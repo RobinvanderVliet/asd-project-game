@@ -13,6 +13,6 @@
 9. Feature, Bugfix en Task branches worden aangemaakt vanuit Jira met de standaard naamgeving, voor Task branches wordt als type 'custom' gebruikt en wordt 'task/' voor de naam geplaatst.
 10. Als een feature branche aan de DoD voldoet wordt hiervoor een pull request aangemaakt.
 11. Als een pull request is goedgekeurd moet deze door de originele maker worden gemerged.
-12. Als iemand de develop breekt wordt de merge gerevert en mag de gorep die de merge heeft gemaakt het fixen.
+12. Als iemand de develop breekt wordt de merge gerevert en mag de groep die de merge heeft gemaakt het fixen.
 13. De branch namen zullen allemaal met een kleine letter beginnen tenzij Jira een andere naam geeft.
 
