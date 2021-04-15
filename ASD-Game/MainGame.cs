@@ -17,6 +17,7 @@ namespace ASD_project
 
             public void Run()
             {
+                new WorldGeneration.Class1();
                 Console.WriteLine("Game is gestart");
             }
         }
