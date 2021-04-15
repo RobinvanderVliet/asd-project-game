@@ -1,3 +1,13 @@
+/*
+    AIM SD ASD 2020/2021 S2 project
+     
+    Project name: ASD-project-game.
+ 
+    This file is created by team 2: Danny, Fedor, Luke, Martijn, Robin, Robin, Sven.
+     
+    Goal of this file: Grammer rules player actions.
+     
+*/
 grammar PlayerCommands;
 
 //LEXER
@@ -23,10 +33,12 @@ NUMBER: [1-9] | '10';
 
 //PARSER
 
-text: command EOF;
+input: command EOF;
+
+step: NUMBER;
 
 command:
-    (MOVE | WALK | GO) SPACE direction (SPACE NUMBER)? #move;
+    (MOVE | WALK | GO) SPACE direction (SPACE step)? #move;
 
 forward: FORWARD | UP | NORTH;
 backward: BACKWARD | DOWN | SOUTH;
