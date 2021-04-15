@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Chat;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 
@@ -18,6 +19,11 @@ namespace ASD_project
             public void Run()
             {
                 Console.WriteLine("Game is gestart");
+
+                //moet later vervangen worden
+                ChatComponent chat = new ChatComponent();
+
+                chat.handleCommands();
             }
         }
     }
