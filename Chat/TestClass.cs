@@ -3,7 +3,7 @@
      
     Project name: ASD-project.
  
-    This file is created by team 2: Luke van Schoonderwalt, Martijn Ooms, Danny Hageman.
+    This file is created by tea: 2.
      
     Goal of this file: Temporary class to mock recieving a message for the parser.
      
