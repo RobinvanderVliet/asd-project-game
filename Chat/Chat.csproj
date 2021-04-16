@@ -17,10 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="antlr\ast" />
     <Folder Include="antlr\checker" />
     <Folder Include="antlr\generator" />
-    <Folder Include="antlr\parser" />
     <Folder Include="antlr\transformer" />
   </ItemGroup>
 
