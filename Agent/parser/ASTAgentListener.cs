@@ -47,19 +47,20 @@ namespace Agent.parser
 
         public override void EnterComparison([NotNull] AgentConfigurationParser.ComparisonContext context)
         {
-            Configuration configuration = new Configuration();
-            currentContainer.Push(configuration);
-            ast.setRoot(configuration);
+            base.EnterComparison(context);
         }
 
         public override void EnterCondition([NotNull] AgentConfigurationParser.ConditionContext context)
         {
-            base.EnterCondition(context);
+            Condition condition = new Condition();
+            currentContainer.Push(condition);
         }
 
         public override void EnterConfiguration([NotNull] AgentConfigurationParser.ConfigurationContext context)
         {
-            base.EnterConfiguration(context);
+            Configuration configuration = new Configuration();
+            currentContainer.Push(configuration);
+            ast.setRoot(configuration);
         }
 
         public override void EnterCurrent([NotNull] AgentConfigurationParser.CurrentContext context)
@@ -123,7 +124,8 @@ namespace Agent.parser
 
         public override void EnterSettingBlock([NotNull] AgentConfigurationParser.SettingBlockContext context)
         {
-            base.EnterSettingBlock(context);
+            SettingsBlock block = new SettingsBlock();
+            currentContainer.Push(block);
         }
 
         public override void EnterStat([NotNull] AgentConfigurationParser.StatContext context)
@@ -153,7 +155,10 @@ namespace Agent.parser
 
         public override void EnterWhenClause([NotNull] AgentConfigurationParser.WhenClauseContext context)
         {
-            base.EnterWhenClause(context);
+            WhenClause clause = new WhenClause();
+            clause.addChild(new Compareble(context.comparable));
+            clause.addChild(new NodeComparison(context.comparison));
+            currentContainer.Push(clause);
         }
 
         public override void ExitAction([NotNull] AgentConfigurationParser.ActionContext context)
@@ -243,7 +248,8 @@ namespace Agent.parser
 
         public override void ExitSetting([NotNull] AgentConfigurationParser.SettingContext context)
         {
-            base.ExitSetting(context);
+            ASTNode temp = currentContainer.Pop();
+            currentContainer.Peek().addChild(temp);
         }
 
         public override void ExitSettingBlock([NotNull] AgentConfigurationParser.SettingBlockContext context)
