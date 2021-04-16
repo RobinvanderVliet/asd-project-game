@@ -71,8 +71,7 @@ namespace WorldGeneration
                 Console.WriteLine("aantal waardes: " +  collection.Count());
 
                 var results = collection.Query()
-                    .Where( x => lookingForX ) 
-                    .Where( y => lookingForX )
+                    .Where( chunk => chunk.x.Equals(lookingForX) && chunk.y.Equals(lookingForY) ) 
                     .Select(queryOutput => new {x = queryOutput.x, y = queryOutput.y })
                     .Limit(10)
                     .ToList();
