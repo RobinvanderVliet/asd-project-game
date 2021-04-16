@@ -11,4 +11,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="conceptGrammar.g4" />
+  </ItemGroup>
+
 </Project>
