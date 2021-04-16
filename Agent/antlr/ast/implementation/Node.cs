@@ -9,8 +9,8 @@ namespace Agent.antlr.ast
         
         public string GetNodeType()
         {
-            //TODO
-            return "TODO";
+            //TODO moet voor elke node override worden
+            return "Node";
         }
 
         public ArrayList GetChildren()
