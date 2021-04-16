@@ -3,7 +3,7 @@
      
     Project name: ASD-project-game.
  
-    This file is created by team 2: Danny, Fedor, Luke, Martijn, Robin, Robin, Sven.
+    This file is created by team: 2
      
     Goal of this file: Grammer rules player actions.
      
