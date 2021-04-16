@@ -61,7 +61,7 @@ namespace Creature
             }
         }
 
-        public PathAlgorithm(List<List<Node>> grid)
+        public PathFinder(List<List<Node>> grid)
         {
             Grid = grid;
         }
