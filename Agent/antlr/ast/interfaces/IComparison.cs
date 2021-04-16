@@ -8,6 +8,6 @@ namespace Agent.antlr.ast
 {
     interface IComparison : INode
     {
-
+        public string ComparisonType { get; set; }
     }
 }

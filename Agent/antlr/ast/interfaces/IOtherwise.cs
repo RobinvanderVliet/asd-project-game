@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Agent.antlr.ast
 {
-    interface IOtherwise
+    interface IOtherwise : INode
     {
 
     }
