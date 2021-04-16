@@ -1,4 +1,15 @@
-﻿using System;
+﻿/*
+    AIM SD ASD 2020/2021 S2 project
+     
+    Project name: [to be determined].
+ 
+    This file is created by team: 2.
+     
+    Goal of this file: implementing the player.
+     
+*/
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
