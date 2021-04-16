@@ -9,12 +9,6 @@ BRACKET_CLOSE: '}';
 DOUBLE_QUOTE: '"';
 EQUALSIGN: '=';
 
-//ACTIONS
-USE: 'use';
-DROP: 'drop' | 'throw';
-DROPALL: 'drop all' | 'throw all';
-SET: 'set';
-
 //EVENTS
 FINDS: 'finds';
 NEARBY: 'nearby';
@@ -26,7 +20,7 @@ THEN: 'then';
 
 //COMPARISONS
 GREATER_THAN : 'greater than';
-LOWER_THAN: 'lower than';
+LESS_THAN: 'less than';
 EQUALS: 'equals';
 CONTAINS: 'contains';
 DOES_NOT_CONTAIN: 'does not contain';
@@ -35,6 +29,7 @@ DOES_NOT_CONTAIN: 'does not contain';
 PLAYER: 'player';
 NPC: 'npc';
 INVENTORY: 'inventory';
+OPPONENT: 'opponent';
 
 //OBJECTS
 POTION: 'potion';
@@ -45,6 +40,8 @@ CURRENT: 'current';
 //STATS
 STRENGTH: 'strength';
 HEALTH: 'health';
+POWER: 'power';
+STAMINA: 'stamina';
 
 //SETTINGS
 GENERAL: 'general';
@@ -59,20 +56,23 @@ STRING: [a-z0-9\-]+;
  PARSER
 */
 
-configuration: (generalBlock settingBlock+ | generalBlock | settingBlock+) EOF;
-generalBlock: GENERAL BRACKET_OPEN rule+ BRACKET_CLOSE;
+configuration: rule* settingBlock* EOF;
 rule: (setting | STRING)  EQUALSIGN STRING;
 
 settingBlock: setting BRACKET_OPEN (condition | actionBlock)+ BRACKET_CLOSE;
 actionBlock: action BRACKET_OPEN condition+ BRACKET_CLOSE;
 condition: whenClause | whenClause otherwiseClause; 
-whenClause: WHEN (subject | itemStat) comparison (subject | INT | object | itemStat) THEN action;
-otherwiseClause: OTHERWISE action;
-comparison: GREATER_THAN | LOWER_THAN | EQUALS | CONTAINS | DOES_NOT_CONTAIN | NEARBY | FINDS;
-subject: PLAYER #player | NPC #npc | INVENTORY #inventory | ITEM #item | CURRENT #current | HEALTH #health;
+whenClause: WHEN comparable comparison comparable THEN (action | actionSubject);
+otherwiseClause: OTHERWISE (action | actionSubject);
+comparison: GREATER_THAN | LESS_THAN | EQUALS | CONTAINS | DOES_NOT_CONTAIN | NEARBY | FINDS;
 setting: COMBAT | EXPLORE;
-action: STRING | useItem;
-itemStat: ITEM (INT | STRENGTH);
-useItem: USE object;
-object: POTION | WEAPON | string;
-string: DOUBLE_QUOTE STRING DOUBLE_QUOTE;
+action: STRING;
+actionSubject: action subject | action item;
+string: DOUBLE_QUOTE STRING+ DOUBLE_QUOTE;
+
+comparable: item | itemStat | subject | subjectStat | stat | INT;
+itemStat: item stat;
+subjectStat: subject stat;
+subject: PLAYER #player | NPC #npc | OPPONENT #opponent | INVENTORY #inventory | CURRENT #current | STRING #tile;
+item: ITEM | POTION | WEAPON | string;
+stat: STRENGTH | POWER | HEALTH | STAMINA;
