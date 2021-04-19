@@ -3,13 +3,13 @@ using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using Chat.antlr.ast;
+using Chat.antlr.ast.actions;
 using Chat.antlr.grammar;
 using Chat.antlr.parser;
 using NUnit.Framework;
 
 namespace Chat.Tests
-{
-    public class ParserTest
+{public class ParserTest
     {
 
 
@@ -17,9 +17,10 @@ namespace Chat.Tests
         {
             AntlrInputStream inputStream = new AntlrInputStream(text);
             PlayerCommandsLexer lexer = new PlayerCommandsLexer(inputStream);
-            CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
-            PlayerCommandsParser parser = new PlayerCommandsParser(commonTokenStream);
-
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            
+            PlayerCommandsParser parser = new PlayerCommandsParser(tokens);
+            
             ASTListener listener = new ASTListener();
             try
             {
@@ -31,8 +32,30 @@ namespace Chat.Tests
             {
                 Assert.Fail(e.ToString()); 
             }
-            return listener.Ast;
+            return listener.getAST();
         }
-        
+
+        public static AST MoveForwardCommand()
+        {
+            Input moveForward = new Input();
+
+
+            moveForward.addChild(new Move()
+                .addChild(new Direction("forward"))
+                .addChild(new Step(2)));
+            
+            return new AST(moveForward); 
+
+        }
+
+        [Test]
+        public void AstListenerEnterMoveAddsToContainerTest()
+        {
+            AST sut = SetupParser("move forward 2");
+            AST exp = MoveForwardCommand();
+
+            Assert.AreEqual(exp, sut);
+        }
     }
+    
 }
