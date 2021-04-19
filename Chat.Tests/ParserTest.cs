@@ -12,7 +12,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Antlr4.Runtime;
-using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using Chat.antlr.ast;
 using Chat.antlr.ast.actions;
@@ -40,7 +39,7 @@ namespace Chat.Tests
                 ParseTreeWalker walker = new ParseTreeWalker();
                 walker.Walk(listener, parseTree);
             }
-            catch (ParseCanceledException e)
+            catch (Exception e)
             {
                 Assert.Fail(e.ToString());
             }
