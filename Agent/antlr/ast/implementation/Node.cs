@@ -2,6 +2,10 @@
 
 namespace Agent.antlr.ast
 {
+    /*
+     * 
+     * @author Abdul     
+    */
     public class Node : INode
     {
 
@@ -19,14 +23,16 @@ namespace Agent.antlr.ast
             return new ArrayList();
         }
 
-        public void AddChild(INode node)
+        public Node AddChild(INode node)
         {
             //TODO
+            return this;
         }
 
-        public void RemoveChild(INode node)
+        public Node RemoveChild(INode node)
         {
             //TODO
+            return this;
         }
     }
 }

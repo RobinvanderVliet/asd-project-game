@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Agent.antlr.ast;
 
 namespace Agent
 {
@@ -8,8 +9,8 @@ namespace Agent
         
         ArrayList GetChildren();
         
-        void AddChild(INode node);
+        Node AddChild(INode node);
 
-        void RemoveChild(INode node);
+        Node RemoveChild(INode node);
     }
 }
