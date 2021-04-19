@@ -8,10 +8,10 @@
     Goal of this file: command class extends ASTNode.
      
 */
+
 namespace Chat.antlr.ast
 {
     public abstract class Command : ASTNode
     {
-        
     }
 }

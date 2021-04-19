@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 /*
     AIM SD ASD 2020/2021 S2 project
@@ -21,34 +22,20 @@ namespace Chat.antlr.ast
         {
             this.body = new ArrayList();
         }
-
-        public Input(ArrayList body)
-        {
-            this.body = body;
-        }
-
-        public override ArrayList getChildren()
-        {
-            return this.body;
-        }
-
+        
         public override ASTNode addChild(ASTNode child)
         {
             body.Add(child);
             return this;
         }
 
-        public override ASTNode removeChild(ASTNode child)
-        {
-            body.Remove(child);
-            return this;
-        }
-
+        [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
             return this.Equals(obj as Input);
         }
 
+        [ExcludeFromCodeCoverage]
         public bool Equals(Input other)
         {
             if (other == null)
@@ -58,7 +45,7 @@ namespace Chat.antlr.ast
             {
                 return false;
             }
-            
+
             for (int i = 0; i < body.Count; i++)
             {
                 if (!body[i].Equals(other.body[i]))

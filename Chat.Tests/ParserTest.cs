@@ -8,7 +8,9 @@
     Goal of this file: Parser test class for test parser (add to AST).
      
 */
+
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
@@ -20,6 +22,7 @@ using NUnit.Framework;
 
 namespace Chat.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class ParserTest
     {
         public AST SetupParser(string text)
@@ -41,7 +44,7 @@ namespace Chat.Tests
             {
                 Assert.Fail(e.ToString());
             }
-            
+
             return listener.ast;
         }
 
@@ -159,7 +162,7 @@ namespace Chat.Tests
             AST sut = SetupParser("mv left 1");
             // new error
         }
-        
+
         [Test]
         public void AstListenerThrowsSyntaxErrorWhenDirectionCommandIsNotRecognised()
         {

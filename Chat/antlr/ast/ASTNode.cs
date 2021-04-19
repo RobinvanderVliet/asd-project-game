@@ -15,17 +15,7 @@ namespace Chat.antlr.ast
 {
     public class ASTNode
     {
-        public virtual ArrayList getChildren()
-        {
-            return new ArrayList();
-        }
-
         public virtual ASTNode addChild(ASTNode child)
-        {
-            return this;
-        }
-
-        public virtual ASTNode removeChild(ASTNode child)
         {
             return this;
         }
