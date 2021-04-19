@@ -10,6 +10,7 @@
 */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Chat.antlr.ast
 {
@@ -32,11 +33,13 @@ namespace Chat.antlr.ast
             root = input;
         }
 
+        [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
             return this.Equals(obj as AST);
         }
 
+        [ExcludeFromCodeCoverage]
         public bool Equals(AST other)
         {
             if (other == null)

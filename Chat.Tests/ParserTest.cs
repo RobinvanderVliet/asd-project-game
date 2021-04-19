@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
@@ -11,6 +12,7 @@ using NUnit.Framework;
 
 namespace Chat.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class ParserTest
     {
         public AST SetupParser(string text)
@@ -36,11 +38,11 @@ namespace Chat.Tests
             return listener.getAST();
         }
         
-        public static AST PickUpCommand()
+        public static AST PickupCommand()
         {
             Input pickUp = new Input();
 
-            pickUp.addChild(new PickUp());
+            pickUp.addChild(new Pickup());
 
             return new AST(pickUp);
         }
@@ -84,7 +86,7 @@ namespace Chat.Tests
 
             return new AST(attack);
         }        
-        
+        [Test]
         public void DropCommandInputTest()
         {
             AST sut = SetupParser("drop");
@@ -93,7 +95,7 @@ namespace Chat.Tests
             Assert.AreEqual(exp, sut);
         }
         
-
+        [Test]
         public void ExitCommandInputTest()
         {
             AST sut = SetupParser("exit");
@@ -101,53 +103,44 @@ namespace Chat.Tests
 
             Assert.AreEqual(exp, sut);
         }
-
-        public void AttackCommandWithoutDirectionAttacksForwardTest(string direction)
+        [Test]
+        public void AttackCommandWithDirectionAttacksForwardTest()
         {
-            AST sut = SetupParser("attack");
-            AST exp = AttackCommand("");
+            AST sut = SetupParser("attack forward");
+            AST exp = AttackCommand("forward");
 
             Assert.AreEqual(exp, sut);
         }
-        public void AttackCommandWithLeftDirectionTest(string direction)
+        
+        [Test]
+        public void AttackCommandWithLeftDirectionTest()
         {
             AST sut = SetupParser("attack left");
             AST exp = AttackCommand("left");
 
             Assert.AreEqual(exp, sut);
         }
-        public void AttackCommandWithRightDirectionTest(string direction)
+        [Test]
+        public void AttackCommandWithRightDirectionTest()
         {
             AST sut = SetupParser("attack right");
             AST exp = AttackCommand("right");
 
             Assert.AreEqual(exp, sut);
         }
-        
-        public void AttackCommandBackWardDirectionTest(string direction)
+        [Test]
+        public void AttackCommandBackWardDirectionTest()
         {
             AST sut = SetupParser("attack backward");
             AST exp = AttackCommand("backward");
 
             Assert.AreEqual(exp, sut);
         }
-
-
-      
-
+        [Test]
         public void PickUpCommandTest()
         {
             AST sut = SetupParser("pickup");
-            AST exp = PickUpCommand();
-
-            Assert.AreEqual(exp, sut);
-        }
-
-        public void PickUpCommandWithWronglyTypedPickedUpThrowsExceptionTest()
-        {
-            AST sut = SetupParser("pickup left");
-            AST exp = PickUpCommand();
-
+            AST exp = PickupCommand();
 
             Assert.AreEqual(exp, sut);
         }
