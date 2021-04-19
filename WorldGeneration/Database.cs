@@ -41,7 +41,7 @@ namespace WorldGeneration
                     var collection = getMapCollection(db);
                     var results = collection.Query()
                         .Where(chunk => chunk.x.Equals(chunkXValue) && chunk.y.Equals(chunkYValue))
-                        .Select(queryOutput => new Chunk(queryOutput.x, queryOutput.y, queryOutput.map))
+                        .Select(queryOutput => new Chunk(queryOutput.x, queryOutput.y, queryOutput.map, queryOutput.rowSize))
                         .ToList();
 
                     switch (results.Count)
@@ -77,7 +77,7 @@ namespace WorldGeneration
                 using (var db = new LiteDatabase(databaseLocation))
                 {
                     var results = getMapCollection(db).Query()
-                        .Select(queryOutput => new Chunk(queryOutput.x, queryOutput.y, queryOutput.map))
+                        .Select(queryOutput => new Chunk(queryOutput.x, queryOutput.y, queryOutput.map, queryOutput.rowSize))
                         .ToList();
 
                     switch (results.Count)

@@ -4,25 +4,22 @@ namespace WorldGeneration
 {
     public class Chunk
     {
-        [BsonCtor]
-        public Chunk(int x, int y, Tile[,] map)
+        public Chunk(int x, int y, Tile[] map, int rowSize)
         {
             this.x = x;
             this.y = y;
             this.map = map;
+            this.rowSize = rowSize;
         }
-        public Chunk(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-
+        
         public Chunk()
         {
         }
 
         public int x { get; set; }
         public int y { get; set; }
-        public Tile[,] map { get; set; }
+        public Tile[] map { get; set; }
+        
+        public int rowSize { get; set; }
     }
 }
