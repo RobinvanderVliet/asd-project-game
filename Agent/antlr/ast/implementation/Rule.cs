@@ -39,7 +39,10 @@ namespace Agent.antlr.ast
 
         public new Node RemoveChild(INode node)
         {
-            body.Remove(node);
+            if (node is Setting setting)
+                settings.Remove(setting);
+            else
+                body.Remove(node);
             return this;
         }
     }

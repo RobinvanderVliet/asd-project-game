@@ -1,4 +1,5 @@
-﻿using Agent.antlr.ast;
+using System;
+using Agent.antlr.ast;
 using NUnit.Framework;
 
 namespace Agent.Tests.ast
@@ -8,15 +9,15 @@ namespace Agent.Tests.ast
      * @author Abdul     
     */
     [TestFixture]
-    public class ConfigurationTest
+    public class RuleTest
     {
-        private Configuration _config;
-        private const string TYPE = "Configuration";
+        private Rule _rule;
+        private const string TYPE = "Rule";
 
         [SetUp]
         public void Setup()
         {
-            _config = new Configuration();
+            _rule = new Rule();
         }
 
         /*
@@ -30,7 +31,7 @@ namespace Agent.Tests.ast
         {
             //Arrange
             //Act
-            var result = _config.GetNodeType();
+            var result = _rule.GetNodeType();
             //Assert
             Assert.AreEqual(result, TYPE);
         }
@@ -38,42 +39,45 @@ namespace Agent.Tests.ast
         /*
          * AddChild()
          *
-         * Test of de Rule toegevoegd wordt aan de Configuration
+         * Test of de Setting toegevoegd wordt aan de Rule
          * @author Abdul     
         */
         [Test]
         public void AddChild()
         {
             //Arrange
-            Rule rule = new Rule();
-            _config.AddChild(rule);
+            Setting setting = new Setting();
+            _rule.AddChild(setting);
 
             //Act
-            var result = ((Rule) _config.GetChildren()[0])?.GetNodeType();
+
+
+            var result = ((Setting) _rule.GetChildren()[0])?.GetNodeType();
 
             //Assert
-            Assert.AreEqual(result, "Rule");
+            Assert.AreEqual(result, "Setting");
         }
 
         /*
          * RemoveChild()
          *
-         * Test of de Rule is verwijderd van de Node
+         * Test of de Setting verwijderd wordt van de Rule
          * @author Abdul
         */
         [Test]
         public void RemoveChild()
         {
             //Arrange
-            Rule rule = new Rule();
-            _config.AddChild(rule);
-            _config.RemoveChild(rule);
+            Setting setting = new Setting();
+            _rule.AddChild(setting);
+            _rule.RemoveChild(setting);
+            
 
             //Act
-            var result = _config.GetChildren().Count == 0;
-
+            var result = _rule.GetChildren().Count == 0;
+            
             //Assert
-            Assert.True(result);
+         Assert.True(result);
         }
     }
 }
