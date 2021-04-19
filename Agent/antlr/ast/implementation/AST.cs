@@ -13,7 +13,7 @@ namespace Agent.antlr.ast.implementation
     Goal of this file: [making_the_system_work].
      
     */
-    class AST
+    public class AST
     {
         public IConfiguration root;
 

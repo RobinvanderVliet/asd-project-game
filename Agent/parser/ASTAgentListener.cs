@@ -6,10 +6,11 @@ using Antlr4.Runtime.Misc;
 using Agent.antlr.ast.implementation;
 using Agent.antlr.ast.implementation.comparables;
 using Agent.antlr.ast.implementation.comparables.subjects;
+using Action = Agent.antlr.ast.implementation.Action;
 
 namespace Agent.parser
 {
-    class ASTAgentListener : AgentConfigurationBaseListener
+    public class ASTAgentListener : AgentConfigurationBaseListener
     {
         private AST ast;
         private Stack<Node> currentContainer;
@@ -20,7 +21,7 @@ namespace Agent.parser
             currentContainer = new Stack<Node>();
         }
 
-        public AST GetAST(){ return ast; }
+        public AST GetAST() { return ast; }
 
         public override void EnterAction([NotNull] AgentConfigurationParser.ActionContext context)
         {
