@@ -13,8 +13,10 @@ namespace Network
         //Check action type
         String actionType = "actionType";
 
-        private void checkActionType(String actionType, String payload) {
-            switch (actionType) {
+        public void checkActionType(String actionType, String payload) 
+        {
+            switch (actionType) 
+            {
                 case "chatAction":
                     Console.WriteLine("Case chatAction");
                     processChatAction(payload);
