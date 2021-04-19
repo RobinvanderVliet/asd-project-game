@@ -22,8 +22,10 @@ namespace ASD_project
 
                 //moet later vervangen worden
                 ChatComponent chat = new ChatComponent();
-
-                chat.handleCommands();
+                do
+                {
+                    chat.handleCommands();
+                } while (true); // moet vervangen worden met variabele: isQuit 
             }
         }
     }

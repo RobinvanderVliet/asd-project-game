@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Antlr4.Runtime;
-using Antlr4.Runtime.Atn;
-using Antlr4.Runtime.Dfa;
 using Antlr4.Runtime.Misc;
-using Antlr4.Runtime.Sharpen;
 using Antlr4.Runtime.Tree;
 using Chat.antlr.ast;
 using Chat.antlr.grammar;
@@ -23,13 +19,16 @@ namespace Chat.antlr
             errors = new List<string>();
         }
 
-        public void parseString(String input)
+        public void parseCommando(String input)
         {
             //Lex (with Antlr's generated lexer)
+            if (!input.StartsWith("say") || !input.StartsWith("whisper") || !input.StartsWith("shout"))
+            {
+                input = input.ToLower();
+            }
             AntlrInputStream inputStream = new AntlrInputStream(input);
             PlayerCommandsLexer lexer = new PlayerCommandsLexer(inputStream);
             lexer.RemoveErrorListeners();
-            // lexer.AddErrorListener(this);
             errors.Clear();
             try
             {
@@ -60,10 +59,6 @@ namespace Chat.antlr
                 this.ast = new AST();
                 //errors.add("Syntax error");
             }
-            catch (Exception e)
-            {
-                throw e;
-            }
         }
 
 
@@ -77,7 +72,7 @@ namespace Chat.antlr
             RecognitionException e)
         {
             Console.WriteLine(msg);
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }
