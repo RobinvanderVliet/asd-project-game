@@ -10,21 +10,50 @@ namespace Creature
 {
     public class Monster : ICreature
     {
-        public enum Event { LOST_PLAYER, SPOTTED_PLAYER, ALMOST_DEAD, REGAINED_HEALTH_PLAYER_OUT_OF_RANGE, REGAINED_HEALTH_PLAYER_IN_RANGE, PLAYER_OUT_OF_RANGE, PLAYER_IN_RANGE };
-        public enum State { WANDERING, FOLLOW_PLAYER, ATTACK_PLAYER, USE_POTION };
+        /// <summary>
+        /// All events that this creature is capable of responding to.
+        /// Every creature can respond to its own events.
+        /// </summary>
+        public enum Event
+        {
+            LOST_PLAYER,
+            SPOTTED_PLAYER,
+            ALMOST_DEAD,
+            REGAINED_HEALTH_PLAYER_OUT_OF_RANGE,
+            REGAINED_HEALTH_PLAYER_IN_RANGE,
+            PLAYER_OUT_OF_RANGE,
+            PLAYER_IN_RANGE
+        };
 
+        /// <summary>
+        /// All states that this creature is capable of activating.
+        /// Every creature has its own states that it can be in.
+        /// </summary>
+        public enum State
+        {
+            WANDERING,
+            FOLLOW_PLAYER,
+            ATTACK_PLAYER,
+            USE_POTION
+        };
+
+        /// <summary>
+        /// Passive NOT ASYNC statemachine.
+        /// A statemachine will decide how a creature responds to specific events.
+        /// Statemachines will decide how a creature behaves in certain events.
+        /// </summary>
         private PassiveStateMachine<State, Event> stateMachine;
 
         public Monster()
         {
-            startStateMachine();
+            StartStateMachine();
         }
 
         public void FireEvent(Enum creatureEvent, object argument)
         {
             if (creatureEvent.GetType() == typeof(Event))
             {
-                stateMachine.Fire((Event) creatureEvent, argument);
+                stateMachine.Fire((Event)creatureEvent, argument);
             }
         }
 
@@ -32,11 +61,11 @@ namespace Creature
         {
             if (creatureEvent.GetType() == typeof(Event))
             {
-                stateMachine.Fire((Event) creatureEvent);
+                stateMachine.Fire((Event)creatureEvent);
             }
         }
 
-        private void startStateMachine()
+        private void StartStateMachine()
         {
             var builder = new StateMachineDefinitionBuilder<State, Event>();
 
@@ -61,5 +90,5 @@ namespace Creature
             stateMachine = builder.Build().CreatePassiveStateMachine();
             stateMachine.Start();
         }
-    }    
+    }
 }
