@@ -17,6 +17,14 @@ SPACE: ' '+;
 MOVE: 'move';
 WALK: 'walk';
 GO: 'go';
+ATTACK: 'attack';
+SLASH: 'slash';
+STRIKE: 'strike';
+PICKUP: 'pickup';
+GET: 'get';
+DROP: 'drop';
+EXIT: 'exit';
+LEAVE: 'leave';
 
 FORWARD: 'forward';
 UP: 'up';
@@ -38,7 +46,11 @@ input: command EOF;
 step: NUMBER;
 
 command:
-    (MOVE | WALK | GO) SPACE direction (SPACE step)? #move;
+    (MOVE | WALK | GO) SPACE direction (SPACE step)? #move |
+    (ATTACK | SLASH | STRIKE) SPACE (FORWARD | BACKWARD | LEFT | RIGHT) #attack |
+    (PICKUP | GET) #pickup |
+    DROP #drop |
+    (EXIT | LEAVE) #exit;
 
 forward: FORWARD | UP | NORTH;
 backward: BACKWARD | DOWN | SOUTH;

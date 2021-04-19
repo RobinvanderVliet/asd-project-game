@@ -17,7 +17,6 @@ using Chat.antlr.grammar;
 namespace Chat.antlr.parser
 {
     public class ASTListener : PlayerCommandsBaseListener
-
     {
         private AST ast;
         private Stack _currentContainer;
@@ -40,8 +39,47 @@ namespace Chat.antlr.parser
 
         public override void ExitMove(PlayerCommandsParser.MoveContext context)
         {
-            
-           ast.root.addChild((ASTNode)_currentContainer.Pop());
+            ast.root.addChild((ASTNode)_currentContainer.Pop());
+        }
+
+        public override void EnterAttack(PlayerCommandsParser.AttackContext context)
+        {
+            _currentContainer.Push(new Attack());
+        }
+
+        public override void ExitAttack(PlayerCommandsParser.AttackContext context)
+        {
+            ast.root.addChild((ASTNode)_currentContainer.Pop());
+        }
+
+        public override void EnterDrop(PlayerCommandsParser.DropContext context)
+        {
+            _currentContainer.Push(new Drop());
+        }
+
+        public override void ExitDrop(PlayerCommandsParser.DropContext context)
+        {
+            ast.root.addChild((ASTNode)_currentContainer.Pop());
+        }
+
+        public override void EnterPickup(PlayerCommandsParser.PickupContext context)
+        {
+            _currentContainer.Push(new Pickup());
+        }
+
+        public override void ExitPickup(PlayerCommandsParser.PickupContext context)
+        {
+            ast.root.addChild((ASTNode)_currentContainer.Pop());
+        }
+
+        public override void EnterExit(PlayerCommandsParser.ExitContext context)
+        {
+            _currentContainer.Push(new Exit());
+        }
+
+        public override void ExitExit(PlayerCommandsParser.ExitContext context)
+        {
+            ast.root.addChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterDirection(PlayerCommandsParser.DirectionContext context)
