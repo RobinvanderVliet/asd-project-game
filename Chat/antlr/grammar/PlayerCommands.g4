@@ -47,7 +47,7 @@ step: NUMBER;
 
 command:
     (MOVE | WALK | GO) SPACE direction (SPACE step)? #move |
-    (ATTACK | SLASH | STRIKE) SPACE (FORWARD | BACKWARD | LEFT | RIGHT) #attack |
+    (ATTACK | SLASH | STRIKE) SPACE direction #attack |
     (PICKUP | GET) #pickup |
     DROP #drop |
     (EXIT | LEAVE) #exit;
