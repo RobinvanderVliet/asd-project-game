@@ -6,7 +6,20 @@ using System.Threading.Tasks;
 
 namespace Creature.Consumable
 {
-    class Class1
+   public interface IConsumable
     {
+        public String type { get; set; }
+        public int amount { get; set; }
+        
+        public void applyEffect(String recipient)
+        {
+
+        }
+        public void damageEnemie(String enemie); // Must be a object type from the attacking entity instead of String.
+        public void healPlayer(String playername); // Must be a Object of type Player instead of String.
+        
+
+        
+
     }
 }
