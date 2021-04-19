@@ -39,7 +39,7 @@ namespace Chat.Tests
         public void AstListenerMoveForward2StepsTest()
         {
             AST sut = SetupParser("move forward 2");
-            AST exp = MoveForwardCommand(2);
+            AST exp = MoveCommand(2, "forward");
 
             Assert.AreEqual(exp, sut);
         }
@@ -48,7 +48,7 @@ namespace Chat.Tests
         public void AstListenerMoveForward1StepsTest()
         {
             AST sut = SetupParser("move forward 1");
-            AST exp = MoveForwardCommand(1);
+            AST exp = MoveCommand(1, "forward");
 
             Assert.AreEqual(exp, sut);
         }
@@ -57,7 +57,7 @@ namespace Chat.Tests
         public void AstListenerMoveForwardWithoutEnteringStepsTest()
         {
             AST sut = SetupParser("move forward");
-            AST exp = MoveForwardCommand(1); // if no steps entered always 1 step 
+            AST exp = MoveCommand(1, "forward"); // if no steps entered always 1 step 
 
             Assert.AreEqual(exp, sut);
         }
@@ -66,7 +66,7 @@ namespace Chat.Tests
         public void AstListenerMoveBackward2StepsTest()
         {
             AST sut = SetupParser("move backward 2");
-            AST exp = MoveBackwardCommand(2);
+            AST exp = MoveCommand(2, "backward");
 
             Assert.AreEqual(exp, sut);
         }
@@ -75,7 +75,7 @@ namespace Chat.Tests
         public void AstListenerMoveBackward1StepsTest()
         {
             AST sut = SetupParser("move backward 1");
-            AST exp = MoveBackwardCommand(1);
+            AST exp = MoveCommand(1, "backward");
 
             Assert.AreEqual(exp, sut);
         }
@@ -84,7 +84,7 @@ namespace Chat.Tests
         public void AstListenerMoveBackwardWithoutEnteringStepsTest()
         {
             AST sut = SetupParser("move backward");
-            AST exp = MoveBackwardCommand(1); // if no steps entered always 1 step 
+            AST exp = MoveCommand(1, "backward"); // if no steps entered always 1 step 
 
             Assert.AreEqual(exp, sut);
         }
@@ -93,7 +93,7 @@ namespace Chat.Tests
         public void AstListenerMoveLeft2StepsTest()
         {
             AST sut = SetupParser("move left 2");
-            AST exp = MoveLeftCommand(2);
+            AST exp = MoveCommand(2, "left");
 
             Assert.AreEqual(exp, sut);
         }
@@ -102,7 +102,7 @@ namespace Chat.Tests
         public void AstListenerMoveLeft1StepsTest()
         {
             AST sut = SetupParser("move left 1");
-            AST exp = MoveLeftCommand(1);
+            AST exp = MoveCommand(1, "left");
 
             Assert.AreEqual(exp, sut);
         }
@@ -111,7 +111,7 @@ namespace Chat.Tests
         public void AstListenerMoveLeftWithoutEnteringStepsTest()
         {
             AST sut = SetupParser("move left");
-            AST exp = MoveLeftCommand(1); // if no steps entered always 1 step 
+            AST exp = MoveCommand(1, "left"); // if no steps entered always 1 step 
 
             Assert.AreEqual(exp, sut);
         }
@@ -120,7 +120,7 @@ namespace Chat.Tests
         public void AstListenerMoveRight2StepsTest()
         {
             AST sut = SetupParser("move right 2");
-            AST exp = MoveRightCommand(2);
+            AST exp = MoveCommand(2, "right");
 
             Assert.AreEqual(exp, sut);
         }
@@ -129,7 +129,7 @@ namespace Chat.Tests
         public void AstListenerMoveRight1StepsTest()
         {
             AST sut = SetupParser("move right 1");
-            AST exp = MoveRightCommand(1);
+            AST exp = MoveCommand(1, "right");
 
             Assert.AreEqual(exp, sut);
         }
@@ -138,7 +138,7 @@ namespace Chat.Tests
         public void AstListenerMoveRightWithoutEnteringStepsTest()
         {
             AST sut = SetupParser("move right");
-            AST exp = MoveRightCommand(1); // if no steps entered always 1 step 
+            AST exp = MoveCommand(1, "right"); // if no steps entered always 1 step 
 
             Assert.AreEqual(exp, sut);
         }
@@ -153,54 +153,18 @@ namespace Chat.Tests
         [Test]
         public void AstListenerThrowsSyntaxErrorWhenDirectionCommandIsNotRecognised()
         {
-            AST sut = SetupParser("mv lf 1");
+            AST sut = SetupParser("move lf 1");
             // new error
         }
 
-        // Help functions for checking command
-        public static AST MoveForwardCommand(int steps)
+        // Help methode for checking command
+        public static AST MoveCommand(int steps, String direction)
         {
             Input moveForward = new Input();
 
 
             moveForward.addChild(new Move()
-                .addChild(new Direction("forward"))
-                .addChild(new Step(steps)));
-
-            return new AST(moveForward);
-        }
-
-        public static AST MoveBackwardCommand(int steps)
-        {
-            Input moveForward = new Input();
-
-
-            moveForward.addChild(new Move()
-                .addChild(new Direction("backward"))
-                .addChild(new Step(steps)));
-
-            return new AST(moveForward);
-        }
-
-        public static AST MoveLeftCommand(int steps)
-        {
-            Input moveForward = new Input();
-
-
-            moveForward.addChild(new Move()
-                .addChild(new Direction("left"))
-                .addChild(new Step(steps)));
-
-            return new AST(moveForward);
-        }
-
-        public static AST MoveRightCommand(int steps)
-        {
-            Input moveForward = new Input();
-
-
-            moveForward.addChild(new Move()
-                .addChild(new Direction("right"))
+                .addChild(new Direction(direction))
                 .addChild(new Step(steps)));
 
             return new AST(moveForward);
