@@ -17,19 +17,19 @@ namespace Network
                     break;
                 case "moveAction":
                     Console.WriteLine("Case moveAction");
-                    //processMoveAction(payload);
+                    processMoveAction(objectPayloadDTO.moveAction);
                     break;
                 case "attackAction":
                     Console.WriteLine("Case attackAction");
-                    //processAttackAction(payload);
+                    processAttackAction(objectPayloadDTO.attackAction);
                     break;
                 case "joinAction":
                     Console.WriteLine("Case joinAction");
-                    //processJoinAction(payload);
+                    processJoinAction(objectPayloadDTO.joinAction);
                     break;
                 case "sessionUpdateAction":
                     Console.WriteLine("Case sessionUpdateAction");
-                    //processSessionUpdateAction(payload);
+                    processSessionUpdateAction(objectPayloadDTO.sessionUpdateAction);
                     break;
                 default:
                     Console.WriteLine("Not a valid actiontype");
@@ -47,19 +47,19 @@ namespace Network
             //Process chat action
         }
 
-        public void processMoveAction(String payload) {
+        public void processMoveAction(MoveActionDTO moveActionDTO) {
             //Process move action
         }
 
-        public void processAttackAction(String payload) {
+        public void processAttackAction(AttackActionDTO attackActionDTO) {
             //Process attack action
         }
 
-        public void processJoinAction(String payload) {
+        public void processJoinAction(JoinActionDTO joinActionDTO) {
             //Process join action
         }
 
-        public void processSessionUpdateAction(String payload) {
+        public void processSessionUpdateAction(SessionUpdateActionDTO sessionUpdateActionDTO) {
             //Process session update action
         }
     }
