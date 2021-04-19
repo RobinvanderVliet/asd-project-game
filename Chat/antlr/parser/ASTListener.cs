@@ -84,8 +84,18 @@ namespace Chat.antlr.parser
 
         public override void EnterDirection(PlayerCommandsParser.DirectionContext context)
         {
-            Move move = (Move) _currentContainer.Peek();
-            move.addChild(new Direction(context.GetText()));
+            var action = _currentContainer.Peek();
+
+            if (action is Move)
+            {
+                Move move = (Move) action;
+                move.addChild(new Direction(context.GetText()));
+            }
+            else if (action is Attack)
+            {
+                Attack attack = (Attack) action;
+                attack.addChild(new Direction(context.GetText()));
+            }
         }
 
         public override void EnterStep(PlayerCommandsParser.StepContext context)
