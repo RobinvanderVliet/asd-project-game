@@ -43,7 +43,7 @@ namespace Agent.antlr.ast.implementation
 
         public new INode AddChild(INode node)
         {
-            if (node is ISetting setting)
+            if (node is Setting setting)
                 settings.Add(setting);
             else
                 body.Add(node);
