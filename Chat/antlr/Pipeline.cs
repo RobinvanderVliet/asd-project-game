@@ -22,7 +22,7 @@ namespace Chat.antlr
         public void parseCommando(String input)
         {
             //Lex (with Antlr's generated lexer)
-            if (!input.StartsWith("say") || !input.StartsWith("whisper") || !input.StartsWith("shout"))
+            if (!input.StartsWith("say") && !input.StartsWith("whisper") && !input.StartsWith("shout"))
             {
                 input = input.ToLower();
             }
