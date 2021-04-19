@@ -32,14 +32,15 @@ namespace WorldGeneration
             }
         }
 
-        public Chunk getChunk(int lookingForX, int lookingForY)
+        public Chunk getChunk(int chunkXValue, int chunkYValue)
         {
             try
             {
                 using (var db = new LiteDatabase(databaseLocation))
                 {
-                    var results = getMapCollection(db).Query()
-                        .Where(chunk => chunk.x.Equals(lookingForX) && chunk.y.Equals(lookingForY))
+                    var collection = getMapCollection(db);
+                    var results = collection.Query()
+                        .Where(chunk => chunk.x.Equals(chunkXValue) && chunk.y.Equals(chunkYValue))
                         .Select(queryOutput => new Chunk(queryOutput.x, queryOutput.y, queryOutput.map))
                         .ToList();
 
@@ -95,7 +96,22 @@ namespace WorldGeneration
                 Console.WriteLine(e);
                 throw;
             }
-            return null;
+        }
+
+        public void deleteTileMap()
+        {
+            try
+            {
+                using (var db = new LiteDatabase(databaseLocation))
+                {
+                    db.DropCollection(mapCollection);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public ILiteCollection<Chunk> getMapCollection(LiteDatabase db)
