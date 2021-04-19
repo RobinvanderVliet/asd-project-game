@@ -7,146 +7,141 @@ using System.Threading.Tasks;
 
 namespace Creature
 {
-    class Node
-    {
-        public static int NODE_SIZE = 1;
-        public Node Parent;
-        public Vector2 Position;
-        public Vector2 Center
-        {
-            get
-            {
-                return new Vector2(Position.X + NODE_SIZE / 2, Position.Y + NODE_SIZE / 2);
-            }
-        }
-        public float DistanceToTarget;
-        public float Cost;
-        public float Weight;
-        public float F
-        {
-            get
-            {
-                if (DistanceToTarget != -1 && Cost != -1)
-                    return DistanceToTarget + Cost;
-                else
-                    return -1;
-            }
-        }
-        public bool Walkable;
-        public Node(Vector2 pos, bool walkable, float weight = 1)
-        {
-            Parent = null;
-            Position = pos;
-            DistanceToTarget = -1;
-            Cost = 1;
-            Weight = weight;
-            Walkable = walkable;
-        }
-    }
     class PathFinder
     {
-        List<List<Node>> Grid;
-        int GridRows
+        List<List<Node>> grid;
+        public PathFinder(List<List<Node>> nodes)
+        {
+            this.grid = nodes;
+        }
+        int gridRows
         {
             get
             {
-                return Grid[0].Count;
+                return grid[0].Count;
             }
         }
-        int GridCols
+        int gridCols
         {
             get
             {
-                return Grid.Count;
+                return grid.Count;
             }
         }
-
-        public PathFinder(List<List<Node>> grid)
+        public Stack<Node> findPath(Vector2 startPosition, Vector2 endPosition)
         {
-            Grid = grid;
-        }
+            Node startNode = new Node(new Vector2((int)(startPosition.X / Node.nodeSize), (int)(startPosition.Y / Node.nodeSize)), true);
+            Node endNode = new Node(new Vector2((int)(endPosition.X / Node.nodeSize), (int)(endPosition.Y / Node.nodeSize)), true);
 
-        public Stack<Node> FindPath(Vector2 StartPosition, Vector2 EndPosition)
-        {
-            Node start = new Node(new Vector2((int)(StartPosition.X / Node.NODE_SIZE), (int)(StartPosition.Y / Node.NODE_SIZE)), true);
-            Node end = new Node(new Vector2((int)(EndPosition.X / Node.NODE_SIZE), (int)(EndPosition.Y / Node.NODE_SIZE)), true);
-
-            Stack<Node> Path = new Stack<Node>();
-            List<Node> OpenList = new List<Node>();
-            List<Node> ClosedList = new List<Node>();
+            Stack<Node> path = new Stack<Node>();
+            List<Node> openList = new List<Node>();
+            List<Node> closedList = new List<Node>();
             List<Node> adjacencies;
-            Node current = start;
+            Node current = startNode;
 
-            // add start node to Open List
-            //OpenList.Add(new Node(new Vector2(5,8), true));
-            OpenList.Add(start);
+            // Add start node to OpenList
+            openList.Add(startNode);
 
-            while (OpenList.Count != 0 && !ClosedList.Exists(x => x.Position == end.Position))
+            while (openList.Count != 0 && !closedList.Exists(x => x.position == endNode.position))
             {
-                current = OpenList[0];
-                OpenList.Remove(current);
-                ClosedList.Add(current);
-                adjacencies = GetAdjacentNodes(current);
-
+                current = openList[0];
+                openList.Remove(current);
+                closedList.Add(current);
+                adjacencies = getAdjacentNodes(current);
 
                 foreach (Node n in adjacencies)
                 {
-                    if (!ClosedList.Contains(n) && n.Walkable)
+                    if (!closedList.Contains(n) && n.isWalkable)
                     {
-                        if (!OpenList.Contains(n))
+                        if (!openList.Contains(n))
                         {
-                            n.Parent = current;
-                            n.DistanceToTarget = Math.Abs(n.Position.X - end.Position.X) + Math.Abs(n.Position.Y - end.Position.Y);
-                            n.Cost = n.Weight + n.Parent.Cost;
-                            OpenList.Add(n);
-                            OpenList = OpenList.OrderBy(node => node.F).ToList<Node>();
+                            n.parent = current;
+                            n.distanceToTarget = Math.Abs(n.position.X - endNode.position.X) + Math.Abs(n.position.Y - endNode.position.Y);
+                            n.cost = n.weight + n.parent.cost;
+                            openList.Add(n);
+                            openList = openList.OrderBy(node => node.fScore).ToList<Node>();
                         }
                     }
                 }
             }
 
-            // construct path, if end was not closed return null
-            if (!ClosedList.Exists(x => x.Position == end.Position))
+            // Construct path, if end was not closed return null
+            if (!closedList.Exists(x => x.position == endNode.position))
             {
                 return null;
             }
 
-            // if all good, return path
-            Node temp = ClosedList[ClosedList.IndexOf(current)];
+            // If the end was reached, return the path
+            Node temp = closedList[closedList.IndexOf(current)];
             if (temp == null) return null;
             do
             {
-                Path.Push(temp);
-                temp = temp.Parent;
-            } while (temp != start && temp != null);
-            return Path;
+                path.Push(temp);
+                temp = temp.parent;
+            } while (temp != startNode && temp != null);
+            return path;
         }
-
-        private List<Node> GetAdjacentNodes(Node n)
+        private List<Node> getAdjacentNodes(Node node)
         {
             List<Node> temp = new List<Node>();
 
-            int row = (int)n.Position.Y;
-            int col = (int)n.Position.X;
+            int row = (int)node.position.Y;
+            int col = (int)node.position.X;
 
-            if (row + 1 < GridRows)
+            if (row + 1 < gridRows)
             {
-                temp.Add(Grid[col][row + 1]);
+                temp.Add(grid[col][row + 1]);
             }
             if (row - 1 >= 0)
             {
-                temp.Add(Grid[col][row - 1]);
+                temp.Add(grid[col][row - 1]);
             }
             if (col - 1 >= 0)
             {
-                temp.Add(Grid[col - 1][row]);
+                temp.Add(grid[col - 1][row]);
             }
-            if (col + 1 < GridCols)
+            if (col + 1 < gridCols)
             {
-                temp.Add(Grid[col + 1][row]);
+                temp.Add(grid[col + 1][row]);
             }
 
             return temp;
+        }
+    }
+    class Node
+    {
+        public const int nodeSize = 1;
+        public Node parent;
+        public Vector2 position;
+        public Vector2 center
+        {
+            get
+            {
+                return new Vector2(position.X + nodeSize / 2, position.Y + nodeSize / 2);
+            }
+        }
+        public float distanceToTarget;
+        public float cost;
+        public float weight;
+        public float fScore
+        {
+            get
+            {
+                if (distanceToTarget != -1 && cost != -1)
+                    return distanceToTarget + cost;
+                else
+                    return -1;
+            }
+        }
+        public bool isWalkable;
+        public Node(Vector2 pos, bool isWalkable, float weight = 1)
+        {
+            this.parent = null;
+            this.position = pos;
+            this.distanceToTarget = -1;
+            this.cost = 1;
+            this.weight = weight;
+            this.isWalkable = isWalkable;
         }
     }
 }
