@@ -1,16 +1,25 @@
 ﻿using System.Collections;
-using Agent.antlr.ast;
 
-namespace Agent
+namespace Agent.antlr.ast.interfaces
 {
+    /*
+    AIM SD ASD 2020/2021 S2 project
+     
+    Project name: [to be determined].
+
+    This file is created by team: 1.
+     
+    Goal of this file: [making_the_system_work].
+     
+    */
     public interface INode
     {
         string GetNodeType();
         
         ArrayList GetChildren();
         
-        Node AddChild(INode node);
+        INode AddChild(INode node);
 
-        Node RemoveChild(INode node);
+        INode RemoveChild(INode node);
     }
 }
