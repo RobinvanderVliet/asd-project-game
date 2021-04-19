@@ -20,13 +20,21 @@ namespace Network
                     Console.WriteLine(objectPayloadDTO2.header.actionType);
                     Console.WriteLine(objectPayloadDTO2.chatAction.chat);
                     Console.WriteLine(objectPayloadDTO2.chatAction.message);
+
+                    Receiver receiver = new Receiver();
+
+                    //Check if the message is meant for you
+                    if(receiver.checkHeader(objectPayloadDTO2.header))
+                    {
+                        receiver.checkActionType(objectPayloadDTO2);
+                    }
                 };
 
                 PayloadHeaderDTO payloadHeaderDTO1 = new PayloadHeaderDTO();
                 payloadHeaderDTO1.target = "host";
                 payloadHeaderDTO1.originID = "ce4d2959-cc81-4722-8801-eba55173536";
                 payloadHeaderDTO1.sessionID = "10";
-                payloadHeaderDTO1.actionType = "chat";
+                payloadHeaderDTO1.actionType = "chatAction";
 
                 ChatActionDTO chatActionDTO1 = new ChatActionDTO();
                 chatActionDTO1.chat = "team";
@@ -43,10 +51,6 @@ namespace Network
 
                 Console.ReadKey();
             }
-
-            Receiver receiver = new Receiver();
-
-            receiver.checkActionType("actionType", "payload");
         }
     }
 }

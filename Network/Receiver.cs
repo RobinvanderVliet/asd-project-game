@@ -7,35 +7,29 @@ using System.Threading.Tasks;
 namespace Network
 {
     class Receiver {
-        //Receive message from socket
-        String message = "getMessageFromSocket";
-
-        //Check action type
-        String actionType = "actionType";
-
-        public void checkActionType(String actionType, String payload) 
+        public void checkActionType(ObjectPayloadDTO objectPayloadDTO) 
         {
-            switch (actionType) 
+            switch (objectPayloadDTO.header.actionType) 
             {
                 case "chatAction":
                     Console.WriteLine("Case chatAction");
-                    processChatAction(payload);
+                    processChatAction(objectPayloadDTO.chatAction);
                     break;
                 case "moveAction":
                     Console.WriteLine("Case moveAction");
-                    processMoveAction(payload);
+                    //processMoveAction(payload);
                     break;
                 case "attackAction":
                     Console.WriteLine("Case attackAction");
-                    processAttackAction(payload);
+                    //processAttackAction(payload);
                     break;
                 case "joinAction":
                     Console.WriteLine("Case joinAction");
-                    processJoinAction(payload);
+                    //processJoinAction(payload);
                     break;
                 case "sessionUpdateAction":
                     Console.WriteLine("Case sessionUpdateAction");
-                    processSessionUpdateAction(payload);
+                    //processSessionUpdateAction(payload);
                     break;
                 default:
                     Console.WriteLine("Not a valid actiontype");
@@ -43,7 +37,13 @@ namespace Network
             }
         }
 
-        public void processChatAction(String payload) {
+        public Boolean checkHeader(PayloadHeaderDTO payloadHeaderDTO)
+        {
+            Console.WriteLine("Checking session with ID: " + payloadHeaderDTO.sessionID);
+            return true;
+        }
+
+        public void processChatAction(ChatActionDTO chatActionDTO) {
             //Process chat action
         }
 
