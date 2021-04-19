@@ -10,7 +10,7 @@
     Goal of this file: [making_the_system_work].
      
     */
-    interface IPlayer : ISubject
+    public interface IPlayer : ISubject
     {
         
     }

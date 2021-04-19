@@ -10,7 +10,7 @@
     Goal of this file: [making_the_system_work].
      
     */
-    interface IComparison : INode
+    public interface IComparison : INode
     {
         public string ComparisonType { get; set; }
     }

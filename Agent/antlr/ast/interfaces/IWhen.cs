@@ -11,7 +11,7 @@
      
     */
     
-    interface IWhen : INode
+    public interface IWhen : INode
     {
 
     }

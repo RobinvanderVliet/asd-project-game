@@ -32,12 +32,9 @@ namespace Agent.antlr.ast.implementation
             {
                 this._comparableL,
                 this._comparison,
-                this._comparableR
+                this._comparableR,
+                this._then
             };
-            if (this._then != null) {
-                children.Add(this._then);
-                
-            }
             children.AddRange(body);
             return children;
         }
@@ -46,10 +43,10 @@ namespace Agent.antlr.ast.implementation
         {
             switch (node) {
                 case IComparable comparable:
-                    if (this._comparableL != null) {
+                    if (this._comparableL == null) {
                         this._comparableL = comparable;
                     }
-                    else if (this._comparableR != null) {
+                    else if (this._comparableR == null) {
                         this._comparableR = comparable;
                     }
                     else {
@@ -69,5 +66,48 @@ namespace Agent.antlr.ast.implementation
 
             return this;
         }
+        
+
+        public IComparable GetComparableL()
+        {
+            return _comparableL;
+        }
+
+        public void SetComparableL(IComparable comparable)
+        {
+            _comparableL = comparable;
+        }
+        
+        
+        public IComparable GetComparableR()
+        {
+            return _comparableR;
+        }
+
+        public void SetComparableR(IComparable comparable)
+        {
+            _comparableR = comparable;
+        }
+
+        public IComparison GetComparison()
+        {
+            return _comparison;
+        }
+
+        public void SetComparison(IComparison comparison)
+        {
+            _comparison = comparison;
+        }
+        
+        public IActionReference GetThen()
+        {
+            return _then;
+        }
+
+        public void SetThen(IActionReference then)
+        {
+            _then = then;
+        }
+
     }
 }

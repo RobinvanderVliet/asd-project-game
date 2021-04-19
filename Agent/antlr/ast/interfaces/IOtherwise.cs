@@ -10,7 +10,7 @@
     Goal of this file: [making_the_system_work].
      
     */
-    interface IOtherwise : INode
+    public interface IOtherwise : INode
     {
 
     }
