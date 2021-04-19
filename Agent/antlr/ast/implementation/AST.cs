@@ -1,4 +1,5 @@
 ﻿using Agent.antlr.ast.interfaces;
+using System;
 
 namespace Agent.antlr.ast.implementation
 {
@@ -23,6 +24,11 @@ namespace Agent.antlr.ast.implementation
         public AST(IConfiguration root)
         {
             this.root = root;
+        }
+
+        public void SetRoot(Configuration configuration)
+        {
+            root = configuration;
         }
     }
 }

@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Agent.antlr.grammar;
-using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
-using Agent.antlr.ast;
 using Agent.antlr.ast.implementation;
 using Agent.antlr.ast.implementation.comparables;
-using Agent.antlr.ast.comparables;
 using Agent.antlr.ast.implementation.comparables.subjects;
-using Action = Agent.antlr.ast.Action;
 
 namespace Agent.parser
 {
@@ -30,8 +24,7 @@ namespace Agent.parser
 
         public override void EnterAction([NotNull] AgentConfigurationParser.ActionContext context)
         {
-            ActionReference reference = new ActionReference();
-            reference.action = context.STRING();
+            ActionReference reference = new ActionReference(context.STRING().GetText());
             currentContainer.Push(reference);
         }
 
@@ -43,8 +36,7 @@ namespace Agent.parser
 
         public override void EnterActionSubject([NotNull] AgentConfigurationParser.ActionSubjectContext context)
         {
-            ActionReference reference = new ActionReference();
-            reference.action = context.action().STRING();
+            ActionReference reference = new ActionReference(context.action().STRING().GetText());
             currentContainer.Push(reference);
         }
 
@@ -55,7 +47,7 @@ namespace Agent.parser
 
         public override void EnterComparison([NotNull] AgentConfigurationParser.ComparisonContext context)
         {
-            Comparison comparison = new Comparison();
+            Comparison comparison = new Comparison(context.children.Where(c => c.GetText() != null).FirstOrDefault().GetText());
             currentContainer.Push(comparison);
         }
 
@@ -95,21 +87,13 @@ namespace Agent.parser
 
         public override void EnterRule([NotNull] AgentConfigurationParser.RuleContext context)
         {
-            Rule rule = new Rule();
-            rule.SetValue = context.STRING();
+            Rule rule = new Rule(context.setting().GetText(), context.STRING().ElementAt(1).GetText());
             currentContainer.Push(rule);
-        }
-
-        public override void EnterSetting([NotNull] AgentConfigurationParser.SettingContext context)
-        {
-            Setting node = (Setting)currentContainer.Pop();
-            node.SettingName = context.GetText();
-            currentContainer.Push(node);
         }
 
         public override void EnterSettingBlock([NotNull] AgentConfigurationParser.SettingBlockContext context)
         {
-            Setting block = new Setting();
+            Setting block = new Setting(context.setting().children.Where(c => c.GetText() != null).FirstOrDefault().GetText());
             currentContainer.Push(block);
         }
 
@@ -127,21 +111,21 @@ namespace Agent.parser
 
         public override void EnterSubject([NotNull] AgentConfigurationParser.SubjectContext context)
         {
-            String subject = context.children.Where(c => c.GetText() != null).FirstOrDefault().GetText();
+            Subject subject = (Subject)context.children.Where(c => c.GetText() != null).FirstOrDefault();
             Subject node = CreateSubject(subject);
             currentContainer.Push(node);
         }
 
-        private Subject CreateSubject(string subject)
+        private Subject CreateSubject(Subject subject)
         {
-            return subject switch
+            return subject.ToString() switch
             {
-                "player" => new Player(),
-                "npc" => new NPC(),
-                "opponent" => new Opponent(),
-                "inventory" => new Inventory(),
-                "current" => new Current(),
-                "tile" => new Tile(),
+                "player" => new Player(subject.Name),
+                "npc" => new NPC(subject.Name),
+                "opponent" => new Opponent(subject.Name),
+                "inventory" => new Inventory(subject.Name),
+                "current" => new Current(subject.Name),
+                "tile" => new Tile(subject.Name),
                 _ => throw new Exception("subject is an invallid type:" + subject),
             };
         }
