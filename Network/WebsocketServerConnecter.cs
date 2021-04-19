@@ -21,7 +21,7 @@ namespace Network
                     Console.WriteLine(objectPayloadDTO2.chatAction.chat);
                     Console.WriteLine(objectPayloadDTO2.chatAction.message);
 
-                    Receiver receiver = new Receiver();
+                    ObjectPayloadHandler receiver = new ObjectPayloadHandler();
 
                     //Check if the message is meant for you
                     if(receiver.checkHeader(objectPayloadDTO2.header))

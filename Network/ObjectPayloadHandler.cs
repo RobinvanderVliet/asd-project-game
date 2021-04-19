@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Network
 {
-    class Receiver {
+    class ObjectPayloadHandler {
         public void checkActionType(ObjectPayloadDTO objectPayloadDTO) 
         {
             switch (objectPayloadDTO.header.actionType) 
