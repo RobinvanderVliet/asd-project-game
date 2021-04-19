@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
+using WorldGeneration;
 
 namespace ASD_project
 {
@@ -18,6 +19,9 @@ namespace ASD_project
             public void Run()
             {
                 Console.WriteLine("Game is gestart");
+                   Class1 whatever = new Class1();
+                    Console.WriteLine(whatever.prototype("hallo"));
+            
             }
         }
     }
