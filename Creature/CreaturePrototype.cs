@@ -10,7 +10,8 @@ namespace Creature
     {
         static void Main(string[] args)
         {
-            // Prototype code here...
+            ICreature creature = new Monster();
+            creature.FireEvent(Monster.Event.SPOTTED_PLAYER);
         }
     }
 }
