@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <Content Include="conceptGrammar.g4" />
+    <Content Include="conceptGrammar1.g4" />
   </ItemGroup>
 
 </Project>
