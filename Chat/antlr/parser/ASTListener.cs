@@ -19,18 +19,13 @@ namespace Chat.antlr.parser
     public class ASTListener : PlayerCommandsBaseListener
 
     {
-        private AST ast;
+        public AST ast { get;}
         private Stack _currentContainer;
 
         public ASTListener()
         {
             ast = new AST();
             _currentContainer = new Stack();
-        }
-
-        public AST getAST()
-        {
-            return ast;
         }
 
         public override void EnterMove(PlayerCommandsParser.MoveContext context)
