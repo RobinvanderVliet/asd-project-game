@@ -16,37 +16,43 @@ using Chat.antlr.grammar;
 
 namespace Chat.antlr.parser
 {
-    public class Parser : PlayerCommandsBaseListener
+    public class ASTListener : PlayerCommandsBaseListener
 
     {
-        private AST ast { get; }
-        private Stack currentContainer;
+        private AST ast;
+        private Stack _currentContainer;
 
-        public Parser()
+        public ASTListener()
         {
             ast = new AST();
-            currentContainer = new Stack();
+            _currentContainer = new Stack();
+        }
+
+        public AST getAST()
+        {
+            return ast;
         }
 
         public override void EnterMove(PlayerCommandsParser.MoveContext context)
         {
-            currentContainer.Push(new Move());
+            _currentContainer.Push(new Move());
         }
 
         public override void ExitMove(PlayerCommandsParser.MoveContext context)
         {
-            currentContainer.Pop();
+            
+           ast.root.addChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterDirection(PlayerCommandsParser.DirectionContext context)
         {
-            Move move = (Move) currentContainer.Peek();
+            Move move = (Move) _currentContainer.Peek();
             move.addChild(new Direction(context.GetText()));
         }
 
         public override void EnterStep(PlayerCommandsParser.StepContext context)
         {
-            Move move = (Move) currentContainer.Peek();
+            Move move = (Move) _currentContainer.Peek();
             move.addChild(new Step(Convert.ToInt32(context.GetText())));
         }
     }

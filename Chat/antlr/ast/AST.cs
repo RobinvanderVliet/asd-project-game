@@ -8,9 +8,12 @@
     Goal of this file: AST class.
      
 */
+
+using System;
+
 namespace Chat.antlr.ast
 {
-    public class AST
+    public class AST : IEquatable<AST>
     {
         public Input root;
 
@@ -27,6 +30,19 @@ namespace Chat.antlr.ast
         public void setRoot(Input input)
         {
             root = input;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as AST);
+        }
+
+        public bool Equals(AST other)
+        {
+            if (other == null)
+                return false;
+
+            return root.Equals(other.root);
         }
     }
 }

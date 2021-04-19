@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 
 /*
     AIM SD ASD 2020/2021 S2 project
@@ -12,7 +13,7 @@
 */
 namespace Chat.antlr.ast
 {
-    public class Input : ASTNode
+    public class Input : ASTNode, IEquatable<Input>
     {
         public ArrayList body;
 
@@ -41,6 +42,32 @@ namespace Chat.antlr.ast
         {
             body.Remove(child);
             return this;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as Input);
+        }
+
+        public bool Equals(Input other)
+        {
+            if (other == null)
+                return false;
+
+            if (body.Count != other.body.Count)
+            {
+                return false;
+            }
+            
+            for (int i = 0; i < body.Count; i++)
+            {
+                if (!body[i].Equals(other.body[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

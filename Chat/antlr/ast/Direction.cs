@@ -8,9 +8,12 @@
     Goal of this file: Direction class for direction of player.
      
 */
+
+using System;
+
 namespace Chat.antlr.ast
 {
-    public class Direction : ASTNode
+    public class Direction : ASTNode, IEquatable<Direction>
     {
         private string value;
 
@@ -21,6 +24,19 @@ namespace Chat.antlr.ast
         public Direction(string value)
         {
             this.value = value;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as Direction);
+        }
+
+        public bool Equals(Direction other)
+        {
+            if (other == null)
+                return false;
+
+            return value == other.value;
         }
     }
 }

@@ -8,14 +8,16 @@
     Goal of this file: Move action class (extends command).
      
 */
+
+using System;
 using System.Collections;
 
 namespace Chat.antlr.ast.actions
 {
-    public class Move : Command
+    public class Move : Command, IEquatable<Move>
     {
         public Direction direction;
-        public Step steps;
+        public Step steps = new Step();
 
         public override ArrayList getChildren()
         {
@@ -51,6 +53,18 @@ namespace Chat.antlr.ast.actions
             }
 
             return this;
+        }
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as Move);
+        }
+
+        public bool Equals(Move other)
+        {
+            if (other == null)
+                return false;
+
+            return direction.Equals(other.direction) && steps.Equals(other.steps);
         }
     }
 }
