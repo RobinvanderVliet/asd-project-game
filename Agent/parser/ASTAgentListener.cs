@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Agent.antlr.grammar;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
+using Agent.antlr.ast;
 
 namespace Agent.parser
 {
@@ -13,17 +14,15 @@ namespace Agent.parser
     {
 
         private AST ast;
-        private Stack<ASTNode> currentContainer;
+        private Stack<Node> currentContainer;
 
         public ASTAgentListener()
         {
             ast = new AST();
-            currentContainer = new Stack<ASTNode>;
+            currentContainer = new Stack<Node>;
         }
 
         public AST getAST(){ return ast; }
-
-
 
         public override void EnterAction([NotNull] AgentConfigurationParser.ActionContext context)
         {
@@ -32,7 +31,8 @@ namespace Agent.parser
 
         public override void EnterActionBlock([NotNull] AgentConfigurationParser.ActionBlockContext context)
         {
-            base.EnterActionBlock(context);
+            antlr.ast.Action action = new antlr.ast.Action(context.GetText());
+            currentContainer.Peek().AddChild(action);
         }
 
         public override void EnterActionSubject([NotNull] AgentConfigurationParser.ActionSubjectContext context)
@@ -117,14 +117,14 @@ namespace Agent.parser
 
         public override void EnterSetting([NotNull] AgentConfigurationParser.SettingContext context)
         {
-            ASTNode node = currentContainer.Pop();
-            node.addChild(new Setting(context.GetChild()));
+            Setting node = (Setting)currentContainer.Pop();
+            node.SettingName = context.GetText();
             currentContainer.Push(node);
         }
 
         public override void EnterSettingBlock([NotNull] AgentConfigurationParser.SettingBlockContext context)
         {
-            SettingsBlock block = new SettingsBlock();
+            Setting block = new Setting();
             currentContainer.Push(block);
         }
 
@@ -155,9 +155,9 @@ namespace Agent.parser
 
         public override void EnterWhenClause([NotNull] AgentConfigurationParser.WhenClauseContext context)
         {
-            WhenClause clause = new WhenClause();
-            clause.addChild(new Compareble(context.comparable));
-            clause.addChild(new NodeComparison(context.comparison));
+            When clause = new When();
+            clause.AddChild(new Comparison(context.comparison));
+            clause.AddChild(new Comparable(context.comparable)); //todo check double value.
             currentContainer.Push(clause);
         }
 
@@ -248,8 +248,8 @@ namespace Agent.parser
 
         public override void ExitSetting([NotNull] AgentConfigurationParser.SettingContext context)
         {
-            ASTNode temp = currentContainer.Pop();
-            currentContainer.Peek().addChild(temp);
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
         }
 
         public override void ExitSettingBlock([NotNull] AgentConfigurationParser.SettingBlockContext context)
