@@ -8,6 +8,10 @@ namespace WorldGeneration
             this.y = y;
             this.map = map;
         }
+        
+        public Chunk()
+        {
+        }
 
         public int x { get; set; }
         public int y { get; set; }
