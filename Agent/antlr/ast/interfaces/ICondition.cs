@@ -10,7 +10,7 @@
     Goal of this file: [making_the_system_work].
      
     */
-    interface ICondition : INode
+    public interface ICondition : INode
     {
 
     }

@@ -10,7 +10,7 @@
     Goal of this file: [making_the_system_work].
      
     */
-    interface ISetting : INode
+    public interface ISetting : INode
     {
         public string SettingName { get; set; }
     }

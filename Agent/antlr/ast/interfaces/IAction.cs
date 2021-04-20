@@ -16,7 +16,7 @@ namespace Agent.antlr.ast.interfaces
     Goal of this file: [making_the_system_work].
      
     */
-    interface IAction : INode
+    public interface IAction : INode
     {
         public string Name { get; set; }
 

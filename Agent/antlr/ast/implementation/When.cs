@@ -58,12 +58,16 @@ namespace Agent.antlr.ast.implementation
             switch (node)
             {
                 case IComparable comparable:
+                    if (this._comparableL == null) {
+                        this._comparableL = comparable;
                     // TODO: Wanneer komt die hier in? Dit is altijd null, hij komt altijd in de else
                     
                     if (this.comparableL != null)
                     {
                         this.comparableL = comparable;
                     }
+                    else if (this._comparableR == null) {
+                        this._comparableR = comparable;
                     else if (this.comparableR != null)
                     {
                         this.comparableR = comparable;
@@ -87,5 +91,48 @@ namespace Agent.antlr.ast.implementation
 
             return this;
         }
+        
+
+        public IComparable GetComparableL()
+        {
+            return _comparableL;
+        }
+
+        public void SetComparableL(IComparable comparable)
+        {
+            _comparableL = comparable;
+        }
+        
+        
+        public IComparable GetComparableR()
+        {
+            return _comparableR;
+        }
+
+        public void SetComparableR(IComparable comparable)
+        {
+            _comparableR = comparable;
+        }
+
+        public IComparison GetComparison()
+        {
+            return _comparison;
+        }
+
+        public void SetComparison(IComparison comparison)
+        {
+            _comparison = comparison;
+        }
+        
+        public IActionReference GetThen()
+        {
+            return _then;
+        }
+
+        public void SetThen(IActionReference then)
+        {
+            _then = then;
+        }
+
     }
 }

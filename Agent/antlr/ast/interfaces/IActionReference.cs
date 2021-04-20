@@ -10,7 +10,7 @@
     Goal of this file: [making_the_system_work].
      
     */
-    interface IActionReference : INode
+    public interface IActionReference : INode
     {
         public string Name { get; set; }
     }
