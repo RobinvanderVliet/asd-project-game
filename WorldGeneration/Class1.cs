@@ -1,9 +1,16 @@
-﻿using System;
+﻿/*
+    AIM SD ASD 2020/2021 S2 project
+     
+    Project name: ASD project.
+ 
+    This file is created by team: 3.
+     
+    Goal of this file: Prototype database storage.
+     
+*/
+
+using System;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using System.Runtime.Serialization.Json;
-using LiteDB;
 
 namespace WorldGeneration
 {
@@ -43,17 +50,21 @@ namespace WorldGeneration
                 gasLevel = 0,
                 tileType = water
             };
-            Tile[] tileMap = {grassTile, sandTile, waterTile, sandTile};
+            Tile[] tileMap = {grassTile, sandTile, waterTile, sandTile, 
+                grassTile, grassTile, sandTile, sandTile,
+                grassTile, grassTile, grassTile, grassTile,
+                grassTile, grassTile, grassTile, grassTile
+            };
             var chunk = new Chunk()
             {
-                x = 1,
-                y = 2,
+                x = 0,
+                y = 0,
                 map = tileMap,
                 rowSize = 4
             };
             var chunk2 = new Chunk()
             {
-                x = 1,
+                x = 0,
                 y = 1,
                 map = tileMap,
                 rowSize = 4
@@ -63,65 +74,23 @@ namespace WorldGeneration
             db.deleteTileMap();
             db.insertChunkIntoDatabase(chunk);
             db.insertChunkIntoDatabase(chunk2);
-            //db.getAllChunks();
-            using (var db2 = new LiteDatabase("C:\\Temp\\ChunkDatabase.db"))
-            {
-                var collection = db2.GetCollection<Chunk>("Chunks");
-
-                var results = collection.Query()
-                    .Where(chunk => chunk.x.Equals(lookingForX) && chunk.y.Equals(lookingForY))
-                    .Select(queryOutput => new {queryOutput.map})
-                    .ToArray();
-                /*
-                var results = collection.Query()
-                    .Where( chunk => chunk.x.Equals(lookingForX) && chunk.y.Equals(lookingForY) ) 
-                    .Select(queryOutput => new {x = queryOutput.x, y = queryOutput.y })
-                    .Limit(10)
-                    .ToList();
-                    */
-                foreach (var result in results)
-                {
-                    for (int i = 0; i < result.map.Length - 1; i++)
-                    {
-                        Console.Write(" " + result.map[i].tileType.symbol);
-                    }
-                    Console.WriteLine(" " + result.map[result.map.Length - 1].tileType.symbol);                                         
-                }
-            }/*
-
-            // db.getChunk(1, 1);
-            // var output = db.getChunk(1, 1);
-            //Console.WriteLine("Chunk: " + output.x + " " + chunk.y);
-            
-            /*
-            using (var db = new LiteDatabase(@"C:\Temp\ChunkDatabase.db"))
-            {
-                // Get a collection (or create, if doesn't exist)
-                db.DropCollection("Chunks");
-                var collection = db.GetCollection<Chunk>("Chunks");
-            
-                
-                // Insert new customer document (Id will be auto-incremented)
-                collection.Insert(chunk);
-                collection.Insert(chunk2);
-                
-                var chunkOutput = collection.FindAll();
-                
-                Console.WriteLine("aantal waardes: " +  collection.Count());
-                Console.WriteLine("aantal waardes: " +  collection.Count());
-                var AAAAAAAAA = collection.Query()
-                    .Where( chunk => chunk.x.Equals(lookingForX) && chunk.y.Equals(lookingForY) ) 
-                    .Select(queryOutput => new {x = queryOutput.x, y = queryOutput.y })
-                    .Limit(10)
-                    .ToList();
-                foreach (var result in AAAAAAAAA)
-                {
-                    Console.WriteLine("waarde: " +  result);
-                }
-        
-
-            }
-            */
+            db.getAllChunks();
+            var chunkA = db.getChunk(0,0);
+            var chunkB = db.getChunk(0,1);
+            chunkA.displayChunk();
+            Console.WriteLine(chunkA.getTileCoordinatesInChunk(0)[0] + " " + chunkA.getTileCoordinatesInChunk(0)[1]); 
+            Console.WriteLine(chunkA.getTileCoordinatesInChunk(1)[0] + " " + chunkA.getTileCoordinatesInChunk(1)[1]); 
+            Console.WriteLine(chunkA.getTileCoordinatesInChunk(2)[0] + " " + chunkA.getTileCoordinatesInChunk(2)[1]); 
+            Console.WriteLine(chunkA.getTileCoordinatesInChunk(3)[0] + " " + chunkA.getTileCoordinatesInChunk(3)[1]); 
+            Console.WriteLine(chunkA.getTileCoordinatesInChunk(4)[0] + " " + chunkA.getTileCoordinatesInChunk(4)[1]); 
+            Console.WriteLine(chunkA.getTileCoordinatesInChunk(5)[0] + " " + chunkA.getTileCoordinatesInChunk(5)[1]); 
+            Console.WriteLine(chunkA.getTileCoordinatesInChunk(6)[0] + " " + chunkA.getTileCoordinatesInChunk(6)[1]); 
+            Console.WriteLine(chunkA.getTileCoordinatesInChunk(7)[0] + " " + chunkA.getTileCoordinatesInChunk(7)[1]); 
+            Console.WriteLine(chunkA.getTileCoordinatesInChunk(8)[0] + " " + chunkA.getTileCoordinatesInChunk(8)[1]); 
+            Console.WriteLine(chunkA.getTileCoordinatesInChunk(9)[0] + " " + chunkA.getTileCoordinatesInChunk(9)[1]); 
+            Console.WriteLine(" ------- "); 
+            Console.WriteLine(chunkA.getTileCoordinatesInWorld(0)[0] + " " + chunkA.getTileCoordinatesInWorld(0)[1]);
+            Console.WriteLine(chunkB.getTileCoordinatesInWorld(0)[0] + " " + chunkB.getTileCoordinatesInWorld(0)[1]);
         }
     }
 }

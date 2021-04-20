@@ -1,5 +1,17 @@
+/*
+    AIM SD ASD 2020/2021 S2 project
+     
+    Project name: ASD project.
+ 
+    This file is created by team: 3.
+     
+    Goal of this file: All data transfer with the database.
+     
+*/
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using LiteDB;
 
 namespace WorldGeneration
@@ -8,8 +20,7 @@ namespace WorldGeneration
     {
         private String databaseLocation;
         private String mapCollection;
-
-
+        
         public Database()
         {
             databaseLocation = "C:\\Temp\\ChunkDatabase.db";
@@ -38,27 +49,22 @@ namespace WorldGeneration
             {
                 using (var db = new LiteDatabase(databaseLocation))
                 {
-                    var collection = getMapCollection(db);
+                    var collection = this.getMapCollection(db);
                     var results = collection.Query()
                         .Where(chunk => chunk.x.Equals(chunkXValue) && chunk.y.Equals(chunkYValue))
-                        .Select(queryOutput => new Chunk(queryOutput.x, queryOutput.y, queryOutput.map, queryOutput.rowSize))
-                        .ToList();
+                        .Select(queryOutput => new {queryOutput.map, queryOutput.rowSize, queryOutput.x, queryOutput.y})
+                        .ToArray();
 
-                    switch (results.Count)
+                    switch (results.Length)
                     {
                         case 0:
                             throw new DatabaseError("There were no matching chunks found");
                         case >1:
                             throw new DatabaseError("There were multiple matching chunks found. bad! this bad!");
                         case 1:
-                            foreach (var result in results)
-                            {
-                                Console.WriteLine("waarde: " + result);
-                                return result;
-                            }
-                            break;
+                            return new Chunk(results.First().x, results.First().y, results.First().map, results.First().rowSize);
                         default:
-                            throw new DatabaseError("Extremely unexpected result from query. like, this is only here in case of a count being negative. So pretty much unreachable code.");
+                            throw new DatabaseError("Extremely unexpected result from query. like, this is only here in case of a count being negative or null. So pretty much unreachable code.");
                     }
                 }
             }
@@ -77,15 +83,16 @@ namespace WorldGeneration
                 using (var db = new LiteDatabase(databaseLocation))
                 {
                     var results = getMapCollection(db).Query()
-                        .Select(queryOutput => new Chunk(queryOutput.x, queryOutput.y, queryOutput.map, queryOutput.rowSize))
+                        .Select(queryOutput => new {queryOutput.map, queryOutput.rowSize, queryOutput.x, queryOutput.y})
                         .ToList();
+                
 
                     switch (results.Count)
                     {
                         case 0:
                             throw new DatabaseError("There were no matching chunks found");
                         case >0:
-                            return results;
+                            return results.Select(result => new Chunk(result.x, result.y, result.map, result.rowSize)).ToList();
                         default:
                             throw new DatabaseError("Extremely unexpected result from query. like, this is only here in case of a count being negative. So pretty much unreachable code.");
                     }
