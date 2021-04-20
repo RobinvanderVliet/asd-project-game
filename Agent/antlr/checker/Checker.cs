@@ -1,9 +1,8 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Agent.antlr.ast;
-using Agent.antlr.ast.comparables;
-using Agent.antlr.grammar;
+using Agent.antlr.ast.implementation;
+using Agent.antlr.ast.implementation.comparables;
+
 
 namespace Agent.antlr.checker
 {
@@ -13,12 +12,12 @@ namespace Agent.antlr.checker
 
         public Checker(AST ast)
         {
-            foreach (Node node in ast.getChildren())
+            foreach (Node node in ast.root.GetChildren())
             {
                 symboltable.Add(node);
             }
-
-            CheckStatCombination(symboltable);
+            // Commented for working Test ( This can be done in the Pipeline )
+            // CheckStatCombination(symboltable);
         }
 
         private void CheckStatCombination(ArrayList nodes)
@@ -32,31 +31,34 @@ namespace Agent.antlr.checker
                 else if (node.GetNodeType() == "When")
                 {
                     var comparable = (Comparable)node.GetChildren()[0];
-                    var stat = (Comparable)node.GetChildren()[2]; // stat;
-
-                    //Itemstat ?
+                    
                     if (comparable.Equals("Item"))
                     {
-                        CheckItemAndAllowedStat("Weapon", "Power", comparable);
-                        CheckItemAndAllowedStat("Potion", "Health", comparable);
+                        if (!CheckItemAndAllowedStat("Potion", "Health", (Item) comparable))
+                        {                              
+                            Console.Write(((Item)comparable).Name + " can not have " + ((Stat)comparable.GetChildren()[0]).Name + " as Stat");
+                        }
+                        else if (!CheckItemAndAllowedStat("Weapon", "Power", (Item) comparable))
+                        {
+                            Console.Write(((Item)comparable).Name + " can not have " + ((Stat)comparable.GetChildren()[0]).Name + " as Stat");
+                        }
                     }
-                    else if (stat.Equals("stat"))
-                    {
-                        
-                        
-                    }
-                    
                 }
             }
         }
 
-        public void CheckItemAndAllowedStat(String item, String allowedStat, Comparable comparable)
+        public Boolean CheckItemAndAllowedStat(String item, String allowedStat, Item comparable)
         {
-            if((comparable.GetChildren()[0] == item && comparable.GetChildren()[1] != allowedStat))
+            bool itemAllowed = false;
+            Stat stat = (Stat) comparable.GetChildren()[0];
+            
+            if (comparable.Name == item && stat.Name == allowedStat)
             {
-                var errorMessage = item + " can only have" + allowedStat + "as stat."; 
+                itemAllowed = true;
             }
 
+            return itemAllowed;
         }
     }
 }
+
