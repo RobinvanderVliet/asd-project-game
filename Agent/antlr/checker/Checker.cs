@@ -50,7 +50,7 @@ namespace Agent.antlr.checker
             }
         }
 
-        private void CheckItemAndAllowedStat(String item, String allowedStat, Comparable comparable)
+        public void CheckItemAndAllowedStat(String item, String allowedStat, Comparable comparable)
         {
             if((comparable.GetChildren()[0] == item && comparable.GetChildren()[1] != allowedStat))
             {
