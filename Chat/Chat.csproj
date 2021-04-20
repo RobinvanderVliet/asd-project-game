@@ -4,4 +4,24 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Antlr4" Version="4.6.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="antlr\grammar\PlayerCommands.g4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="antlr\ast" />
+    <Folder Include="antlr\checker" />
+    <Folder Include="antlr\generator" />
+    <Folder Include="antlr\parser" />
+    <Folder Include="antlr\transformer" />
+  </ItemGroup>
+
 </Project>
