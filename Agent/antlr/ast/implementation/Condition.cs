@@ -1,23 +1,23 @@
-﻿using System.Collections;
+﻿using System;
+using Agent.antlr.ast.interfaces;
+using System.Collections;
 
-namespace Agent.antlr.ast
+namespace Agent.antlr.ast.implementation
 {
     /*
-     * 
-     * @author Abdul     
+    AIM SD ASD 2020/2021 S2 project
+     
+    Project name: [to be determined].
+ 
+    This file is created by team: 1.
+     
+    Goal of this file: [making_the_system_work].
+     
     */
     public class Condition : Node, ICondition
     {
         private When _whenClause;
         private Otherwise _otherwiseClause;
-        private ArrayList _body;
-
-        public Condition()
-        {
-            // _whenClause = new When();
-            // _otherwiseClause = new Otherwise();
-            _body = new ArrayList();
-        }
 
         public new string GetNodeType()
         {
@@ -27,15 +27,16 @@ namespace Agent.antlr.ast
         public new ArrayList GetChildren()
         {
             var children = new ArrayList();
-            children.Add(_whenClause);
-            children.AddRange(_body);
+            if (_whenClause != null)
+                children.Add(_whenClause);
             if (_otherwiseClause != null)
                 children.Add(_otherwiseClause);
-            
-            return _body;
+            children.AddRange(body);
+
+            return children;
         }
 
-        public new Node AddChild(INode node)
+        public new INode AddChild(INode node)
         {
             switch (node)
             {
@@ -46,7 +47,25 @@ namespace Agent.antlr.ast
                     _otherwiseClause = otherwiseClause;
                     break;
                 default:
-                    _body.Add(node);
+                    body.Add(node);
+                    break;
+            }
+
+            return this;
+        }
+
+        public new INode RemoveChild(INode node)
+        {
+            switch (node)
+            {
+                case When:
+                    _whenClause = null;
+                    break;
+                case Otherwise:
+                    _otherwiseClause = null;
+                    break;
+                default:
+                    body.Remove(node);
                     break;
             }
 

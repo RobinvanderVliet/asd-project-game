@@ -1,46 +1,31 @@
 ﻿using System.Collections;
-using System.IO.Compression;
+using Agent.antlr.ast.implementation;
+using Agent.antlr.ast.interfaces;
 
-namespace Agent.antlr.ast
+namespace Agent.antlr.ast.implementation
 {
     /*
-     * 
-     * @author Abdul     
+    AIM SD ASD 2020/2021 S2 project
+     
+    Project name: [to be determined].
+
+    This file is created by team: 1.
+     
+    Goal of this file: [making_the_system_work].
+     
     */
     public class Configuration : Node, IConfiguration
     {
-        private ArrayList body;
-
-        public Configuration()
-        {
-            this.body = new ArrayList();
-        }
-
+        public Configuration(){}
+        
         public Configuration(ArrayList body)
         {
             this.body = body;
         }
-        
+
         public new string GetNodeType()
         {
             return "Configuration";
-        }
-
-        public new ArrayList GetChildren()
-        {
-            return this.body;
-        }
-
-        public new Node AddChild(INode node)
-        {
-            body.Add(node);
-            return this;
-        }
-
-        public new Node RemoveChild(INode node)
-        {
-            body.Remove(node);
-            return this;
         }
     }
 }

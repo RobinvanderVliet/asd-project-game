@@ -12,20 +12,17 @@ namespace Agent.antlr.ast.implementation
     Goal of this file: [making_the_system_work].
      
     */
-    
-    public class Comparison : Node, IComparison
+    class AST
     {
-        public string ComparisonType { get; set; }
-        
-        //TODO: Create comparisonTypeEnum
-        public Comparison(string comparisonType)
-        {
-            ComparisonType = comparisonType;
-        }
+        public IConfiguration root;
 
-        public new string GetNodeType()
+        public AST( )
         {
-            return "Comparison";
+            this.root = new Configuration();
+        }
+        public AST(IConfiguration root)
+        {
+            this.root = root;
         }
     }
 }

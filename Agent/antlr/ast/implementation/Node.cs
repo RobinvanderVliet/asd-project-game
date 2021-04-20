@@ -1,37 +1,42 @@
-﻿using System.Collections;
+﻿using Agent.antlr.ast.interfaces;
+using System.Collections;
 
-namespace Agent.antlr.ast
+namespace Agent.antlr.ast.implementation
 {
     /*
-     * 
-     * @author Abdul     
+    AIM SD ASD 2020/2021 S2 project
+     
+    Project name: [to be determined].
+
+    This file is created by team: 1.
+     
+    Goal of this file: [making_the_system_work].
+     
     */
     public class Node : INode
     {
 
-        private ArrayList children;
+        protected ArrayList body = new ArrayList();
         
         public string GetNodeType()
         {
-            //TODO moet voor elke node override worden
             return "Node";
         }
 
         public ArrayList GetChildren()
         {
-            //TODO
-            return new ArrayList();
+            return this.body;
         }
 
-        public Node AddChild(INode node)
+        public INode AddChild(INode node)
         {
-            //TODO
+            body.Add(node);
             return this;
         }
 
-        public Node RemoveChild(INode node)
+        public INode RemoveChild(INode node)
         {
-            //TODO
+            body.Remove(node);
             return this;
         }
     }
