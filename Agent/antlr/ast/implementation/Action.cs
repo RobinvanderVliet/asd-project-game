@@ -18,7 +18,7 @@ namespace Agent.antlr.ast.implementation
         private ArrayList conditions = new ArrayList();
 
         public string Name { get; set; }
-        
+
         public Action(string name)
         {
             Name = name;
@@ -40,15 +40,22 @@ namespace Agent.antlr.ast.implementation
 
         public new INode AddChild(INode node)
         {
-            if (node is ICondition condition) {
+            if (node is ICondition condition)
                 this.conditions.Add(condition);
-            }
-            else {
+            else
                 this.body.Add(node);
-            }
 
             return this;
         }
 
+        public new INode RemoveChild(INode node)
+        {
+            if (node is ICondition condition)
+                conditions.Remove(condition);
+            else
+                body.Remove(node);
+
+            return this;
+        }
     }
 }

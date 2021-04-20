@@ -13,14 +13,14 @@ namespace Agent.antlr.ast.implementation
     Goal of this file: [making_the_system_work].
      
     */
-    
+
     public class When : Node, IWhen
     {
-        private IComparable _comparableL;
-        private IComparable _comparableR;
-        private IComparison _comparison;
-        private IActionReference _then;
-        
+        private IComparable comparableL;
+        private IComparable comparableR;
+        private IComparison comparison;
+        private IActionReference then;
+
         public new string GetNodeType()
         {
             return "When";
@@ -28,39 +28,57 @@ namespace Agent.antlr.ast.implementation
 
         public new ArrayList GetChildren()
         {
-            var children = new ArrayList() 
-            {
-                this._comparableL,
-                this._comparison,
-                this._comparableR
-            };
-            if (this._then != null) {
-                children.Add(this._then);
-                
-            }
+            // TODO: Er worden nu drie waardes in de array gereseveerd voor null Als je door de three loopt, zijn dit alweer drie extra loops
+
+
+            // var children = new ArrayList()
+            // {
+            //     this._comparableL,
+            //     this._comparison,
+            //     this._comparableR
+            // };
+
+            var children = new ArrayList();
+
+            if (comparableL != null)
+                children.Add(comparableL);
+            if (comparison != null)
+                children.Add(comparison);
+            if (comparableR != null)
+                children.Add(comparableR);
+            if (this.then != null)
+                children.Add(this.then);
+
             children.AddRange(body);
             return children;
         }
 
         public new INode AddChild(INode node)
         {
-            switch (node) {
+            switch (node)
+            {
                 case IComparable comparable:
-                    if (this._comparableL != null) {
-                        this._comparableL = comparable;
+                    // TODO: Wanneer komt die hier in? Dit is altijd null, hij komt altijd in de else
+                    
+                    if (this.comparableL != null)
+                    {
+                        this.comparableL = comparable;
                     }
-                    else if (this._comparableR != null) {
-                        this._comparableR = comparable;
+                    else if (this.comparableR != null)
+                    {
+                        this.comparableR = comparable;
                     }
-                    else {
+                    else
+                    {
                         this.body.Add(comparable);
                     }
+
                     break;
                 case IActionReference action:
-                    this._then = action;
+                    this.then = action;
                     break;
                 case IComparison comparison:
-                    this._comparison = comparison;
+                    this.comparison = comparison;
                     break;
                 default:
                     this.body.Add(node);

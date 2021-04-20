@@ -16,9 +16,8 @@ namespace Agent.antlr.ast.implementation
     */
     public class ActionReference : Node, IActionReference
     {
-        private ISubject _subject;
-        private IItem _item;
-        
+        private ISubject subject;
+        private IItem item;
         
         public string Name { get; set; }
         
@@ -35,11 +34,19 @@ namespace Agent.antlr.ast.implementation
 
         public new ArrayList GetChildren()
         {
-            var children = new ArrayList() {
-                this._item,
-                this._subject
-            };
+            //TODO: Zelfde als GetChildren() van When klasse
+            // var children = new ArrayList() {
+            //     this._item,
+            //     this._subject
+            // };
+
+            var children = new ArrayList();
+            if (item != null)
+                children.Add(item);
+            if (subject != null)
+                children.Add(subject);
             children.AddRange(body);
+            
             return children;
         }
 
@@ -47,10 +54,10 @@ namespace Agent.antlr.ast.implementation
         {
             switch (node) {
                 case ISubject subject:
-                    this._subject = subject;
+                    this.subject = subject;
                     break;
                 case IItem item:
-                    this._item = item;
+                    this.item = item;
                     break;
                 default:
                     this.body.Add(node);

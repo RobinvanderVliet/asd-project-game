@@ -1,4 +1,6 @@
-﻿using Agent.antlr.ast.interfaces;
+﻿using System.Collections;
+using Agent.antlr.ast.implementation;
+using Agent.antlr.ast.interfaces;
 
 namespace Agent.antlr.ast.implementation
 {
@@ -14,6 +16,13 @@ namespace Agent.antlr.ast.implementation
     */
     public class Configuration : Node, IConfiguration
     {
+        public Configuration(){}
+        
+        public Configuration(ArrayList body)
+        {
+            this.body = body;
+        }
+
         public new string GetNodeType()
         {
             return "Configuration";

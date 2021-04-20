@@ -1,4 +1,5 @@
-﻿using Agent.antlr.ast.interfaces;
+﻿using System;
+using Agent.antlr.ast.interfaces;
 using System.Collections;
 
 namespace Agent.antlr.ast.implementation
@@ -26,12 +27,13 @@ namespace Agent.antlr.ast.implementation
         public new ArrayList GetChildren()
         {
             var children = new ArrayList();
-            children.Add(_whenClause);
-            children.AddRange(body);
+            if (_whenClause != null)
+                children.Add(_whenClause);
             if (_otherwiseClause != null)
                 children.Add(_otherwiseClause);
-            
-            return body;
+            children.AddRange(body);
+
+            return children;
         }
 
         public new INode AddChild(INode node)
@@ -51,7 +53,7 @@ namespace Agent.antlr.ast.implementation
 
             return this;
         }
-        
+
         public new INode RemoveChild(INode node)
         {
             switch (node)
@@ -66,6 +68,7 @@ namespace Agent.antlr.ast.implementation
                     body.Remove(node);
                     break;
             }
+
             return this;
         }
 

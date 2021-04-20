@@ -13,8 +13,6 @@ namespace Agent.antlr.ast.implementation
     Goal of this file: [making_the_system_work].
      
     */
-    
-    
     public class Setting : Node, ISetting
     {
         
@@ -48,13 +46,13 @@ namespace Agent.antlr.ast.implementation
             switch (node) 
             {
                 case IConfiguration:
-                    this.conditions.Add(node);
+                    conditions.Add(node);
                     break;
                 case IAction:
-                    this.actions.Add(node);
+                    actions.Add(node);
                     break;
                 default:
-                    this.body.Add(node);
+                    body.Add(node);
                     break;
                 
             }
