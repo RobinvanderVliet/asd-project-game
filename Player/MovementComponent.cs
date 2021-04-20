@@ -10,15 +10,16 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Player
 {
     public class MovementComponent
     {
+
+        private int[] newPosition = new int[2];
+        //line above is temporary and shows the new position of a player,
+        //assuming it will be defined like that elsewhere. for the sake of NUnit
+
         public MovementComponent()
         {
 
@@ -53,9 +54,12 @@ namespace Player
                     newMovement[1] = steps;
                     break;
             }
-            SendNewPosition(newMovement);
+            newPosition = SendNewPosition(newMovement);
+
+            // the next line of code should be changed by sending newPosition to a relevant method
+            WriteCommand(newPosition);
         }
-        public void SendNewPosition(int[] newMovement)
+        public int[] SendNewPosition(int[] newMovement)
         {
             int[] newPlayerPosition = new int[2];
 
@@ -65,12 +69,11 @@ namespace Player
                 newPlayerPosition[i] = GetPosition()[i] + newMovement[i];
             }
 
-            // the next line of code should be changed by sending newPosition to a relevant method
-            WriteCommand(newPlayerPosition);
+            return newPlayerPosition;
         }
 
         // !!! METHODS BELOW ARE TEMPORARY, PROTOTYPE ONLY !!!
-        public String GetCommand(String command, int directionOrSteps)
+        private String GetCommand(String command, int directionOrSteps)
         {
             // splits i.e. "right 1" into "right" and "1"
             string[] substr = command.Split(' ');
@@ -81,17 +84,17 @@ namespace Player
                 default: return "";
             }
         }
-        public String GetDirection(String command)
+        private String GetDirection(String command)
         {
             // gets the direction from the command
             return GetCommand(command, 0);
         }
-        public int GetSteps(String command)
+        private int GetSteps(String command)
         {
             // gets the steps from the command
             return Int32.Parse(GetCommand(command, 1));
         }
-        public int[] GetPosition()
+        private int[] GetPosition()
         {
             // gets the current position of the player
             int[] positionRequestedPlayer = new int[2];
@@ -99,10 +102,14 @@ namespace Player
             positionRequestedPlayer[1] = 11;
             return positionRequestedPlayer;
         }
-        public void WriteCommand(int[] newPosition)
+        private void WriteCommand(int[] newPosition)
         {
             // returns the new position
             Console.WriteLine("X: " + newPosition[0] + ". Y: " + newPosition[1]);
+        }
+        public int[] GetNewPosition
+        {
+            get { return newPosition; }
         }
     }
 }
