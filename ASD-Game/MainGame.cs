@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
+using WorldGeneration;
 
 namespace ASD_project
 {
@@ -9,6 +10,9 @@ namespace ASD_project
         public class MainGame : IMainGame
         {
             private readonly ILogger<MainGame> log;
+            
+            RandomTileGenerator generator = new RandomTileGenerator();
+
 
             public MainGame(ILogger<MainGame> log)
             {
@@ -18,6 +22,8 @@ namespace ASD_project
             public void Run()
             {
                 Console.WriteLine("Game is gestart");
+
+                generator.generate();
             }
         }
     }
