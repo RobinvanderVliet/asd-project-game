@@ -10,72 +10,81 @@
 */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WorldGeneration
 {
 
     public class Class1
     {
-            public String prototype(String seed)
+
+        private FastNoiseLite noise;
+
+        public Class1(int seed)
+        {
+            // Create and configure FastNoise object
+            noise = new FastNoiseLite();
+            noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+            noise.SetSeed(seed);
+        }
+
+        public String PrototypeWorldGeneration()
+        {
+            String result = "";
+            List<String> datamap = GenerateChunk();
+            for (int x = 0; x < datamap.Count; x++)
             {
-                String result = "";
-                List<String> datamap = generateChunk(seed);
-                for (int x = 0; x < datamap.Count; x++)
-                {
-                    result += datamap[x];
-                }
+                result += (datamap[x]);
+            }
             return result;
         }
 
-        private List<String> generateChunk(String seed)
+        private List<String> GenerateChunk()
         {
             // Create an empty result array.
             List<String> result = new List<string>();
-
-            // Create and configure FastNoise object
-            FastNoiseLite noise = new FastNoiseLite();
-            noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
-
+            
             // Gather noise data
-            float[] noiseData = new float[128 * 128];
+            float[] noiseData = new float[10 * 10];
             int index = 0;
 
-            for (int y = 0; y < 128; y++)
+            for (int y = 0; y < 10; y++)
             {
-                for (int x = 0; x < 128; x++)
+                for (int x = 0; x < 10; x++)
                 {
                     noiseData[index++] = noise.GetNoise(x, y);
                 }
             }
 
-            for (int x = 0; x < noiseData.Length; x++)
+            for (int x = 0; x < 100; x++)
             {
+                // Use the noise data to generate some random tiles.
                 result.Add(generateTileName(noiseData[x]));
             }
-
             return result;
         }
 
-        private String generateTileName (float noise)
+        private String generateTileName (float randomNumber)
         {
-            int roundedNoise = (int) (((noise +1)*10)-10);
-            if (roundedNoise < 0)
+            // Noise is a float, generate an int between 0 and 10.
+            int roundedNumber = (int) (((randomNumber +1)*10)-10);
+            if (roundedNumber < 0)
             {
-                roundedNoise = roundedNoise * -1;
+                roundedNumber = roundedNumber * -1;
             }
-            switch (roundedNoise)
+            switch (roundedNumber)
             {
-                case 0: return "Nul" + roundedNoise;
-                case 1: return "Een" + roundedNoise;
-                case 2: return "Twee" + roundedNoise;
-                case 3: return "Drie" + roundedNoise;
-                case 4: return "Vier" + roundedNoise;
-                case 5: return "Vijf" + roundedNoise;
-                case 6: return "Zes" + roundedNoise;
-                case 7: return "Zeven" + roundedNoise;
-                case 8: return "Acht" + roundedNoise;
-                case 9: return "Negen" + roundedNoise;
-                default: return "No valid tile detected, number was " + roundedNoise;
+                case 0: return "Nul, ";
+                case 1: return "Een, ";
+                case 2: return "Twee, ";
+                case 3: return "Drie, ";
+                case 4: return "Vier, ";
+                case 5: return "Vijf, ";
+                case 6: return "Zes, ";
+                case 7: return "Zeven, ";
+                case 8: return "Acht, ";
+                case 9: return "Negen, ";
+                default: return "No valid tile detected, number was " + roundedNumber;
             }
 
         }
