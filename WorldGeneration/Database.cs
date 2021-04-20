@@ -21,12 +21,13 @@ namespace WorldGeneration
         private String databaseLocation;
         private String mapCollection;
         
-        public Database()
+        public Database(String databaseLocation = "C:\\Temp\\ChunkDatabase.db", String mapCollection = "Chunks")
         {
-            databaseLocation = "C:\\Temp\\ChunkDatabase.db";
-            mapCollection = "Chunks";
+            this.databaseLocation = databaseLocation;
+            this.mapCollection = mapCollection;
         }
 
+        //read function name
         public void insertChunkIntoDatabase(Chunk chunk)
         {
             try
@@ -43,6 +44,7 @@ namespace WorldGeneration
             }
         }
 
+        //returns Chunk from database after finding it by Chunk x and y.
         public Chunk getChunk(int chunkXValue, int chunkYValue)
         {
             try
@@ -76,6 +78,7 @@ namespace WorldGeneration
             return null;
         }
         
+        //returns all Chunks from the database in a list. Throws a error if there are no Chunks.
         public List<Chunk> getAllChunks()
         {
             try
@@ -105,6 +108,7 @@ namespace WorldGeneration
             }
         }
 
+        //Drops the Chunks collection.
         public void deleteTileMap()
         {
             try
@@ -121,6 +125,7 @@ namespace WorldGeneration
             }
         }
 
+        //Returns the collection connection.
         public ILiteCollection<Chunk> getMapCollection(LiteDatabase db)
         {
             return db.GetCollection<Chunk>(mapCollection);
