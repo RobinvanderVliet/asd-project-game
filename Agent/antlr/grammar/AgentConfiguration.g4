@@ -4,8 +4,6 @@
  LEXER
 */
 WS: [ \t\r\n]+ -> skip;
-BRACKET_OPEN: '{';
-BRACKET_CLOSE: '}';
 DOUBLE_QUOTE: '"';
 EQUALSIGN: '=';
 
