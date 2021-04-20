@@ -58,17 +58,11 @@ namespace Agent.antlr.ast.implementation
             switch (node)
             {
                 case IComparable comparable:
-                    if (this._comparableL == null) {
-                        this._comparableL = comparable;
-                    // TODO: Wanneer komt die hier in? Dit is altijd null, hij komt altijd in de else
-                    
-                    if (this.comparableL != null)
+                    if (this.comparableL == null) 
                     {
                         this.comparableL = comparable;
                     }
-                    else if (this._comparableR == null) {
-                        this._comparableR = comparable;
-                    else if (this.comparableR != null)
+                    else if (this.comparableR == null) 
                     {
                         this.comparableR = comparable;
                     }
@@ -76,7 +70,6 @@ namespace Agent.antlr.ast.implementation
                     {
                         this.body.Add(comparable);
                     }
-
                     break;
                 case IActionReference action:
                     this.then = action;
@@ -95,43 +88,43 @@ namespace Agent.antlr.ast.implementation
 
         public IComparable GetComparableL()
         {
-            return _comparableL;
+            return comparableL;
         }
 
         public void SetComparableL(IComparable comparable)
         {
-            _comparableL = comparable;
+            comparableL = comparable;
         }
         
         
         public IComparable GetComparableR()
         {
-            return _comparableR;
+            return comparableR;
         }
 
         public void SetComparableR(IComparable comparable)
         {
-            _comparableR = comparable;
+            comparableR = comparable;
         }
 
         public IComparison GetComparison()
         {
-            return _comparison;
+            return comparison;
         }
 
         public void SetComparison(IComparison comparison)
         {
-            _comparison = comparison;
+            comparison = comparison;
         }
         
         public IActionReference GetThen()
         {
-            return _then;
+            return then;
         }
 
         public void SetThen(IActionReference then)
         {
-            _then = then;
+            then = then;
         }
 
     }
