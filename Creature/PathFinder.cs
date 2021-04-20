@@ -64,7 +64,7 @@ namespace Creature
                 return grid.Count;
             }
         }
-        public Stack<Node> findPath(Vector2 startPosition, Vector2 endPosition)
+        public Stack<Node> FindPath(Vector2 startPosition, Vector2 endPosition)
         {
             Node startNode = new Node(new Vector2((int)(startPosition.X / Node.nodeSize), (int)(startPosition.Y / Node.nodeSize)), true);
             Node endNode = new Node(new Vector2((int)(endPosition.X / Node.nodeSize), (int)(endPosition.Y / Node.nodeSize)), true);
@@ -83,7 +83,7 @@ namespace Creature
                 current = openList[0];
                 openList.Remove(current);
                 closedList.Add(current);
-                adjacencies = getAdjacentNodes(current);
+                adjacencies = GetAdjacentNodes(current);
 
                 foreach (Node n in adjacencies)
                 {
@@ -117,7 +117,7 @@ namespace Creature
             } while (temp != startNode && temp != null);
             return path;
         }
-        private List<Node> getAdjacentNodes(Node node)
+        private List<Node> GetAdjacentNodes(Node node)
         {
             List<Node> temp = new List<Node>();
 
