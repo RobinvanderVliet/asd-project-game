@@ -11,6 +11,12 @@ namespace Creature
     public class Monster : ICreature
     {
         /// <summary>
+        /// Player that is being interacted with.
+        /// Monsters can follow, attack, spot a player, etc.
+        /// </summary>
+        private IPlayer player;
+
+        /// <summary>
         /// All events that this creature is capable of responding to.
         /// Every creature can respond to its own events.
         /// </summary>
@@ -73,7 +79,7 @@ namespace Creature
             builder.In(State.FOLLOW_PLAYER).On(Event.LOST_PLAYER).Goto(State.WANDERING);
 
             // Follow player
-            builder.In(State.WANDERING).On(Event.SPOTTED_PLAYER).Goto(State.FOLLOW_PLAYER).Execute(() => Console.WriteLine("Now following player"));
+            builder.In(State.WANDERING).On(Event.SPOTTED_PLAYER).Goto(State.FOLLOW_PLAYER).Execute<IPlayer>(OnSpottedPlayer);
             builder.In(State.USE_POTION).On(Event.REGAINED_HEALTH_PLAYER_OUT_OF_RANGE).Goto(State.FOLLOW_PLAYER);
             builder.In(State.ATTACK_PLAYER).On(Event.PLAYER_OUT_OF_RANGE).Goto(State.FOLLOW_PLAYER);
 
@@ -89,6 +95,11 @@ namespace Creature
 
             stateMachine = builder.Build().CreatePassiveStateMachine();
             stateMachine.Start();
+        }
+
+        private void OnSpottedPlayer(IPlayer player)
+        {
+            this.player = player;
         }
     }
 }
