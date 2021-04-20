@@ -38,18 +38,24 @@ namespace Player
             switch (direction)
             {
                 case "right":
+                case "east":
                     newMovement[0] = steps;
                     newMovement[1] = 0;
                     break;
                 case "left":
+                case "west":
                     newMovement[0] = -steps;
                     newMovement[1] = 0;
                     break;
                 case "forward":
+                case "up":
+                case "north":
                     newMovement[0] = 0;
                     newMovement[1] = -steps;
                     break;
                 case "backward":
+                case "down":
+                case "south": 
                     newMovement[0] = 0;
                     newMovement[1] = steps;
                     break;
