@@ -66,7 +66,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual(null,this._sut.GetComparableR());
             Assert.AreEqual(null,this._sut.GetComparison());
             Assert.AreEqual(null,this._sut.GetThen());
-            Assert.AreEqual(4, this._sut.GetChildren().Count);
+            Assert.AreEqual(1, this._sut.GetChildren().Count);
         }
         
         /*
@@ -100,7 +100,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual(comparableR,this._sut.GetComparableR());
             Assert.AreEqual(null,this._sut.GetComparison());
             Assert.AreEqual(null,this._sut.GetThen());
-            Assert.AreEqual(4, this._sut.GetChildren().Count);
+            Assert.AreEqual(2, this._sut.GetChildren().Count);
         }
         /*
         * AddChild()
@@ -135,8 +135,8 @@ namespace Agent.Tests.ast
             Assert.AreEqual(comparableR,this._sut.GetComparableR());
             Assert.AreEqual(null,this._sut.GetComparison());
             Assert.AreEqual(null,this._sut.GetThen());
-            Assert.AreEqual(5, this._sut.GetChildren().Count);
-            Assert.AreEqual(comparable, this._sut.GetChildren()[4]);
+            Assert.AreEqual(3, this._sut.GetChildren().Count);
+            Assert.AreEqual(comparable, this._sut.GetChildren()[2]);
         }
         
         /*
@@ -156,7 +156,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual(null,this._sut.GetComparableR());
             Assert.AreEqual(null,this._sut.GetComparison());
             Assert.AreEqual(action,this._sut.GetThen());
-            Assert.AreEqual(4, this._sut.GetChildren().Count);
+            Assert.AreEqual(1, this._sut.GetChildren().Count);
         }
         
         /*
@@ -177,7 +177,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual(comparison,this._sut.GetComparison());
             Assert.AreEqual(null,this._sut.GetThen());
             
-            Assert.AreEqual(4, this._sut.GetChildren().Count);
+            Assert.AreEqual(1, this._sut.GetChildren().Count);
         }
         
                 
@@ -198,8 +198,8 @@ namespace Agent.Tests.ast
             Assert.AreEqual(null,this._sut.GetComparableR());
             Assert.AreEqual(null,this._sut.GetComparison());
             Assert.AreEqual(null,this._sut.GetThen());
-            Assert.AreEqual(5, this._sut.GetChildren().Count);
-            Assert.AreEqual(extra, this._sut.GetChildren()[4]);
+            Assert.AreEqual(1, this._sut.GetChildren().Count);
+            Assert.AreEqual(extra, this._sut.GetChildren()[0]);
         }
         
         private static IComparable ComparableTestCase(Type testCase)

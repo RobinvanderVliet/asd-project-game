@@ -34,12 +34,6 @@ namespace Agent.antlr.ast.implementation
 
         public new ArrayList GetChildren()
         {
-            //TODO: Zelfde als GetChildren() van When klasse
-            // var children = new ArrayList() {
-            //     this._item,
-            //     this._subject
-            // };
-
             var children = new ArrayList();
             if (item != null)
                 children.Add(item);
