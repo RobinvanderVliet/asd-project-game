@@ -22,8 +22,8 @@ namespace Player
 
         //private Tile _currentTile;
         private IInventory _inventory;
-        private Bitcoin _bitcoins;
-        private RadiationLevel _radiationLevel;
+        private IBitcoin _bitcoins;
+        private IRadiationLevel _radiationLevel;
 
         //random default values for health&stamina for now
         private const int HEALTHCAP = 100;

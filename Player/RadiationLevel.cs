@@ -11,7 +11,7 @@
 
 namespace Player
 {
-    public class RadiationLevel
+    public class RadiationLevel : IRadiationLevel
     {
         private int _level;
 

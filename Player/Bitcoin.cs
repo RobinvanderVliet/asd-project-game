@@ -11,7 +11,7 @@
 
 namespace Player
 {
-    public class Bitcoin
+    public class Bitcoin : IBitcoin
     {
         private int _amount;
 
