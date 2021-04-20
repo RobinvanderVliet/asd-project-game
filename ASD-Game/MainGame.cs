@@ -20,9 +20,8 @@ namespace ASD_project
             {
                 // Note this code is for testing purposes only!
                 Console.WriteLine("Game is gestart");
-                   Class1 whatever = new Class1();
-                    Console.WriteLine(whatever.prototype("hallo"));
-            
+                   Class1 whatever = new Class1(9);
+                    Console.WriteLine(whatever.PrototypeWorldGeneration());
             }
         }
     }
