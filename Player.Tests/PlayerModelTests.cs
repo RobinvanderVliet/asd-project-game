@@ -14,15 +14,15 @@ using NUnit.Framework;
 namespace Player.Tests
 {
     [TestFixture]
-    public class MovementComponentTest
+    public class PlayerModelTests
     {
 
-        private MovementComponent movementComponent;
+        private PlayerModel movementComponent;
 
         [SetUp]
         public void Setup()
         {
-            movementComponent = new MovementComponent();
+            movementComponent = new PlayerModel();
         }
 
 

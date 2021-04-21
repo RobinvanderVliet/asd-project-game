@@ -13,14 +13,14 @@ using System;
 
 namespace Player
 {
-    public class MovementComponent
+    public class PlayerModel : IPlayerModel
     {
 
         private int[] newPosition = new int[2];
         //line above is temporary and shows the new position of a player,
         //assuming it will be defined like that elsewhere. for the sake of NUnit
 
-        public MovementComponent()
+        public PlayerModel()
         {
 
         }
