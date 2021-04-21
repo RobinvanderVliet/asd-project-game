@@ -29,6 +29,7 @@ SAY: 'say';
 SHOUT: 'shout';
 REPLACE: 'replace';
 PAUSE : 'pause';
+RESUME : 'resume';
 
 FORWARD: 'forward';
 UP: 'up';
@@ -50,6 +51,7 @@ MESSAGE: '"' ~'"'+ '"';
 input: command EOF;
 
 step: NUMBER;
+message: MESSAGE;
 
 command:
     (MOVE | WALK | GO) SPACE direction (SPACE step)? #move |
@@ -57,10 +59,11 @@ command:
     (PICKUP | GET) #pickup |
     DROP #drop |  
     (EXIT | LEAVE) #exit |
-    SAY SPACE MESSAGE #say |
-    SHOUT SPACE MESSAGE #shout |
+    SAY SPACE message #say |
+    SHOUT SPACE message #shout |
     REPLACE #replace |
-    PAUSE #pause;
+    PAUSE #pause |
+    RESUME #resume;
 
 
 forward: FORWARD | UP | NORTH;
