@@ -61,13 +61,6 @@ namespace Chat.antlr
             }
         }
 
-
-        public void clearErrors()
-        {
-            errors.Clear();
-        }
-        
-
         public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine, string msg,
             RecognitionException e)
         {

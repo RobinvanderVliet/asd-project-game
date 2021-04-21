@@ -154,21 +154,7 @@ namespace Chat.Tests
 
             Assert.AreEqual(exp, sut);
         }
-
-        [Test]
-        public void AstListenerThrowsSyntaxErrorWhenMoveCommandIsNotRecognised()
-        {
-            AST sut = SetupParser("mv left 1");
-            // new error
-        }
-
-        [Test]
-        public void AstListenerThrowsSyntaxErrorWhenDirectionCommandIsNotRecognised()
-        {
-            AST sut = SetupParser("move lf 1");
-            // new error
-        }
-
+        
         // Help method for checking command
         public static AST MoveCommand(int steps, String direction)
         {
