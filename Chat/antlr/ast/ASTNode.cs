@@ -9,13 +9,11 @@
      
 */
 
-using System.Collections;
-
 namespace Chat.antlr.ast
 {
     public class ASTNode
     {
-        public virtual ASTNode addChild(ASTNode child)
+        public virtual ASTNode AddChild(ASTNode child)
         {
             return this;
         }
