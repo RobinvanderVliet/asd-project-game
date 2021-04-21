@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserInterface.Tests", "User
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldGeneration.Tests", "WorldGeneration.Tests\WorldGeneration.Tests.csproj", "{4E35DC1D-7AAD-47A6-B700-AF0433C0C9BD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASD-Game", "ASD-Game\ASD-Game.csproj", "{7FC7413A-3987-43C7-82F6-FCB4051CC2BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASD-Game", "ASD-Game\ASD-Game.csproj", "{A1D30E5D-DE84-44DB-A33C-0B977661150B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -107,10 +107,10 @@ Global
 		{4E35DC1D-7AAD-47A6-B700-AF0433C0C9BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E35DC1D-7AAD-47A6-B700-AF0433C0C9BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E35DC1D-7AAD-47A6-B700-AF0433C0C9BD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7FC7413A-3987-43C7-82F6-FCB4051CC2BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7FC7413A-3987-43C7-82F6-FCB4051CC2BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7FC7413A-3987-43C7-82F6-FCB4051CC2BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7FC7413A-3987-43C7-82F6-FCB4051CC2BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1D30E5D-DE84-44DB-A33C-0B977661150B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1D30E5D-DE84-44DB-A33C-0B977661150B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1D30E5D-DE84-44DB-A33C-0B977661150B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1D30E5D-DE84-44DB-A33C-0B977661150B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
