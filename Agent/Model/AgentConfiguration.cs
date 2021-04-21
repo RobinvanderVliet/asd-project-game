@@ -7,26 +7,30 @@ namespace Agent.Model
 {
     public class AgentConfiguration
     {
-        private Dictionary<string, string> settings;
-        
-        public AgentConfiguration(string filePath)
+        public Dictionary<string, string> settings;
+
+        public AgentConfiguration()
         {
-            LoadSettings(filePath);
+            settings = new Dictionary<string, string>();
         }
 
         public void LoadSettings(string filePath)
         {
-            using (var fs = File.OpenRead(filePath))
+            if (!File.Exists(filePath))
             {
-                var b = new byte[1024];
-                var temp = new UTF8Encoding(true);
-                while (fs.Read(b,0,b.Length) > 0)
-                {
-                    Console.WriteLine(temp.GetString(b));
-                    var setting = temp.GetString(b).Split("=");
-                    settings[setting[0]] = setting[1];
-                }
+                throw new FileNotFoundException("Configuration file was not found.");
             }
+
+            foreach (var line in File.ReadLines(filePath))
+            {
+                var setting = line.Split("=");
+                settings.Add(setting[0], setting[1]);
+            }
+        }
+
+        public string GetSetting(string settingName)
+        {
+            return settings[settingName];
         }
     }
 }
