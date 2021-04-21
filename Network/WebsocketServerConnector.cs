@@ -4,7 +4,7 @@ using WebSocketSharp;
 
 namespace Network
 {
-    class WebsocketServerConnector2
+    class WebsocketServerConnector
     {
         static void Main(string[] args)
         {
