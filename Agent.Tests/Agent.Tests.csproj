@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="Resources\test1.txt" />
+    <None Remove="Resources\test2.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +28,7 @@
 
   <ItemGroup>
 	  <EmbeddedResource Include="Resources\test1.txt" />
+	  <EmbeddedResource Include="Resources\test2.txt" />
   </ItemGroup>
 
 </Project>

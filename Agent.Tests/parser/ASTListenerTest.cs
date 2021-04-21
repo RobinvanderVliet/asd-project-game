@@ -58,9 +58,7 @@ namespace Agent.Tests.parser
         }
         
         [Test]
-        
-        // [TestCase()]
-        public void testfiletests()// (string file)
+        public void TestFileTests1()
         {
             //Arrange
             var file = "test1.txt";
@@ -72,6 +70,20 @@ namespace Agent.Tests.parser
             //Assert
             Assert.AreEqual(expected.ToString(), sut.ToString());
         }
-        
+
+        [Test]
+        public void TestFileTests2()
+        {
+            //Arrange
+            var file = "test2.txt";
+            var expected = Fixtures.GetFixture(file);
+
+            //Act
+            var sut = ParseTestFile(file);
+
+            //Assert
+            Assert.AreEqual(expected.ToString(), sut.ToString());
+        }
+
     }
 }

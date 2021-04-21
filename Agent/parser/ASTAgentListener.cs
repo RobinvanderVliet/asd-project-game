@@ -26,19 +26,23 @@ namespace Agent.parser
 
         public override void EnterAction([NotNull] AgentConfigurationParser.ActionContext context)
         {
-            ActionReference reference = new ActionReference(context.STRING().GetText());
-            currentContainer.Push(reference);
+            if (currentContainer.Peek() is When || currentContainer.Peek() is Otherwise)
+            {
+                ActionReference reference = new ActionReference(context.STRING().GetText());
+                currentContainer.Push(reference);
+            }
         }
 
         public override void EnterActionBlock([NotNull] AgentConfigurationParser.ActionBlockContext context)
         {
-            Action action = new Action(context.GetText());
-            currentContainer.Peek().AddChild(action);
+            Action action = new Action(context.children.FirstOrDefault().GetText());
+            currentContainer.Push(action);
         }
 
         public override void EnterActionSubject([NotNull] AgentConfigurationParser.ActionSubjectContext context)
         {
             ActionReference reference = new ActionReference(context.action().STRING().GetText());
+            Console.WriteLine("");
             currentContainer.Push(reference);
         }
 
@@ -62,7 +66,8 @@ namespace Agent.parser
 
         public override void EnterItem([NotNull] AgentConfigurationParser.ItemContext context)
         {
-            Item item = new Item(context.children.Where(c => c.ToString() != null).FirstOrDefault().GetText());
+            String temp = context.children.FirstOrDefault().GetText();
+            Item item = new Item(temp);
             currentContainer.Push(item);
         }
 
@@ -79,7 +84,7 @@ namespace Agent.parser
 
         public override void EnterRule([NotNull] AgentConfigurationParser.RuleContext context)
         {
-            Rule rule = new Rule(context.setting().GetText(), context.STRING().ElementAt(1).GetText());
+            Rule rule = new Rule(context.children.ElementAt(0).GetText(), context.children.ElementAt(2).GetText());
             currentContainer.Push(rule);
         }
 
@@ -91,36 +96,16 @@ namespace Agent.parser
 
         public override void EnterStat([NotNull] AgentConfigurationParser.StatContext context)
         {
-            Stat node = (Stat)currentContainer.Pop();
-            node.Name = context.children.Where(c => c.GetText() != null).FirstOrDefault().GetText();
-            currentContainer.Push(node);
-        }
-
-        public override void EnterString([NotNull] AgentConfigurationParser.StringContext context)
-        {
-            base.EnterString(context);
+            Stat stat = new Stat(context.children.Where(c => c.GetText() != null).FirstOrDefault().GetText());
+            currentContainer.Push(stat);
         }
 
         public override void EnterSubject([NotNull] AgentConfigurationParser.SubjectContext context)
         {
             Subject subject = (Subject)context.children.Where(c => c.GetText() != null).FirstOrDefault();
-            Subject node = CreateSubject(subject);
-            currentContainer.Push(node);
+            currentContainer.Push(subject);
         }
 
-        private Subject CreateSubject(Subject subject)
-        {
-            return subject.ToString() switch
-            {
-                "player" => new Player(subject.Name),
-                "npc" => new NPC(subject.Name),
-                "opponent" => new Opponent(subject.Name),
-                "inventory" => new Inventory(subject.Name),
-                "current" => new Current(subject.Name),
-                "tile" => new Tile(subject.Name),
-                _ => throw new Exception("subject is an invallid type:" + subject),
-            };
-        }
 
         public override void EnterSubjectStat([NotNull] AgentConfigurationParser.SubjectStatContext context)
         {
@@ -132,10 +117,6 @@ namespace Agent.parser
             When clause = new When();
             currentContainer.Push(clause);
         }
-
-        /* ################################### */
-        /* ##             EXIT              ## */
-        /* ################################### */
 
         public override void ExitItem([NotNull] AgentConfigurationParser.ItemContext context)
         {
@@ -169,7 +150,8 @@ namespace Agent.parser
 
         public override void ExitRule([NotNull] AgentConfigurationParser.RuleContext context)
         {
-            base.ExitRule(context);
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
         }
 
         public override void ExitSettingBlock([NotNull] AgentConfigurationParser.SettingBlockContext context)
@@ -180,7 +162,8 @@ namespace Agent.parser
 
         public override void ExitActionBlock([NotNull] AgentConfigurationParser.ActionBlockContext context)
         {
-            base.ExitActionBlock(context);
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
         }
 
         public override void ExitCondition([NotNull] AgentConfigurationParser.ConditionContext context)
@@ -197,13 +180,17 @@ namespace Agent.parser
 
         public override void ExitAction([NotNull] AgentConfigurationParser.ActionContext context)
         {
-            Node temp = currentContainer.Pop();
-            currentContainer.Peek().AddChild(temp);
+            if (currentContainer.Peek() is ActionReference && ((ActionReference)currentContainer.Peek()).Name != "use") 
+            {
+                Node temp = currentContainer.Pop();
+                currentContainer.Peek().AddChild(temp);
+            }
         }
 
         public override void ExitActionSubject([NotNull] AgentConfigurationParser.ActionSubjectContext context)
         {
-            base.ExitActionSubject(context);
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
         }
 
         public override void ExitItemStat([NotNull] AgentConfigurationParser.ItemStatContext context)
@@ -220,10 +207,6 @@ namespace Agent.parser
         {
             base.ExitSubject(context);
         }
-
-        /* ################################### */
-        /* ##            SUBJECS            ## */
-        /* ################################### */
 
 
         public override void EnterNpc([NotNull] AgentConfigurationParser.NpcContext context)
@@ -268,11 +251,14 @@ namespace Agent.parser
 
         public override void EnterInventory([NotNull] AgentConfigurationParser.InventoryContext context)
         {
-            base.EnterInventory(context);
+            Inventory inventory = new Inventory(context.INVENTORY().GetText());
+            currentContainer.Push(inventory);
         }
 
         public override void ExitInventory([NotNull] AgentConfigurationParser.InventoryContext context)
         {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
             base.ExitInventory(context);
         }
 
@@ -288,9 +274,14 @@ namespace Agent.parser
             currentContainer.Peek().AddChild(temp);
         }
 
-        public override void ExitString([NotNull] AgentConfigurationParser.StringContext context)
+        public override void EnterComparable([NotNull] AgentConfigurationParser.ComparableContext context)
         {
-            base.ExitString(context);
+            int x = 0;
+            String value = context.children.FirstOrDefault().GetText();
+            if (int.TryParse(value, out x)) {
+                Int node = new Int(int.Parse(context.children.FirstOrDefault().GetText()));
+                currentContainer.Peek().AddChild(node);
+            }
         }
     }
 }
