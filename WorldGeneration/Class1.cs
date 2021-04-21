@@ -45,21 +45,31 @@ namespace WorldGeneration
             List<String> result = new List<string>();
             
             // Gather noise data
-            float[] noiseData = new float[10 * 10];
-            int index = 0;
+            float[,] noiseData = new float[80,80];
 
-            for (int y = 0; y < 10; y++)
+            for (int y = 0; y < 80; y++)
             {
-                for (int x = 0; x < 10; x++)
+                for (int x = 0; x < 80; x++)
                 {
-                    noiseData[index++] = noise.GetNoise(x, y);
+                    noiseData[x,y] = noise.GetNoise(x, y);
+                    if ((int) Math.Floor(noiseData[x, y] * 10) > -1)
+                    {
+                        Console.Write("_" + (int)Math.Floor(noiseData[x,y] * 10));
+                    }
+                    else
+                    {
+                        Console.Write((int)Math.Floor(noiseData[x,y] * 10));
+                    }
+                    
                 }
+                Console.WriteLine("");
             }
+            
 
             for (int x = 0; x < 100; x++)
             {
                 // Use the noise data to generate some random tiles.
-                result.Add(generateTileName(noiseData[x]));
+                //result.Add(generateTileName(noiseData[x]));
             }
             return result;
         }
