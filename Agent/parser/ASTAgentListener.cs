@@ -11,7 +11,7 @@
 // using Agent.antlr.ast.implementation.comparables;
 // using Agent.antlr.ast.comparables;
 // using Agent.antlr.ast.implementation.comparables.subjects;
-// using Action = Agent.antlr.ast.Action;
+// using Action = Agent.antlr.ast.implementation.Action;
 //
 // namespace Agent.parser
 // {
