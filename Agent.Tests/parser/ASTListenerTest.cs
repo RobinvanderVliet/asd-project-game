@@ -58,24 +58,12 @@ namespace Agent.Tests.parser
         }
         
         [Test]
-        public void TestFileTests1()
+        [TestCase("test1.txt")]
+        [TestCase("test2.txt")]
+        [TestCase("test3.txt")]
+        public void TestFileTests1(String file)
         {
             //Arrange
-            var file = "test1.txt";
-            var expected = Fixtures.GetFixture(file);
-
-            //Act
-            var sut = ParseTestFile(file);
-
-            //Assert
-            Assert.AreEqual(expected.ToString(), sut.ToString());
-        }
-
-        [Test]
-        public void TestFileTests2()
-        {
-            //Arrange
-            var file = "test2.txt";
             var expected = Fixtures.GetFixture(file);
 
             //Act
