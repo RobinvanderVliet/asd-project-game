@@ -3,7 +3,7 @@
 namespace Network
 {
     class ObjectPayloadHandler {
-        public void checkActionType(ObjectPayloadDTO objectPayloadDTO) 
+        public void CheckActionType(ObjectPayloadDTO objectPayloadDTO) 
         {
             switch (objectPayloadDTO.Header.ActionType)
             {
@@ -33,7 +33,7 @@ namespace Network
             }
         }
 
-        public Boolean checkHeader(PayloadHeaderDTO payloadHeaderDTO)
+        public Boolean CheckHeader(PayloadHeaderDTO payloadHeaderDTO)
         {
             Console.WriteLine("Checking session with ID: " + payloadHeaderDTO.SessionID);
             return true;

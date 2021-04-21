@@ -19,9 +19,9 @@ namespace Network
 
                     ObjectPayloadHandler objectPayloadHandler = new ObjectPayloadHandler();
 
-                    if(objectPayloadHandler.checkHeader(objectPayloadDTO2.Header))
+                    if(objectPayloadHandler.CheckHeader(objectPayloadDTO2.Header))
                     {
-                        objectPayloadHandler.checkActionType(objectPayloadDTO2);
+                        objectPayloadHandler.CheckActionType(objectPayloadDTO2);
                     }
                 };
 
