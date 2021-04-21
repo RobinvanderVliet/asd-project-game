@@ -9,27 +9,27 @@ namespace Network
     class ObjectPayloadHandler {
         public void checkActionType(ObjectPayloadDTO objectPayloadDTO) 
         {
-            switch (objectPayloadDTO.header.actionType) 
+            switch (objectPayloadDTO.header.actionType)
             {
                 case "chatAction":
                     Console.WriteLine("Case chatAction");
-                    processChatAction(objectPayloadDTO.chatAction);
+                    //Send payload to chatActionComponent
                     break;
                 case "moveAction":
                     Console.WriteLine("Case moveAction");
-                    processMoveAction(objectPayloadDTO.moveAction);
+                    //Send payload to moveActionComponent
                     break;
                 case "attackAction":
                     Console.WriteLine("Case attackAction");
-                    processAttackAction(objectPayloadDTO.attackAction);
+                    //Send payload to attackActionComponent
                     break;
                 case "joinAction":
                     Console.WriteLine("Case joinAction");
-                    processJoinAction(objectPayloadDTO.joinAction);
+                    //Send payload to joinActionComponent
                     break;
                 case "sessionUpdateAction":
                     Console.WriteLine("Case sessionUpdateAction");
-                    processSessionUpdateAction(objectPayloadDTO.sessionUpdateAction);
+                    //Send payload to sessionUpdateActionComponent
                     break;
                 default:
                     Console.WriteLine("Not a valid actiontype");
@@ -41,26 +41,6 @@ namespace Network
         {
             Console.WriteLine("Checking session with ID: " + payloadHeaderDTO.sessionID);
             return true;
-        }
-
-        public void processChatAction(ChatActionDTO chatActionDTO) {
-            //Process chat action
-        }
-
-        public void processMoveAction(MoveActionDTO moveActionDTO) {
-            //Process move action
-        }
-
-        public void processAttackAction(AttackActionDTO attackActionDTO) {
-            //Process attack action
-        }
-
-        public void processJoinAction(JoinActionDTO joinActionDTO) {
-            //Process join action
-        }
-
-        public void processSessionUpdateAction(SessionUpdateActionDTO sessionUpdateActionDTO) {
-            //Process session update action
         }
     }
 }
