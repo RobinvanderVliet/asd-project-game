@@ -14,8 +14,8 @@ namespace Creature
         {
             IWorld world = new DefaultWorld(25);
             IPlayer player = new Player(10, new Vector2(3, 2));
-            ICreature creature = new Monster(new Vector2(10, 10), 2, 6, 10);
-            ICreature creature2 = new Monster(new Vector2(20, 20), 2, 6, 10);
+            ICreature creature = new Monster(world, new Vector2(10, 10), 2, 6, 50);
+            ICreature creature2 = new Monster(world, new Vector2(20, 20), 2, 6, 50);
 
             world.SpawnPlayer(player);
             world.SpawnCreature(creature);
