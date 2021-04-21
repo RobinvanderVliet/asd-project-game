@@ -13,7 +13,7 @@ namespace WorldGeneration
 {
     public class Tile
     {
-        public int gasLevel { get; set; }
-        public TileType tileType { get; set; }
+        public int GasLevel { get; set; }
+        public TileType TileType { get; set; }
     }
 }

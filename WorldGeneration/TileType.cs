@@ -15,9 +15,7 @@ namespace WorldGeneration
 {
     public class TileType
     {
-        public char symbol { get; set; }
-        public Color color { get; set; }
-
-        public void stepOnTile(){}
+        public char Symbol { get; set; }
+        public Color Color { get; set; }
     }
 }

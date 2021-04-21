@@ -33,37 +33,35 @@ namespace WorldGeneration
     {
         public Class1()
         {
-            var lookingForX = 1;
-            var lookingForY = 1;
             var grass = new TileType()
             {
-                symbol = '+',
-                color = Color.Green
+                Symbol = '+',
+                Color = Color.Green
             };
             var sand = new TileType()
             {
-                symbol = '=',
-                color = Color.Yellow
+                Symbol = '=',
+                Color = Color.Yellow
             };
             var water = new TileType()
             {
-                symbol = '~',
-                color = Color.DodgerBlue
+                Symbol = '~',
+                Color = Color.DodgerBlue
             };
             var grassTile = new Tile()
             {
-                gasLevel = 0,
-                tileType = grass
+                GasLevel = 0,
+                TileType = grass
             };
             var sandTile = new Tile()
             {
-                gasLevel = 0,
-                tileType = sand
+                GasLevel = 0,
+                TileType = sand
             };
             var waterTile = new Tile()
             {
-                gasLevel = 0,
-                tileType = water
+                GasLevel = 0,
+                TileType = water
             };
             Tile[] tileMap = {grassTile, sandTile, waterTile, sandTile, 
                 grassTile, grassTile, sandTile, sandTile,
@@ -72,40 +70,41 @@ namespace WorldGeneration
             };
             var chunk = new Chunk()
             {
-                x = 0,
-                y = 0,
-                map = tileMap,
-                rowSize = 4
+                X = 0,
+                Y = 0,
+                Map = tileMap,
+                RowSize = 4
             };
             var chunk2 = new Chunk()
             {
-                x = 0,
-                y = 1,
-                map = tileMap,
-                rowSize = 4
+                X = 0,
+                Y = 1,
+                Map = tileMap,
+                RowSize = 4
             };
             
             var db = new Database();
-            db.deleteTileMap();
-            db.insertChunkIntoDatabase(chunk);
-            db.insertChunkIntoDatabase(chunk2);
-            db.getAllChunks();
-            var chunkA = db.getChunk(0,0);
-            var chunkB = db.getChunk(0,1);
-            chunkA.displayChunk();
-            Console.WriteLine(chunkA.getTileCoordinatesInChunk(0)[0] + " " + chunkA.getTileCoordinatesInChunk(0)[1]); 
-            Console.WriteLine(chunkA.getTileCoordinatesInChunk(1)[0] + " " + chunkA.getTileCoordinatesInChunk(1)[1]); 
-            Console.WriteLine(chunkA.getTileCoordinatesInChunk(2)[0] + " " + chunkA.getTileCoordinatesInChunk(2)[1]); 
-            Console.WriteLine(chunkA.getTileCoordinatesInChunk(3)[0] + " " + chunkA.getTileCoordinatesInChunk(3)[1]); 
-            Console.WriteLine(chunkA.getTileCoordinatesInChunk(4)[0] + " " + chunkA.getTileCoordinatesInChunk(4)[1]); 
-            Console.WriteLine(chunkA.getTileCoordinatesInChunk(5)[0] + " " + chunkA.getTileCoordinatesInChunk(5)[1]); 
-            Console.WriteLine(chunkA.getTileCoordinatesInChunk(6)[0] + " " + chunkA.getTileCoordinatesInChunk(6)[1]); 
-            Console.WriteLine(chunkA.getTileCoordinatesInChunk(7)[0] + " " + chunkA.getTileCoordinatesInChunk(7)[1]); 
-            Console.WriteLine(chunkA.getTileCoordinatesInChunk(8)[0] + " " + chunkA.getTileCoordinatesInChunk(8)[1]); 
-            Console.WriteLine(chunkA.getTileCoordinatesInChunk(9)[0] + " " + chunkA.getTileCoordinatesInChunk(9)[1]); 
+            db.DeleteTileMap();
+            db.InsertChunkIntoDatabase(chunk);
+            db.InsertChunkIntoDatabase(chunk2);
+            db.GetAllChunks();
+            var chunkA = db.GetChunk(0,0);
+            var chunkB = db.GetChunk(0,1);
+            chunkA.DisplayChunk();
+            Console.WriteLine(chunkA.GetTileCoordinatesInChunk(0)[0] + " " + chunkA.GetTileCoordinatesInChunk(0)[1]); 
+            Console.WriteLine(chunkA.GetTileCoordinatesInChunk(1)[0] + " " + chunkA.GetTileCoordinatesInChunk(1)[1]); 
+            Console.WriteLine(chunkA.GetTileCoordinatesInChunk(2)[0] + " " + chunkA.GetTileCoordinatesInChunk(2)[1]); 
+            Console.WriteLine(chunkA.GetTileCoordinatesInChunk(3)[0] + " " + chunkA.GetTileCoordinatesInChunk(3)[1]); 
+            Console.WriteLine(chunkA.GetTileCoordinatesInChunk(4)[0] + " " + chunkA.GetTileCoordinatesInChunk(4)[1]); 
+            Console.WriteLine(chunkA.GetTileCoordinatesInChunk(5)[0] + " " + chunkA.GetTileCoordinatesInChunk(5)[1]); 
+            Console.WriteLine(chunkA.GetTileCoordinatesInChunk(6)[0] + " " + chunkA.GetTileCoordinatesInChunk(6)[1]); 
+            Console.WriteLine(chunkA.GetTileCoordinatesInChunk(7)[0] + " " + chunkA.GetTileCoordinatesInChunk(7)[1]); 
+            Console.WriteLine(chunkA.GetTileCoordinatesInChunk(8)[0] + " " + chunkA.GetTileCoordinatesInChunk(8)[1]); 
+            Console.WriteLine(chunkA.GetTileCoordinatesInChunk(9)[0] + " " + chunkA.GetTileCoordinatesInChunk(9)[1]); 
             Console.WriteLine(" ------- "); 
-            Console.WriteLine(chunkA.getTileCoordinatesInWorld(0)[0] + " " + chunkA.getTileCoordinatesInWorld(0)[1]);
-            Console.WriteLine(chunkB.getTileCoordinatesInWorld(0)[0] + " " + chunkB.getTileCoordinatesInWorld(0)[1]);
+            Console.WriteLine(chunkA.GetTileCoordinatesInWorld(0)[0] + " " + chunkA.GetTileCoordinatesInWorld(0)[1]);
+            Console.WriteLine(chunkB.GetTileCoordinatesInWorld(0)[0] + " " + chunkB.GetTileCoordinatesInWorld(0)[1]);
+            Console.WriteLine(chunkB.GetTileCoordinatesInWorld(1)[0] + " " + chunkB.GetTileCoordinatesInWorld(1)[1]);
         }
     }
 }

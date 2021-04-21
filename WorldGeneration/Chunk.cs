@@ -15,17 +15,17 @@ namespace WorldGeneration
 {
     public class Chunk
     {
-        public int x { get; set; }
-        public int y { get; set; }
-        public Tile[] map { get; set; }
-        public int rowSize { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public Tile[] Map { get; set; }
+        public int RowSize { get; set; }
 
         public Chunk(int x, int y, Tile[] map, int rowSize)
         {
-            this.x = x;
-            this.y = y;
-            this.map = map;
-            this.rowSize = rowSize;
+            this.X = x;
+            this.Y = y;
+            this.Map = map;
+            this.RowSize = rowSize;
         }
 
         public Chunk()
@@ -33,35 +33,34 @@ namespace WorldGeneration
         }
 
         //writes out the symbols for the tilemap of the current chunk in the proper shape.
-        public void displayChunk()
+        public void DisplayChunk()
         {
-            var rowNumber = 0;
-            for (int i = 0; i < map.Length; i++)
+            for (int i = 0; i < Map.Length; i++)
             {
-                if (i % rowSize == 0)
+                if (i % RowSize == 0)
                 {
                     Console.WriteLine(" ");
                 }
 
-                Console.Write(" " + map[i].tileType.symbol);
+                Console.Write(" " + Map[i].TileType.Symbol);
             }
 
             Console.WriteLine("");
         }
 
         //returns the coordinates relative to the start (left top) of the chunk. 0,0 is the left top. First value is x, second is y.
-        public int[] getTileCoordinatesInChunk(int indexInArray)
+        public int[] GetTileCoordinatesInChunk(int indexInArray)
         {
-            var x = (indexInArray % rowSize);
-            var y = (int) Math.Floor((double) indexInArray / rowSize);
+            var x = (indexInArray % RowSize);
+            var y = (int) Math.Floor((double) indexInArray / RowSize);
             return new[] {x, y};
         }
 
         //returns the coordinates relative to the center of the world. First value is x, second is y.
-        public int[] getTileCoordinatesInWorld(int indexInArray)
+        public int[] GetTileCoordinatesInWorld(int indexInArray)
         {
-            var internalCoordinates = getTileCoordinatesInChunk(indexInArray);
-            return new[] {internalCoordinates[0] + rowSize * x, internalCoordinates[1] + rowSize * y};
+            var internalCoordinates = GetTileCoordinatesInChunk(indexInArray);
+            return new[] {internalCoordinates[0] + RowSize * X, internalCoordinates[1] + RowSize * Y};
         }
     }
 }

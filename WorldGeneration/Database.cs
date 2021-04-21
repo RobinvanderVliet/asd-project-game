@@ -18,24 +18,22 @@ namespace WorldGeneration
 {
     public class Database
     {
-        private String databaseLocation;
-        private String mapCollection;
+        private readonly string _databaseLocation;
+        private readonly string _mapCollection;
         
-        public Database(String databaseLocation = "C:\\Temp\\ChunkDatabase.db", String mapCollection = "Chunks")
+        public Database(string databaseLocation = "C:\\Temp\\ChunkDatabase.db", string mapCollection = "Chunks")
         {
-            this.databaseLocation = databaseLocation;
-            this.mapCollection = mapCollection;
+            this._databaseLocation = databaseLocation;
+            this._mapCollection = mapCollection;
         }
 
         //read function name
-        public void insertChunkIntoDatabase(Chunk chunk)
+        public void InsertChunkIntoDatabase(Chunk chunk)
         {
             try
             {
-                using (var db = new LiteDatabase(databaseLocation))
-                {
-                    getMapCollection(db).Insert(chunk);
-                }
+                using var db = new LiteDatabase(_databaseLocation);
+                GetMapCollection(db).Insert(chunk);
             }
             catch (Exception e)
             {
@@ -45,29 +43,27 @@ namespace WorldGeneration
         }
 
         //returns Chunk from database after finding it by Chunk x and y.
-        public Chunk getChunk(int chunkXValue, int chunkYValue)
+        public Chunk GetChunk(int chunkXValue, int chunkYValue)
         {
             try
             {
-                using (var db = new LiteDatabase(databaseLocation))
-                {
-                    var collection = this.getMapCollection(db);
-                    var results = collection.Query()
-                        .Where(chunk => chunk.x.Equals(chunkXValue) && chunk.y.Equals(chunkYValue))
-                        .Select(queryOutput => new {queryOutput.map, queryOutput.rowSize, queryOutput.x, queryOutput.y})
-                        .ToArray();
+                using var db = new LiteDatabase(_databaseLocation);
+                var collection = this.GetMapCollection(db);
+                var results = collection.Query()
+                    .Where(chunk => chunk.X.Equals(chunkXValue) && chunk.Y.Equals(chunkYValue))
+                    .Select(queryOutput => new {map = queryOutput.Map, rowSize = queryOutput.RowSize, x = queryOutput.X, y = queryOutput.Y})
+                    .ToArray();
 
-                    switch (results.Length)
-                    {
-                        case 0:
-                            throw new DatabaseError("There were no matching chunks found");
-                        case >1:
-                            throw new DatabaseError("There were multiple matching chunks found. bad! this bad!");
-                        case 1:
-                            return new Chunk(results.First().x, results.First().y, results.First().map, results.First().rowSize);
-                        default:
-                            throw new DatabaseError("Extremely unexpected result from query. like, this is only here in case of a count being negative or null. So pretty much unreachable code.");
-                    }
+                switch (results.Length)
+                {
+                    case 0:
+                        throw new DatabaseError("There were no matching chunks found");
+                    case >1:
+                        throw new DatabaseError("There were multiple matching chunks found. bad! this bad!");
+                    case 1:
+                        return new Chunk(results.First().x, results.First().y, results.First().map, results.First().rowSize);
+                    default:
+                        throw new DatabaseError("Extremely unexpected result from query. like, this is only here in case of a count being negative or null. So pretty much unreachable code.");
                 }
             }
             catch (Exception e)
@@ -75,30 +71,27 @@ namespace WorldGeneration
                 Console.WriteLine(e);
                 throw;
             }
-            return null;
         }
         
         //returns all Chunks from the database in a list. Throws a error if there are no Chunks.
-        public List<Chunk> getAllChunks()
+        public List<Chunk> GetAllChunks()
         {
             try
             {
-                using (var db = new LiteDatabase(databaseLocation))
-                {
-                    var results = getMapCollection(db).Query()
-                        .Select(queryOutput => new {queryOutput.map, queryOutput.rowSize, queryOutput.x, queryOutput.y})
-                        .ToList();
+                using var db = new LiteDatabase(_databaseLocation);
+                var results = GetMapCollection(db).Query()
+                    .Select(queryOutput => new {map = queryOutput.Map, rowSize = queryOutput.RowSize, x = queryOutput.X, y = queryOutput.Y})
+                    .ToList();
                 
 
-                    switch (results.Count)
-                    {
-                        case 0:
-                            throw new DatabaseError("There were no matching chunks found");
-                        case >0:
-                            return results.Select(result => new Chunk(result.x, result.y, result.map, result.rowSize)).ToList();
-                        default:
-                            throw new DatabaseError("Extremely unexpected result from query. like, this is only here in case of a count being negative. So pretty much unreachable code.");
-                    }
+                switch (results.Count)
+                {
+                    case 0:
+                        throw new DatabaseError("There were no matching chunks found");
+                    case >0:
+                        return results.Select(result => new Chunk(result.x, result.y, result.map, result.rowSize)).ToList();
+                    default:
+                        throw new DatabaseError("Extremely unexpected result from query. like, this is only here in case of a count being negative. So pretty much unreachable code.");
                 }
             }
             catch (Exception e)
@@ -109,14 +102,12 @@ namespace WorldGeneration
         }
 
         //Drops the Chunks collection.
-        public void deleteTileMap()
+        public void DeleteTileMap()
         {
             try
             {
-                using (var db = new LiteDatabase(databaseLocation))
-                {
-                    db.DropCollection(mapCollection);
-                }
+                using var db = new LiteDatabase(_databaseLocation);
+                db.DropCollection(_mapCollection);
             }
             catch (Exception e)
             {
@@ -125,10 +116,10 @@ namespace WorldGeneration
             }
         }
 
-        //Returns the collection connection.
-        public ILiteCollection<Chunk> getMapCollection(LiteDatabase db)
+        //Returns the collection connection.    
+        private ILiteCollection<Chunk> GetMapCollection(ILiteDatabase db)
         {
-            return db.GetCollection<Chunk>(mapCollection);
+            return db.GetCollection<Chunk>(_mapCollection);
         }
     }
 }
