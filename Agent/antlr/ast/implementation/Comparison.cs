@@ -17,7 +17,7 @@ namespace Agent.antlr.ast.implementation
     {
         public string ComparisonType { get; set; }
         
-        //TODO: Create comparisonTypeEnum
+        //TODO: Create comparisonTypeEnum ,(reactie) voor u overbodig kan later
         public Comparison(string comparisonType)
         {
             ComparisonType = comparisonType;
