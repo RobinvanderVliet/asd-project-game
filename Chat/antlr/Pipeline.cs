@@ -1,15 +1,4 @@
-﻿/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: ASD-project-game.
- 
-    This file is created by team: 2
-     
-    Goal of this file: pipeline for parse command.
-     
-*/
-
-using System;
+﻿using System;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using Chat.antlr.ast;
@@ -17,6 +6,7 @@ using Chat.antlr.grammar;
 using Chat.antlr.parser;
 using Chat.antlr.transformer;
 using Chat.exception;
+using Player;
 
 namespace Chat.antlr
 {
@@ -59,11 +49,11 @@ namespace Chat.antlr
         }
 
 
-        public void transform()
+        public void transform(IPlayerModel playerModel)
         {
             if (Ast == null)
                 return;
-            (new Evaluator()).apply(Ast);
+            new Evaluator(playerModel).apply(Ast);
         }
 
         public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine,

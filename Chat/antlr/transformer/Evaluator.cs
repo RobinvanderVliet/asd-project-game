@@ -1,11 +1,19 @@
-﻿using System.Security.Cryptography;
+﻿using System;
+using System.Security.Cryptography;
 using Chat.antlr.ast;
 using Chat.antlr.ast.actions;
+using Player;
 
 namespace Chat.antlr.transformer
 {
     public class Evaluator : ITransform
     {
+        private readonly IPlayerModel _playerModel;
+
+        public Evaluator(IPlayerModel playerModel)
+        {
+            _playerModel = playerModel;
+        }
         public void apply(AST ast)
         {
             transformNode(ast.root);
@@ -18,21 +26,14 @@ namespace Chat.antlr.transformer
                 case Move:
                     transformMove(node);
                     break;
-           
-            }
-            if (node is Move)
-            {
-                transformMove(node);
             }
         }
 
         private void transformMove(ASTNode node)
         {
             Move move = (Move)node;
-            // if (move.direction.ToString() == "forward")
             {
-                
-                // .Net methode (move.direction.ToString(), move.steps)
+                _playerModel.HandleDirection(move.direction.ToString(), Convert.ToInt32(move.steps));
             }
         }
     }
