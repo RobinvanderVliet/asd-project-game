@@ -15,16 +15,14 @@ namespace Player
 {
     public interface IInventory
     {
-        public List<Item> getInventory();
+        public List<Item> _itemList { get; set; }
 
-        public void setInventory(List<Item> newInventory);
+        public Item GetItem(string itemName);
 
-        public Item getItem(string itemName);
+        public void AddItem(Item item);
 
-        public void addItem(Item item);
+        public void RemoveItem(Item item);
 
-        public void removeItem(Item item);
-
-        public void emptyInventory();
+        public void EmptyInventory();
     }
 }

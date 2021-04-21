@@ -15,18 +15,18 @@ namespace Player
 {
     public class PlayerComponent
     {
-        public void attack(String direction)
+        public void Attack(String direction)
         {
             //Player1.getTile();
             //check with the gameboard whether or not there's a player in the given direction from this tile
             //if yes {
             //  random value
-            //dmg = player1.getAttackDamage();
-            //Player1.removeStamina(1);
-            //Player2.removeHealth(dmg)
+            //dmg = player1.GetAttackDamage();
+            //Player1.RemoveStamina(1);
+            //Player2.RemoveHealth(dmg)
             //} else {
             //  Console.WriteLine("You swung at nothing!");
-            //Player1.removeStamina(1);
+            //Player1.RemoveStamina(1);
             //}
 
             Console.WriteLine("Attacked in " + direction + " direction.");

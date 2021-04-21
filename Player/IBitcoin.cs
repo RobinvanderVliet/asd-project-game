@@ -11,14 +11,12 @@
 
 namespace Player
 {
-    interface IBitcoin
+    public interface IBitcoin
     {
-        public int getAmount();
+        public int _amount { get; set; }
 
-        public void setAmount(int amount);
+        public void AddAmount(int amount);
 
-        public void addAmount(int amount);
-
-        public void removeAmount(int amount);
+        public void RemoveAmount(int amount);
     }
 }

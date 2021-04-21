@@ -13,19 +13,9 @@ namespace Player
 {
     public class RadiationLevel : IRadiationLevel
     {
-        private int _level;
+        public int _level { get; set; }
 
         public RadiationLevel(int radiationLevel)
-        {
-            _level = radiationLevel;
-        }
-
-        public int getRadiationLevel()
-        {
-            return _level;
-        }
-
-        public void setRadiationLevel(int radiationLevel)
         {
             _level = radiationLevel;
         }

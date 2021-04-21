@@ -15,33 +15,13 @@ namespace Player
 {
     public class Item
     {
-        private String _itemName;
-        private String _description;
+        public String _itemName { get; set; }
+        public String _description { get; set; }
 
         public Item(String itemName, String decription)
         {
             _itemName = itemName;
             _description = decription;
-        }
-
-        public String getItemName()
-        {
-            return _itemName;
-        }
-
-        public void setItemName(String itemName)
-        {
-            _itemName = itemName;
-        }
-
-        public String getDescription()
-        {
-            return _description;
-        }
-
-        public void setDescription(String descriptionName)
-        {
-            _description = descriptionName;
         }
     }
 }

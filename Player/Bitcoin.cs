@@ -13,29 +13,19 @@ namespace Player
 {
     public class Bitcoin : IBitcoin
     {
-        private int _amount;
+        public int _amount { get; set; }
 
         public Bitcoin(int amount)
         {
             _amount = amount;
         }
 
-        public int getAmount()
-        {
-            return _amount;
-        }
-
-        public void setAmount(int amount)
-        {
-            _amount = amount;
-        }
-
-        public void addAmount(int amount)
+        public void AddAmount(int amount)
         {
             _amount += amount;
         }
 
-        public void removeAmount(int amount)
+        public void RemoveAmount(int amount)
         {
             _amount -= amount;
         }

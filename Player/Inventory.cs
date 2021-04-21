@@ -15,28 +15,18 @@ namespace Player
 {
     public class Inventory : IInventory
     {
-        private List<Item> _itemList = new List<Item>();
+        public List<Item> _itemList { get; set; }
 
         public Inventory()
         {
 
         }
 
-        public List<Item> getInventory()
-        {
-            return _itemList;
-        }
-
-        public void setInventory(List<Item> newInventory)
-        {
-            _itemList = newInventory;
-        }
-
-        public Item getItem(string itemName)
+        public Item GetItem(string itemName)
         {
             foreach (var item in _itemList)
             {
-                if (item.getItemName() == itemName)
+                if (item._itemName == itemName)
                 {
                     return item;
                 }
@@ -44,17 +34,17 @@ namespace Player
             return null;
         }
 
-        public void addItem(Item item)
+        public void AddItem(Item item)
         {
             _itemList.Add(item);
         }
 
-        public void removeItem(Item item)
+        public void RemoveItem(Item item)
         {
             _itemList.Remove(item);
         }
 
-        public void emptyInventory()
+        public void EmptyInventory()
         {
             _itemList.Clear();
         }

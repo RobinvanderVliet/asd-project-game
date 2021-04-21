@@ -16,14 +16,14 @@ namespace Player
 {
     public class PlayerModel
     {
-        private String _name;
-        private int _health;
-        private int _stamina;
+        public String _name { get; set; }
+        public int _health { get; set; }
+        public int _stamina { get; set; }
 
-        //private Tile _currentTile;
-        private IInventory _inventory;
-        private IBitcoin _bitcoins;
-        private IRadiationLevel _radiationLevel;
+        //public Tile _currentTile { get; set; }
+        public IInventory _inventory { get; set; }
+        public IBitcoin _bitcoins { get; set; }
+        public IRadiationLevel _radiationLevel { get; set; }
 
         //random default values for health&stamina for now
         private const int HEALTHCAP = 100;
@@ -42,27 +42,7 @@ namespace Player
             _radiationLevel = new RadiationLevel(0);
         }
 
-        public String getName()
-        {
-            return _name;
-        }
-
-        public void setName(String newName)
-        {
-            _name = newName;
-        }
-
-        public int getHealthAmount()
-        {
-            return _health;
-        }
-
-        public void setHealthAmount(int amount)
-        {
-            _health = amount;
-        }
-
-        public void addHealth(int amount)
+        public void AddHealth(int amount)
         {
             if (_health + amount >= HEALTHCAP)
             {
@@ -73,7 +53,7 @@ namespace Player
             }
         }
 
-        public void removeHealth(int amount)
+        public void RemoveHealth(int amount)
         {
             if (_health - amount <= 0)
             {
@@ -86,17 +66,7 @@ namespace Player
             }
         }
 
-        public int getStaminaAmount()
-        {
-            return _stamina;
-        }
-
-        public void setStaminaAmount(int amount)
-        {
-            _stamina = amount;
-        }
-
-        public void addStamina(int amount)
+        public void AddStamina(int amount)
         {
             if (_stamina + amount >= STAMINACAP)
             {
@@ -108,7 +78,7 @@ namespace Player
             }
         }
 
-        public void removeStamina(int amount)
+        public void RemoveStamina(int amount)
         {
             if (_stamina - amount <= 0)
             {
@@ -120,102 +90,62 @@ namespace Player
             }
         }
 
-        //public Tile getTile()
-        //{
-        //    return _currentTile;
-        //}
-
-        //public void setTile(Tile newTile)
-        //{
-        //    _currentTile = newTile;
-        //}
-
-        public List<Item> getInventory()
+        public void AddInventoryItem(Item item)
         {
-            return _inventory.getInventory();
+            _inventory.AddItem(item);
         }
 
-        public void setInventory(List<Item> newInventory)
+        public void RemoveInventoryItem(Item item)
         {
-            _inventory.setInventory(newInventory);
+            _inventory.RemoveItem(item);
         }
 
-        public void addInventoryItem(Item item)
+        public void EmptyInventory()
         {
-            _inventory.addItem(item);
+            _inventory.EmptyInventory();
         }
 
-        public void removeInventoryItem(Item item)
-        {
-            _inventory.removeItem(item);
-        }
-
-        public void emptyInventory()
-        {
-            _inventory.emptyInventory();
-        }
-
-        public int getBitcoinAmount()
-        {
-            return _bitcoins.getAmount();
-        }
-
-        public void setBitcoinAmount(int amount)
-        {
-            _bitcoins.setAmount(amount);
-        }
-
-        public void addBitcoins(int amount)
+        public void AddBitcoins(int amount)
         { 
-            _bitcoins.addAmount(amount);
+            _bitcoins.AddAmount(amount);
         }
 
-        public void removeBitcoins(int amount)
+        public void RemoveBitcoins(int amount)
         {
-            _bitcoins.removeAmount(amount);
+            _bitcoins.RemoveAmount(amount);
         }
 
-        public int getRadiationLevel()
-        {
-            return _radiationLevel.getRadiationLevel();
-        }
-
-        public void setRadiationLevel(int amount)
-        {
-            _radiationLevel.setRadiationLevel(amount);
-        }
-
-        public int getAttackDamage()
+        public int GetAttackDamage()
         {
             //random default attack damage for now
-            int dmg = 5 + getItemDamage();
+            int dmg = 5 + GetItemDamage();
             return dmg;
         }
 
-        private int getItemDamage()
+        private int GetItemDamage()
         {
             //things like passive damage items go here
             return 0;
         }
 
-        public void pickupItem()
+        public void PickupItem()
         {
             //Item item = currentTile.pickupItem();
             //addInventoryItem(item);
             Console.WriteLine("Item opgepakt!");
         }
 
-        public void dropItem(String itemName)
+        public void DropItem(String itemName)
         {
-            Item item = _inventory.getItem(itemName);
+            Item item = _inventory.GetItem(itemName);
             if (item != null)
             {
-                removeInventoryItem(item);
+                RemoveInventoryItem(item);
             }
-            Console.WriteLine(item.getItemName() + " laten vallen.");
+            Console.WriteLine(item._itemName + " laten vallen.");
         }
 
-        public void exitCurrentGame()
+        public void ExitCurrentGame()
         {
             //code for removing player from lobby
             Console.WriteLine("Spel geleaved.");

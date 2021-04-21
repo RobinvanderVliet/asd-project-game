@@ -11,10 +11,8 @@
 
 namespace Player
 {
-    interface IRadiationLevel
+    public interface IRadiationLevel
     {
-        public int getRadiationLevel();
-
-        public void setRadiationLevel(int radiationLevel);
+        public int _level { get; set; }
     }
 }
