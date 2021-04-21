@@ -1,6 +1,6 @@
 ﻿using System;
-using Agent.antlr.ast.implementation;
-using Agent.antlr.ast.implementation.comparables;
+using Agent.antlr.ast;
+using Agent.antlr.ast.comparables;
 using NUnit.Framework;
 
 namespace Agent.Tests.ast

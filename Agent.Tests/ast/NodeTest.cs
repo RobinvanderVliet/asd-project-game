@@ -1,7 +1,7 @@
-﻿using Agent.antlr.ast.implementation;
-using Agent.antlr.ast.interfaces;
+﻿using Agent.antlr.ast;
 using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Agent.Tests.ast
 {
@@ -10,7 +10,7 @@ namespace Agent.Tests.ast
     public class NodeTest
     {
 
-        private INode _sut;
+        private Node _sut;
         private const string Type = "Node";
         
         [SetUp]
@@ -48,7 +48,7 @@ namespace Agent.Tests.ast
             //Act
             var result = this._sut.GetChildren();
             //Assert
-            Assert.IsInstanceOf(typeof(ArrayList), result);
+            Assert.IsInstanceOf(typeof(List<Node>), result);
         }
         
         
