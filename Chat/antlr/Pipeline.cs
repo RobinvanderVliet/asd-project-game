@@ -1,4 +1,14 @@
-﻿using System;
+﻿/*
+    AIM SD ASD 2020/2021 S2 project
+     
+    Project name: ASD-project-game.
+ 
+    This file is created by team: 2
+     
+    Goal of this file: pipeline for parse and evaluate command.
+     
+*/
+using System;
 using System.Collections.Generic;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;

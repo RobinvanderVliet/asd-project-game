@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Diagnostics.CodeAnalysis;
-
-/*
+﻿/*
     AIM SD ASD 2020/2021 S2 project
      
     Project name: ASD-project-game.
@@ -12,6 +8,11 @@ using System.Diagnostics.CodeAnalysis;
     Goal of this file: Input class (like command).
      
 */
+
+using System;
+using System.Collections;
+using System.Diagnostics.CodeAnalysis;
+
 namespace Chat.antlr.ast
 {
     public class Input : ASTNode, IEquatable<Input>
@@ -22,7 +23,7 @@ namespace Chat.antlr.ast
         {
             this.body = new ArrayList();
         }
-        
+
         public override ASTNode addChild(ASTNode child)
         {
             body.Add(child);

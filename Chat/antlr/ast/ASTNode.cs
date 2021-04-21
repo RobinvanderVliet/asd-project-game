@@ -9,8 +9,6 @@
      
 */
 
-using System.Collections;
-
 namespace Chat.antlr.ast
 {
     public class ASTNode
