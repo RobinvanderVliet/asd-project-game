@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 /*
     AIM SD ASD 2020/2021 S2 project
@@ -44,6 +45,7 @@ namespace Chat.antlr.ast
             return this;
         }
 
+    
         public override bool Equals(object obj)
         {
             return this.Equals(obj as Input);

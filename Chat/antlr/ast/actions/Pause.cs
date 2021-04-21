@@ -1,25 +1,17 @@
-﻿/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: ASD-project-game.
- 
-    This file is created by team: 2
-     
-    Goal of this file: Pause action class (extends command).
-     
-*/
-
-using System;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Chat.antlr.ast.actions
 {
     public class Pause : Command, IEquatable<Pause>
     {
+        [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
             return this.Equals(obj as Pause);
         }
 
+        [ExcludeFromCodeCoverage]
         public bool Equals(Pause other)
         {
             return true;
