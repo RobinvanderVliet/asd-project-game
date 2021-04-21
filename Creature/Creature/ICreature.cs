@@ -30,5 +30,10 @@ namespace Creature
         public void ApplyDamage(double amount);
 
         public void HealAmount(double amount);
+
+        /// <summary>
+        /// Executes behavior.
+        /// </summary>
+        public void Do();
     }
 }

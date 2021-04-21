@@ -1,6 +1,7 @@
 ﻿using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
 using Creature.Consumable;
+using Creature.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,11 @@ namespace Creature
 {
     public class Monster : ICreature
     {
+        private bool _following;
         private readonly double _maxHealth;
         private double _health = 0;
         private double _damage;
+        private readonly IWorld _world;
 
         private bool _alive;
         public bool IsAlive
@@ -76,13 +79,15 @@ namespace Creature
         /// </summary>
         private PassiveStateMachine<State, Event> stateMachine;
 
-        public Monster(Vector2 position, double damage, double initialHealth, int visionRange)
+        public Monster(IWorld world, Vector2 position, double damage, double initialHealth, int visionRange)
         {
             _position = position;
             _damage = damage;
             _visionRange = visionRange;
             _maxHealth = initialHealth;
             _alive = true;
+            _world = world;
+            _following = false;
 
             _health = _maxHealth;
 
@@ -131,8 +136,20 @@ namespace Creature
             stateMachine.Start();
         }
 
+        public void Do()
+        {
+            if (_following)
+            {
+                if (_position.X < _player.Position.X) _position.X += 1;
+                else if (_position.X > _player.Position.X) _position.X -= 1;
+                else if (_position.Y < _player.Position.Y) _position.Y += 1;
+                else if (_position.Y > _player.Position.Y) _position.Y -= 1;
+            }
+        }
+
         private void OnFollowPlayer(IPlayer player)
         {
+            _following = true;
             _player = player;
         }
 
