@@ -3,7 +3,7 @@
      
     Project name: ASD-Project.
  
-    This file is created by team: 5.
+    This file is created by team: 5 Pepijn van Erp.
      
     Goal of this file: Format of sent message.
      
