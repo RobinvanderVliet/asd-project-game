@@ -32,11 +32,13 @@ namespace Chat
             {
                 Pipeline pipeline = new Pipeline();
                 pipeline.ParseCommand(commando);
+                pipeline.transform();
             }
             catch (CommandSyntaxException e)
             {
                 System.Console.WriteLine(e.Message);
             }
+
 
 
         }
