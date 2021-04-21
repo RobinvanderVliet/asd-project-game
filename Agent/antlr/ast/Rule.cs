@@ -27,12 +27,12 @@ namespace Agent.antlr.ast
             Value = value;
         }
         
-        public string GetNodeType()
+        public override string GetNodeType()
         {
             return "Rule";
         }
 
-        public new List<Node> GetChildren()
+        public override List<Node> GetChildren()
         {
             var children = new List<Node>();
             children.AddRange(settings);
@@ -40,7 +40,7 @@ namespace Agent.antlr.ast
             return children;
         }
 
-        public new Node AddChild(Node node)
+        public override Node AddChild(Node node)
         {
             if (node is Setting setting)
                 settings.Add(setting);
@@ -50,7 +50,7 @@ namespace Agent.antlr.ast
             return this;
         }
 
-        public new Node RemoveChild(Node node)
+        public override Node RemoveChild(Node node)
         {
             if (node is Setting setting)
                 settings.Remove(setting);

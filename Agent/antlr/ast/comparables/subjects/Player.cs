@@ -18,7 +18,7 @@
         }
 
 
-        public string GetNodeType()
+        public override string GetNodeType()
         {
             return "Player";
         }

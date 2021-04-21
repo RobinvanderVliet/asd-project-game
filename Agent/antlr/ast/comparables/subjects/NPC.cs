@@ -18,7 +18,7 @@ namespace Agent.antlr.ast.comparables.subjects
         {
         }
 
-        public new string GetNodeType()
+        public override string GetNodeType()
         {
             return "NPC";
         }
