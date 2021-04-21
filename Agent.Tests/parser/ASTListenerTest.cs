@@ -70,7 +70,7 @@ namespace Agent.Tests.parser
             var sut = ParseTestFile(file);
 
             //Assert
-            Assert.AreEqual(expected.ToString(), sut.ToString());
+            Assert.AreEqual(expected.root.ToString(), sut.root.ToString());
         }
 
     }
