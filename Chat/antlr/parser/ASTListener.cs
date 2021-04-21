@@ -8,6 +8,7 @@
     Goal of this file: Parser class for add actions to stack.
      
 */
+
 using System;
 using System.Collections;
 using Chat.antlr.ast;
@@ -39,7 +40,7 @@ namespace Chat.antlr.parser
 
         public override void ExitMove(PlayerCommandsParser.MoveContext context)
         {
-            ast.root.addChild((ASTNode)_currentContainer.Pop());
+            ast.root.addChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterAttack(PlayerCommandsParser.AttackContext context)
@@ -49,7 +50,7 @@ namespace Chat.antlr.parser
 
         public override void ExitAttack(PlayerCommandsParser.AttackContext context)
         {
-            ast.root.addChild((ASTNode)_currentContainer.Pop());
+            ast.root.addChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterDrop(PlayerCommandsParser.DropContext context)
@@ -59,7 +60,7 @@ namespace Chat.antlr.parser
 
         public override void ExitDrop(PlayerCommandsParser.DropContext context)
         {
-            ast.root.addChild((ASTNode)_currentContainer.Pop());
+            ast.root.addChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterPickup(PlayerCommandsParser.PickupContext context)
@@ -69,7 +70,7 @@ namespace Chat.antlr.parser
 
         public override void ExitPickup(PlayerCommandsParser.PickupContext context)
         {
-            ast.root.addChild((ASTNode)_currentContainer.Pop());
+            ast.root.addChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterExit(PlayerCommandsParser.ExitContext context)
@@ -79,7 +80,47 @@ namespace Chat.antlr.parser
 
         public override void ExitExit(PlayerCommandsParser.ExitContext context)
         {
-            ast.root.addChild((ASTNode)_currentContainer.Pop());
+            ast.root.addChild((ASTNode) _currentContainer.Pop());
+        }
+
+        public override void EnterSay(PlayerCommandsParser.SayContext context)
+        {
+            _currentContainer.Push(new Say());
+        }
+
+        public override void ExitSay(PlayerCommandsParser.SayContext context)
+        {
+            ast.root.addChild((ASTNode) _currentContainer.Pop());
+        }
+
+        public override void EnterShout(PlayerCommandsParser.ShoutContext context)
+        {
+            _currentContainer.Push(new Shout());
+        }
+
+        public override void ExitShout(PlayerCommandsParser.ShoutContext context)
+        {
+            ast.root.addChild((ASTNode) _currentContainer.Pop());
+        }
+
+        public override void EnterReplace(PlayerCommandsParser.ReplaceContext context)
+        {
+            _currentContainer.Push(new Replace());
+        }
+
+        public override void ExitReplace(PlayerCommandsParser.ReplaceContext context)
+        {
+            ast.root.addChild((ASTNode) _currentContainer.Pop());
+        }
+
+        public override void EnterPause(PlayerCommandsParser.PauseContext context)
+        {
+            _currentContainer.Push(new Pause());
+        }
+
+        public override void ExitPause(PlayerCommandsParser.PauseContext context)
+        {
+            ast.root.addChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterDirection(PlayerCommandsParser.DirectionContext context)

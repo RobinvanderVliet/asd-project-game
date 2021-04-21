@@ -25,6 +25,10 @@ GET: 'get';
 DROP: 'drop';
 EXIT: 'exit';
 LEAVE: 'leave';
+SAY: 'say';
+SHOUT: 'shout';
+REPLACE: 'replace';
+PAUSE : 'pause';
 
 FORWARD: 'forward';
 UP: 'up';
@@ -38,6 +42,8 @@ RIGHT: 'right';
 EAST: 'east';
 
 NUMBER: [1-9] | '10';
+MESSAGE: '"' ~'"'+ '"';
+//MESSAGE: ~[\r\n]+;
 
 //PARSER
 
@@ -49,12 +55,16 @@ command:
     (MOVE | WALK | GO) SPACE direction (SPACE step)? #move |
     (ATTACK | SLASH | STRIKE) SPACE direction #attack |
     (PICKUP | GET) #pickup |
-    DROP #drop |
-    (EXIT | LEAVE) #exit;
+    DROP #drop |  
+    (EXIT | LEAVE) #exit |
+    SAY SPACE MESSAGE #say |
+    SHOUT SPACE MESSAGE #shout |
+    REPLACE #replace |
+    PAUSE #pause;
+
 
 forward: FORWARD | UP | NORTH;
 backward: BACKWARD | DOWN | SOUTH;
 left: LEFT | WEST;
 right: RIGHT  | EAST;
 direction: forward | backward | left | right;
-
