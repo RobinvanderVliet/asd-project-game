@@ -11,7 +11,7 @@
 
 using System;
 
-namespace Player
+namespace Player.Model
 {
     public class Item
     {

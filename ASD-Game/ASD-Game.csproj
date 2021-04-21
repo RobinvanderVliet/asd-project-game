@@ -23,4 +23,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Player\Player.csproj" />
+  </ItemGroup>
+
 </Project>

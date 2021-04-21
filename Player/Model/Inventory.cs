@@ -11,7 +11,7 @@
 
 using System.Collections.Generic;
 
-namespace Player
+namespace Player.Model
 {
     public class Inventory : IInventory
     {
