@@ -122,6 +122,16 @@ namespace Chat.antlr.parser
         {
             ast.root.addChild((ASTNode) _currentContainer.Pop());
         }
+        
+        public override void EnterResume(PlayerCommandsParser.ResumeContext context)
+        {
+            _currentContainer.Push(new Resume());
+        }
+
+        public override void ExitResume(PlayerCommandsParser.ResumeContext context)
+        {
+            ast.root.addChild((ASTNode) _currentContainer.Pop());
+        }
 
         public override void EnterDirection(PlayerCommandsParser.DirectionContext context)
         {
@@ -143,6 +153,22 @@ namespace Chat.antlr.parser
         {
             Move move = (Move) _currentContainer.Peek();
             move.addChild(new Step(Convert.ToInt32(context.GetText())));
+        }
+        
+        public override void EnterMessage(PlayerCommandsParser.MessageContext context)
+        {
+            var action = _currentContainer.Peek();
+
+            if (action is Say)
+            {
+                Say say = (Say) action;
+                say.addChild(new Message(context.GetText()));
+            }
+            else if (action is Shout)
+            {
+                Shout shout = (Shout) action;
+                shout.addChild(new Message(context.GetText()));
+            }
         }
     }
 }
