@@ -14,7 +14,7 @@ using System.Numerics;
 
 namespace Creature.Pathfinder
 {
-    class Node
+    public class Node
     {
         public const int nodeSize = 1;
         public Node parent;

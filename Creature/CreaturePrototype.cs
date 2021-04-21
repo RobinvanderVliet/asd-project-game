@@ -1,4 +1,5 @@
-﻿using Creature.World;
+﻿using Creature.Pathfinder;
+using Creature.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace Creature
             ICreature creature = new Monster(world, new Vector2(10, 10), 2, 6, 50);
             ICreature creature2 = new Monster(world, new Vector2(20, 20), 2, 6, 50);
 
+            world.GenerateWorldNodes();
             world.SpawnPlayer(player);
             world.SpawnCreature(creature);
             world.SpawnCreature(creature2);
