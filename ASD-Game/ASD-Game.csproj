@@ -23,4 +23,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WorldGeneration\WorldGeneration.csproj" />
+  </ItemGroup>
+
 </Project>
