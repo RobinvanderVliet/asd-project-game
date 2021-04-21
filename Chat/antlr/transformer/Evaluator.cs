@@ -13,6 +13,13 @@ namespace Chat.antlr.transformer
 
         private void transformNode(ASTNode node)
         {
+            switch (node)
+            {
+                case Move:
+                    transformMove(node);
+                    break;
+           
+            }
             if (node is Move)
             {
                 transformMove(node);

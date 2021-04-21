@@ -29,6 +29,7 @@ namespace Chat
         {
             Pipeline pipeline = new Pipeline();
             pipeline.parseCommando(commando);
+            pipeline.transform();
         }
         
         public String getCommand()

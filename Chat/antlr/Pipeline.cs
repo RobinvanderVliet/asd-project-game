@@ -6,6 +6,7 @@ using Antlr4.Runtime.Tree;
 using Chat.antlr.ast;
 using Chat.antlr.grammar;
 using Chat.antlr.parser;
+using Chat.antlr.transformer;
 
 namespace Chat.antlr
 {
@@ -59,6 +60,13 @@ namespace Chat.antlr
                 this.ast = new AST();
                 //errors.add("Syntax error");
             }
+        }
+
+        public void transform()
+        {
+            if (ast == null)
+                return;
+            (new Evaluator()).apply(ast);
         }
 
 
