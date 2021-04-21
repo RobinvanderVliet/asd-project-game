@@ -11,6 +11,7 @@
 
 using System;
 using Chat.antlr;
+using Chat.exception;
 
 namespace Chat
 {
@@ -20,18 +21,27 @@ namespace Chat
         {
 
         }
-        public void handleCommands()
+        public void HandleCommands()
         {
-            sendChat(getCommand());
+            SendChat(GetCommand());
         }
 
-        private static void sendChat(string commando)
+        private static void SendChat(string commando)
         {
-            Pipeline pipeline = new Pipeline();
-            pipeline.parseCommando(commando);
+            try
+            {
+                Pipeline pipeline = new Pipeline();
+                pipeline.ParseCommand(commando);
+            }
+            catch (CommandSyntaxException e)
+            {
+                System.Console.WriteLine(e.Message);
+            }
+
+
         }
         
-        public String getCommand()
+        public String GetCommand()
         {
             return Console.ReadLine();
         }
