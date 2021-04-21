@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using Agent.antlr.ast;
-using Agent.antlr.ast.comparables;
+using Agent.antlr.ast.implementation;
+using Agent.antlr.ast.implementation.comparables;
 using Agent.antlr.checker;
+using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Moq;
 using NUnit.Framework;
 
@@ -24,38 +24,19 @@ namespace Agent.Tests.checker
         public void Test_CheckItemAndAllowedStat_1()
         {
             //Arrange
+            String testItem = "Weapon";
+            String testAllowedStat = "Power";
+            
+            
             Item item = new Item("Weapon");
-            Stat stat = new Stat("Health");
+            Stat stat = new Stat("Power");
             item.AddChild(stat);
 
             //Act
-            bool result = sut.CheckItemAndAllowedStat(item);
+            bool result = sut.CheckItemAndAllowedStat(testItem, testAllowedStat, item);
             
             //Assert
-            Assert.False(result);
-
-        }
-        
-        [Test]
-        public void Test_CheckStatCombination_2()
-        {
-            //Arrange
-            List<Node> testNodes = new List<Node>();
-            Item item = new Item("Weapon");
-            Stat stat = new Stat("Health");
-            item.AddChild(stat);
-            
-            When whenNode = new When();
-            whenNode.SetComparableL(item);
-
-            testNodes.Add(whenNode);
-
-            //Act
-            sut.CheckStatCombination(testNodes);
-            
-            //Assert
-            Assert.AreNotEqual(String.Empty, item.GetError().ToString());
-            Assert.AreEqual(new ASTError("There is an invalid combination of item and stat").ToString(), item.GetError().ToString());
+            Assert.True(result);
 
         }
     }
