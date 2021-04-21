@@ -179,6 +179,7 @@ namespace Creature
         public void ApplyDamage(double amount)
         {
             _health -= amount;
+            Console.WriteLine("Damaged enemie for: " + amount + ". Remaining enemie health: "+ _health + ".");
             if (_health < 0)
                 _alive = false;
         }
