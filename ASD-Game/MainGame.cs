@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Chat;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace ASD_project
@@ -17,6 +19,13 @@ namespace ASD_project
             public void Run()
             {
                 Console.WriteLine("Game is gestart");
+
+                //moet later vervangen worden
+                ChatComponent chat = new ChatComponent();
+                do
+                {
+                    chat.handleCommands();
+                } while (true); // moet vervangen worden met variabele: isQuit 
             }
         }
     }

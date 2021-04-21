@@ -10,6 +10,7 @@
 */
 
 using System;
+using Chat.antlr;
 
 namespace Chat
 {
@@ -26,9 +27,8 @@ namespace Chat
 
         private static void sendChat(string commando)
         {
-            //testclass moet de parserclass worden
-            TestClass parser = new TestClass();
-            parser.receiveCommand(commando);
+            Pipeline pipeline = new Pipeline();
+            pipeline.ParseCommando(commando);
         }
         
         public String getCommand()
