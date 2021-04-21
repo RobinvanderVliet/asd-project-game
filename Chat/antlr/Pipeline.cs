@@ -15,6 +15,7 @@ using Antlr4.Runtime.Tree;
 using Chat.antlr.ast;
 using Chat.antlr.grammar;
 using Chat.antlr.parser;
+using Chat.antlr.transformer;
 using Chat.exception;
 
 namespace Chat.antlr
@@ -57,6 +58,13 @@ namespace Chat.antlr
             Ast = listener.ast;
         }
 
+
+        public void transform()
+        {
+            if (Ast == null)
+                return;
+            (new Evaluator()).apply(Ast);
+        }
 
         public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine,
             string msg,
