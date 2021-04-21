@@ -28,7 +28,7 @@ namespace Chat
         private static void sendChat(string commando)
         {
             Pipeline pipeline = new Pipeline();
-            pipeline.parseCommando(commando);
+            pipeline.ParseCommando(commando);
         }
         
         public String getCommand()

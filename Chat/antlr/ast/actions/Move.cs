@@ -20,7 +20,7 @@ namespace Chat.antlr.ast.actions
         public Direction direction;
         public Step steps = new Step();
         
-        public override ASTNode addChild(ASTNode child)
+        public override ASTNode AddChild(ASTNode child)
         {
             if (child is Direction)
             {

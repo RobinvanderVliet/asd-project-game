@@ -36,19 +36,19 @@ namespace Chat.antlr.parser
         public override void ExitMove(PlayerCommandsParser.MoveContext context)
         {
             
-           ast.root.addChild((ASTNode)_currentContainer.Pop());
+           ast.root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterDirection(PlayerCommandsParser.DirectionContext context)
         {
             Move move = (Move) _currentContainer.Peek();
-            move.addChild(new Direction(context.GetText()));
+            move.AddChild(new Direction(context.GetText()));
         }
 
         public override void EnterStep(PlayerCommandsParser.StepContext context)
         {
             Move move = (Move) _currentContainer.Peek();
-            move.addChild(new Step(Convert.ToInt32(context.GetText())));
+            move.AddChild(new Step(Convert.ToInt32(context.GetText())));
         }
     }
 }

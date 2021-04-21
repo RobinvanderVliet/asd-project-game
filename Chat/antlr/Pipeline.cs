@@ -29,7 +29,7 @@ namespace Chat.antlr
             errors = new List<string>();
         }
 
-        public void parseCommando(String input)
+        public void ParseCommando(String input)
         {
             //Lex (with Antlr's generated lexer)
             if (!input.StartsWith("say") && !input.StartsWith("whisper") && !input.StartsWith("shout"))
@@ -72,7 +72,7 @@ namespace Chat.antlr
         }
 
 
-        public void clearErrors()
+        public void ClearErrors()
         {
             errors.Clear();
         }

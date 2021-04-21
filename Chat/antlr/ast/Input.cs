@@ -24,7 +24,7 @@ namespace Chat.antlr.ast
             this.body = new ArrayList();
         }
 
-        public override ASTNode addChild(ASTNode child)
+        public override ASTNode AddChild(ASTNode child)
         {
             body.Add(child);
             return this;
