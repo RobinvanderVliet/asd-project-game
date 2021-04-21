@@ -1,18 +1,7 @@
-/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: ASD project.
- 
-    This file is created by team: 3.
-     
-    Goal of this file: Storing Chunk data and executing functions.
-     
-*/
-
 using System;
-using WorldGeneration.Tiles.Interfaces;
+using WorldGeneration.Models.Interfaces;
 
-namespace WorldGeneration
+namespace WorldGeneration.Models
 {
     public class Chunk
     {
