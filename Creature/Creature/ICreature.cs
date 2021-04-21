@@ -1,10 +1,15 @@
 ﻿using Appccelerate.StateMachine.AsyncMachine;
 using System;
+using System.Numerics;
 
 namespace Creature
 {
     public interface ICreature
     {
+        bool IsAlive { get; set; }
+        Vector2 Position { get; set; }
+        int VisionRange { get; set; }
+
         /// <summary>
         /// Fire events on a Creature.
         /// Creatures will adapt their behavior to specific events.
@@ -21,5 +26,9 @@ namespace Creature
         /// </summary>
         /// <param name="creatureEvent">Enum that specifies what Event occured. Use events defined by the relevant ICreature implementation.</param>
         public void FireEvent(Enum creatureEvent);
+
+        public void ApplyDamage(double amount);
+
+        public void HealAmount(double amount);
     }
 }
