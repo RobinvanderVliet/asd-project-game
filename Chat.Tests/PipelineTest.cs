@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Chat.antlr;
 using Chat.antlr.ast;
 using Chat.antlr.ast.actions;
@@ -7,6 +8,7 @@ using NUnit.Framework;
 
 namespace Chat.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class PipelineTest
     {
         [Test]
