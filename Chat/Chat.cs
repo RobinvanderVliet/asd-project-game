@@ -12,6 +12,7 @@
 using System;
 using Chat.antlr;
 using Chat.exception;
+using Player;
 
 namespace Chat
 {
@@ -32,7 +33,7 @@ namespace Chat
             {
                 Pipeline pipeline = new Pipeline();
                 pipeline.ParseCommand(commando);
-                pipeline.transform();
+                pipeline.transform(new PlayerModel());
             }
             catch (CommandSyntaxException e)
             {

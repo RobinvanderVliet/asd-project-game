@@ -14,6 +14,7 @@ namespace Chat.antlr.transformer
         {
             _playerModel = playerModel;
         }
+
         public void apply(AST ast)
         {
             transformNode(ast.root);
@@ -21,19 +22,21 @@ namespace Chat.antlr.transformer
 
         private void transformNode(ASTNode node)
         {
-            switch (node)
-            {
-                case Move:
-                    transformMove(node);
-                    break;
-            }
+            var input = (Input) node;
+            var nodeBody = input.body;
+            for (int i = 0; i < nodeBody.Count; i++)
+                switch (nodeBody[i])
+                {
+                    case Move:
+                        transformMove((Move) nodeBody[i]);
+                        break;
+                }
         }
 
-        private void transformMove(ASTNode node)
+        private void transformMove(Move move)
         {
-            Move move = (Move)node;
             {
-                _playerModel.HandleDirection(move.direction.ToString(), Convert.ToInt32(move.steps));
+                _playerModel.HandleDirection(move.direction.ToString(),move.steps.value);
             }
         }
     }

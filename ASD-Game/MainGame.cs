@@ -24,7 +24,7 @@ namespace ASD_project
                 ChatComponent chat = new ChatComponent();
                 do
                 {
-                    chat.HandleCommands();
+                    chat.HandleCommands(); // speler model meegeven
                 } while (true); // moet vervangen worden met variabele: isQuit 
             }
         }
