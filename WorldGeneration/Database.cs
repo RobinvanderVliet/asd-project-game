@@ -74,7 +74,7 @@ namespace WorldGeneration
         }
         
         //returns all Chunks from the database in a list. Throws a error if there are no Chunks.
-        public List<Chunk> GetAllChunks()
+        public IEnumerable<Chunk> GetAllChunks()
         {
             try
             {
