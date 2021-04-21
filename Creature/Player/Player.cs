@@ -29,6 +29,14 @@ namespace Creature
             _alive = true;
         }
 
+        public Player(double initialHealth, Vector2 position)
+        {
+            _health = initialHealth;
+            _maxHealth = initialHealth;
+            _alive = true;
+            _position = position;
+        }
+
         public void ApplyDamage(double amount)
         {
             _health -= amount;
