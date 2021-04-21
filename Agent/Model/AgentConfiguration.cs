@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Agent.Model
 {
-    public class AgentConfiguration
+    public class AgentConfiguration : IAgentConfiguration
     {
         public Dictionary<string, string> settings;
 
@@ -14,14 +14,13 @@ namespace Agent.Model
             settings = new Dictionary<string, string>();
         }
 
-        public void LoadSettings(string filePath)
+        public void LoadSettings(Stream fileStream)
         {
-            if (!File.Exists(filePath))
-            {
-                throw new FileNotFoundException("Configuration file was not found.");
-            }
+            var sr = new StreamReader(fileStream, Encoding.UTF8);
 
-            foreach (var line in File.ReadLines(filePath))
+            string line = String.Empty;
+
+            while ((line = sr.ReadLine()) != null)
             {
                 var setting = line.Split("=");
                 settings.Add(setting[0], setting[1]);
