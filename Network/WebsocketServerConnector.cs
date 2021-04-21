@@ -2,6 +2,17 @@
 using Newtonsoft.Json;
 using WebSocketSharp;
 
+/*
+    AIM SD ASD 2020/2021 S2 project
+     
+    Project name: ASD-Project.
+ 
+    This file is created by team: 5.
+     
+    Goal of this file: Create connection with websocket server.
+     
+*/
+
 namespace Network
 {
     class WebsocketServerConnector

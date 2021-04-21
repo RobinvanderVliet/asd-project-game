@@ -1,4 +1,15 @@
-﻿namespace Network
+﻿/*
+    AIM SD ASD 2020/2021 S2 project
+     
+    Project name: ASD-Project.
+ 
+    This file is created by team: 5.
+     
+    Goal of this file: Format of sent message.
+     
+*/
+
+namespace Network
 {
     class ObjectPayloadDTO
     {
