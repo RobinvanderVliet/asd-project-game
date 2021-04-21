@@ -12,9 +12,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WorldGeneration.Tiles;
 using WorldGeneration.Tiles.Interfaces;
 
 namespace WorldGeneration
@@ -42,6 +39,6 @@ namespace WorldGeneration
                 Console.WriteLine(tileLine);
             }
         }
-        
+
     }
 }

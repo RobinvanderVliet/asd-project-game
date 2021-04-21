@@ -11,9 +11,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WorldGeneration.Tiles;
 
 namespace WorldGeneration
@@ -63,7 +60,7 @@ namespace WorldGeneration
                         default:
                             Map.Add(new GrassTile(x, y));
                             break;
-                    }                   
+                    }
                 }
             }
             return Map;

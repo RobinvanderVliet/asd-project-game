@@ -9,12 +9,6 @@
      
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace WorldGeneration.Tiles
 {
     class GasTile : HazardousTile
@@ -24,7 +18,7 @@ namespace WorldGeneration.Tiles
         {
             Symbol = "&";
             Accessible = true;
-  
+
             this.Radius = Radius;
         }
 
