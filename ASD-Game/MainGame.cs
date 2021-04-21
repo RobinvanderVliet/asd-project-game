@@ -1,7 +1,4 @@
-﻿using Player;
-﻿using Chat;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System;
 
 namespace ASD_project
@@ -20,14 +17,6 @@ namespace ASD_project
             public void Run()
             {
                 Console.WriteLine("Game is gestart");
-
-                //the next 2 lines of code is temporary, until player movement is complete
-                //MovementComponent mc = new MovementComponent(); 
-                //mc.Test();
-
-                //moet later vervangen worden
-                //ChatComponent chat = new ChatComponent();
-                //chat.handleCommands();
             }
         }
     }
