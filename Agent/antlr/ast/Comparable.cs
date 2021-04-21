@@ -13,7 +13,7 @@ namespace Agent.antlr.ast
         Goal of this file: [making_the_system_work].
          
         */
-        public new string GetNodeType()
+        public override string GetNodeType()
         {
             return "Comparable";
         }

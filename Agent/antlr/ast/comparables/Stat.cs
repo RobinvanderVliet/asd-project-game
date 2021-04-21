@@ -22,7 +22,7 @@ namespace Agent.antlr.ast.comparables
             Name = name;
         }
 
-        public new string GetNodeType()
+        public override string GetNodeType()
         {
             return "Stat";
         }

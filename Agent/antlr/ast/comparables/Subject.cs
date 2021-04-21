@@ -23,7 +23,7 @@ namespace Agent.antlr.ast.comparables
         }
 
 
-        public new string GetNodeType()
+        public override string GetNodeType()
         {
             return "Subject";
         }

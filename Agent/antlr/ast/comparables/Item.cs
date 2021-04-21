@@ -25,12 +25,12 @@ namespace Agent.antlr.ast.comparables
             Name = name;
         }
 
-        public new string GetNodeType()
+        public override string GetNodeType()
         {
             return "Item";
         }
 
-        public new List<Node> GetChildren()
+        public override List<Node> GetChildren()
         {
             var children = new List<Node>();
             if (this._stat != null) {
@@ -40,7 +40,7 @@ namespace Agent.antlr.ast.comparables
             return children;
         }
 
-        public new Node AddChild(Node node)
+        public override Node AddChild(Node node)
         {
             if (node is Stat stat) {
                 this._stat = stat;

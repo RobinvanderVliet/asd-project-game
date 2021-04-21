@@ -18,12 +18,12 @@ namespace Agent.antlr.ast
         
         public string Value { get; set; }
         
-        public new string GetNodeType()
+        public override string GetNodeType()
         {
             return "Otherwise";
         }
 
-        public new List<Node> GetChildren()
+        public override List<Node> GetChildren()
         {
             var children = new List<Node>() {
                 this._action
@@ -32,7 +32,7 @@ namespace Agent.antlr.ast
             return children;
         }
 
-        public new Node AddChild(Node node)
+        public override Node AddChild(Node node)
         {
             if (node is ActionReference actionReference) {
                 this._action = actionReference;

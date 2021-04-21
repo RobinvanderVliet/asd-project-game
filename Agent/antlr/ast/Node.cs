@@ -13,29 +13,31 @@ namespace Agent.antlr.ast
     Goal of this file: [making_the_system_work].
      
     */
-    public class Node
+ 
+    
+    public class Node 
     {
 
         protected ASTError error = null;
         protected List<Node> body = new List<Node>();
         
-        public string GetNodeType()
+        public virtual string GetNodeType()
         {
             return "Node";
         }
 
-        public List<Node> GetChildren()
+        public virtual List<Node> GetChildren()
         {
             return this.body;
         }
 
-        public Node AddChild(Node node)
+        public virtual Node AddChild(Node node)
         {
             body.Add(node);
             return this;
         }
 
-        public Node RemoveChild(Node node)
+        public virtual Node RemoveChild(Node node)
         {
             body.Remove(node);
             return this;
@@ -53,7 +55,7 @@ namespace Agent.antlr.ast
 
         private string BuildString(StringBuilder builder)
         {
-            builder.Append("[" + this.GetNodeType() + "");
+            builder.Append("[" + this.GetNodeType() + "]");
             foreach (var child in this.GetChildren()) {
                 child.BuildString(builder);
             }
@@ -61,7 +63,7 @@ namespace Agent.antlr.ast
             return builder.ToString();
         }
         
-        override public string ToString()
+         public override string ToString()
         {
             return BuildString(new StringBuilder()).ToString();
         }
