@@ -21,7 +21,7 @@ namespace Agent.antlr.ast
             this.body = body;
         }
 
-        public new string GetNodeType()
+        public override string GetNodeType()
         {
             return "Configuration";
         }

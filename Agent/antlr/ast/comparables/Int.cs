@@ -21,7 +21,7 @@
             Value = value;
         }
 
-        public new string GetNodeType()
+        public override string GetNodeType()
         {
             return "Int";
         }

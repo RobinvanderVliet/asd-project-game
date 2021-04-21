@@ -26,12 +26,12 @@ namespace Agent.antlr.ast
         }
 
 
-        public new string GetNodeType()
+        public override string GetNodeType()
         {
             return "Setting";
         }
 
-        public new List<Node> GetChildren()
+        public override List<Node> GetChildren()
         {
             var children = new List<Node>();
             children.AddRange(conditions);
@@ -40,11 +40,11 @@ namespace Agent.antlr.ast
             return children;
         }
 
-        public new Node AddChild(Node node)
+        public override Node AddChild(Node node)
         {
             switch (node) 
             {
-                case Configuration:
+                case Condition:
                     conditions.Add(node);
                     break;
                 case Action:

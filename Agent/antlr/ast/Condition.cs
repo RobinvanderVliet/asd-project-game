@@ -17,12 +17,12 @@ namespace Agent.antlr.ast
         private When _whenClause;
         private Otherwise _otherwiseClause;
 
-        public new string GetNodeType()
+        public override string GetNodeType()
         {
             return "Condition";
         }
 
-        public new List<Node> GetChildren()
+        public override List<Node> GetChildren()
         {
             var children = new List<Node>();
             if (_whenClause != null)
@@ -34,7 +34,7 @@ namespace Agent.antlr.ast
             return children;
         }
 
-        public new Node AddChild(Node node)
+        public override Node AddChild(Node node)
         {
             switch (node)
             {
@@ -52,7 +52,7 @@ namespace Agent.antlr.ast
             return this;
         }
 
-        public new Node RemoveChild(Node node)
+        public override Node RemoveChild(Node node)
         {
             switch (node)
             {

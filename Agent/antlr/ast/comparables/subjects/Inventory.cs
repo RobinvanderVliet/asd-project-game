@@ -18,7 +18,7 @@
         }
 
 
-        public new string GetNodeType()
+        public override string GetNodeType()
         {
             return "Inventory";
         }
