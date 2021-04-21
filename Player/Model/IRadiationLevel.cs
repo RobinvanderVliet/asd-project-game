@@ -9,7 +9,7 @@
 
 */
 
-namespace Player
+namespace Player.Model
 {
     public interface IRadiationLevel
     {

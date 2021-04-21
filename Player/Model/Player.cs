@@ -11,9 +11,9 @@
 
 using System;
 
-namespace Player
+namespace Player.Model
 {
-    public class PlayerModel : IPlayerModel
+    public class Player : IPlayer
     {
         public string Name { get; set; }
         public int Health { get; set; }
@@ -28,7 +28,7 @@ namespace Player
         private const int HEALTHCAP = 100;
         private const int STAMINACAP = 10;
 
-        public PlayerModel(string name//, Tile tile
+        public Player(string name//, Tile tile
                                       )
         {
             Name = name;
@@ -40,7 +40,7 @@ namespace Player
             Bitcoins = new Bitcoin(20);
             RadiationLevel = new RadiationLevel(0);
         }
-
+        
         public void AddHealth(int amount)
         {
             if (Health + amount >= HEALTHCAP)
@@ -142,12 +142,6 @@ namespace Player
                 RemoveInventoryItem(item);
             }
             Console.WriteLine(item.ItemName + " laten vallen.");
-        }
-
-        public void ExitCurrentGame()
-        {
-            //code for removing player from lobby
-            Console.WriteLine("Spel geleaved.");
         }
     }
 }
