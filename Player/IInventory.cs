@@ -15,7 +15,7 @@ namespace Player
 {
     public interface IInventory
     {
-        public List<Item> _itemList { get; set; }
+        public List<Item> ItemList { get; set; }
 
         public Item GetItem(string itemName);
 

@@ -15,7 +15,7 @@ namespace Player
 {
     public class PlayerComponent
     {
-        public void Attack(String direction)
+        public void Attack(string direction)
         {
             //Player1.getTile();
             //check with the gameboard whether or not there's a player in the given direction from this tile

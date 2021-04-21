@@ -13,11 +13,11 @@ namespace Player
 {
     public class RadiationLevel : IRadiationLevel
     {
-        public int _level { get; set; }
+        public int Level { get; set; }
 
         public RadiationLevel(int radiationLevel)
         {
-            _level = radiationLevel;
+            Level = radiationLevel;
         }
     }
 }

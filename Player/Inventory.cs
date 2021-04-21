@@ -15,18 +15,18 @@ namespace Player
 {
     public class Inventory : IInventory
     {
-        public List<Item> _itemList { get; set; }
+        public List<Item> ItemList { get; set; }
 
         public Inventory()
         {
-
+            ItemList = new List<Item>();
         }
 
         public Item GetItem(string itemName)
         {
-            foreach (var item in _itemList)
+            foreach (var item in ItemList)
             {
-                if (item._itemName == itemName)
+                if (item.ItemName == itemName)
                 {
                     return item;
                 }
@@ -36,17 +36,17 @@ namespace Player
 
         public void AddItem(Item item)
         {
-            _itemList.Add(item);
+            ItemList.Add(item);
         }
 
         public void RemoveItem(Item item)
         {
-            _itemList.Remove(item);
+            ItemList.Remove(item);
         }
 
         public void EmptyInventory()
         {
-            _itemList.Clear();
+            ItemList.Clear();
         }
     }
 }
