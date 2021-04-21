@@ -2,11 +2,9 @@
 {
     class PayloadHeaderDTO
     {
-        public string target { get; set; }
-        public string originID { get; set; }
-        public string sessionID { get; set; }
-        public string actionType { get; set; }
-
-        public string payload { get; set; }
+        public string Target { get; set; }
+        public string OriginID { get; set; }
+        public string SessionID { get; set; }
+        public string ActionType { get; set; }
     }
 }

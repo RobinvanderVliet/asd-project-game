@@ -2,7 +2,7 @@
 {
     class ObjectPayloadDTO
     {
-        public PayloadHeaderDTO header { get; set; }
-        public string payload { get; set; }
+        public PayloadHeaderDTO Header { get; set; }
+        public string Payload { get; set; }
     }
 }

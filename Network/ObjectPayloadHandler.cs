@@ -5,7 +5,7 @@ namespace Network
     class ObjectPayloadHandler {
         public void checkActionType(ObjectPayloadDTO objectPayloadDTO) 
         {
-            switch (objectPayloadDTO.header.actionType)
+            switch (objectPayloadDTO.Header.ActionType)
             {
                 case "chatAction":
                     Console.WriteLine("Case chatAction");
@@ -35,7 +35,7 @@ namespace Network
 
         public Boolean checkHeader(PayloadHeaderDTO payloadHeaderDTO)
         {
-            Console.WriteLine("Checking session with ID: " + payloadHeaderDTO.sessionID);
+            Console.WriteLine("Checking session with ID: " + payloadHeaderDTO.SessionID);
             return true;
         }
     }
