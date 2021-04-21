@@ -20,6 +20,8 @@ namespace Player
         //line above is temporary and shows the new position of a player,
         //assuming it will be defined like that elsewhere. for the sake of NUnit
 
+        private const int DEFAULT_STEPS = 0;
+
         public PlayerModel()
         {
 
@@ -40,23 +42,23 @@ namespace Player
                 case "right":
                 case "east":
                     newMovement[0] = steps;
-                    newMovement[1] = 0;
+                    newMovement[1] = DEFAULT_STEPS;
                     break;
                 case "left":
                 case "west":
                     newMovement[0] = -steps;
-                    newMovement[1] = 0;
+                    newMovement[1] = DEFAULT_STEPS;
                     break;
                 case "forward":
                 case "up":
                 case "north":
-                    newMovement[0] = 0;
+                    newMovement[0] = DEFAULT_STEPS;
                     newMovement[1] = -steps;
                     break;
                 case "backward":
                 case "down":
                 case "south": 
-                    newMovement[0] = 0;
+                    newMovement[0] = DEFAULT_STEPS;
                     newMovement[1] = steps;
                     break;
             }
