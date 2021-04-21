@@ -5,84 +5,64 @@
  
     This file is created by team: 2
      
-    Goal of this file: pipeline for parse and evaluate command.
+    Goal of this file: pipeline for parse command.
      
 */
+
 using System;
-using System.Collections.Generic;
 using Antlr4.Runtime;
-using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using Chat.antlr.ast;
 using Chat.antlr.grammar;
 using Chat.antlr.parser;
+using Chat.exception;
 
 namespace Chat.antlr
 {
     public class Pipeline : IAntlrErrorListener<IToken>
     {
-        public AST ast { get; set; }
-        public List<String> errors { get; }
+        public AST Ast { get; private set; }
 
         public Pipeline()
         {
-            errors = new List<string>();
         }
 
-        public void ParseCommando(String input)
+        public void ParseCommand(String input)
         {
             //Lex (with Antlr's generated lexer)
             if (!input.StartsWith("say") && !input.StartsWith("whisper") && !input.StartsWith("shout"))
             {
                 input = input.ToLower();
             }
+
             AntlrInputStream inputStream = new AntlrInputStream(input);
             PlayerCommandsLexer lexer = new PlayerCommandsLexer(inputStream);
             lexer.RemoveErrorListeners();
-            errors.Clear();
-            try
-            {
-                CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-                //Parse (with Antlr's generated parser)
-                var errorListener = new Pipeline();
-                PlayerCommandsParser parser = new PlayerCommandsParser(tokens);
-                parser.RemoveErrorListeners();
-                parser.AddErrorListener(errorListener);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-                var parseTree = parser.input();
+            //Parse (with Antlr's generated parser)
+            var errorListener = new Pipeline();
+            PlayerCommandsParser parser = new PlayerCommandsParser(tokens);
+            parser.RemoveErrorListeners();
+            parser.AddErrorListener(errorListener);
 
-                //Extract AST from the Antlr parse tree
-                ASTListener listener = new ASTListener();
-                ParseTreeWalker walker = new ParseTreeWalker();
-                walker.Walk(listener, parseTree);
+            var parseTree = parser.input();
 
-                ast = listener.ast;
-            }
-            catch (RecognitionException e)
-            {
-                this.ast = new AST();
-                //errors.add(e.getMessage());
-            }
-            catch (ParseCanceledException e)
-            {
-                this.ast = new AST();
-                //errors.add("Syntax error");
-            }
+            //Extract AST from the Antlr parse tree
+            ASTListener listener = new ASTListener();
+            ParseTreeWalker walker = new ParseTreeWalker();
+            walker.Walk(listener, parseTree);
+
+            Ast = listener.ast;
         }
 
 
-        public void ClearErrors()
-        {
-            errors.Clear();
-        }
-        
-
-        public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine, string msg,
+        public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine,
+            string msg,
             RecognitionException e)
         {
-            Console.WriteLine(msg);
-            //throw new NotImplementedException();
+            throw new CommandSyntaxException(msg);
         }
     }
 }
