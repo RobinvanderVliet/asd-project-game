@@ -28,16 +28,6 @@ namespace Agent.antlr.ast.implementation
 
         public new ArrayList GetChildren()
         {
-            // TODO: Er worden nu drie waardes in de array gereseveerd voor null Als je door de three loopt, zijn dit alweer drie extra loops
-
-
-            // var children = new ArrayList()
-            // {
-            //     this._comparableL,
-            //     this._comparison,
-            //     this._comparableR
-            // };
-
             var children = new ArrayList();
 
             if (comparableL != null)
