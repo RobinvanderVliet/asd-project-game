@@ -8,20 +8,32 @@ using WebSocketSharp;
 
 namespace Network
 {
-    public class WebSocketConnector
+    public class WebSocketConnection
     {
         private WebSocket _websocket;
         private static readonly string _ip = "localhost";
         private static readonly string _port = "8088";
         private static readonly string _path = "Relay";
-        public WebSocketConnector()
+        public WebSocketConnection()
         {
             _websocket = new WebSocket($"ws://{_ip}:{_port}/{_path}");
+            AddBehaviorToWebsocket();
+            _websocket.Connect();
+        }
+
+        public WebSocketConnection(WebSocket webSocket)
+        {
+            this._websocket = webSocket;
+            AddBehaviorToWebsocket();
+            _websocket.Connect();
+        }
+
+        private void AddBehaviorToWebsocket()
+        {
             _websocket.OnMessage += OnMessage;
             _websocket.OnOpen += Websocket_OnOpen;
             _websocket.OnError += Websocket_OnError;
             _websocket.OnClose += Websocket_OnClose;
-            _websocket.Connect();
         }
 
         private void Websocket_OnClose(object sender, CloseEventArgs e)

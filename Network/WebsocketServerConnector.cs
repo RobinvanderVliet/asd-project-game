@@ -8,7 +8,7 @@ namespace Network
     {
         static void Main(string[] args)
         {
-            WebSocketConnector webSocketConnector = new WebSocketConnector();
+            WebSocketConnection webSocketConnector = new WebSocketConnection();
 
             PayloadHeaderDTO payloadHeaderDTO = new PayloadHeaderDTO();
             payloadHeaderDTO.Target = "host";
