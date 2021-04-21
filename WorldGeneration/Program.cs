@@ -1,13 +1,8 @@
-﻿/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: ASD project.
- 
-    This file is created by team: 3.
-     
-    Goal of this file: Prototype database storage.
-     
-*/
+﻿using System;
+using WorldGeneration.Models;
+using WorldGeneration.Models.BuildingTiles;
+using WorldGeneration.Models.Interfaces;
+using WorldGeneration.Models.TerrainTiles;
 
 using System;
 using WorldGeneration.Tiles;
@@ -15,12 +10,10 @@ using WorldGeneration.Tiles.Interfaces;
 
 namespace WorldGeneration
 {
-    public class Class1
+    public class Program
     {
-        public Class1()
+        public Program()
         {
-
-            //var tileMap = new TileMap().GenerateBaseTerrain().ToArray();
             var tileMap = new ITile[] {
                 new DirtTile(), new DirtTile(), new StreetTile(), new StreetTile(), 
                 new WaterTile(), new WaterTile(), new WaterTile(), new WaterTile(), 
@@ -42,7 +35,7 @@ namespace WorldGeneration
                 RowSize = 4
             };
             
-            var db = new Database();
+            var db = new Database.Database();
             db.DeleteTileMap();
             db.InsertChunkIntoDatabase(chunk);
             db.InsertChunkIntoDatabase(chunk2);

@@ -1,20 +1,10 @@
-/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: ASD project.
- 
-    This file is created by team: 3.
-     
-    Goal of this file: All data transfer with the database.
-     
-*/
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using LiteDB;
+using WorldGeneration.Models;
 
-namespace WorldGeneration
+namespace WorldGeneration.Database
 {
     public class Database
     {

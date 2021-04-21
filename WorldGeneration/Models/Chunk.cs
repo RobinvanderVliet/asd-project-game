@@ -1,18 +1,7 @@
-/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: ASD project.
- 
-    This file is created by team: 3.
-     
-    Goal of this file: Storing Chunk data and executing functions.
-     
-*/
-
 using System;
-using WorldGeneration.Tiles.Interfaces;
+using WorldGeneration.Models.Interfaces;
 
-namespace WorldGeneration
+namespace WorldGeneration.Models
 {
     public class Chunk
     {
@@ -23,10 +12,10 @@ namespace WorldGeneration
 
         public Chunk(int x, int y, ITile[] map, int rowSize)
         {
-            this.X = x;
-            this.Y = y;
-            this.Map = map;
-            this.RowSize = rowSize;
+            X = x;
+            Y = y;
+            Map = map;
+            RowSize = rowSize;
         }
 
         public Chunk()
@@ -36,7 +25,7 @@ namespace WorldGeneration
         //writes out the symbols for the tilemap of the current chunk in the proper shape.
         public void DisplayChunk()
         {
-            for (int i = 0; i < Map.Length; i++)
+            for (var i = 0; i < Map.Length; i++)
             {
                 if (i % RowSize == 0)
                 {

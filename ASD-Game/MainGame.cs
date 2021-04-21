@@ -1,7 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System;
-using WorldGeneration;
 
 namespace ASD_project
 {
@@ -18,7 +16,7 @@ namespace ASD_project
 
             public void Run()
             {
-                new WorldGeneration.Class1();
+                new WorldGeneration.Program();
                 Console.WriteLine("Game is gestart");
             }
         }
