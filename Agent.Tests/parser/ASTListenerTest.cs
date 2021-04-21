@@ -7,30 +7,24 @@ using System;
 using System.IO;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using System.Diagnostics;
 using System.Reflection;
+using System.Linq;
 
 namespace Agent.Tests.parser
 {
     public class ASTListenerTest
     {
 
-        private ASTAgentListener sut;
-
-        [SetUp]
-        public void Setup()
-        {
-            this.sut = new ASTAgentListener();
-        }
-
         AST ParseTestFile(String resourse)
         {
+
             String fileContext;
             var assembly = Assembly.GetExecutingAssembly();
-            
-            //using (var stream = assembly.GetManifestResourceStream("Agent.Tests.Resources.test1.txt")) 
-            //Console.Write(stream.CanRead);
-            using (var sr = new StreamReader( resourse)) {
+            var resourceName = assembly.GetManifestResourceNames().Single(s => s.EndsWith(resourse));
+
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            using (var sr = new StreamReader(stream))
+            {
                 fileContext = sr.ReadToEnd();
             }
             
@@ -61,21 +55,6 @@ namespace Agent.Tests.parser
             
             return listener.GetAST();
     
-        }       
-
-
-        [Test]
-        public void EnterConfiguration1()
-        {
-            //Arrange
-            var context = new ConfigurationContext(null, 0);
-
-            //Act
-            this.sut.EnterConfiguration(context);
-
-            //Assert
-            Assert.IsNotNull(sut.GetAST().root);
-            Assert.AreEqual(new Configuration().GetNodeType(), sut.GetAST().root.GetNodeType());
         }
         
         [Test]
@@ -88,10 +67,10 @@ namespace Agent.Tests.parser
             var expected = Fixtures.GetFixture(file);
 
             //Act
-            var sutt = ParseTestFile(file);
+            var sut = ParseTestFile(file);
 
             //Assert
-            Assert.AreEqual(expected,sutt);
+            Assert.AreEqual(expected.ToString(), sut.ToString());
         }
         
     }

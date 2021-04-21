@@ -41,11 +41,6 @@ namespace Agent.parser
             currentContainer.Push(reference);
         }
 
-        public override void EnterComparable([NotNull] AgentConfigurationParser.ComparableContext context)
-        {
-            //base.EnterComparable();
-        }
-
         public override void EnterComparison([NotNull] AgentConfigurationParser.ComparisonContext context)
         {
             Comparison comparison = new Comparison(context.children.Where(c => c.GetText() != null).FirstOrDefault().GetText());
@@ -62,7 +57,6 @@ namespace Agent.parser
         {
             Configuration configuration = new Configuration();
             currentContainer.Push(configuration);
-            ast.SetRoot(configuration);
         }
 
         public override void EnterItem([NotNull] AgentConfigurationParser.ItemContext context)
@@ -73,11 +67,7 @@ namespace Agent.parser
 
         public override void EnterItemStat([NotNull] AgentConfigurationParser.ItemStatContext context)
         {
-            /*
-            Stat stat = new Stat();
-            stat.Name = context.stat().children.Where(c => c.GetText() != null).FirstOrDefault().GetText();
-            currentContainer.Push(stat);
-            */
+            base.EnterItemStat(context);
         }
 
         public override void EnterOtherwiseClause([NotNull] AgentConfigurationParser.OtherwiseClauseContext context)
@@ -133,11 +123,7 @@ namespace Agent.parser
 
         public override void EnterSubjectStat([NotNull] AgentConfigurationParser.SubjectStatContext context)
         {
-            /*
-            Stat stat = new Stat();
-            stat.Name = context.stat().children.Where(c => c.GetText() != null).FirstOrDefault().GetText();
-            currentContainer.Push(stat);
-            */
+            base.EnterSubjectStat(context);
         }
 
         public override void EnterWhenClause([NotNull] AgentConfigurationParser.WhenClauseContext context)
@@ -162,12 +148,6 @@ namespace Agent.parser
             currentContainer.Peek().AddChild(temp);
         }
 
-        public override void ExitSetting([NotNull] AgentConfigurationParser.SettingContext context)
-        {
-            Node temp = currentContainer.Pop();
-            currentContainer.Peek().AddChild(temp);
-        }
-
         public override void ExitStat([NotNull] AgentConfigurationParser.StatContext context)
         {
             Node temp = currentContainer.Pop();
@@ -180,5 +160,142 @@ namespace Agent.parser
             currentContainer.Peek().AddChild(temp);
         }
 
+        public override void ExitConfiguration([NotNull] AgentConfigurationParser.ConfigurationContext context)
+        {
+            Node temp = currentContainer.Pop();
+            ast.SetRoot((Configuration)temp);
+        }
+
+        public override void ExitRule([NotNull] AgentConfigurationParser.RuleContext context)
+        {
+            base.ExitRule(context);
+        }
+
+        public override void ExitSettingBlock([NotNull] AgentConfigurationParser.SettingBlockContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void ExitActionBlock([NotNull] AgentConfigurationParser.ActionBlockContext context)
+        {
+            base.ExitActionBlock(context);
+        }
+
+        public override void ExitCondition([NotNull] AgentConfigurationParser.ConditionContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void ExitComparison([NotNull] AgentConfigurationParser.ComparisonContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void ExitAction([NotNull] AgentConfigurationParser.ActionContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void ExitActionSubject([NotNull] AgentConfigurationParser.ActionSubjectContext context)
+        {
+            base.ExitActionSubject(context);
+        }
+
+        public override void ExitComparable([NotNull] AgentConfigurationParser.ComparableContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void ExitItemStat([NotNull] AgentConfigurationParser.ItemStatContext context)
+        {
+            base.ExitItemStat(context);
+        }
+
+        public override void ExitSubjectStat([NotNull] AgentConfigurationParser.SubjectStatContext context)
+        {
+            base.ExitSubjectStat(context);
+        }
+
+        public override void ExitSubject([NotNull] AgentConfigurationParser.SubjectContext context)
+        {
+            base.ExitSubject(context);
+        }
+
+        /* ################################### */
+        /* ##            SUBJECS            ## */
+        /* ################################### */
+
+
+        public override void EnterNpc([NotNull] AgentConfigurationParser.NpcContext context)
+        {
+            base.EnterNpc(context);
+        }
+
+        public override void ExitNpc([NotNull] AgentConfigurationParser.NpcContext context)
+        {
+            base.ExitNpc(context);
+        }
+
+        public override void EnterCurrent([NotNull] AgentConfigurationParser.CurrentContext context)
+        {
+            base.EnterCurrent(context);
+        }
+
+        public override void ExitCurrent([NotNull] AgentConfigurationParser.CurrentContext context)
+        {
+            base.ExitCurrent(context);
+        }
+
+        public override void EnterOpponent([NotNull] AgentConfigurationParser.OpponentContext context)
+        {
+            base.EnterOpponent(context);
+        }
+
+        public override void ExitOpponent([NotNull] AgentConfigurationParser.OpponentContext context)
+        {
+            base.ExitOpponent(context);
+        }
+
+        public override void EnterTile([NotNull] AgentConfigurationParser.TileContext context)
+        {
+            base.EnterTile(context);
+        }
+
+        public override void ExitTile([NotNull] AgentConfigurationParser.TileContext context)
+        {
+            base.ExitTile(context);
+        }
+
+        public override void EnterInventory([NotNull] AgentConfigurationParser.InventoryContext context)
+        {
+            base.EnterInventory(context);
+        }
+
+        public override void ExitInventory([NotNull] AgentConfigurationParser.InventoryContext context)
+        {
+            base.ExitInventory(context);
+        }
+
+        public override void EnterPlayer([NotNull] AgentConfigurationParser.PlayerContext context)
+        {
+            Player player = new Player(context.PLAYER().GetText());
+            currentContainer.Push(player);
+        }
+
+        public override void ExitPlayer([NotNull] AgentConfigurationParser.PlayerContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void ExitString([NotNull] AgentConfigurationParser.StringContext context)
+        {
+            base.ExitString(context);
+        }
     }
 }
