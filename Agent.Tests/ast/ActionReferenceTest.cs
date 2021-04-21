@@ -1,6 +1,5 @@
-﻿using Agent.antlr.ast.implementation;
-using Agent.antlr.ast.implementation.comparables;
-using Agent.antlr.ast.interfaces.comparables;
+﻿using Agent.antlr.ast;
+using Agent.antlr.ast.comparables;
 using NUnit.Framework;
 
 namespace Agent.Tests.ast
@@ -43,7 +42,7 @@ namespace Agent.Tests.ast
         public void AddSubjectToChild()
         {
             //Arrange
-            ISubject subject = new Subject("");
+            Subject subject = new Subject("");
             actionReference.AddChild(subject);
 
             //Act
