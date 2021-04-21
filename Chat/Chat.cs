@@ -10,6 +10,7 @@
 */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Chat.antlr;
 using Chat.exception;
 
@@ -19,14 +20,15 @@ namespace Chat
     {
         public ChatComponent()
         {
-
+            
         }
+        
         public void HandleCommands()
         {
             SendChat(GetCommand());
         }
 
-        private static void SendChat(string commando)
+        private void SendChat(string commando)
         {
             try
             {
@@ -37,10 +39,9 @@ namespace Chat
             {
                 System.Console.WriteLine(e.Message);
             }
-
-
         }
         
+        [ExcludeFromCodeCoverage]
         public String GetCommand()
         {
             return Console.ReadLine();
