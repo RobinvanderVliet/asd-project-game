@@ -1,5 +1,7 @@
 ﻿using Appccelerate.StateMachine.AsyncMachine;
+using Creature.Pathfinder;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace Creature
@@ -34,6 +36,6 @@ namespace Creature
         /// <summary>
         /// Executes behavior.
         /// </summary>
-        public void Do();
+        public void Do(Stack<Node> path);
     }
 }

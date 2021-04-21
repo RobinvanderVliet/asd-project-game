@@ -1,6 +1,7 @@
 ﻿using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
 using Creature.Consumable;
+using Creature.Pathfinder;
 using Creature.World;
 using System;
 using System.Collections.Generic;
@@ -136,14 +137,26 @@ namespace Creature
             stateMachine.Start();
         }
 
-        public void Do()
+        public void Do(Stack<Node> path)
         {
             if (_following)
             {
-                if (_position.X < _player.Position.X) _position.X += 1;
-                else if (_position.X > _player.Position.X) _position.X -= 1;
-                else if (_position.Y < _player.Position.Y) _position.Y += 1;
-                else if (_position.Y > _player.Position.Y) _position.Y -= 1;
+                //if (_position.X < _player.Position.X) _position.X += 1;
+                //else if (_position.X > _player.Position.X) _position.X -= 1;
+                //else if (_position.Y < _player.Position.Y) _position.Y += 1;
+                //else if (_position.Y > _player.Position.Y) _position.Y -= 1;
+
+                foreach (Node node in path)
+                {
+                    System.Diagnostics.Debug.WriteLine("-----------------");
+                    System.Diagnostics.Debug.WriteLine(node.position.X);
+                    System.Diagnostics.Debug.WriteLine(node.position.Y);
+                }
+
+                _position.X = path.Peek().position.X;
+                _position.Y = path.Peek().position.Y;
+
+                //System.Threading.Thread.Sleep(1000);
             }
         }
 
