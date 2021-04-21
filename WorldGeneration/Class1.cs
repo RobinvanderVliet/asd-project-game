@@ -9,6 +9,10 @@
      
 */
 
+using System;
+using WorldGeneration.Tiles;
+using WorldGeneration.Tiles.Interfaces;
+
 namespace WorldGeneration
 {
     public class Class1
