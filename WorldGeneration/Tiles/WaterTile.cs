@@ -17,9 +17,9 @@ using System.Threading.Tasks;
 
 namespace WorldGeneration.Tiles
 {
-    class WaterTile : Tile
+    public class WaterTile : Tile
     {
-        public WaterTile(int X, int Y) : base(X, Y)
+        public WaterTile() 
         {
             Symbol = "~";
             Accessible = false;

@@ -17,10 +17,10 @@ using System.Threading.Tasks;
 
 namespace WorldGeneration.Tiles
 {
-    class GasTile : HazardousTile
+    public class GasTile : HazardousTile
     {
         public int Radius { get; set; }
-        public GasTile(int X, int Y, int Radius) : base(X, Y)
+        public GasTile(int Radius) 
         {
             Symbol = "&";
             Accessible = true;

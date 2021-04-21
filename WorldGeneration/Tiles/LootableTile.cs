@@ -18,9 +18,9 @@ using WorldGeneration.Tiles.Interfaces;
 
 namespace WorldGeneration.Tiles
 {
-    class LootableTile : Tile, ILootableTile
+    public class LootableTile : Tile, ILootableTile
     {
-        public LootableTile(int X, int Y) : base(X, Y)
+        public LootableTile() 
         {
         }
 

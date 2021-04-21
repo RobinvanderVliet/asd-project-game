@@ -17,9 +17,9 @@ using System.Threading.Tasks;
 
 namespace WorldGeneration.Tiles
 {
-    class DoorTile : BuildingTile
+    public class DoorTile : BuildingTile
     {
-        public DoorTile(int X, int Y) : base(X, Y)
+        public DoorTile() 
         {
             Symbol = "/";
             Accessible = true;

@@ -18,11 +18,11 @@ using WorldGeneration.Tiles.Interfaces;
 
 namespace WorldGeneration.Tiles
 {
-    abstract class HazardousTile : Tile, IHazardousTile
+    public abstract class HazardousTile : Tile, IHazardousTile
     {
         public int Damage { get; set; }
 
-        public HazardousTile(int X, int Y) : base(X, Y)
+        public HazardousTile() 
         {
 
         }

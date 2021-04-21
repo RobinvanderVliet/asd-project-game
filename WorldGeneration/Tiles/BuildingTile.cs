@@ -18,9 +18,9 @@ using WorldGeneration.Tiles.Interfaces;
 
 namespace WorldGeneration.Tiles
 {
-    class BuildingTile : Tile, IBuildingTile
+    public class BuildingTile : Tile, IBuildingTile
     {
-        public BuildingTile(int X, int Y) : base(X, Y)
+        public BuildingTile() 
         {
         }
 

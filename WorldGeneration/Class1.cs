@@ -10,48 +10,23 @@
 */
 
 using System;
-using System.Drawing;
+using System.Linq;
+using WorldGeneration.Tiles;
+using WorldGeneration.Tiles.Interfaces;
 
 namespace WorldGeneration
 {
-    class Class1
+    public class Class1
     {
         public Class1()
         {
-            var grass = new TileType()
-            {
-                Symbol = '+',
-                Color = Color.Green
-            };
-            var sand = new TileType()
-            {
-                Symbol = '=',
-                Color = Color.Yellow
-            };
-            var water = new TileType()
-            {
-                Symbol = '~',
-                Color = Color.DodgerBlue
-            };
-            var grassTile = new Tile()
-            {
-                GasLevel = 0,
-                TileType = grass
-            };
-            var sandTile = new Tile()
-            {
-                GasLevel = 0,
-                TileType = sand
-            };
-            var waterTile = new Tile()
-            {
-                GasLevel = 0,
-                TileType = water
-            };
-            Tile[] tileMap = {grassTile, sandTile, waterTile, sandTile, 
-                grassTile, grassTile, sandTile, sandTile,
-                grassTile, grassTile, grassTile, grassTile,
-                grassTile, grassTile, grassTile, grassTile
+
+            //var tileMap = new TileMap().GenerateBaseTerrain().ToArray();
+            var tileMap = new ITile[] {
+                new DirtTile(), new DirtTile(), new StreetTile(), new StreetTile(), 
+                new WaterTile(), new WaterTile(), new WaterTile(), new WaterTile(), 
+                new StreetTile(), new StreetTile(), new StreetTile(), new StreetTile(),
+                new WallTile(), new DoorTile(), new WallTile(), new GrassTile()
             };
             var chunk = new Chunk()
             {

@@ -10,6 +10,7 @@
 */
 
 using System;
+using WorldGeneration.Tiles.Interfaces;
 
 namespace WorldGeneration
 {
@@ -17,10 +18,10 @@ namespace WorldGeneration
     {
         public int X { get; set; }
         public int Y { get; set; }
-        public Tile[] Map { get; set; }
+        public ITile[] Map { get; set; }
         public int RowSize { get; set; }
 
-        public Chunk(int x, int y, Tile[] map, int rowSize)
+        public Chunk(int x, int y, ITile[] map, int rowSize)
         {
             this.X = x;
             this.Y = y;
@@ -42,7 +43,7 @@ namespace WorldGeneration
                     Console.WriteLine(" ");
                 }
 
-                Console.Write(" " + Map[i].TileType.Symbol);
+                Console.Write(" " + Map[i].Symbol);
             }
 
             Console.WriteLine("");

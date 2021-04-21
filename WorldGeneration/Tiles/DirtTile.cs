@@ -17,9 +17,9 @@ using System.Threading.Tasks;
 
 namespace WorldGeneration.Tiles
 {
-    class DirtTile : Tile
+    public class DirtTile : Tile
     {
-        public DirtTile(int X, int Y) : base(X, Y)
+        public DirtTile() 
         {
             Symbol = ".";
             Accessible = true;

@@ -17,9 +17,9 @@ using System.Threading.Tasks;
 
 namespace WorldGeneration.Tiles
 {
-    class StreetTile : Tile
+    public class StreetTile : Tile
     {
-        public StreetTile(int X, int Y) : base(X, Y)
+        public StreetTile() 
         {
             Symbol = "_";
             Accessible = true;

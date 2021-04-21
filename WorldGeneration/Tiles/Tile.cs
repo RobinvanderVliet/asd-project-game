@@ -19,7 +19,7 @@ using WorldGeneration.Tiles.Interfaces;
 
 namespace WorldGeneration
 {
-    abstract class Tile : ITile
+    public abstract class Tile : ITile
     {
         public int X { get; set; }
         public int Y { get; set; }
@@ -27,10 +27,8 @@ namespace WorldGeneration
         public string Symbol { get; set; }
         public bool Accessible { get; set; }
 
-        public Tile(int X, int Y)
+        public Tile()
         {
-            this.X = X;
-            this.Y = Y;
         }
 
     }

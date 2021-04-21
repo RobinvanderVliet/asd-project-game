@@ -17,9 +17,9 @@ using System.Threading.Tasks;
 
 namespace WorldGeneration.Tiles
 {
-    class HouseTile : Tile
+    public class HouseTile : Tile
     {
-        public HouseTile(int X, int Y) : base(X, Y)
+        public HouseTile() 
         {
             Symbol = "+";
             Accessible = true;

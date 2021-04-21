@@ -17,9 +17,9 @@ using System.Threading.Tasks;
 
 namespace WorldGeneration.Tiles
 {
-    class ChestTile : LootableTile
+    public class ChestTile : LootableTile
     {
-        public ChestTile(int X, int Y) : base(X, Y)
+        public ChestTile() 
         {
             Symbol = "n";
             Accessible = true;

@@ -15,53 +15,54 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WorldGeneration.Tiles;
+using WorldGeneration.Tiles.Interfaces;
 
 namespace WorldGeneration
 {
     class TileMap
     {
-        public IList<Tile> generateBaseTerrain()
+        public IList<ITile> GenerateBaseTerrain()
         {
-            IList<Tile> Map = new List<Tile>();
-            for (var x = 0; x < 40; x++)
+            IList<ITile> Map = new List<ITile>();
+            for (var x = 0; x < 4; x++)
             {
-                for (var y = 0; y < 80; y++)
+                for (var y = 0; y < 4; y++)
                 {
                     var rnd = new Random().Next(0, 10);
                     switch (rnd)
                     {
                         case 0:
-                            Map.Add(new StreetTile(x, y));
+                            Map.Add(new StreetTile());
                             break;
                         case 1:
-                            Map.Add(new GrassTile(x, y));
+                            Map.Add(new GrassTile());
                             break;
                         case 2:
-                            Map.Add(new DirtTile(x, y));
+                            Map.Add(new DirtTile());
                             break;
                         case 3:
-                            Map.Add(new HouseTile(x, y));
+                            Map.Add(new HouseTile());
                             break;
                         case 4:
-                            Map.Add(new GasTile(x, y, 1));
+                            Map.Add(new GasTile(1));
                             break;
                         case 5:
-                            Map.Add(new SpikeTile(x, y));
+                            Map.Add(new SpikeTile());
                             break;
                         case 6:
-                            Map.Add(new ChestTile(x, y));
+                            Map.Add(new ChestTile());
                             break;
                         case 7:
-                            Map.Add(new DoorTile(x, y));
+                            Map.Add(new DoorTile());
                             break;
                         case 8:
-                            Map.Add(new WallTile(x, y));
+                            Map.Add(new WallTile());
                             break;
                         case 9:
-                            Map.Add(new WaterTile(x, y));
+                            Map.Add(new WaterTile());
                             break;
                         default:
-                            Map.Add(new GrassTile(x, y));
+                            Map.Add(new GrassTile());
                             break;
                     }                   
                 }

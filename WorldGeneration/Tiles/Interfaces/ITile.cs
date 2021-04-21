@@ -11,7 +11,7 @@
 
 namespace WorldGeneration.Tiles.Interfaces
 {
-    interface ITile
+    public interface ITile
     {
         bool Accessible { get; set; }
         string Symbol { get; set; }

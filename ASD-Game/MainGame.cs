@@ -10,9 +10,6 @@ namespace ASD_project
         public class MainGame : IMainGame
         {
             private readonly ILogger<MainGame> log;
-            
-            RandomTileGenerator generator = new RandomTileGenerator();
-
 
             public MainGame(ILogger<MainGame> log)
             {
@@ -23,8 +20,6 @@ namespace ASD_project
             {
                 new WorldGeneration.Class1();
                 Console.WriteLine("Game is gestart");
-
-                generator.generate();
             }
         }
     }

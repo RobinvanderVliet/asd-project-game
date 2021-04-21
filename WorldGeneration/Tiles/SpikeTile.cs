@@ -17,9 +17,9 @@ using System.Threading.Tasks;
 
 namespace WorldGeneration.Tiles
 {
-    class SpikeTile : HazardousTile
+    public class SpikeTile : HazardousTile
     {
-        public SpikeTile(int X, int Y) : base(X, Y)
+        public SpikeTile() 
         {
             Symbol = "^";
             Accessible = true;

@@ -17,9 +17,9 @@ using System.Threading.Tasks;
 
 namespace WorldGeneration.Tiles
 {
-    class GrassTile : Tile
+    public class GrassTile : Tile
     {
-        public GrassTile(int X, int Y) : base(X, Y)
+        public GrassTile() 
         {
             Symbol = ",";
             Accessible = true;

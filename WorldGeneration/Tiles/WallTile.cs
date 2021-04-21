@@ -17,9 +17,9 @@ using System.Threading.Tasks;
 
 namespace WorldGeneration.Tiles
 {
-    class WallTile : BuildingTile
+    public class WallTile : BuildingTile
     {
-        public WallTile(int X, int Y) : base(X, Y)
+        public WallTile() 
         {
             Symbol = "\u25A0";
             Accessible = false;
