@@ -1,6 +1,7 @@
-﻿using Agent.antlr.ast.implementation;
-using Agent.antlr.ast.interfaces;
+﻿using Agent.antlr.ast;
 using NUnit.Framework;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Agent.Tests.ast
 {
@@ -9,13 +10,13 @@ namespace Agent.Tests.ast
     public class NodeTest
     {
 
-        private INode sut;
-        private const string TYPE = "Node";
+        private Node _sut;
+        private const string Type = "Node";
         
         [SetUp]
         public void Setup()
         {
-            sut = new Node();
+            this._sut = new Node();
         }
         
         /*
@@ -24,15 +25,32 @@ namespace Agent.Tests.ast
          * Test of de juiste type terug gegeven wordt
          */
         [Test]
-        public void GetNodeType()
+        public void GetNodeTypeTest()
         {
             //Arrange
             
             //Act
-            var result = this.sut.GetNodeType();
+            var result = this._sut.GetNodeType();
             //Assert
-            Assert.AreEqual(result, TYPE);
+            Assert.AreEqual(result, Type);
         }
+        
+        /*
+         * GetChildren()
+         *
+         * Test of een arraylist gegeven wordt
+         */
+        [Test]
+        public void GetChildrenTest()
+        {
+            //Arrange
+            
+            //Act
+            var result = this._sut.GetChildren();
+            //Assert
+            Assert.IsInstanceOf(typeof(List<Node>), result);
+        }
+        
         
     }
 }

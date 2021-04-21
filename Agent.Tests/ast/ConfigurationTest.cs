@@ -1,4 +1,4 @@
-﻿using Agent.antlr.ast.implementation;
+﻿using Agent.antlr.ast;
 using NUnit.Framework;
 
 namespace Agent.Tests.ast
