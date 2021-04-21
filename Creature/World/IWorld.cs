@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Creature.World
 {
-    interface IWorld
+    public interface IWorld
     {
         List<ICreature> creatures { get; }
         List<IPlayer> players { get; }

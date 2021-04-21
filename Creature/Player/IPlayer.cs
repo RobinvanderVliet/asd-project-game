@@ -2,7 +2,7 @@
 
 namespace Creature
 {
-    internal interface IPlayer
+    public interface IPlayer
     {
         bool IsAlive { get; set; }
         Vector2 Position { get; set; }

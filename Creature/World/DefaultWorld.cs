@@ -44,25 +44,31 @@ namespace Creature.World
                 for (int x = 0; x < _size; x++)
                 {
                     bool addedLine = false;
-
+                    IPlayer player = _players[0];
+                    
+                    if (player.Position.X == x && player.Position.Y == y)
+                    {
+                        line += "+";
+                        addedLine = true;
+                    }
                     foreach (ICreature creature in _creatures)
                     {
                         if (creature.Position.X == x && creature.Position.Y == y)
                         {
-                            line += "|||";
+                            line += "|";
                             addedLine = true;
-                        }
-                    }
 
-                    foreach (IPlayer player in _players)
-                    {
-                        if (player.Position.X == x && player.Position.Y == y)
-                        {
-                            line += "+++";
-                            addedLine = true;
+                            if (Vector2.DistanceSquared(creature.Position, player.Position) < creature.VisionRange)
+                            {
+                                creature.FireEvent(Monster.Event.SPOTTED_PLAYER, player);
+                            } else
+                            {
+                                creature.FireEvent(Monster.Event.LOST_PLAYER, player);
+                            }
                         }
+                        creature.Do();
                     }
-                    if (!addedLine) line += "---";
+                    if (!addedLine) line += "-";
                 }
                 Console.WriteLine(line);
             }
