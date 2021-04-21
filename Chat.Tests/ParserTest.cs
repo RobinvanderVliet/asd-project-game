@@ -37,36 +37,35 @@ namespace Chat.Tests
 
             return listener.getAST();
         }
-        
+
         public static AST PickupCommand()
         {
-            Input pickUp = new Input();
+            Input pickup = new Input();
 
-            pickUp.addChild(new Pickup());
+            pickup.addChild(new Pickup());
 
-            return new AST(pickUp);
+            return new AST(pickup);
         }
 
         public static AST MoveForwardCommand()
         {
             Input moveForward = new Input();
-            
+
             moveForward.addChild(new Move()
                 .addChild(new Direction("forward"))
                 .addChild(new Step(2)));
 
             return new AST(moveForward);
         }
-        
+
         public static AST ExitCommand()
         {
-            Input pickUp = new Input();
+            Input pickup = new Input();
 
-            pickUp.addChild(new Exit());
-            
-            return new AST(pickUp);
+            pickup.addChild(new Exit());
+
+            return new AST(pickup);
         }
-
 
         public static AST AttackCommand(string direction)
         {
@@ -77,7 +76,7 @@ namespace Chat.Tests
 
             return new AST(attack);
         }
-        
+
         public static AST DropCommand()
         {
             Input attack = new Input();
@@ -85,7 +84,55 @@ namespace Chat.Tests
             attack.addChild(new Drop());
 
             return new AST(attack);
-        }        
+        }
+
+        public static AST SayCommand(string message)
+        {
+            Input say = new Input();
+
+            say.addChild(new Say()
+                .addChild(new Message(message)));
+
+            return new AST(say);
+        }
+
+        public static AST ShoutCommand(string message)
+        {
+            Input shout = new Input();
+
+            shout.addChild(new Shout()
+                .addChild(new Message(message)));
+
+            return new AST(shout);
+        }
+
+        public static AST ReplaceCommand()
+        {
+            Input replace = new Input();
+
+            replace.addChild(new Replace());
+
+            return new AST(replace);
+        }
+
+        public static AST PauseCommand()
+        {
+            Input pause = new Input();
+
+            pause.addChild(new Pause());
+
+            return new AST(pause);
+        }
+
+        public static AST ResumeCommand()
+        {
+            Input resume = new Input();
+
+            resume.addChild(new Resume());
+
+            return new AST(resume);
+        }
+
         [Test]
         public void DropCommandInputTest()
         {
@@ -94,7 +141,7 @@ namespace Chat.Tests
 
             Assert.AreEqual(exp, sut);
         }
-        
+
         [Test]
         public void ExitCommandInputTest()
         {
@@ -103,6 +150,7 @@ namespace Chat.Tests
 
             Assert.AreEqual(exp, sut);
         }
+
         [Test]
         public void AttackCommandWithDirectionAttacksForwardTest()
         {
@@ -111,7 +159,7 @@ namespace Chat.Tests
 
             Assert.AreEqual(exp, sut);
         }
-        
+
         [Test]
         public void AttackCommandWithLeftDirectionTest()
         {
@@ -120,6 +168,7 @@ namespace Chat.Tests
 
             Assert.AreEqual(exp, sut);
         }
+
         [Test]
         public void AttackCommandWithRightDirectionTest()
         {
@@ -128,6 +177,7 @@ namespace Chat.Tests
 
             Assert.AreEqual(exp, sut);
         }
+
         [Test]
         public void AttackCommandBackWardDirectionTest()
         {
@@ -136,8 +186,9 @@ namespace Chat.Tests
 
             Assert.AreEqual(exp, sut);
         }
+
         [Test]
-        public void PickUpCommandTest()
+        public void PickupCommandTest()
         {
             AST sut = SetupParser("pickup");
             AST exp = PickupCommand();
@@ -145,12 +196,47 @@ namespace Chat.Tests
             Assert.AreEqual(exp, sut);
         }
 
+        [Test]
+        public void SayCommandWithMessageTest()
+        {
+            AST sut = SetupParser("say \"hello world!\"");
+            AST exp = SayCommand("\"hello world!\"");
+
+            Assert.AreEqual(exp, sut);
+        }
 
         [Test]
-        public void AstListenerEnterMoveAddsToContainerTest()
+        public void ShoutCommandWithMessageTest()
         {
-            AST sut = SetupParser("move up 2");
-            AST exp = MoveForwardCommand();
+            AST sut = SetupParser("shout \"hello world!\"");
+            AST exp = ShoutCommand("\"hello world!\"");
+
+            Assert.AreEqual(exp, sut);
+        }
+
+        [Test]
+        public void ReplaceCommandTest()
+        {
+            AST sut = SetupParser("replace");
+            AST exp = ReplaceCommand();
+
+            Assert.AreEqual(exp, sut);
+        }
+
+        [Test]
+        public void PauseCommandTest()
+        {
+            AST sut = SetupParser("pause");
+            AST exp = PauseCommand();
+
+            Assert.AreEqual(exp, sut);
+        }
+
+        [Test]
+        public void ResumeCommandTest()
+        {
+            AST sut = SetupParser("resume");
+            AST exp = ResumeCommand();
 
             Assert.AreEqual(exp, sut);
         }
