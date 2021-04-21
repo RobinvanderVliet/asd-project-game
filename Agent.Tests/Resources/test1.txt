@@ -1,0 +1,4 @@
+﻿combat {
+    when player nearby player then attack
+     
+}
