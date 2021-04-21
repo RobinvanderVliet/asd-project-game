@@ -4,8 +4,8 @@
     {
         public ChestTile() 
         {
-            Symbol = "n";
-            Accessible = true;
+            Symbol = TileSymbol.Chest;
+            IsAccessible = true;
         }
 
         public override int GenerateLoot()

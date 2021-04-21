@@ -8,9 +8,9 @@ namespace WorldGeneration.Models
         public int Y { get; set; }
 
         public string Symbol { get; set; }
-        public bool Accessible { get; set; }
+        public bool IsAccessible { get; set; }
 
-        public Tile()
+        protected Tile()
         {
         }
 

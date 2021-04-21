@@ -4,8 +4,8 @@
     {
         public WallTile() 
         {
-            Symbol = "\u25A0";
-            Accessible = false;
+            Symbol = TileSymbol.Wall;
+            IsAccessible = false;
         }
 
         public override void DrawBuilding()

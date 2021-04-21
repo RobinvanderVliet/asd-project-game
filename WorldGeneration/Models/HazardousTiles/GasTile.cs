@@ -2,13 +2,13 @@
 {
     public class GasTile : HazardousTile
     {
-        public int Radius { get; set; }
+        private int Radius { get; set; }
         public GasTile(int radius) 
         {
-            Symbol = "&";
-            Accessible = true;
+            Symbol = TileSymbol.Gas;
+            IsAccessible = true;
 
-            this.Radius = radius;
+            Radius = radius;
         }
 
         public override int GetDamage(int time)

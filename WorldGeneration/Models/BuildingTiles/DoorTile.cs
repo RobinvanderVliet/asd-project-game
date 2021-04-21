@@ -4,8 +4,8 @@
     {
         public DoorTile() 
         {
-            Symbol = "/";
-            Accessible = true;
+            Symbol = TileSymbol.Door;
+            IsAccessible = true;
         }
 
         public override void DrawBuilding()

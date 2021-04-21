@@ -4,7 +4,7 @@ namespace WorldGeneration.Models
 {
     public class TerrainTile : Tile, ITerrainTile
     {
-        public TerrainTile()
+        protected TerrainTile()
         {
         }
     }

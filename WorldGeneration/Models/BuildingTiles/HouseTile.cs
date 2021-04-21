@@ -2,10 +2,10 @@
 {
     public class HouseTile : BuildingTile
     {
-        public HouseTile() 
+        public HouseTile()
         {
-            Symbol = "+";
-            Accessible = true;
+            Symbol = TileSymbol.House;
+            IsAccessible = true;
         }
 
         public override void DrawBuilding()

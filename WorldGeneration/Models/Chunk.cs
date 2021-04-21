@@ -12,10 +12,10 @@ namespace WorldGeneration.Models
 
         public Chunk(int x, int y, ITile[] map, int rowSize)
         {
-            this.X = x;
-            this.Y = y;
-            this.Map = map;
-            this.RowSize = rowSize;
+            X = x;
+            Y = y;
+            Map = map;
+            RowSize = rowSize;
         }
 
         public Chunk()
@@ -25,7 +25,7 @@ namespace WorldGeneration.Models
         //writes out the symbols for the tilemap of the current chunk in the proper shape.
         public void DisplayChunk()
         {
-            for (int i = 0; i < Map.Length; i++)
+            for (var i = 0; i < Map.Length; i++)
             {
                 if (i % RowSize == 0)
                 {

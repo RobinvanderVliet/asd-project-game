@@ -4,8 +4,8 @@
     {
         public WaterTile() 
         {
-            Symbol = "~";
-            Accessible = false;
+            Symbol = TileSymbol.Water;
+            IsAccessible = false;
         }
     }
 }

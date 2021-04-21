@@ -4,8 +4,8 @@
     {
         public GrassTile() 
         {
-            Symbol = ",";
-            Accessible = true;
+            Symbol = TileSymbol.Grass;
+            IsAccessible = true;
         }
     }
 }
