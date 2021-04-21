@@ -160,6 +160,7 @@ namespace Chat.Tests
         {
             Input moveForward = new Input();
 
+
             moveForward.AddChild(new Move()
                 .AddChild(new Direction(direction))
                 .AddChild(new Step(steps)));

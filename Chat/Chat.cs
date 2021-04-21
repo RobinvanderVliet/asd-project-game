@@ -21,12 +21,12 @@ namespace Chat
         {
 
         }
-        public void handleCommands()
+        public void HandleCommands()
         {
-            sendChat(getCommand());
+            SendChat(GetCommand());
         }
 
-        private static void sendChat(string commando)
+        private static void SendChat(string commando)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace Chat
 
         }
         
-        public String getCommand()
+        public String GetCommand()
         {
             return Console.ReadLine();
         }
