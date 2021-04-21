@@ -4,9 +4,10 @@ using System.Linq;
 using Agent.antlr.grammar;
 using Antlr4.Runtime.Misc;
 using Agent.antlr.ast.implementation;
-using Agent.antlr.ast.implementation.comparables;
-using Agent.antlr.ast.implementation.comparables.subjects;
-using Action = Agent.antlr.ast.implementation.Action;
+using Agent.antlr.ast;
+using Action = Agent.antlr.ast.Action;
+using Agent.antlr.ast.comparables;
+using Agent.antlr.ast.comparables.subjects;
 
 namespace Agent.parser
 {
@@ -203,12 +204,6 @@ namespace Agent.parser
         public override void ExitActionSubject([NotNull] AgentConfigurationParser.ActionSubjectContext context)
         {
             base.ExitActionSubject(context);
-        }
-
-        public override void ExitComparable([NotNull] AgentConfigurationParser.ComparableContext context)
-        {
-            Node temp = currentContainer.Pop();
-            currentContainer.Peek().AddChild(temp);
         }
 
         public override void ExitItemStat([NotNull] AgentConfigurationParser.ItemStatContext context)

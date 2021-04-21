@@ -1,5 +1,6 @@
-﻿using Agent.antlr.ast.implementation;
-using Agent.antlr.ast.implementation.comparables.subjects;
+﻿using Agent.antlr.ast;
+using Agent.antlr.ast.comparables.subjects;
+using Agent.antlr.ast.implementation;
 
 namespace Agent.Tests.parser
 {
