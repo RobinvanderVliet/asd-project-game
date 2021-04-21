@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Chat.antlr;
 using Chat.antlr.ast;
 using Chat.antlr.ast.actions;
@@ -7,6 +8,7 @@ using NUnit.Framework;
 
 namespace Chat.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class PipelineTest
     {
         [Test]
@@ -32,9 +34,9 @@ namespace Chat.Tests
             Input moveForward = new Input();
 
 
-            moveForward.addChild(new Move()
-                .addChild(new Direction(direction))
-                .addChild(new Step(steps)));
+            moveForward.AddChild(new Move()
+                .AddChild(new Direction(direction))
+                .AddChild(new Step(steps)));
 
             return new AST(moveForward);
         }
