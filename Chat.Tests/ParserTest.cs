@@ -149,7 +149,7 @@ namespace Chat.Tests
         [Test]
         public void AstListenerEnterMoveAddsToContainerTest()
         {
-            AST sut = SetupParser("move forward 2");
+            AST sut = SetupParser("move up 2");
             AST exp = MoveForwardCommand();
 
             Assert.AreEqual(exp, sut);
