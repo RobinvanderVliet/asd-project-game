@@ -19,11 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Player\Player.csproj" />
-    <ProjectReference Include="..\Chat\Chat.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -31,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Chat\Chat.csproj" />
+    <ProjectReference Include="..\Player\Player.csproj" />
   </ItemGroup>
 
 </Project>

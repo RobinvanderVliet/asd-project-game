@@ -2,7 +2,7 @@
 
 namespace Player
 {
-    public class Player : IPlayer
+    public class PlayerModel : IPlayerModel
     {
 
         private int[] newPosition = new int[2];
@@ -12,7 +12,7 @@ namespace Player
 
         private const int DEFAULT_STEPS = 0;
 
-        public Player()
+        public PlayerModel()
         {
 
         }

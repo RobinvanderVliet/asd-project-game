@@ -13,14 +13,14 @@ namespace Chat.Tests
     class EvaluatorTests
     {
         private Evaluator sut;
-        private Mock<IPlayer> mockedPlayerModel;
+        private Mock<IPlayerModel> mockedPlayer;
 
 
         [SetUp]
         public void Setup()
         {
-            mockedPlayerModel = new Mock<IPlayer>();
-            sut = new Evaluator(mockedPlayerModel.Object);
+            mockedPlayer = new Mock<IPlayerModel>();
+            sut = new Evaluator(mockedPlayer.Object);
         }
 
         [Test]
@@ -28,9 +28,9 @@ namespace Chat.Tests
         {
             var ast = MoveAST(1, "up");
 
-            mockedPlayerModel.Setup(x => x.HandleDirection("up", 1));
+            mockedPlayer.Setup(x => x.HandleDirection("up", 1));
             sut.Apply(ast);
-            mockedPlayerModel.VerifyAll();
+            mockedPlayer.VerifyAll();
         }
 
         public static AST MoveAST(int steps, string direction)

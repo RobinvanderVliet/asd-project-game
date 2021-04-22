@@ -6,9 +6,9 @@ namespace Chat.antlr.transformer
 {
     public class Evaluator : ITransform
     {
-        private readonly IPlayer _playerModel;
+        private readonly IPlayerModel _playerModel;
 
-        public Evaluator(IPlayer playerModel)
+        public Evaluator(IPlayerModel playerModel)
         {
             _playerModel = playerModel;
         }

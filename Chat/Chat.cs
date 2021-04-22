@@ -16,13 +16,13 @@ namespace Chat
             SendChat(GetCommand(), player);
         }
 
-        private static void SendChat(string commando, PlayerModel player)
+        private static void SendChat(string commando, Player.PlayerModel playerModel)
         {
             try
             {
                 Pipeline pipeline = new Pipeline();
                 pipeline.ParseCommand(commando);
-                pipeline.transform(player);
+                pipeline.transform(playerModel);
             }
             catch (CommandSyntaxException e)
             {

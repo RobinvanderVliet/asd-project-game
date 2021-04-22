@@ -23,10 +23,10 @@ namespace ASD_project
 
                 //moet later vervangen worden
                 ChatComponent chat = new ChatComponent();
-                PlayerModel player = new PlayerModel();
+                PlayerModel playerModel = new PlayerModel();
                 do
                 {
-                    chat.HandleCommands(player); 
+                    chat.HandleCommands(playerModel);
                 } while (true); // moet vervangen worden met variabele: isQuit 
             }
         }

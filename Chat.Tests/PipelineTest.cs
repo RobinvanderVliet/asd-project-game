@@ -14,7 +14,7 @@ namespace Chat.Tests
     [ExcludeFromCodeCoverage]
     public class PipelineTest
     {
-        private Mock<IPlayerModel> mockedPlayerModel;
+        private Mock<IPlayerModel> mockedPlayer;
         private Mock<Evaluator> mockedEvaluator;
         private Pipeline sut = new Pipeline();
 
