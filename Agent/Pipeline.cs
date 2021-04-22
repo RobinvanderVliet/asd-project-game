@@ -64,21 +64,21 @@ namespace Agent
 
         public void CheckAst()
         {
-            ThrowExpetionIfAstIsNull();
+            ThrowExceptionIfAstIsNull();
             checker.Check(ast);
         }
         
         public void TransformAst()
         {
-            ThrowExpetionIfAstIsNull();
+            ThrowExceptionIfAstIsNull();
         }
 
         public void GenerateAst()
         {
-            ThrowExpetionIfAstIsNull();
+            ThrowExceptionIfAstIsNull();
         }
 
-        private void ThrowExpetionIfAstIsNull()
+        private void ThrowExceptionIfAstIsNull()
         {
             if (ast == null)
                 throw new UndefinedAstException();
