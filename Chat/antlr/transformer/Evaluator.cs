@@ -30,6 +30,9 @@ namespace Chat.antlr.transformer
                     case Move:
                         transformMove((Move)nodeBody[i]);
                         break;
+                    case Pickup:
+                        transformPickup((Pickup)nodeBody[i]);
+                        break;
                 }
         }
 
@@ -38,6 +41,16 @@ namespace Chat.antlr.transformer
             {
                 _playerModel.HandleDirection(move.direction.ToString(), move.steps.value);
             }
+        }
+
+        private void transformPickup(Pickup pickup)
+        {
+            _playerModel.HandleItemAction("pickup");     
+        }
+
+        private void transformPickup(Drop drop)
+        {
+            _playerModel.HandleItemAction("drop");
         }
     }
 }

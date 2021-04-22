@@ -15,22 +15,22 @@ namespace Player
         // ATTACK: 'attack';
         // SLASH: 'slash';
         // STRIKE: 'strike';
-        void HandleAttack();
+        // void HandleAttack();
 
         // PICKUP: 'pickup';
         // GET: 'get';
         // DROP: 'drop';
-        void HandleItemAction();
+        void HandleItemAction(string action);
 
         // EXIT: 'exit';
         // LEAVE: 'leave';
         // PAUSE : 'pause';
         // RESUME : 'resume';
-        void HandleGameAction();
+        // void HandleGameAction();
 
         // SAY: 'say';
         // SHOUT: 'shout';
         // REPLACE: 'replace';
-        void HandleChatAction();
+        // void HandleChatAction();
     }
 }

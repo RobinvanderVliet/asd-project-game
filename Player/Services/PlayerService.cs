@@ -25,7 +25,7 @@ namespace Player.Services
             //int dmg = player1.GetAttackDamage();
             //player1.RemoveStamina(1);
             // player2.RemoveHealth(dmg);
-            //} else {
+            //} else {  
             //  Console.WriteLine("You swung at nothing!");
             // player1.RemoveStamina(1);
             //}
