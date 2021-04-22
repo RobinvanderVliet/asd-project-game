@@ -8,6 +8,7 @@ using Creature;
 using Moq;
 using Creature.World;
 using System.Numerics;
+using Creature.Consumable;
 
 namespace Creature.Tests
 {
@@ -29,7 +30,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void ApplyDamageKillsMonster()
+        public void Test_Apply_Damage_Kills_Monster()
         {
             // Act
             _sut.ApplyDamage(30);
@@ -39,7 +40,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void FireEventAttacksPlayer()
+        public void Test_Fire_Event_Attacks_Player()
         {
             // Arrange
             Mock<ICreature> playerMock = new Mock<ICreature>();
@@ -48,7 +49,26 @@ namespace Creature.Tests
             _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
             _sut.FireEvent(Monster.Event.PLAYER_IN_RANGE, playerMock.Object);
 
+            // Assert
             playerMock.Verify((playerMock) => playerMock.ApplyDamage(_damage));
+        }
+
+        /*
+            
+        */
+        [Test]
+        public void Test_Fire_Event_Use_Consumable()
+        {
+            // Arrange
+            Mock<ICreature> playerMock = new Mock<ICreature>();
+            Mock<IConsumable> consumableMock = new Mock<IConsumable>();
+
+            // Act
+            _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
+            _sut.FireEvent(Monster.Event.ALMOST_DEAD, consumableMock.Object);
+
+            // Assert
+            consumableMock.Verify((consumableMock) => consumableMock.Use());
         }
     }
 }
