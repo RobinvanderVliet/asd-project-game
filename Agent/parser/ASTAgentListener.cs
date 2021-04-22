@@ -15,6 +15,7 @@ namespace Agent.parser
     {
         private AST ast;
         private Stack<Node> currentContainer;
+        private bool itemStat = false;
 
         public ASTAgentListener()
         {
@@ -73,7 +74,7 @@ namespace Agent.parser
 
         public override void EnterItemStat([NotNull] AgentConfigurationParser.ItemStatContext context)
         {
-            base.EnterItemStat(context);
+            itemStat = true;
         }
 
         public override void EnterOtherwiseClause([NotNull] AgentConfigurationParser.OtherwiseClauseContext context)
@@ -120,8 +121,11 @@ namespace Agent.parser
 
         public override void ExitItem([NotNull] AgentConfigurationParser.ItemContext context)
         {
-            Node temp = currentContainer.Pop();
-            currentContainer.Peek().AddChild(temp);
+            if (!itemStat)
+            {
+                Node temp = currentContainer.Pop();
+                currentContainer.Peek().AddChild(temp);
+            }
         }
 
         public override void ExitOtherwiseClause([NotNull] AgentConfigurationParser.OtherwiseClauseContext context)
@@ -132,8 +136,11 @@ namespace Agent.parser
 
         public override void ExitStat([NotNull] AgentConfigurationParser.StatContext context)
         {
-            Node temp = currentContainer.Pop();
-            currentContainer.Peek().AddChild(temp);
+            if (!itemStat) 
+            { 
+                Node temp = currentContainer.Pop();
+                currentContainer.Peek().AddChild(temp);
+            }
         }
 
         public override void ExitWhenClause([NotNull] AgentConfigurationParser.WhenClauseContext context)
@@ -195,7 +202,15 @@ namespace Agent.parser
 
         public override void ExitItemStat([NotNull] AgentConfigurationParser.ItemStatContext context)
         {
-            base.ExitItemStat(context);
+            //merge item + state
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+
+            //push itemStat in When
+            temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+
+            itemStat = false;
         }
 
         public override void ExitSubjectStat([NotNull] AgentConfigurationParser.SubjectStatContext context)
@@ -211,42 +226,50 @@ namespace Agent.parser
 
         public override void EnterNpc([NotNull] AgentConfigurationParser.NpcContext context)
         {
-            base.EnterNpc(context);
+            NPC npc = new NPC(context.NPC().GetText());
+            currentContainer.Push(npc);
         }
 
         public override void ExitNpc([NotNull] AgentConfigurationParser.NpcContext context)
         {
-            base.ExitNpc(context);
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
         }
 
         public override void EnterCurrent([NotNull] AgentConfigurationParser.CurrentContext context)
         {
-            base.EnterCurrent(context);
+            Current current = new Current(context.CURRENT().GetText());
+            currentContainer.Push(current);
         }
 
         public override void ExitCurrent([NotNull] AgentConfigurationParser.CurrentContext context)
         {
-            base.ExitCurrent(context);
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
         }
 
         public override void EnterOpponent([NotNull] AgentConfigurationParser.OpponentContext context)
         {
-            base.EnterOpponent(context);
+            Opponent opponent = new Opponent(context.OPPONENT().GetText());
+            currentContainer.Push(opponent);
         }
 
         public override void ExitOpponent([NotNull] AgentConfigurationParser.OpponentContext context)
         {
-            base.ExitOpponent(context);
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
         }
 
         public override void EnterTile([NotNull] AgentConfigurationParser.TileContext context)
         {
-            base.EnterTile(context);
+            Tile tile = new Tile(context.STRING().GetText());
+            currentContainer.Push(tile);
         }
 
         public override void ExitTile([NotNull] AgentConfigurationParser.TileContext context)
         {
-            base.ExitTile(context);
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
         }
 
         public override void EnterInventory([NotNull] AgentConfigurationParser.InventoryContext context)
@@ -259,7 +282,6 @@ namespace Agent.parser
         {
             Node temp = currentContainer.Pop();
             currentContainer.Peek().AddChild(temp);
-            base.ExitInventory(context);
         }
 
         public override void EnterPlayer([NotNull] AgentConfigurationParser.PlayerContext context)
