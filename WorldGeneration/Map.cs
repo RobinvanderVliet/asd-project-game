@@ -34,7 +34,7 @@ namespace WorldGeneration
                 catch (ChunkNotFoundException e)
                 {
                     Console.WriteLine("no chunk found, generating new chunk");
-                    chunks.Add(generateNewChunk());
+                    chunks.Add(generateNewChunk(chunk[0], chunk[1], chunkSize));
                 }
             }
             DisplayMap(viewDistance, chunks);
@@ -72,12 +72,14 @@ namespace WorldGeneration
                     {
                         throw new Exception();
                     }
-                    
+                    chunk
                 }
             }
         }
+        
+        public 
 
-        private Chunk generateNewChunk()
+        private Chunk generateNewChunk(int x, int y, int rowSize)
         {
             //TODO: replace placeholder function
             var tileMap = new ITile[] {
