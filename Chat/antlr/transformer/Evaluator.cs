@@ -35,9 +35,7 @@ namespace Chat.antlr.transformer
 
         private void transformMove(Move move)
         {
-            {
-                _playerModel.HandleDirection(move.direction.value,move.steps.value);
-            }
+            _playerModel.HandleDirection(move.direction.value,move.steps.value);
         }
     }
 }
