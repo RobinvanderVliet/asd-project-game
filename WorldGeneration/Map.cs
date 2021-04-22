@@ -72,12 +72,9 @@ namespace WorldGeneration
                     {
                         throw new Exception();
                     }
-                    chunk
                 }
             }
         }
-        
-        public 
 
         private Chunk generateNewChunk(int x, int y, int rowSize)
         {
