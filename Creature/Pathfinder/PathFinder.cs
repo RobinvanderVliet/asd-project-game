@@ -17,8 +17,7 @@ using System.Numerics;
 
 namespace Creature
 {
-    
-    class PathFinder
+    public class PathFinder
     {
         List<List<Node>> grid;
         public PathFinder(List<List<Node>> nodes)
