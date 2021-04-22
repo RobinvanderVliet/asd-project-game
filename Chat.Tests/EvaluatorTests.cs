@@ -1,6 +1,7 @@
 ﻿using Chat.antlr.ast;
 using Chat.antlr.ast.actions;
 using Chat.antlr.transformer;
+using Moq;
 using NUnit.Framework;
 using Player;
 
@@ -9,31 +10,25 @@ namespace Chat.Tests
     [TestFixture]
     class EvaluatorTests
     {
+        private Evaluator sut;
+        private Mock<IPlayerModel> mockedPlayerModel;
 
-        private PlayerModel player;
-        private Evaluator evaluator;
 
         [SetUp]
         public void Setup()
         {
-            player = new PlayerModel();
-            evaluator = new Evaluator(player);
+            mockedPlayerModel = new Mock<IPlayerModel>();
+            sut = new Evaluator(mockedPlayerModel.Object);
         }
 
         [Test]
         public void TestTransformerEvaluatorRunsCorrectly()
         {
-            AST ast = MoveAST(1, "up");
-            
-            try
-            {
-                evaluator.Apply(ast);
-                Assert.IsTrue(true);
-            } catch
-            {
-                Assert.IsTrue(false);
-            }
-            
+            var ast = MoveAST(1, "up");
+
+            mockedPlayerModel.Setup(x => x.HandleDirection("up", 1));
+            sut.Apply(ast);
+            mockedPlayerModel.VerifyAll();
         }
 
         public static AST MoveAST(int steps, string direction)
@@ -44,6 +39,5 @@ namespace Chat.Tests
                 .AddChild(new Step(steps)));
             return new AST(move);
         }
-
     }
 }
