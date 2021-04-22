@@ -70,5 +70,16 @@ namespace Creature.Tests
             // Assert
             consumableMock.Verify((consumableMock) => consumableMock.Use());
         }
+
+        [Test]
+        public void Heal_Amount_Does_Not_Revive_Monster()
+        {
+            // Act
+            _sut.ApplyDamage(30);
+            _sut.HealAmount(50);
+
+            // Assert
+            Assert.That(_sut.IsAlive == false);
+        }
     }
 }
