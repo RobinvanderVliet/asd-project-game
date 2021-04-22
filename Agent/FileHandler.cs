@@ -43,7 +43,8 @@ namespace Agent
         {
             //TODO change file name to selected by user
             string tmpFileName = "agentFile.cfg";
-            string safeFileLocation = Path.Combine(Environment.CurrentDirectory, @"resource\", tmpFileName);
+            string safeFileLocation = String.Format(Path.GetFullPath(Path.Combine
+                        (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\" + tmpFileName;
 
             try
             {
