@@ -3,32 +3,43 @@ using System.Diagnostics.CodeAnalysis;
 using Chat.antlr;
 using Chat.antlr.ast;
 using Chat.antlr.ast.actions;
+using Chat.antlr.transformer;
 using Chat.exception;
+using Moq;
 using NUnit.Framework;
+using Player;
 
 namespace Chat.Tests
 {
     [ExcludeFromCodeCoverage]
     public class PipelineTest
     {
+        private Mock<IPlayerModel> mockedPlayerModel;
+        private Mock<Evaluator> mockedEvaluator;
+        private Pipeline sut = new Pipeline();
+
+        [SetUp]
+        public void SetUp()
+        {
+            sut = new Pipeline();
+        }
+
         [Test]
         public void ThrowsSyntaxErrorWhenCommandNotRecognised()
         {
-            Pipeline sut = new Pipeline();
             Assert.Throws<CommandSyntaxException>(() => sut.ParseCommand("me forward"));
         }
-        
+
         [Test]
-        public void change()
+        public void Test_ParseCommand()
         {
-            Pipeline sut = new Pipeline();
             sut.ParseCommand("move forward");
             AST ast = sut.Ast;
             AST exp = MoveCommand(1, "forward");
 
             Assert.AreEqual(exp, ast);
         }
-        
+
         public static AST MoveCommand(int steps, String direction)
         {
             Input moveForward = new Input();

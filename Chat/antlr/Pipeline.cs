@@ -53,7 +53,7 @@ namespace Chat.antlr
         {
             if (Ast == null)
                 return;
-            new Evaluator(playerModel).apply(Ast);
+            new Evaluator(playerModel).Apply(Ast);
         }
 
         public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine,
