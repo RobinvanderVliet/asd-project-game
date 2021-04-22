@@ -1,6 +1,6 @@
 namespace WorldGeneration.Models.Interfaces
 {
-    public interface ITerrainTile
+    public interface ITerrainTile : ITile
     {
         
     }

@@ -1,6 +1,6 @@
 ﻿namespace WorldGeneration.Models.LootableTiles
 {
-    public class ChestTile : LootableTile
+    public class ChestTile : LootAbleTile
     {
         public ChestTile() 
         {
@@ -13,7 +13,7 @@
             throw new System.NotImplementedException();
         }
 
-        public override void LootItem(int Item)
+        public override int LootItem(int item)
         {
             throw new System.NotImplementedException();
         }

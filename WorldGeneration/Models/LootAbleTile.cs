@@ -2,10 +2,10 @@
 
 namespace WorldGeneration.Models
 {
-    public abstract class LootableTile : Tile, ILootableTile
+    public abstract class LootAbleTile : Tile, ILootAbleTile
     {
         public abstract int GenerateLoot();
 
-        public abstract void LootItem(int item);
+        public abstract int LootItem(int item);
     }
 }

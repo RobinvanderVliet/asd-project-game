@@ -8,7 +8,7 @@
             IsAccessible = true;
         }
 
-        public override void DrawBuilding()
+        public override string DrawBuilding()
         {
             throw new System.NotImplementedException();
         }

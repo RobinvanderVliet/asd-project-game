@@ -4,6 +4,6 @@ namespace WorldGeneration.Models
 {
     public abstract class BuildingTile : Tile, IBuildingTile
     {
-        public abstract void DrawBuilding();
+        public abstract string DrawBuilding();
     }
 }

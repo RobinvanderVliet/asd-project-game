@@ -1,6 +1,8 @@
-﻿namespace WorldGeneration.Models.BuildingTiles
+﻿using WorldGeneration.Models.Interfaces;
+
+namespace WorldGeneration.Models.BuildingTiles
 {
-    public class DoorTile : BuildingTile
+    public class DoorTile : BuildingTile, ITile
     {
         public DoorTile() 
         {
@@ -8,7 +10,7 @@
             IsAccessible = true;
         }
 
-        public override void DrawBuilding()
+        public override string DrawBuilding()
         {
             throw new System.NotImplementedException();
         }

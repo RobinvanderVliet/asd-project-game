@@ -1,8 +1,8 @@
 ﻿namespace WorldGeneration.Models.Interfaces
 {
-    public interface ILootableTile
+    public interface ILootAbleTile : ITile
     {
         int GenerateLoot();
-        void LootItem(int item);
+        int LootItem(int item);
     }
 }
