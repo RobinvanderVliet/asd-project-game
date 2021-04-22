@@ -13,18 +13,23 @@ namespace Agent
         {
             try
             {
-                if (Path.GetExtension(filepath) != ".txt" || Path.GetExtension(filepath) != ".cfg")
+                if (Path.GetExtension(filepath) == ".txt" || Path.GetExtension(filepath) == ".cfg")
+                {
+                    using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
+                    {
+                        using (StreamReader reader = new StreamReader(fileStream))
+                        {
+                            string fileData = reader.ReadToEnd();
+
+                            reader.Close();
+
+                            return fileData;
+                        };
+                    }
+                }
+                else 
                 {
                     throw new FileException("File given is not of the correct file type");
-                }
-
-                using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
-                {
-                    using (StreamReader reader = new StreamReader(fileStream))
-                    {
-                        string fileData = reader.ReadToEnd();
-                        return fileData;
-                    };
                 }
             }
             catch (FileException)
@@ -52,7 +57,6 @@ namespace Agent
                     };   
                 };
             }
-            //TODO change to work with exception handler
             catch (FileException)
             {
                 throw;
