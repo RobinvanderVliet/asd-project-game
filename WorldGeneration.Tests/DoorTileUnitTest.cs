@@ -8,11 +8,13 @@ namespace WorldGeneration.Tests
     public class DoorTileUnitTest
     {
         private IBuildingTile _tile;
+        private string _tileSymbol;
         
         [SetUp]
         public void Setup()
         {
             _tile = new DoorTile();
+            _tileSymbol = "/";
         }
         
         [Test]
@@ -36,7 +38,7 @@ namespace WorldGeneration.Tests
         [Test]
         public void Test_TileSymbol_EqualsTo_DoorTileSymbol()
         {
-            Assert.That(_tile.Symbol, Is.EqualTo("/"));
+            Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
         }
         
         [Test]

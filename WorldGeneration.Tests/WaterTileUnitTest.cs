@@ -7,11 +7,13 @@ namespace WorldGeneration.Tests
     public class WaterTileUnitTest
     {
         private ITerrainTile _tile;
+        private string _tileSymbol;
         
         [SetUp]
         public void Setup()
         {
             _tile = new WaterTile();
+            _tileSymbol = "~";
         }
         
         [Test]
@@ -35,7 +37,7 @@ namespace WorldGeneration.Tests
         [Test]
         public void Test_TileSymbol_EqualsTo_WaterTileSymbol()
         {
-            Assert.That(_tile.Symbol, Is.EqualTo("~"));
+            Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
         }
     }
 }

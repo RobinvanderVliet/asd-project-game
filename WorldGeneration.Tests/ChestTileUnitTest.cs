@@ -8,11 +8,13 @@ namespace WorldGeneration.Tests
     public class ChestTileUnitTest
     {
         private ILootAbleTile _tile;
+        private string _tileSymbol;
         
         [SetUp]
         public void Setup()
         {
             _tile = new ChestTile();
+            _tileSymbol = "n";
         }
         
         [Test]
@@ -36,7 +38,7 @@ namespace WorldGeneration.Tests
         [Test]
         public void Test_TileSymbol_EqualsTo_ChestTileSymbol()
         {
-            Assert.That(_tile.Symbol, Is.EqualTo("n"));
+            Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
         }
         
         [Test]
@@ -53,7 +55,7 @@ namespace WorldGeneration.Tests
         {
             Assert.Throws<NotImplementedException>(() =>
             {
-                var itemId = 0;
+                const int itemId = 0;
                 _tile.LootItem(itemId);
             });
         }

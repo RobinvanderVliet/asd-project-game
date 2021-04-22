@@ -7,13 +7,14 @@ namespace WorldGeneration.Tests
 {
     public class HouseTileUnitTest
     {
-        
         private IBuildingTile _tile;
+        private string _tileSymbol;
         
         [SetUp]
         public void Setup()
         {
             _tile = new HouseTile();
+            _tileSymbol = "+";
         }
 
         [Test]
@@ -37,7 +38,7 @@ namespace WorldGeneration.Tests
         [Test]
         public void Test_TileSymbol_EqualsTo_HouseTileSymbol()
         {
-            Assert.That(_tile.Symbol, Is.EqualTo("+"));
+            Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
         }
         
         [Test]

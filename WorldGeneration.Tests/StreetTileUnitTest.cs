@@ -7,11 +7,13 @@ namespace WorldGeneration.Tests
     public class StreetTileUnitTest
     {
         private ITerrainTile _tile;
+        private string _tileSymbol;
         
         [SetUp]
         public void Setup()
         {
             _tile = new StreetTile();
+            _tileSymbol = "_";
         }
         
         [Test]
@@ -35,7 +37,7 @@ namespace WorldGeneration.Tests
         [Test]
         public void Test_TileSymbol_EqualsTo_StreetTileSymbol()
         {
-            Assert.That(_tile.Symbol, Is.EqualTo("_"));
+            Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
         }
     }
 }

@@ -7,11 +7,13 @@ namespace WorldGeneration.Tests
     public class DirtTileUnitTest
     {
         private ITile _tile;
+        private string _tileSymbol;
         
         [SetUp]
         public void Setup()
         {
             _tile = new DirtTile();
+            _tileSymbol = ".";
         }
         
         [Test]
@@ -35,7 +37,7 @@ namespace WorldGeneration.Tests
         [Test]
         public void Test_TileSymbol_EqualsTo_DirtTileSymbol()
         {
-            Assert.That(_tile.Symbol, Is.EqualTo("."));
+            Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
         }
     }
 }

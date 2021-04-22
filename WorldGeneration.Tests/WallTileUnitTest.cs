@@ -8,11 +8,13 @@ namespace WorldGeneration.Tests
     public class WallTileUnitTest
     {
         private IBuildingTile _tile;
+        private string _tileSymbol;
         
         [SetUp]
         public void Setup()
         {
             _tile = new WallTile();
+            _tileSymbol = "\u25A0";
         }
         
         [Test]
@@ -36,7 +38,7 @@ namespace WorldGeneration.Tests
         [Test]
         public void Test_TileSymbol_EqualsTo_WallTileSymbol()
         {
-            Assert.That(_tile.Symbol, Is.EqualTo("\u25A0"));
+            Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
         }
         
         [Test]
