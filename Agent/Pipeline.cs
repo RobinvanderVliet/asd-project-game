@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using Agent.antlr.ast.implementation;
 using Agent.antlr.checker;
 using Agent.antlr.exception;
@@ -8,10 +9,11 @@ using Agent.parser;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
+using SyntaxErrorException = Agent.exceptions.SyntaxErrorException;
 
 namespace Agent
 {
-    public class Pipeline
+    public class Pipeline : IAntlrErrorListener<IToken>
     {
         private AST ast;
 
@@ -34,32 +36,17 @@ namespace Agent
             AgentConfigurationLexer lexer = new AgentConfigurationLexer(inputStream);
             lexer.RemoveErrorListeners();
             errors.Clear();
-            try
-            {
-                CommonTokenStream tokens = new CommonTokenStream(lexer);
-                AgentConfigurationParser parser = new AgentConfigurationParser(tokens);
-                parser.RemoveErrorListeners();
-                var parseTree = parser.configuration();
-                ParseTreeWalker walker = new ParseTreeWalker();
-                
-                ASTAgentListener astAgentListener = new ASTAgentListener();
-                walker.Walk(astAgentListener, parseTree);
-                ast = astAgentListener.GetAST();
-            }
-            catch (RecognitionException e)
-            {
-                ast = new AST();
-                errors.Add(e.Message);
-            }
-            catch (ParseCanceledException e)
-            {
-                ast = new AST();
-                errors.Add("Syntax error");
-            }
-            catch (Exception e)
-            {
-                errors.Add("File not found");
-            }
+
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            AgentConfigurationParser parser = new AgentConfigurationParser(tokens);
+            parser.RemoveErrorListeners();
+            parser.AddErrorListener(this);
+            var parseTree = parser.configuration();
+            ParseTreeWalker walker = new ParseTreeWalker();
+            
+            ASTAgentListener astAgentListener = new ASTAgentListener();
+            walker.Walk(astAgentListener, parseTree);
+            ast = astAgentListener.GetAST();
         }
 
         public void CheckAst()
@@ -100,6 +87,13 @@ namespace Agent
         public Checker Checker
         {
             set => checker = value;
+        }
+        
+        public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine,
+            string msg,
+            RecognitionException e)
+        {
+            throw new SyntaxErrorException(msg);
         }
     }
 }

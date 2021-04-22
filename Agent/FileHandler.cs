@@ -13,10 +13,10 @@ namespace Agent
         {
             try
             {
-                if (Path.GetExtension(filepath) != ".txt" || Path.GetExtension(filepath) != ".cfg")
-                {
-                    throw new FileException("File given is not of the correct file type");
-                }
+                // if (Path.GetExtension(filepath) != ".txt" || Path.GetExtension(filepath) != ".cfg")
+                // {
+                //     throw new FileException("File given is not of the correct file type");
+                // }
 
                 using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
                 {
