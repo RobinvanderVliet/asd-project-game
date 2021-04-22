@@ -24,8 +24,16 @@ namespace Chat.Tests
         public void TestTransformerEvaluatorRunsCorrectly()
         {
             AST ast = MoveAST(1, "up");
-            evaluator.apply(ast);
-            Assert.IsTrue(true);
+            
+            try
+            {
+                evaluator.Apply(ast);
+                Assert.IsTrue(true);
+            } catch
+            {
+                Assert.IsTrue(false);
+            }
+            
         }
 
         public static AST MoveAST(int steps, string direction)

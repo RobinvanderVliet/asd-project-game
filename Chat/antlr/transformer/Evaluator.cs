@@ -1,6 +1,4 @@
-﻿using System;
-using System.Security.Cryptography;
-using Chat.antlr.ast;
+﻿using Chat.antlr.ast;
 using Chat.antlr.ast.actions;
 using Player;
 
@@ -15,12 +13,12 @@ namespace Chat.antlr.transformer
             _playerModel = playerModel;
         }
 
-        public void apply(AST ast)
+        public void Apply(AST ast)
         {
-            transformNode(ast.root);
+            TransformNode(ast.root);
         }
 
-        private void transformNode(ASTNode node)
+        private void TransformNode(ASTNode node)
         {
             var input = (Input) node;
             var nodeBody = input.body;
@@ -28,12 +26,12 @@ namespace Chat.antlr.transformer
                 switch (nodeBody[i])
                 {
                     case Move:
-                        transformMove((Move) nodeBody[i]);
+                        TransformMove((Move) nodeBody[i]);
                         break;
                 }
         }
 
-        private void transformMove(Move move)
+        private void TransformMove(Move move)
         {
             _playerModel.HandleDirection(move.direction.value,move.steps.value);
         }
