@@ -52,5 +52,40 @@ namespace Chat.antlr.transformer
         {
             _playerModel.HandleItemAction("drop");
         }
+
+        private void transformPickup(Attack attack)
+        {
+            _playerModel.HandleItemAction("attack");
+        }
+
+        private void transformPickup(Exit exit)
+        {
+            _playerModel.HandleItemAction("exit");
+        }
+
+        private void transformPickup(Pause pause)
+        {
+            _playerModel.HandleItemAction("pause");
+        }
+
+        private void transformPickup(Replace replace)
+        {
+            _playerModel.HandleItemAction("replace");
+        }
+
+        private void transformPickup(Resume resume)
+        {
+            _playerModel.HandleItemAction("resume");
+        }
+
+        private void transformPickup(Say say)
+        {
+            _playerModel.HandleItemAction("say");
+        }
+
+        private void transformPickup(Shout shout)
+        {
+            _playerModel.HandleItemAction("shout");
+        }
     }
 }
