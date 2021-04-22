@@ -20,8 +20,9 @@ namespace ASD_project
             {
                 // Note this code is for testing purposes only!
                 Console.WriteLine("Game is gestart");
-                   Class1 whatever = new Class1(9);
-                    Console.WriteLine(whatever.PrototypeWorldGeneration());
+                WorldGenerationPrototype prototypeGenerator = new WorldGenerationPrototype(0);
+                prototypeGenerator.generateThreeWorldsWithDifferentFrequenceButTheSameSeed(12345);
+                prototypeGenerator.generateThreeWorldsWithDifferentFrequenceButTheSameSeed(987654);
             }
         }
     }
