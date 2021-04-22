@@ -24,7 +24,7 @@ namespace Network.Tests
 
 
         [Test]
-        public void SendTest1()
+        public void TestSendCallsSendOnWebsocket()
         {
             // Arrange
             string messageTest = "test";
