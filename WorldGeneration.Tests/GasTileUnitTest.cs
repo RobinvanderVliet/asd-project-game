@@ -35,6 +35,20 @@ namespace WorldGeneration.Tests
         }
         
         [Test]
+        public void Test_SetX_EqualsTo_5()
+        {
+            _tile.X = 5;
+            Assert.That(_tile.X, Is.EqualTo(5));
+        }
+        
+        [Test]
+        public void Test_SetY_EqualsTo_5()
+        {
+            _tile.Y = 5;
+            Assert.That(_tile.Y, Is.EqualTo(5));
+        }
+        
+        [Test]
         public void Test_TileSymbol_EqualsTo_GasTileSymbol()
         {
             Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
@@ -62,6 +76,12 @@ namespace WorldGeneration.Tests
             _tile = new GasTile(3);
             const int time = 5; // 5 seconds
             Assert.That(_tile.GetDamage(time), Is.EqualTo(15));
+        }
+        
+        [Test]
+        public void Test_IsAccessible_EqualsTo_True()
+        {
+            Assert.That(_tile.IsAccessible, Is.EqualTo(true));
         }
     }
 }

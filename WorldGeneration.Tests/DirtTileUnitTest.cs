@@ -35,9 +35,29 @@ namespace WorldGeneration.Tests
         }
         
         [Test]
+        public void Test_SetX_EqualsTo_5()
+        {
+            _tile.X = 5;
+            Assert.That(_tile.X, Is.EqualTo(5));
+        }
+        
+        [Test]
+        public void Test_SetY_EqualsTo_5()
+        {
+            _tile.Y = 5;
+            Assert.That(_tile.Y, Is.EqualTo(5));
+        }
+        
+        [Test]
         public void Test_TileSymbol_EqualsTo_DirtTileSymbol()
         {
             Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
+        }
+        
+        [Test]
+        public void Test_IsAccessible_EqualsTo_True()
+        {
+            Assert.That(_tile.IsAccessible, Is.EqualTo(true));
         }
     }
 }
