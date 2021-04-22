@@ -4,9 +4,11 @@ using Chat.antlr.transformer;
 using Moq;
 using NUnit.Framework;
 using Player;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Chat.Tests
 {
+    [ExcludeFromCodeCoverage]
     [TestFixture]
     class EvaluatorTests
     {
@@ -22,7 +24,7 @@ namespace Chat.Tests
         }
 
         [Test]
-        public void TestTransformerEvaluatorRunsCorrectly()
+        public void Test_HandleDirection_RunsCorrectly()
         {
             var ast = MoveAST(1, "up");
 
