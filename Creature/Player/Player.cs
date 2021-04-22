@@ -40,7 +40,7 @@ namespace Creature
         public void ApplyDamage(double amount)
         {
             _health -= amount;
-            Console.WriteLine("You sufferd: " + amount + "damage. Remaining health: " + _health + ".");
+            Console.WriteLine("You sufferd: " + amount + " damage. Remaining health: " + _health + ".");
             if (_health < 0)
                 _alive = false;
         }

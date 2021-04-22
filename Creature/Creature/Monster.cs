@@ -156,7 +156,11 @@ namespace Creature
                 _position.X = path.Peek().position.X;
                 _position.Y = path.Peek().position.Y;
 
-                //System.Threading.Thread.Sleep(1000);
+                //System.Threading.Thread.Sleep(1000); 
+            }
+            if ((_position.X + 1) == _player.Position.X || (_position.X - 1) == _player.Position.X)
+            {
+                OnAttackPlayer(_player);
             }
         }
 
