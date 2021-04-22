@@ -34,7 +34,7 @@ namespace WorldGeneration.Tests
         }
         
         [Test]
-        public void Test_Symbol_EqualsTo_ChestTileSymbol()
+        public void Test_TileSymbol_EqualsTo_ChestTileSymbol()
         {
             Assert.That(_tile.Symbol, Is.EqualTo("n"));
         }

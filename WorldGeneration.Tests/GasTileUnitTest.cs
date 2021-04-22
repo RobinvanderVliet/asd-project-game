@@ -33,7 +33,7 @@ namespace WorldGeneration.Tests
         }
         
         [Test]
-        public void Test_Symbol_EqualsTo_GasTileSymbol()
+        public void Test_TileSymbol_EqualsTo_GasTileSymbol()
         {
             Assert.That(_tile.Symbol, Is.EqualTo("%"));
         }

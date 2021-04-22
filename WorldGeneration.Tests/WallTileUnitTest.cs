@@ -34,7 +34,7 @@ namespace WorldGeneration.Tests
         }
         
         [Test]
-        public void Test_Symbol_EqualsTo_WallTileSymbol()
+        public void Test_TileSymbol_EqualsTo_WallTileSymbol()
         {
             Assert.That(_tile.Symbol, Is.EqualTo("\u25A0"));
         }

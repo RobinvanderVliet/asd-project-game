@@ -35,7 +35,7 @@ namespace WorldGeneration.Tests
         }
         
         [Test]
-        public void Test_Symbol_EqualsTo_HouseTileSymbol()
+        public void Test_TileSymbol_EqualsTo_HouseTileSymbol()
         {
             Assert.That(_tile.Symbol, Is.EqualTo("+"));
         }

@@ -33,7 +33,7 @@ namespace WorldGeneration.Tests
         }
         
         [Test]
-        public void Test_Symbol_EqualsTo_DirtTileSymbol()
+        public void Test_TileSymbol_EqualsTo_DirtTileSymbol()
         {
             Assert.That(_tile.Symbol, Is.EqualTo("."));
         }
