@@ -88,7 +88,7 @@ namespace Player
         switch (action)
         {
             case "pickup":
-               AddInventoryItem(CheckTileContainsItem());
+              //  AddInventoryItem(CheckTileContainsItem());
                 // add item to inventory
                 
                 break;
@@ -104,4 +104,21 @@ namespace Player
         // Als er op de Tile iets ligt moet deze het item returnen
         // anders return null;
     }
+
+       public void HandleItemAction(string action) { Console.WriteLine("Action: " + action); }
+
+       public void HandleAttackAction(Attack attack) { Console.WriteLine("Attack: " + attack); }
+
+       public void HandleExitAction(Exit exit) { Console.WriteLine("Exit: " + exit); }
+
+       public void HandlePauseAction(Pause pause) { Console.WriteLine("Pause: " + pause); }
+
+       public void HandleReplaceAction(Replace replace) { Console.WriteLine("Replace: " + replace); }
+
+       public void HandleResumeAction(Resume resume) { Console.WriteLine("Resume: " + resume); }
+
+    // Test hier of de case uit de Evaluator gereached wordt.
+       public void HandleSayAction(Say say) { Console.WriteLine("Say: " + say); }
+
+       public void HandleShoutAction(Shout shout) { Console.WriteLine("Shout: " + shout); }
 }

@@ -12,25 +12,13 @@ namespace Player
         void HandleDirection(string direction, int steps);
         int[] SendNewPosition(int[] newMovement);
 
-        // ATTACK: 'attack';
-        // SLASH: 'slash';
-        // STRIKE: 'strike';
-        // void HandleAttack();
-
-        // PICKUP: 'pickup';
-        // GET: 'get';
-        // DROP: 'drop';
         void HandleItemAction(string action);
-
-        // EXIT: 'exit';
-        // LEAVE: 'leave';
-        // PAUSE : 'pause';
-        // RESUME : 'resume';
-        // void HandleGameAction();
-
-        // SAY: 'say';
-        // SHOUT: 'shout';
-        // REPLACE: 'replace';
-        // void HandleChatAction();
+        void HandleAttackAction(Attack attack);
+        void HandleExitAction(Exit exit);
+        void HandlePauseAction(Pause pause);
+        void HandleReplaceAction(Replace replace);
+        void HandleResumeAction(Resume resume);
+        void HandleSayAction(Say say);
+        void HandleShoutAction(Shout shout);
     }
 }
