@@ -113,22 +113,8 @@ namespace Creature
         {
             if (_following)
             {
-                //if (_position.X < _player.Position.X) _position.X += 1;
-                //else if (_position.X > _player.Position.X) _position.X -= 1;
-                //else if (_position.Y < _player.Position.Y) _position.Y += 1;
-                //else if (_position.Y > _player.Position.Y) _position.Y -= 1;
-
-                foreach (Node node in path)
-                {
-                    System.Diagnostics.Debug.WriteLine("-----------------");
-                    System.Diagnostics.Debug.WriteLine(node.position.X);
-                    System.Diagnostics.Debug.WriteLine(node.position.Y);
-                }
-
                 _position.X = path.Peek().position.X;
                 _position.Y = path.Peek().position.Y;
-
-                //System.Threading.Thread.Sleep(1000); 
             }
             if ((_position.X + 1) == _player.Position.X || (_position.X - 1) == _player.Position.X)
             {
