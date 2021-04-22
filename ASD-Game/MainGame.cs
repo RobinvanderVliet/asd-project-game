@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using WorldGeneration;
@@ -18,6 +17,7 @@ namespace ASD_project
 
             public void Run()
             {
+                new WorldGeneration.Program();
                 // Note this code is for testing purposes only!
                 Console.WriteLine("Game is gestart");
                 WorldGenerationPrototype prototypeGenerator = new WorldGenerationPrototype(0);
