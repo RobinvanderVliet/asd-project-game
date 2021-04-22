@@ -25,13 +25,13 @@ namespace Chat.Tests
         }
 
         [Test]
-        public void ThrowsSyntaxErrorWhenCommandNotRecognised()
+        public void Test_ParseCommand_ThrowsSyntaxErrorWhenCommandNotRecognised()
         {
             Assert.Throws<CommandSyntaxException>(() => sut.ParseCommand("me forward"));
         }
 
         [Test]
-        public void Test_ParseCommand()
+        public void Test_ParseCommand_ParsingACommandWorksAsExpected()
         {
             sut.ParseCommand("move forward");
             AST ast = sut.Ast;
