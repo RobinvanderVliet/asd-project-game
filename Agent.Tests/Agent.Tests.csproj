@@ -1,10 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\test1.txt" />
+    <None Remove="Resources\test2.txt" />
+    <None Remove="Resources\test3.txt" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Antlr4" Version="4.6.6">
@@ -19,6 +25,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Agent\Agent.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <EmbeddedResource Include="Resources\test1.txt" />
+	  <EmbeddedResource Include="Resources\test2.txt" />
+	  <EmbeddedResource Include="Resources\test3.txt" />
   </ItemGroup>
 
 </Project>
