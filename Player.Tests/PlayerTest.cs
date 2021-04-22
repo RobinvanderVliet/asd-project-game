@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Moq;
 using NUnit.Framework;
@@ -8,7 +6,7 @@ using Player.Model;
 namespace Player.Tests
 {
     [ExcludeFromCodeCoverage]
-    public class Tests
+    public class PlayerTest
     {
         private Model.Player sut;
         private Mock<IInventory> mockedInventory;
@@ -22,6 +20,96 @@ namespace Player.Tests
             mockedBitcoins = new Mock<IBitcoin>();
             mockedRadiationLevel = new Mock<IRadiationLevel>();
             sut = new Model.Player("Jan", mockedInventory.Object, mockedBitcoins.Object, mockedRadiationLevel.Object);
+        }
+        
+        [Test]
+        public void GetNameGetsName()
+        {
+            Assert.AreEqual("Jan", sut.Name);
+        }
+        
+        [Test]
+        public void SetNameSetsName()
+        {
+            var name = "Nieuwe naam";
+            sut.Name = name;
+            
+            Assert.AreEqual(name, sut.Name);
+        }
+        
+        [Test]
+        public void GetHealthGetsHealth()
+        {
+            Assert.AreEqual(100, sut.Health);
+        }
+        
+        [Test]
+        public void SetHealthSetsHealth()
+        {
+            var HP = 50;
+            sut.Health = HP;
+            
+            Assert.AreEqual(HP, sut.Health);
+        }
+        
+        [Test]
+        public void GetStaminaGetsStamina()
+        {
+            Assert.AreEqual(10, sut.Stamina);
+        }
+        
+        [Test]
+        public void SetStaminaSetsStamina()
+        {
+            var stamina = 5;
+            sut.Stamina = stamina;
+            
+            Assert.AreEqual(stamina, sut.Stamina);
+        }
+        
+        [Test]
+        public void GetInventoryGetsInventory()
+        {
+            Assert.AreEqual(mockedInventory.Object, sut.Inventory);
+        }
+        
+        [Test]
+        public void SetInventorySetsInventory()
+        {
+            var inventory = new Inventory();
+            sut.Inventory = inventory;
+            
+            Assert.AreEqual(inventory, sut.Inventory);
+        }
+        
+        [Test]
+        public void GetBitcoinsGetsBitcoins()
+        {
+            Assert.AreEqual(mockedBitcoins.Object, sut.Bitcoins);
+        }
+        
+        [Test]
+        public void SetBitcoinsSetsBitcoins()
+        {
+            var bitcoins = new Bitcoin(5);
+            sut.Bitcoins = bitcoins;
+            
+            Assert.AreEqual(bitcoins, sut.Bitcoins);
+        }
+        
+        [Test]
+        public void GetRadiationLevelGetsRadiationLevel()
+        {
+            Assert.AreEqual(mockedRadiationLevel.Object, sut.RadiationLevel);
+        }
+        
+        [Test]
+        public void SetRadiationLevelSetsRadiationLevel()
+        {
+            var radiationLevel = new RadiationLevel(5);
+            sut.RadiationLevel = radiationLevel;
+            
+            Assert.AreEqual(radiationLevel, sut.RadiationLevel);
         }
 
         [Test]
