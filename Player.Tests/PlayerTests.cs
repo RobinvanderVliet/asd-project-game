@@ -16,7 +16,7 @@ namespace Player.Tests
 
 
         [Test]
-        public void Test_MoveRight()
+        public void Test_MoveRight_AssertsDirectionPositionsCorrectlyToTheRight()
         {
             // Arrange
             var direction_right = "right";
@@ -33,7 +33,7 @@ namespace Player.Tests
         }
 
         [Test]
-        public void Test_MoveLeft()
+        public void Test_MoveLeft_AssertsDirectionPositionsCorrectlyToTheLeft()
         {
             // Arrange
             var direction_left = "left";
@@ -50,7 +50,7 @@ namespace Player.Tests
         }
 
         [Test]
-        public void Test_MoveForward()
+        public void Test_MoveForward_AssertsDirectionPositionsCorrectlyToTheNorth()
         {
             // Arrange
             var direction_forward = "forward";
@@ -67,7 +67,7 @@ namespace Player.Tests
         }
 
         [Test]
-        public void Test_MoveBackward()
+        public void Test_MoveBackward_AssertsDirectionPositionsCorrectlyToTheSouth()
         {
             // Arrange
             var direction_backward = "backward";
@@ -84,7 +84,7 @@ namespace Player.Tests
         }
 
         [Test]
-        public void Test_HandleDirection()
+        public void Test_HandleDirection_AssertsPositionsCorrectly()
         {
             // Arrange
             int[] newMovement = new int[2];
