@@ -9,6 +9,7 @@ using Moq;
 using Creature.World;
 using System.Numerics;
 using Creature.Consumable;
+using Creature.Pathfinder;
 
 namespace Creature.Tests
 {
@@ -80,6 +81,24 @@ namespace Creature.Tests
 
             // Assert
             Assert.That(_sut.IsAlive == false);
+        }
+
+        [Test]
+        public void Test_Get_Top_Position_From_Path_Stack()
+        {
+            // Arrange
+            Mock<ICreature> playerMock = new Mock<ICreature>();
+            Stack<Node> path = new Stack<Node>();
+            path.Push(new Node(new Vector2(1, 1), true));
+            path.Push(new Node(new Vector2(1, 2), true));
+            path.Push(new Node(new Vector2(1, 3), true));
+
+            // Act
+            _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
+            _sut.Do(path);
+
+            // Assert
+            Assert.That(new Vector2(1, 3), Is.EqualTo(_sut.Position));
         }
     }
 }
