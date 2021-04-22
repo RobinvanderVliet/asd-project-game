@@ -4,10 +4,6 @@ using WorldGeneration.Models.BuildingTiles;
 using WorldGeneration.Models.Interfaces;
 using WorldGeneration.Models.TerrainTiles;
 
-using System;
-using WorldGeneration.Tiles;
-using WorldGeneration.Tiles.Interfaces;
-
 namespace WorldGeneration
 {
     public class Program
