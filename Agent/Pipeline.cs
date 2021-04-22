@@ -25,7 +25,6 @@ namespace Agent
         public Pipeline()
         {
             errors = new List<string>();
-            checker = new Checker();
             // transformer = new Transformer();
             generator = new Generator();
         }
@@ -51,7 +50,8 @@ namespace Agent
 
         public void CheckAst()
         {
-            checker.Check(ast);
+            // checker = new Checker(ast);
+            // TODO: Implement checker calls
         }
         
         public void TransformAst()

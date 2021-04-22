@@ -1,5 +1,5 @@
 ﻿using Agent.antlr.ast;
-using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
+using Agent.antlr.ast.implementation;
 using NUnit.Framework;
 
 namespace Agent.Tests.ast
