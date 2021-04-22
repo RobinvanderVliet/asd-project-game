@@ -25,12 +25,6 @@ namespace WorldGeneration
         
         public void GenerateThreeWorldsWithDifferentFrequencyButTheSameSeed (int seed){
             noise.SetSeed(seed);
-            SetNoiseFrequency (0.9f);
-            Console.WriteLine(PrototypeWorldGeneration());
-            SetNoiseFrequency (0.1f);
-            Console.WriteLine(PrototypeWorldGeneration());
-            SetNoiseFrequency (0.01f);
-            Console.WriteLine(PrototypeWorldGeneration());
         }
 
         public string PrototypeWorldGeneration()

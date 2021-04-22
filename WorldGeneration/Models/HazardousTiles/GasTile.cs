@@ -3,7 +3,7 @@
     public class GasTile : HazardousTile
     {
         private int Radius { get; set; }
-        public GasTile(int radius) 
+        public GasTile(int radius = 1) 
         {
             Symbol = TileSymbol.Gas;
             IsAccessible = true;

@@ -53,9 +53,11 @@ namespace WorldGeneration.Models
             return new[] {internalCoordinates[0] + RowSize * X, internalCoordinates[1] + RowSize * Y};
         }
 
-        public int getPositionInTileArrayByWorldCoordinates(int x, int y)
+        public int GetPositionInTileArrayByWorldCoordinates(int x, int y)
         {
-            return ((x % RowSize) + ((Y * RowSize - y) * RowSize));
+            
+            // return (x % RowSize) + (Y * RowSize + (y - Y * RowSize) * RowSize);
+            return (x % RowSize) + (Y * RowSize - y) * RowSize;
             
         }
     }
