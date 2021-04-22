@@ -11,28 +11,27 @@ namespace Agent
     {
         public string ImportFile(string filepath)
         {
-            if (Path.GetExtension(filepath) != ".txt" || Path.GetExtension(filepath) != ".cfg") 
-            {
-                //TODO throw exception
-            }
-
-
-            FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read);
-            StreamReader reader = new StreamReader(fileStream);
-
             try
             {
-                string fileData = reader.ReadToEnd();
+                if (Path.GetExtension(filepath) != ".txt" || Path.GetExtension(filepath) != ".cfg")
+                {
+                    throw new FileException("File given is not of the correct file type");
+                }
 
-                reader.Close();
-
-                return fileData;
+                using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
+                {
+                    using (StreamReader reader = new StreamReader(fileStream))
+                    {
+                        string fileData = reader.ReadToEnd();
+                        return fileData;
+                    };
+                }
             }
-            //TODO add version to work with exception mapper
-            catch (Exception)
-            {
+            catch (FileException)
+            { 
                 throw;
             }
+            
         }
 
         public void ExportFile(string content)
@@ -45,16 +44,16 @@ namespace Agent
             {
                 CreateDirectory(safeFileLocation);
 
-                FileStream fileStream = new FileStream(safeFileLocation, FileMode.Create, FileAccess.Write);
-                StreamWriter streamWriter = new StreamWriter(fileStream);
-
-                //TODO change to write with \n
-                streamWriter.Write(content);
-
-                streamWriter.Close();
+                using (FileStream fileStream = new FileStream(safeFileLocation, FileMode.Create, FileAccess.Write))
+                {
+                    using (StreamWriter streamWriter = new StreamWriter(fileStream))
+                    {
+                        streamWriter.Write(content);
+                    };   
+                };
             }
             //TODO change to work with exception handler
-            catch (Exception)
+            catch (FileException)
             {
                 throw;
             }
@@ -74,4 +73,11 @@ namespace Agent
             }
         }
     }
+}
+
+[Serializable]
+public class FileException : IOException
+{
+    public FileException() { }
+    public FileException(String massage) : base(String.Format(massage)) { }
 }
