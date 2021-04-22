@@ -37,7 +37,7 @@ namespace Chat.Tests
         }
 
         [Test]
-        public void AstListenerMoveForward2StepsTest()
+        public void Test_AstListener_MoveForward2Steps()
         {
             AST sut = SetupParser("move forward 2");
             AST exp = MoveCommand(2, "forward");
@@ -46,7 +46,7 @@ namespace Chat.Tests
         }
 
         [Test]
-        public void AstListenerMoveForward1StepsTest()
+        public void Test_AstListener_MoveForward1Steps()
         {
             AST sut = SetupParser("move forward 1");
             AST exp = MoveCommand(1, "forward");
@@ -55,7 +55,7 @@ namespace Chat.Tests
         }
 
         [Test]
-        public void AstListenerMoveForwardWithoutEnteringStepsTest()
+        public void Test_AstListener_MoveForwardWithoutEnteringSteps()
         {
             AST sut = SetupParser("move forward");
             AST exp = MoveCommand(1, "forward"); // if no steps entered always 1 step 
@@ -64,7 +64,7 @@ namespace Chat.Tests
         }
 
         [Test]
-        public void AstListenerMoveBackward2StepsTest()
+        public void Test_AstListener_MoveBackward2Steps()
         {
             AST sut = SetupParser("move backward 2");
             AST exp = MoveCommand(2, "backward");
@@ -73,7 +73,7 @@ namespace Chat.Tests
         }
 
         [Test]
-        public void AstListenerMoveBackward1StepsTest()
+        public void Test_AstListener_MoveBackward1Steps()
         {
             AST sut = SetupParser("move backward 1");
             AST exp = MoveCommand(1, "backward");
@@ -82,7 +82,7 @@ namespace Chat.Tests
         }
 
         [Test]
-        public void AstListenerMoveBackwardWithoutEnteringStepsTest()
+        public void Test_AstListener_MoveBackwardWithoutEnteringSteps()
         {
             AST sut = SetupParser("move backward");
             AST exp = MoveCommand(1, "backward"); // if no steps entered always 1 step 
@@ -91,7 +91,7 @@ namespace Chat.Tests
         }
 
         [Test]
-        public void AstListenerMoveLeft2StepsTest()
+        public void Test_AstListener_MoveLeft2Steps()
         {
             AST sut = SetupParser("move left 2");
             AST exp = MoveCommand(2, "left");
@@ -100,7 +100,7 @@ namespace Chat.Tests
         }
 
         [Test]
-        public void AstListenerMoveLeft1StepsTest()
+        public void Test_AstListener_MoveLeft1Steps()
         {
             AST sut = SetupParser("move left 1");
             AST exp = MoveCommand(1, "left");
@@ -109,7 +109,7 @@ namespace Chat.Tests
         }
 
         [Test]
-        public void AstListenerMoveLeftWithoutEnteringStepsTest()
+        public void Test_AstListener_MoveLeftWithoutEnteringSteps()
         {
             AST sut = SetupParser("move left");
             AST exp = MoveCommand(1, "left"); // if no steps entered always 1 step 
@@ -118,7 +118,7 @@ namespace Chat.Tests
         }
 
         [Test]
-        public void AstListenerMoveRight2StepsTest()
+        public void Test_AstListener_MoveRight2Steps()
         {
             AST sut = SetupParser("move right 2");
             AST exp = MoveCommand(2, "right");
@@ -127,7 +127,7 @@ namespace Chat.Tests
         }
 
         [Test]
-        public void AstListenerMoveRight1StepsTest()
+        public void Test_AstListener_MoveRight1Steps()
         {
             AST sut = SetupParser("move right 1");
             AST exp = MoveCommand(1, "right");
@@ -136,7 +136,7 @@ namespace Chat.Tests
         }
 
         [Test]
-        public void AstListenerMoveRightWithoutEnteringStepsTest()
+        public void Test_AstListener_MoveRightWithoutEnteringSteps()
         {
             AST sut = SetupParser("move right");
             AST exp = MoveCommand(1, "right"); // if no steps entered always 1 step 

@@ -3,20 +3,20 @@ using NUnit.Framework;
 namespace Player.Tests
 {
     [TestFixture]
-    public class PlayerModelTests
+    public class PlayerTests
     {
 
-        private PlayerModel movementComponent;
+        private Player movementComponent;
 
         [SetUp]
         public void Setup()
         {
-            movementComponent = new PlayerModel();
+            movementComponent = new Player();
         }
 
 
         [Test]
-        public void TestMoveRight()
+        public void Test_MoveRight_AssertsDirectionPositionsCorrectlyToTheRight()
         {
             // Arrange
             var direction_right = "right";
@@ -33,7 +33,7 @@ namespace Player.Tests
         }
 
         [Test]
-        public void TestMoveLeft()
+        public void Test_MoveLeft_AssertsDirectionPositionsCorrectlyToTheLeft()
         {
             // Arrange
             var direction_left = "left";
@@ -50,7 +50,7 @@ namespace Player.Tests
         }
 
         [Test]
-        public void TestMoveForward()
+        public void Test_MoveForward_AssertsDirectionPositionsCorrectlyToTheNorth()
         {
             // Arrange
             var direction_forward = "forward";
@@ -67,7 +67,7 @@ namespace Player.Tests
         }
 
         [Test]
-        public void TestMoveBackward()
+        public void Test_MoveBackward_AssertsDirectionPositionsCorrectlyToTheSouth()
         {
             // Arrange
             var direction_backward = "backward";
@@ -84,7 +84,7 @@ namespace Player.Tests
         }
 
         [Test]
-        public void HandleDirectionTest()
+        public void Test_HandleDirection_AssertsPositionsCorrectly()
         {
             // Arrange
             int[] newMovement = new int[2];

@@ -13,13 +13,13 @@ namespace Chat.Tests
     class EvaluatorTests
     {
         private Evaluator sut;
-        private Mock<IPlayerModel> mockedPlayerModel;
+        private Mock<IPlayer> mockedPlayerModel;
 
 
         [SetUp]
         public void Setup()
         {
-            mockedPlayerModel = new Mock<IPlayerModel>();
+            mockedPlayerModel = new Mock<IPlayer>();
             sut = new Evaluator(mockedPlayerModel.Object);
         }
 
