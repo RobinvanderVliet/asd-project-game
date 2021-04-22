@@ -76,7 +76,7 @@ namespace Creature
         /// A statemachine will decide how a creature responds to specific events.
         /// Statemachines will decide how a creature behaves in certain events.
         /// </summary>
-        private PassiveStateMachine<ICreatureStateInterface, Event> stateMachine;
+        private PassiveStateMachine<ICreatureStateInterface, Event> _stateMachine;
 
         public Monster(IWorld world, Vector2 position, double damage, double initialHealth, int visionRange)
         {
@@ -97,7 +97,7 @@ namespace Creature
         {
             if (creatureEvent.GetType() == typeof(Event))
             {
-                stateMachine.Fire((Event)creatureEvent, argument);
+                _stateMachine.Fire((Event)creatureEvent, argument);
             }
         }
 
@@ -105,7 +105,7 @@ namespace Creature
         {
             if (creatureEvent.GetType() == typeof(Event))
             {
-                stateMachine.Fire((Event)creatureEvent);
+                _stateMachine.Fire((Event)creatureEvent);
             }
         }
 
@@ -191,8 +191,8 @@ namespace Creature
 
             builder.WithInitialState(wanderState);
 
-            stateMachine = builder.Build().CreatePassiveStateMachine();
-            stateMachine.Start();
+            _stateMachine = builder.Build().CreatePassiveStateMachine();
+            _stateMachine.Start();
         }
 
         public void StartStateMachine(RuleSet ruleSet)
