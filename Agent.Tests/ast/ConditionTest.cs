@@ -22,7 +22,7 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void GetNodeType()
+        public void Test_GetNodeType_CorrectOutput()
         {
             //Arrange
             //Act
@@ -38,7 +38,7 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void AddWhenClauseToChild()
+        public void Test_AddChild_When()
         {
             //Arrange
             var whenclause = new When();
@@ -58,7 +58,7 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void AddOtherwiseClauseToChild()
+        public void Test_AddChild_Otherwise()
         {
             //Arrange
             var otherwiseClause = new Otherwise();
@@ -70,7 +70,24 @@ namespace Agent.Tests.ast
             //Assert
             Assert.AreEqual("Otherwise", result);
         }
-        
+        /*
+         * AddOtherwiseClauseToChild()
+         *
+         * Test if the node is added to configuration
+        */
+        [Test]
+        public void Test_AddChild_Node()
+        {
+            //Arrange
+            var node = new Node();
+            condition.AddChild(node);
+
+            //Act
+            var result = ( condition.GetChildren()[0]).GetNodeType();
+
+            //Assert
+            Assert.AreEqual(result, "Node");
+        }
         /*
          * RemoveWhenClauseChild()
          *
@@ -78,7 +95,7 @@ namespace Agent.Tests.ast
          * @author Abdul
         */
         [Test]
-        public void RemoveWhenClauseChild()
+        public void Test_Remove_When()
         {
             //Arrange
             var whenclause = new When();
@@ -99,12 +116,32 @@ namespace Agent.Tests.ast
          * @author Abdul
         */
         [Test]
-        public void RemoveOtherWiseClauseChild()
+        public void Test_Remove_Otherwise()
         {
             //Arrange
             var otherWise = new Otherwise();
             condition.AddChild(otherWise);
             condition.RemoveChild(otherWise);
+
+            //Act
+            var result = condition.GetChildren().Count == 0;
+
+            //Assert
+            Assert.True(result);
+        }
+        
+        /*
+          * RemoveOtherWiseClauseChild()
+          *
+          * Test if node is deleted from condition
+         */
+        [Test]
+        public void Test_Remove_Node()
+        {
+            //Arrange
+            var node = new Node();
+            condition.AddChild(node);
+            condition.RemoveChild(node);
 
             //Act
             var result = condition.GetChildren().Count == 0;

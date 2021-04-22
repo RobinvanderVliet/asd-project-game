@@ -23,7 +23,7 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void GetNodeType()
+        public void Test_GetNodeType_CorrectOutput()
         {
             //Arrange
             //Act
@@ -39,7 +39,7 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void AddSubjectToChild()
+        public void Test_AddChild_AddSubjectChild()
         {
             //Arrange
             Subject subject = new Subject("");
@@ -59,7 +59,7 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void AddItemToChild()
+        public void Test_AddChild_AddItemChild()
         {
             //Arrange
             var item = new Item("");
@@ -70,6 +70,25 @@ namespace Agent.Tests.ast
 
             //Assert
             Assert.AreEqual("Item", result);
+        }
+        
+        /*
+         * AddItemToChild()
+         *
+         * Test if the item is added to ActionReference
+        */
+        [Test]
+        public void Test_AddChild_AddNodeChild()
+        {
+            //Arrange
+            var node = new Node();
+            actionReference.AddChild(node);
+
+            //Act
+            var result = (actionReference.GetChildren()[0])?.GetNodeType();
+
+            //Assert
+            Assert.AreEqual("Node", result);
         }
     }
 }
