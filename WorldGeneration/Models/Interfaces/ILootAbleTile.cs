@@ -3,6 +3,6 @@
     public interface ILootAbleTile : ITile
     {
         int GenerateLoot();
-        int LootItem(int item);
+        void LootItem(int item);
     }
 }

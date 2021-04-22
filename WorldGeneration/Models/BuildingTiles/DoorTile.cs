@@ -10,7 +10,7 @@ namespace WorldGeneration.Models.BuildingTiles
             IsAccessible = true;
         }
 
-        public override string DrawBuilding()
+        public override void DrawBuilding()
         {
             throw new System.NotImplementedException();
         }

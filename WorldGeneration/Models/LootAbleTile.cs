@@ -6,6 +6,6 @@ namespace WorldGeneration.Models
     {
         public abstract int GenerateLoot();
 
-        public abstract int LootItem(int item);
+        public abstract void LootItem(int item);
     }
 }

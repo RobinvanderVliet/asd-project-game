@@ -13,7 +13,7 @@
             throw new System.NotImplementedException();
         }
 
-        public override int LootItem(int item)
+        public override void LootItem(int item)
         {
             throw new System.NotImplementedException();
         }

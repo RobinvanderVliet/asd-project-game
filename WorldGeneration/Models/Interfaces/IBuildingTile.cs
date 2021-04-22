@@ -2,6 +2,6 @@
 {
     public interface IBuildingTile : ITile
     {
-        string DrawBuilding();
+        void DrawBuilding();
     }
 }
