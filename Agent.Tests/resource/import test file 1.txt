@@ -1,6 +1,0 @@
-combat 
-    when player nearby player then attack 
-combat 
-    when player nearby player then attack 
-combat 
-    when player nearby player then attack 

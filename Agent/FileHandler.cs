@@ -13,18 +13,23 @@ namespace Agent
         {
             try
             {
-                // if (Path.GetExtension(filepath) != ".txt" || Path.GetExtension(filepath) != ".cfg")
-                // {
-                //     throw new FileException("File given is not of the correct file type");
-                // }
-
-                using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
+                if (Path.GetExtension(filepath) == ".txt" || Path.GetExtension(filepath) == ".cfg")
                 {
-                    using (StreamReader reader = new StreamReader(fileStream))
+                    using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
                     {
-                        string fileData = reader.ReadToEnd();
-                        return fileData;
-                    };
+                        using (StreamReader reader = new StreamReader(fileStream))
+                        {
+                            string fileData = reader.ReadToEnd();
+
+                            reader.Close();
+
+                            return fileData;
+                        };
+                    }
+                }
+                else 
+                {
+                    throw new FileException("File given is not of the correct file type");
                 }
             }
             catch (FileException)
@@ -38,7 +43,8 @@ namespace Agent
         {
             //TODO change file name to selected by user
             string tmpFileName = "agentFile.cfg";
-            string safeFileLocation = Path.Combine(Environment.CurrentDirectory, @"resource\", tmpFileName);
+            string safeFileLocation = String.Format(Path.GetFullPath(Path.Combine
+                        (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\" + tmpFileName;
 
             try
             {
@@ -52,7 +58,6 @@ namespace Agent
                     };   
                 };
             }
-            //TODO change to work with exception handler
             catch (FileException)
             {
                 throw;
