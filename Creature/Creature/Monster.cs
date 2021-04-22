@@ -1,6 +1,7 @@
 ﻿using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
 using Creature.Consumable;
+using Creature.Creature;
 using Creature.Pathfinder;
 using Creature.World;
 using System;
@@ -44,7 +45,7 @@ namespace Creature
         /// Player that is being interacted with.
         /// Monsters can follow, attack, spot a player, etc.
         /// </summary>
-        private IPlayer _player;
+        private ICreature _player;
 
         /// <summary>
         /// All events that this creature is capable of responding to.
@@ -111,32 +112,6 @@ namespace Creature
             }
         }
 
-        private void StartStateMachine()
-        {
-            var builder = new StateMachineDefinitionBuilder<State, Event>();
-
-            // Wandering
-            builder.In(State.FOLLOW_PLAYER).On(Event.LOST_PLAYER).Goto(State.WANDERING);
-
-            // Follow player
-            builder.In(State.WANDERING).On(Event.SPOTTED_PLAYER).Goto(State.FOLLOW_PLAYER).Execute<IPlayer>(OnFollowPlayer);
-            builder.In(State.USE_CONSUMABLE).On(Event.REGAINED_HEALTH_PLAYER_OUT_OF_RANGE).Goto(State.FOLLOW_PLAYER).Execute<IPlayer>(OnFollowPlayer);
-            builder.In(State.ATTACK_PLAYER).On(Event.PLAYER_OUT_OF_RANGE).Goto(State.FOLLOW_PLAYER).Execute<IPlayer>(OnFollowPlayer);
-
-            // Attack player
-            builder.In(State.FOLLOW_PLAYER).On(Event.PLAYER_IN_RANGE).Goto(State.ATTACK_PLAYER).Execute<IPlayer>(OnAttackPlayer);
-            builder.In(State.USE_CONSUMABLE).On(Event.REGAINED_HEALTH_PLAYER_IN_RANGE).Goto(State.ATTACK_PLAYER).Execute<IPlayer>(OnAttackPlayer);
-
-            // Use potion
-            builder.In(State.ATTACK_PLAYER).On(Event.ALMOST_DEAD).Goto(State.USE_CONSUMABLE).Execute<IConsumable>(OnUseConsumable);
-            builder.In(State.FOLLOW_PLAYER).On(Event.ALMOST_DEAD).Goto(State.USE_CONSUMABLE).Execute<IConsumable>(OnUseConsumable);
-
-            builder.WithInitialState(State.WANDERING);
-
-            stateMachine = builder.Build().CreatePassiveStateMachine();
-            stateMachine.Start();
-        }
-
         public void Do(Stack<Node> path)
         {
             if (_following)
@@ -160,7 +135,7 @@ namespace Creature
             }
         }
 
-        private void OnFollowPlayer(IPlayer player)
+        private void OnFollowPlayer(ICreature player)
         {
             _following = true;
             _player = player;
@@ -171,7 +146,7 @@ namespace Creature
             _health += consumable.Amount;
         }
 
-        private void OnAttackPlayer(IPlayer player)
+        private void OnAttackPlayer(ICreature player)
         {
             player.ApplyDamage(_damage);
         }
@@ -190,6 +165,37 @@ namespace Creature
 
             if (_health >= _maxHealth)
                 _health = _maxHealth;
+        }
+
+        public void StartStateMachine()
+        {
+            var builder = new StateMachineDefinitionBuilder<State, Event>();
+
+            // Wandering
+            builder.In(State.FOLLOW_PLAYER).On(Event.LOST_PLAYER).Goto(State.WANDERING);
+
+            // Follow player
+            builder.In(State.WANDERING).On(Event.SPOTTED_PLAYER).Goto(State.FOLLOW_PLAYER).Execute<ICreature>(OnFollowPlayer);
+            builder.In(State.USE_CONSUMABLE).On(Event.REGAINED_HEALTH_PLAYER_OUT_OF_RANGE).Goto(State.FOLLOW_PLAYER).Execute<ICreature>(OnFollowPlayer);
+            builder.In(State.ATTACK_PLAYER).On(Event.PLAYER_OUT_OF_RANGE).Goto(State.FOLLOW_PLAYER).Execute<ICreature>(OnFollowPlayer);
+
+            // Attack player
+            builder.In(State.FOLLOW_PLAYER).On(Event.PLAYER_IN_RANGE).Goto(State.ATTACK_PLAYER).Execute<ICreature>(OnAttackPlayer);
+            builder.In(State.USE_CONSUMABLE).On(Event.REGAINED_HEALTH_PLAYER_IN_RANGE).Goto(State.ATTACK_PLAYER).Execute<ICreature>(OnAttackPlayer);
+
+            // Use potion
+            builder.In(State.ATTACK_PLAYER).On(Event.ALMOST_DEAD).Goto(State.USE_CONSUMABLE).Execute<IConsumable>(OnUseConsumable);
+            builder.In(State.FOLLOW_PLAYER).On(Event.ALMOST_DEAD).Goto(State.USE_CONSUMABLE).Execute<IConsumable>(OnUseConsumable);
+
+            builder.WithInitialState(State.WANDERING);
+
+            stateMachine = builder.Build().CreatePassiveStateMachine();
+            stateMachine.Start();
+        }
+
+        public void StartStateMachine(RuleSet ruleSet)
+        {
+            throw new NotImplementedException();
         }
     }
 }
