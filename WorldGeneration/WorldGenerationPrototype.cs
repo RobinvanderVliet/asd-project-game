@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WorldGeneration
 {
@@ -22,7 +23,7 @@ namespace WorldGeneration
             noise.SetFrequency(frequency);
         }
         
-        public void generateThreeWorldsWithDifferentFrequenceButTheSameSeed (int seed){
+        public void GenerateThreeWorldsWithDifferentFrequencyButTheSameSeed (int seed){
             noise.SetSeed(seed);
             SetNoiseFrequency (0.9f);
             Console.WriteLine(PrototypeWorldGeneration());
@@ -32,31 +33,31 @@ namespace WorldGeneration
             Console.WriteLine(PrototypeWorldGeneration());
         }
 
-        public String PrototypeWorldGeneration()
+        public string PrototypeWorldGeneration()
         {
-            String result = "";
-            List<String> datamap = GenerateChunk();
-            for (int x = 0; x < datamap.Count; x++)
+            var result = "";
+            var datamap = GenerateChunk();
+            foreach (var chunk in datamap)
             {
-                result += (datamap[x]);
+                result += chunk;
             }
             return result;
         }
 
-        private List<String> GenerateChunk()
+        private IEnumerable<string> GenerateChunk()
         {
             // Create an empty result array.
-            List<String> result = new List<string>();
+            IEnumerable<string> result = new List<string>();
             
             // Set number of rows and columns to generate. In order to test the prototype, this is simplified to a single number.
-            int  number = 10;
+            const int number = 10;
 
             // Gather noise data
-            float[,] noiseData = new float[number,number];
+            var noiseData = new float[number,number];
 
-            for (int y = 0; y < number; y++)
+            for (var y = 0; y < number; y++)
             {
-                for (int x = 0; x < number; x++)
+                for (var x = 0; x < number; x++)
                 {
                     noiseData[x,y] = noise.GetNoise(x, y);
                     if ((int) Math.Floor(noiseData[x, y] * 10) > -1)
