@@ -5,7 +5,7 @@ namespace Chat.antlr.ast
 {
     public class Direction : ASTNode, IEquatable<Direction>
     {
-        private string value;
+        public string value;
         
         public Direction(string value)
         {

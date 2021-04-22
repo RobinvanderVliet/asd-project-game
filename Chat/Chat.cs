@@ -1,6 +1,7 @@
 ﻿using System;
 using Chat.antlr;
 using Chat.exception;
+using Player;
 
 namespace Chat
 {
@@ -10,22 +11,24 @@ namespace Chat
         {
 
         }
-        public void HandleCommands()
+        public void HandleCommands(PlayerModel player)
         {
-            SendChat(GetCommand());
+            SendChat(GetCommand(), player);
         }
 
-        private static void SendChat(string commando)
+        private static void SendChat(string commando, PlayerModel player)
         {
             try
             {
                 Pipeline pipeline = new Pipeline();
                 pipeline.ParseCommand(commando);
+                pipeline.transform(player);
             }
             catch (CommandSyntaxException e)
             {
                 System.Console.WriteLine(e.Message);
             }
+
 
 
         }

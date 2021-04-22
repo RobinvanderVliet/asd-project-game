@@ -6,6 +6,7 @@ namespace Player
     {
 
         private int[] newPosition = new int[2];
+        private int[] currentposition = { 26, 11 };
         //line above is temporary and shows the new position of a player,
         //assuming it will be defined like that elsewhere. for the sake of NUnit
 
@@ -15,13 +16,6 @@ namespace Player
         {
 
         }
-        public void Test()
-        {
-            var command = Console.ReadLine();
-            HandleDirection(GetDirection(command), GetSteps(command));
-        }
-        // above is a temporary method, instead of calling test from the main,
-        // handleDirection should be called with direction & steps from elsewhere
 
         public void HandleDirection(String direction, int steps)
         {
@@ -63,45 +57,17 @@ namespace Player
             // getPosition() should be replaced by another method that gets the coordinates of the player
             for (int i = 0; i<=1; i++)
             {
-                newPlayerPosition[i] = GetPosition()[i] + newMovement[i];
+                newPlayerPosition[i] = currentposition[i] + newMovement[i];
             }
 
             return newPlayerPosition;
         }
 
         // !!! METHODS BELOW ARE TEMPORARY, PROTOTYPE ONLY !!!
-        private String GetCommand(String command, int directionOrSteps)
-        {
-            // splits i.e. "right 1" into "right" and "1"
-            string[] substr = command.Split(' ');
-            switch (directionOrSteps)
-            {
-                case 0: return substr[0];
-                case 1: return substr[1];
-                default: return "";
-            }
-        }
-        private String GetDirection(String command)
-        {
-            // gets the direction from the command
-            return GetCommand(command, 0);
-        }
-        private int GetSteps(String command)
-        {
-            // gets the steps from the command
-            return Int32.Parse(GetCommand(command, 1));
-        }
-        private int[] GetPosition()
-        {
-            // gets the current position of the player
-            int[] positionRequestedPlayer = new int[2];
-            positionRequestedPlayer[0] = 26;
-            positionRequestedPlayer[1] = 11;
-            return positionRequestedPlayer;
-        }
         private void WriteCommand(int[] newPosition)
         {
             // returns the new position
+            currentposition = newPosition;
             Console.WriteLine("X: " + newPosition[0] + ". Y: " + newPosition[1]);
         }
         public int[] GetNewPosition
