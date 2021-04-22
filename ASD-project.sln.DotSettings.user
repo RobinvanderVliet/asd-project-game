@@ -1,19 +1,5 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">/Users/adam/Library/Caches/JetBrains/Rider2021.1/resharper-host/temp/Rider/vAny/CoverageData/_ASD-project.-1101338649/Snapshot/snapshot.utdcvr</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=0300b29b_002Deeea_002D44c4_002D9771_002D35aae716a7f5/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Test_CheckStatCombination_2 #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::FBCBFE02-C99B-4436-8E42-C921AE6A6BE8::net5.0::Agent.Tests.checker.TestCheckerFunctions.Test_CheckStatCombination_2&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::FBCBFE02-C99B-4436-8E42-C921AE6A6BE8::net5.0::Agent.Tests.checker.TestCheckerFunctions.Test_CheckItemAndAllowedStat_1&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=472c1ed8_002Dd60b_002D48c6_002Db0af_002D8ebd04caaafd/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Test_CheckStatCombination_2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;ProjectFile&gt;FBCBFE02-C99B-4436-8E42-C921AE6A6BE8/d:checker/f:TestCheckerFunctions.cs&lt;/ProjectFile&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c7cb5122_002D04bb_002D46f1_002Da36f_002D9355b6293fac/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Test_CheckStatCombination_2 #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::FBCBFE02-C99B-4436-8E42-C921AE6A6BE8::net5.0::Agent.Tests.checker.TestCheckerFunctions&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=da081156_002De9e9_002D4e14_002Db4da_002D90ab45139951/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="RootTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;NUnit3x::FBCBFE02-C99B-4436-8E42-C921AE6A6BE8::net5.0::Agent.Tests.checker.TestCheckerFunctions&lt;/TestId&gt;&#xD;
