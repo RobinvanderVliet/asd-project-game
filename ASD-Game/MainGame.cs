@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
+using Player;
 
 namespace ASD_project
 {
@@ -22,9 +23,10 @@ namespace ASD_project
 
                 //moet later vervangen worden
                 ChatComponent chat = new ChatComponent();
+                PlayerModel player = new PlayerModel();
                 do
                 {
-                    chat.HandleCommands(); // speler model meegeven
+                    chat.HandleCommands(player); // speler model meegeven
                 } while (true); // moet vervangen worden met variabele: isQuit 
             }
         }

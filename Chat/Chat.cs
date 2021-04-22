@@ -22,18 +22,18 @@ namespace Chat
         {
 
         }
-        public void HandleCommands()
+        public void HandleCommands(PlayerModel player)
         {
-            SendChat(GetCommand());
+            SendChat(GetCommand(), player);
         }
 
-        private static void SendChat(string commando)
+        private static void SendChat(string commando, PlayerModel player)
         {
             try
             {
                 Pipeline pipeline = new Pipeline();
                 pipeline.ParseCommand(commando);
-                pipeline.transform(new PlayerModel());
+                pipeline.transform(player);
             }
             catch (CommandSyntaxException e)
             {
