@@ -11,5 +11,26 @@ namespace Player
     {
         void HandleDirection(string direction, int steps);
         int[] SendNewPosition(int[] newMovement);
+
+        // ATTACK: 'attack';
+        // SLASH: 'slash';
+        // STRIKE: 'strike';
+        void HandleAttack();
+
+        // PICKUP: 'pickup';
+        // GET: 'get';
+        // DROP: 'drop';
+        void HandleItemAction();
+
+        // EXIT: 'exit';
+        // LEAVE: 'leave';
+        // PAUSE : 'pause';
+        // RESUME : 'resume';
+        void HandleGameAction();
+
+        // SAY: 'say';
+        // SHOUT: 'shout';
+        // REPLACE: 'replace';
+        void HandleChatAction();
     }
 }
