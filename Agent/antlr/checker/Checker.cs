@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Agent.antlr.ast;
 using Agent.antlr.ast.comparables;
+using Agent.antlr.ast.implementation;
 
 
 namespace Agent.antlr.checker
@@ -76,3 +77,4 @@ namespace Agent.antlr.checker
         }
     }
 }
+

@@ -10,7 +10,6 @@ namespace Agent.Tests.ast
     public class ComparableTest
     {
         private Comparable comparable;
-        private const string TYPE = "Comparable";
 
         [SetUp]
         public void Setup()
@@ -18,6 +17,24 @@ namespace Agent.Tests.ast
             // comparable = new 
         }
 
+
+        /*
+         * GetNodeType() of Item
+         *
+         * Test If Comparable is a comparable    
+        */
+        [Test]
+        public void Test_GetNodeTypeComparable_CorrectOutput()
+        {
+            //Arrange
+            comparable = new Comparable();
+            //Act
+            var result = comparable.GetNodeType();
+            //Assert
+            Assert.AreEqual("Comparable", result);
+        }
+        
+        
         /*
          * GetNodeType() of Item
          *
@@ -25,14 +42,14 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void GetNodeTypeOfItem()
+        public void Test_GetNodeTypeItem_CorrectOutput()
         {
             //Arrange
             comparable = new Item("");
             //Act
             var result = comparable.GetNodeType();
             //Assert
-            Assert.AreEqual(TYPE, result);
+            Assert.AreEqual("Item", result);
         }
         
         /*
@@ -42,14 +59,14 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void GetNodeTypeOfInt()
+        public void Test_GetNodeTypeInt_CorrectOutput()
         {
             //Arrange
             comparable = new Int(1);
             //Act
             var result = comparable.GetNodeType();
             //Assert
-            Assert.AreEqual(TYPE, result);
+            Assert.AreEqual("Int", result);
         }
         
         /*
@@ -59,14 +76,14 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void GetNodeTypeOfStat()
+        public void Test_GetNodeTypeStat_CorrectOutput()
         {
             //Arrange
             comparable = new Stat("");
             //Act
             var result = comparable.GetNodeType();
             //Assert
-            Assert.AreEqual(TYPE, result);
+            Assert.AreEqual("Stat", result);
         }
         
         /*
@@ -76,14 +93,14 @@ namespace Agent.Tests.ast
         * @author Abdul     
        */
         [Test]
-        public void GetNodeTypeOfSubject()
+        public void Test_GetNodeTypeSubject_CorrectOutput()
         {
             //Arrange
             comparable = new Subject("");
             //Act
             var result = comparable.GetNodeType();
             //Assert
-            Assert.AreEqual(TYPE, result);
+            Assert.AreEqual("Subject", result);
         }
     }
 }

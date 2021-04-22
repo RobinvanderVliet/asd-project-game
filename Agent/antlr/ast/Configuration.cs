@@ -16,10 +16,10 @@ namespace Agent.antlr.ast
     {
         public Configuration(){}
         
-        public Configuration(List<Node> body)
-        {
-            this.body = body;
-        }
+        // public Configuration(List<Node> body)
+        // {
+        //     this.body = body;
+        // }
 
         public override string GetNodeType()
         {

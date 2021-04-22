@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
+using Agent.Services;
 
 namespace ASD_project
 {
@@ -18,6 +19,10 @@ namespace ASD_project
             public void Run()
             {
                 Console.WriteLine("Game is gestart");
+                
+                // TODO: Remove from this method, team 2 will provide a command for it
+                AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
+                agentConfigurationService.StartConfiguration();
             }
         }
     }

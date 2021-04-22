@@ -26,7 +26,7 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void GetNodeType()
+        public void Test_GetNodeType_CorrectOutput()
         {
             //Arrange
             //Act
@@ -42,7 +42,7 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void AddChild()
+        public void Test_AddChild()
         {
             //Arrange
             Rule rule = new Rule(null,null);
@@ -62,7 +62,7 @@ namespace Agent.Tests.ast
          * @author Abdul
         */
         [Test]
-        public void RemoveChild()
+        public void Test_RemoveChild()
         {
             //Arrange
             Rule rule = new Rule(null,null);
