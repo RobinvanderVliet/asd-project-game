@@ -14,7 +14,7 @@ namespace Creature
         static void Main(string[] args)
         {
             IWorld world = new DefaultWorld(25);
-            IPlayer player = new Player(10, new Vector2(3, 2));
+            ICreature player = new Player(10, new Vector2(3, 2));
             ICreature creature = new Monster(world, new Vector2(10, 10), 2, 6, 50);
             ICreature creature2 = new Monster(world, new Vector2(20, 20), 2, 6, 50);
 
@@ -34,7 +34,7 @@ namespace Creature
             }
         }
 
-        private static void MovePlayer(IPlayer player, string input)
+        private static void MovePlayer(ICreature player, string input)
         {
             switch (input)
             {

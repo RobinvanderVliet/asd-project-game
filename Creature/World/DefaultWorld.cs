@@ -11,13 +11,13 @@ namespace Creature.World
     class DefaultWorld : IWorld
     {
         private List<ICreature> _creatures;
-        private List<IPlayer> _players;
+        private List<ICreature> _players;
         private List<List<Node>> _nodes;
         private int _size;
 
         public List<ICreature> creatures => creatures;
 
-        public List<IPlayer> players => players;
+        public List<ICreature> players => players;
 
         public int Size => _size;
 
@@ -26,7 +26,7 @@ namespace Creature.World
             _size = initialSize;
             _nodes = new List<List<Node>>();
             _creatures = new List<ICreature>();
-            _players = new List<IPlayer>();
+            _players = new List<ICreature>();
         }
 
         public void GenerateWorldNodes()
@@ -49,7 +49,7 @@ namespace Creature.World
             _creatures.Add(creature);
         }
 
-        public void SpawnPlayer(IPlayer player)
+        public void SpawnPlayer(ICreature player)
         {
             _players.Add(player);
         }
@@ -60,7 +60,7 @@ namespace Creature.World
             {
                 PathFinder pathFinder = new PathFinder(_nodes);
 
-                IPlayer player = _players[0];
+                ICreature player = _players[0];
                 if (Vector2.DistanceSquared(creature.Position, player.Position) < creature.VisionRange)
                 {
                     Stack<Node> newPath = pathFinder.FindPath(creature.Position, player.Position);
@@ -79,7 +79,7 @@ namespace Creature.World
                 for (int x = 0; x < _size; x++)
                 {
                     bool addedLine = false;
-                    IPlayer player = _players[0];
+                    ICreature player = _players[0];
                     
                     if (player.Position.X == x && player.Position.Y == y)
                     {

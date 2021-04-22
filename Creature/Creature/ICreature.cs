@@ -1,4 +1,5 @@
 ﻿using Appccelerate.StateMachine.AsyncMachine;
+using Creature.Creature;
 using Creature.Pathfinder;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,17 @@ namespace Creature
         bool IsAlive { get; set; }
         Vector2 Position { get; set; }
         int VisionRange { get; set; }
+
+        /// <summary>
+        /// Starts the defaultstate machine using the default RuleSet for this Creature.
+        /// </summary>
+        public void StartStateMachine();
+
+        /// <summary>
+        /// Starts the statemachine using a custom RuleSet.
+        /// </summary>
+        /// <param name="ruleSet">RuleSet that is used to start the statemachine</param>
+        public void StartStateMachine(RuleSet ruleSet);
 
         /// <summary>
         /// Fire events on a Creature.
