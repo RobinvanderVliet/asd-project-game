@@ -89,8 +89,6 @@ $RECYCLE.BIN/
 .idea/.idea.ASD-project/.idea/indexLayout.xml
 .idea/.idea.ASD-project/.idea/projectSettingsUpdater.xml
 .idea/.idea.ASD-project/.idea/workspace.xml
-Agent/Agent.csproj
-Agent/Agent.csproj
-Agent/Agent.csproj
-*.csproj
 ASD-project.sln.DotSettings.user
+azure-pipelines.yml
+
