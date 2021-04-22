@@ -1,199 +1,309 @@
-﻿// using System;
-// using System.Collections.Generic;
-// using System.Linq;
-// using System.Text;
-// using System.Threading.Tasks;
-// using Agent.antlr.grammar;
-// using Antlr4.Runtime;
-// using Antlr4.Runtime.Misc;
-// using Agent.antlr.ast;
-// using Agent.antlr.ast.implementation;
-// using Agent.antlr.ast.implementation.comparables;
-// using Agent.antlr.ast.comparables;
-// using Agent.antlr.ast.implementation.comparables.subjects;
-// using Action = Agent.antlr.ast.Action;
-//
-// namespace Agent.parser
-// {
-//     class ASTAgentListener : AgentConfigurationBaseListener
-//     {
-//         private AST ast;
-//         private Stack<Node> currentContainer;
-//
-//         public ASTAgentListener()
-//         {
-//             ast = new AST();
-//             currentContainer = new Stack<Node>();
-//         }
-//
-//         public AST GetAST(){ return ast; }
-//
-//         public override void EnterAction([NotNull] AgentConfigurationParser.ActionContext context)
-//         {
-//             ActionReference reference = new ActionReference();
-//             reference.action = context.STRING();
-//             currentContainer.Push(reference);
-//         }
-//
-//         public override void EnterActionBlock([NotNull] AgentConfigurationParser.ActionBlockContext context)
-//         {
-//             Action action = new Action(context.GetText());
-//             currentContainer.Peek().AddChild(action);
-//         }
-//
-//         public override void EnterActionSubject([NotNull] AgentConfigurationParser.ActionSubjectContext context)
-//         {
-//             ActionReference reference = new ActionReference();
-//             reference.action = context.action().STRING();
-//             currentContainer.Push(reference);
-//         }
-//
-//         public override void EnterComparable([NotNull] AgentConfigurationParser.ComparableContext context)
-//         {
-//             //base.EnterComparable();
-//         }
-//
-//         public override void EnterComparison([NotNull] AgentConfigurationParser.ComparisonContext context)
-//         {
-//             Comparison comparison = new Comparison();
-//             currentContainer.Push(comparison);
-//         }
-//
-//         public override void EnterCondition([NotNull] AgentConfigurationParser.ConditionContext context)
-//         {
-//             Condition condition = new Condition();
-//             currentContainer.Push(condition);
-//         }
-//
-//         public override void EnterConfiguration([NotNull] AgentConfigurationParser.ConfigurationContext context)
-//         {
-//             Configuration configuration = new Configuration();
-//             currentContainer.Push(configuration);
-//             ast.SetRoot(configuration);
-//         }
-//
-//         public override void EnterItem([NotNull] AgentConfigurationParser.ItemContext context)
-//         {
-//             Item item = new Item(context.children.Where(c => c.ToString() != null).FirstOrDefault().GetText());
-//             currentContainer.Push(item);
-//         }
-//
-//         public override void EnterItemStat([NotNull] AgentConfigurationParser.ItemStatContext context)
-//         {
-//             /*
-//             Stat stat = new Stat();
-//             stat.Name = context.stat().children.Where(c => c.GetText() != null).FirstOrDefault().GetText();
-//             currentContainer.Push(stat);
-//             */
-//         }
-//
-//         public override void EnterOtherwiseClause([NotNull] AgentConfigurationParser.OtherwiseClauseContext context)
-//         {
-//             Otherwise otherwise = new Otherwise();
-//             currentContainer.Push(otherwise);
-//         }
-//
-//         public override void EnterRule([NotNull] AgentConfigurationParser.RuleContext context)
-//         {
-//             Rule rule = new Rule();
-//             rule.SetValue = context.STRING();
-//             currentContainer.Push(rule);
-//         }
-//
-//         public override void EnterSetting([NotNull] AgentConfigurationParser.SettingContext context)
-//         {
-//             Setting node = (Setting)currentContainer.Pop();
-//             node.SettingName = context.GetText();
-//             currentContainer.Push(node);
-//         }
-//
-//         public override void EnterSettingBlock([NotNull] AgentConfigurationParser.SettingBlockContext context)
-//         {
-//             Setting block = new Setting();
-//             currentContainer.Push(block);
-//         }
-//
-//         public override void EnterStat([NotNull] AgentConfigurationParser.StatContext context)
-//         {
-//             Stat node = (Stat)currentContainer.Pop();
-//             node.Name = context.children.Where(c => c.GetText() != null).FirstOrDefault().GetText();
-//             currentContainer.Push(node);
-//         }
-//
-//         public override void EnterString([NotNull] AgentConfigurationParser.StringContext context)
-//         {
-//             base.EnterString(context);
-//         }
-//
-//         public override void EnterSubject([NotNull] AgentConfigurationParser.SubjectContext context)
-//         {
-//             String subject = context.children.Where(c => c.GetText() != null).FirstOrDefault().GetText();
-//             Subject node = CreateSubject(subject);
-//             currentContainer.Push(node);
-//         }
-//
-//         private Subject CreateSubject(string subject)
-//         {
-//             return subject switch
-//             {
-//                 "player" => new Player(),
-//                 "npc" => new NPC(),
-//                 "opponent" => new Opponent(),
-//                 "inventory" => new Inventory(),
-//                 "current" => new Current(),
-//                 "tile" => new Tile(),
-//                 _ => throw new Exception("subject is an invallid type:" + subject),
-//             };
-//         }
-//
-//         public override void EnterSubjectStat([NotNull] AgentConfigurationParser.SubjectStatContext context)
-//         {
-//             /*
-//             Stat stat = new Stat();
-//             stat.Name = context.stat().children.Where(c => c.GetText() != null).FirstOrDefault().GetText();
-//             currentContainer.Push(stat);
-//             */
-//         }
-//
-//         public override void EnterWhenClause([NotNull] AgentConfigurationParser.WhenClauseContext context)
-//         {
-//             When clause = new When();
-//             currentContainer.Push(clause);
-//         }
-//
-//         /* ################################### */
-//         /* ##             EXIT              ## */
-//         /* ################################### */
-//
-//         public override void ExitItem([NotNull] AgentConfigurationParser.ItemContext context)
-//         {
-//             Node temp = currentContainer.Pop();
-//             currentContainer.Peek().AddChild(temp);
-//         }
-//
-//         public override void ExitOtherwiseClause([NotNull] AgentConfigurationParser.OtherwiseClauseContext context)
-//         {
-//             Node temp = currentContainer.Pop();
-//             currentContainer.Peek().AddChild(temp);
-//         }
-//
-//         public override void ExitSetting([NotNull] AgentConfigurationParser.SettingContext context)
-//         {
-//             Node temp = currentContainer.Pop();
-//             currentContainer.Peek().AddChild(temp);
-//         }
-//
-//         public override void ExitStat([NotNull] AgentConfigurationParser.StatContext context)
-//         {
-//             Node temp = currentContainer.Pop();
-//             currentContainer.Peek().AddChild(temp);
-//         }
-//
-//         public override void ExitWhenClause([NotNull] AgentConfigurationParser.WhenClauseContext context)
-//         {
-//             Node temp = currentContainer.Pop();
-//             currentContainer.Peek().AddChild(temp);
-//         }
-//
-//     }
-// }
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Agent.antlr.grammar;
+using Antlr4.Runtime.Misc;
+using Agent.antlr.ast.implementation;
+using Agent.antlr.ast;
+using Action = Agent.antlr.ast.Action;
+using Agent.antlr.ast.comparables;
+using Agent.antlr.ast.comparables.subjects;
+
+namespace Agent.parser
+{
+    public class ASTAgentListener : AgentConfigurationBaseListener
+    {
+        private AST ast;
+        private Stack<Node> currentContainer;
+        private bool itemStat = false;
+
+        public ASTAgentListener()
+        {
+            ast = new AST();
+            currentContainer = new Stack<Node>();
+        }
+
+        public AST GetAST() { return ast; }
+
+        public override void EnterAction([NotNull] AgentConfigurationParser.ActionContext context)
+        {
+            if (currentContainer.Peek() is When || currentContainer.Peek() is Otherwise)
+            {
+                ActionReference reference = new ActionReference(context.STRING().GetText());
+                currentContainer.Push(reference);
+            }
+        }
+
+        public override void EnterActionBlock([NotNull] AgentConfigurationParser.ActionBlockContext context)
+        {
+            Action action = new Action(context.children.FirstOrDefault().GetText());
+            currentContainer.Push(action);
+        }
+
+        public override void EnterActionSubject([NotNull] AgentConfigurationParser.ActionSubjectContext context)
+        {
+            ActionReference reference = new ActionReference(context.action().STRING().GetText());
+            Console.WriteLine("");
+            currentContainer.Push(reference);
+        }
+
+        public override void EnterComparison([NotNull] AgentConfigurationParser.ComparisonContext context)
+        {
+            Comparison comparison = new Comparison(context.children.Where(c => c.GetText() != null).FirstOrDefault().GetText());
+            currentContainer.Push(comparison);
+        }
+
+        public override void EnterCondition([NotNull] AgentConfigurationParser.ConditionContext context)
+        {
+            Condition condition = new Condition();
+            currentContainer.Push(condition);
+        }
+
+        public override void EnterConfiguration([NotNull] AgentConfigurationParser.ConfigurationContext context)
+        {
+            Configuration configuration = new Configuration();
+            currentContainer.Push(configuration);
+        }
+
+        public override void EnterItem([NotNull] AgentConfigurationParser.ItemContext context)
+        {
+            String temp = context.children.FirstOrDefault().GetText();
+            Item item = new Item(temp);
+            currentContainer.Push(item);
+        }
+
+        public override void EnterItemStat([NotNull] AgentConfigurationParser.ItemStatContext context)
+        {
+            itemStat = true;
+        }
+
+        public override void EnterOtherwiseClause([NotNull] AgentConfigurationParser.OtherwiseClauseContext context)
+        {
+            Otherwise otherwise = new Otherwise();
+            currentContainer.Push(otherwise);
+        }
+
+        public override void EnterRule([NotNull] AgentConfigurationParser.RuleContext context)
+        {
+            Rule rule = new Rule(context.children.ElementAt(0).GetText(), context.children.ElementAt(2).GetText());
+            currentContainer.Push(rule);
+        }
+
+        public override void EnterSettingBlock([NotNull] AgentConfigurationParser.SettingBlockContext context)
+        {
+            Setting block = new Setting(context.setting().children.Where(c => c.GetText() != null).FirstOrDefault().GetText());
+            currentContainer.Push(block);
+        }
+
+        public override void EnterStat([NotNull] AgentConfigurationParser.StatContext context)
+        {
+            Stat stat = new Stat(context.children.Where(c => c.GetText() != null).FirstOrDefault().GetText());
+            currentContainer.Push(stat);
+        }
+
+        public override void EnterSubject([NotNull] AgentConfigurationParser.SubjectContext context)
+        {
+            Subject subject = (Subject)context.children.Where(c => c.GetText() != null).FirstOrDefault();
+            currentContainer.Push(subject);
+        }
+
+
+        public override void EnterSubjectStat([NotNull] AgentConfigurationParser.SubjectStatContext context)
+        {
+            base.EnterSubjectStat(context);
+        }
+
+        public override void EnterWhenClause([NotNull] AgentConfigurationParser.WhenClauseContext context)
+        {
+            When clause = new When();
+            currentContainer.Push(clause);
+        }
+
+        public override void ExitItem([NotNull] AgentConfigurationParser.ItemContext context)
+        {
+            if (!itemStat)
+            {
+                Node temp = currentContainer.Pop();
+                currentContainer.Peek().AddChild(temp);
+            }
+        }
+
+        public override void ExitOtherwiseClause([NotNull] AgentConfigurationParser.OtherwiseClauseContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void ExitStat([NotNull] AgentConfigurationParser.StatContext context)
+        {
+            if (!itemStat) 
+            { 
+                Node temp = currentContainer.Pop();
+                currentContainer.Peek().AddChild(temp);
+            }
+        }
+
+        public override void ExitWhenClause([NotNull] AgentConfigurationParser.WhenClauseContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void ExitConfiguration([NotNull] AgentConfigurationParser.ConfigurationContext context)
+        {
+            Node temp = currentContainer.Pop();
+            ast.SetRoot((Configuration)temp);
+        }
+
+        public override void ExitRule([NotNull] AgentConfigurationParser.RuleContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void ExitSettingBlock([NotNull] AgentConfigurationParser.SettingBlockContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void ExitActionBlock([NotNull] AgentConfigurationParser.ActionBlockContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void ExitCondition([NotNull] AgentConfigurationParser.ConditionContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void ExitComparison([NotNull] AgentConfigurationParser.ComparisonContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void ExitAction([NotNull] AgentConfigurationParser.ActionContext context)
+        {
+            if (currentContainer.Peek() is ActionReference && ((ActionReference)currentContainer.Peek()).Name != "use") 
+            {
+                Node temp = currentContainer.Pop();
+                currentContainer.Peek().AddChild(temp);
+            }
+        }
+
+        public override void ExitActionSubject([NotNull] AgentConfigurationParser.ActionSubjectContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void ExitItemStat([NotNull] AgentConfigurationParser.ItemStatContext context)
+        {
+            //merge item + state
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+
+            //push itemStat in When
+            temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+
+            itemStat = false;
+        }
+
+        public override void ExitSubjectStat([NotNull] AgentConfigurationParser.SubjectStatContext context)
+        {
+            base.ExitSubjectStat(context);
+        }
+
+        public override void ExitSubject([NotNull] AgentConfigurationParser.SubjectContext context)
+        {
+            base.ExitSubject(context);
+        }
+
+
+        public override void EnterNpc([NotNull] AgentConfigurationParser.NpcContext context)
+        {
+            NPC npc = new NPC(context.NPC().GetText());
+            currentContainer.Push(npc);
+        }
+
+        public override void ExitNpc([NotNull] AgentConfigurationParser.NpcContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void EnterCurrent([NotNull] AgentConfigurationParser.CurrentContext context)
+        {
+            Current current = new Current(context.CURRENT().GetText());
+            currentContainer.Push(current);
+        }
+
+        public override void ExitCurrent([NotNull] AgentConfigurationParser.CurrentContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void EnterOpponent([NotNull] AgentConfigurationParser.OpponentContext context)
+        {
+            Opponent opponent = new Opponent(context.OPPONENT().GetText());
+            currentContainer.Push(opponent);
+        }
+
+        public override void ExitOpponent([NotNull] AgentConfigurationParser.OpponentContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void EnterTile([NotNull] AgentConfigurationParser.TileContext context)
+        {
+            Tile tile = new Tile(context.STRING().GetText());
+            currentContainer.Push(tile);
+        }
+
+        public override void ExitTile([NotNull] AgentConfigurationParser.TileContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void EnterInventory([NotNull] AgentConfigurationParser.InventoryContext context)
+        {
+            Inventory inventory = new Inventory(context.INVENTORY().GetText());
+            currentContainer.Push(inventory);
+        }
+
+        public override void ExitInventory([NotNull] AgentConfigurationParser.InventoryContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void EnterPlayer([NotNull] AgentConfigurationParser.PlayerContext context)
+        {
+            Player player = new Player(context.PLAYER().GetText());
+            currentContainer.Push(player);
+        }
+
+        public override void ExitPlayer([NotNull] AgentConfigurationParser.PlayerContext context)
+        {
+            Node temp = currentContainer.Pop();
+            currentContainer.Peek().AddChild(temp);
+        }
+
+        public override void EnterComparable([NotNull] AgentConfigurationParser.ComparableContext context)
+        {
+            int x = 0;
+            String value = context.children.FirstOrDefault().GetText();
+            if (int.TryParse(value, out x)) {
+                Int node = new Int(int.Parse(context.children.FirstOrDefault().GetText()));
+                currentContainer.Peek().AddChild(node);
+            }
+        }
+    }
+}

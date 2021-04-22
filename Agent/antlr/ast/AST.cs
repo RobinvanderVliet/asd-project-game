@@ -1,5 +1,6 @@
-﻿
-namespace Agent.antlr.ast
+﻿using System;
+
+namespace Agent.antlr.ast.implementation
 {
     /*
     AIM SD ASD 2020/2021 S2 project
@@ -22,6 +23,11 @@ namespace Agent.antlr.ast
         public AST(Configuration root)
         {
             this.root = root;
+        }
+
+        public void SetRoot(Configuration configuration)
+        {
+            root = configuration;
         }
     }
 }
