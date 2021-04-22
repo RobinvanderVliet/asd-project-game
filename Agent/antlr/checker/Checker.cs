@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using Agent.antlr.ast;
+using Agent.antlr.ast.comparables;
 using Agent.antlr.ast.implementation;
-using Agent.antlr.ast.implementation.comparables;
-
 
 namespace Agent.antlr.checker
 {
@@ -20,7 +21,7 @@ namespace Agent.antlr.checker
             // CheckStatCombination(symboltable);
         }
 
-        private void CheckStatCombination(ArrayList nodes)
+        private void CheckStatCombination(List<Node> nodes)
         {
             foreach (Node node in nodes)
             {

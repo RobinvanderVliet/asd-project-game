@@ -1,8 +1,7 @@
 using System;
+using Agent.antlr.ast.comparables;
 using Agent.antlr.ast.implementation;
-using Agent.antlr.ast.implementation.comparables;
 using Agent.antlr.checker;
-using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Moq;
 using NUnit.Framework;
 
@@ -18,7 +17,6 @@ namespace Agent.Tests.checker
             Mock<AST> ast = new Mock<AST>();
             sut = new Checker(ast.Object);
         }
-
 
         [Test]
         public void Test_CheckItemAndAllowedStat_1()
