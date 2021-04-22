@@ -45,11 +45,15 @@ namespace Agent.Tests
         [Test]
         public void ExportFileTest()
         {
-            //var expected = "combat when player nearby player then attack combat";
+            var expected = "combat when player nearby player then attack combat";
 
-            //sut.ExportFile("combat when player nearby player then attack combat");
+            sut.ExportFile("combat when player nearby player then attack combat");
 
-            //Assert.Equals(expected, actual);
+            var fileLocation = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\agentFile.cfg";
+
+            var actual = File.ReadAllText(fileLocation);
+
+            Assert.AreEqual(expected, actual);
         }
     }
 }

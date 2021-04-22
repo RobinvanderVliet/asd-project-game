@@ -89,7 +89,10 @@ $RECYCLE.BIN/
 .idea/.idea.ASD-project/.idea/indexLayout.xml
 .idea/.idea.ASD-project/.idea/projectSettingsUpdater.xml
 .idea/.idea.ASD-project/.idea/workspace.xml
-Agent/Agent.csproj
-Agent/Agent.csproj
-Agent/Agent.csproj
-*.csproj
+ASD-project.sln.DotSettings.user
+
+*.coverage
+# End of https://www.toptal.com/developers/gitignore/api/macos,windows,dotnetcore,linux
+
+#.idea folder ignore
+.idea/

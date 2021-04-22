@@ -1,69 +1,78 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Agent.antlr.ast;
 using Agent.antlr.ast.comparables;
 using Agent.antlr.ast.implementation;
+
 
 namespace Agent.antlr.checker
 {
     public class Checker
     {
+        private List<Node> symboltable;
 
-        // TODO: Je loopt door een list met nodes om een list met nodes te vullen?
-        // private List<Node> symboltable;
-        // public Checker(AST ast)
-        // {
-        //     foreach (Node node in ast.root.GetChildren())
-        //     {
-        //         symboltable.Add(node);
-        //     }
-        //     // Commented for working Test ( This can be done in the Pipeline )
-        //     // CheckStatCombination(symboltable);
-        // }
-
-        // TODO: Unit-test
-        public virtual void Check(AST ast)
+        public Checker(AST ast)
         {
-            CheckStatCombination(ast.root.GetChildren());
+            foreach (Node node in ast.root.GetChildren())
+            {
+                symboltable.Add(node);
+            }
+            //Entry of checkStatCombination in Pipeline
         }
-
-        private void CheckStatCombination(List<Node> nodes)
+        
+        public void CheckStatCombination(List<Node> nodes)
         {
             foreach (Node node in nodes)
             {
                 if (node.GetChildren().Count > 0)
                 {
                     CheckStatCombination(node.GetChildren());
-                }
-                else if (node.GetNodeType() == "When")
-                {
-                    var comparable = (Comparable)node.GetChildren()[0];
                     
-                    if (comparable.Equals("Item"))
+                }
+                
+                if (node is When)
+                {
+                    var comparable = (Comparable) node.GetChildren().FirstOrDefault();
+
+                    if (comparable is Item)
                     {
-                        if (!CheckItemAndAllowedStat("Potion", "Health", (Item) comparable))
-                        {                              
-                            Console.Write(((Item)comparable).Name + " can not have " + ((Stat)comparable.GetChildren()[0]).Name + " as Stat");
-                        }
-                        else if (!CheckItemAndAllowedStat("Weapon", "Power", (Item) comparable))
+                        if (!CheckItemAndAllowedStat((Item) comparable))
                         {
-                            Console.Write(((Item)comparable).Name + " can not have " + ((Stat)comparable.GetChildren()[0]).Name + " as Stat");
+                            comparable.SetError("There is an invalid combination of item and stat");
                         }
                     }
                 }
+                if (node is Stat)
+                {
+                    
+                }
             }
         }
-        public Boolean CheckItemAndAllowedStat(String item, String allowedStat, Item comparable)
+
+        public Boolean CheckItemAndAllowedStat(Item comparable)
         {
             bool itemAllowed = false;
-            Stat stat = (Stat) comparable.GetChildren()[0];
             
-            if (comparable.Name == item && stat.Name == allowedStat)
+            string[][] allowedItemStatsCombinations =
             {
-                itemAllowed = true;
-            }
+                //              ITEM     STAT
+                new string[] {"Weapon", "Power"},
+                new string[] {"Potion", "Health"},
+            };
 
+            String itemName = comparable.Name;
+            Stat stat = (Stat) comparable.GetChildren()[0];
+            String statName = stat.Name;
+
+
+            foreach (string[] s in allowedItemStatsCombinations)
+            {
+                if (itemName != s[0] || statName != s[1]) continue;
+                itemAllowed = true;
+                if (itemAllowed) break;
+
+            }
             return itemAllowed;
         }
     }

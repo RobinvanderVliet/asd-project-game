@@ -28,7 +28,7 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void GetNodeType()
+        public void Test_GetNodeType_CorrectOutput()
         {
             //Arrange
             //Act
@@ -44,7 +44,7 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void AddChild()
+        public void Test_AddChild_Action()
         {
             //Arrange
             Action action = new Action("Action");
@@ -52,11 +52,50 @@ namespace Agent.Tests.ast
 
             //Act
 
-            var result = ((Action) _setting.GetChildren()[0])?.GetNodeType();
+            var result = ( _setting.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual(result, "Action");
         }
 
-          }
+        /*
+         * AddChild()
+         *
+         * Test if the condition is added to Setting   
+        */
+        [Test]
+        public void Test_AddChild_Condition()
+        {
+            //Arrange
+            var condition = new Condition();
+            _setting.AddChild(condition);
+
+            //Act
+
+            var result = ( _setting.GetChildren()[0]).GetNodeType();
+
+            //Assert
+            Assert.AreEqual("Condition", result);
+        }
+        
+        /*
+         * AddChild()
+         *
+         * Test if the node is added to Setting
+        */
+        [Test]
+        public void Test_AddChild_Node()
+        {
+            //Arrange
+            var node = new Node();
+            _setting.AddChild(node);
+
+            //Act
+
+            var result = ( _setting.GetChildren()[0]).GetNodeType();
+
+            //Assert
+            Assert.AreEqual( "Node", result);
+        }
+    }
 }

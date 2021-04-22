@@ -1,14 +1,40 @@
-﻿using Agent.antlr.ast;
+﻿using System;
+using Agent.antlr.ast;
 using Agent.antlr.ast.comparables;
 using NUnit.Framework;
 
 namespace Agent.Tests.ast
 {
+    
     [TestFixture]
     public class ComparableTest
     {
         private Comparable comparable;
 
+        [SetUp]
+        public void Setup()
+        {
+            // comparable = new 
+        }
+
+
+        /*
+         * GetNodeType() of Item
+         *
+         * Test If Comparable is a comparable    
+        */
+        [Test]
+        public void Test_GetNodeTypeComparable_CorrectOutput()
+        {
+            //Arrange
+            comparable = new Comparable();
+            //Act
+            var result = comparable.GetNodeType();
+            //Assert
+            Assert.AreEqual("Comparable", result);
+        }
+        
+        
         /*
          * GetNodeType() of Item
          *
@@ -16,16 +42,16 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void GetNodeTypeOfItem()
+        public void Test_GetNodeTypeItem_CorrectOutput()
         {
             //Arrange
             comparable = new Item("");
             //Act
-
+            var result = comparable.GetNodeType();
             //Assert
-            Assert.IsTrue(comparable is Comparable);
+            Assert.AreEqual("Item", result);
         }
-
+        
         /*
          * GetNodeTypeInt() of Item
          *
@@ -33,16 +59,16 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void GetNodeTypeOfInt()
+        public void Test_GetNodeTypeInt_CorrectOutput()
         {
             //Arrange
             comparable = new Int(1);
             //Act
-
+            var result = comparable.GetNodeType();
             //Assert
-            Assert.IsTrue(comparable is Comparable);
+            Assert.AreEqual("Int", result);
         }
-
+        
         /*
          * GetNodeTypeOfStat() of Item
          *
@@ -50,16 +76,16 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void GetNodeTypeOfStat()
+        public void Test_GetNodeTypeStat_CorrectOutput()
         {
             //Arrange
             comparable = new Stat("");
             //Act
-
+            var result = comparable.GetNodeType();
             //Assert
-            Assert.IsTrue(comparable is Comparable);
+            Assert.AreEqual("Stat", result);
         }
-
+        
         /*
         * GetNodeTypeOfSubject() of Item
         *
@@ -67,14 +93,14 @@ namespace Agent.Tests.ast
         * @author Abdul     
        */
         [Test]
-        public void GetNodeTypeOfSubject()
+        public void Test_GetNodeTypeSubject_CorrectOutput()
         {
             //Arrange
             comparable = new Subject("");
             //Act
-            
+            var result = comparable.GetNodeType();
             //Assert
-            Assert.IsTrue(comparable is Comparable);
+            Assert.AreEqual("Subject", result);
         }
     }
 }
