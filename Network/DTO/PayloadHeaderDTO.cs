@@ -1,6 +1,6 @@
 ﻿namespace Network
 {
-    class PayloadHeaderDTO
+    public class PayloadHeaderDTO
     {
         public string Target { get; set; }
         public string OriginID { get; set; }
