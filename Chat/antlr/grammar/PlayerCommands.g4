@@ -29,7 +29,7 @@ WEST: 'west';
 RIGHT: 'right';
 EAST: 'east';
 
-NUMBER: '0' | [1-9] [0-9]*;
+NUMBER: [1-9] | '10';
 
 //PARSER
 

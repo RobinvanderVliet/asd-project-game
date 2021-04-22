@@ -20,7 +20,6 @@ namespace Player
         public void HandleDirection(String direction, int steps)
         {
             int[] newMovement = new int[2];
-            Console.Write(direction);
             switch (direction)
             {
                 case "right":
@@ -46,7 +45,6 @@ namespace Player
                     newMovement[1] = steps;
                     break;
             }
-            Console.Write(newMovement[0] + " " + newMovement[1]);
             newPosition = SendNewPosition(newMovement);
 
             // the next line of code should be changed by sending newPosition to a relevant method

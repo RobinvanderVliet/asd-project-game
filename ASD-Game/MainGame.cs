@@ -26,7 +26,7 @@ namespace ASD_project
                 PlayerModel player = new PlayerModel();
                 do
                 {
-                    chat.HandleCommands(player); // speler model meegeven
+                    chat.HandleCommands(player); 
                 } while (true); // moet vervangen worden met variabele: isQuit 
             }
         }
