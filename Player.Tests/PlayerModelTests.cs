@@ -17,12 +17,12 @@ namespace Player.Tests
     public class PlayerModelTests
     {
 
-        private PlayerModel movementComponent;
+        private Player movementComponent;
 
         [SetUp]
         public void Setup()
         {
-            movementComponent = new PlayerModel();
+            movementComponent = new Player();
         }
 
 
