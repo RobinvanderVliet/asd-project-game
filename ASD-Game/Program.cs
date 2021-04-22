@@ -30,6 +30,9 @@ namespace ASD_project
                 {
                     services.AddTransient<IMainGame, MainGame>();
                     services.AddScoped<IPlayer, Player.Model.Player>();
+                    services.AddScoped<IInventory, Inventory>();
+                    services.AddScoped<IBitcoin, Bitcoin>();
+                    services.AddScoped<IRadiationLevel, RadiationLevel>();
                 })
                 .UseSerilog()
                 .Build();

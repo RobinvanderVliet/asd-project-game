@@ -21,7 +21,6 @@ namespace Player.Services
             //player1.getTile();
             //check with the gameboard whether or not there's a player in the given direction from this tile
             //if yes {
-            ////random value
             //int dmg = player1.GetAttackDamage();
             //player1.RemoveStamina(1);
             // player2.RemoveHealth(dmg);

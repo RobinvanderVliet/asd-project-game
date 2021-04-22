@@ -10,6 +10,7 @@
 */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Player.Model
 {
@@ -28,17 +29,17 @@ namespace Player.Model
         private const int HEALTHCAP = 100;
         private const int STAMINACAP = 10;
 
-        public Player(string name//, Tile tile
+        public Player(string name, IInventory inventory, IBitcoin bitcoins, IRadiationLevel radiationLevel //, Tile tile
                                       )
         {
             Name = name;
             Health = HEALTHCAP;
             Stamina = STAMINACAP;
             //_currentTile = tile;
-            Inventory = new Inventory();
+            Inventory = inventory;
             //random default value for now
-            Bitcoins = new Bitcoin(20);
-            RadiationLevel = new RadiationLevel(0);
+            Bitcoins = bitcoins;
+            RadiationLevel = radiationLevel;
         }
         
         public void AddHealth(int amount)
@@ -73,7 +74,7 @@ namespace Player.Model
             }
             else
             {
-                Stamina -= amount;
+                Stamina += amount;
             }
         }
 
@@ -87,6 +88,11 @@ namespace Player.Model
             {
                 Stamina -= amount;
             }
+        }
+
+        public Item GetItem(string itemName)
+        {
+            return Inventory.GetItem(itemName);
         }
 
         public void AddInventoryItem(Item item)
