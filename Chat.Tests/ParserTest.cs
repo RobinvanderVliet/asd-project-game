@@ -145,7 +145,7 @@ namespace Chat.Tests
         }
         
         // Help method for checking command
-        public static AST MoveCommand(int steps, String direction)
+        public static AST MoveCommand(int steps, string direction)
         {
             Input moveForward = new Input();
 

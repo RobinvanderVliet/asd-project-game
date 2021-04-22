@@ -1,5 +1,4 @@
-﻿using System;
-using Antlr4.Runtime;
+﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using Chat.antlr.ast;
 using Chat.antlr.grammar;
@@ -18,7 +17,7 @@ namespace Chat.antlr
         {
         }
 
-        public void ParseCommand(String input)
+        public void ParseCommand(string input)
         {
             //Lex (with Antlr's generated lexer)
             if (!input.StartsWith("say") && !input.StartsWith("whisper") && !input.StartsWith("shout"))

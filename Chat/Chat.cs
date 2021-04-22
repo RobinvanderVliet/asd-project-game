@@ -33,7 +33,7 @@ namespace Chat
 
         }
         
-        public String GetCommand()
+        public string GetCommand()
         {
             return Console.ReadLine();
         }

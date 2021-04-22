@@ -1,8 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 
 namespace Player.Tests
 {
-    [TestFixture]
+    [ExcludeFromCodeCoverage]
     public class PlayerTests
     {
 

@@ -9,7 +9,6 @@ using System.Diagnostics.CodeAnalysis;
 namespace Chat.Tests
 {
     [ExcludeFromCodeCoverage]
-    [TestFixture]
     class EvaluatorTests
     {
         private Evaluator sut;

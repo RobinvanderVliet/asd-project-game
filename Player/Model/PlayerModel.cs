@@ -17,7 +17,7 @@ namespace Player
 
         }
 
-        public void HandleDirection(String direction, int steps)
+        public void HandleDirection(string direction, int steps)
         {
             int[] newMovement = new int[2];
             switch (direction)

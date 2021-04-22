@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Chat.antlr;
 using Chat.antlr.ast;
 using Chat.antlr.ast.actions;
@@ -40,7 +39,7 @@ namespace Chat.Tests
             Assert.AreEqual(exp, ast);
         }
 
-        public static AST MoveCommand(int steps, String direction)
+        public static AST MoveCommand(int steps, string direction)
         {
             Input moveForward = new Input();
 
