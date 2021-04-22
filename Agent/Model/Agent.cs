@@ -11,6 +11,7 @@
         }
 
         public void SwitchAgent(AgentStatus status)
+        // This function only activates and deactivates the Logic. The status switch happens somewhere else.
         {
             if (status.Equals(AgentStatus.AgentOn))
             {
