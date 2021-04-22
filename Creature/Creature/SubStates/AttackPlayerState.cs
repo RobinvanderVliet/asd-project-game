@@ -4,9 +4,9 @@ namespace Creature
 {
     public class AttackPlayerState : ICreatureStateInterface
     {
-        private Monster.Event _stateName;
+        private readonly Monster.Event _stateName;
         public Monster.Event StateName { get => _stateName; }
-        public void Do()
+        public override void Do()
         {
 
         }

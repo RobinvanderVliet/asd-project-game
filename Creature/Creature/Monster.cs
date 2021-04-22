@@ -15,7 +15,7 @@ namespace Creature
         private bool _following;
         private readonly double _maxHealth;
         private double _health = 0;
-        private double _damage;
+        private readonly double _damage;
         private readonly IWorld _world;
 
         private bool _alive;
