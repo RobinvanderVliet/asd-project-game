@@ -23,7 +23,7 @@ namespace Agent.antlr.checker
         // }
 
         // TODO: Unit-test
-        public void Check(AST ast)
+        public virtual void Check(AST ast)
         {
             CheckStatCombination(ast.root.GetChildren());
         }

@@ -48,13 +48,13 @@ namespace Agent.Tests
         public void CheckAst()
         {
             //Arrange
-            // Mock<AST> ast = new Mock<AST>();
+
             AST ast = new AST();
             sut.Ast = ast;
 
             Mock<Checker> mockedChecker = new Mock<Checker>();
-            // mockedChecker.Setup(mock => mock.Check(ast)).Verifiable();
-            
+            mockedChecker.Setup(mock => mock.Check(ast));
+
             sut.Checker = mockedChecker.Object;
 
             //Act
@@ -68,8 +68,9 @@ namespace Agent.Tests
                 Console.WriteLine(e);
                 throw;
             }
+
             //Assert
-            // mockedChecker.Verify(mock => mock.Check(ast), Times.Once);
+            mockedChecker.Verify(mock => mock.Check(ast), Times.Once);
         }
     }
 }
