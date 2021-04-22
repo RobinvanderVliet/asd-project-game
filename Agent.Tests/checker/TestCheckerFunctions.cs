@@ -15,7 +15,7 @@ namespace Agent.Tests.checker
         public void Setup()
         {
             Mock<AST> ast = new Mock<AST>();
-            sut = new Checker(ast.Object);
+            sut = new Checker();
         }
 
         [Test]
@@ -35,7 +35,6 @@ namespace Agent.Tests.checker
             
             //Assert
             Assert.True(result);
-
         }
     }
 }

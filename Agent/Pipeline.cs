@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Agent.antlr.ast.implementation;
+using Agent.antlr.checker;
 using Agent.antlr.exception;
 using Agent.antlr.grammar;
-// using Agent.parser;
+using Agent.parser;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
@@ -15,14 +16,14 @@ namespace Agent
         private AST ast;
 
         private List<string> errors;
-        // private Checker checker;
+        private Checker checker;
         // private Transformer transformer;
         // private Generator generator;
 
         public Pipeline()
         {
             errors = new List<string>();
-            // checker = new Checker();
+            checker = new Checker();
             // transformer = new Transformer();
             // generator = new Generator();
         }
@@ -41,9 +42,9 @@ namespace Agent
                 var parseTree = parser.configuration();
                 ParseTreeWalker walker = new ParseTreeWalker();
                 
-                // ASTAgentListener astAgentListener = new ASTAgentListener();
-                // walker.Walk(astAgentListener, parseTree);
-                // ast = astAgentListener.GetAST();
+                ASTAgentListener astAgentListener = new ASTAgentListener();
+                walker.Walk(astAgentListener, parseTree);
+                ast = astAgentListener.GetAST();
             }
             catch (RecognitionException e)
             {
@@ -64,9 +65,9 @@ namespace Agent
         public void CheckAst()
         {
             ThrowExpetionIfAstIsNull();
+            checker.Check(ast);
         }
-
-
+        
         public void TransformAst()
         {
             ThrowExpetionIfAstIsNull();
@@ -95,10 +96,10 @@ namespace Agent
         {
             errors.Clear();
         }
-
-        // public void Checker
-        // {
-        //     set => checker = value;
-        // }
+        
+        public Checker Checker
+        {
+            set => checker = value;
+        }
     }
 }

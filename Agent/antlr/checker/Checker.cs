@@ -9,16 +9,23 @@ namespace Agent.antlr.checker
 {
     public class Checker
     {
-        private ArrayList symboltable;
 
-        public Checker(AST ast)
+        // TODO: Je loopt door een list met nodes om een list met nodes te vullen?
+        // private List<Node> symboltable;
+        // public Checker(AST ast)
+        // {
+        //     foreach (Node node in ast.root.GetChildren())
+        //     {
+        //         symboltable.Add(node);
+        //     }
+        //     // Commented for working Test ( This can be done in the Pipeline )
+        //     // CheckStatCombination(symboltable);
+        // }
+
+        // TODO: Unit-test
+        public void Check(AST ast)
         {
-            foreach (Node node in ast.root.GetChildren())
-            {
-                symboltable.Add(node);
-            }
-            // Commented for working Test ( This can be done in the Pipeline )
-            // CheckStatCombination(symboltable);
+            CheckStatCombination(ast.root.GetChildren());
         }
 
         private void CheckStatCombination(List<Node> nodes)
@@ -47,7 +54,6 @@ namespace Agent.antlr.checker
                 }
             }
         }
-
         public Boolean CheckItemAndAllowedStat(String item, String allowedStat, Item comparable)
         {
             bool itemAllowed = false;
