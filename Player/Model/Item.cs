@@ -11,17 +11,17 @@
 
 using System;
 
-namespace Player
+namespace Player.Model
 {
     public class Item
     {
-        public String _itemName { get; set; }
-        public String _description { get; set; }
+        public string ItemName { get; set; }
+        public string Description { get; set; }
 
-        public Item(String itemName, String decription)
+        public Item(string itemName, string decription)
         {
-            _itemName = itemName;
-            _description = decription;
+            ItemName = itemName;
+            Description = decription;
         }
     }
 }

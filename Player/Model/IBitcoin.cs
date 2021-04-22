@@ -9,11 +9,11 @@
 
 */
 
-namespace Player
+namespace Player.Model
 {
     public interface IBitcoin
     {
-        public int _amount { get; set; }
+        public int Amount { get; set; }
 
         public void AddAmount(int amount);
 

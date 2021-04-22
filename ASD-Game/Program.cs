@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.IO;
+using Player.Model;
 
 namespace ASD_project
 {
@@ -28,6 +29,7 @@ namespace ASD_project
                 .ConfigureServices((context, services) =>
                 {
                     services.AddTransient<IMainGame, MainGame>();
+                    services.AddScoped<IPlayer, Player.Model.Player>();
                 })
                 .UseSerilog()
                 .Build();

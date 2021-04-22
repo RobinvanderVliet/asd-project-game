@@ -11,11 +11,11 @@
 
 using System.Collections.Generic;
 
-namespace Player
+namespace Player.Model
 {
     public interface IInventory
     {
-        public List<Item> _itemList { get; set; }
+        public List<Item> ItemList { get; set; }
 
         public Item GetItem(string itemName);
 

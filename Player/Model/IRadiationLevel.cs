@@ -9,10 +9,10 @@
 
 */
 
-namespace Player
+namespace Player.Model
 {
     public interface IRadiationLevel
     {
-        public int _level { get; set; }
+        public int Level { get; set; }
     }
 }
