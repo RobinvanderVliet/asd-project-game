@@ -144,6 +144,7 @@ namespace Creature
 
         private void OnUseConsumable(IConsumable consumable)
         {
+            consumable.Use();
             _health += consumable.Amount;
         }
 
