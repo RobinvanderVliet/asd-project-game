@@ -19,6 +19,8 @@ namespace ASD_project
             public void Run()
             {
                 Console.WriteLine("Game is gestart");
+                
+                // TODO: Remove from this method, team 2 will provide a command for it
                 AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
                 agentConfigurationService.StartConfiguration();
             }

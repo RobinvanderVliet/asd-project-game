@@ -20,14 +20,14 @@ namespace Agent
         private List<string> errors;
         private Checker checker;
         // private Transformer transformer;
-        // private Generator generator;
+        private Generator generator;
 
         public Pipeline()
         {
             errors = new List<string>();
             checker = new Checker();
             // transformer = new Transformer();
-            // generator = new Generator();
+            generator = new Generator();
         }
 
         public void ParseString(String input)
@@ -51,7 +51,6 @@ namespace Agent
 
         public void CheckAst()
         {
-            ThrowExceptionIfAstIsNull();
             checker.Check(ast);
         }
         
@@ -60,9 +59,9 @@ namespace Agent
             ThrowExceptionIfAstIsNull();
         }
 
-        public void GenerateAst()
+        public string GenerateAst()
         {
-            ThrowExceptionIfAstIsNull();
+            return generator.execute(ast);
         }
 
         private void ThrowExceptionIfAstIsNull()
