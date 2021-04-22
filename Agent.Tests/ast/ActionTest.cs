@@ -1,7 +1,7 @@
 ﻿using System;
-using Agent.antlr.ast.implementation;
+using Agent.antlr.ast;
 using NUnit.Framework;
-using Action = Agent.antlr.ast.implementation.Action;
+using Action = Agent.antlr.ast.Action;
 
 namespace Agent.Tests.ast
 {

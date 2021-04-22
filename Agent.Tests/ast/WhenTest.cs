@@ -1,9 +1,9 @@
-﻿using Agent.antlr.ast.implementation;
-using Agent.antlr.ast.implementation.comparables;
-using Agent.antlr.ast.implementation.comparables.subjects;
+﻿using Agent.antlr.ast;
+using Agent.antlr.ast.comparables;
+using Agent.antlr.ast.comparables.subjects;
 using NUnit.Framework;
 using System;
-using IComparable = Agent.antlr.ast.interfaces.IComparable;
+using Comparable = Agent.antlr.ast.Comparable;
 
 namespace Agent.Tests.ast
 {
@@ -59,7 +59,7 @@ namespace Agent.Tests.ast
             var comparable = ComparableTestCase(testCase);
             
             //Act
-            this._sut.AddChild(comparable);
+            this._sut.AddChild( comparable);
             //Assert
             
             Assert.AreEqual( comparable, this._sut.GetComparableL());
@@ -202,17 +202,17 @@ namespace Agent.Tests.ast
             Assert.AreEqual(extra, this._sut.GetChildren()[0]);
         }
         
-        private static IComparable ComparableTestCase(Type testCase)
+        private static Comparable ComparableTestCase(Type testCase)
         {
-            IComparable comparable;
+            Comparable comparable;
             if (testCase == typeof(Int)){
-                comparable = (IComparable) Activator.CreateInstance(testCase,1);
+                comparable = (Comparable) Activator.CreateInstance(testCase,1);
             }
             else if (testCase == typeof(Comparable)){
-                comparable = (IComparable) Activator.CreateInstance(testCase);
+                comparable = (Comparable) Activator.CreateInstance(testCase);
             }
             else {
-                comparable = (IComparable) Activator.CreateInstance(testCase, "test");
+                comparable = (Comparable) Activator.CreateInstance(testCase, "test");
             }
 
             return comparable;
