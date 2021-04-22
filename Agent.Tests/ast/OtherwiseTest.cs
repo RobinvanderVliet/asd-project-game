@@ -28,7 +28,7 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void GetNodeType()
+        public void Test_GetNodeType_CorrectOutput()
         {
             //Arrange
             //Act
@@ -44,7 +44,7 @@ namespace Agent.Tests.ast
          * @author Abdul     
         */
         [Test]
-        public void AddChild()
+        public void Test_AddChild_ActionReference()
         {
             //Arrange
             ActionReference actionReference = new ActionReference("action Reference");
@@ -52,10 +52,30 @@ namespace Agent.Tests.ast
 
             //Act
 
-            var result = ((ActionReference) _otherwise.GetChildren()[0])?.GetNodeType();
+            var result = ( _otherwise.GetChildren()[0]).GetNodeType();
 
             //Assert
             Assert.AreEqual(result, "ActionReference");
+        }
+        
+        /*
+          * AddChild()
+          *
+          * Test if the node is added to Otherwise   
+         */
+        [Test]
+        public void Test_AddChild_Node()
+        {
+            //Arrange
+            var node = new Node();
+            _otherwise.AddChild(node);
+
+            //Act
+
+            var result = ( _otherwise.GetChildren()[0]).GetNodeType();
+
+            //Assert
+            Assert.AreEqual("Node", result);
         }
     }
 }

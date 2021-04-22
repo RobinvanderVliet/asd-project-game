@@ -25,8 +25,9 @@ namespace Agent.antlr.ast
 
         public override List<Node> GetChildren()
         {
-            var children = new List<Node>() {
-                this._action
+            var children = new List<Node>();
+            if(this._action!= null){
+                children.Add(this._action);
             };
             children.AddRange(this.body);
             return children;

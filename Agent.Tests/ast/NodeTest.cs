@@ -25,7 +25,7 @@ namespace Agent.Tests.ast
          * Test of de juiste type terug gegeven wordt
          */
         [Test]
-        public void GetNodeTypeTest()
+        public void Test_GetNodeType_CorrectOutput()
         {
             //Arrange
             
@@ -41,7 +41,7 @@ namespace Agent.Tests.ast
          * Test of een arraylist gegeven wordt
          */
         [Test]
-        public void GetChildrenTest()
+        public void Test_GetChildren()
         {
             //Arrange
             
@@ -50,7 +50,79 @@ namespace Agent.Tests.ast
             //Assert
             Assert.IsInstanceOf(typeof(List<Node>), result);
         }
+        /*
+         * AddChild()
+         *
+         * Tests if anode is added
+         */
+        [Test]
+        public void Test_AddChild()
+        {
+            //Arrange
+            var node = new Node();
+            this._sut.AddChild(node);
+            //Act
+            var result = ( this._sut.GetChildren()[0])?.GetNodeType();
+
+            //Assert
+            Assert.AreEqual("Node", result);
+            Assert.AreEqual(1, this._sut.GetChildren().Count);
+        }
         
+        /*
+         * RemoveChild()
+         *
+         * Tests if anode is added
+         */
+        [Test]
+        public void Test_RemoveChild()
+        {
+            //Arrange
+            var node = new Node();
+            this._sut.AddChild(node);
+            //Act
+            this._sut.RemoveChild(node);
+
+            //Assert
+            Assert.AreEqual(0, this._sut.GetChildren().Count);
+        }
         
+        /*
+         * GetError()
+         *
+         * Tests if an ASTError is returned if an error is set
+         */
+        [Test]
+        public void Test_GetErrorAfterSetError()
+        {
+            //Arrange
+            var message = "testtt";
+            this._sut.SetError(message);
+            //Act
+            var result = this._sut.GetError();
+                
+            //Assert
+            Assert.IsInstanceOf(typeof(ASTError), result);
+            Assert.AreEqual((new ASTError(message)).ToString(), result.ToString());
+        }
+        
+        /*
+         * toString()
+         *
+         * Tests if an correct output string is given
+         */
+        [Test]
+        public void Test_ToString()
+        {
+            //Arrange
+            var expected = "[Node][Node][Node]";
+            this._sut.AddChild(new Node());
+            this._sut.AddChild(new Node());
+            //Act
+            var result = this._sut.ToString();
+                
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
     }
 }

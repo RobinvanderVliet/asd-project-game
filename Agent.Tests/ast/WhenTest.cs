@@ -26,7 +26,7 @@ namespace Agent.Tests.ast
          * Test of de juiste type terug gegeven wordt
          */
         [Test]
-        public void GetNodeTypeTest()
+        public void Test_GetNodeType_CorrectOutput()
         {
             //Arrange
             
@@ -53,7 +53,7 @@ namespace Agent.Tests.ast
         [TestCase(typeof(Stat))]
         [TestCase(typeof(Subject))]
         [TestCase(typeof(Comparable))]
-        public void AddChildTest1( Type testCase)
+        public void Test_AddChild_AllComparablesComparableL( Type testCase)
         {
             //Arrange
             var comparable = ComparableTestCase(testCase);
@@ -86,7 +86,7 @@ namespace Agent.Tests.ast
         [TestCase(typeof(Stat))]
         [TestCase(typeof(Subject))]
         [TestCase(typeof(Comparable))]
-        public void AddChildTest2( Type testCase)
+        public void Test_AddChild_AllComparablesComparableR( Type testCase)
         {
             //Arrange
             var comparableL = new Comparable();
@@ -119,7 +119,7 @@ namespace Agent.Tests.ast
         [TestCase(typeof(Stat))]
         [TestCase(typeof(Subject))]
         [TestCase(typeof(Comparable))]
-        public void AddChildTest3( Type testCase)
+        public void Test_AddChild_AllComparablesComparableExtra( Type testCase)
         {
             //Arrange
             var comparableL = new Comparable();
@@ -145,7 +145,7 @@ namespace Agent.Tests.ast
         * Test of de then actionreference goed wordt toegevoegd.
         */
         [Test]
-        public void AddChildTest4()
+        public void Test_AddChild_ActionReference()
         {
             //Arrange
             var action = new ActionReference("test");
@@ -165,7 +165,7 @@ namespace Agent.Tests.ast
         * Test of de comparison goed wordt toegevoegd.
         */
         [Test]
-        public void AddChildTest5()
+        public void Test_Child_Comparison()
         {
             //Arrange
             var comparison = new Comparison("test");
@@ -187,7 +187,7 @@ namespace Agent.Tests.ast
         * Test of de comparison goed wordt toegevoegd.
         */
         [Test]
-        public void AddChildTest6()
+        public void Test_AddChild_ExtraNode()
         {
             //Arrange
             var extra = new Node();
