@@ -1,6 +1,8 @@
-﻿namespace WorldGeneration.Models.BuildingTiles
+﻿using WorldGeneration.Models.Interfaces;
+
+namespace WorldGeneration.Models.BuildingTiles
 {
-    public class DoorTile : BuildingTile
+    public class DoorTile : BuildingTile, ITile
     {
         public DoorTile() 
         {
