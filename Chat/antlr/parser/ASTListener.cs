@@ -1,14 +1,4 @@
-﻿/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: ASD-project-game.
- 
-    This file is created by team: 2
-     
-    Goal of this file: Parser class for add actions to stack.
-     
-*/
-using System;
+﻿using System;
 using System.Collections;
 using Chat.antlr.ast;
 using Chat.antlr.ast.actions;

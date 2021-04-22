@@ -1,15 +1,4 @@
-﻿/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: ASD-project.
- 
-    This file is created by team: 2.
-     
-    Goal of this file: To be able to type commands and pass them to the parser.
-     
-*/
-
-using System;
+﻿using System;
 using Chat.antlr;
 using Chat.exception;
 

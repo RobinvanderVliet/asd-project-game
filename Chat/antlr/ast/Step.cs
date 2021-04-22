@@ -1,15 +1,4 @@
-﻿/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: ASD-project-game.
- 
-    This file is created by team: 2
-     
-    Goal of this file: Step class.
-     
-*/
-
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Chat.antlr.ast
