@@ -47,13 +47,13 @@ namespace WorldGeneration.Database
                 switch (results.Length)
                 {
                     case 0:
-                        throw new DatabaseError("There were no matching chunks found");
+                        throw new ChunkNotFoundException("There were no matching chunks found");
                     case >1:
-                        throw new DatabaseError("There were multiple matching chunks found. bad! this bad!");
+                        throw new DatabaseException("There were multiple matching chunks found. bad! this bad!");
                     case 1:
                         return new Chunk(results.First().x, results.First().y, results.First().map, results.First().rowSize);
                     default:
-                        throw new DatabaseError("Extremely unexpected result from query. like, this is only here in case of a count being negative or null. So pretty much unreachable code.");
+                        throw new DatabaseException("Extremely unexpected result from query. like, this is only here in case of a count being negative or null. So pretty much unreachable code.");
                 }
             }
             catch (Exception e)
@@ -77,11 +77,11 @@ namespace WorldGeneration.Database
                 switch (results.Count)
                 {
                     case 0:
-                        throw new DatabaseError("There were no matching chunks found");
+                        throw new DatabaseException("There were no matching chunks found");
                     case >0:
                         return results.Select(result => new Chunk(result.x, result.y, result.map, result.rowSize)).ToList();
                     default:
-                        throw new DatabaseError("Extremely unexpected result from query. like, this is only here in case of a count being negative. So pretty much unreachable code.");
+                        throw new DatabaseException("Extremely unexpected result from query. like, this is only here in case of a count being negative. So pretty much unreachable code.");
                 }
             }
             catch (Exception e)
