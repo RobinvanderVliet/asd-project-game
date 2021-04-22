@@ -14,12 +14,12 @@ namespace Agent.Services
         
         public void EnableAgent()
         {
-            _agent.SwitchAgent(AgentStatus.AgentOn);
+            _agent.EnableAgent(AgentStatus.AgentOn);
         }
 
         public void DisableAgent()
         {
-            _agent.SwitchAgent(AgentStatus.AgentOff);
+            _agent.EnableAgent(AgentStatus.AgentOff);
         }
 
         public void ConfigureAgent()

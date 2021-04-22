@@ -10,18 +10,9 @@
             _agentConfiguration = agentConfiguration;
         }
 
-        public void SwitchAgent(AgentStatus status)
-        // This function only activates and deactivates the Logic. The status switch happens somewhere else.
+        public void EnableAgent()
         {
-            if (status.Equals(AgentStatus.AgentOn))
-            {
-                // TODO: Activate agent logic and mark it somewhere as activated
-                executeLogic();
-            }
-            else
-            {
-                // TODO: Deactivate agent logic and mark it somewhere as deactivated
-            }
+            executeLogic();
         }
 
         private void executeLogic()
