@@ -1,15 +1,4 @@
-﻿/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: ASD-project.
- 
-    This file is created by team: 2.
-     
-    Goal of this file: Keeping track of the inventory.
-     
-*/
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Player.Model
 {

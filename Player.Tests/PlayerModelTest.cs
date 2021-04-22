@@ -6,9 +6,9 @@ using Player.Model;
 namespace Player.Tests
 {
     [ExcludeFromCodeCoverage]
-    public class PlayerTest
+    public class PlayerModelTest
     {
-        private Model.Player sut;
+        private PlayerModel sut;
         private Mock<IInventory> mockedInventory;
         private Mock<IBitcoin> mockedBitcoins;
         private Mock<IRadiationLevel> mockedRadiationLevel;
@@ -19,17 +19,17 @@ namespace Player.Tests
             mockedInventory = new Mock<IInventory>();
             mockedBitcoins = new Mock<IBitcoin>();
             mockedRadiationLevel = new Mock<IRadiationLevel>();
-            sut = new Model.Player("Jan", mockedInventory.Object, mockedBitcoins.Object, mockedRadiationLevel.Object);
+            sut = new PlayerModel("Jan", mockedInventory.Object, mockedBitcoins.Object, mockedRadiationLevel.Object);
         }
         
         [Test]
-        public void GetNameGetsName()
+        public void Test_GetName_GetsNameSuccessfully()
         {
             Assert.AreEqual("Jan", sut.Name);
         }
         
         [Test]
-        public void SetNameSetsName()
+        public void Test_SetName_SetsNameSuccessfully()
         {
             var name = "Nieuwe naam";
             sut.Name = name;
@@ -38,13 +38,13 @@ namespace Player.Tests
         }
         
         [Test]
-        public void GetHealthGetsHealth()
+        public void Test_GetHealth_GetsHealthSuccessfully()
         {
             Assert.AreEqual(100, sut.Health);
         }
         
         [Test]
-        public void SetHealthSetsHealth()
+        public void Test_SetHealth_SetsHealthSuccessfully()
         {
             var HP = 50;
             sut.Health = HP;
@@ -53,13 +53,13 @@ namespace Player.Tests
         }
         
         [Test]
-        public void GetStaminaGetsStamina()
+        public void Test_GetStamina_GetsStaminaSuccessfully()
         {
             Assert.AreEqual(10, sut.Stamina);
         }
         
         [Test]
-        public void SetStaminaSetsStamina()
+        public void Test_SetStamina_SetsStaminaSuccessfully()
         {
             var stamina = 5;
             sut.Stamina = stamina;
@@ -68,13 +68,13 @@ namespace Player.Tests
         }
         
         [Test]
-        public void GetInventoryGetsInventory()
+        public void Test_GetInventory_GetsInventorySuccessfully()
         {
             Assert.AreEqual(mockedInventory.Object, sut.Inventory);
         }
         
         [Test]
-        public void SetInventorySetsInventory()
+        public void Test_SetInventory_SetsInventorySuccessfully()
         {
             var inventory = new Inventory();
             sut.Inventory = inventory;
@@ -83,13 +83,13 @@ namespace Player.Tests
         }
         
         [Test]
-        public void GetBitcoinsGetsBitcoins()
+        public void Test_GetBitcoins_GetsBitcoinsSuccessfully()
         {
             Assert.AreEqual(mockedBitcoins.Object, sut.Bitcoins);
         }
         
         [Test]
-        public void SetBitcoinsSetsBitcoins()
+        public void Test_SetBitcoins_SetsBitcoinsSuccessfully()
         {
             var bitcoins = new Bitcoin(5);
             sut.Bitcoins = bitcoins;
@@ -98,13 +98,13 @@ namespace Player.Tests
         }
         
         [Test]
-        public void GetRadiationLevelGetsRadiationLevel()
+        public void Test_GetRadiationLevel_GetsRadiationLevelSuccessfully()
         {
             Assert.AreEqual(mockedRadiationLevel.Object, sut.RadiationLevel);
         }
         
         [Test]
-        public void SetRadiationLevelSetsRadiationLevel()
+        public void Test_SetRadiationLevel_SetsRadiationLevelSuccessfully()
         {
             var radiationLevel = new RadiationLevel(5);
             sut.RadiationLevel = radiationLevel;
@@ -113,7 +113,7 @@ namespace Player.Tests
         }
 
         [Test]
-        public void RemoveHealthWithAmountLessThan100()
+        public void Test_RemoveHealth_WithoutDying()
         {
             sut.RemoveHealth(50);
             
@@ -121,7 +121,7 @@ namespace Player.Tests
         }
         
         [Test]
-        public void RemoveHealthWithAmountMoreThan100StopsAt0()
+        public void Test_RemoveHealth_StopsAtDyingState()
         {
             sut.RemoveHealth(200);
             
@@ -129,7 +129,7 @@ namespace Player.Tests
         }
         
         [Test]
-        public void AddHealthWithoutExceedingHealthCap()
+        public void Test_AddHealth_WithoutExceedingHealthCap()
         {
             sut.RemoveHealth(50);
             
@@ -139,7 +139,7 @@ namespace Player.Tests
         }
         
         [Test]
-        public void AddHealthReachesHealthCap()
+        public void Test_AddHealth_ReachesHealthCap()
         {
             sut.RemoveHealth(30);
             
@@ -149,7 +149,7 @@ namespace Player.Tests
         }
         
         [Test]
-        public void RemoveStaminaWithAmountLessThan10()
+        public void Test_RemoveStamina_WithoutRunningOutOfMana()
         {
             sut.RemoveStamina(5);
             
@@ -157,7 +157,7 @@ namespace Player.Tests
         }
         
         [Test]
-        public void RemoveStaminaWithAmountMoreThan100StopsAt0()
+        public void Test_RemoveStamina_StopsAtNoMana()
         {
             sut.RemoveStamina(20);
             
@@ -165,7 +165,7 @@ namespace Player.Tests
         }
         
         [Test]
-        public void AddStaminaWithoutExceedingStaminaCap()
+        public void Test_AddStamina_WithoutExceedingStaminaCap()
         {
             sut.RemoveStamina(5);
             
@@ -175,7 +175,7 @@ namespace Player.Tests
         }
         
         [Test]
-        public void AddStaminaReachesStaminaCap()
+        public void Test_AddStamina_ReachesStaminaCap()
         {
             sut.RemoveStamina(3);
             
@@ -185,19 +185,49 @@ namespace Player.Tests
         }
         
         [Test]
-        public void VerifyInventoryMoqWorks()
+        public void Test_GetItem_VerifyInventoryMoqWorks()
         {
             Item item = new Item("Naam", "Beschrijving");
             mockedInventory.Setup(mockedInventory => mockedInventory.GetItem("Naam")).Returns(item);
-
-            // sut.GetItem("Naam");
             
             Assert.AreEqual(item, sut.GetItem("Naam"));
             mockedInventory.Verify(mockedInventory => mockedInventory.GetItem("Naam"), Times.Once);
         }
         
         [Test]
-        public void VerifyBitcoinMoqWorks()
+        public void Test_AddInventoryItem_AddsItemSuccessfully()
+        {
+            Item item = new Item("Naam", "Beschrijving");
+            mockedInventory.Setup(mockedInventory => mockedInventory.AddItem(item));
+
+            sut.AddInventoryItem(item);
+            
+            mockedInventory.Verify(mockedInventory => mockedInventory.AddItem(item), Times.Once);
+        }
+        
+        [Test]
+        public void Test_RemoveInventoryItem_RemovesItemSuccessfully()
+        {
+            Item item = new Item("Naam", "Beschrijving");
+            mockedInventory.Setup(mockedInventory => mockedInventory.RemoveItem(item));
+
+            sut.RemoveInventoryItem(item);
+            
+            mockedInventory.Verify(mockedInventory => mockedInventory.RemoveItem(item), Times.Once);
+        }
+        
+        [Test]
+        public void Test_EmptyInventory_EmptiesInventorySuccessfully()
+        {
+            mockedInventory.Setup(mockedInventory => mockedInventory.EmptyInventory());
+
+            sut.EmptyInventory();
+            
+            mockedInventory.Verify(mockedInventory => mockedInventory.EmptyInventory(), Times.Once);
+        }
+        
+        [Test]
+        public void Test_GetAmount_VerifyBitcoinMoqWorks()
         {
             mockedBitcoins.Setup(mockedBitcoins => mockedBitcoins.Amount).Returns(20);
 
@@ -206,18 +236,50 @@ namespace Player.Tests
         }
         
         [Test]
-        public void VerifyRadiationLevelMoqWorks()
+        public void Test_AddBitcoins_AddsBitcoinsSuccessfully()
+        {
+            mockedBitcoins.Setup(mockedBitcoins => mockedBitcoins.AddAmount(20));
+
+            sut.AddBitcoins(20);
+            
+            mockedBitcoins.Verify(mockedBitcoins => mockedBitcoins.AddAmount(20), Times.Once);
+        }
+        
+        [Test]
+        public void Test_RemoveBitcoins_RemovesBitcoinsSuccessfully()
+        {
+            mockedBitcoins.Setup(mockedBitcoins => mockedBitcoins.RemoveAmount(10));
+
+            sut.RemoveBitcoins(10);
+            
+            mockedBitcoins.Verify(mockedBitcoins => mockedBitcoins.RemoveAmount(10), Times.Once);
+        }
+        
+        [Test]
+        public void Test_DropItem_DropsItemSuccessfully()
+        {
+            Item item = new Item("Naam", "Beschrijving");
+            mockedInventory.Setup(mockedInventory => mockedInventory.GetItem("Naam")).Returns(item);
+            mockedInventory.Setup(mockedInventory => mockedInventory.RemoveItem(item));
+
+            sut.DropItem("Naam");
+            
+            mockedInventory.Verify(mockedInventory => mockedInventory.RemoveItem(item), Times.Once);
+        }
+        
+        [Test]
+        public void Test_GetAttackDamage_GetDefaultAttackDamage()
+        {
+            Assert.AreEqual(5, sut.GetAttackDamage());
+        }
+        
+        [Test]
+        public void Test_GetLevel_VerifyRadiationLevelMoqWorks()
         {
             mockedRadiationLevel.Setup(mockedRadiationLevel => mockedRadiationLevel.Level).Returns(1);
 
             Assert.AreEqual(1, sut.RadiationLevel.Level);
             mockedRadiationLevel.Verify(mockedRadiationLevel => mockedRadiationLevel.Level, Times.Once);
-        }
-        
-        [Test]
-        public void GetDefaultAttackDamage()
-        {
-            Assert.AreEqual(5, sut.GetAttackDamage());
         }
     }
 }

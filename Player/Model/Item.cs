@@ -1,17 +1,4 @@
-﻿/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: ASD-project.
- 
-    This file is created by team: 2.
-     
-    Goal of this file: Keeping track of items.
-     
-*/
-
-using System;
-
-namespace Player.Model
+﻿namespace Player.Model
 {
     public class Item
     {

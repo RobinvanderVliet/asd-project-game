@@ -16,13 +16,13 @@ namespace Player.Tests
         }
         
         [Test]
-        public void GetLevelGetsLevel()
+        public void Test_GetLevel_GetsLevelSuccessfully()
         {
             Assert.AreEqual(1, sut.Level);
         }
         
         [Test]
-        public void SetLevelSetsLevel()
+        public void Test_SetLevel_SetsLevelSuccessfully()
         {
             var level = 5;
             sut.Level = level;

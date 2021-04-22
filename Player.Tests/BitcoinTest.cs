@@ -16,13 +16,13 @@ namespace Player.Tests
         }
         
         [Test]
-        public void GetAmountGetsAmount()
+        public void Test_GetAmount_GetsAmountSuccessfully()
         {
             Assert.AreEqual(20, sut.Amount);
         }
         
         [Test]
-        public void SetAmountSetsAmount()
+        public void Test_SetAmount_SetsAmountSuccessfully()
         {
             var amount = 5;
             sut.Amount = amount;
@@ -31,7 +31,7 @@ namespace Player.Tests
         }
         
         [Test]
-        public void AddAmountAddsGivenAmount()
+        public void Test_AddAmount_AddsGivenAmountSuccessfully()
         {
             sut.AddAmount(20);
             
@@ -39,7 +39,7 @@ namespace Player.Tests
         }
         
         [Test]
-        public void RemoveAmountRemovesGivenAmount()
+        public void Test_RemoveAmount_RemovesGivenAmountSuccessfully()
         {
             sut.RemoveAmount(10);
             

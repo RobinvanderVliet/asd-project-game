@@ -17,13 +17,13 @@ namespace Player.Tests
         }
         
         [Test]
-        public void GetItemListGetsItemList()
+        public void Test_GetItemList_GetsItemListSuccessfully()
         {
             Assert.AreEqual(new List<Item>(), sut.ItemList);
         }
         
         [Test]
-        public void SetItemListSetsItemList()
+        public void Test_SetItemList_SetsItemListSuccessfully()
         {
             var ItemList = new List<Item>();
             ItemList.Add(new Item("Naam", "Beschrijving"));
@@ -33,7 +33,7 @@ namespace Player.Tests
         }
         
         [Test]
-        public void GetItemReturnsItem()
+        public void Test_GetItem_GetsRightItem()
         {
             Item item = new Item("Naam", "Beschrijving");
             sut.ItemList.Add(item);
@@ -42,16 +42,13 @@ namespace Player.Tests
         }
         
         [Test]
-        public void GetItemReturnsNull()
+        public void Test_GetItem_ReturnsNull()
         {
-            // Item item = new Item("Naam", "Beschrijving");
-            // sut.ItemList.Add(item);
-            
             Assert.AreEqual(null, sut.GetItem("Naam"));
         }
         
         [Test]
-        public void AddItemAddsItemToInventory()
+        public void Test_AddItem_AddsItemSuccessfully()
         {
             Item item = new Item("Naam", "Beschrijving");
             
@@ -61,7 +58,7 @@ namespace Player.Tests
         }
         
         [Test]
-        public void RemoveItemIsActuallyRemoved()
+        public void Test_RemoveItem_RemovesItemSuccessfully()
         {
             Item item = new Item("Naam", "Beschrijving");
             sut.ItemList.Add(item);
@@ -72,7 +69,7 @@ namespace Player.Tests
         }
         
         [Test]
-        public void EmptyInventoryEmptiesInventory()
+        public void Test_EmptyInventory_EmptiesInventorySuccessfully()
         {
             Item item = new Item("Naam", "Beschrijving");
             sut.AddItem(item);

@@ -29,7 +29,7 @@ namespace ASD_project
                 .ConfigureServices((context, services) =>
                 {
                     services.AddTransient<IMainGame, MainGame>();
-                    services.AddScoped<IPlayer, Player.Model.Player>();
+                    services.AddScoped<IPlayerModel, PlayerModel>();
                     services.AddScoped<IInventory, Inventory>();
                     services.AddScoped<IBitcoin, Bitcoin>();
                     services.AddScoped<IRadiationLevel, RadiationLevel>();

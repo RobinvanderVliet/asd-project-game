@@ -16,13 +16,13 @@ namespace Player.Tests
         }
         
         [Test]
-        public void GetItemNameGetsItemName()
+        public void Test_GetItemName_GetsItemNameSuccessfully()
         {
             Assert.AreEqual("Naam", sut.ItemName);
         }
         
         [Test]
-        public void SetItemNameSetsItemName()
+        public void Test_SetItemName_SetsItemNameSuccessfully()
         {
             var itemName = "New name";
             sut.ItemName = itemName;
@@ -31,13 +31,13 @@ namespace Player.Tests
         }
         
         [Test]
-        public void GetDescriptionGetsDescription()
+        public void Test_GetDescription_GetsDescriptionSuccessfully()
         {
             Assert.AreEqual("Beschrijving", sut.Description);
         }
         
         [Test]
-        public void SeDescriptionSetsDescription()
+        public void Test_SetDescription_SetsDescriptionSuccessfully()
         {
             var description = "New description";
             sut.Description = description;
