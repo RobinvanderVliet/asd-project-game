@@ -53,11 +53,13 @@ namespace WorldGeneration
             Console.WriteLine(chunkA.GetTileCoordinatesInWorld(0)[0] + " " + chunkA.GetTileCoordinatesInWorld(0)[1]);
             Console.WriteLine(chunkB.GetTileCoordinatesInWorld(0)[0] + " " + chunkB.GetTileCoordinatesInWorld(0)[1]);
             Console.WriteLine(chunkB.GetTileCoordinatesInWorld(1)[0] + " " + chunkB.GetTileCoordinatesInWorld(1)[1]);
-
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.BackgroundColor = ConsoleColor.Black;
             Map map = new Map();
             var playerLocation = new int[2] {0, 0};
-            var viewDistance = 10;
+            var viewDistance = 6;
             map.LoadArea(playerLocation, viewDistance);
+            chunk.DisplayChunk();
         }
     }
 }

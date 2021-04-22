@@ -47,7 +47,8 @@ namespace WorldGeneration.Database
                 switch (results.Length)
                 {
                     case 0:
-                        throw new ChunkNotFoundException("There were no matching chunks found");
+                        return null;
+                        //throw new ChunkNotFoundException("There were no matching chunks found"); don't want log spam so switching to different implementation
                     case >1:
                         throw new DatabaseException("There were multiple matching chunks found. bad! this bad!");
                     case 1:
