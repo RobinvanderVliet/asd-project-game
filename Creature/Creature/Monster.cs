@@ -6,10 +6,7 @@ using Creature.Pathfinder;
 using Creature.World;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Creature
 {
@@ -79,7 +76,7 @@ namespace Creature
         /// A statemachine will decide how a creature responds to specific events.
         /// Statemachines will decide how a creature behaves in certain events.
         /// </summary>
-        private PassiveStateMachine<State, Event> stateMachine;
+        private PassiveStateMachine<ICreatureStateInterface, Event> stateMachine;
 
         public Monster(IWorld world, Vector2 position, double damage, double initialHealth, int visionRange)
         {
@@ -169,25 +166,30 @@ namespace Creature
 
         public void StartStateMachine()
         {
-            var builder = new StateMachineDefinitionBuilder<State, Event>();
+            var builder = new StateMachineDefinitionBuilder<ICreatureStateInterface, Event>();
+
+            ICreatureStateInterface followPlayer = new FollowPlayerState();
+            ICreatureStateInterface wanderState = new WanderState();
+            ICreatureStateInterface useConsumable = new UseConsumableState();
+            ICreatureStateInterface attackPlayerState = new AttackPlayerState();
 
             // Wandering
-            builder.In(State.FOLLOW_PLAYER).On(Event.LOST_PLAYER).Goto(State.WANDERING);
+            builder.In(followPlayer).On(Event.LOST_PLAYER).Goto(wanderState);
 
             // Follow player
-            builder.In(State.WANDERING).On(Event.SPOTTED_PLAYER).Goto(State.FOLLOW_PLAYER).Execute<ICreature>(OnFollowPlayer);
-            builder.In(State.USE_CONSUMABLE).On(Event.REGAINED_HEALTH_PLAYER_OUT_OF_RANGE).Goto(State.FOLLOW_PLAYER).Execute<ICreature>(OnFollowPlayer);
-            builder.In(State.ATTACK_PLAYER).On(Event.PLAYER_OUT_OF_RANGE).Goto(State.FOLLOW_PLAYER).Execute<ICreature>(OnFollowPlayer);
+            builder.In(wanderState).On(Event.SPOTTED_PLAYER).Goto(followPlayer).Execute<ICreature>(OnFollowPlayer);
+            builder.In(useConsumable).On(Event.REGAINED_HEALTH_PLAYER_OUT_OF_RANGE).Goto(followPlayer).Execute<ICreature>(OnFollowPlayer);
+            builder.In(attackPlayerState).On(Event.PLAYER_OUT_OF_RANGE).Goto(followPlayer).Execute<ICreature>(OnFollowPlayer);
 
             // Attack player
-            builder.In(State.FOLLOW_PLAYER).On(Event.PLAYER_IN_RANGE).Goto(State.ATTACK_PLAYER).Execute<ICreature>(OnAttackPlayer);
-            builder.In(State.USE_CONSUMABLE).On(Event.REGAINED_HEALTH_PLAYER_IN_RANGE).Goto(State.ATTACK_PLAYER).Execute<ICreature>(OnAttackPlayer);
+            builder.In(followPlayer).On(Event.PLAYER_IN_RANGE).Goto(attackPlayerState).Execute<ICreature>(OnAttackPlayer);
+            builder.In(useConsumable).On(Event.REGAINED_HEALTH_PLAYER_IN_RANGE).Goto(attackPlayerState).Execute<ICreature>(OnAttackPlayer);
 
             // Use potion
-            builder.In(State.ATTACK_PLAYER).On(Event.ALMOST_DEAD).Goto(State.USE_CONSUMABLE).Execute<IConsumable>(OnUseConsumable);
-            builder.In(State.FOLLOW_PLAYER).On(Event.ALMOST_DEAD).Goto(State.USE_CONSUMABLE).Execute<IConsumable>(OnUseConsumable);
+            builder.In(attackPlayerState).On(Event.ALMOST_DEAD).Goto(useConsumable).Execute<IConsumable>(OnUseConsumable);
+            builder.In(followPlayer).On(Event.ALMOST_DEAD).Goto(useConsumable).Execute<IConsumable>(OnUseConsumable);
 
-            builder.WithInitialState(State.WANDERING);
+            builder.WithInitialState(wanderState);
 
             stateMachine = builder.Build().CreatePassiveStateMachine();
             stateMachine.Start();
