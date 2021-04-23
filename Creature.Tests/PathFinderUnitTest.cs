@@ -11,7 +11,7 @@ using System.Numerics;
 namespace Creature.Tests
 {
     [TestFixture]
-    class PathFinderUnitTests
+    class PathFinderUnitTest
     {
         // Declaratie en initialisatie constante variabelen
         // Declaratie variabelen

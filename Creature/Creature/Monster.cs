@@ -17,6 +17,11 @@ namespace Creature
         private double _health = 0;
         private readonly double _damage;
         private readonly IWorld _world;
+        public bool IsFollowing
+        {
+            get => _following;
+            set => _following = value;
+        }
 
         private bool _alive;
         public bool IsAlive

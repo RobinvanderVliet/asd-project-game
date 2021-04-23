@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Creature.Pathfinder;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -11,6 +12,8 @@ namespace Creature.World
     {
         List<ICreature> creatures { get; }
         List<ICreature> players { get; }
+
+        public List<List<Node>> Nodes { get; }
         int Size { get; }
 
         public void GenerateWorldNodes();

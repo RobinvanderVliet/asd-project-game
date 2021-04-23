@@ -15,7 +15,7 @@ namespace Creature.Tests
 {
     class MonsterTest
     {
-        private ICreature _sut;
+        private Monster _sut;
         private int _damage;
 
         [SetUp]
@@ -41,7 +41,35 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_FireEvent_AttacksPlayer()
+        public void Test_FireEventSpottedPlayer_FollowsPlayer()
+        {
+            // Arrange
+            Mock<ICreature> playerMock = new Mock<ICreature>();
+
+            // Act
+            _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
+
+            // Assert
+            Assert.AreEqual(true, _sut.IsFollowing);
+            //Assert.AreEqual(playerMock.Object, _sut.Player);
+        }
+
+        [Test]
+        public void Test_FireEventLostPlayer_DoesNotFollowPlayer()
+        {
+            // Arrange
+            Mock<ICreature> playerMock = new Mock<ICreature>();
+
+            // Act
+            _sut.FireEvent(Monster.Event.LOST_PLAYER, playerMock.Object);
+
+            // Assert
+            Assert.AreEqual(false, _sut.IsFollowing);
+            //Assert.AreEqual(playerMock.Object, _sut.Player);
+        }
+
+        [Test]
+        public void Test_FireEventPlayerInRange_AttacksPlayer()
         {
             // Arrange
             Mock<ICreature> playerMock = new Mock<ICreature>();
@@ -55,7 +83,20 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_FireEvent_UsesConsumable()
+        public void Test_FireEventSpottedPlayer_DoesNotAttackPlayer()
+        {
+            // Arrange
+            Mock<ICreature> playerMock = new Mock<ICreature>();
+
+            // Act
+            _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
+
+            // Assert
+            playerMock.Verify((playerMock) => playerMock.ApplyDamage(_damage), Times.Never);
+        }
+
+        [Test]
+        public void Test_FireEventAlmostDead_UsesConsumable()
         {
             // Arrange
             Mock<ICreature> playerMock = new Mock<ICreature>();
@@ -70,7 +111,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_HealAmount_DoesNotReviveMonster()
+        public void Test_HealAmount_DoesNotReviveMonsterWhenDamageTooHigh()
         {
             // Act
             _sut.ApplyDamage(30);
@@ -81,7 +122,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_FireEvent_GetsTopPositionFromPathStack()
+        public void Test_FireEventSpottedPlayer_GetsTopPositionFromPathStack()
         {
             // Arrange
             Mock<ICreature> playerMock = new Mock<ICreature>();

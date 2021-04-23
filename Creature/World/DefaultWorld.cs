@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace Creature.World
 {
-    class DefaultWorld : IWorld
+    public class DefaultWorld : IWorld
     {
         private List<ICreature> _creatures;
         private List<ICreature> _players;
@@ -16,6 +16,7 @@ namespace Creature.World
 
         public List<ICreature> players => players;
 
+        public List<List<Node>> Nodes => _nodes;
         public int Size => _size;
 
         public DefaultWorld(int initialSize)
