@@ -1,9 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WebSocketSharp;
 
 namespace Network
@@ -18,7 +14,15 @@ namespace Network
         {
             _websocket = new WebSocket($"ws://{_ip}:{_port}/{_path}");
             AddBehaviorToWebsocket();
-            _websocket.Connect();
+            try
+            {
+                _websocket.Connect();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public WebSocketConnection(WebSocket webSocket)
