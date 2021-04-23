@@ -10,18 +10,6 @@ namespace Agent.antlr.checker
 {
     public class Checker
     {
-    
-        // private List<Node> symboltable;
-        //
-        // public Checker(AST ast)
-        // {
-        //     foreach (Node node in ast.root.GetChildren())
-        //     {
-        //         symboltable.Add(node);
-        //     }
-        //     //Entry of checkStatCombination in Pipeline
-        // }
-        
         public void Check(AST ast)
         {
             CheckStatCombination(ast.root.GetChildren());
