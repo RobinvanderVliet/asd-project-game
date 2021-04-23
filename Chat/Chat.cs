@@ -28,9 +28,10 @@ namespace Chat
             {
                 System.Console.WriteLine(e.Message);
             }
-
-
-
+            catch (MoveException e)
+            {
+                System.Console.WriteLine(e.Message);
+            }
         }
         
         public string GetCommand()
