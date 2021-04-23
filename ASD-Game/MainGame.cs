@@ -1,7 +1,8 @@
-﻿using Chat;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System;
 using Player;
+using Agent.Services;
+using Chat;
 
 namespace ASD_project
 {
@@ -9,17 +10,21 @@ namespace ASD_project
     {
         public class MainGame : IMainGame
         {
-            private readonly ILogger<MainGame> log;
+            private readonly ILogger<MainGame> _log;
 
             public MainGame(ILogger<MainGame> log)
             {
-                this.log = log;
+                this._log = log;
             }
 
             public void Run()
             {
                 Console.WriteLine("Game is gestart");
 
+                // TODO: Remove from this method, team 2 will provide a command for it
+                //AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
+                //agentConfigurationService.StartConfiguration();
+                
                 //moet later vervangen worden
                 ChatComponent chat = new ChatComponent();
                 PlayerModel playerModel = new PlayerModel();
@@ -27,6 +32,7 @@ namespace ASD_project
                 {
                     chat.HandleCommands(playerModel);
                 } while (true); // moet vervangen worden met variabele: isQuit 
+                
             }
         }
     }

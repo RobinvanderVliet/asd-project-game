@@ -29,4 +29,8 @@
     <ProjectReference Include="..\Player\Player.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Agent\Agent.csproj" />
+  </ItemGroup>
+
 </Project>
