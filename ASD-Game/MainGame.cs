@@ -22,8 +22,8 @@ namespace ASD_project
                 Console.WriteLine("Game is gestart");
 
                 // TODO: Remove from this method, team 2 will provide a command for it
-                AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
-                agentConfigurationService.StartConfiguration();
+                //AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
+                //agentConfigurationService.StartConfiguration();
                 
                 //moet later vervangen worden
                 ChatComponent chat = new ChatComponent();
