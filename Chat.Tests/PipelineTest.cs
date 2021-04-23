@@ -15,7 +15,7 @@ namespace Chat.Tests
     {
         private Mock<IPlayerModel> mockedPlayer;
         private Mock<Evaluator> mockedEvaluator;
-        private Pipeline sut = new Pipeline();
+        private Pipeline sut;
 
         [SetUp]
         public void SetUp()

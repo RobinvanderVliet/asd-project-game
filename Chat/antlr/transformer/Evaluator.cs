@@ -23,13 +23,15 @@ namespace Chat.antlr.transformer
         {
             var input = (Input) node;
             var nodeBody = input.body;
-            for (var i = 0; i < nodeBody.Count; i++)
-                switch (nodeBody[i])
+            foreach (var nodeObject in nodeBody)
+            {
+                switch (nodeObject)
                 {
                     case Move:
-                        TransformMove((Move) nodeBody[i]);
+                        TransformMove((Move) nodeObject);
                         break;
                 }
+            }
         }
 
         private void TransformMove(Move move)

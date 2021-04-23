@@ -13,9 +13,12 @@ namespace Chat.antlr
     {
         public AST Ast { get; private set; }
 
-        public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine,
-            string msg,
-            RecognitionException e)
+        public void SyntaxError(IRecognizer recognizer, 
+                                IToken offendingSymbol, 
+                                int line, 
+                                int charPositionInLine, 
+                                string msg, 
+                                RecognitionException e)
         {
             throw new CommandSyntaxException(msg);
         }
@@ -24,7 +27,9 @@ namespace Chat.antlr
         {
             //Lex (with Antlr's generated lexer)
             if (!input.StartsWith("say") && !input.StartsWith("whisper") && !input.StartsWith("shout"))
+            {
                 input = input.ToLower();
+            }
 
             var inputStream = new AntlrInputStream(input);
             var lexer = new PlayerCommandsLexer(inputStream);
@@ -33,10 +38,9 @@ namespace Chat.antlr
             var tokens = new CommonTokenStream(lexer);
 
             //Parse (with Antlr's generated parser)
-            var errorListener = new Pipeline();
             var parser = new PlayerCommandsParser(tokens);
             parser.RemoveErrorListeners();
-            parser.AddErrorListener(errorListener);
+            parser.AddErrorListener(this);
 
             var parseTree = parser.input();
 
@@ -49,10 +53,12 @@ namespace Chat.antlr
         }
 
 
-        public void transform(IPlayerModel playerModel)
+        public void Transform(IPlayerModel playerModel)
         {
             if (Ast == null)
+            {
                 return;
+            }
             new Evaluator(playerModel).Apply(Ast);
         }
     }

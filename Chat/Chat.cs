@@ -7,18 +7,18 @@ namespace Chat
 {
     public class ChatComponent
     {
-        public void HandleCommands(PlayerModel player)
+        public void HandleCommands(IPlayerModel player)
         {
             SendChat(GetCommand(), player);
         }
 
-        private static void SendChat(string commando, PlayerModel playerModel)
+        private static void SendChat(string commando, IPlayerModel playerModel)
         {
             try
             {
                 var pipeline = new Pipeline();
                 pipeline.ParseCommand(commando);
-                pipeline.transform(playerModel);
+                pipeline.Transform(playerModel);
             }
             catch (CommandSyntaxException e)
             {
