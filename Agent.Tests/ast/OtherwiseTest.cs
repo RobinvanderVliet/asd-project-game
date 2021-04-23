@@ -1,14 +1,12 @@
 
 using Agent.antlr.ast;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 
 namespace Agent.Tests.ast
 {
-    /*
-     * 
-     * @author Abdul     
-    */
+    [ExcludeFromCodeCoverage]
     [TestFixture]
     public class OtherwiseTest
     {

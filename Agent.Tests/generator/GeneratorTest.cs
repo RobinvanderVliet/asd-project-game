@@ -1,14 +1,11 @@
-﻿using Agent.antlr.ast;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Agent.antlr.ast.implementation;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.generator
 {
+    [ExcludeFromCodeCoverage]
     public class GeneratorTest
     {
 

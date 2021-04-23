@@ -6,9 +6,11 @@ using Agent.antlr.ast.implementation;
 using Agent.antlr.checker;
 using Moq;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.checker
 {
+    [ExcludeFromCodeCoverage]
     public class TestCheckerFunctions
     {
         private Checker sut;

@@ -1,8 +1,10 @@
 ﻿using Agent.antlr.ast;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.ast
 {
+    [ExcludeFromCodeCoverage]
     [TestFixture]
     public class ConditionTest
     {

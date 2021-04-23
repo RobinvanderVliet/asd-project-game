@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Agent.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class FileHandlerTests
     {
         static FileHandler sut;
@@ -20,7 +22,7 @@ namespace Agent.Tests
         }
 
         [Test]
-        public void ImportFileTest()
+        public void Test_Import_CorrectFile()
         {
             var expected = "combat when player nearby player then attack";
             var fileLocation = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\import_test_file_1.txt";
@@ -30,7 +32,7 @@ namespace Agent.Tests
             Assert.AreEqual(expected, result);
         }
         [Test]
-        public void ImportWrongFileTest()
+        public void Test_Import_WrongFile()
         { 
             //Method to 
             var fileLocation = String.Format(Path.GetFullPath(Path.Combine
@@ -43,7 +45,7 @@ namespace Agent.Tests
         }
 
         [Test]
-        public void ExportFileTest()
+        public void Test_ExportFile()
         {
             var expected = "combat when player nearby player then attack combat";
 

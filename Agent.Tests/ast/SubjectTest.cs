@@ -1,9 +1,11 @@
 ﻿using Agent.antlr.ast.comparables;
 using Agent.antlr.ast.comparables.subjects;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.ast
 {
+    [ExcludeFromCodeCoverage]
     [TestFixture]
     public class SubjectTest
     {

@@ -2,9 +2,11 @@
 using Agent.antlr.ast.comparables;
 using Agent.antlr.ast.comparables.subjects;
 using Agent.antlr.ast.implementation;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.parser
 {
+    [ExcludeFromCodeCoverage]
     public static class Fixtures
     {
 

@@ -1,7 +1,9 @@
 ﻿using Antlr4.Runtime;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.parser
 {
+    [ExcludeFromCodeCoverage]
     public class TestErrorHandler : BaseErrorListener
     {
 

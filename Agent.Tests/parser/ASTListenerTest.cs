@@ -7,11 +7,13 @@ using System;
 using System.IO;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Linq;
 
 namespace Agent.Tests.parser
 {
+    [ExcludeFromCodeCoverage]
     public class ASTListenerTest
     {
 
@@ -61,7 +63,7 @@ namespace Agent.Tests.parser
         [TestCase("test1.txt")]
         [TestCase("test2.txt")]
         [TestCase("test3.txt")]
-        public void TestFileTests1(String file)
+        public void Test_FileTests_MultipleFiles(String file)
         {
             //Arrange
             var expected = Fixtures.GetFixture(file);

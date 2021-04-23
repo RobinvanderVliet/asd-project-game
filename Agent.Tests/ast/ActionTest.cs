@@ -1,10 +1,12 @@
 ﻿using System;
 using Agent.antlr.ast;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 using Action = Agent.antlr.ast.Action;
 
 namespace Agent.Tests.ast
 {
+    [ExcludeFromCodeCoverage]
     [TestFixture]
     public class ActionTest
     {

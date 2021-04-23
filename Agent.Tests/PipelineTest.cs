@@ -3,9 +3,11 @@ using Agent.antlr.ast.implementation;
 using Agent.antlr.checker;
 using Moq;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests
 {
+    [ExcludeFromCodeCoverage]
     [TestFixture]
     public class PipelineTest
     {
@@ -25,7 +27,7 @@ namespace Agent.Tests
         * @author Abdul     
        */
         [Test]
-        public void ParseString()
+        public void Test_ParseString_HappyPath()
         {
             //Arrange
             //Act
@@ -44,9 +46,9 @@ namespace Agent.Tests
         * Parse incoming string
         * @author Abdul     
        */
-        [Test]
-        public void CheckAst()
-        {
+        // [Test]
+        // public void CheckAst()
+        // {
             // //Arrange
             //
             // AST ast = new AST();
@@ -71,6 +73,6 @@ namespace Agent.Tests
             //
             // //Assert
             // mockedChecker.Verify(mock => mock.Check(ast), Times.Once);
-        }
+        // }
     }
 }
