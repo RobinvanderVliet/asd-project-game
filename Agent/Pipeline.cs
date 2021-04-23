@@ -13,16 +13,16 @@ namespace Agent
 {
     public class Pipeline : IAntlrErrorListener<IToken>
     {
-        private AST ast;
+        private AST _ast;
 
-        private List<string> errors;
-        private Checker checker;
+        private List<string> _errors;
+        private Checker _checker;
         // private Transformer transformer;
         private Generator generator;
 
         public Pipeline()
         {
-            errors = new List<string>();
+            _errors = new List<string>();
             // transformer = new Transformer();
             generator = new Generator();
         }
@@ -32,7 +32,7 @@ namespace Agent
             AntlrInputStream inputStream = new AntlrInputStream(input);
             AgentConfigurationLexer lexer = new AgentConfigurationLexer(inputStream);
             lexer.RemoveErrorListeners();
-            errors.Clear();
+            _errors.Clear();
 
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             AgentConfigurationParser parser = new AgentConfigurationParser(tokens);
@@ -43,7 +43,7 @@ namespace Agent
             
             ASTAgentListener astAgentListener = new ASTAgentListener();
             walker.Walk(astAgentListener, parseTree);
-            ast = astAgentListener.GetAST();
+            _ast = astAgentListener.GetAST();
         }
 
         public void CheckAst()
@@ -59,31 +59,31 @@ namespace Agent
 
         public string GenerateAst()
         {
-            return generator.execute(ast);
+            return generator.Execute(_ast);
         }
 
         private void ThrowExceptionIfAstIsNull()
         {
-            if (ast == null)
+            if (_ast == null)
                 throw new UndefinedAstException();
         }
 
         public AST Ast
         {
-            get => ast;
-            set => ast = value;
+            get => _ast;
+            set => _ast = value;
         }
 
-        public List<string> Errors => errors;
+        public List<string> Errors => _errors;
 
         public void ClearErrors()
         {
-            errors.Clear();
+            _errors.Clear();
         }
         
         public Checker Checker
         {
-            set => checker = value;
+            set => _checker = value;
         }
         
         public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine,

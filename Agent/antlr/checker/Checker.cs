@@ -9,13 +9,13 @@ namespace Agent.antlr.checker
 {
     public class Checker
     {
-        private List<Node> symboltable;
+        private List<Node> _symboltable;
 
         public Checker(AST ast)
         {
             foreach (Node node in ast.root.GetChildren())
             {
-                symboltable.Add(node);
+                _symboltable.Add(node);
             }
             //Entry of checkStatCombination in Pipeline
         }
@@ -56,8 +56,8 @@ namespace Agent.antlr.checker
             string[][] allowedItemStatsCombinations =
             {
                 //              ITEM     STAT
-                new string[] {"Weapon", "Power"},
-                new string[] {"Potion", "Health"},
+                new[] {"Weapon", "Power"},
+                new[] {"Potion", "Health"},
             };
 
             String itemName = comparable.Name;

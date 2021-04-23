@@ -5,7 +5,7 @@ namespace Agent.antlr.ast
     
     public class Rule : Node
     {
-        private List<Node> settings = new List<Node>();
+        private List<Node> _settings = new List<Node>();
 
         public string SettingName { get; set; }
         public string Value { get; set; }
@@ -25,7 +25,7 @@ namespace Agent.antlr.ast
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            children.AddRange(settings);
+            children.AddRange(_settings);
             children.AddRange(body);
             return children;
         }
@@ -33,7 +33,7 @@ namespace Agent.antlr.ast
         public override Node AddChild(Node node)
         {
             if (node is Setting setting)
-                settings.Add(setting);
+                _settings.Add(setting);
             else
                 body.Add(node);
 
@@ -43,7 +43,7 @@ namespace Agent.antlr.ast
         public override Node RemoveChild(Node node)
         {
             if (node is Setting setting)
-                settings.Remove(setting);
+                _settings.Remove(setting);
             else 
                 body.Remove(node);
             return this;

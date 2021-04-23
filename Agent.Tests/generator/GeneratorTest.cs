@@ -29,7 +29,7 @@ namespace Agent.Tests.generator
             AST ast = fix.GetFixture(input);
 
             //Act
-            var result = sut.execute(ast);
+            var result = sut.Execute(ast);
 
             //Assert
             Assert.True(true);

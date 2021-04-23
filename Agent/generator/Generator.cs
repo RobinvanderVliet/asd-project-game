@@ -10,10 +10,10 @@ namespace Agent
 {
     public class Generator
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new();
         String player;
 
-        public string execute(AST ast) 
+        public string Execute(AST ast) 
         {
             foreach (Node node in ast.root.GetChildren())
             {

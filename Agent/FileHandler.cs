@@ -11,31 +11,26 @@ namespace Agent
     {
         public string ImportFile(string filepath)
         {
-            try
+            if (Path.GetExtension(filepath) == ".txt" || Path.GetExtension(filepath) == ".cfg")
             {
-                if (Path.GetExtension(filepath) == ".txt" || Path.GetExtension(filepath) == ".cfg")
+                if (!File.Exists(filepath))
                 {
-                    using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
+                    throw new FileException("File does not exists");
+                }
+                    
+                using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
+                {
+                    using (StreamReader reader = new StreamReader(fileStream))
                     {
-                        using (StreamReader reader = new StreamReader(fileStream))
-                        {
-                            string fileData = reader.ReadToEnd();
+                        string fileData = reader.ReadToEnd();
 
-                            reader.Close();
+                        reader.Close();
 
-                            return fileData;
-                        };
-                    }
-                }
-                else 
-                {
-                    throw new FileException("File given is not of the correct file type");
+                        return fileData;
+                    };
                 }
             }
-            catch (FileException)
-            { 
-                throw;
-            }
+            throw new FileException("File given is not of the correct file type");
             
         }
 

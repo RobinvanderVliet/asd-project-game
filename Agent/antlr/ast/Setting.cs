@@ -6,8 +6,8 @@ namespace Agent.antlr.ast
     public class Setting : Node
     {
         
-        private List<Node> conditions = new List<Node>();
-        private List<Node> actions = new List<Node>();
+        private List<Node> _conditions = new List<Node>();
+        private List<Node> _actions = new List<Node>();
         
         public string SettingName { get; set; }
         
@@ -25,8 +25,8 @@ namespace Agent.antlr.ast
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            children.AddRange(conditions);
-            children.AddRange(actions);
+            children.AddRange(_conditions);
+            children.AddRange(_actions);
             children.AddRange(body);
             return children;
         }
@@ -36,10 +36,10 @@ namespace Agent.antlr.ast
             switch (node) 
             {
                 case Condition:
-                    conditions.Add(node);
+                    _conditions.Add(node);
                     break;
                 case Action:
-                    actions.Add(node);
+                    _actions.Add(node);
                     break;
                 default:
                     body.Add(node);

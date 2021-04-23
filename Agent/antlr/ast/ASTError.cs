@@ -2,18 +2,18 @@
 {
     public class ASTError
     {
-        private string message;
+        private string _message;
 
 
         public ASTError(string message)
         {
-            this.message = message;
+            this._message = message;
         }
 
 
         override public string ToString()
         {
-            return "ERROR: " + this.message;
+            return "ERROR: " + this._message;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-namespace Agent.antlr.ast.comparables.subjects
+﻿namespace Agent.antlr.ast.comparables.subjects
 {
     public class NPC : Subject
     {
