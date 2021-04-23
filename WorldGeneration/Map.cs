@@ -7,7 +7,7 @@ namespace WorldGeneration
 {
     public class Map
     {
-        private List<Chunk> _chunks;
+        private IList<Chunk> _chunks;
         private readonly int _chunkSize;
         private readonly int _seed;
 
@@ -26,16 +26,15 @@ namespace WorldGeneration
             foreach (var chunkXY in chunksWithinLoadingRange)
             {
                 var chunk = db.GetChunk(chunkXY[0], chunkXY[1]);
-                if (chunk == null)
-                    chunks.Add(GenerateNewChunk(chunkXY[0], chunkXY[1]));
-                else
-                    chunks.Add(db.GetChunk(chunkXY[0], chunkXY[1]));
+                chunks.Add(chunk == null
+                    ? GenerateNewChunk(chunkXY[0], chunkXY[1])
+                    : db.GetChunk(chunkXY[0], chunkXY[1]));
             }
 
             DisplayMap(0, 0, viewDistance, chunks);
         }
 
-        private List<int[]> CalculateChunksToLoad(int[] playerLocation, int viewDistance)
+        private IEnumerable<int[]> CalculateChunksToLoad(int[] playerLocation, int viewDistance)
         {
             var maxX = (playerLocation[0] + viewDistance * 2 + _chunkSize) / _chunkSize;
             var minX = (playerLocation[0] - viewDistance * 2 - _chunkSize * 2) /
@@ -51,7 +50,7 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
 
-        private void DisplayMap(int playerx, int playery, int viewDistance, List<Chunk> chunks)
+        private void DisplayMap(int playerx, int playery, int viewDistance, IReadOnlyCollection<Chunk> chunks)
         {
             for (var y = playery; y < viewDistance * 2 + 1; y++)
             for (var x = playerx; x < viewDistance * 2 + 1; x++)
