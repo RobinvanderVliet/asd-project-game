@@ -10,7 +10,7 @@ namespace Agent.antlr.checker
 {
     public class Checker
     {
-        public void Check(AST ast)
+        public virtual void Check(AST ast)
         {
             CheckStatCombination(ast.root.GetChildren());
         }
