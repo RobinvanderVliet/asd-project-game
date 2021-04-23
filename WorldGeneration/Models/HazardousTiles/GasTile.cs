@@ -4,7 +4,7 @@
     {
         public GasTile(int radius = 1)
         {
-            Symbol = TileSymbol.Gas;
+            Symbol = TileSymbol.GAS;
             IsAccessible = true;
 
             Radius = radius;

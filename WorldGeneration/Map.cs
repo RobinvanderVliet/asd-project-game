@@ -7,9 +7,9 @@ namespace WorldGeneration
 {
     public class Map
     {
-        private IList<Chunk> _chunks;
         private readonly int _chunkSize;
         private readonly int _seed;
+        private IList<Chunk> _chunks;
 
         public Map(int chunkSize = 10, int seed = 0620520399)
         {
@@ -59,7 +59,7 @@ namespace WorldGeneration
                     chunk.X * _chunkSize <= x && chunk.X * _chunkSize > x - _chunkSize && chunk.Y * _chunkSize >= y &&
                     chunk.Y * _chunkSize < y + _chunkSize);
                 if (chunk == null) throw new Exception("this chunk should not be null");
-                Console.Write(chunk.Map[chunk.GetPositionInTileArrayByWorldCoordinates(x, y)].Symbol);
+                Console.Write(" " + chunk.Map[chunk.GetPositionInTileArrayByWorldCoordinates(x, y)].Symbol);
                 if (x == viewDistance * 2) Console.WriteLine("");
             }
         }

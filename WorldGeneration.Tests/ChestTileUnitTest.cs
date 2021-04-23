@@ -1,10 +1,12 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using WorldGeneration.Models.Interfaces;
 using WorldGeneration.Models.LootableTiles;
 
 namespace WorldGeneration.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class ChestTileUnitTest
     {
         private ILootAbleTile _tile;

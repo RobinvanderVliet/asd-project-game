@@ -6,7 +6,7 @@ namespace WorldGeneration.Models.HazardousTiles
     {
         public SpikeTile()
         {
-            Symbol = TileSymbol.Spike;
+            Symbol = TileSymbol.SPIKE;
             IsAccessible = true;
             Damage = new Random().Next(2, 11);
         }

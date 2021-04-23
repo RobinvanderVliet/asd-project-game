@@ -39,14 +39,14 @@ namespace WorldGeneration
             IEnumerable<string> result = new List<string>();
 
             // Set number of rows and columns to generate. In order to test the prototype, this is simplified to a single number.
-            const int number = 10;
+            const int NUMBER = 10;
 
             // Gather noise data
-            var noiseData = new float[number, number];
+            var noiseData = new float[NUMBER, NUMBER];
 
-            for (var y = 0; y < number; y++)
+            for (var y = 0; y < NUMBER; y++)
             {
-                for (var x = 0; x < number; x++)
+                for (var x = 0; x < NUMBER; x++)
                 {
                     noiseData[x, y] = noise.GetNoise(x, y);
                     if ((int) Math.Floor(noiseData[x, y] * 10) > -1)

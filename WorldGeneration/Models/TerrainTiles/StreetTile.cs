@@ -4,7 +4,7 @@
     {
         public StreetTile()
         {
-            Symbol = TileSymbol.Street;
+            Symbol = TileSymbol.STREET;
             IsAccessible = true;
         }
     }

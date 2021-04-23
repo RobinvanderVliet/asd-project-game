@@ -4,7 +4,7 @@
     {
         public GrassTile()
         {
-            Symbol = TileSymbol.Grass;
+            Symbol = TileSymbol.GRASS;
             IsAccessible = true;
         }
     }

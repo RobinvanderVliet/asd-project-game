@@ -7,7 +7,7 @@ namespace WorldGeneration.Models.BuildingTiles
     {
         public DoorTile()
         {
-            Symbol = TileSymbol.Door;
+            Symbol = TileSymbol.DOOR;
             IsAccessible = true;
         }
 

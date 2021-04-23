@@ -18,11 +18,6 @@ namespace ASD_project
             public void Run()
             {
                 new WorldGeneration.Program();
-                // Note this code is for testing purposes only!
-                Console.WriteLine("Game is gestart");
-                WorldGenerationPrototype prototypeGenerator = new WorldGenerationPrototype(0);
-                prototypeGenerator.GenerateThreeWorldsWithDifferentFrequencyButTheSameSeed(12345);
-                prototypeGenerator.GenerateThreeWorldsWithDifferentFrequencyButTheSameSeed(987654);
             }
         }
     }

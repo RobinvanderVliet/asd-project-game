@@ -1,10 +1,12 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using WorldGeneration.Models.BuildingTiles;
 using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class HouseTileUnitTest
     {
         private IBuildingTile _tile;

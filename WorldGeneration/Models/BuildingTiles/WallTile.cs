@@ -6,7 +6,7 @@ namespace WorldGeneration.Models.BuildingTiles
     {
         public WallTile()
         {
-            Symbol = TileSymbol.Wall;
+            Symbol = TileSymbol.WALL;
             IsAccessible = false;
         }
 

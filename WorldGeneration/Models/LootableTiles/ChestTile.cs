@@ -6,7 +6,7 @@ namespace WorldGeneration.Models.LootableTiles
     {
         public ChestTile()
         {
-            Symbol = TileSymbol.Chest;
+            Symbol = TileSymbol.CHEST;
             IsAccessible = true;
         }
 

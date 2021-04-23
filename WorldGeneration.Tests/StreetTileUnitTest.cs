@@ -1,9 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using WorldGeneration.Models.Interfaces;
 using WorldGeneration.Models.TerrainTiles;
 
 namespace WorldGeneration.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class StreetTileUnitTest
     {
         private ITerrainTile _tile;

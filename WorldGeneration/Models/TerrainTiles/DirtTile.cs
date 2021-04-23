@@ -4,7 +4,7 @@
     {
         public DirtTile()
         {
-            Symbol = TileSymbol.Dirt;
+            Symbol = TileSymbol.DIRT;
             IsAccessible = true;
         }
     }
