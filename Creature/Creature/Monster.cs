@@ -101,12 +101,19 @@ namespace Creature
         {
             if (_following)
             {
-                _position.X = path.Peek().position.X;
-                _position.Y = path.Peek().position.Y;
+                if (!(path.Peek().position.X == _player.Position.X && path.Peek().position.Y == _player.Position.Y))
+                {
+                    _position.X = path.Peek().position.X;
+                    _position.Y = path.Peek().position.Y;
+                }
             }
-            if ((_position.X + 1) == _player.Position.X || (_position.X - 1) == _player.Position.X)
+
+            if ((_position.X + 1f) == _player.Position.X && (_position.Y == _player.Position.Y)
+                || (_position.X - 1f) == _player.Position.X && (_position.Y == _player.Position.Y)
+                || (_position.Y + 1f) == _player.Position.Y && (_position.X == _player.Position.X)
+                || (_position.Y - 1f) == _player.Position.Y && (_position.X == _player.Position.X))
             {
-                OnAttackPlayer(_player);
+                FireEvent(Monster.Event.PLAYER_IN_RANGE, _player);
             }
         }
 
@@ -162,6 +169,7 @@ namespace Creature
 
             // Attack player
             builder.In(followPlayer).On(Event.PLAYER_IN_RANGE).Goto(attackPlayerState).Execute<ICreature>(OnAttackPlayer);
+            builder.In(attackPlayerState).On(Event.PLAYER_IN_RANGE).Execute<ICreature>(OnAttackPlayer);
             builder.In(useConsumable).On(Event.REGAINED_HEALTH_PLAYER_IN_RANGE).Goto(attackPlayerState).Execute<ICreature>(OnAttackPlayer);
 
             // Use potion
