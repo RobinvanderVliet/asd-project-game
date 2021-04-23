@@ -17,15 +17,9 @@ namespace Chat.antlr.ast
             root = input;
         }
 
-        public void setRoot(Input input)
+        public void SetRoot(Input input)
         {
             root = input;
-        }
-
-        [ExcludeFromCodeCoverage]
-        public override bool Equals(object obj)
-        {
-            return this.Equals(obj as AST);
         }
 
         [ExcludeFromCodeCoverage]

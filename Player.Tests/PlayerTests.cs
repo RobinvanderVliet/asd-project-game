@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
+using Player.Model;
 
 namespace Player.Tests
 {
@@ -12,7 +13,7 @@ namespace Player.Tests
         [SetUp]
         public void Setup()
         {
-            movementComponent = new PlayerModel();
+            movementComponent = new PlayerModel("Name", new Inventory(), new Bitcoin(20), new RadiationLevel(1));
         }
 
 

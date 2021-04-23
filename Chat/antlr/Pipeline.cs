@@ -5,7 +5,7 @@ using Chat.antlr.grammar;
 using Chat.antlr.parser;
 using Chat.antlr.transformer;
 using Chat.exception;
-using Player;
+using Player.Model;
 
 namespace Chat.antlr
 {
@@ -49,7 +49,7 @@ namespace Chat.antlr
             var walker = new ParseTreeWalker();
             walker.Walk(listener, parseTree);
 
-            Ast = listener.ast;
+            Ast = listener.getAST();
         }
 
 

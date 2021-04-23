@@ -1,7 +1,7 @@
 ﻿using System;
 using Chat.antlr;
 using Chat.exception;
-using Player;
+using Player.Model;
 
 namespace Chat
 {

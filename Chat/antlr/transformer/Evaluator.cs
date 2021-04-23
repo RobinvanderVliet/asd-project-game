@@ -1,7 +1,7 @@
 ﻿using Chat.antlr.ast;
 using Chat.antlr.ast.actions;
 using Chat.exception;
-using Player;
+using Player.Model;
 
 namespace Chat.antlr.transformer
 {

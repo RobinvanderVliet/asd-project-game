@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using Chat.antlr.ast;
 using Chat.antlr.ast.actions;
@@ -29,7 +29,7 @@ namespace Chat.antlr.parser
 
         public override void ExitMove(PlayerCommandsParser.MoveContext context)
         {
-            ast.root.addChild((ASTNode) _currentContainer.Pop());
+            ast.root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterAttack(PlayerCommandsParser.AttackContext context)
@@ -39,7 +39,7 @@ namespace Chat.antlr.parser
 
         public override void ExitAttack(PlayerCommandsParser.AttackContext context)
         {
-            ast.root.addChild((ASTNode) _currentContainer.Pop());
+            ast.root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterDrop(PlayerCommandsParser.DropContext context)
@@ -49,7 +49,7 @@ namespace Chat.antlr.parser
 
         public override void ExitDrop(PlayerCommandsParser.DropContext context)
         {
-            ast.root.addChild((ASTNode) _currentContainer.Pop());
+            ast.root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterPickup(PlayerCommandsParser.PickupContext context)
@@ -59,7 +59,7 @@ namespace Chat.antlr.parser
 
         public override void ExitPickup(PlayerCommandsParser.PickupContext context)
         {
-            ast.root.addChild((ASTNode) _currentContainer.Pop());
+            ast.root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterExit(PlayerCommandsParser.ExitContext context)
@@ -69,7 +69,7 @@ namespace Chat.antlr.parser
 
         public override void ExitExit(PlayerCommandsParser.ExitContext context)
         {
-            ast.root.addChild((ASTNode) _currentContainer.Pop());
+            ast.root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterSay(PlayerCommandsParser.SayContext context)
@@ -79,7 +79,7 @@ namespace Chat.antlr.parser
 
         public override void ExitSay(PlayerCommandsParser.SayContext context)
         {
-            ast.root.addChild((ASTNode) _currentContainer.Pop());
+            ast.root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterShout(PlayerCommandsParser.ShoutContext context)
@@ -89,7 +89,7 @@ namespace Chat.antlr.parser
 
         public override void ExitShout(PlayerCommandsParser.ShoutContext context)
         {
-            ast.root.addChild((ASTNode) _currentContainer.Pop());
+            ast.root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterReplace(PlayerCommandsParser.ReplaceContext context)
@@ -99,7 +99,7 @@ namespace Chat.antlr.parser
 
         public override void ExitReplace(PlayerCommandsParser.ReplaceContext context)
         {
-            ast.root.addChild((ASTNode) _currentContainer.Pop());
+            ast.root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterPause(PlayerCommandsParser.PauseContext context)
@@ -109,7 +109,7 @@ namespace Chat.antlr.parser
 
         public override void ExitPause(PlayerCommandsParser.PauseContext context)
         {
-            ast.root.addChild((ASTNode) _currentContainer.Pop());
+            ast.root.AddChild((ASTNode) _currentContainer.Pop());
         }
         
         public override void EnterResume(PlayerCommandsParser.ResumeContext context)
@@ -119,7 +119,7 @@ namespace Chat.antlr.parser
 
         public override void ExitResume(PlayerCommandsParser.ResumeContext context)
         {
-            ast.root.addChild((ASTNode) _currentContainer.Pop());
+            ast.root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterDirection(PlayerCommandsParser.DirectionContext context)
@@ -129,19 +129,19 @@ namespace Chat.antlr.parser
             if (action is Move)
             {
                 Move move = (Move) action;
-                move.addChild(new Direction(context.GetText()));
+                move.AddChild(new Direction(context.GetText()));
             }
             else if (action is Attack)
             {
                 Attack attack = (Attack) action;
-                attack.addChild(new Direction(context.GetText()));
+                attack.AddChild(new Direction(context.GetText()));
             }
         }
 
         public override void EnterStep(PlayerCommandsParser.StepContext context)
         {
             Move move = (Move) _currentContainer.Peek();
-            move.addChild(new Step(Convert.ToInt32(context.GetText())));
+            move.AddChild(new Step(Convert.ToInt32(context.GetText())));
         }
         
         public override void EnterMessage(PlayerCommandsParser.MessageContext context)
@@ -151,12 +151,12 @@ namespace Chat.antlr.parser
             if (action is Say)
             {
                 Say say = (Say) action;
-                say.addChild(new Message(context.GetText()));
+                say.AddChild(new Message(context.GetText()));
             }
             else if (action is Shout)
             {
                 Shout shout = (Shout) action;
-                shout.addChild(new Message(context.GetText()));
+                shout.AddChild(new Message(context.GetText()));
             }
         }
     }

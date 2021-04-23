@@ -3,8 +3,8 @@ using Chat.antlr.ast.actions;
 using Chat.antlr.transformer;
 using Moq;
 using NUnit.Framework;
-using Player;
 using System.Diagnostics.CodeAnalysis;
+using Player.Model;
 
 namespace Chat.Tests
 {

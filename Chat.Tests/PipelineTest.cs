@@ -6,7 +6,7 @@ using Chat.antlr.transformer;
 using Chat.exception;
 using Moq;
 using NUnit.Framework;
-using Player;
+using Player.Model;
 
 namespace Chat.Tests
 {
