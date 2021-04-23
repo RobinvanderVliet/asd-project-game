@@ -29,7 +29,15 @@ namespace Network
         {
             this._websocket = webSocket;
             AddBehaviorToWebsocket();
-            _websocket.Connect();
+            try
+            {
+                _websocket.Connect();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         private void AddBehaviorToWebsocket()
