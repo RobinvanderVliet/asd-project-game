@@ -1,18 +1,20 @@
 ﻿using Newtonsoft.Json;
 using System;
 using WebSocketSharp;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using System.IO;
 
 namespace Network
 {
     public class WebSocketConnection
     {
         private WebSocket _websocket;
-        private readonly string _ip = "localhost";
-        private readonly string _port = "8088";
-        private readonly string _path = "Relay";
+        private WebSocketConnectionConfig _webSocketConnectionConfig;
         public WebSocketConnection()
         {
-            _websocket = new WebSocket($"ws://{_ip}:{_port}/{_path}");
+            LoadConfigVariables();
+            _websocket = new WebSocket($"ws://{_webSocketConnectionConfig.Ip}:{_webSocketConnectionConfig.Port}/{_webSocketConnectionConfig.Path}");
             AddBehaviorToWebsocket();
             try
             {
@@ -53,7 +55,7 @@ namespace Network
             Console.WriteLine("connection close");
         }
 
-        private void Websocket_OnError(object sender, ErrorEventArgs e)
+        private void Websocket_OnError(object sender, WebSocketSharp.ErrorEventArgs e)
         {
             Console.WriteLine("error event");
         }
@@ -86,6 +88,12 @@ namespace Network
                 Console.WriteLine(e);
                 throw;
             }
+        }
+        private void LoadConfigVariables()
+        {
+            var config = new ConfigurationBuilder().SetBasePath(AppDomain.CurrentDomain.BaseDirectory).AddJsonFile("appsettings.json").Build();
+            var section = config.GetSection(nameof(WebSocketConnectionConfig));
+            _webSocketConnectionConfig = section.Get<WebSocketConnectionConfig>();
         }
     }
 }
