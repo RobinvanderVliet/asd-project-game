@@ -1,5 +1,6 @@
 ﻿using Chat.antlr.ast;
 using Chat.antlr.ast.actions;
+using Chat.exception;
 using Player;
 
 namespace Chat.antlr.transformer
@@ -33,7 +34,16 @@ namespace Chat.antlr.transformer
 
         private void TransformMove(Move move)
         {
-            _playerModel.HandleDirection(move.direction.value,move.steps.value);
+            switch (move.steps.value)
+            {
+                case < 1:
+                    throw new MoveException("Too few steps, the minimum is 1.");
+                case > 10:
+                    throw new MoveException("Too many steps, the maximum is 10.");
+                default:
+                    _playerModel.HandleDirection(move.direction.value, move.steps.value);
+                    break;
+            }
         }
     }
 }
