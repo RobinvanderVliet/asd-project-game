@@ -10,11 +10,11 @@ namespace ASD_project
     {
         public class MainGame : IMainGame
         {
-            private readonly ILogger<MainGame> log;
+            private readonly ILogger<MainGame> _log;
 
             public MainGame(ILogger<MainGame> log)
             {
-                this.log = log;
+                this._log = log;
             }
 
             public void Run()
