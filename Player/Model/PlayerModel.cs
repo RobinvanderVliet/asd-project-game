@@ -1,19 +1,8 @@
-﻿/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: ASD-project.
- 
-    This file is created by team: 2.
-     
-    Goal of this file: Implementing the player.
-     
-*/
-
-using System;
+﻿using System;
 
 namespace Player.Model
 {
-    public class Player : IPlayer
+    public class PlayerModel : IPlayerModel
     {
         public string Name { get; set; }
         public int Health { get; set; }
@@ -28,17 +17,17 @@ namespace Player.Model
         private const int HEALTHCAP = 100;
         private const int STAMINACAP = 10;
 
-        public Player(string name//, Tile tile
+        public PlayerModel(string name, IInventory inventory, IBitcoin bitcoins, IRadiationLevel radiationLevel //, Tile tile
                                       )
         {
             Name = name;
             Health = HEALTHCAP;
             Stamina = STAMINACAP;
             //_currentTile = tile;
-            Inventory = new Inventory();
+            Inventory = inventory;
             //random default value for now
-            Bitcoins = new Bitcoin(20);
-            RadiationLevel = new RadiationLevel(0);
+            Bitcoins = bitcoins;
+            RadiationLevel = radiationLevel;
         }
         
         public void AddHealth(int amount)
@@ -73,7 +62,7 @@ namespace Player.Model
             }
             else
             {
-                Stamina -= amount;
+                Stamina += amount;
             }
         }
 
@@ -87,6 +76,11 @@ namespace Player.Model
             {
                 Stamina -= amount;
             }
+        }
+
+        public Item GetItem(string itemName)
+        {
+            return Inventory.GetItem(itemName);
         }
 
         public void AddInventoryItem(Item item)
@@ -140,8 +134,12 @@ namespace Player.Model
             if (item != null)
             {
                 RemoveInventoryItem(item);
+                Console.WriteLine(item.ItemName + " laten vallen.");
             }
-            Console.WriteLine(item.ItemName + " laten vallen.");
+            else
+            {
+                Console.WriteLine("Je hebt geen " + itemName + " item in je inventory!");
+            }
         }
     }
 }
