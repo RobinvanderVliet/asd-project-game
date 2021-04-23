@@ -2,7 +2,7 @@
 
 namespace Creature
 {
-    public class FollowPlayerState : ICreatureStateInterface
+    public class FollowPlayerState : ICreatureState
     {
         private readonly Monster.Event _stateName;
         public Monster.Event StateName { get => _stateName; }

@@ -2,7 +2,7 @@
 
 namespace Creature.Creature
 {
-    public abstract class ICreatureStateInterface : IComparable
+    public abstract class ICreatureState : IComparable
     {
         Monster.Event StateName { get; }
 

@@ -2,7 +2,7 @@
 
 namespace Creature
 {
-    public class UseConsumableState : ICreatureStateInterface
+    public class UseConsumableState : ICreatureState
     {
         private Monster.Event _stateName;
         public Monster.Event StateName { get => _stateName; }
