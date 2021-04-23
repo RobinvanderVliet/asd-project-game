@@ -31,7 +31,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_Apply_Damage_Kills_Monster()
+        public void Test_ApplyDamage_KillsMonster()
         {
             // Act
             _sut.ApplyDamage(30);
@@ -41,7 +41,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_Fire_Event_Attacks_Player()
+        public void Test_FireEvent_AttacksPlayer()
         {
             // Arrange
             Mock<ICreature> playerMock = new Mock<ICreature>();
@@ -54,11 +54,8 @@ namespace Creature.Tests
             playerMock.Verify((playerMock) => playerMock.ApplyDamage(_damage));
         }
 
-        /*
-            
-        */
         [Test]
-        public void Test_Fire_Event_Use_Consumable()
+        public void Test_FireEvent_UsesConsumable()
         {
             // Arrange
             Mock<ICreature> playerMock = new Mock<ICreature>();
@@ -73,7 +70,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Heal_Amount_Does_Not_Revive_Monster()
+        public void Test_HealAmount_DoesNotReviveMonster()
         {
             // Act
             _sut.ApplyDamage(30);
@@ -84,7 +81,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_Get_Top_Position_From_Path_Stack()
+        public void Test_FireEvent_GetsTopPositionFromPathStack()
         {
             // Arrange
             Mock<ICreature> playerMock = new Mock<ICreature>();
