@@ -13,35 +13,36 @@ namespace Chat.antlr
     {
         public AST Ast { get; private set; }
 
-        public Pipeline()
+        public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine,
+            string msg,
+            RecognitionException e)
         {
+            throw new CommandSyntaxException(msg);
         }
 
         public void ParseCommand(string input)
         {
             //Lex (with Antlr's generated lexer)
             if (!input.StartsWith("say") && !input.StartsWith("whisper") && !input.StartsWith("shout"))
-            {
                 input = input.ToLower();
-            }
 
-            AntlrInputStream inputStream = new AntlrInputStream(input);
-            PlayerCommandsLexer lexer = new PlayerCommandsLexer(inputStream);
+            var inputStream = new AntlrInputStream(input);
+            var lexer = new PlayerCommandsLexer(inputStream);
             lexer.RemoveErrorListeners();
 
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            var tokens = new CommonTokenStream(lexer);
 
             //Parse (with Antlr's generated parser)
             var errorListener = new Pipeline();
-            PlayerCommandsParser parser = new PlayerCommandsParser(tokens);
+            var parser = new PlayerCommandsParser(tokens);
             parser.RemoveErrorListeners();
             parser.AddErrorListener(errorListener);
 
             var parseTree = parser.input();
 
             //Extract AST from the Antlr parse tree
-            ASTListener listener = new ASTListener();
-            ParseTreeWalker walker = new ParseTreeWalker();
+            var listener = new ASTListener();
+            var walker = new ParseTreeWalker();
             walker.Walk(listener, parseTree);
 
             Ast = listener.ast;
@@ -53,13 +54,6 @@ namespace Chat.antlr
             if (Ast == null)
                 return;
             new Evaluator(playerModel).Apply(Ast);
-        }
-
-        public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine,
-            string msg,
-            RecognitionException e)
-        {
-            throw new CommandSyntaxException(msg);
         }
     }
 }

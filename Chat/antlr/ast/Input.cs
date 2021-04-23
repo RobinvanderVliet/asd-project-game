@@ -10,7 +10,22 @@ namespace Chat.antlr.ast
 
         public Input()
         {
-            this.body = new ArrayList();
+            body = new ArrayList();
+        }
+
+        [ExcludeFromCodeCoverage]
+        public bool Equals(Input other)
+        {
+            if (other == null)
+                return false;
+
+            if (body.Count != other.body.Count) return false;
+
+            for (var i = 0; i < body.Count; i++)
+                if (!body[i].Equals(other.body[i]))
+                    return false;
+
+            return true;
         }
 
         public override ASTNode AddChild(ASTNode child)
@@ -22,29 +37,7 @@ namespace Chat.antlr.ast
         [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
-            return this.Equals(obj as Input);
-        }
-
-        [ExcludeFromCodeCoverage]
-        public bool Equals(Input other)
-        {
-            if (other == null)
-                return false;
-
-            if (body.Count != other.body.Count)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < body.Count; i++)
-            {
-                if (!body[i].Equals(other.body[i]))
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return Equals(obj as Input);
         }
     }
 }

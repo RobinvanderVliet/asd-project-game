@@ -23,7 +23,7 @@ namespace Chat.antlr.transformer
         {
             var input = (Input) node;
             var nodeBody = input.body;
-            for (int i = 0; i < nodeBody.Count; i++)
+            for (var i = 0; i < nodeBody.Count; i++)
                 switch (nodeBody[i])
                 {
                     case Move:

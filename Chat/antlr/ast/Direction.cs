@@ -6,16 +6,10 @@ namespace Chat.antlr.ast
     public class Direction : ASTNode, IEquatable<Direction>
     {
         public string value;
-        
+
         public Direction(string value)
         {
             this.value = value;
-        }
-
-        [ExcludeFromCodeCoverage]
-        public override bool Equals(object obj)
-        {
-            return this.Equals(obj as Direction);
         }
 
         [ExcludeFromCodeCoverage]
@@ -25,6 +19,12 @@ namespace Chat.antlr.ast
                 return false;
 
             return value == other.value;
+        }
+
+        [ExcludeFromCodeCoverage]
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Direction);
         }
     }
 }

@@ -18,18 +18,18 @@ namespace Chat.antlr.ast
         }
 
         [ExcludeFromCodeCoverage]
-        public override bool Equals(object obj)
-        {
-            return this.Equals(obj as AST);
-        }
-
-        [ExcludeFromCodeCoverage]
         public bool Equals(AST other)
         {
             if (other == null)
                 return false;
 
             return root.Equals(other.root);
+        }
+
+        [ExcludeFromCodeCoverage]
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as AST);
         }
     }
 }

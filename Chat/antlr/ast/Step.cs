@@ -15,12 +15,6 @@ namespace Chat.antlr.ast
         {
             this.value = value;
         }
-        
-        [ExcludeFromCodeCoverage]
-        public override bool Equals(object obj)
-        {
-            return this.Equals(obj as Step);
-        }
 
         [ExcludeFromCodeCoverage]
         public bool Equals(Step other)
@@ -29,6 +23,12 @@ namespace Chat.antlr.ast
                 return false;
 
             return value == other.value;
+        }
+
+        [ExcludeFromCodeCoverage]
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Step);
         }
     }
 }

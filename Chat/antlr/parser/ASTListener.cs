@@ -9,14 +9,15 @@ namespace Chat.antlr.parser
     public class ASTListener : PlayerCommandsBaseListener
 
     {
-        public AST ast { get;}
-        private Stack _currentContainer;
+        private readonly Stack _currentContainer;
 
         public ASTListener()
         {
             ast = new AST();
             _currentContainer = new Stack();
         }
+
+        public AST ast { get; }
 
         public override void EnterMove(PlayerCommandsParser.MoveContext context)
         {
@@ -25,19 +26,18 @@ namespace Chat.antlr.parser
 
         public override void ExitMove(PlayerCommandsParser.MoveContext context)
         {
-            
-           ast.root.AddChild((ASTNode)_currentContainer.Pop());
+            ast.root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterDirection(PlayerCommandsParser.DirectionContext context)
         {
-            Move move = (Move) _currentContainer.Peek();
+            var move = (Move) _currentContainer.Peek();
             move.AddChild(new Direction(context.GetText()));
         }
 
         public override void EnterStep(PlayerCommandsParser.StepContext context)
         {
-            Move move = (Move) _currentContainer.Peek();
+            var move = (Move) _currentContainer.Peek();
             move.AddChild(new Step(Convert.ToInt32(context.GetText())));
         }
     }
