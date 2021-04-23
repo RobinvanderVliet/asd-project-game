@@ -4,7 +4,7 @@ namespace WorldGeneration.Models.HazardousTiles
 {
     public class SpikeTile : HazardousTile
     {
-        public SpikeTile() 
+        public SpikeTile()
         {
             Symbol = TileSymbol.Spike;
             IsAccessible = true;

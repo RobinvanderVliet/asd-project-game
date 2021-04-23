@@ -2,7 +2,7 @@
 {
     public class StreetTile : TerrainTile
     {
-        public StreetTile() 
+        public StreetTile()
         {
             Symbol = TileSymbol.Street;
             IsAccessible = true;

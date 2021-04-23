@@ -2,7 +2,7 @@
 {
     public class WaterTile : TerrainTile
     {
-        public WaterTile() 
+        public WaterTile()
         {
             Symbol = TileSymbol.Water;
             IsAccessible = false;

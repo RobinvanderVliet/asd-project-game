@@ -2,7 +2,7 @@
 {
     public class GrassTile : TerrainTile
     {
-        public GrassTile() 
+        public GrassTile()
         {
             Symbol = TileSymbol.Grass;
             IsAccessible = true;

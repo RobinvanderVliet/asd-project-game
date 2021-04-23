@@ -2,7 +2,7 @@
 {
     public class DirtTile : TerrainTile
     {
-        public DirtTile() 
+        public DirtTile()
         {
             Symbol = TileSymbol.Dirt;
             IsAccessible = true;

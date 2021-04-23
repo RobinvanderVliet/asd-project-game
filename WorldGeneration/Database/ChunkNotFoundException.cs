@@ -3,7 +3,7 @@ namespace WorldGeneration.Database
 {
     public class ChunkNotFoundException : DatabaseException
     {
-        public ChunkNotFoundException(string? message) : base()
+        public ChunkNotFoundException(string? message)
         {
         }
     }

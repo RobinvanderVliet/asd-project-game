@@ -8,4 +8,3 @@
         int Y { get; set; }
     }
 }
-

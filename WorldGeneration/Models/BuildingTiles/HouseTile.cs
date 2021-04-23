@@ -1,4 +1,6 @@
-﻿namespace WorldGeneration.Models.BuildingTiles
+﻿using System;
+
+namespace WorldGeneration.Models.BuildingTiles
 {
     public class HouseTile : BuildingTile
     {
@@ -10,7 +12,7 @@
 
         public override void DrawBuilding()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

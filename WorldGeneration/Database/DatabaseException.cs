@@ -8,6 +8,7 @@ namespace WorldGeneration.Database
         public DatabaseException()
         {
         }
+
         public DatabaseException(string? message) : base(message)
         {
         }
