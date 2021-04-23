@@ -60,18 +60,6 @@ namespace Creature
         };
 
         /// <summary>
-        /// All states that this creature is capable of activating.
-        /// Every creature has its own states that it can be in.
-        /// </summary>
-        public enum State
-        {
-            WANDERING,
-            FOLLOW_PLAYER,
-            ATTACK_PLAYER,
-            USE_CONSUMABLE
-        };
-
-        /// <summary>
         /// Passive NOT ASYNC statemachine.
         /// A statemachine will decide how a creature responds to specific events.
         /// Statemachines will decide how a creature behaves in certain events.
