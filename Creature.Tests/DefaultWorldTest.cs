@@ -13,16 +13,16 @@ namespace Creature.Tests
 {
     class DefaultWorldTest
     {
-        Mock<ICreature> firstCreatureMock;
-        Mock<ICreature> secondCreatureMock;
+        private Mock<ICreature> _firstCreatureMock;
+        private Mock<ICreature> _secondCreatureMock;
 
         private IWorld _sut;
 
         [SetUp]
         public void Setup()
         {
-            firstCreatureMock = new Mock<ICreature>();
-            secondCreatureMock = new Mock<ICreature>();
+            _firstCreatureMock = new Mock<ICreature>();
+            _secondCreatureMock = new Mock<ICreature>();
 
             int size = 2;
             _sut = new DefaultWorld(size);
@@ -59,8 +59,8 @@ namespace Creature.Tests
         public void Test_SpawnCreature_CreatureGetsSpawned()
         {
             // Act
-            _sut.SpawnCreature(firstCreatureMock.Object);
-            _sut.SpawnCreature(secondCreatureMock.Object);
+            _sut.SpawnCreature(_firstCreatureMock.Object);
+            _sut.SpawnCreature(_secondCreatureMock.Object);
 
             // Assert
             Assert.AreEqual(2, _sut.Creatures.Count);
@@ -71,8 +71,8 @@ namespace Creature.Tests
         public void Test_SpawnPlayer_PlayerGetsSpawned()
         {
             // Act
-            _sut.SpawnPlayer(firstCreatureMock.Object);
-            _sut.SpawnPlayer(secondCreatureMock.Object);
+            _sut.SpawnPlayer(_firstCreatureMock.Object);
+            _sut.SpawnPlayer(_secondCreatureMock.Object);
 
             // Assert
             Assert.AreEqual(2, _sut.Creatures.Count);

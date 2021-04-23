@@ -11,36 +11,36 @@ namespace Creature.Tests
     {
         // Declaratie en initialisatie constante variabelen
         // Declaratie variabelen
-        List<List<Node>> nodes;
-        int board_size;
-        Vector2 startPos;
-        Vector2 endPos;
+        private List<List<Node>> _nodes;
+        private int _boardSize;
+        private Vector2 _startPos;
+        private Vector2 _endPos;
         
         // Declaratie mocks
-        Mock<PathFinder> pathfinder;
+        private Mock<PathFinder> _pathfinder;
 
         [SetUp]
         public void Setup()
         {
             // Initialiseren variabelen
-            board_size = 20;
-            startPos = new Vector2(0, 0);
-            endPos = new Vector2(19, 19);
+            _boardSize = 20;
+            _startPos = new Vector2(0, 0);
+            _endPos = new Vector2(19, 19);
 
-            nodes = new List<List<Node>>();
-            for (int row = 0; row < board_size; row++)
+            _nodes = new List<List<Node>>();
+            for (int row = 0; row < _boardSize; row++)
             {
                 List<Node> nodePoints = new List<Node>();
-                for (int col = 0; col < board_size; col++)
+                for (int col = 0; col < _boardSize; col++)
                 {
                     Vector2 nodeLocation = new Vector2(row, col);
                     Node node = new Node(nodeLocation, true);
                     nodePoints.Add(node);
                 }
-                nodes.Add(nodePoints);
+                _nodes.Add(nodePoints);
             }
             // Initialiseren mocks
-            pathfinder = new Mock<PathFinder>(nodes) { CallBase = true};
+            _pathfinder = new Mock<PathFinder>(_nodes) { CallBase = true};
         }
 
         /*
@@ -54,7 +54,7 @@ namespace Creature.Tests
             // Arrange ---------
             Stack<Node> actualPath = new Stack<Node>();
             Stack<Node> path = new Stack<Node>();
-            actualPath = pathfinder.Object.FindPath(startPos, endPos);
+            actualPath = _pathfinder.Object.FindPath(_startPos, _endPos);
             
             // Act ---------
             int actual = actualPath.Count;
