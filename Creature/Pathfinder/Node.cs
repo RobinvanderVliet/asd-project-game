@@ -1,16 +1,4 @@
-﻿/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: [to be determined].
- 
-    This file is created by team: 4.
-     
-    Goal of this file: Nodes maken en klaarzetten voor gebruik in path finding.
-     
-*/
-
-using System.Numerics;
-
+﻿using System.Numerics;
 
 namespace Creature.Pathfinder
 {
