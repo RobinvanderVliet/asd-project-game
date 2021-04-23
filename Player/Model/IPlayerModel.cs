@@ -36,5 +36,10 @@ namespace Player.Model
         public void PickupItem();
 
         public void DropItem(string itemName);
+
+        public void HandleDirection(string direction, int steps);
+        
+        public int[] SendNewPosition(int[] newMovement);
+
     }
 }

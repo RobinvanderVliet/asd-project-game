@@ -8,7 +8,7 @@ namespace Chat.antlr.ast.actions
     {
         public Direction direction;
         public Step steps = new Step();
-
+        
         public override ArrayList getChildren()
         {
             var children = new ArrayList();
@@ -16,7 +16,7 @@ namespace Chat.antlr.ast.actions
             children.Add(steps);
             return children;
         }
-
+        
         public override ASTNode addChild(ASTNode child)
         {
             if (child is Direction)
@@ -30,7 +30,7 @@ namespace Chat.antlr.ast.actions
 
             return this;
         }
-
+        
         public override ASTNode removeChild(ASTNode child)
         {
             if (child is Direction && child == direction)
@@ -44,11 +44,11 @@ namespace Chat.antlr.ast.actions
 
             return this;
         }
-
+        
         [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
-            return this.Equals(obj as Move);
+            return Equals(obj as Move);
         }
 
         [ExcludeFromCodeCoverage]

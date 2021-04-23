@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.IO;
-using Player.Model;
+using Player;
 
 namespace ASD_project
 {
@@ -29,7 +29,7 @@ namespace ASD_project
                 .ConfigureServices((context, services) =>
                 {
                     services.AddTransient<IMainGame, MainGame>();
-                    services.AddScoped<IPlayerModel, PlayerModel>();
+                    services.AddScoped<IPlayerModel, IPlayerModel>();
                     services.AddScoped<IInventory, Inventory>();
                     services.AddScoped<IBitcoin, Bitcoin>();
                     services.AddScoped<IRadiationLevel, RadiationLevel>();
