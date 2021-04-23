@@ -63,7 +63,7 @@ namespace Creature.Tests
             _sut.SpawnCreature(secondCreatureMock.Object);
 
             // Assert
-            Assert.AreEqual(2, _sut.creatures.Count);
+            Assert.AreEqual(2, _sut.Creatures.Count);
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace Creature.Tests
             _sut.SpawnPlayer(secondCreatureMock.Object);
 
             // Assert
-            Assert.AreEqual(2, _sut.creatures.Count);
+            Assert.AreEqual(2, _sut.Creatures.Count);
         }
     }
 }

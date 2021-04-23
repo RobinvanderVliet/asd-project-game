@@ -10,11 +10,11 @@ namespace Creature.World
 {
     public interface IWorld
     {
-        List<ICreature> creatures { get; }
-        List<ICreature> players { get; }
+        public List<ICreature> Creatures { get; }
+        public List<ICreature> Players { get; }
 
         public List<List<Node>> Nodes { get; }
-        int Size { get; }
+        public int Size { get; }
 
         public void GenerateWorldNodes();
         public void SpawnPlayer(ICreature player);

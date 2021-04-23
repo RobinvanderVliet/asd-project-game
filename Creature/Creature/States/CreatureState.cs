@@ -2,19 +2,13 @@
 
 namespace Creature.Creature
 {
-    public abstract class ICreatureState : IComparable
+    public abstract class CreatureState : IComparable
     {
         Monster.Event StateName { get; }
 
-        public virtual void Do()
-        {
+        public virtual void Do() {}
 
-        }
-
-        public virtual void Do(object argument)
-        {
-
-        }
+        public virtual void Do(object argument) {}
 
         public int CompareTo(object? obj)
         {

@@ -2,10 +2,8 @@
 
 namespace Creature
 {
-    public class WanderState : ICreatureState
+    public class WanderState : CreatureState
     {
-        private Monster.Event _stateName;
-        public Monster.Event StateName { get => _stateName; }
         public override void Do()
         {
 

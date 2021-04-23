@@ -1,15 +1,4 @@
-﻿/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: [to be determined].
- 
-    This file is created by team: 4.
-     
-    Goal of this file: Op basis van een lijst aan gegeven nodes een optimaal pad berekenen.
-     
-*/
-
-using Creature.Pathfinder;
+﻿using Creature.Pathfinder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
