@@ -1,6 +1,7 @@
 ﻿using Agent.antlr.ast;
 using Agent.antlr.ast.comparables;
 using Agent.antlr.ast.comparables.subjects;
+using Agent.antlr.ast.implementation;
 
 namespace Agent.Tests.generator
 {

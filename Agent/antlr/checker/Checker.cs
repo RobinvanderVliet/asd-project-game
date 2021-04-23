@@ -10,17 +10,23 @@ namespace Agent.antlr.checker
 {
     public class Checker
     {
-        private List<Node> symboltable;
-
-        public Checker(AST ast)
-        {
-            foreach (Node node in ast.root.GetChildren())
-            {
-                symboltable.Add(node);
-            }
-            //Entry of checkStatCombination in Pipeline
-        }
+    
+        // private List<Node> symboltable;
+        //
+        // public Checker(AST ast)
+        // {
+        //     foreach (Node node in ast.root.GetChildren())
+        //     {
+        //         symboltable.Add(node);
+        //     }
+        //     //Entry of checkStatCombination in Pipeline
+        // }
         
+        public void Check(AST ast)
+        {
+            CheckStatCombination(ast.root.GetChildren());
+        }
+
         public void CheckStatCombination(List<Node> nodes)
         {
             foreach (Node node in nodes)
@@ -28,9 +34,8 @@ namespace Agent.antlr.checker
                 if (node.GetChildren().Count > 0)
                 {
                     CheckStatCombination(node.GetChildren());
-                    
                 }
-                
+
                 if (node is When)
                 {
                     var comparable = (Comparable) node.GetChildren().FirstOrDefault();
@@ -43,9 +48,9 @@ namespace Agent.antlr.checker
                         }
                     }
                 }
+
                 if (node is Stat)
                 {
-                    
                 }
             }
         }
@@ -53,7 +58,7 @@ namespace Agent.antlr.checker
         public Boolean CheckItemAndAllowedStat(Item comparable)
         {
             bool itemAllowed = false;
-            
+
             string[][] allowedItemStatsCombinations =
             {
                 //              ITEM     STAT
@@ -71,10 +76,9 @@ namespace Agent.antlr.checker
                 if (itemName != s[0] || statName != s[1]) continue;
                 itemAllowed = true;
                 if (itemAllowed) break;
-
             }
+
             return itemAllowed;
         }
     }
 }
-

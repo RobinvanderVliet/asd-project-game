@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using Agent.antlr.ast.implementation;
 using Agent.antlr.checker;
 using Agent.antlr.exception;
 using Agent.antlr.grammar;
 using Agent.parser;
 using Antlr4.Runtime;
-using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using SyntaxErrorException = Agent.exceptions.SyntaxErrorException;
 
