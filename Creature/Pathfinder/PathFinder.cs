@@ -8,23 +8,23 @@ namespace Creature
 {
     public class PathFinder
     {
-        List<List<Node>> grid;
+        List<List<Node>> _grid;
         public PathFinder(List<List<Node>> nodes)
         {
-            this.grid = nodes;
+            _grid = nodes;
         }
-        int gridRows
+        int _gridRows
         {
             get
             {
-                return grid[0].Count;
+                return _grid[0].Count;
             }
         }
-        int gridCols
+        int _gridCols
         {
             get
             {
-                return grid.Count;
+                return _grid.Count;
             }
         }
         public Stack<Node> FindPath(Vector2 startPosition, Vector2 endPosition)
@@ -87,21 +87,21 @@ namespace Creature
             int row = (int)node.position.Y;
             int col = (int)node.position.X;
 
-            if (row + 1 < gridRows)
+            if (row + 1 < _gridRows)
             {
-                temp.Add(grid[col][row + 1]);
+                temp.Add(_grid[col][row + 1]);
             }
             if (row - 1 >= 0)
             {
-                temp.Add(grid[col][row - 1]);
+                temp.Add(_grid[col][row - 1]);
             }
             if (col - 1 >= 0)
             {
-                temp.Add(grid[col - 1][row]);
+                temp.Add(_grid[col - 1][row]);
             }
-            if (col + 1 < gridCols)
+            if (col + 1 < _gridCols)
             {
-                temp.Add(grid[col + 1][row]);
+                temp.Add(_grid[col + 1][row]);
             }
 
             return temp;
