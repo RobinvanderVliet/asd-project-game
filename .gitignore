@@ -87,3 +87,4 @@ $RECYCLE.BIN/
 
 #.idea folder ignore
 .idea/
+*.user
