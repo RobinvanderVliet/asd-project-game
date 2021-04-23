@@ -26,7 +26,7 @@ namespace Player.Tests
         public void Test_SetItemList_SetsItemListSuccessfully()
         {
             var ItemList = new List<Item>();
-            ItemList.Add(new Item("Naam", "Beschrijving"));
+            ItemList.Add(new Item("ItemName", "Description"));
             sut.ItemList = ItemList;
             
             Assert.AreEqual(ItemList, sut.ItemList);
@@ -35,32 +35,35 @@ namespace Player.Tests
         [Test]
         public void Test_GetItem_GetsRightItem()
         {
-            Item item = new Item("Naam", "Beschrijving");
+            Item item = new Item("ItemName", "Description");
             sut.ItemList.Add(item);
             
-            Assert.AreEqual(item, sut.GetItem("Naam"));
+            Assert.AreEqual(item, sut.GetItem("ItemName"));
         }
         
         [Test]
         public void Test_GetItem_ReturnsNull()
         {
-            Assert.AreEqual(null, sut.GetItem("Naam"));
+            Item item = new Item("ItemName", "Description");
+            sut.ItemList.Add(item);
+            
+            Assert.AreEqual(null, sut.GetItem("UnexistingItemName"));
         }
         
         [Test]
         public void Test_AddItem_AddsItemSuccessfully()
         {
-            Item item = new Item("Naam", "Beschrijving");
+            Item item = new Item("ItemName", "Description");
             
             sut.AddItem(item);
             
-            Assert.AreEqual(item, sut.GetItem("Naam"));
+            Assert.AreEqual(item, sut.GetItem("ItemName"));
         }
         
         [Test]
         public void Test_RemoveItem_RemovesItemSuccessfully()
         {
-            Item item = new Item("Naam", "Beschrijving");
+            Item item = new Item("ItemName", "Description");
             sut.ItemList.Add(item);
             
             sut.RemoveItem(item);
@@ -71,7 +74,7 @@ namespace Player.Tests
         [Test]
         public void Test_EmptyInventory_EmptiesInventorySuccessfully()
         {
-            Item item = new Item("Naam", "Beschrijving");
+            Item item = new Item("ItemName", "Description");
             sut.AddItem(item);
             
             sut.EmptyInventory();

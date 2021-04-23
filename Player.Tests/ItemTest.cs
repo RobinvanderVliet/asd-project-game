@@ -12,13 +12,13 @@ namespace Player.Tests
         [SetUp]
         public void Setup()
         {
-            sut = new Item("Naam", "Beschrijving");
+            sut = new Item("ItemName", "Description");
         }
         
         [Test]
         public void Test_GetItemName_GetsItemNameSuccessfully()
         {
-            Assert.AreEqual("Naam", sut.ItemName);
+            Assert.AreEqual("ItemName", sut.ItemName);
         }
         
         [Test]
@@ -33,7 +33,7 @@ namespace Player.Tests
         [Test]
         public void Test_GetDescription_GetsDescriptionSuccessfully()
         {
-            Assert.AreEqual("Beschrijving", sut.Description);
+            Assert.AreEqual("Description", sut.Description);
         }
         
         [Test]

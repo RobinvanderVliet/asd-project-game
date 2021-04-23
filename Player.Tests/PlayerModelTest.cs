@@ -31,7 +31,7 @@ namespace Player.Tests
         [Test]
         public void Test_SetName_SetsNameSuccessfully()
         {
-            var name = "Nieuwe naam";
+            var name = "New Name";
             sut.Name = name;
             
             Assert.AreEqual(name, sut.Name);
@@ -187,17 +187,17 @@ namespace Player.Tests
         [Test]
         public void Test_GetItem_VerifyInventoryMoqWorks()
         {
-            Item item = new Item("Naam", "Beschrijving");
-            mockedInventory.Setup(mockedInventory => mockedInventory.GetItem("Naam")).Returns(item);
+            Item item = new Item("ItemName", "Description");
+            mockedInventory.Setup(mockedInventory => mockedInventory.GetItem("ItemName")).Returns(item);
             
-            Assert.AreEqual(item, sut.GetItem("Naam"));
-            mockedInventory.Verify(mockedInventory => mockedInventory.GetItem("Naam"), Times.Once);
+            Assert.AreEqual(item, sut.GetItem("ItemName"));
+            mockedInventory.Verify(mockedInventory => mockedInventory.GetItem("ItemName"), Times.Once);
         }
         
         [Test]
         public void Test_AddInventoryItem_AddsItemSuccessfully()
         {
-            Item item = new Item("Naam", "Beschrijving");
+            Item item = new Item("ItemName", "Description");
             mockedInventory.Setup(mockedInventory => mockedInventory.AddItem(item));
 
             sut.AddInventoryItem(item);
@@ -208,7 +208,7 @@ namespace Player.Tests
         [Test]
         public void Test_RemoveInventoryItem_RemovesItemSuccessfully()
         {
-            Item item = new Item("Naam", "Beschrijving");
+            Item item = new Item("ItemName", "Description");
             mockedInventory.Setup(mockedInventory => mockedInventory.RemoveItem(item));
 
             sut.RemoveInventoryItem(item);
@@ -258,11 +258,11 @@ namespace Player.Tests
         [Test]
         public void Test_DropItem_DropsItemSuccessfully()
         {
-            Item item = new Item("Naam", "Beschrijving");
-            mockedInventory.Setup(mockedInventory => mockedInventory.GetItem("Naam")).Returns(item);
+            Item item = new Item("ItemName", "Description");
+            mockedInventory.Setup(mockedInventory => mockedInventory.GetItem("ItemName")).Returns(item);
             mockedInventory.Setup(mockedInventory => mockedInventory.RemoveItem(item));
 
-            sut.DropItem("Naam");
+            sut.DropItem("ItemName");
             
             mockedInventory.Verify(mockedInventory => mockedInventory.RemoveItem(item), Times.Once);
         }
