@@ -7,9 +7,9 @@ namespace Network
     public class WebSocketConnection
     {
         private WebSocket _websocket;
-        private static readonly string _ip = "localhost";
-        private static readonly string _port = "8088";
-        private static readonly string _path = "Relay";
+        private readonly string _ip = "localhost";
+        private readonly string _port = "8088";
+        private readonly string _path = "Relay";
         public WebSocketConnection()
         {
             _websocket = new WebSocket($"ws://{_ip}:{_port}/{_path}");
