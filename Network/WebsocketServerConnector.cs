@@ -8,7 +8,7 @@ namespace Network
     {
         static void Main(string[] args)
         {
-            WebSocketConnection webSocketConnector = new WebSocketConnection();
+            WebSocketConnection webSocketConnection = new WebSocketConnection();
 
             PayloadHeaderDTO payloadHeaderDTO = new PayloadHeaderDTO();
             payloadHeaderDTO.Target = "host";
@@ -24,7 +24,7 @@ namespace Network
 
             string message = JsonConvert.SerializeObject(objectPayloadDTO);
 
-            webSocketConnector.Send(message);
+            webSocketConnection.Send(message);
             Console.ReadKey();
         }
     }
