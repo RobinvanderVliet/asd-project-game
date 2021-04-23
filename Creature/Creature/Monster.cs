@@ -76,7 +76,7 @@ namespace Creature
         /// A statemachine will decide how a creature responds to specific events.
         /// Statemachines will decide how a creature behaves in certain events.
         /// </summary>
-        private PassiveStateMachine<ICreatureStateInterface, Event> _stateMachine;
+        private PassiveStateMachine<ICreatureState, Event> _stateMachine;
 
         public Monster(IWorld world, Vector2 position, double damage, double initialHealth, int visionRange)
         {
@@ -157,12 +157,12 @@ namespace Creature
 
         public void StartStateMachine()
         {
-            var builder = new StateMachineDefinitionBuilder<ICreatureStateInterface, Event>();
+            var builder = new StateMachineDefinitionBuilder<ICreatureState, Event>();
 
-            ICreatureStateInterface followPlayer = new FollowPlayerState();
-            ICreatureStateInterface wanderState = new WanderState();
-            ICreatureStateInterface useConsumable = new UseConsumableState();
-            ICreatureStateInterface attackPlayerState = new AttackPlayerState();
+            ICreatureState followPlayer = new FollowPlayerState();
+            ICreatureState wanderState = new WanderState();
+            ICreatureState useConsumable = new UseConsumableState();
+            ICreatureState attackPlayerState = new AttackPlayerState();
 
             // Wandering
             builder.In(followPlayer).On(Event.LOST_PLAYER).Goto(wanderState);
