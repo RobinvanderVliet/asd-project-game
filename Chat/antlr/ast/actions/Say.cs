@@ -15,7 +15,7 @@ namespace Chat.antlr.ast.actions
             return children;
         }
 
-        public ASTNode AddChild(ASTNode child)
+        public override ASTNode AddChild(ASTNode child)
         {
             if (child is Message)
             {

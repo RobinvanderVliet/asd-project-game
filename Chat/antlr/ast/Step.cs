@@ -5,10 +5,11 @@ namespace Chat.antlr.ast
 {
     public class Step : ASTNode, IEquatable<Step>
     {
-        public int value = 1;
+        public int value;
 
         public Step()
         {
+            value = 1;
         }
 
         public Step(int value)

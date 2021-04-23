@@ -46,18 +46,6 @@ namespace Chat.Tests
             return new AST(pickup);
         }
 
-        // public static AST MoveForwardCommand()
-        // {
-        //     AST sut = SetupParser("move forward 2");
-        //     AST exp = MoveCommand(2, "forward");
-        //
-        //     moveForward.AddChild(new Move()
-        //         .AddChild(new Direction("forward"))
-        //         .AddChild(new Step(2)));
-        //
-        //     return new AST(moveForward);
-        // }
-
         public static AST ExitCommand()
         {
             Input pickup = new Input();
@@ -355,7 +343,8 @@ namespace Chat.Tests
 
             moveForward.AddChild(new Move()
                 .AddChild(new Direction(direction))
-                .AddChild(new Step(steps)));
+                .AddChild(new Step(steps))
+            );
 
             return new AST(moveForward);
         }
