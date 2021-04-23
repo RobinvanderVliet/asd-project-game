@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Agent.antlr.ast;
 using Agent.antlr.ast.comparables;
-using Agent.antlr.ast.implementation;
 using Agent.antlr.checker;
 using Moq;
 using NUnit.Framework;

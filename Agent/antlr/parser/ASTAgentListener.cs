@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Agent.antlr.grammar;
 using Antlr4.Runtime.Misc;
-using Agent.antlr.ast.implementation;
 using Agent.antlr.ast;
 using Action = Agent.antlr.ast.Action;
 using Agent.antlr.ast.comparables;

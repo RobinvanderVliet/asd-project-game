@@ -1,6 +1,4 @@
 ﻿using System;
-using Agent.antlr.ast.implementation;
-using Agent.antlr.checker;
 using Moq;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;

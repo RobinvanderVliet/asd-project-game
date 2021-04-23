@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
+﻿using Agent.antlr.ast;
+using NUnit.Framework;
 using System;
-using Agent.antlr.ast.implementation;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.generator

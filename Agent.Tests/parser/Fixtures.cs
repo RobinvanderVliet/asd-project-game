@@ -1,11 +1,13 @@
 ﻿using Agent.antlr.ast;
 using Agent.antlr.ast.comparables;
 using Agent.antlr.ast.comparables.subjects;
-using Agent.antlr.ast.implementation;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.parser
 {
+    /*
+   Maakt AST trees voor de verschillende test bestanden om te vergelijken in de tests  
+  */
     [ExcludeFromCodeCoverage]
     public static class Fixtures
     {
