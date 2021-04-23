@@ -69,7 +69,15 @@ namespace Network
 
         public void Send(string message)
         {
-            _websocket.Send(message);
+            try
+            {
+                _websocket.Send(message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }
