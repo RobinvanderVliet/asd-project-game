@@ -1,7 +1,14 @@
-﻿namespace WorldGeneration.Models.HazardousTiles
+﻿using WorldGeneration.Models.Interfaces;
+
+namespace WorldGeneration.Models.HazardousTiles
 {
-    public class GasTile : HazardousTile
+    public class GasTile : IHazardousTile
     {
+        
+        public bool IsAccessible { get; set; }
+        public string Symbol { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
         public GasTile(int radius = 1)
         {
             Symbol = TileSymbol.GAS;
@@ -12,7 +19,9 @@
 
         private int Radius { get; }
 
-        public override int GetDamage(int time)
+        public int Damage { get; set; }
+
+        public int GetDamage(int time)
         {
             return time * Radius;
         }

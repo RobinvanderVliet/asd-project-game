@@ -27,13 +27,13 @@ namespace ASD_project
                 //agentConfigurationService.StartConfiguration();
                 
                 //moet later vervangen worden
-                ChatComponent chat = new ChatComponent();
-                PlayerModel playerModel = new PlayerModel();
-                do
-                {
-                    chat.HandleCommands(playerModel);
-                } while (true); // moet vervangen worden met variabele: isQuit 
-                
+                // ChatComponent chat = new ChatComponent();
+                // PlayerModel playerModel = new PlayerModel();
+                // do
+                // {
+                //     chat.HandleCommands(playerModel);
+                // } while (true); // moet vervangen worden met variabele: isQuit 
+                //
                 new WorldGeneration.Program();
             }
         }
