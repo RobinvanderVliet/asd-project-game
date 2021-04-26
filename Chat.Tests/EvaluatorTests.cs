@@ -40,5 +40,16 @@ namespace Chat.Tests
                 .AddChild(new Step(steps)));
             return new AST(move);
         }
+        
+        // [Test]
+        // public void Test_HandleSayActionIsCalled()
+        // {
+        //     var ast = Say();
+        //     mockedPlayer.Setup(mockedPlayer => mockedPlayer.HandleSayAction("test"));
+        //
+        //    sut.Apply(ast);
+        //     
+        //     mockedPlayer.Verify(mockedPlayer => mockedPlayer.HandleSayAction("test"), Times.Once);
+        // }
     }
 }

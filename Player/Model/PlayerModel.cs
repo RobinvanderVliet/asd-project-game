@@ -231,8 +231,7 @@ namespace Player.Model
         {
             Console.WriteLine("Resume");
         }
-
-        // Test hier of de case uit de Evaluator gereached wordt.
+        
         public void HandleSayAction(string sayMessage)
         {
             Console.WriteLine("player said: " + sayMessage);
