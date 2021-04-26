@@ -1,17 +1,6 @@
-/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: ASD-Project.
- 
-    This file is created by team: 2.
-     
-    Goal of this file: Creating an interface for the player.
-     
-*/
-
 namespace Player.Model
 {
-    public interface IPlayer
+    public interface IPlayerModel
     {
         public string Name { get; set; }
         public int Health { get; set; }
@@ -30,6 +19,8 @@ namespace Player.Model
 
         public void RemoveStamina(int amount);
 
+        public Item GetItem(string itemName);
+
         public void AddInventoryItem(Item item);
 
         public void RemoveInventoryItem(Item item);
@@ -45,5 +36,10 @@ namespace Player.Model
         public void PickupItem();
 
         public void DropItem(string itemName);
+
+        public void HandleDirection(string direction, int steps);
+        
+        public int[] SendNewPosition(int[] newMovement);
+
     }
 }

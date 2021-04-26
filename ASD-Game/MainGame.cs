@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Chat;
 using Microsoft.Extensions.Logging;
 using System;
+using Player;
+using Player.Model;
 
 namespace ASD_project
 {
@@ -18,6 +20,14 @@ namespace ASD_project
             public void Run()
             {
                 Console.WriteLine("Game is gestart");
+
+                //moet later vervangen worden
+                ChatComponent chat = new ChatComponent();
+                PlayerModel playerModel = new PlayerModel("Name", new Inventory(), new Bitcoin(20), new RadiationLevel(1));
+                do
+                {
+                    chat.HandleCommands(playerModel);
+                } while (true); // moet vervangen worden met variabele: isQuit 
             }
         }
     }

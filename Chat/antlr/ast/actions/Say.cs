@@ -8,14 +8,14 @@ namespace Chat.antlr.ast.actions
     {
         public Message message;
 
-        public override ArrayList getChildren()
+        public ArrayList GetChildren()
         {
             var children = new ArrayList();
             children.Add(message);
             return children;
         }
 
-        public override ASTNode addChild(ASTNode child)
+        public override ASTNode AddChild(ASTNode child)
         {
             if (child is Message)
             {
@@ -25,7 +25,7 @@ namespace Chat.antlr.ast.actions
             return this;
         }
 
-        public override ASTNode removeChild(ASTNode child)
+        public ASTNode RemoveChild(ASTNode child)
         {
             if (child is Message && child == message)
             {

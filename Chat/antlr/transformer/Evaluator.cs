@@ -1,115 +1,86 @@
-using System;
-using System.Security.Cryptography;
-using Chat.antlr.ast;
-using Chat.antlr.ast.actions;
-using Player;
-
-namespace Chat.antlr.transformer
-{
-    public class Evaluator : ITransform
-    {
-        private readonly IPlayerModel _playerModel;
-
-        public Evaluator(IPlayerModel playerModel)
         {
-            _playerModel = playerModel;
+        private void transformAttack(Attack attack)
+
         }
-
-        public void apply(AST ast)
+            _playerModel.HandleItemAction("drop");
         {
-            transformNode(ast.root);
+        private void transformDrop(Drop drop)
+
         }
-
-        private void transformNode(ASTNode node)
+            _playerModel.HandleItemAction("pickup");     
         {
-            var input = (Input)node;
-            var nodeBody = input.body;
-            for (int i = 0; i < nodeBody.Count; i++)
-                switch (nodeBody[i])
-                {
-                    case Attack:
-                        transformAttack((Attack)nodeBody[i]);
+        private void transformPickup(Pickup pickup)
+        private void TransformMove(Move move)
+        }
+                    break;
+            }
+                    _playerModel.HandleDirection(move.direction.value, move.steps.value);
+                default:
+                    throw new MoveException("Too many steps, the maximum is 10.");
+                case > 10:
+                    throw new MoveException("Too few steps, the minimum is 1.");
+                case < 1:
+            {
+            switch (move.steps.value)
+        {
+        }
+                }
                         break;
-                    case Drop:
+                        transformShout((Shout)nodeBody[i]);
+                        break;
+                        transformSay((Say)nodeBody[i]);
+                    case Shout:
+                    case Say:
+                        transformResume((Resume)nodeBody[i]);
+                        break;
+                    case Resume:
+                        break;
+                    case Replace:
+                        transformReplace((Replace)nodeBody[i]);
                         transformDrop((Drop)nodeBody[i]);
                         break;
-                    case Exit:
-                        transformExit((Exit)nodeBody[i]);
                         break;
                     case Move:
                         transformMove((Move)nodeBody[i]);
-                        break;
                     case Pause:
                         transformPause((Pause)nodeBody[i]);
                         break;
                     case Pickup:
                         transformPickup((Pickup)nodeBody[i]);
                         break;
-                    case Replace:
-                        transformReplace((Replace)nodeBody[i]);
                         break;
-                    case Resume:
-                        transformResume((Resume)nodeBody[i]);
+                        transformExit((Exit)nodeBody[i]);
+                    case Exit:
+                    case Drop:
                         break;
-                    case Say:
-                        transformSay((Say)nodeBody[i]);
-                        break;
-                    case Shout:
-                        transformShout((Shout)nodeBody[i]);
-                        break;
-                }
-        }
+                        transformAttack((Attack)nodeBody[i]);
+                {
+                    case Attack:
+            for (int i = 0; i < nodeBody.Count; i++)
+                switch (nodeBody[i])
+            var nodeBody = input.body;
+            var input = (Input)node;
 
-        private void transformMove(Move move)
+        private void transformNode(ASTNode node)
         {
-            {
-                _playerModel.HandleDirection(move.direction.ToString(), move.steps.value);
-            }
-        }
 
-        private void transformPickup(Pickup pickup)
-        {
-            _playerModel.HandleItemAction("pickup");     
         }
+            TransformNode(ast.root);
+        {
+        public void Apply(AST ast)
 
-        private void transformDrop(Drop drop)
-        {
-            _playerModel.HandleItemAction("drop");
+            _playerModel = playerModel;
         }
+        {
+        public Evaluator(IPlayerModel playerModel)
+        private readonly IPlayerModel _playerModel;
 
-        private void transformAttack(Attack attack)
-        {
-            _playerModel.HandleAttackAction("attack");
-        }
+    public class Evaluator : ITransform
+    {
+{
 
-        private void transformExit(Exit exit)
-        {
-            _playerModel.HandleExitAction("exit");
-        }
-
-        private void transformPause(Pause pause)
-        {
-            _playerModel.HandlePauseAction("pause");
-        }
-
-        private void transformReplace(Replace replace)
-        {
-            _playerModel.HandleReplaceAction("replace");
-        }
-
-        private void transformResume(Resume resume)
-        {
-            _playerModel.HandleResumeAction("resume");
-        }
-
-        private void transformSay(Say say)
-        {
-            _playerModel.HandleSayAction("say");
-        }
-
-        private void transformShout(Shout shout)
-        {
-            _playerModel.HandleShoutAction("shout");
-        }
-    }
-}
+namespace Chat.antlr.transformer
+using Player.Model;
+using Chat.exception;
+using Chat.antlr.ast.actions;
+﻿using Chat.antlr.ast;

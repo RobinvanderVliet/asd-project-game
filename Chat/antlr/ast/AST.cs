@@ -1,15 +1,4 @@
-﻿/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: ASD-project-game.
- 
-    This file is created by team: 2
-     
-    Goal of this file: AST class.
-     
-*/
-
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Chat.antlr.ast
@@ -28,15 +17,9 @@ namespace Chat.antlr.ast
             root = input;
         }
 
-        public void setRoot(Input input)
+        public void SetRoot(Input input)
         {
             root = input;
-        }
-
-        [ExcludeFromCodeCoverage]
-        public override bool Equals(object obj)
-        {
-            return this.Equals(obj as AST);
         }
 
         [ExcludeFromCodeCoverage]
@@ -46,6 +29,12 @@ namespace Chat.antlr.ast
                 return false;
 
             return root.Equals(other.root);
+        }
+
+        [ExcludeFromCodeCoverage]
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as AST);
         }
     }
 }

@@ -1,50 +1,36 @@
-/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: ASD-project.
- 
-    This file is created by team: 2.
-     
-    Goal of this file: To be able to type commands and pass them to the parser.
-     
-*/
-
-using System;
+﻿using System;
 using Chat.antlr;
 using Chat.exception;
-using Player;
+using Player.Model;
 
 namespace Chat
 {
     public class ChatComponent
     {
-        public ChatComponent()
+        public void HandleCommands(IPlayerModel player)
         {
-
-        }
-        public void HandleCommands()
-        {
-            SendChat(GetCommand());
+            SendChat(GetCommand(), player);
         }
 
-        private static void SendChat(string commando)
+        private static void SendChat(string commando, IPlayerModel playerModel)
         {
             try
             {
-                Pipeline pipeline = new Pipeline();
+                var pipeline = new Pipeline();
                 pipeline.ParseCommand(commando);
-                pipeline.transform(new PlayerModel());
+                pipeline.Transform(playerModel);
             }
             catch (CommandSyntaxException e)
             {
-                System.Console.WriteLine(e.Message);
+                Console.WriteLine(e.Message);
             }
-
-
-
+            catch (MoveException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
-        
-        public String GetCommand()
+
+        public string GetCommand()
         {
             return Console.ReadLine();
         }

@@ -1,13 +1,3 @@
-/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: ASD-project-game.
- 
-    This file is created by team: 2
-     
-    Goal of this file: Grammer rules player actions.
-     
-*/
 grammar PlayerCommands;
 
 //LEXER
@@ -42,7 +32,7 @@ WEST: 'west';
 RIGHT: 'right';
 EAST: 'east';
 
-NUMBER: '0' | [1-9] [0-9]*;
+NUMBER: '0' | [0-9]*;
 MESSAGE: '"' ~'"'+ '"';
 //MESSAGE: ~[\r\n]+;
 

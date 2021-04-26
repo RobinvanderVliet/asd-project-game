@@ -7,7 +7,7 @@ namespace Chat.antlr.ast.actions
     {
         public Direction direction;
 
-        public override ASTNode addChild(ASTNode child)
+        public override ASTNode AddChild(ASTNode child)
         {
             if (child is Direction)
             {
