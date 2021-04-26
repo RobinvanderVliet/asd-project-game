@@ -92,5 +92,4 @@ ASD-project.sln.DotSettings.user
 
 #.idea folder ignore
 .idea/
-
-ASD-project.sln.DotSettings.user
+*.user
