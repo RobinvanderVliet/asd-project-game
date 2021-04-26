@@ -199,5 +199,48 @@ namespace Player.Model
             currentposition = newPosition;
             Console.WriteLine("X: " + newPosition[0] + ". Y: " + newPosition[1]);
         }
+
+        public Item CheckTileContainsItem()
+        {
+            // Als er op de Tile iets ligt moet deze het item returnen
+            // anders return null;
+            return null;
+        }
+
+        public void HandleAttackAction()
+        {
+            Console.WriteLine("Attack");
+        }
+
+        public void HandleExitAction()
+        {
+            Console.WriteLine("Exit");
+        }
+
+        public void HandlePauseAction()
+        {
+            Console.WriteLine("Pause");
+        }
+
+        public void HandleReplaceAction()
+        {
+            Console.WriteLine("Replace");
+        }
+
+        public void HandleResumeAction()
+        {
+            Console.WriteLine("Resume");
+        }
+
+        // Test hier of de case uit de Evaluator gereached wordt.
+        public void HandleSayAction()
+        {
+            Console.WriteLine("Say");
+        }
+
+        public void HandleShoutAction()
+        {
+            Console.WriteLine("Shout");
+        }
     }
 }

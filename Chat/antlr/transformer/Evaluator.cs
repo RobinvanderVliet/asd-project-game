@@ -27,34 +27,34 @@ namespace Chat.antlr.transformer
                 switch (nodeBody[i])
                 {
                     case Attack:
-                        transformAttack((Attack)nodeBody[i]);
+                        TransformAttack((Attack)nodeBody[i]);
                         break;
                     case Drop:
-                        transformDrop((Drop)nodeBody[i]);
+                        TransformDrop((Drop)nodeBody[i]);
                         break;
                     case Exit:
-                        transformExit((Exit)nodeBody[i]);
+                        TransformExit((Exit)nodeBody[i]);
                         break;
                     case Move:
-                        transformMove((Move)nodeBody[i]);
+                        TransformMove((Move)nodeBody[i]);
                         break;
                     case Pause:
-                        transformPause((Pause)nodeBody[i]);
+                        TransformPause((Pause)nodeBody[i]);
                         break;
                     case Pickup:
-                        transformPickup((Pickup)nodeBody[i]);
+                        TransformPickup((Pickup)nodeBody[i]);
                         break;
                     case Replace:
-                        transformReplace((Replace)nodeBody[i]);
+                        TransformReplace((Replace)nodeBody[i]);
                         break;
                     case Resume:
-                        transformResume((Resume)nodeBody[i]);
+                        TransformResume((Resume)nodeBody[i]);
                         break;
                     case Say:
-                        transformSay((Say)nodeBody[i]);
+                        TransformSay((Say)nodeBody[i]);
                         break;
                     case Shout:
-                        transformShout((Shout)nodeBody[i]);
+                        TransformShout((Shout)nodeBody[i]);
                         break;
                 }
         }
@@ -75,47 +75,47 @@ namespace Chat.antlr.transformer
 
         private void TransformPickup(Pickup pickup)
         {
-            _playerModel.HandleItemAction("pickup");
+            _playerModel.PickupItem();
         }
 
         private void TransformDrop(Drop drop)
         {
-            _playerModel.HandleItemAction("drop");
+            // _playerModel.DropItem(item);
         }
 
         private void TransformAttack(Attack attack)
         {
-            _playerModel.HandleAttackAction("attack");
+            _playerModel.HandleAttackAction();
         }
 
         private void TransformExit(Exit exit)
         {
-            _playerModel.HandleExitAction("exit");
+            _playerModel.HandleExitAction();
         }
 
         private void TransformPause(Pause pause)
         {
-            _playerModel.HandlePauseAction("pause");
+            _playerModel.HandlePauseAction();
         }
 
         private void TransformReplace(Replace replace)
         {
-            _playerModel.HandleReplaceAction("replace");
+            _playerModel.HandleReplaceAction();
         }
 
         private void TransformResume(Resume resume)
         {
-            _playerModel.HandleResumeAction("resume");
+            _playerModel.HandleResumeAction();
         }
 
         private void TransformSay(Say say)
         {
-            _playerModel.HandleSayAction("say");
+            _playerModel.HandleSayAction();
         }
 
         private void TransformShout(Shout shout)
         {
-            _playerModel.HandleShoutAction("shout");
+            _playerModel.HandleShoutAction();
         }
     }
 }

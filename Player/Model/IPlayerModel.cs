@@ -40,6 +40,19 @@ namespace Player.Model
         public void HandleDirection(string direction, int steps);
         
         public int[] SendNewPosition(int[] newMovement);
-
+        
+        void HandleAttackAction();
+        
+        void HandleExitAction();
+        
+        void HandlePauseAction();
+        
+        void HandleReplaceAction();
+        
+        void HandleResumeAction();
+        
+        void HandleSayAction();
+        
+        void HandleShoutAction();
     }
 }
