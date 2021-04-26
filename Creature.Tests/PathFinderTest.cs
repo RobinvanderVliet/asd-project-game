@@ -7,22 +7,18 @@ using System.Numerics;
 namespace Creature.Tests
 {
     [TestFixture]
-    class PathFinderUnitTest
+    class PathFinderTest
     {
-        // Declaratie en initialisatie constante variabelen
-        // Declaratie variabelen
         private List<List<Node>> _nodes;
         private int _boardSize;
         private Vector2 _startPos;
         private Vector2 _endPos;
         
-        // Declaratie mocks
         private Mock<PathFinder> _pathfinder;
 
         [SetUp]
         public void Setup()
         {
-            // Initialiseren variabelen
             _boardSize = 20;
             _startPos = new Vector2(0, 0);
             _endPos = new Vector2(19, 19);
@@ -39,15 +35,9 @@ namespace Creature.Tests
                 }
                 _nodes.Add(nodePoints);
             }
-            // Initialiseren mocks
             _pathfinder = new Mock<PathFinder>(_nodes) { CallBase = true};
         }
 
-        /*
-        Geef de functie die getest wordt
-
-        Beschrijf duidelijk wat er getest wordt
-        */
         [Test]
         public void Test_FindPath_BetweenStartAndEndPoint()
         {

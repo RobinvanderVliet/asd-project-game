@@ -33,23 +33,25 @@ namespace Creature.Tests
         [Test]
         public void Test_ApplyDamage_KillsMonster()
         {
-            // Act
+            // Arrange ---------
+
+            // Act ---------
             _sut.ApplyDamage(30);
 
-            // Assert
+            // Assert ---------
             Assert.That(_sut.IsAlive == false);
         }
 
         [Test]
         public void Test_FireEventSpottedPlayer_FollowsPlayer()
         {
-            // Arrange
+            // Arrange ---------
             Mock<ICreature> playerMock = new Mock<ICreature>();
 
-            // Act
+            // Act ---------
             _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
 
-            // Assert
+            // Assert ---------
             Assert.AreEqual(true, _sut.IsFollowing);
             //Assert.AreEqual(playerMock.Object, _sut.Player);
         }
@@ -57,13 +59,13 @@ namespace Creature.Tests
         [Test]
         public void Test_FireEventLostPlayer_DoesNotFollowPlayer()
         {
-            // Arrange
+            // Arrange ---------
             Mock<ICreature> playerMock = new Mock<ICreature>();
 
-            // Act
+            // Act ---------
             _sut.FireEvent(Monster.Event.LOST_PLAYER, playerMock.Object);
 
-            // Assert
+            // Assert ---------
             Assert.AreEqual(false, _sut.IsFollowing);
             //Assert.AreEqual(playerMock.Object, _sut.Player);
         }
@@ -71,71 +73,73 @@ namespace Creature.Tests
         [Test]
         public void Test_FireEventPlayerInRange_AttacksPlayer()
         {
-            // Arrange
+            // Arrange ---------
             Mock<ICreature> playerMock = new Mock<ICreature>();
 
-            // Act
+            // Act ---------
             _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
             _sut.FireEvent(Monster.Event.PLAYER_IN_RANGE, playerMock.Object);
 
-            // Assert
+            // Assert ---------
             playerMock.Verify((playerMock) => playerMock.ApplyDamage(_damage));
         }
 
         [Test]
         public void Test_FireEventSpottedPlayer_DoesNotAttackPlayer()
         {
-            // Arrange
+            // Arrange ---------
             Mock<ICreature> playerMock = new Mock<ICreature>();
 
-            // Act
+            // Act ---------
             _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
 
-            // Assert
+            // Assert ---------
             playerMock.Verify((playerMock) => playerMock.ApplyDamage(_damage), Times.Never);
         }
 
         [Test]
         public void Test_FireEventAlmostDead_UsesConsumable()
         {
-            // Arrange
+            // Arrange ---------
             Mock<ICreature> playerMock = new Mock<ICreature>();
             Mock<IConsumable> consumableMock = new Mock<IConsumable>();
 
-            // Act
+            // Act ---------
             _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
             _sut.FireEvent(Monster.Event.ALMOST_DEAD, consumableMock.Object);
 
-            // Assert
+            // Assert ---------
             consumableMock.Verify((consumableMock) => consumableMock.Use());
         }
 
         [Test]
         public void Test_HealAmount_DoesNotReviveMonsterWhenDamageTooHigh()
         {
-            // Act
+            // Arrange ---------
+
+            // Act ---------
             _sut.ApplyDamage(30);
             _sut.HealAmount(50);
 
-            // Assert
+            // Assert ---------
             Assert.That(_sut.IsAlive == false);
         }
 
         [Test]
         public void Test_FireEventSpottedPlayer_GetsTopPositionFromPathStack()
         {
-            // Arrange
+            // Arrange ---------
             Mock<ICreature> playerMock = new Mock<ICreature>();
             Stack<Node> path = new Stack<Node>();
             path.Push(new Node(new Vector2(1, 1), true));
             path.Push(new Node(new Vector2(1, 2), true));
             path.Push(new Node(new Vector2(1, 3), true));
 
-            // Act
+            // Act ---------
             _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
             _sut.Do(path);
 
-            // Assert
+            // Assert ---------
             Assert.That(new Vector2(1, 3), Is.EqualTo(_sut.Position));
         }
     }
