@@ -24,6 +24,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Tests", "Chat.Tests\Chat.Tests.csproj", "{F4C269A6-CA96-483F-8BD2-1518CDE8F0B4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Creature.Tests", "Creature.Tests\Creature.Tests.csproj", "{FC91E850-F925-41EF-A217-20CAB945F564}"
+	ProjectSection(ProjectDependencies) = postProject
+		{188F52A8-34CF-47D0-948C-73119DFFACE6} = {188F52A8-34CF-47D0-948C-73119DFFACE6}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lobby.Tests", "Lobby.Tests\Lobby.Tests.csproj", "{2FE32D2B-89C2-4216-98AC-332E7718BC26}"
 EndProject
