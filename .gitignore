@@ -87,3 +87,12 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,dotnetcore,linux
+.idea/
+ASD-project.sln.DotSettings.user
+
+*.coverage
+# End of https://www.toptal.com/developers/gitignore/api/macos,windows,dotnetcore,linux
+
+#.idea folder ignore
+.idea/
+*.user
