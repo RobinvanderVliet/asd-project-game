@@ -110,12 +110,12 @@ namespace Chat.antlr.transformer
 
         private void TransformSay(Say say)
         {
-            _playerModel.HandleSayAction();
+            _playerModel.HandleSayAction(say.message.value);
         }
 
         private void TransformShout(Shout shout)
         {
-            _playerModel.HandleShoutAction();
+            _playerModel.HandleShoutAction(shout.message.value);
         }
     }
 }

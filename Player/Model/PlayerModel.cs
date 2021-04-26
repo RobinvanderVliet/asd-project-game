@@ -233,14 +233,14 @@ namespace Player.Model
         }
 
         // Test hier of de case uit de Evaluator gereached wordt.
-        public void HandleSayAction()
+        public void HandleSayAction(string sayMessage)
         {
-            Console.WriteLine("Say");
+            Console.WriteLine("player said: " + sayMessage);
         }
 
-        public void HandleShoutAction()
+        public void HandleShoutAction(string shoutMessage)
         {
-            Console.WriteLine("Shout");
+            Console.WriteLine("player shouted: " + shoutMessage);        
         }
     }
 }

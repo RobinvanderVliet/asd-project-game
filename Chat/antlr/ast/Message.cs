@@ -15,7 +15,7 @@ namespace Chat.antlr.ast
 {
     public class Message : ASTNode, IEquatable<Message>
     {
-        private string value;
+        public string value;
 
         public Message()
         {

@@ -51,8 +51,8 @@ namespace Player.Model
         
         void HandleResumeAction();
         
-        void HandleSayAction();
+        void HandleSayAction(string sayMessage);
         
-        void HandleShoutAction();
+        void HandleShoutAction(string shoutMessage);
     }
 }
