@@ -1,86 +1,121 @@
-        {
-        private void transformAttack(Attack attack)
+using Chat.antlr.ast;
+using Chat.antlr.ast.actions;
+using Chat.exception;
+using Player.Model;
 
-        }
-            _playerModel.HandleItemAction("drop");
-        {
-        private void transformDrop(Drop drop)
+namespace Chat.antlr.transformer
+{
+    public class Evaluator : ITransform
+    {
+        private readonly IPlayerModel _playerModel;
 
-        }
-            _playerModel.HandleItemAction("pickup");     
+        public Evaluator(IPlayerModel playerModel)
         {
-        private void transformPickup(Pickup pickup)
-        private void TransformMove(Move move)
+            _playerModel = playerModel;
         }
-                    break;
-            }
-                    _playerModel.HandleDirection(move.direction.value, move.steps.value);
-                default:
-                    throw new MoveException("Too many steps, the maximum is 10.");
-                case > 10:
-                    throw new MoveException("Too few steps, the minimum is 1.");
-                case < 1:
-            {
-            switch (move.steps.value)
+
+        public void Apply(AST ast)
         {
+            TransformNode(ast.root);
         }
-                }
+
+        private void TransformNode(ASTNode node)
+        {
+            var input = (Input)node;
+            var nodeBody = input.body;
+            for (int i = 0; i < nodeBody.Count; i++)
+                switch (nodeBody[i])
+                {
+                    case Attack:
+                        transformAttack((Attack)nodeBody[i]);
                         break;
-                        transformShout((Shout)nodeBody[i]);
-                        break;
-                        transformSay((Say)nodeBody[i]);
-                    case Shout:
-                    case Say:
-                        transformResume((Resume)nodeBody[i]);
-                        break;
-                    case Resume:
-                        break;
-                    case Replace:
-                        transformReplace((Replace)nodeBody[i]);
+                    case Drop:
                         transformDrop((Drop)nodeBody[i]);
                         break;
+                    case Exit:
+                        transformExit((Exit)nodeBody[i]);
                         break;
                     case Move:
                         transformMove((Move)nodeBody[i]);
+                        break;
                     case Pause:
                         transformPause((Pause)nodeBody[i]);
                         break;
                     case Pickup:
                         transformPickup((Pickup)nodeBody[i]);
                         break;
+                    case Replace:
+                        transformReplace((Replace)nodeBody[i]);
                         break;
-                        transformExit((Exit)nodeBody[i]);
-                    case Exit:
-                    case Drop:
+                    case Resume:
+                        transformResume((Resume)nodeBody[i]);
                         break;
-                        transformAttack((Attack)nodeBody[i]);
-                {
-                    case Attack:
-            for (int i = 0; i < nodeBody.Count; i++)
-                switch (nodeBody[i])
-            var nodeBody = input.body;
-            var input = (Input)node;
-
-        private void transformNode(ASTNode node)
-        {
-
+                    case Say:
+                        transformSay((Say)nodeBody[i]);
+                        break;
+                    case Shout:
+                        transformShout((Shout)nodeBody[i]);
+                        break;
+                }
         }
-            TransformNode(ast.root);
-        {
-        public void Apply(AST ast)
 
-            _playerModel = playerModel;
+        private void TransformMove(Move move)
+        {
+            switch (move.steps.value)
+            {
+                case < 1:
+                    throw new MoveException("Too few steps, the minimum is 1.");
+                case > 10:
+                    throw new MoveException("Too many steps, the maximum is 10.");
+                default:
+                    _playerModel.HandleDirection(move.direction.value, move.steps.value);
+                    break;
+            }
         }
+
+        private void TransformPickup(Pickup pickup)
         {
-        public Evaluator(IPlayerModel playerModel)
-        private readonly IPlayerModel _playerModel;
+            _playerModel.HandleItemAction("pickup");
+        }
 
-    public class Evaluator : ITransform
-    {
-{
+        private void TransformDrop(Drop drop)
+        {
+            _playerModel.HandleItemAction("drop");
+        }
 
-namespace Chat.antlr.transformer
-using Player.Model;
-using Chat.exception;
-using Chat.antlr.ast.actions;
-﻿using Chat.antlr.ast;
+        private void TransformAttack(Attack attack)
+        {
+            _playerModel.HandleAttackAction("attack");
+        }
+
+        private void TransformExit(Exit exit)
+        {
+            _playerModel.HandleExitAction("exit");
+        }
+
+        private void TransformPause(Pause pause)
+        {
+            _playerModel.HandlePauseAction("pause");
+        }
+
+        private void TransformReplace(Replace replace)
+        {
+            _playerModel.HandleReplaceAction("replace");
+        }
+
+        private void TransformResume(Resume resume)
+        {
+            _playerModel.HandleResumeAction("resume");
+        }
+
+        private void TransformSay(Say say)
+        {
+            _playerModel.HandleSayAction("say");
+        }
+
+        private void TransformShout(Shout shout)
+        {
+            _playerModel.HandleShoutAction("shout");
+        }
+    }
+}
