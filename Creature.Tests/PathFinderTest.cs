@@ -46,11 +46,11 @@ namespace Creature.Tests
             Stack<Node> path = new Stack<Node>();
             actualPath = _pathfinder.Object.FindPath(_startPos, _endPos);
             
-            // Act ---------
+            // Act -------------
             int actual = actualPath.Count;
             int expected = 38;
 
-            // Assert
+            // Assert ----------
             Assert.That(actual, Is.EqualTo(expected));
         }
     }

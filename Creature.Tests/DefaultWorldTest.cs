@@ -31,12 +31,12 @@ namespace Creature.Tests
         [Test]
         public void Test_GenerateWorldNodes_GeneratesWorldNodes()
         {
-            // Arrange
+            // Arrange  ---------
             List<List<Node>> expectedNodes = new List<List<Node>>();
             List<Node> horizontalNodes = new List<Node>();
             List<Node> verticalNodes = new List<Node>();
 
-            // Act
+            // Act  -------------
             verticalNodes.Add(new Node(new Vector2(0, 0), true));
             verticalNodes.Add(new Node(new Vector2(0, 1), true));
             horizontalNodes.Add(new Node(new Vector2(1, 0), true));
@@ -48,7 +48,7 @@ namespace Creature.Tests
             List<List<Node>> actualNodes = _sut.Nodes;
             //System.Diagnostics.Debug.WriteLine(expectedNodes);
 
-            // Assert
+            // Assert ----------
             Assert.That(expectedNodes.Count, Is.EqualTo(actualNodes.Count));
             Assert.That(expectedNodes[0].Count, Is.EqualTo(actualNodes[0].Count));
             //Assert.AreEqual(expectedNodes, actualNodes);
@@ -58,11 +58,13 @@ namespace Creature.Tests
         [Ignore("Ignore this test")]
         public void Test_SpawnCreature_CreatureGetsSpawned()
         {
-            // Act
+            // Arrange  ---------
+
+            // Act  -------------
             _sut.SpawnCreature(_firstCreatureMock.Object);
             _sut.SpawnCreature(_secondCreatureMock.Object);
 
-            // Assert
+            // Assert ----------
             Assert.AreEqual(2, _sut.Creatures.Count);
         }
 
@@ -70,11 +72,13 @@ namespace Creature.Tests
         [Ignore("Ignore this test")]
         public void Test_SpawnPlayer_PlayerGetsSpawned()
         {
-            // Act
+            // Arrange  ---------
+
+            // Act  -------------
             _sut.SpawnPlayer(_firstCreatureMock.Object);
             _sut.SpawnPlayer(_secondCreatureMock.Object);
 
-            // Assert
+            // Assert ----------
             Assert.AreEqual(2, _sut.Creatures.Count);
         }
     }

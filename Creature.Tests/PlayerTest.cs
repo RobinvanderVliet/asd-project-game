@@ -19,21 +19,25 @@ namespace Creature.Tests
         [Test]
         public void Test_ApplyDamage_KillsPlayer()
         {
-            // Act
+            // Arrange ---------
+
+            // Act -------------
             _sut.ApplyDamage(30);
 
-            // Assert
+            // Assert ----------
             Assert.That(_sut.IsAlive == false);
         }
 
         [Test]
         public void Test_HealAmount_DoesNotRevivePlayer()
         {
-            // Act
+            // Arrange ---------
+
+            // Act -------------
             _sut.ApplyDamage(30);
             _sut.HealAmount(50);
 
-            // Assert
+            // Assert ----------
             Assert.That(_sut.IsAlive == false);
         }
     }

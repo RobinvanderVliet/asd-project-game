@@ -35,10 +35,10 @@ namespace Creature.Tests
         {
             // Arrange ---------
 
-            // Act ---------
+            // Act -------------
             _sut.ApplyDamage(30);
 
-            // Assert ---------
+            // Assert ----------
             Assert.That(_sut.IsAlive == false);
         }
 
@@ -48,10 +48,10 @@ namespace Creature.Tests
             // Arrange ---------
             Mock<ICreature> playerMock = new Mock<ICreature>();
 
-            // Act ---------
+            // Act -------------
             _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
 
-            // Assert ---------
+            // Assert ----------
             Assert.AreEqual(true, _sut.IsFollowing);
             //Assert.AreEqual(playerMock.Object, _sut.Player);
         }
@@ -62,10 +62,10 @@ namespace Creature.Tests
             // Arrange ---------
             Mock<ICreature> playerMock = new Mock<ICreature>();
 
-            // Act ---------
+            // Act -------------
             _sut.FireEvent(Monster.Event.LOST_PLAYER, playerMock.Object);
 
-            // Assert ---------
+            // Assert ----------
             Assert.AreEqual(false, _sut.IsFollowing);
             //Assert.AreEqual(playerMock.Object, _sut.Player);
         }
@@ -76,11 +76,11 @@ namespace Creature.Tests
             // Arrange ---------
             Mock<ICreature> playerMock = new Mock<ICreature>();
 
-            // Act ---------
+            // Act -------------
             _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
             _sut.FireEvent(Monster.Event.PLAYER_IN_RANGE, playerMock.Object);
 
-            // Assert ---------
+            // Assert ----------
             playerMock.Verify((playerMock) => playerMock.ApplyDamage(_damage));
         }
 
@@ -90,10 +90,10 @@ namespace Creature.Tests
             // Arrange ---------
             Mock<ICreature> playerMock = new Mock<ICreature>();
 
-            // Act ---------
+            // Act -------------
             _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
 
-            // Assert ---------
+            // Assert ----------
             playerMock.Verify((playerMock) => playerMock.ApplyDamage(_damage), Times.Never);
         }
 
@@ -104,11 +104,11 @@ namespace Creature.Tests
             Mock<ICreature> playerMock = new Mock<ICreature>();
             Mock<IConsumable> consumableMock = new Mock<IConsumable>();
 
-            // Act ---------
+            // Act -------------
             _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
             _sut.FireEvent(Monster.Event.ALMOST_DEAD, consumableMock.Object);
 
-            // Assert ---------
+            // Assert ----------
             consumableMock.Verify((consumableMock) => consumableMock.Use());
         }
 
@@ -117,11 +117,11 @@ namespace Creature.Tests
         {
             // Arrange ---------
 
-            // Act ---------
+            // Act -------------
             _sut.ApplyDamage(30);
             _sut.HealAmount(50);
 
-            // Assert ---------
+            // Assert ----------
             Assert.That(_sut.IsAlive == false);
         }
 
@@ -135,11 +135,11 @@ namespace Creature.Tests
             path.Push(new Node(new Vector2(1, 2), true));
             path.Push(new Node(new Vector2(1, 3), true));
 
-            // Act ---------
+            // Act -------------
             _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
             _sut.Do(path);
 
-            // Assert ---------
+            // Assert ----------
             Assert.That(new Vector2(1, 3), Is.EqualTo(_sut.Position));
         }
     }
