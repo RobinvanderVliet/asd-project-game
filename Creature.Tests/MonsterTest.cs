@@ -10,9 +10,11 @@ using Creature.World;
 using System.Numerics;
 using Creature.Consumable;
 using Creature.Pathfinder;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Creature.Tests
 {
+    [ExcludeFromCodeCoverage]
     class MonsterTest
     {
         private Monster _sut;

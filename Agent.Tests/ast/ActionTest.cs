@@ -10,13 +10,13 @@ namespace Agent.Tests.ast
     [TestFixture]
     public class ActionTest
     {
-        private Action action;
+        private Action _action;
         private const string TYPE = "Action";
 
         [SetUp]
         public void Setup()
         {
-            action = new Action("");
+            this._action = new Action("");
         }
 
 
@@ -25,7 +25,7 @@ namespace Agent.Tests.ast
         {
             //Arrange
             //Act
-            var result = action.GetNodeType();
+            var result = this._action.GetNodeType();
             //Assert
             Assert.AreEqual(TYPE, result);
         }
@@ -36,10 +36,10 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var condition = new Condition();
-            action.AddChild(condition);
+            this._action.AddChild(condition);
 
             //Act
-            var result = (action.GetChildren()[0])?.GetNodeType();
+            var result = (this._action.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Condition", result);
@@ -51,10 +51,10 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var node = new Node();
-            action.AddChild(node);
+            this._action.AddChild(node);
 
             //Act
-            var result = (action.GetChildren()[0])?.GetNodeType();
+            var result = (this._action.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Node", result);
@@ -66,11 +66,11 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var condition = new Condition();
-            action.AddChild(condition);
-            action.RemoveChild(condition);
+            this._action.AddChild(condition);
+            this._action.RemoveChild(condition);
 
             //Act
-            var result = action.GetChildren().Count == 0;
+            var result = this._action.GetChildren().Count == 0;
 
             //Assert
             Assert.True(result);
@@ -82,11 +82,11 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var node = new Node();
-            action.AddChild(node);
-            action.RemoveChild(node);
+            this._action.AddChild(node);
+            this._action.RemoveChild(node);
 
             //Act
-            var result = action.GetChildren().Count == 0;
+            var result = this._action.GetChildren().Count == 0;
 
             //Assert
             Assert.True(result);

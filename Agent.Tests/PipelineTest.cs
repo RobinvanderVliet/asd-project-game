@@ -10,12 +10,12 @@ namespace Agent.Tests
     public class PipelineTest
     {
         private static string SCRIPT = "combat{when player nearby player then attack}";
-        private Pipeline sut;
+        private Pipeline _sut;
 
         [SetUp]
         public void Setup()
         {
-            sut = new Pipeline();
+            this._sut = new Pipeline();
         }
         
         [Test]
@@ -23,12 +23,12 @@ namespace Agent.Tests
         {
             //Arrange
             //Act
-            sut.ParseString(SCRIPT);
-            var result = sut.Ast;
+            this._sut.ParseString(SCRIPT);
+            var result = this._sut.Ast;
 
             //Assert
             Assert.NotNull(result);
-            Assert.IsEmpty(sut.Errors);
+            Assert.IsEmpty(this._sut.Errors);
         }
 
 

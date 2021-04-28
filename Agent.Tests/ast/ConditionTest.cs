@@ -8,13 +8,13 @@ namespace Agent.Tests.ast
     [TestFixture]
     public class ConditionTest
     {
-        private Condition condition;
+        private Condition _condition;
         private const string TYPE = "Condition";
 
         [SetUp]
         public void Setup()
         {
-            condition = new Condition();
+            this._condition = new Condition();
         }
 
      
@@ -23,7 +23,7 @@ namespace Agent.Tests.ast
         {
             //Arrange
             //Act
-            var result = condition.GetNodeType();
+            var result = this._condition.GetNodeType();
             //Assert
             Assert.AreEqual(TYPE, result);
         }
@@ -33,10 +33,10 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var whenclause = new When();
-            condition.AddChild(whenclause);
+            this._condition.AddChild(whenclause);
 
             //Act
-            var result = ((When) condition.GetChildren()[0])?.GetNodeType();
+            var result = ((When) this._condition.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("When", result);
@@ -49,10 +49,10 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var otherwiseClause = new Otherwise();
-            condition.AddChild(otherwiseClause);
+            this._condition.AddChild(otherwiseClause);
 
             //Act
-            var result = ((Otherwise) condition.GetChildren()[0])?.GetNodeType();
+            var result = ((Otherwise) this._condition.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Otherwise", result);
@@ -63,10 +63,10 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var node = new Node();
-            condition.AddChild(node);
+            this._condition.AddChild(node);
 
             //Act
-            var result = ( condition.GetChildren()[0]).GetNodeType();
+            var result = ( this._condition.GetChildren()[0]).GetNodeType();
 
             //Assert
             Assert.AreEqual(result, "Node");
@@ -77,11 +77,11 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var whenclause = new When();
-            condition.AddChild(whenclause);
-            condition.RemoveChild(whenclause);
+            this._condition.AddChild(whenclause);
+            this._condition.RemoveChild(whenclause);
 
             //Act
-            var result = condition.GetChildren().Count == 0;
+            var result = this._condition.GetChildren().Count == 0;
 
             //Assert
             Assert.True(result);
@@ -93,11 +93,11 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var otherWise = new Otherwise();
-            condition.AddChild(otherWise);
-            condition.RemoveChild(otherWise);
+            this._condition.AddChild(otherWise);
+            this._condition.RemoveChild(otherWise);
 
             //Act
-            var result = condition.GetChildren().Count == 0;
+            var result = this._condition.GetChildren().Count == 0;
 
             //Assert
             Assert.True(result);
@@ -109,11 +109,11 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var node = new Node();
-            condition.AddChild(node);
-            condition.RemoveChild(node);
+            this._condition.AddChild(node);
+            this._condition.RemoveChild(node);
 
             //Act
-            var result = condition.GetChildren().Count == 0;
+            var result = this._condition.GetChildren().Count == 0;
 
             //Assert
             Assert.True(result);

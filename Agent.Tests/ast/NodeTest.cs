@@ -11,7 +11,7 @@ namespace Agent.Tests.ast
     public class NodeTest
     {
         private Node _sut;
-        private const string Type = "Node";
+        private const string TYPE = "Node";
 
         [SetUp]
         public void Setup()
@@ -28,7 +28,7 @@ namespace Agent.Tests.ast
             //Act
             var result = this._sut.GetNodeType();
             //Assert
-            Assert.AreEqual(result, Type);
+            Assert.AreEqual(result, TYPE);
         }
 
 

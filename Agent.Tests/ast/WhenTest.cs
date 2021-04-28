@@ -3,16 +3,18 @@ using Agent.antlr.ast.comparables;
 using Agent.antlr.ast.comparables.subjects;
 using NUnit.Framework;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Comparable = Agent.antlr.ast.Comparable;
 
 namespace Agent.Tests.ast
 {
+    [ExcludeFromCodeCoverage]
     [TestFixture]
     public class WhenTest
     {
 
         private When _sut;
-        private const string Type = "When";
+        private const string TYPE = "When";
         
         [SetUp]
         public void Setup()
@@ -28,7 +30,7 @@ namespace Agent.Tests.ast
             //Act
             var result = this._sut.GetNodeType();
             //Assert
-            Assert.AreEqual(result, Type);
+            Assert.AreEqual(result, TYPE);
         }
         
         [Test]

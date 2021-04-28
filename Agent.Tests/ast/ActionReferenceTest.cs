@@ -9,13 +9,13 @@ namespace Agent.Tests.ast
     [TestFixture]
     public class ActionReferenceTest
     {
-        private ActionReference actionReference;
+        private ActionReference _actionReference;
         private const string TYPE = "ActionReference";
 
         [SetUp]
         public void Setup()
         {
-            actionReference = new ActionReference("");
+            this._actionReference = new ActionReference("");
         }
 
     
@@ -24,7 +24,7 @@ namespace Agent.Tests.ast
         {
             //Arrange
             //Act
-            var result = actionReference.GetNodeType();
+            var result = this._actionReference.GetNodeType();
             //Assert
             Assert.AreEqual(TYPE, result);
         }
@@ -35,10 +35,10 @@ namespace Agent.Tests.ast
         {
             //Arrange
             Subject subject = new Subject("");
-            actionReference.AddChild(subject);
+            this._actionReference.AddChild(subject);
 
             //Act
-            var result = ((Subject) actionReference.GetChildren()[0])?.GetNodeType();
+            var result = ((Subject) this._actionReference.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Subject", result);
@@ -50,10 +50,10 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var item = new Item("");
-            actionReference.AddChild(item);
+            this._actionReference.AddChild(item);
 
             //Act
-            var result = ((Item) actionReference.GetChildren()[0])?.GetNodeType();
+            var result = ((Item) this._actionReference.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Item", result);
@@ -65,10 +65,10 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var node = new Node();
-            actionReference.AddChild(node);
+            this._actionReference.AddChild(node);
 
             //Act
-            var result = (actionReference.GetChildren()[0])?.GetNodeType();
+            var result = (this._actionReference.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Node", result);

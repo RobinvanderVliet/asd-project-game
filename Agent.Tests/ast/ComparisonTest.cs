@@ -8,13 +8,13 @@ namespace Agent.Tests.ast
     [TestFixture]
     public class ComparisonTest
     {
-        private Comparison comparison;
+        private Comparison _comparison;
         private const string TYPE = "Comparison";
 
         [SetUp]
         public void Setup()
         {
-            comparison = new Comparison("");
+            this._comparison = new Comparison("");
         }
 
         [Test]
@@ -22,7 +22,7 @@ namespace Agent.Tests.ast
         {
             //Arrange
             //Act
-            var result = comparison.GetNodeType();
+            var result = this._comparison.GetNodeType();
             //Assert
             Assert.AreEqual(TYPE, result);
         }

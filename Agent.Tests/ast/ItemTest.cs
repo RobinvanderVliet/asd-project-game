@@ -10,12 +10,12 @@ namespace Agent.Tests.ast
     public class ItemTest
     {
         private Item _sut;
-        private const string Type = "Item";
+        private const string TYPE = "Item";
         
         [SetUp]
         public void Setup()
         {
-            this._sut = new Item(Type);
+            this._sut = new Item(TYPE);
         }
         
     
@@ -27,7 +27,7 @@ namespace Agent.Tests.ast
             //Act
             var result = this._sut.GetNodeType();
             //Assert
-            Assert.AreEqual(Type, result);
+            Assert.AreEqual(TYPE, result);
         }
     
         [Test]
