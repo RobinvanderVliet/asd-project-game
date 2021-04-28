@@ -56,12 +56,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual("Node", result);
             Assert.AreEqual(1, this._sut.GetChildren().Count);
         }
-
-        /*
-         * RemoveChild()
-         *
-         * Tests if anode is added
-         */
+        
         [Test]
         public void Test_RemoveChild()
         {
