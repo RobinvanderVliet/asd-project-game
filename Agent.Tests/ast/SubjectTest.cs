@@ -12,11 +12,6 @@ namespace Agent.Tests.ast
 
         private const string Testname = "test";
         
-        /*
-         * GetNodeType() of Item
-         *
-         * Test If subject is a subject    
-        */
         [Test]
         public void Test_GetNodeTypeSubject_CorrectOutput()
         {
@@ -27,11 +22,7 @@ namespace Agent.Tests.ast
             //Assert
             Assert.AreEqual("Subject", result);
         }
-        /*
-         * GetNodeType() of Item
-         *
-         * Test If Current is a current    
-        */
+        
         [Test]
         public void Test_GetNodeTypeCurrent_CorrectOutput()
         {
@@ -42,11 +33,7 @@ namespace Agent.Tests.ast
             //Assert
             Assert.AreEqual("Current", result);
         }
-        /*
-         * GetNodeType() of Item
-         *
-         * Test If inventory is a inventory    
-        */
+      
         [Test]
         public void Test_GetNodeTypeInventory_CorrectOutput()
         {
@@ -57,11 +44,7 @@ namespace Agent.Tests.ast
             //Assert
             Assert.AreEqual("Inventory", result);
         }
-        /*
-         * GetNodeType() of Item
-         *
-         * Test If npc is a npc    
-        */
+
         [Test]
         public void Test_GetNodeNPC_CorrectOutput()
         {
@@ -72,11 +55,7 @@ namespace Agent.Tests.ast
             //Assert
             Assert.AreEqual("NPC", result);
         }
-        /*
-         * GetNodeType() of Item
-         *
-         * Test If opponent is a oponnent    
-        */
+
         [Test]
         public void Test_GetNodeOpponent_CorrectOutput()
         {
@@ -87,12 +66,7 @@ namespace Agent.Tests.ast
             //Assert
             Assert.AreEqual("Opponent", result);
         }
-        
-        /*
-         * GetNodeType() of Item
-         *
-         * Test If player is a player    
-        */
+
         [Test]
         public void Test_GetNodePlayer_CorrectOutput()
         {
@@ -103,11 +77,7 @@ namespace Agent.Tests.ast
             //Assert
             Assert.AreEqual("Player", result);
         }
-        /*
-         * GetNodeType() of Item
-         *
-         * Test If Tile is a tile    
-        */
+
         [Test]
         public void Test_GetNodeTile_CorrectOutput()
         {

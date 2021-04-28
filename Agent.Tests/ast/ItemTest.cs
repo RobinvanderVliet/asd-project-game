@@ -18,11 +18,7 @@ namespace Agent.Tests.ast
             this._sut = new Item(Type);
         }
         
-        /*
-         * GetNodeType()
-         *
-         * Test of de juiste type terug gegeven wordt
-         */
+    
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
@@ -33,11 +29,7 @@ namespace Agent.Tests.ast
             //Assert
             Assert.AreEqual(Type, result);
         }
-        /*
-         * AddSubjectToChild()
-         *
-         * Test if the stat is added to item
-        */
+    
         [Test]
         public void Test_AddChild_AddItem()
         {
@@ -52,11 +44,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual("Stat", result);
         }
         
-        /*
-         * AddItemToChild()
-         *
-         * Test if the node is added to item
-        */
+     
         [Test]
         public void Test_AddChild_AddNoe()
         {

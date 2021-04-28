@@ -19,12 +19,7 @@ namespace Agent.Tests.ast
             action = new Action("");
         }
 
-        /*
-         * GetNodeType()
-         *
-         * Test of de juiste type terug gegeven wordt
-         * @author Abdul     
-        */
+
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
@@ -35,12 +30,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual(TYPE, result);
         }
 
-        /*
-         * AddConditionToChild()
-         *
-         * Test if the condition is added to Action
-         * @author Abdul     
-        */
+
         [Test]
         public void Test_AddChild_AddConditionChild()
         {
@@ -54,13 +44,8 @@ namespace Agent.Tests.ast
             //Assert
             Assert.AreEqual("Condition", result);
         }
-        
-        
-        /*
-         * AddChild()
-         *
-         * Test if the child is added to Action
-        */
+
+
         [Test]
         public void Test_AddChild_AddNodeChild()
         {
@@ -69,19 +54,13 @@ namespace Agent.Tests.ast
             action.AddChild(node);
 
             //Act
-            var result = ( action.GetChildren()[0])?.GetNodeType();
+            var result = (action.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Node", result);
         }
-        
-        
-        /*
-         * RemoveConditionFromChild()
-         *
-         * Test if condition is deleted from action
-         * @author Abdul
-        */
+
+
         [Test]
         public void Test_RemoveChild_RemoveConditionChild()
         {
@@ -96,12 +75,8 @@ namespace Agent.Tests.ast
             //Assert
             Assert.True(result);
         }
-        
-        /*
-         * RemoveConditionFromChild()
-         *
-         * Test if node is deleted from action
-        */
+
+   
         [Test]
         public void Test_RemoveChild_RemoveNodeChild()
         {

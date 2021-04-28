@@ -17,13 +17,7 @@ namespace Agent.Tests
         {
             sut = new Pipeline();
         }
-
-        /*
-        * ParseString()
-        *
-        * Parse incoming string
-        * @author Abdul     
-       */
+        
         [Test]
         public void Test_ParseString_HappyPath()
         {

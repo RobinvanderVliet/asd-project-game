@@ -20,11 +20,6 @@ namespace Agent.Tests.ast
             this._sut = new When();
         }
         
-        /*
-         * GetNodeType()
-         *
-         * Test of de juiste type terug gegeven wordt
-         */
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
@@ -36,11 +31,6 @@ namespace Agent.Tests.ast
             Assert.AreEqual(result, Type);
         }
         
-        /*
-        * AddChild()
-        *
-        * Test of de eerste comparable als de linker comparable goed geplaatst wordt.
-        */
         [Test]
         [TestCase(typeof(Current))]
         [TestCase(typeof(Inventory))]
@@ -69,11 +59,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual(1, this._sut.GetChildren().Count);
         }
         
-        /*
-        * AddChild()
-        *
-        * Test of als er twee comparables toegevoegd worden de tweede de rechter comaprable is.
-        */
+     
         [Test]
         [TestCase(typeof(Current))]
         [TestCase(typeof(Inventory))]
@@ -102,11 +88,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual(null,this._sut.GetThen());
             Assert.AreEqual(2, this._sut.GetChildren().Count);
         }
-        /*
-        * AddChild()
-        *
-        * Test of als er al twee comparables zijn toegevoegd de volgende aan de body toegevoegd wordt.
-        */
+      
         [Test]
         [TestCase(typeof(Current))]
         [TestCase(typeof(Inventory))]
@@ -139,11 +121,6 @@ namespace Agent.Tests.ast
             Assert.AreEqual(comparable, this._sut.GetChildren()[2]);
         }
         
-        /*
-        * AddChild()
-        *
-        * Test of de then actionreference goed wordt toegevoegd.
-        */
         [Test]
         public void Test_AddChild_ActionReference()
         {
@@ -159,11 +136,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual(1, this._sut.GetChildren().Count);
         }
         
-        /*
-        * AddChild()
-        *
-        * Test of de comparison goed wordt toegevoegd.
-        */
+     
         [Test]
         public void Test_Child_Comparison()
         {
@@ -181,11 +154,7 @@ namespace Agent.Tests.ast
         }
         
                 
-        /*
-        * AddChild()
-        *
-        * Test of de comparison goed wordt toegevoegd.
-        */
+    
         [Test]
         public void Test_AddChild_ExtraNode()
         {

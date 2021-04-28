@@ -17,12 +17,6 @@ namespace Agent.Tests.ast
             comparison = new Comparison("");
         }
 
-        /*
-         * GetNodeType()
-         *
-         * Test of de juiste type terug gegeven wordt
-         * @author Abdul     
-        */
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {

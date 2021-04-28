@@ -10,52 +10,39 @@ namespace Agent.Tests.ast
     [TestFixture]
     public class NodeTest
     {
-
         private Node _sut;
         private const string Type = "Node";
-        
+
         [SetUp]
         public void Setup()
         {
             this._sut = new Node();
         }
-        
-        /*
-         * GetNodeType()
-         *
-         * Test of de juiste type terug gegeven wordt
-         */
+
+
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
             //Arrange
-            
+
             //Act
             var result = this._sut.GetNodeType();
             //Assert
             Assert.AreEqual(result, Type);
         }
-        
-        /*
-         * GetChildren()
-         *
-         * Test of een arraylist gegeven wordt
-         */
+
+
         [Test]
         public void Test_GetChildren()
         {
             //Arrange
-            
+
             //Act
             var result = this._sut.GetChildren();
             //Assert
             Assert.IsInstanceOf(typeof(List<Node>), result);
         }
-        /*
-         * AddChild()
-         *
-         * Tests if anode is added
-         */
+
         [Test]
         public void Test_AddChild()
         {
@@ -63,13 +50,13 @@ namespace Agent.Tests.ast
             var node = new Node();
             this._sut.AddChild(node);
             //Act
-            var result = ( this._sut.GetChildren()[0])?.GetNodeType();
+            var result = (this._sut.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Node", result);
             Assert.AreEqual(1, this._sut.GetChildren().Count);
         }
-        
+
         /*
          * RemoveChild()
          *
@@ -87,12 +74,8 @@ namespace Agent.Tests.ast
             //Assert
             Assert.AreEqual(0, this._sut.GetChildren().Count);
         }
-        
-        /*
-         * GetError()
-         *
-         * Tests if an ASTError is returned if an error is set
-         */
+
+
         [Test]
         public void Test_GetErrorAfterSetError()
         {
@@ -101,17 +84,13 @@ namespace Agent.Tests.ast
             this._sut.SetError(message);
             //Act
             var result = this._sut.GetError();
-                
+
             //Assert
             Assert.IsInstanceOf(typeof(ASTError), result);
             Assert.AreEqual((new ASTError(message)).ToString(), result.ToString());
         }
-        
-        /*
-         * toString()
-         *
-         * Tests if an correct output string is given
-         */
+
+
         [Test]
         public void Test_ToString()
         {
@@ -121,7 +100,7 @@ namespace Agent.Tests.ast
             this._sut.AddChild(new Node());
             //Act
             var result = this._sut.ToString();
-                
+
             //Assert
             Assert.AreEqual(expected, result);
         }

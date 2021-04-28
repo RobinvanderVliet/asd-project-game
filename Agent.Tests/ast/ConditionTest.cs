@@ -17,12 +17,7 @@ namespace Agent.Tests.ast
             condition = new Condition();
         }
 
-        /*
-         * GetNodeType()
-         *
-         * Test of de juiste type terug gegeven wordt
-         * @author Abdul     
-        */
+     
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
@@ -33,12 +28,6 @@ namespace Agent.Tests.ast
             Assert.AreEqual(TYPE, result);
         }
 
-        /*
-         * AddWhenClauseToChild()
-         *
-         * Test if the whenclause is added to Settings
-         * @author Abdul     
-        */
         [Test]
         public void Test_AddChild_When()
         {
@@ -53,12 +42,8 @@ namespace Agent.Tests.ast
             Assert.AreEqual("When", result);
         }
 
-        /*
-         * AddOtherwiseClauseToChild()
-         *
-         * Test if the otherwiseClause is added to configuration
-         * @author Abdul     
-        */
+        
+    
         [Test]
         public void Test_AddChild_Otherwise()
         {
@@ -72,11 +57,7 @@ namespace Agent.Tests.ast
             //Assert
             Assert.AreEqual("Otherwise", result);
         }
-        /*
-         * AddOtherwiseClauseToChild()
-         *
-         * Test if the node is added to configuration
-        */
+   
         [Test]
         public void Test_AddChild_Node()
         {
@@ -90,12 +71,7 @@ namespace Agent.Tests.ast
             //Assert
             Assert.AreEqual(result, "Node");
         }
-        /*
-         * RemoveWhenClauseChild()
-         *
-         * Test if whenclause is deleted from condition
-         * @author Abdul
-        */
+     
         [Test]
         public void Test_Remove_When()
         {
@@ -111,12 +87,7 @@ namespace Agent.Tests.ast
             Assert.True(result);
         }
 
-        /*
-         * RemoveOtherWiseClauseChild()
-         *
-         * Test if otherwiseClause is deleted from condition
-         * @author Abdul
-        */
+     
         [Test]
         public void Test_Remove_Otherwise()
         {
@@ -132,11 +103,7 @@ namespace Agent.Tests.ast
             Assert.True(result);
         }
         
-        /*
-          * RemoveOtherWiseClauseChild()
-          *
-          * Test if node is deleted from condition
-         */
+        
         [Test]
         public void Test_Remove_Node()
         {

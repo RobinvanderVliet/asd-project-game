@@ -12,19 +12,9 @@ namespace Agent.Tests.ast
     public class ComparableTest
     {
         private Comparable comparable;
-
-        [SetUp]
-        public void Setup()
-        {
-            // comparable = new 
-        }
-
-
-        /*
-         * GetNodeType() of Item
-         *
-         * Test If Comparable is a comparable    
-        */
+        
+        
+     
         [Test]
         public void Test_GetNodeTypeComparable_CorrectOutput()
         {
@@ -37,12 +27,7 @@ namespace Agent.Tests.ast
         }
         
         
-        /*
-         * GetNodeType() of Item
-         *
-         * Test If Item is a comparable
-         * @author Abdul     
-        */
+    
         [Test]
         public void Test_GetNodeTypeItem_CorrectOutput()
         {
@@ -54,12 +39,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual("Item", result);
         }
         
-        /*
-         * GetNodeTypeInt() of Item
-         *
-         * Test If Int is a comparable
-         * @author Abdul     
-        */
+    
         [Test]
         public void Test_GetNodeTypeInt_CorrectOutput()
         {
@@ -71,12 +51,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual("Int", result);
         }
         
-        /*
-         * GetNodeTypeOfStat() of Item
-         *
-         * Test If Stat is a comparable
-         * @author Abdul     
-        */
+ 
         [Test]
         public void Test_GetNodeTypeStat_CorrectOutput()
         {
@@ -88,12 +63,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual("Stat", result);
         }
         
-        /*
-        * GetNodeTypeOfSubject() of Item
-        *
-        * Test If Stat is a comparable
-        * @author Abdul     
-       */
+
         [Test]
         public void Test_GetNodeTypeSubject_CorrectOutput()
         {

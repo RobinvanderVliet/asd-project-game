@@ -18,12 +18,7 @@ namespace Agent.Tests.ast
             actionReference = new ActionReference("");
         }
 
-        /*
-         * GetNodeType()
-         *
-         * Test of de juiste type terug gegeven wordt
-         * @author Abdul     
-        */
+    
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
@@ -34,12 +29,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual(TYPE, result);
         }
         
-        /*
-         * AddSubjectToChild()
-         *
-         * Test if the subject is added to ActionReference
-         * @author Abdul     
-        */
+       
         [Test]
         public void Test_AddChild_AddSubjectChild()
         {
@@ -54,12 +44,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual("Subject", result);
         }
         
-        /*
-         * AddItemToChild()
-         *
-         * Test if the item is added to ActionReference
-         * @author Abdul     
-        */
+  
         [Test]
         public void Test_AddChild_AddItemChild()
         {
@@ -74,11 +59,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual("Item", result);
         }
         
-        /*
-         * AddItemToChild()
-         *
-         * Test if the item is added to ActionReference
-        */
+   
         [Test]
         public void Test_AddChild_AddNodeChild()
         {
