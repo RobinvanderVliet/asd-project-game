@@ -52,8 +52,9 @@ namespace WorldGeneration.Models
 
         public int GetPositionInTileArrayByWorldCoordinates(int x, int y)
         {
-            // return (x % RowSize) + (Y * RowSize + (y - Y * RowSize) * RowSize);
-            return x % RowSize + (Y * RowSize - y) * RowSize;
+            var pain = x % RowSize;
+            var suffering = (RowSize * RowSize - RowSize) -(Y * RowSize - y) * RowSize;
+            return pain + suffering;
         }
     }
 }
