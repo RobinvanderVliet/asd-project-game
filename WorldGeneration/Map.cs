@@ -31,7 +31,7 @@ namespace WorldGeneration
                     : db.GetChunk(chunkXY[0], chunkXY[1]));
             }
 
-            DisplayMap(0, 0, viewDistance, _chunks);
+            DisplayMap(0, 0, viewDistance);
         }
 
         private IEnumerable<int[]> CalculateChunksToLoad(int[] playerLocation, int viewDistance)
@@ -50,7 +50,7 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
 
-        private void DisplayMap(int playerx, int playery, int viewDistance, IReadOnlyCollection<Chunk> chunks)
+        private void DisplayMap(int playerx, int playery, int viewDistance)
         {
             for (var y = playery; y < viewDistance * 2 + 1; y++)
             for (var x = playerx; x < viewDistance * 2 + 1; x++)
