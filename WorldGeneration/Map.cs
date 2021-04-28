@@ -66,9 +66,7 @@ namespace WorldGeneration
 
         private Chunk GenerateNewChunk(int x, int y)
         {
-            var chunk = NoiseMapGenerator.GenerateChunk(x, y, _chunkSize, _seed);
-            new Database.Database().InsertChunkIntoDatabase(chunk);
-            return chunk;
+            return NoiseMapGenerator.GenerateChunk(x, y, _chunkSize, _seed);
         }
     }
 }
