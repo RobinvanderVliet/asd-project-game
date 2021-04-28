@@ -67,9 +67,9 @@ namespace Agent.Tests.generator
         {
             var configuration = new Configuration();
 
-            configuration.AddChild(new Rule("test", "test"))
-                .AddChild(new Rule("test", "test"))
-                .AddChild(new Rule("test", "test"));
+            configuration.AddChild(new Rule("explore", "random"))
+                .AddChild(new Rule("aggressive", "high"))
+                .AddChild(new Rule("chicken", "egg"));
             configuration.AddChild((new Setting("combat"))
                 .AddChild((new Condition())
                     .AddChild((new When())
@@ -107,9 +107,9 @@ namespace Agent.Tests.generator
         private static AST GetTestFixture3()
         {
             var configuration = new Configuration();
-            configuration.AddChild(new Rule("test", "test"))
-                .AddChild(new Rule("test", "test"))
-                .AddChild(new Rule("test", "test"));
+            configuration.AddChild(new Rule("explore", "random"))
+                .AddChild(new Rule("aggressive", "high"))
+                .AddChild(new Rule("chicken", "egg"));
             configuration.AddChild((new Setting("combat"))
                 .AddChild((new Condition())
                     .AddChild((new When())

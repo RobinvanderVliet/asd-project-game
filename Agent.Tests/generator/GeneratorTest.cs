@@ -32,7 +32,10 @@ namespace Agent.Tests.generator
             var result = sut.Execute(ast);
 
             //Assert
-            Assert.True(true);
+            Assert.True(result.Length != 0);
+            Assert.True(result.Contains("player"));
+            Assert.True(result.Contains("nearby"));
+            Assert.False(result.Contains("????"));
         }
 
 
