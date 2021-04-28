@@ -9,7 +9,7 @@ namespace WorldGeneration
     {
         private readonly int _chunkSize;
         private readonly int _seed;
-        private IList<Chunk> _chunks;
+        private List<Chunk> _chunks;
 
         public Map(int chunkSize = 10, int seed = 0620520399)
         {
@@ -20,18 +20,18 @@ namespace WorldGeneration
         public void LoadArea(int[] playerLocation, int viewDistance)
         {
             var chunksWithinLoadingRange = CalculateChunksToLoad(playerLocation, viewDistance);
-            var chunks = new List<Chunk>();
+            _chunks = new List<Chunk>();
             var db = new Database.Database();
 
             foreach (var chunkXY in chunksWithinLoadingRange)
             {
                 var chunk = db.GetChunk(chunkXY[0], chunkXY[1]);
-                chunks.Add(chunk == null
+                _chunks.Add(chunk == null
                     ? GenerateNewChunk(chunkXY[0], chunkXY[1])
                     : db.GetChunk(chunkXY[0], chunkXY[1]));
             }
 
-            DisplayMap(0, 0, viewDistance, chunks);
+            DisplayMap(0, 0, viewDistance, _chunks);
         }
 
         private IEnumerable<int[]> CalculateChunksToLoad(int[] playerLocation, int viewDistance)
@@ -55,10 +55,7 @@ namespace WorldGeneration
             for (var y = playery; y < viewDistance * 2 + 1; y++)
             for (var x = playerx; x < viewDistance * 2 + 1; x++)
             {
-                var chunk = chunks.FirstOrDefault(chunk =>
-                    chunk.X * _chunkSize <= x && chunk.X * _chunkSize > x - _chunkSize && chunk.Y * _chunkSize >= y &&
-                    chunk.Y * _chunkSize < y + _chunkSize);
-                if (chunk == null) throw new Exception("this chunk should not be null");
+                var chunk = GetChunkForTileXAndY(x, y);
                 Console.Write(" " + chunk.Map[chunk.GetPositionInTileArrayByWorldCoordinates(x, y)].Symbol);
                 if (x == viewDistance * 2) Console.WriteLine("");
             }
@@ -68,6 +65,21 @@ namespace WorldGeneration
         {
             var chunk = NoiseMapGenerator.GenerateChunk(x, y, _chunkSize, _seed);
             new Database.Database().InsertChunkIntoDatabase(chunk);
+            return chunk;
+        }
+
+        public Chunk GetChunkForTileXAndY(int x, int y)
+        {
+            var chunk = _chunks.FirstOrDefault(chunk =>
+                chunk.X * _chunkSize <= x 
+                && chunk.X * _chunkSize > x - _chunkSize 
+                && chunk.Y * _chunkSize >= y &&
+                chunk.Y * _chunkSize < y + _chunkSize);
+            
+            if (chunk == null)
+            {
+                throw new Exception("Tried to find a chunk that has not been loaded");
+            }
             return chunk;
         }
     }
