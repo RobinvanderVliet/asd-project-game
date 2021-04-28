@@ -2,12 +2,14 @@ using Chat.antlr.ast;
 using Chat.antlr.ast.actions;
 using Chat.exception;
 using Player.Model;
+using Player.Services;
 
 namespace Chat.antlr.transformer
 {
     public class Evaluator : ITransform
     {
         private readonly IPlayerModel _playerModel;
+        private readonly PlayerService _playerService;
 
         public Evaluator(IPlayerModel playerModel)
         {
@@ -80,32 +82,37 @@ namespace Chat.antlr.transformer
 
         private void TransformDrop(Drop drop)
         {
-            // _playerModel.DropItem(item);
+            _playerModel.DropItem(drop.itemName.value);
         }
 
         private void TransformAttack(Attack attack)
         {
-            _playerModel.HandleAttackAction();
+            _playerService.Attack();
+            // _playerModel.HandleAttackAction();
         }
 
         private void TransformExit(Exit exit)
         {
-            _playerModel.HandleExitAction();
+            _playerService.ExitCurrentGame();
+            // _playerModel.HandleExitAction();
         }
 
         private void TransformPause(Pause pause)
         {
-            _playerModel.HandlePauseAction();
+            _playerService.Pause();
+            // _playerModel.HandlePauseAction();
         }
 
         private void TransformReplace(Replace replace)
         {
-            _playerModel.HandleReplaceAction();
+            _playerService.ReplaceByAgent();
+            // _playerModel.HandleReplaceAction();
         }
 
         private void TransformResume(Resume resume)
         {
-            _playerModel.HandleResumeAction();
+            _playerService.Pause();
+            // _playerModel.HandleResumeAction();
         }
 
         private void TransformSay(Say say)

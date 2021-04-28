@@ -42,6 +42,61 @@ namespace Chat.Tests
         }
 
         [Test]
+        public void Test_HandlePickupActionIsCalled()
+        {
+            var ast = PickupAST();
+            mockedPlayer.Setup(mockedPlayer => mockedPlayer.PickupItem());
+
+            sut.Apply(ast);
+
+            mockedPlayer.Verify(mockedPlayer => mockedPlayer.PickupItem(), Times.Once);
+        }
+
+        public static AST PickupAST()
+        {
+            Input pickup = new Input();
+            pickup.AddChild(new Pickup());
+            return new AST(pickup);
+        }
+        
+        [Test]
+        public void Test_HandleDropActionIsCalled()
+        {
+            var ast = DropAST("item");
+            mockedPlayer.Setup(mockedPlayer => mockedPlayer.DropItem("item"));
+
+            sut.Apply(ast);
+
+            mockedPlayer.Verify(mockedPlayer => mockedPlayer.DropItem("item"), Times.Once);
+        }
+
+        public static AST DropAST(string itemName)
+        {
+            Input drop = new Input();
+            drop.AddChild(new Drop()
+                .AddChild(new Message(itemName)));
+            return new AST(drop);
+        }
+        
+        [Test]
+        public void Test_HandleAttackActionIsCalled()
+        {
+            var ast = AttackAST();
+            mockedPlayer.Setup(mockedPlayer => mockedPlayer. );
+
+            sut.Apply(ast);
+
+            mockedPlayer.Verify(mockedPlayer => mockedPlayer. , Times.Once);
+        }
+
+        public static AST AttackAST()
+        {
+            Input Attack = new Input();
+            Attack.AddChild(new Attack());
+            return new AST(Attack);
+        }
+        
+        [Test]
         public void Test_HandleSayActionIsCalled()
         {
             var ast = SayAST("test");
@@ -56,6 +111,25 @@ namespace Chat.Tests
         {
             Input say = new Input();
             say.AddChild(new Say()
+                .AddChild(new Message(message)));
+            return new AST(say);
+        }
+        
+        [Test]
+        public void Test_HandleShoutActionIsCalled()
+        {
+            var ast = ShoutAST("test");
+            mockedPlayer.Setup(mockedPlayer => mockedPlayer.HandleShoutAction("test"));
+
+            sut.Apply(ast);
+
+            mockedPlayer.Verify(mockedPlayer => mockedPlayer.HandleShoutAction("test"), Times.Once);
+        }
+
+        public static AST ShoutAST(string message)
+        {
+            Input say = new Input();
+            say.AddChild(new Shout()
                 .AddChild(new Message(message)));
             return new AST(say);
         }
