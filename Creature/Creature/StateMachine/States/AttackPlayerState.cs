@@ -1,4 +1,5 @@
 ﻿using Creature.Creature;
+using System;
 
 namespace Creature
 {
@@ -6,7 +7,7 @@ namespace Creature
     {
         public override void Do()
         {
-
+            throw new NotImplementedException();
         }
     }
 }
