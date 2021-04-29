@@ -5,16 +5,24 @@ namespace Player.Model
 {
     public class PlayerModel : IPlayerModel
     {
-        public string Name { get; set; }
-        public int Health { get; set; }
-        public int Stamina { get; set; }
+        private string _name;
+        public string Name { get => _name; set => _name = value; }
+        private int _health;
+        public int Health { get => _health; set => _health = value; }
+        private int _stamina;
+        public int Stamina { get => _stamina; set => _stamina = value; }
 
-        //public Tile _currentTile { get; set; }
-        public IInventory Inventory { get; set; }
-        public IBitcoin Bitcoins { get; set; }
-        public IRadiationLevel RadiationLevel { get; set; }
+        // private Tile _currentTile;
+        // public Tile CurrentTile { get => _currentTile; set => _currentTile = value; }
+        private IInventory _inventory;
+        public IInventory Inventory { get => _inventory; set => _inventory = value; }
+        private IBitcoin _bitcoins;
+        public IBitcoin Bitcoins { get => _bitcoins; set => _bitcoins = value; }
+        private IRadiationLevel _radiationLevel;
+        public IRadiationLevel RadiationLevel { get => _radiationLevel; set => _radiationLevel = value; }
 
-        public int[] CurrentPosition { get; set; }
+        private int[] _currentPosition;
+        public int[] CurrentPosition { get => _currentPosition; set => _currentPosition = value; }
 
         //random default values for health&stamina for now
         private const int HEALTHCAP = 100;
@@ -25,94 +33,94 @@ namespace Player.Model
             //, Tile tile
         )
         {
-            Name = name;
-            Health = HEALTHCAP;
-            Stamina = STAMINACAP;
+            _name = name;
+            _health = HEALTHCAP;
+            _stamina = STAMINACAP;
             //_currentTile = tile;
-            Inventory = inventory;
+            _inventory = inventory;
             //random default value for now
-            Bitcoins = bitcoins;
-            RadiationLevel = radiationLevel;
-            CurrentPosition = new[] {26, 11};
+            _bitcoins = bitcoins;
+            _radiationLevel = radiationLevel;
+            _currentPosition = new[] {26, 11};
         }
 
         public void AddHealth(int amount)
         {
-            if (Health + amount >= HEALTHCAP)
+            if (_health + amount >= HEALTHCAP)
             {
-                Health = HEALTHCAP;
+                _health = HEALTHCAP;
             }
             else
             {
-                Health += amount;
+                _health += amount;
             }
         }
 
         public void RemoveHealth(int amount)
         {
-            if (Health - amount <= 0)
+            if (_health - amount <= 0)
             {
-                Health = 0;
+                _health = 0;
                 //extra code for when a player dies goes here
             }
             else
             {
-                Health -= amount;
+                _health -= amount;
             }
         }
 
         public void AddStamina(int amount)
         {
-            if (Stamina + amount >= STAMINACAP)
+            if (_stamina + amount >= STAMINACAP)
             {
-                Stamina = STAMINACAP;
+                _stamina = STAMINACAP;
             }
             else
             {
-                Stamina += amount;
+                _stamina += amount;
             }
         }
 
         public void RemoveStamina(int amount)
         {
-            if (Stamina - amount <= 0)
+            if (_stamina - amount <= 0)
             {
-                Stamina = 0;
+                _stamina = 0;
             }
             else
             {
-                Stamina -= amount;
+                _stamina -= amount;
             }
         }
 
         public Item GetItem(string itemName)
         {
-            return Inventory.GetItem(itemName);
+            return _inventory.GetItem(itemName);
         }
 
         public void AddInventoryItem(Item item)
         {
-            Inventory.AddItem(item);
+            _inventory.AddItem(item);
         }
 
         public void RemoveInventoryItem(Item item)
         {
-            Inventory.RemoveItem(item);
+            _inventory.RemoveItem(item);
         }
 
         public void EmptyInventory()
         {
-            Inventory.EmptyInventory();
+            _inventory.EmptyInventory();
         }
 
         public void AddBitcoins(int amount)
         {
-            Bitcoins.AddAmount(amount);
+            _bitcoins.AddAmount(amount);
         }
 
         public void RemoveBitcoins(int amount)
         {
-            Bitcoins.RemoveAmount(amount);
+            _bitcoins.RemoveAmount(amount);
         }
 
         public int GetAttackDamage()
@@ -137,7 +145,7 @@ namespace Player.Model
 
         public void DropItem(string itemName)
         {
-            Item item = Inventory.GetItem(itemName);
+            Item item = _inventory.GetItem(itemName);
             if (item != null)
             {
                 RemoveInventoryItem(item);
@@ -153,7 +161,7 @@ namespace Player.Model
         {
             for (var i = 0; i <= 1; i++)
             {
-                CurrentPosition[i] = CurrentPosition[i] + newMovement[i];
+                _currentPosition[i] = _currentPosition[i] + newMovement[i];
             }
         }
     }

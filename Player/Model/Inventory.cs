@@ -4,16 +4,17 @@ namespace Player.Model
 {
     public class Inventory : IInventory
     {
-        public List<Item> ItemList { get; set; }
+        private List<Item> _itemList;
+        public List<Item> ItemList { get => _itemList; set => _itemList = value; }
 
         public Inventory()
         {
-            ItemList = new List<Item>();
+            _itemList = new List<Item>();
         }
 
         public Item GetItem(string itemName)
         {
-            foreach (var item in ItemList)
+            foreach (var item in _itemList)
             {
                 if (item.ItemName == itemName)
                 {
@@ -25,17 +26,17 @@ namespace Player.Model
 
         public void AddItem(Item item)
         {
-            ItemList.Add(item);
+            _itemList.Add(item);
         }
 
         public void RemoveItem(Item item)
         {
-            ItemList.Remove(item);
+            _itemList.Remove(item);
         }
 
         public void EmptyInventory()
         {
-            ItemList.Clear();
+            _itemList.Clear();
         }
     }
 }
