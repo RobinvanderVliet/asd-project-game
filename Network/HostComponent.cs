@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Network
+﻿namespace Network
 {
     public class HostComponent : IPacketListener
     {
         private NetworkComponent _networkComponent;
         private IPacketHandler _client;
-        private Session _session;
+        private SessionComponent _session;
 
-        public HostComponent(NetworkComponent networkComponent, IPacketHandler client, Session session)
+        public HostComponent(NetworkComponent networkComponent, IPacketHandler client, SessionComponent session)
         {
             this._networkComponent = networkComponent;
             this._client = client;
