@@ -15,14 +15,13 @@ namespace Agent
     {
         private AST _ast;
 
-        private List<string> _errors;
+        private List<string> errors;
         private Checker _checker;
-        // private Transformer transformer;
         private Generator generator;
 
         public Pipeline()
         {
-            _errors = new List<string>();
+            errors = new List<string>();
             // transformer = new Transformer();
             generator = new Generator();
         }
@@ -32,7 +31,7 @@ namespace Agent
             AntlrInputStream inputStream = new AntlrInputStream(input);
             AgentConfigurationLexer lexer = new AgentConfigurationLexer(inputStream);
             lexer.RemoveErrorListeners();
-            _errors.Clear();
+            errors.Clear();
 
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             AgentConfigurationParser parser = new AgentConfigurationParser(tokens);
@@ -44,28 +43,21 @@ namespace Agent
             ASTAgentListener astAgentListener = new ASTAgentListener();
             walker.Walk(astAgentListener, parseTree);
             _ast = astAgentListener.GetAST();
+
         }
 
         public void CheckAst()
         {
-            // checker = new Checker(ast);
-            // TODO: Implement checker calls
-        }
-        
-        public void TransformAst()
-        {
-            ThrowExceptionIfAstIsNull();
+            if(_checker == null)
+            {
+                _checker = new Checker(_ast);
+            }
+            _checker.Check(_ast);
         }
 
         public string GenerateAst()
         {
             return generator.Execute(_ast);
-        }
-
-        private void ThrowExceptionIfAstIsNull()
-        {
-            if (_ast == null)
-                throw new UndefinedAstException();
         }
 
         public AST Ast
@@ -74,11 +66,11 @@ namespace Agent
             set => _ast = value;
         }
 
-        public List<string> Errors => _errors;
+        public List<string> Errors => errors;
 
         public void ClearErrors()
         {
-            _errors.Clear();
+            errors.Clear();
         }
         
         public Checker Checker
