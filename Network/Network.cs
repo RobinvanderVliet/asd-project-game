@@ -30,9 +30,11 @@ namespace Network
                 networkComponent.Host = hostComponent;
                 
                 hostComponent.CreateGame();
-                
+
+                Console.Read();
+
             }
-            else
+            else if (roleResult != null && roleResult.ToLower() == "client")
             {
                 PacketDTO packetDTO = new PacketBuilder()
                     .SetTarget("host")

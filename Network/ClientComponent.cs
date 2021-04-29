@@ -11,7 +11,6 @@ namespace Network
 
         public ClientComponent()
         {
-            this._networkComponent = new NetworkComponent(this);
         }
 
         public bool HandlePacket(PacketDTO packet)
