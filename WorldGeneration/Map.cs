@@ -70,8 +70,9 @@ namespace WorldGeneration
 
         private Chunk GenerateNewChunk(int x, int y)
         {
-            var a = NoiseMapGenerator.GenerateChunk(x, y, _chunkSize, _seed);
-            return a;
+            var chunk = NoiseMapGenerator.GenerateChunk(x, y, _chunkSize, _seed);
+            new Database.Database().InsertChunkIntoDatabase(chunk);
+            return chunk;
         }
     }
 }
