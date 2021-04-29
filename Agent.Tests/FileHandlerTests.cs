@@ -8,12 +8,12 @@ namespace Agent.Tests
     [ExcludeFromCodeCoverage]
     public class FileHandlerTests
     {
-        static FileHandler sut;
+        private FileHandler _sut;
 
         [SetUp]
         public void Setup()
         {
-            sut = new FileHandler();
+            _sut = new FileHandler();
 
         }
 
@@ -22,8 +22,8 @@ namespace Agent.Tests
         {
             var expected = "combat when player nearby player then attack";
             var fileLocation = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\import_test_file_1.txt";
-
-            var result = sut.ImportFile(fileLocation);
+            
+            var result = _sut.ImportFile(fileLocation);
 
             Assert.AreEqual(expected, result);
         }
@@ -35,7 +35,7 @@ namespace Agent.Tests
                         (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\import_test_file_1.php";
 
             var exception = Assert.Throws<FileException>(() =>
-                sut.ImportFile(fileLocation));
+                _sut.ImportFile(fileLocation));
 
             Assert.AreEqual("File given is not of the correct file type", exception.Message);
         }
@@ -45,7 +45,7 @@ namespace Agent.Tests
         {
             var expected = "combat when player nearby player then attack combat";
 
-            sut.ExportFile("combat when player nearby player then attack combat");
+            _sut.ExportFile("combat when player nearby player then attack combat");
 
             var fileLocation = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\agentFile.cfg";
 
