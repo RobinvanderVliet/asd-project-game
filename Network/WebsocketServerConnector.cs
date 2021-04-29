@@ -10,15 +10,15 @@ namespace Network
         {
             WebSocketConnection webSocketConnection = new WebSocketConnection();
 
-            PayloadHeaderDTO payloadHeaderDTO = new PayloadHeaderDTO();
+            PacketHeaderDTO payloadHeaderDTO = new PacketHeaderDTO();
             payloadHeaderDTO.Target = "host";
             payloadHeaderDTO.OriginID = "ce4d2959-cc81-4722-8801-eba55173536";
             payloadHeaderDTO.SessionID = "10";
-            payloadHeaderDTO.ActionType = "chatAction";
+            payloadHeaderDTO.ActionType = ActionType.Chat;
 
             string testPayload = "testPayload";
 
-            ObjectPayloadDTO objectPayloadDTO = new ObjectPayloadDTO();
+            PacketDTO objectPayloadDTO = new PacketDTO();
             objectPayloadDTO.Header = payloadHeaderDTO;
             objectPayloadDTO.Payload = testPayload;
 

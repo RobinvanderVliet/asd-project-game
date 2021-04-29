@@ -1,10 +1,10 @@
 ﻿namespace Network
 {
-    public class PayloadHeaderDTO
+    public class PacketHeaderDTO
     {
         public string Target { get; set; }
         public string OriginID { get; set; }
         public string SessionID { get; set; }
-        public string ActionType { get; set; }
+        public ActionType ActionType { get; set; }
     }
 }

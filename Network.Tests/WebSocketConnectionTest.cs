@@ -1,6 +1,6 @@
 // tests not functional
 
-/*using NUnit.Framework;
+using NUnit.Framework;
 using Moq;
 using WebSocketSharp;
 
@@ -18,7 +18,7 @@ namespace Network.Tests
         {
             _websocketMock = new Mock<WebSocket>("ws://localhost:9999");
             _mockedWebsocket = _websocketMock.Object;
-            _subject = new WebSocketConnection(_mockedWebsocket); 
+            _subject = new WebSocketConnection(_mockedWebsocket);
         }
 
 
@@ -37,4 +37,4 @@ namespace Network.Tests
             Mock.Get(_mockedWebsocket).Verify(x => x.Send(messageTest), Times.Once);
         }
     }
-}*/
+}
