@@ -1,5 +1,4 @@
 using System;
-using LiteDB;
 using LiteDB.Async;
 using Microsoft.Extensions.Logging;
 
@@ -8,19 +7,17 @@ namespace DatabaseHandler
     public class DbConnection : IDbConnection
     {
         private readonly ILogger<DbConnection> _log;
-        private readonly string _connectionString;
 
-        public DbConnection(ILogger<DbConnection> log, string connectionString)
+        public DbConnection(ILogger<DbConnection> log)
         {
             _log = log;
-            _connectionString = connectionString;
         }
         
         public ILiteDatabaseAsync getConnectionASync()
         {
             try
             {
-                var connection = new LiteDatabaseAsync(_connectionString);
+                using var connection = new LiteDatabaseAsync("Filename=.\\chunks.db;Mode=Exclusive;Async=true;");
                 return connection;
             }
             catch (Exception ex)

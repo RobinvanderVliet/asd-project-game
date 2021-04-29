@@ -1,31 +1,31 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LiteDB;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using WorldGeneration.Models;
 
 namespace DatabaseHandler.Repository
 {
-    public class WorldRepository : IRepository<Chunk>
+    public class ChunkRepository : IChunkRepository
     {
-        private readonly ILogger<WorldRepository> _log;
+        private readonly ILogger<ChunkRepository> _log;
         private readonly IDbConnection _connection;
         private readonly string _collection;
 
-        public WorldRepository(IDbConnection connection, ILogger<WorldRepository> log, string collection)
+        public ChunkRepository(ILogger<ChunkRepository> log, IDbConnection connection, string collection = "Chunks")
         {
             _connection = connection;
             _log = log;
             _collection = collection;
         }
         
-        public async Task<Chunk> CreateASync(Chunk obj)
+        public async Task<BsonValue> CreateAsync(Chunk obj)
         {
             try
             {
-                using var db = _connection.getConnectionASync();
-                await db.GetCollection<Chunk>(_collection).InsertAsync(obj);
-                return obj;
+                var db = _connection.getConnectionASync();
+                return await db.GetCollection<Chunk>(_collection).InsertAsync(obj);
             }
             catch (LiteException ex)
             {
@@ -34,11 +34,11 @@ namespace DatabaseHandler.Repository
             }
         }
 
-        public async Task<Chunk> ReadASync(Chunk obj)
+        public async Task<Chunk> ReadAsync(Chunk obj)
         {
             try
             {
-                using var db = _connection.getConnectionASync();
+                var db = _connection.getConnectionASync();
                 return await db.GetCollection<Chunk>(_collection).FindOneAsync(chunk => chunk.X.Equals(obj.X) && chunk.Y.Equals(obj.Y));
             }
             catch (LiteException ex)
@@ -48,7 +48,7 @@ namespace DatabaseHandler.Repository
             }
         }
 
-        public async Task<Chunk> UpdateASync(Chunk oldObj, Chunk newObj)
+        public async Task<Chunk> UpdateAsync(Chunk oldObj, Chunk newObj)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace DatabaseHandler.Repository
             }
         }
 
-        public async Task<Chunk> DeleteASync(Chunk obj)
+        public async Task<Chunk> DeleteAsync(Chunk obj)
         {
             try
             {
@@ -78,11 +78,11 @@ namespace DatabaseHandler.Repository
             }
         }
 
-        public async Task<IList<Chunk>> GetAllASync()
+        public async Task<IList<Chunk>> GetAllAsync()
         {
             try
             {
-                using var db = _connection.getConnectionASync();
+                var db = _connection.getConnectionASync();
                 return await db.GetCollection<Chunk>(_collection).Query().ToListAsync();
             }
             catch (LiteException ex)
@@ -92,11 +92,11 @@ namespace DatabaseHandler.Repository
             }
         }
 
-        public async Task<int> DeleteAllASync()
+        public async Task<int> DeleteAllAsync()
         {
             try
             {
-                using var db = _connection.getConnectionASync();
+                var db = _connection.getConnectionASync();
                 return await db.GetCollection<Chunk>(_collection).DeleteAllAsync();
             }
             catch (LiteException ex)

@@ -4,6 +4,10 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.IO;
+using DatabaseHandler;
+using DatabaseHandler.Repository;
+using DatabaseHandler.Services;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using WorldGeneration;
 using Player;
 
@@ -31,9 +35,11 @@ namespace ASD_project
                 {
                     services.AddTransient<IMainGame, MainGame>();
                     services.AddScoped<IPlayerModel, PlayerModel>();
+                    services.SetDatabaseHandlerDependencies();
                 })
                 .UseSerilog()
                 .Build();
+            
 
             var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);
             svc.Run();
