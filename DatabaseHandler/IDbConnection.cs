@@ -6,6 +6,6 @@ namespace DatabaseHandler
 {
     public interface IDbConnection
     {
-        ILiteDatabaseAsync getConnectionASync();
+        ILiteDatabase GetConnection();
     }
 }

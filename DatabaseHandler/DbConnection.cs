@@ -1,28 +1,24 @@
 using System;
-using LiteDB.Async;
-using Microsoft.Extensions.Logging;
+using LiteDB;
 
 namespace DatabaseHandler
 {
     public class DbConnection : IDbConnection
     {
-        private readonly ILogger<DbConnection> _log;
-
-        public DbConnection(ILogger<DbConnection> log)
+        public DbConnection()
         {
-            _log = log;
         }
         
-        public ILiteDatabaseAsync getConnectionASync()
+        public ILiteDatabase GetConnection()
         {
             try
             {
-                using var connection = new LiteDatabaseAsync("Filename=.\\chunks.db;Mode=Exclusive;Async=true;");
+                using var connection = new LiteDatabase("Filename=.\\chunks.db;Mode=Exclusive;");
                 return connection;
             }
             catch (Exception ex)
             {
-                _log.LogError(ex.Message);
+                Console.WriteLine(ex.Message);
                 throw;
             }
         }

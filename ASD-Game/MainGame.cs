@@ -8,6 +8,7 @@ using DatabaseHandler;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using WorldGeneration.Models;
+using WorldGeneration.Models.Interfaces;
 
 namespace ASD_project
 {
@@ -26,25 +27,21 @@ namespace ASD_project
             {
                 Console.WriteLine("Game is gestart");
 
-                var repo = new ChunkRepository(null, new DbConnection(null));
-                var services = new ChunkServices(null, repo);
                 var chunk = new Chunk()
                 {
                     X = 10,
                     Y = 10,
                     RowSize = 5,
-                    Map = null
+                    Map = Array.Empty<ITile>()
                 };
-                var wtf = await services.CreateAsync(chunk);
-                var wtf1 = await services.ReadAsync(chunk);
-                var wtt2 = await services.GetAllAsync();
-                var wtf3 = await services.DeleteAllAsync();
-                var wtf4 = await services.GetAllAsync();
+                
+                using var db = new DbConnection().GetConnection();
+                var result = db.GetCollection<Chunk>("Chunks").Insert(chunk);
 
                 // TODO: Remove from this method, team 2 will provide a command for it
                 //AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
                 //agentConfigurationService.StartConfiguration();
-                
+
                 //moet later vervangen worden
                 // ChatComponent chat = new ChatComponent();
                 // PlayerModel playerModel = new PlayerModel();

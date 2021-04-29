@@ -3,96 +3,93 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DatabaseHandler.Repository;
 using LiteDB;
-using Microsoft.Extensions.Logging;
 using WorldGeneration.Models;
 
 namespace DatabaseHandler.Services
 {
     public class ChunkServices : IChunkServices
     {
-        private readonly ILogger<ChunkServices> _log;
         private readonly IChunkRepository _repository;
         
-        public ChunkServices(ILogger<ChunkServices> log, IChunkRepository repository)
+        public ChunkServices( IChunkRepository repository)
         {
-            _log = log;
             _repository = repository;
         }
         
-        public async Task<BsonValue> CreateAsync(Chunk obj)
+        public Chunk Create(Chunk obj)
         {
             try
             {
-                return await _repository.CreateAsync(obj);
+                return _repository.Create(obj);
             }
             catch (LiteException ex)
             {
-                _log.LogError(ex.Message);
+                Console.WriteLine(ex.Message);
                 throw;
             }
         }
 
-        public async Task<Chunk> ReadAsync(Chunk obj)
+        public Chunk Read(Chunk obj)
         {
             try
             {
-                return await _repository.ReadAsync(obj);
+                return _repository.Read(obj);
             }
             catch (LiteException ex)
             {
-                _log.LogError(ex.Message);
+                Console.WriteLine(ex.Message);
                 throw;
             }
         }
 
-        public async Task<Chunk> UpdateAsync(Chunk oldObj, Chunk newObj)
+        public Chunk Update(Chunk oldObj, Chunk newObj)
         {
             try
             {
-                return await _repository.UpdateAsync(oldObj, newObj);
+                return _repository.Update(oldObj, newObj);
             }
             catch (LiteException ex)
             {
-                _log.LogError(ex.Message);
+                Console.WriteLine(ex.Message);
                 throw;
             }
         }
 
-        public async Task<Chunk> DeleteAsync(Chunk obj)
+        public Chunk Delete(Chunk obj)
         {
             try
             {
-                return await _repository.DeleteAsync(obj);
+                return _repository.Delete(obj);
             }
             catch (LiteException ex)
             {
-                _log.LogError(ex.Message);
+                Console.WriteLine(ex.Message);
                 throw;
             }
         }
 
-        public async Task<IList<Chunk>> GetAllAsync()
+        public IEnumerable<Chunk> GetAll()
         {
             try
             {
-                return await _repository.GetAllAsync();
+                return _repository.GetAll();
             }
             catch (LiteException ex)
             {
-                _log.LogError(ex.Message);
+                Console.WriteLine(ex.Message);
                 throw;
             }
         }
 
-        public async Task<int> DeleteAllAsync()
+        public int DeleteAll()
         {
             try
             {
-                return await _repository.DeleteAllAsync();
+                return _repository.DeleteAll();
             }
             catch (LiteException ex)
             {
-                _log.LogError(ex.Message);
+                Console.WriteLine(ex.Message);
                 throw;
             }
         }

@@ -22,11 +22,11 @@ namespace DatabaseHandler.Tests
         }
 
         [Test]
-        public async Task Test_CreateAsync_Chunk()
+        public void Test_CreateAsync_Chunk()
         {
-            _services = new ChunkServices(null, _repository.Object);
+            _services = new ChunkServices(_repository.Object);
             var generatedChunk = _chunkFaker.Generate();
-            var createdChunk = await _services.CreateAsync(generatedChunk);
+            var createdChunk = _services.Create(generatedChunk);
 
             Assert.AreEqual(generatedChunk, createdChunk);
         }
