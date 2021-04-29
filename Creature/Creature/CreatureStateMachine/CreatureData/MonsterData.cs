@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 
 namespace Creature.Creature.StateMachine.CreatureData
 {
-    class MonsterData : ICreatureData
+    public class MonsterData : ICreatureData
     {
         private bool _alive;
         private Vector2 _position;
