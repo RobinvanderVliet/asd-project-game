@@ -13,8 +13,8 @@ namespace WorldGeneration
             Console.ForegroundColor = ConsoleColor.Red;
             var map = new Map(4, 2243);
             map.DeleteMap();
-            map.LoadArea(3, -1, 20);
-            map.DisplayMap(3,-1,20);
+            map.LoadArea(3, 0, 30);
+            map.DisplayMap(3,0,30);
             
             
             /*

@@ -49,9 +49,9 @@ namespace WorldGeneration
             var maxY = (playerY + viewDistance * 2 + _chunkSize) / _chunkSize + 1;
             var minY = (playerY - viewDistance * 2 - _chunkSize) / _chunkSize;
             var chunksWithinLoadingRange = new List<int[]>();
-            Console.WriteLine("playerX = " + playerX + ", playerX = " + playerX + ", viewDistance = " + viewDistance);
-            Console.WriteLine("maxChunkX = " + maxX + ", minChunkX = " + minX + ", maxChunkY = " + maxY + ", minChunkY = " + minY);
-            Console.WriteLine("maxX = " + maxX * _chunkSize + ", minX = " + minX * _chunkSize + ", maxY = " + maxY * _chunkSize + ", minY = " + minY * _chunkSize);
+            //Console.WriteLine("playerX = " + playerX + ", playerX = " + playerX + ", viewDistance = " + viewDistance);
+            //Console.WriteLine("maxChunkX = " + maxX + ", minChunkX = " + minX + ", maxChunkY = " + maxY + ", minChunkY = " + minY);
+            //Console.WriteLine("maxX = " + maxX * _chunkSize + ", minX = " + minX * _chunkSize + ", maxY = " + maxY * _chunkSize + ", minY = " + minY * _chunkSize);
 
             for (var x = minX; x <= maxX; x++)
             {
@@ -72,8 +72,15 @@ namespace WorldGeneration
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2)); x++)
                 {
                     var chunk = GetChunkForTileXAndY(x, y);
+                    if (x == 0 && y == 0)
+                    {
+                        Console.Write(" " + '0');
+                    }
+                    else
+                    {
+                        Console.Write(" " + chunk.Map[chunk.GetPositionInTileArrayByWorldCoordinates(x, y)].Symbol);
+                    }
                     //Console.Write(" [" + x +" " + y + " " + chunk.GetPositionInTileArrayByWorldCoordinates(x, y) /*+ " " + chunk.X + " " + chunk.Y*/ + "]");
-                    Console.Write(" " + chunk.Map[chunk.GetPositionInTileArrayByWorldCoordinates(x, y)].Symbol);
                 }
                 Console.WriteLine("");
             }
