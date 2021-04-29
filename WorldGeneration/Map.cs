@@ -67,18 +67,19 @@ namespace WorldGeneration
         {
             Console.WriteLine("Starting point Y: " +  (playerY - viewDistance) + ", Ending point Y: " + ((playerY - viewDistance) + (viewDistance * 2)));
             Console.WriteLine("Starting point X: " +  (playerX - viewDistance) + ", Ending point X: " + ((playerX - viewDistance) + (viewDistance * 2)));
-            for (var y = (playerY - viewDistance); y < ((playerY - viewDistance) + (viewDistance * 2)); y++)
+            for (var y = (playerY + viewDistance); y > ((playerY + viewDistance) - (viewDistance * 2)); y--)
             {
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2)); x++)
                 {
                     var chunk = GetChunkForTileXAndY(x, y);
+                    //Console.Write(" [" + x +" " + y + " " + chunk.GetPositionInTileArrayByWorldCoordinates(x, y) + " " + chunk.X + " " + chunk.Y + "]");
                     Console.Write(" " + chunk.Map[chunk.GetPositionInTileArrayByWorldCoordinates(x, y)].Symbol);
                 }
                 Console.WriteLine("");
             }
         }
 
-        private Chunk GenerateNewChunk(int chunkX, int chunkY)
+        public Chunk GenerateNewChunk(int chunkX, int chunkY)
         {
             var chunk = NoiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize, _seed);
             _db.InsertChunkIntoDatabase(chunk);

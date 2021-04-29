@@ -54,7 +54,13 @@ namespace WorldGeneration.Models
 
         public int GetPositionInTileArrayByWorldCoordinates(int x, int y)
         {
-            return (x % RowSize) + ((RowSize * RowSize - RowSize) - (Y * RowSize - y) * RowSize);
+            //return (x % RowSize) + ((RowSize * RowSize) - (Y * RowSize - y) * RowSize);
+            var y1 = (RowSize * RowSize - RowSize);
+            //Console.Write(" Y1 = " + y1);
+            var y2 = (Math.Abs((Y * RowSize - y) * RowSize) - RowSize);
+            //Console.Write(", y2 = " + y2);
+            Console.Write(" total: " + (x % RowSize + y2));
+            return (x % RowSize) + (Math.Abs((Y * RowSize - y) * RowSize) - RowSize);
         }
         
         public ITile GetTileByWorldCoordinates(int x, int y)
