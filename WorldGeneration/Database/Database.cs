@@ -39,11 +39,11 @@ namespace WorldGeneration.Database
             {
                 using var db = new LiteDatabase(_databaseLocation);
                 var collection = GetMapCollection(db);
-                var results = collection.Query()
+                var queryresults = collection.Query()
                     .Where(chunk => chunk.X.Equals(chunkXValue) && chunk.Y.Equals(chunkYValue))
                     .Select(queryOutput => new
-                        {map = queryOutput.Map, rowSize = queryOutput.RowSize, x = queryOutput.X, y = queryOutput.Y})
-                    .ToArray();
+                        {map = queryOutput.Map, rowSize = queryOutput.RowSize, x = queryOutput.X, y = queryOutput.Y});
+                var results = queryresults.ToArray();
 
                 switch (results.Length)
                 {

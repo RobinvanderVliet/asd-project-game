@@ -17,9 +17,7 @@ namespace WorldGeneration
             Console.ForegroundColor = ConsoleColor.DarkBlue;
             var randomMap = new Map(16, seed);
             randomMap.LoadArea(new[] {0, 0}, 30);
-            
-            var db = new Database.Database();
-            db.DeleteTileMap();
+            map.deleteMap();
         }
     }
 }

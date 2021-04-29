@@ -10,29 +10,26 @@ namespace WorldGeneration
         private readonly int _chunkSize;
         private readonly int _seed;
         private List<Chunk> _chunks;
-        private string _dbLocation;
-        private string _dbCollectionName;
+        private Database.Database _db;
 
         public Map(int chunkSize = 10, int seed = 0620520399, string dbLocation = "C:\\Temp\\ChunkDatabase.db", string dbCollectionName = "Chunks")
         {
             _chunkSize = chunkSize;
             _seed = seed;
-            _dbLocation = dbLocation;
-            _dbCollectionName = dbCollectionName;
+            _db = new Database.Database(dbLocation, dbCollectionName);
         }
 
         public void LoadArea(int[] playerLocation, int viewDistance)
         {
             var chunksWithinLoadingRange = CalculateChunksToLoad(playerLocation, viewDistance);
             _chunks = new List<Chunk>();
-            var db = new Database.Database(_dbLocation, _dbCollectionName);
 
             foreach (var chunkXY in chunksWithinLoadingRange)
             {
-                var chunk = db.GetChunk(chunkXY[0], chunkXY[1]);
+                var chunk = _db.GetChunk(chunkXY[0], chunkXY[1]);
                 _chunks.Add(chunk == null
                     ? GenerateNewChunk(chunkXY[0], chunkXY[1])
-                    : db.GetChunk(chunkXY[0], chunkXY[1]));
+                    : _db.GetChunk(chunkXY[0], chunkXY[1]));
             }
 
             DisplayMap(0, 0, viewDistance);
@@ -68,7 +65,7 @@ namespace WorldGeneration
         private Chunk GenerateNewChunk(int x, int y)
         {
             var chunk = NoiseMapGenerator.GenerateChunk(x, y, _chunkSize, _seed);
-            new Database.Database(_dbLocation, _dbCollectionName).InsertChunkIntoDatabase(chunk);
+            _db.InsertChunkIntoDatabase(chunk);
             return chunk;
         }
 
@@ -85,6 +82,11 @@ namespace WorldGeneration
                 throw new Exception("Tried to find a chunk that has not been loaded");
             }
             return chunk;
+        }
+
+        public void deleteMap()
+        {
+            _db.DeleteTileMap();
         }
     }
 }
