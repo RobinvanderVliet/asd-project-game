@@ -21,13 +21,18 @@
                 if (success)
                 {
                     packet.Header.Target = "client";
-                    _networkComponent.SendPayload(packet);
+                    _networkComponent.SendPacket(packet);
                 }
                 else
                 {
                     //TODO: send error
                 }
             }
+        }
+        
+        public void CreateGame()
+        {
+            // TODO: Implement methods.
         }
     }
 }

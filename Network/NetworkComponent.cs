@@ -37,7 +37,7 @@ namespace Network
         }
 
 
-        public void SendPayload(PacketDTO packet)
+        public void SendPacket(PacketDTO packet)
         {
             packet.Header.OriginID = _originId;
             string serializedPacket = JsonConvert.SerializeObject(packet);

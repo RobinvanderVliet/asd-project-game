@@ -37,13 +37,10 @@ namespace Network
             else
             {
                 packet.Header.SessionID = _session.SessionId; 
-                _networkComponent.SendPayload(packet);
+                _networkComponent.SendPacket(packet);
             }
         }
 
-        public void StartGame(NetworkComponent networkComponent, SessionComponent sessionComponent)
-        {
-            HostComponent hostComponent = new HostComponent(networkComponent, this, sessionComponent);
-        }
+
     }
 }

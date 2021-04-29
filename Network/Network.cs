@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,12 +11,32 @@ namespace Network
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Are you a Client or Host?");
+
+            String roleResult = Console.ReadLine();
+
             ClientComponent clientComponent = new ClientComponent();
-            NetworkComponent networkComponent = new NetworkComponent(clientComponent);
-
             SessionComponent sessionComponent = new SessionComponent();
-
-            clientComponent.StartGame(networkComponent, sessionComponent);
+            NetworkComponent networkComponent = new NetworkComponent(clientComponent);
+            HostComponent hostComponent;
+            
+            if (roleResult != null && roleResult.ToLower() == "host")
+            {
+                Console.WriteLine("Name of your session?");
+                String nameResult = Console.ReadLine();
+                sessionComponent.Name = nameResult;
+                sessionComponent.GenerateSessionId();
+                hostComponent = new HostComponent(networkComponent, clientComponent, sessionComponent);
+                
+                hostComponent.CreateGame();
+                
+            }
+            else
+            {
+                   
+            }
         }
+        
+        
     }
 }
