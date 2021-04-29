@@ -13,10 +13,17 @@ namespace Agent
 
         public String Execute(AST ast)
         {
-            Parallel.ForEach (ast.root.GetChildren(), node =>
+            try
             {
-                GenerateConfiguration(node);
-            });
+               Parallel.ForEach(ast.root.GetChildren(), node =>
+               {
+                   GenerateConfiguration(node);
+               });
+            }
+            catch (Exception e)
+            {
+                stringBuilder += e.Message;
+            }
 
             return stringBuilder;
         }
@@ -53,12 +60,13 @@ namespace Agent
             String text = ""; 
             foreach (Node child in parent.GetChildren())
             {
-                text += GenerateClause(child, setting, action ,GenerateCompareble(((Condition)parent).GetWhenClause().GetComparableL()));
+                String subject = GenerateCompareble(((Condition)parent).GetWhenClause().GetComparableL());
+                text += GenerateClause(child, setting, action, subject);
             }
             return text;
         }
 
-        private String GenerateAction(Action parent, string settingName)
+        private String GenerateAction(Action parent, String settingName)
         {
             String text = settingName + "_" + parent.Name + "=" + parent.Name + Environment.NewLine;
             foreach(Node child in parent.GetChildren())
@@ -68,7 +76,7 @@ namespace Agent
             return text;
         }
 
-        private String GenerateClause(Node parent, string settingName, String action ,String subject)
+        private String GenerateClause(Node parent, String settingName, String action ,String subject)
         {
             String text = "";
             if (parent is When)
@@ -82,7 +90,7 @@ namespace Agent
             return text;
         }
 
-        private String generateWhen(Node parent, string settingName, String action ,String subject ,string status)
+        private String generateWhen(Node parent, String settingName, String action ,String subject ,String status)
         {
             String text = "";
             Parallel.For(0, parent.GetChildren().Count, i =>
@@ -90,25 +98,25 @@ namespace Agent
                 switch (i)
                 {
                     case 0:
-                        text += settingName + "_" + subject + "_" + action + "_" + "comparable" + "=" + GenerateCompareble(((When)parent).GetComparableL()) + Environment.NewLine;
+                        text += settingName + "_" + action + "_" + subject + "_" + "comparable" + "=" + GenerateCompareble(((When)parent).GetComparableL()) + Environment.NewLine;
                         break;
                     case 1:
-                        text += settingName + "_" + subject + "_" + action + "_" + "treshold" + "=" + GenerateCompareble(((When)parent).GetComparableR()) + Environment.NewLine; 
+                        text += settingName + "_" + action + "_" + subject + "_" + "treshold" + "=" + GenerateCompareble(((When)parent).GetComparableR()) + Environment.NewLine; 
                         break;
                     case 2:
-                        text += settingName + "_" + subject + "_" + action + "_" + "comparision" + "=" + ((When)parent).GetComparison().ComparisonType + Environment.NewLine;
+                        text += settingName + "_" + action + "_" + subject + "_" + "comparision" + "=" + ((When)parent).GetComparison().ComparisonType + Environment.NewLine;
                         break;
                     case 3:
-                        text += settingName + "_" + subject + "_" + action + "_" + "comparision" + "_"+ status + "=" + ((When)parent).GetThen().Name + Environment.NewLine;
+                        text += settingName + "_" + action + "_" + subject + "_" + "comparision" + "_"+ status + "=" + ((When)parent).GetThen().Name + Environment.NewLine;
                         break;
                 }
             });
             return text;
         }
 
-        private String generateOther(Node parent, string settingName, String action ,String subject ,string status)
+        private String generateOther(Node parent, String settingName, String action ,String subject ,String status)
         {
-            return settingName + "_" + subject + "_" + action + "_" + "comparision" + "_" + status + "=" + ((ActionReference)((Otherwise)parent).GetChildren().FirstOrDefault()).Name + Environment.NewLine;
+            return settingName + "_" + action + "_" + subject + "_" + "comparision" + "_" + status + "=" + ((ActionReference)((Otherwise)parent).GetChildren().FirstOrDefault()).Name + Environment.NewLine;
         }
 
         private String GenerateCompareble(Comparable node)

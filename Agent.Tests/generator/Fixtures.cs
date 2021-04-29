@@ -115,7 +115,7 @@ namespace Agent.Tests.generator
                     .AddChild((new When())
                         .AddChild(new Player("player"))
                         .AddChild(new Comparison("nearby"))
-                        .AddChild(new Player("player"))
+                        .AddChild(new Player("opponent"))
                         .AddChild(new ActionReference("attack"))
                     )
                 )

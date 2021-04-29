@@ -1,4 +1,5 @@
 ﻿using Agent.antlr.ast;
+using Moq;
 using NUnit.Framework;
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -38,6 +39,22 @@ namespace Agent.Tests.generator
             Assert.False(result.Contains("????"));
         }
 
+        [Test]
+        [TestCase("test3.txt")]
+        public void Test_Generator_Exception(String input)
+        {
+            //Arrange
+            AST ast = fix.GetFixture(input);
 
+            Mock<Configuration> mockedNode = new();
+            mockedNode.Setup(x => x.GetChildren()).Throws(new Exception());
+
+            ast.SetRoot(mockedNode.Object);
+
+            //Act
+            var result = sut.Execute(ast);
+            //Assert
+            Assert.AreEqual(result, new Exception().Message);
+        }
     }
 }
