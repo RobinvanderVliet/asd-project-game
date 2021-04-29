@@ -11,7 +11,7 @@ namespace WorldGeneration.Database
         private readonly string _databaseLocation;
         private readonly string _mapCollection;
 
-        public Database(string databaseLocation = "C:\\Temp\\ChunkDatabase.db", string mapCollection = "Chunks")
+        public Database(string databaseLocation, string mapCollection)
         {
             _databaseLocation = databaseLocation;
             _mapCollection = mapCollection;

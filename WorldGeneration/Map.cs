@@ -10,18 +10,22 @@ namespace WorldGeneration
         private readonly int _chunkSize;
         private readonly int _seed;
         private List<Chunk> _chunks;
+        private string _dbLocation;
+        private string _dbCollectionName;
 
-        public Map(int chunkSize = 10, int seed = 0620520399)
+        public Map(int chunkSize = 10, int seed = 0620520399, string dbLocation = "C:\\Temp\\ChunkDatabase.db", string dbCollectionName = "Chunks")
         {
             _chunkSize = chunkSize;
             _seed = seed;
+            _dbLocation = dbLocation;
+            _dbCollectionName = dbCollectionName;
         }
 
         public void LoadArea(int[] playerLocation, int viewDistance)
         {
             var chunksWithinLoadingRange = CalculateChunksToLoad(playerLocation, viewDistance);
             _chunks = new List<Chunk>();
-            var db = new Database.Database();
+            var db = new Database.Database(_dbLocation, _dbCollectionName);
 
             foreach (var chunkXY in chunksWithinLoadingRange)
             {
@@ -64,7 +68,7 @@ namespace WorldGeneration
         private Chunk GenerateNewChunk(int x, int y)
         {
             var chunk = NoiseMapGenerator.GenerateChunk(x, y, _chunkSize, _seed);
-            new Database.Database().InsertChunkIntoDatabase(chunk);
+            new Database.Database(_dbLocation, _dbCollectionName).InsertChunkIntoDatabase(chunk);
             return chunk;
         }
 

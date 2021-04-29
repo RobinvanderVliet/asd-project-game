@@ -55,5 +55,10 @@ namespace WorldGeneration.Models
             // return (x % RowSize) + (Y * RowSize + (y - Y * RowSize) * RowSize);
             return x % RowSize + (Y * RowSize - y) * RowSize;
         }
+        
+        public ITile GetTileByWorldCoordinates(int x, int y)
+        {
+            return Map[GetPositionInTileArrayByWorldCoordinates(x,y)];
+        }
     }
 }
