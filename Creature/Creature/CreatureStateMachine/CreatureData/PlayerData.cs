@@ -44,5 +44,14 @@ namespace Creature.Creature.StateMachine.CreatureData
             get => _visionRange;
             set => _visionRange = value;
         }
+
+        public PlayerData(bool isAlive, Vector2 position, int health, int damage, int visionRange)
+        {
+            _alive = isAlive;
+            _position = position;
+            _health = health;
+            _damage = damage;
+            _visionRange = visionRange;
+        }
     }
 }

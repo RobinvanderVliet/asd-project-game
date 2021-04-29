@@ -51,5 +51,15 @@ namespace Creature.Creature.StateMachine.CreatureData
             get => _following;
             set => _following = value;
         }
+
+        public MonsterData(bool isAlive, Vector2 position, int health, int damage, int visionRange, bool following)
+        {
+            _alive = isAlive;
+            _position = position;
+            _health = health;
+            _damage = damage;
+            _visionRange = visionRange;
+            _following = following;
+        }
     }
 }
