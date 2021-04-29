@@ -52,9 +52,7 @@ namespace WorldGeneration.Models
 
         public int GetPositionInTileArrayByWorldCoordinates(int x, int y)
         {
-            var XInWorld = x % RowSize;
-            var YInWorld = (RowSize * RowSize - RowSize) -(Y * RowSize - y) * RowSize;
-            return XInWorld + YInWorld;
+            return (x % RowSize) + ((RowSize * RowSize - RowSize) - (Y * RowSize - y) * RowSize);
         }
     }
 }
