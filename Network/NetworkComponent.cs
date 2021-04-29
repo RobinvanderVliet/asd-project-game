@@ -36,7 +36,6 @@ namespace Network
             }
         }
 
-
         public void SendPacket(PacketDTO packet)
         {
             packet.Header.OriginID = _originId;

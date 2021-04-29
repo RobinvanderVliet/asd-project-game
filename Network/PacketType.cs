@@ -9,6 +9,7 @@ namespace Network
     public enum PacketType
     {
         Chat,
-        Move
+        Move,
+        GameAvailability
     }
 }

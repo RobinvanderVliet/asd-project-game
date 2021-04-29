@@ -33,7 +33,13 @@ namespace Network
             }
             else
             {
-                   
+                PacketDTO packetDTO = new PacketBuilder()
+                    .SetTarget("host")
+                    .SetPacketType(PacketType.GameAvailability)
+                    .SetPayload("testPayload")
+                    .Build();
+
+                networkComponent.SendPacket(packetDTO);
             }
         }
         
