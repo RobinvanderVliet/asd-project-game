@@ -52,8 +52,7 @@ namespace WorldGeneration.Models
 
         public int GetPositionInTileArrayByWorldCoordinates(int x, int y)
         {
-            // return (x % RowSize) + (Y * RowSize + (y - Y * RowSize) * RowSize);
-            return x % RowSize + (Y * RowSize - y) * RowSize;
+            return (x % RowSize) + ((RowSize * RowSize - RowSize) - (Y * RowSize - y) * RowSize);
         }
         
         public ITile GetTileByWorldCoordinates(int x, int y)
