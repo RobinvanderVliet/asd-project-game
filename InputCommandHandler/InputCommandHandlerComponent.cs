@@ -1,7 +1,6 @@
 ﻿using System;
-using InputCommandHandler.antlr;
-using InputCommandHandler.exception;
-using Player.Model;
+using InputCommandHandler.Antlrr;
+using InputCommandHandler.Exceptions;
 using Player.Services;
 
 namespace InputCommandHandler
@@ -10,10 +9,10 @@ namespace InputCommandHandler
     {
         public void HandleCommands(IPlayerService playerService)
         {
-            SendChat(GetCommand(), playerService);
+            SendCommand(GetCommand(), playerService);
         }
 
-        private static void SendChat(string commando, IPlayerService playerService)
+        private static void SendCommand(string commando, IPlayerService playerService)
         {
             try
             {

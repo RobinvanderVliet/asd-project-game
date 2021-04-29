@@ -1,14 +1,13 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using InputCommandHandler.antlr.ast;
-using InputCommandHandler.antlr.grammar;
-using InputCommandHandler.antlr.parser;
-using InputCommandHandler.antlr.transformer;
-using InputCommandHandler.exception;
-using Player.Model;
+using InputCommandHandler.Antlr.Ast;
+using InputCommandHandler.Antlr.Grammar;
+using InputCommandHandler.Antlr.Parser;
+using InputCommandHandler.Antlr.Transformer;
+using InputCommandHandler.Exceptions;
 using Player.Services;
 
-namespace InputCommandHandler.antlr
+namespace InputCommandHandler.Antlrr
 {
     public class Pipeline : IAntlrErrorListener<IToken>
     {

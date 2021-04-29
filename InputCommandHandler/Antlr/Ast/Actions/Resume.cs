@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace InputCommandHandler.antlr.ast.actions
+namespace InputCommandHandler.Antlr.Ast.Actions
 {
     public class Resume : Command, IEquatable<Resume>
     {

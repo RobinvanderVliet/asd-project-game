@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace InputCommandHandler.antlr.ast
+namespace InputCommandHandler.Antlr.Ast
 {
     public class Direction : ASTNode, IEquatable<Direction>
     {

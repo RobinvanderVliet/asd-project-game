@@ -31,6 +31,7 @@ namespace ASD_project
                     services.AddTransient<IMainGame, MainGame>();
                     services.AddScoped<IPlayerModel, PlayerModel>();
                     services.AddScoped<IInventory, Inventory>();
+                    services.AddScoped<IItem, Item>();
                     services.AddScoped<IBitcoin, Bitcoin>();
                     services.AddScoped<IRadiationLevel, RadiationLevel>();
                 })

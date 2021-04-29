@@ -1,17 +1,6 @@
-﻿/*
-    AIM SD ASD 2020/2021 S2 project
-     
-    Project name: ASD-project-game.
- 
-    This file is created by team: 2
-     
-    Goal of this file: Message action class (extends command).
-     
-*/
+﻿using System;
 
-using System;
-
-namespace InputCommandHandler.antlr.ast
+namespace InputCommandHandler.Antlr.Ast
 {
     public class Message : ASTNode, IEquatable<Message>
     {

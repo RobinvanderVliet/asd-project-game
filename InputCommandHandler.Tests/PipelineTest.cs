@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using InputCommandHandler.antlr;
-using InputCommandHandler.antlr.ast;
-using InputCommandHandler.antlr.ast.actions;
-using InputCommandHandler.antlr.transformer;
-using InputCommandHandler.exception;
+using InputCommandHandler.Antlrr;
+using InputCommandHandler.Antlr.Ast;
+using InputCommandHandler.Antlr.Ast.Actions;
+using InputCommandHandler.Antlr.Transformer;
+using InputCommandHandler.Exceptions;
 using Moq;
 using NUnit.Framework;
 using Player.Model;

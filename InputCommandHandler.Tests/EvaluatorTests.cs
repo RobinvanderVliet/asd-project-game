@@ -1,22 +1,20 @@
-﻿using InputCommandHandler.antlr.ast;
-using InputCommandHandler.antlr.ast.actions;
-using InputCommandHandler.antlr.transformer;
+﻿using InputCommandHandler.Antlr.Ast;
+using InputCommandHandler.Antlr.Ast.Actions;
+using InputCommandHandler.Antlr.Transformer;
 using Moq;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
-using InputCommandHandler.exception;
-using Player.Model;
+using InputCommandHandler.Exceptions;
 using Player.Services;
 
 namespace InputCommandHandler.Tests
 {
     [ExcludeFromCodeCoverage]
-    class EvaluatorTests
+    public class EvaluatorTests
     {
         private Evaluator sut;
         private Mock<IPlayerService> _mockedPlayerService;
-
-
+        
         [SetUp]
         public void Setup()
         {
@@ -60,7 +58,7 @@ namespace InputCommandHandler.Tests
         }
 
         [Test]
-        public void Test_HandlePickupActionIsCalled()
+        public void Test_Apply_HandlePickupActionIsCalled()
         {
             var ast = PickupAST();
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.PickupItem());
@@ -78,7 +76,7 @@ namespace InputCommandHandler.Tests
         }
         
         [Test]
-        public void Test_HandleDropActionIsCalled()
+        public void Test_Apply_HandleDropActionIsCalled()
         {
             var ast = DropAST("item");
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.DropItem("item"));
@@ -97,7 +95,7 @@ namespace InputCommandHandler.Tests
         }
         
         [Test]
-        public void Test_HandleAttackActionIsCalled()
+        public void Test_Apply_HandleAttackActionIsCalled()
         {
             string direction = "right";
             var ast = AttackAST(direction);
@@ -117,7 +115,7 @@ namespace InputCommandHandler.Tests
         }
         
         [Test]
-        public void Test_HandleSayActionIsCalled()
+        public void Test_Apply_HandleSayActionIsCalled()
         {
             var ast = SayAST("test");
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Say("test"));
@@ -136,7 +134,7 @@ namespace InputCommandHandler.Tests
         }
         
         [Test]
-        public void Test_HandleShoutActionIsCalled()
+        public void Test_Apply_HandleShoutActionIsCalled()
         {
             var ast = ShoutAST("test");
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Shout("test"));

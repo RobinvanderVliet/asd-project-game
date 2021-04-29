@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
-using InputCommandHandler.antlr.ast;
-using InputCommandHandler.antlr.ast.actions;
-using InputCommandHandler.antlr.grammar;
+using InputCommandHandler.Antlr.Ast;
+using InputCommandHandler.Antlr.Ast.Actions;
+using InputCommandHandler.Antlr.Grammar;
 
-namespace InputCommandHandler.antlr.parser
+namespace InputCommandHandler.Antlr.Parser
 {
     public class ASTListener : PlayerCommandsBaseListener
     {

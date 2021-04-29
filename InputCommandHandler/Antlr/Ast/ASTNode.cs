@@ -1,4 +1,4 @@
-﻿namespace InputCommandHandler.antlr.ast
+﻿namespace InputCommandHandler.Antlr.Ast
 {
     public class ASTNode
     {

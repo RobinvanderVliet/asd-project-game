@@ -1,14 +1,15 @@
-using InputCommandHandler.antlr.ast;
-using InputCommandHandler.antlr.ast.actions;
-using InputCommandHandler.exception;
-using Player.Model;
+using InputCommandHandler.Antlr.Ast;
+using InputCommandHandler.Antlr.Ast.Actions;
+using InputCommandHandler.Exceptions;
 using Player.Services;
 
-namespace InputCommandHandler.antlr.transformer
+namespace InputCommandHandler.Antlr.Transformer
 {
     public class Evaluator : ITransform
     {
         private readonly IPlayerService _playerService;
+        private const int MINIMUM_STEPS = 1;
+        private const int MAXIMUM_STEPS = 10;
 
         public Evaluator(IPlayerService playerService)
         {
@@ -64,9 +65,9 @@ namespace InputCommandHandler.antlr.transformer
         {
             switch (move.steps.value)
             {
-                case < 1:
+                case < MINIMUM_STEPS:
                     throw new MoveException("Too few steps, the minimum is 1.");
-                case > 10:
+                case > MAXIMUM_STEPS:
                     throw new MoveException("Too many steps, the maximum is 10.");
                 default:
                     _playerService.HandleDirection(move.direction.value, move.steps.value);

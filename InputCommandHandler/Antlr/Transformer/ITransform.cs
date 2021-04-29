@@ -1,6 +1,6 @@
-﻿using InputCommandHandler.antlr.ast;
+﻿using InputCommandHandler.Antlr.Ast;
 
-namespace InputCommandHandler.antlr.transformer
+namespace InputCommandHandler.Antlr.Transformer
 {
     public interface ITransform
     {

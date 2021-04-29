@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
-namespace InputCommandHandler.antlr.ast.actions
+namespace InputCommandHandler.Antlr.Ast.Actions
 {
     public class Drop : Command, IEquatable<Drop>
     {

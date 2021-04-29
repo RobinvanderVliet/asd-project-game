@@ -1,6 +1,6 @@
 using System;
 
-namespace InputCommandHandler.exception
+namespace InputCommandHandler.Exceptions
 {
     public class MoveException : Exception
     {
