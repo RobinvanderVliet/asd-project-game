@@ -1,8 +1,11 @@
 ﻿using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace Creature.Tests
 {
+    [ExcludeFromCodeCoverage]
+    [TestFixture]
     class PlayerTest
     {
         private ICreature _sut;

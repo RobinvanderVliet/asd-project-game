@@ -4,15 +4,16 @@ using NUnit.Framework;
 namespace Player.Tests
 {
     [ExcludeFromCodeCoverage]
-    public class PlayerTests
+    [TestFixture]
+    public class PlayerTest
     {
 
-        private PlayerModel movementComponent;
+        private PlayerModel _movementComponent;
 
         [SetUp]
         public void Setup()
         {
-            movementComponent = new PlayerModel();
+            this._movementComponent = new PlayerModel();
         }
 
 
@@ -24,13 +25,13 @@ namespace Player.Tests
             int steps = 5;
 
             // Act
-            movementComponent.HandleDirection(direction_right, steps);
+            this._movementComponent.HandleDirection(direction_right, steps);
 
             // Assert
             int[] playerPosition = new int[2];
             playerPosition[0] = 31;
             playerPosition[1] = 11;
-            Assert.AreEqual(movementComponent.GetNewPosition, playerPosition);
+            Assert.AreEqual(this._movementComponent.GetNewPosition, playerPosition);
         }
 
         [Test]
@@ -41,13 +42,13 @@ namespace Player.Tests
             int steps = 5;
 
             // Act
-            movementComponent.HandleDirection(direction_left, steps);
+            this._movementComponent.HandleDirection(direction_left, steps);
 
             // Assert
             int[] playerPosition = new int[2];
             playerPosition[0] = 21;
             playerPosition[1] = 11;
-            Assert.AreEqual(movementComponent.GetNewPosition, playerPosition);
+            Assert.AreEqual(this._movementComponent.GetNewPosition, playerPosition);
         }
 
         [Test]
@@ -58,13 +59,13 @@ namespace Player.Tests
             int steps = 5;
 
             // Act
-            movementComponent.HandleDirection(direction_forward, steps);
+            this._movementComponent.HandleDirection(direction_forward, steps);
 
             // Assert
             int[] playerPosition = new int[2];
             playerPosition[0] = 26;
             playerPosition[1] = 6;
-            Assert.AreEqual(movementComponent.GetNewPosition, playerPosition);
+            Assert.AreEqual(this._movementComponent.GetNewPosition, playerPosition);
         }
 
         [Test]
@@ -75,13 +76,13 @@ namespace Player.Tests
             int steps = 5;
 
             // Act
-            movementComponent.HandleDirection(direction_backward, steps);
+            this._movementComponent.HandleDirection(direction_backward, steps);
 
             // Assert
             int[] playerPosition = new int[2];
             playerPosition[0] = 26;
             playerPosition[1] = 16;
-            Assert.AreEqual(movementComponent.GetNewPosition, playerPosition);
+            Assert.AreEqual(this._movementComponent.GetNewPosition, playerPosition);
         }
 
         [Test]
@@ -93,7 +94,7 @@ namespace Player.Tests
             newMovement[1] = 3;
 
             // Act
-            var result = movementComponent.SendNewPosition(newMovement);
+            var result = this._movementComponent.SendNewPosition(newMovement);
 
             // Assert
             int[] playerPosition = new int[2];

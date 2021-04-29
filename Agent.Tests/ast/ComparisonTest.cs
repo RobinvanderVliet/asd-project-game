@@ -8,27 +8,21 @@ namespace Agent.Tests.ast
     [TestFixture]
     public class ComparisonTest
     {
-        private Comparison comparison;
+        private Comparison _comparison;
         private const string TYPE = "Comparison";
 
         [SetUp]
         public void Setup()
         {
-            comparison = new Comparison("");
+            this._comparison = new Comparison("");
         }
 
-        /*
-         * GetNodeType()
-         *
-         * Test of de juiste type terug gegeven wordt
-         * @author Abdul     
-        */
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
             //Arrange
             //Act
-            var result = comparison.GetNodeType();
+            var result = this._comparison.GetNodeType();
             //Assert
             Assert.AreEqual(TYPE, result);
         }

@@ -19,12 +19,8 @@ namespace Agent.Tests.ast
             _otherwise = new Otherwise();
         }
 
-        /*
-         * GetNodeType()
-         *
-         * Test of de juiste type terug gegeven wordt
-         * @author Abdul     
-        */
+        
+    
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
@@ -35,12 +31,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual(result, TYPE);
         }
 
-        /*
-         * AddChild()
-         *
-         * Test if the Actionreference is added to Otherwise
-         * @author Abdul     
-        */
+    
         [Test]
         public void Test_AddChild_ActionReference()
         {
@@ -56,11 +47,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual(result, "ActionReference");
         }
         
-        /*
-          * AddChild()
-          *
-          * Test if the node is added to Otherwise   
-         */
+   
         [Test]
         public void Test_AddChild_Node()
         {
