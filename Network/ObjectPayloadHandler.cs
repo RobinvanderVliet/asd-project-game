@@ -3,9 +3,9 @@
 namespace Network
 {
     public static class ObjectPayloadHandler {
-        public static void CheckActionType(PacketDTO objectPayloadDTO) 
+        public static void CheckActionType(PacketDTO packetDTO) 
         {
-            switch (objectPayloadDTO.Header.ActionType)
+            switch (packetDTO.Header.ActionType)
             {
                 case "chatAction":
                     Console.WriteLine("Case chatAction");
@@ -33,10 +33,10 @@ namespace Network
             }
         }
 
-        public static Boolean CheckHeader(PacketHeaderDTO payloadHeaderDTO)
+        public static Boolean CheckHeader(PacketHeaderDTO packetHeaderDTO)
         {
             // returns true if header suggests payload is meant for this client, otherwise returns false
-            Console.WriteLine("Checking session with ID: " + payloadHeaderDTO.SessionID);
+            Console.WriteLine("Checking session with ID: " + packetHeaderDTO.SessionID);
             return true;
         }
     }
