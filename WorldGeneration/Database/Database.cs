@@ -43,18 +43,15 @@ namespace WorldGeneration.Database
                     .Where(chunk => chunk.X.Equals(chunkXValue) && chunk.Y.Equals(chunkYValue))
                     .Select(queryOutput => new
                         {map = queryOutput.Map, rowSize = queryOutput.RowSize, x = queryOutput.X, y = queryOutput.Y});
-                var results = queryresults.ToArray();
-
-                switch (results.Length)
+                switch (queryresults.Count())
                 {
                     case 0:
                         return null;
-                    //throw new ChunkNotFoundException("There were no matching chunks found"); don't want log spam so switching to different implementation
                     case >1:
                         throw new DatabaseException("There were multiple matching chunks found. bad! this bad!");
                     case 1:
-                        return new Chunk(results.First().x, results.First().y, results.First().map,
-                            results.First().rowSize);
+                        return new Chunk(queryresults.First().x, queryresults.First().y, queryresults.First().map,
+                            queryresults.First().rowSize);
                     default:
                         throw new DatabaseException(
                             "Extremely unexpected result from query. like, this is only here in case of a count being negative or null. So pretty much unreachable code.");

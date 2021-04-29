@@ -57,7 +57,7 @@ namespace WorldGeneration
             {
                 for (var x = playerx; x < viewDistance * 2 + 1; x++)
                 {
-                    var chunk = chunks.FirstOrDefault(chunk =>
+                    var chunk = _chunks.FirstOrDefault(chunk =>
                         chunk.X * _chunkSize <= x 
                         && chunk.X * _chunkSize > x - _chunkSize 
                         && chunk.Y * _chunkSize >= y 
