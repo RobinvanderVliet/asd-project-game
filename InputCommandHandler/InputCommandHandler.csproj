@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Include="antlr\grammar\PlayerCommands.g4" />
+      <Content Include="Antlr\Grammar\PlayerCommands.g4" />
     </ItemGroup>
 
     <ItemGroup>
