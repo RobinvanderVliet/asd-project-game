@@ -39,7 +39,7 @@ namespace ASD_project
                 //
                // new WorldGeneration.Program();
                 
-                //Goep 4 NPC
+                //Group 4 NPC
                 IWorld world = new DefaultWorld(25);
                 ICreature player = new Creature.Player(10, new Vector2(3, 2));
                 ICreature creature = new Monster(world, new Vector2(10, 10), 2, 6, 50);
