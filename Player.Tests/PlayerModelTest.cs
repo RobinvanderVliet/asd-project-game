@@ -1,8 +1,6 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using Player.Model;
 
 namespace Player.Tests

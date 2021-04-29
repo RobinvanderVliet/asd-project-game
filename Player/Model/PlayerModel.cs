@@ -13,17 +13,16 @@ namespace Player.Model
         public IBitcoin Bitcoins { get; set; }
         public IRadiationLevel RadiationLevel { get; set; }
 
-        private int[] currentposition = {26, 11};
-
-        public int[] GetNewPosition { get; private set; } = new int[2];
+        public int[] CurrentPosition { get; set; }
 
         //random default values for health&stamina for now
         private const int HEALTHCAP = 100;
         private const int STAMINACAP = 10;
-        private const int DEFAULT_STEPS = 0;
 
-        public PlayerModel(string name, IInventory inventory, IBitcoin bitcoins, IRadiationLevel radiationLevel //, Tile tile
-                                      )
+
+        public PlayerModel(string name, IInventory inventory, IBitcoin bitcoins, IRadiationLevel radiationLevel
+            //, Tile tile
+        )
         {
             Name = name;
             Health = HEALTHCAP;
@@ -33,14 +32,16 @@ namespace Player.Model
             //random default value for now
             Bitcoins = bitcoins;
             RadiationLevel = radiationLevel;
+            CurrentPosition = new[] {26, 11};
         }
-        
+
         public void AddHealth(int amount)
         {
             if (Health + amount >= HEALTHCAP)
             {
                 Health = HEALTHCAP;
-            } else
+            }
+            else
             {
                 Health += amount;
             }
@@ -147,99 +148,12 @@ namespace Player.Model
             }
         }
 
-        public void HandleDirection(string direction, int steps)
+        public void SetNewPlayerPosition(int[] newMovement)
         {
-            var newMovement = new int[2];
-            switch (direction)
+            for (var i = 0; i <= 1; i++)
             {
-                case "right":
-                case "east":
-                    newMovement[0] = steps;
-                    newMovement[1] = DEFAULT_STEPS;
-                    break;
-                case "left":
-                case "west":
-                    newMovement[0] = -steps;
-                    newMovement[1] = DEFAULT_STEPS;
-                    break;
-                case "forward":
-                case "up":
-                case "north":
-                    newMovement[0] = DEFAULT_STEPS;
-                    newMovement[1] = -steps;
-                    break;
-                case "backward":
-                case "down":
-                case "south":
-                    newMovement[0] = DEFAULT_STEPS;
-                    newMovement[1] = steps;
-                    break;
+                CurrentPosition[i] = CurrentPosition[i] + newMovement[i];
             }
-
-            GetNewPosition = SendNewPosition(newMovement);
-
-            // the next line of code should be changed by sending newPosition to a relevant method
-            WriteCommand(GetNewPosition);
-        }
-
-        public int[] SendNewPosition(int[] newMovement)
-        {
-            var newPlayerPosition = new int[2];
-
-            // getPosition() should be replaced by another method that gets the coordinates of the player
-            for (var i = 0; i <= 1; i++) newPlayerPosition[i] = currentposition[i] + newMovement[i];
-
-            return newPlayerPosition;
-        }
-
-        // !!! METHODS BELOW ARE TEMPORARY, PROTOTYPE ONLY !!!
-        private void WriteCommand(int[] newPosition)
-        {
-            // returns the new position
-            currentposition = newPosition;
-            Console.WriteLine("X: " + newPosition[0] + ". Y: " + newPosition[1]);
-        }
-
-        public Item CheckTileContainsItem()
-        {
-            // Als er op de Tile iets ligt moet deze het item returnen
-            // anders return null;
-            return null;
-        }
-
-        public void HandleAttackAction()
-        {
-            Console.WriteLine("Attack");
-        }
-
-        public void HandleExitAction()
-        {
-            Console.WriteLine("Exit");
-        }
-
-        public void HandlePauseAction()
-        {
-            Console.WriteLine("Pause");
-        }
-
-        public void HandleReplaceAction()
-        {
-            Console.WriteLine("Replace");
-        }
-
-        public void HandleResumeAction()
-        {
-            Console.WriteLine("Resume");
-        }
-        
-        public void HandleSayAction(string sayMessage)
-        {
-            Console.WriteLine("player said: " + sayMessage);
-        }
-
-        public void HandleShoutAction(string shoutMessage)
-        {
-            Console.WriteLine("player shouted: " + shoutMessage);        
         }
     }
 }

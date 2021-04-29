@@ -8,12 +8,11 @@ namespace Chat.antlr.transformer
 {
     public class Evaluator : ITransform
     {
-        private readonly IPlayerModel _playerModel;
-        private readonly PlayerService _playerService;
+        private readonly IPlayerService _playerService;
 
-        public Evaluator(IPlayerModel playerModel)
+        public Evaluator(IPlayerService playerService)
         {
-            _playerModel = playerModel;
+            _playerService = playerService;
         }
 
         public void Apply(AST ast)
@@ -35,22 +34,22 @@ namespace Chat.antlr.transformer
                         TransformDrop((Drop)nodeBody[i]);
                         break;
                     case Exit:
-                        TransformExit((Exit)nodeBody[i]);
+                        TransformExit();
                         break;
                     case Move:
                         TransformMove((Move)nodeBody[i]);
                         break;
                     case Pause:
-                        TransformPause((Pause)nodeBody[i]);
+                        TransformPause();
                         break;
                     case Pickup:
-                        TransformPickup((Pickup)nodeBody[i]);
+                        TransformPickup();
                         break;
                     case Replace:
-                        TransformReplace((Replace)nodeBody[i]);
+                        TransformReplace();
                         break;
                     case Resume:
-                        TransformResume((Resume)nodeBody[i]);
+                        TransformResume();
                         break;
                     case Say:
                         TransformSay((Say)nodeBody[i]);
@@ -70,59 +69,54 @@ namespace Chat.antlr.transformer
                 case > 10:
                     throw new MoveException("Too many steps, the maximum is 10.");
                 default:
-                    _playerModel.HandleDirection(move.direction.value, move.steps.value);
+                    _playerService.HandleDirection(move.direction.value, move.steps.value);
                     break;
             }
         }
 
-        private void TransformPickup(Pickup pickup)
+        private void TransformPickup()
         {
-            _playerModel.PickupItem();
+            _playerService.PickupItem();
         }
 
         private void TransformDrop(Drop drop)
         {
-            _playerModel.DropItem(drop.itemName.value);
+            _playerService.DropItem(drop.itemName.value);
         }
 
         private void TransformAttack(Attack attack)
         {
-            _playerService.Attack();
-            // _playerModel.HandleAttackAction();
+            _playerService.Attack(attack.direction.value);
         }
 
-        private void TransformExit(Exit exit)
+        private void TransformExit()
         {
             _playerService.ExitCurrentGame();
-            // _playerModel.HandleExitAction();
         }
 
-        private void TransformPause(Pause pause)
+        private void TransformPause()
         {
             _playerService.Pause();
-            // _playerModel.HandlePauseAction();
         }
 
-        private void TransformReplace(Replace replace)
+        private void TransformReplace()
         {
             _playerService.ReplaceByAgent();
-            // _playerModel.HandleReplaceAction();
         }
 
-        private void TransformResume(Resume resume)
+        private void TransformResume()
         {
-            _playerService.Pause();
-            // _playerModel.HandleResumeAction();
+            _playerService.Resume();
         }
 
         private void TransformSay(Say say)
         {
-            _playerModel.HandleSayAction(say.message.value);
+            _playerService.Say(say.message.value);
         }
 
         private void TransformShout(Shout shout)
         {
-            _playerModel.HandleShoutAction(shout.message.value);
+            _playerService.Shout(shout.message.value);
         }
     }
 }

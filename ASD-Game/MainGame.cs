@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using Player;
 using Player.Model;
+using Player.Services;
 
 namespace ASD_project
 {
@@ -24,9 +25,10 @@ namespace ASD_project
                 //moet later vervangen worden
                 ChatComponent chat = new ChatComponent();
                 PlayerModel playerModel = new PlayerModel("Name", new Inventory(), new Bitcoin(20), new RadiationLevel(1));
+                IPlayerService playerService = new PlayerService(playerModel);
                 do
                 {
-                    chat.HandleCommands(playerModel);
+                    chat.HandleCommands(playerService);
                 } while (true); // moet vervangen worden met variabele: isQuit 
             }
         }

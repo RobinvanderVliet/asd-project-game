@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 using Player.Model;
+using Player.Services;
 
 namespace Chat.Tests
 {
@@ -12,14 +13,14 @@ namespace Chat.Tests
     class EvaluatorTests
     {
         private Evaluator sut;
-        private Mock<IPlayerModel> mockedPlayer;
+        private Mock<IPlayerService> _mockedPlayerService;
 
 
         [SetUp]
         public void Setup()
         {
-            mockedPlayer = new Mock<IPlayerModel>();
-            sut = new Evaluator(mockedPlayer.Object);
+            _mockedPlayerService = new Mock<IPlayerService>();
+            sut = new Evaluator(_mockedPlayerService.Object);
         }
 
         [Test]
@@ -27,9 +28,9 @@ namespace Chat.Tests
         {
             var ast = MoveAST(1, "up");
 
-            mockedPlayer.Setup(x => x.HandleDirection("up", 1));
+            _mockedPlayerService.Setup(x => x.HandleDirection("up", 1));
             sut.Apply(ast);
-            mockedPlayer.VerifyAll();
+            _mockedPlayerService.VerifyAll();
         }
 
         public static AST MoveAST(int steps, string direction)
@@ -45,11 +46,11 @@ namespace Chat.Tests
         public void Test_HandlePickupActionIsCalled()
         {
             var ast = PickupAST();
-            mockedPlayer.Setup(mockedPlayer => mockedPlayer.PickupItem());
+            _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.PickupItem());
 
             sut.Apply(ast);
 
-            mockedPlayer.Verify(mockedPlayer => mockedPlayer.PickupItem(), Times.Once);
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.PickupItem(), Times.Once);
         }
 
         public static AST PickupAST()
@@ -63,11 +64,11 @@ namespace Chat.Tests
         public void Test_HandleDropActionIsCalled()
         {
             var ast = DropAST("item");
-            mockedPlayer.Setup(mockedPlayer => mockedPlayer.DropItem("item"));
+            _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.DropItem("item"));
 
             sut.Apply(ast);
 
-            mockedPlayer.Verify(mockedPlayer => mockedPlayer.DropItem("item"), Times.Once);
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem("item"), Times.Once);
         }
 
         public static AST DropAST(string itemName)
@@ -81,18 +82,20 @@ namespace Chat.Tests
         [Test]
         public void Test_HandleAttackActionIsCalled()
         {
-            var ast = AttackAST();
-            mockedPlayer.Setup(mockedPlayer => mockedPlayer. );
+            string direction = "right";
+            var ast = AttackAST(direction);
+            _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Attack(direction) );
 
             sut.Apply(ast);
 
-            mockedPlayer.Verify(mockedPlayer => mockedPlayer. , Times.Once);
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Attack(direction) , Times.Once);
         }
 
-        public static AST AttackAST()
+        public static AST AttackAST(string direction)
         {
             Input Attack = new Input();
-            Attack.AddChild(new Attack());
+            Attack.AddChild(new Attack()
+                .AddChild(new Direction(direction)));
             return new AST(Attack);
         }
         
@@ -100,11 +103,11 @@ namespace Chat.Tests
         public void Test_HandleSayActionIsCalled()
         {
             var ast = SayAST("test");
-            mockedPlayer.Setup(mockedPlayer => mockedPlayer.HandleSayAction("test"));
+            _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Say("test"));
 
             sut.Apply(ast);
 
-            mockedPlayer.Verify(mockedPlayer => mockedPlayer.HandleSayAction("test"), Times.Once);
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Say("test"), Times.Once);
         }
 
         public static AST SayAST(string message)
@@ -119,11 +122,11 @@ namespace Chat.Tests
         public void Test_HandleShoutActionIsCalled()
         {
             var ast = ShoutAST("test");
-            mockedPlayer.Setup(mockedPlayer => mockedPlayer.HandleShoutAction("test"));
+            _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Shout("test"));
 
             sut.Apply(ast);
 
-            mockedPlayer.Verify(mockedPlayer => mockedPlayer.HandleShoutAction("test"), Times.Once);
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Shout("test"), Times.Once);
         }
 
         public static AST ShoutAST(string message)
@@ -132,6 +135,78 @@ namespace Chat.Tests
             say.AddChild(new Shout()
                 .AddChild(new Message(message)));
             return new AST(say);
+        }
+        
+        [Test]
+        public void Test_Apply_HandleExitActionIsCalled()
+        {
+            var ast = ExitAst();
+            _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.ExitCurrentGame());
+
+            sut.Apply(ast);
+
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.ExitCurrentGame(), Times.Once);
+        }
+
+        public static AST ExitAst()
+        {
+            Input exit = new Input();
+            exit.AddChild(new Exit());
+            return new AST(exit);
+        }
+        
+        [Test]
+        public void Test_Apply_HandlePauseActionIsCalled()
+        {
+            var ast = PauseAst();
+            _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Pause());
+
+            sut.Apply(ast);
+
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Pause(), Times.Once);
+        }
+
+        public static AST PauseAst()
+        {
+            Input pause = new Input();
+            pause.AddChild(new Pause());
+            return new AST(pause);
+        }
+        
+        [Test]
+        public void Test_Apply_HandleResumeActionIsCalled()
+        {
+            var ast = ResumeAst();
+            _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Resume());
+
+            sut.Apply(ast);
+
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Resume(), Times.Once);
+        }
+
+        public static AST ResumeAst()
+        {
+            Input resume = new Input();
+            resume.AddChild(new Resume());
+            return new AST(resume);
+        }
+        
+        [Test]
+        public void Test_Apply_HandleReplaceActionIsCalled()
+        {
+            var ast = ReplaceAst();
+            _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.ReplaceByAgent());
+
+            sut.Apply(ast);
+
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.ReplaceByAgent(), Times.Once);
+        }
+
+        public static AST ReplaceAst()
+        {
+            Input replace = new Input();
+            replace.AddChild(new Replace());
+            return new AST(replace);
         }
     }
 }

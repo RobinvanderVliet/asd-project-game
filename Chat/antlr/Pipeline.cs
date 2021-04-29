@@ -6,6 +6,7 @@ using Chat.antlr.parser;
 using Chat.antlr.transformer;
 using Chat.exception;
 using Player.Model;
+using Player.Services;
 
 namespace Chat.antlr
 {
@@ -53,13 +54,13 @@ namespace Chat.antlr
         }
 
 
-        public void Transform(IPlayerModel playerModel)
+        public void Transform(IPlayerService playerService)
         {
             if (Ast == null)
             {
                 return;
             }
-            new Evaluator(playerModel).Apply(Ast);
+            new Evaluator(playerService).Apply(Ast);
         }
     }
 }
