@@ -93,17 +93,17 @@ namespace Player.Model
             }
         }
 
-        public Item GetItem(string itemName)
+        public IItem GetItem(string itemName)
         {
             return _inventory.GetItem(itemName);
         }
 
-        public void AddInventoryItem(Item item)
+        public void AddInventoryItem(IItem item)
         {
             _inventory.AddItem(item);
         }
 
-        public void RemoveInventoryItem(Item item)
+        public void RemoveInventoryItem(IItem item)
         {
             _inventory.RemoveItem(item);
         }
@@ -145,7 +145,7 @@ namespace Player.Model
 
         public void DropItem(string itemName)
         {
-            Item item = _inventory.GetItem(itemName);
+            IItem item = _inventory.GetItem(itemName);
             if (item != null)
             {
                 RemoveInventoryItem(item);

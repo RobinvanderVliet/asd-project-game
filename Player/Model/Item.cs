@@ -1,6 +1,6 @@
 ﻿namespace Player.Model
 {
-    public class Item
+    public class Item : IItem
     {
         private string _itemName;
         public string ItemName { get => _itemName; set => _itemName = value; }

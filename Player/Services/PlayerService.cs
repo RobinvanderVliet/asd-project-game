@@ -85,17 +85,17 @@ namespace Player.Services
             _playerModel.RemoveStamina(amount);
         }
 
-        public Item GetItem(string itemName)
+        public IItem GetItem(string itemName)
         {
             return _playerModel.GetItem(itemName);
         }
 
-        public void AddInventoryItem(Item item)
+        public void AddInventoryItem(IItem item)
         {
             _playerModel.AddInventoryItem(item);
         }
 
-        public void RemoveInventoryItem(Item item)
+        public void RemoveInventoryItem(IItem item)
         {
             _playerModel.RemoveInventoryItem(item);
         }

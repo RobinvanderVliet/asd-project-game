@@ -4,15 +4,15 @@ namespace Player.Model
 {
     public class Inventory : IInventory
     {
-        private List<Item> _itemList;
-        public List<Item> ItemList { get => _itemList; set => _itemList = value; }
+        private List<IItem> _itemList;
+        public List<IItem> ItemList { get => _itemList; set => _itemList = value; }
 
         public Inventory()
         {
-            _itemList = new List<Item>();
+            _itemList = new List<IItem>();
         }
 
-        public Item GetItem(string itemName)
+        public IItem GetItem(string itemName)
         {
             foreach (var item in _itemList)
             {
@@ -24,12 +24,12 @@ namespace Player.Model
             return null;
         }
 
-        public void AddItem(Item item)
+        public void AddItem(IItem item)
         {
             _itemList.Add(item);
         }
 
-        public void RemoveItem(Item item)
+        public void RemoveItem(IItem item)
         {
             _itemList.Remove(item);
         }

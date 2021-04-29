@@ -20,11 +20,11 @@ namespace Player.Model
 
         public void RemoveStamina(int amount);
 
-        public Item GetItem(string itemName);
+        public IItem GetItem(string itemName);
 
-        public void AddInventoryItem(Item item);
+        public void AddInventoryItem(IItem item);
 
-        public void RemoveInventoryItem(Item item);
+        public void RemoveInventoryItem(IItem item);
 
         public void EmptyInventory();
 
