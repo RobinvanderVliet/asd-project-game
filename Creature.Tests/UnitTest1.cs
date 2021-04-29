@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace Agent.Tests
+namespace Creature.Tests
 {
     public class Tests
     {
