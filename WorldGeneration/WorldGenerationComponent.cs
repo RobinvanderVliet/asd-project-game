@@ -7,15 +7,16 @@ namespace WorldGeneration
         public Program()
         {
             
-            /*
+            
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(" En dan nu een random chunk met de seed " + 2243 + ": ");
             Console.ForegroundColor = ConsoleColor.Red;
             var map = new Map(4, 2243);
             map.DeleteMap();
-            map.LoadArea(0, 0, 4);
-            map.DisplayMap(0,0,4);
-            */
+            map.LoadArea(3, -1, 20);
+            map.DisplayMap(3,-1,20);
+            
+            
             /*
             Console.ForegroundColor = ConsoleColor.White;
             var seed = new Random().Next(999999);
@@ -25,7 +26,7 @@ namespace WorldGeneration
             map.DeleteMap();
             randomMap.LoadArea(new[] {0, 0}, 30);*/
             
-            backToPrototyping(10);
+            //backToPrototyping(10);
         }
 
         public void backToPrototyping(int chunkSize)

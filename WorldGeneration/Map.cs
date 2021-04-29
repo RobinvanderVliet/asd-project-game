@@ -32,7 +32,7 @@ namespace WorldGeneration
                     Console.WriteLine(" ");
                     lastY = chunkXY[0];
                 }
-                Console.Write(" {" + chunkXY[0] + " " + chunkXY[1] + "} ");
+                //Console.Write(" {" + chunkXY[0] + " " + chunkXY[1] + "} ");
                 
                 var chunk = _db.GetChunk(chunkXY[0], chunkXY[1]);
                 _chunks.Add(chunk == null
@@ -72,7 +72,7 @@ namespace WorldGeneration
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2)); x++)
                 {
                     var chunk = GetChunkForTileXAndY(x, y);
-                    Console.Write(" [" + x +" " + y + " " + chunk.GetPositionInTileArrayByWorldCoordinates(x, y) + " " + chunk.X + " " + chunk.Y + "]");
+                    //Console.Write(" [" + x +" " + y + " " + chunk.GetPositionInTileArrayByWorldCoordinates(x, y) /*+ " " + chunk.X + " " + chunk.Y*/ + "]");
                     Console.Write(" " + chunk.Map[chunk.GetPositionInTileArrayByWorldCoordinates(x, y)].Symbol);
                 }
                 Console.WriteLine("");
