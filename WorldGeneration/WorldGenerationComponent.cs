@@ -14,11 +14,6 @@ namespace WorldGeneration
             var map = new Map(4, 2243);
             map.DeleteMap();
             map.LoadArea(0, 0, 4);
-            foreach (var chunk in map._chunks)
-            {
-                chunk.DisplayChunk();
-            }
-            
             map.DisplayMap(0,0,4);
             */
             /*
@@ -29,20 +24,23 @@ namespace WorldGeneration
             var randomMap = new Map(16, seed);
             map.DeleteMap();
             randomMap.LoadArea(new[] {0, 0}, 30);*/
-            backToPrototyping(4);
+            
+            backToPrototyping(10);
         }
 
         public void backToPrototyping(int chunkSize)
         {
             var map = new Map(chunkSize);
-            var chunk = map.GenerateNewChunk(0, 0);
+            var chunkX = -1;
+            var chunkY = -5;
+            var chunk = map.GenerateNewChunk(chunkX, chunkY);
             Console.WriteLine("chunk linesize: " + chunk.Map.Length);
-            for (var y = chunkSize; y > 0; y--)
+            for (var y = chunkSize * chunkY + chunkSize; y > chunkSize * chunkY; y--)
             {
-                for (var x = 0; x < chunkSize; x++)
+                for (var x = chunkX * chunkSize; x < chunkX * chunkSize + chunkSize; x++)
                 {
-                    chunk.GetPositionInTileArrayByWorldCoordinates(x, y);
-                    //Console.Write(" [" + x +" " + y + " " + chunk.GetPositionInTileArrayByWorldCoordinates(x, y) + " " + chunk.X + " " + chunk.Y + "]");
+                    //chunk.GetPositionInTileArrayByWorldCoordinates(x, y);
+                    Console.Write(" [" + x +" " + y + " " + chunk.GetPositionInTileArrayByWorldCoordinates(x, y) + " " + chunk.X + " " + chunk.Y + "]");
                     //Console.Write(" " + chunk.Map[chunk.GetPositionInTileArrayByWorldCoordinates(x, y)].Symbol);
                 }
                 Console.WriteLine("");
