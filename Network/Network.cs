@@ -27,6 +27,7 @@ namespace Network
                 sessionComponent.Name = nameResult;
                 sessionComponent.GenerateSessionId();
                 hostComponent = new HostComponent(networkComponent, clientComponent, sessionComponent);
+                networkComponent.Host = hostComponent;
                 
                 hostComponent.CreateGame();
                 

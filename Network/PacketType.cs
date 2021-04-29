@@ -10,6 +10,7 @@ namespace Network
     {
         Chat,
         Move,
-        GameAvailability
+        GameAvailability,
+        GameAvailable,
     }
 }
