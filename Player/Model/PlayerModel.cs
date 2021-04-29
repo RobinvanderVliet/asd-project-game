@@ -1,4 +1,5 @@
 ﻿using System;
+using Player.Exceptions;
 
 namespace Player.Model
 {
@@ -144,7 +145,7 @@ namespace Player.Model
             }
             else
             {
-                Console.WriteLine("Je hebt geen " + itemName + " item in je inventory!");
+                throw new ItemException("Je hebt geen " + itemName + " item in je inventory!");
             }
         }
 

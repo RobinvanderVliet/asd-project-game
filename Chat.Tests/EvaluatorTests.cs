@@ -4,6 +4,7 @@ using Chat.antlr.transformer;
 using Moq;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
+using Chat.exception;
 using Player.Model;
 using Player.Services;
 
@@ -31,6 +32,22 @@ namespace Chat.Tests
             _mockedPlayerService.Setup(x => x.HandleDirection("up", 1));
             sut.Apply(ast);
             _mockedPlayerService.VerifyAll();
+        }
+        
+        [Test]
+        public void Test_HandleDirection_ThrowsExceptionWithStepsLessThan1()
+        {
+            var ast = MoveAST(0, "up");
+            
+            Assert.Throws<MoveException>(() => sut.Apply(ast));
+        }
+        
+        [Test]
+        public void Test_HandleDirection_ThrowsExceptionWithStepsMoreThan10()
+        {
+            var ast = MoveAST(11, "up");
+            
+            Assert.Throws<MoveException>(() => sut.Apply(ast));
         }
 
         public static AST MoveAST(int steps, string direction)

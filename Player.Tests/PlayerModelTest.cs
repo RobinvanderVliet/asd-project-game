@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Moq;
 using NUnit.Framework;
+using Player.Exceptions;
 using Player.Model;
 
 namespace Player.Tests
@@ -110,6 +111,24 @@ namespace Player.Tests
             sut.RadiationLevel = radiationLevel;
             
             Assert.AreEqual(radiationLevel, sut.RadiationLevel);
+        }
+        
+        [Test]
+        public void Test_GetCurrentPosition_GetsCurrentPositionSuccessfully()
+        {
+            int[] expected = {26, 11};
+            
+            Assert.AreEqual(expected, sut.CurrentPosition);
+        }
+        
+        [Test]
+        public void Test_SetCurrentPosition_SetsCurrentPositionSuccessfully()
+        {
+            int[] expected = {27, 11};
+            
+            sut.CurrentPosition = expected;
+            
+            Assert.AreEqual(expected, sut.CurrentPosition);
         }
 
         [Test]
@@ -268,6 +287,14 @@ namespace Player.Tests
         }
         
         [Test]
+        public void Test_DropItem_ThrowsExceptionBecauseNoItemExists()
+        {
+            mockedInventory.Setup(mockedInventory => mockedInventory.GetItem("ItemName"));
+        
+            Assert.Throws<ItemException>(() => sut.DropItem("ItemName"));
+        }
+        
+        [Test]
         public void Test_GetAttackDamage_GetDefaultAttackDamage()
         {
             Assert.AreEqual(5, sut.GetAttackDamage());
@@ -280,6 +307,17 @@ namespace Player.Tests
 
             Assert.AreEqual(1, sut.RadiationLevel.Level);
             mockedRadiationLevel.Verify(mockedRadiationLevel => mockedRadiationLevel.Level, Times.Once);
+        }
+        
+        [Test]
+        public void Test_SetNewPlayerPosition_SetsNewPlayerPosition()
+        {
+            int[] test = {0, 5};
+            int[] expected = {26, 16};
+            
+            sut.SetNewPlayerPosition(test);
+            
+            Assert.AreEqual(expected, sut.CurrentPosition);
         }
     }
 }
