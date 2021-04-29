@@ -30,9 +30,10 @@ namespace WorldGeneration
             noise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
             var map = new ITile[chunkRowSize * chunkRowSize];
             for (var y = 0; y < chunkRowSize; y++)
-            for (var x = 0; x < chunkRowSize; x++)
-                map[y * chunkRowSize + x] =
-                    GetTileFromNoise(noise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize));
+            {
+                for (var x = 0; x < chunkRowSize; x++)
+                    map[y * chunkRowSize + x] = GetTileFromNoise(noise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize));
+            }
             return new Chunk(chunkX, chunkY, map, chunkRowSize);
         }
 
