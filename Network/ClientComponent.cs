@@ -10,7 +10,7 @@ namespace Network
     {
         private NetworkComponent _networkComponent;
         private HostComponent _hostComponent;
-        private Session _session;
+        private SessionComponent _session;
 
 
         public ClientComponent()
@@ -24,12 +24,12 @@ namespace Network
             throw new NotImplementedException();
         }
 
-        public void SendPayload(string payload, PacketType actionType)
+        public void SendPayload(string payload, PacketType packetType)
         {
             PacketDTO packet = new PacketDTO();
             
             packet.Header = new PacketHeaderDTO();
-            packet.Header.ActionType = actionType;
+            packet.Header.PacketType = packetType;
             packet.Header.Target = "host"; // Make target into enum
             packet.Payload = payload;
 
@@ -45,5 +45,9 @@ namespace Network
             }
         }
 
+        public void StartGame(NetworkComponent networkComponent, SessionComponent sessionComponent)
+        {
+            HostComponent hostComponent = new HostComponent(networkComponent, this, sessionComponent);
+        }
     }
 }
