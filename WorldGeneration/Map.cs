@@ -9,7 +9,7 @@ namespace WorldGeneration
     {
         private readonly int _chunkSize;
         private readonly int _seed;
-        private List<Chunk> _chunks;
+        public List<Chunk> _chunks;
         private Database.Database _db;
 
         public Map(int chunkSize = 10, int seed = 0620520399, string dbLocation = "C:\\Temp\\ChunkDatabase.db", string dbCollectionName = "Chunks")
@@ -19,59 +19,68 @@ namespace WorldGeneration
             _db = new Database.Database(dbLocation, dbCollectionName);
         }
 
-        public void LoadArea(int[] playerLocation, int viewDistance)
+        public void LoadArea(int playerX, int playerY, int viewDistance)
         {
-            var chunksWithinLoadingRange = CalculateChunksToLoad(playerLocation, viewDistance);
+            var chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
             _chunks = new List<Chunk>();
 
+            var lastY = -1000;
             foreach (var chunkXY in chunksWithinLoadingRange)
             {
+                if (chunkXY[0] > lastY)
+                {
+                    Console.WriteLine(" ");
+                    lastY = chunkXY[0];
+                }
+                Console.Write(" {" + chunkXY[0] + " " + chunkXY[1] + "} ");
+                
                 var chunk = _db.GetChunk(chunkXY[0], chunkXY[1]);
                 _chunks.Add(chunk == null
                     ? GenerateNewChunk(chunkXY[0], chunkXY[1])
                     : _db.GetChunk(chunkXY[0], chunkXY[1]));
             }
-
-            DisplayMap(0, 0, viewDistance);
         }
 
-        private IEnumerable<int[]> CalculateChunksToLoad(int[] playerLocation, int viewDistance)
+        private IEnumerable<int[]> CalculateChunksToLoad(int playerX, int playerY, int viewDistance)
         {
-            var maxX = (playerLocation[0] + viewDistance * 2 + _chunkSize) / _chunkSize;
-            var minX = (playerLocation[0] - viewDistance * 2 - _chunkSize * 2) /
-                       _chunkSize; // chunks beginnen links bovenin, dus daarom *2
-            var maxY = (playerLocation[1] + viewDistance * 2 + _chunkSize * 2) / _chunkSize;
-            var minY = (playerLocation[1] - viewDistance * 2 - _chunkSize) / _chunkSize;
+            var maxX = (playerX + viewDistance * 2 + _chunkSize) / _chunkSize; 
+            //playerX + viewDistance = viewscreen, viewscreen * 2 for buffer, + chunkSize for getting the nearest chunk, even if it's huge. / chunksize to get it to chunk coordinates
+            var minX = (playerX - viewDistance * 2 - _chunkSize) / _chunkSize;
+            var maxY = (playerY + viewDistance * 2 + _chunkSize) / _chunkSize + 1;
+            var minY = (playerY - viewDistance * 2 - _chunkSize) / _chunkSize;
             var chunksWithinLoadingRange = new List<int[]>();
-
+            Console.WriteLine("playerX = " + playerX + ", playerX = " + playerX + ", viewDistance = " + viewDistance);
+            Console.WriteLine("maxChunkX = " + maxX + ", minChunkX = " + minX + ", maxChunkY = " + maxY + ", minChunkY = " + minY);
+            Console.WriteLine("maxX = " + maxX * _chunkSize + ", minX = " + minX * _chunkSize + ", maxY = " + maxY * _chunkSize + ", minY = " + minY * _chunkSize);
 
             for (var x = minX; x <= maxX; x++)
-            for (var y = minY; y < maxY; y++)
-                chunksWithinLoadingRange.Add(new[] {x, y});
+            {
+                for (var y = minY; y < maxY; y++)
+                {
+                    chunksWithinLoadingRange.Add(new[] {x, y});
+                }
+            }
             return chunksWithinLoadingRange;
         }
 
-        private void DisplayMap(int playerx, int playery, int viewDistance)
+        public void DisplayMap(int playerX, int playerY, int viewDistance)
         {
-            for (var y = playery; y < viewDistance * 2 + 1; y++)
+            Console.WriteLine("Starting point Y: " +  (playerY - viewDistance) + ", Ending point Y: " + ((playerY - viewDistance) + (viewDistance * 2)));
+            Console.WriteLine("Starting point X: " +  (playerX - viewDistance) + ", Ending point X: " + ((playerX - viewDistance) + (viewDistance * 2)));
+            for (var y = (playerY - viewDistance); y < ((playerY - viewDistance) + (viewDistance * 2)); y++)
             {
-                for (var x = playerx; x < viewDistance * 2 + 1; x++)
+                for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2)); x++)
                 {
-                    var chunk = _chunks.FirstOrDefault(chunk =>
-                        chunk.X * _chunkSize <= x 
-                        && chunk.X * _chunkSize > x - _chunkSize 
-                        && chunk.Y * _chunkSize >= y 
-                        && chunk.Y * _chunkSize < y + _chunkSize);
-                    if (chunk == null) throw new Exception("this chunk should not be null");
+                    var chunk = GetChunkForTileXAndY(x, y);
                     Console.Write(" " + chunk.Map[chunk.GetPositionInTileArrayByWorldCoordinates(x, y)].Symbol);
-                    if (x == viewDistance * 2) Console.WriteLine("");
                 }
+                Console.WriteLine("");
             }
         }
 
-        private Chunk GenerateNewChunk(int x, int y)
+        private Chunk GenerateNewChunk(int chunkX, int chunkY)
         {
-            var chunk = NoiseMapGenerator.GenerateChunk(x, y, _chunkSize, _seed);
+            var chunk = NoiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize, _seed);
             _db.InsertChunkIntoDatabase(chunk);
             return chunk;
         }
@@ -91,7 +100,7 @@ namespace WorldGeneration
             return chunk;
         }
 
-        public void deleteMap()
+        public void DeleteMap()
         {
             _db.DeleteTileMap();
         }

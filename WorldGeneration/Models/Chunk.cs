@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Models
@@ -29,7 +30,8 @@ namespace WorldGeneration.Models
             {
                 if (i % RowSize == 0) Console.WriteLine(" ");
 
-                Console.Write(" " + Map[i].Symbol);
+                //Console.Write(" " + Map[i].Symbol);
+                Console.Write(" {"+GetTileCoordinatesInWorld(i).ToArray()[0]+ " " + GetTileCoordinatesInWorld(i).ToArray()[1]+"} ");
             }
 
             Console.WriteLine("");
