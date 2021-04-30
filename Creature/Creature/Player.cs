@@ -6,10 +6,16 @@ namespace Creature
     public class Player : ICreature
     {
         private PlayerStateMachine _playerStateMachine;
+        private PlayerData _playerData;
+
+        public ICreatureStateMachine CreatureStateMachine
+        {
+            get => _playerStateMachine;
+        }
 
         public Player(PlayerData playerData)
         {
-            
+            _playerData = playerData;
         }
 
         public void ApplyDamage(double amount)

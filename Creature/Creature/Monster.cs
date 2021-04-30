@@ -6,10 +6,16 @@ namespace Creature
     public class Monster : ICreature
     {
         private MonsterStateMachine _monsterStateMachine;
+        private ICreatureData _monsterData;
+
+        public ICreatureStateMachine CreatureStateMachine
+        {
+            get => _monsterStateMachine;
+        }
 
         public Monster(MonsterData monsterData)
         {
-
+            _monsterData = monsterData;
         }
 
         public void ApplyDamage(double amount)

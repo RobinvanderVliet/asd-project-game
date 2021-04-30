@@ -1,7 +1,15 @@
-﻿namespace Creature
+﻿using Creature.Creature.StateMachine;
+using Creature.Creature.StateMachine.Data;
+
+namespace Creature
 {
     public interface ICreature
     {
+        /// <summary>
+        /// Every Creature has specific data that will be influenced by the Creature itself or by the statemachine.
+        /// </summary>
+        public ICreatureStateMachine CreatureStateMachine { get; }
+
         /// <summary>
         /// Heals Creature for x amount of health
         /// </summary>
