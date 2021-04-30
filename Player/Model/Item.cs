@@ -1,14 +1,16 @@
 ﻿namespace Player.Model
 {
-    public class Item
+    public class Item : IItem
     {
-        public string ItemName { get; set; }
-        public string Description { get; set; }
-
+        private string _itemName;
+        public string ItemName { get => _itemName; set => _itemName = value; }
+        private string _description;
+        public string Description { get => _description; set => _description = value; }
+        
         public Item(string itemName, string decription)
         {
-            ItemName = itemName;
-            Description = decription;
+            _itemName = itemName;
+            _description = decription;
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Player.Tests
         [Test]
         public void Test_SetItemList_SetsItemListSuccessfully()
         {
-            var ItemList = new List<Item>();
+            var ItemList = new List<IItem>();
             ItemList.Add(new Item("ItemName", "Description"));
             sut.ItemList = ItemList;
             
@@ -68,7 +68,7 @@ namespace Player.Tests
             
             sut.RemoveItem(item);
             
-            Assert.AreEqual(new List<Item>(), sut.ItemList);
+            Assert.AreEqual(new List<IItem>(), sut.ItemList);
         }
         
         [Test]
@@ -79,7 +79,7 @@ namespace Player.Tests
             
             sut.EmptyInventory();
             
-            Assert.AreEqual(new List<Item>(), sut.ItemList);
+            Assert.AreEqual(new List<IItem>(), sut.ItemList);
         }
     }
 }

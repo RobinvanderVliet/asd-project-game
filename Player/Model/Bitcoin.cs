@@ -2,21 +2,22 @@
 {
     public class Bitcoin : IBitcoin
     {
-        public int Amount { get; set; }
+        private int _amount;
+        public int Amount { get => _amount; set => _amount = value; }
 
         public Bitcoin(int amount)
         {
-            Amount = amount;
+            _amount = amount;
         }
 
         public void AddAmount(int amount)
         {
-            Amount += amount;
+            _amount += amount;
         }
 
         public void RemoveAmount(int amount)
         {
-            Amount -= amount;
+            _amount -= amount;
         }
     }
 }

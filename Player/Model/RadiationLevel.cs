@@ -2,11 +2,12 @@
 {
     public class RadiationLevel : IRadiationLevel
     {
-        public int Level { get; set; }
+        private int _level;
+        public int Level { get => _level; set => _level = value; }
 
         public RadiationLevel(int radiationLevel)
         {
-            Level = radiationLevel;
+            _level = radiationLevel;
         }
     }
 }

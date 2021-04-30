@@ -4,13 +4,13 @@ namespace Player.Model
 {
     public interface IInventory
     {
-        public List<Item> ItemList { get; set; }
+        public List<IItem> ItemList { get; set; }
 
-        public Item GetItem(string itemName);
+        public IItem GetItem(string itemName);
 
-        public void AddItem(Item item);
+        public void AddItem(IItem item);
 
-        public void RemoveItem(Item item);
+        public void RemoveItem(IItem item);
 
         public void EmptyInventory();
     }

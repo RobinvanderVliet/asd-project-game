@@ -1,116 +1,126 @@
 ﻿using System;
+using Player.Exceptions;
 
 namespace Player.Model
 {
     public class PlayerModel : IPlayerModel
     {
-        public string Name { get; set; }
-        public int Health { get; set; }
-        public int Stamina { get; set; }
+        private string _name;
+        public string Name { get => _name; set => _name = value; }
+        private int _health;
+        public int Health { get => _health; set => _health = value; }
+        private int _stamina;
+        public int Stamina { get => _stamina; set => _stamina = value; }
 
-        //public Tile _currentTile { get; set; }
-        public IInventory Inventory { get; set; }
-        public IBitcoin Bitcoins { get; set; }
-        public IRadiationLevel RadiationLevel { get; set; }
+        // private Tile _currentTile;
+        // public Tile CurrentTile { get => _currentTile; set => _currentTile = value; }
+        private IInventory _inventory;
+        public IInventory Inventory { get => _inventory; set => _inventory = value; }
+        private IBitcoin _bitcoins;
+        public IBitcoin Bitcoins { get => _bitcoins; set => _bitcoins = value; }
+        private IRadiationLevel _radiationLevel;
+        public IRadiationLevel RadiationLevel { get => _radiationLevel; set => _radiationLevel = value; }
 
-        private int[] currentposition = {26, 11};
-
-        public int[] GetNewPosition { get; private set; } = new int[2];
+        private int[] _currentPosition;
+        public int[] CurrentPosition { get => _currentPosition; set => _currentPosition = value; }
 
         //random default values for health&stamina for now
         private const int HEALTHCAP = 100;
         private const int STAMINACAP = 10;
-        private const int DEFAULT_STEPS = 0;
 
-        public PlayerModel(string name, IInventory inventory, IBitcoin bitcoins, IRadiationLevel radiationLevel //, Tile tile
-                                      )
+
+        public PlayerModel(string name, IInventory inventory, IBitcoin bitcoins, IRadiationLevel radiationLevel
+            //, Tile tile
+        )
         {
-            Name = name;
-            Health = HEALTHCAP;
-            Stamina = STAMINACAP;
+            _name = name;
+            _health = HEALTHCAP;
+            _stamina = STAMINACAP;
             //_currentTile = tile;
-            Inventory = inventory;
+            _inventory = inventory;
             //random default value for now
-            Bitcoins = bitcoins;
-            RadiationLevel = radiationLevel;
+            _bitcoins = bitcoins;
+            _radiationLevel = radiationLevel;
+            _currentPosition = new[] {26, 11};
         }
-        
+
         public void AddHealth(int amount)
         {
-            if (Health + amount >= HEALTHCAP)
+            if (_health + amount >= HEALTHCAP)
             {
-                Health = HEALTHCAP;
-            } else
+                _health = HEALTHCAP;
+            }
+            else
             {
-                Health += amount;
+                _health += amount;
             }
         }
 
         public void RemoveHealth(int amount)
         {
-            if (Health - amount <= 0)
+            if (_health - amount <= 0)
             {
-                Health = 0;
+                _health = 0;
                 //extra code for when a player dies goes here
             }
             else
             {
-                Health -= amount;
+                _health -= amount;
             }
         }
 
         public void AddStamina(int amount)
         {
-            if (Stamina + amount >= STAMINACAP)
+            if (_stamina + amount >= STAMINACAP)
             {
-                Stamina = STAMINACAP;
+                _stamina = STAMINACAP;
             }
             else
             {
-                Stamina += amount;
+                _stamina += amount;
             }
         }
 
         public void RemoveStamina(int amount)
         {
-            if (Stamina - amount <= 0)
+            if (_stamina - amount <= 0)
             {
-                Stamina = 0;
+                _stamina = 0;
             }
             else
             {
-                Stamina -= amount;
+                _stamina -= amount;
             }
         }
 
-        public Item GetItem(string itemName)
+        public IItem GetItem(string itemName)
         {
-            return Inventory.GetItem(itemName);
+            return _inventory.GetItem(itemName);
         }
 
-        public void AddInventoryItem(Item item)
+        public void AddInventoryItem(IItem item)
         {
-            Inventory.AddItem(item);
+            _inventory.AddItem(item);
         }
 
-        public void RemoveInventoryItem(Item item)
+        public void RemoveInventoryItem(IItem item)
         {
-            Inventory.RemoveItem(item);
+            _inventory.RemoveItem(item);
         }
 
         public void EmptyInventory()
         {
-            Inventory.EmptyInventory();
+            _inventory.EmptyInventory();
         }
 
         public void AddBitcoins(int amount)
         {
-            Bitcoins.AddAmount(amount);
+            _bitcoins.AddAmount(amount);
         }
 
         public void RemoveBitcoins(int amount)
         {
-            Bitcoins.RemoveAmount(amount);
+            _bitcoins.RemoveAmount(amount);
         }
 
         public int GetAttackDamage()
@@ -135,7 +145,7 @@ namespace Player.Model
 
         public void DropItem(string itemName)
         {
-            Item item = Inventory.GetItem(itemName);
+            IItem item = _inventory.GetItem(itemName);
             if (item != null)
             {
                 RemoveInventoryItem(item);
@@ -143,61 +153,16 @@ namespace Player.Model
             }
             else
             {
-                Console.WriteLine("Je hebt geen " + itemName + " item in je inventory!");
+                throw new ItemException("Je hebt geen " + itemName + " item in je inventory!");
             }
         }
 
-        public void HandleDirection(string direction, int steps)
+        public void SetNewPlayerPosition(int[] newMovement)
         {
-            var newMovement = new int[2];
-            switch (direction)
+            for (var i = 0; i <= 1; i++)
             {
-                case "right":
-                case "east":
-                    newMovement[0] = steps;
-                    newMovement[1] = DEFAULT_STEPS;
-                    break;
-                case "left":
-                case "west":
-                    newMovement[0] = -steps;
-                    newMovement[1] = DEFAULT_STEPS;
-                    break;
-                case "forward":
-                case "up":
-                case "north":
-                    newMovement[0] = DEFAULT_STEPS;
-                    newMovement[1] = -steps;
-                    break;
-                case "backward":
-                case "down":
-                case "south":
-                    newMovement[0] = DEFAULT_STEPS;
-                    newMovement[1] = steps;
-                    break;
+                _currentPosition[i] = _currentPosition[i] + newMovement[i];
             }
-
-            GetNewPosition = SendNewPosition(newMovement);
-
-            // the next line of code should be changed by sending newPosition to a relevant method
-            WriteCommand(GetNewPosition);
-        }
-
-        public int[] SendNewPosition(int[] newMovement)
-        {
-            var newPlayerPosition = new int[2];
-
-            // getPosition() should be replaced by another method that gets the coordinates of the player
-            for (var i = 0; i <= 1; i++) newPlayerPosition[i] = currentposition[i] + newMovement[i];
-
-            return newPlayerPosition;
-        }
-
-        // !!! METHODS BELOW ARE TEMPORARY, PROTOTYPE ONLY !!!
-        private void WriteCommand(int[] newPosition)
-        {
-            // returns the new position
-            currentposition = newPosition;
-            Console.WriteLine("X: " + newPosition[0] + ". Y: " + newPosition[1]);
         }
     }
 }
