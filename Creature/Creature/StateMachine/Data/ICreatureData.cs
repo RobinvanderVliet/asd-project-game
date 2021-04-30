@@ -1,4 +1,4 @@
-﻿namespace Creature.Creature.StateMachine.CreatureData
+﻿namespace Creature.Creature.StateMachine.Data
 {
     public interface ICreatureData
     {

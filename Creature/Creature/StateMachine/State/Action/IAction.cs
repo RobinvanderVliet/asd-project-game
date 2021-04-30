@@ -1,4 +1,4 @@
-﻿namespace Creature.Creature.States.Action
+﻿namespace Creature.Creature.StateMachine.State.Action
 {
     public interface IAction
     {

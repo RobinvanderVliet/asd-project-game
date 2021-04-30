@@ -1,9 +1,8 @@
-﻿using Creature.Creature;
-using System;
+﻿using System;
 
-namespace Creature
+namespace Creature.Creature.StateMachine.State
 {
-    public class AttackPlayerState : CreatureState
+    public class UseConsumableState : CreatureState
     {
         public override void Do()
         {

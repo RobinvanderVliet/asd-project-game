@@ -1,7 +1,6 @@
-﻿using Creature.Creature;
-using System;
+﻿using System;
 
-namespace Creature
+namespace Creature.Creature.StateMachine.State
 {
     public class WanderState : CreatureState
     {

@@ -1,10 +1,16 @@
-﻿using Creature.Creature.CreatureStateMachine;
+﻿using Creature.Creature.StateMachine;
+using Creature.Creature.StateMachine.Data;
 
 namespace Creature
 {
     public class Monster : ICreature
     {
         private MonsterStateMachine _monsterStateMachine;
+
+        public Monster(MonsterData monsterData)
+        {
+
+        }
 
         public void ApplyDamage(double amount)
         {

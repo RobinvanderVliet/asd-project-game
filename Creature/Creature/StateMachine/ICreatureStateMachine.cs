@@ -1,9 +1,9 @@
-﻿using Creature.Creature.StateMachine.CreatureData;
-using System;
+﻿using Creature.Creature.StateMachine.Data;
+using Creature.Creature.StateMachine.Event;
 
-namespace Creature.Creature.CreatureStateMachine
+namespace Creature.Creature.StateMachine
 {
-    interface ICreatureStateMachine
+    public interface ICreatureStateMachine
     {
         /// <summary>
         /// Every Creature has specific data that will be influenced by the Creature itself or by the statemachine.
@@ -13,8 +13,7 @@ namespace Creature.Creature.CreatureStateMachine
         /// <summary>
         /// Starts the ICreatureStateMachine using a custom RuleSet.
         /// </summary>
-        /// <param name="ruleSet">RuleSet that is used to start the ICreatureStateMachine</param>
-        public void StartStateMachine(RuleSet ruleSet);
+        public void StartStateMachine();
 
         /// <summary>
         /// Fire events on a ICreatureStateMachine.
@@ -22,14 +21,13 @@ namespace Creature.Creature.CreatureStateMachine
         /// </summary>
         /// <param name="creatureEvent">Event that occured.</param>
         /// <param name="argument">Relevant information about this event. For example: the Player that was spotted.</param>
-        public void FireEvent(Enum creatureEvent, object argument);
+        public void FireEvent(CreatureEvent creatureEvent, object argument);
 
         /// <summary>
         /// Fire events on a ICreatureStateMachine.
         /// An event can be 'spotting a player', 'being attacked', etc.
         /// </summary>
         /// <param name="creatureEvent">Event that occured.</param>
-        public void FireEvent(Enum creatureEvent);
-
+        public void FireEvent(CreatureEvent creatureEvent);
     }
 }

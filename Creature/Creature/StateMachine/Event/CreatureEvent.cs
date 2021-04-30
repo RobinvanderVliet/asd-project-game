@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Creature.Creature.StateMachine.Events
+namespace Creature.Creature.StateMachine.Event
 {
     public abstract class CreatureEvent : IComparable
     {

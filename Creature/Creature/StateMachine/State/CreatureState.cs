@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Creature.Creature
+namespace Creature.Creature.StateMachine.State
 {
     public abstract class CreatureState : IComparable
     {

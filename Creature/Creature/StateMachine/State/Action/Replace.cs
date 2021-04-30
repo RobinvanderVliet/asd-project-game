@@ -1,11 +1,6 @@
-﻿using Creature.Creature.States.Action;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
-namespace Creature.Creature.StateMachine.States.Action
+namespace Creature.Creature.StateMachine.State.Action
 {
     class Replace : IAction
     {
