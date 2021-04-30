@@ -27,8 +27,7 @@
 
                 _networkComponent.SendPacket(packetDto);
             }
-            
-            if(packet.Header.SessionID == _session.SessionId)
+            else if(packet.Header.SessionID == _session.SessionId)
             {
                 bool success = _client.HandlePacket(packet);
                 if (success)
