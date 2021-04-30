@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace Network
 {
-    public class ClientComponent : IPacketHandler
+    public class ClientController : IPacketHandler
     {
         private NetworkComponent _networkComponent;
-        private HostComponent _hostComponent;
-        private SessionComponent _session;
+        private HostController _hostController;
+        private Session _session;
         private Dictionary<string, PacketDTO> _availableGames = new();
 
-        public ClientComponent(NetworkComponent networkComponent)
+        public ClientController(NetworkComponent networkComponent)
         {
             _networkComponent = networkComponent;
         }
@@ -38,9 +38,9 @@ namespace Network
             packet.Payload = payload;
 
 
-            if (_hostComponent != null)
+            if (_hostController != null)
             {
-                _hostComponent.ReceivePacket(packet); //host must check for session?
+                _hostController.ReceivePacket(packet); //host must check for session?
             }
             else
             {
@@ -51,9 +51,9 @@ namespace Network
 
         public void CreateGame(string sessionName)
         {
-            _session = new SessionComponent(sessionName);
+            _session = new Session(sessionName);
             _session.GenerateSessionId();
-            _hostComponent = new HostComponent(_networkComponent, this, _session);
+            _hostController = new HostController(_networkComponent, this, _session);
         }
 
         public void JoinGame(string sessionId)
@@ -65,7 +65,7 @@ namespace Network
                 return;
             }
             
-            _session = new SessionComponent(packetDto.Payload);
+            _session = new Session(packetDto.Payload);
             _session.SessionId = sessionId;
             Console.WriteLine("You joined game: " + _session.Name);
         }

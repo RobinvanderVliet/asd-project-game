@@ -1,12 +1,12 @@
 ﻿namespace Network
 {
-    public class HostComponent : IPacketListener
+    public class HostController : IPacketListener
     {
         private NetworkComponent _networkComponent;
         private IPacketHandler _client;
-        private SessionComponent _session;
+        private Session _session;
 
-        public HostComponent(NetworkComponent networkComponent, IPacketHandler client, SessionComponent session)
+        public HostController(NetworkComponent networkComponent, IPacketHandler client, Session session)
         {
             _networkComponent = networkComponent;
             _client = client;

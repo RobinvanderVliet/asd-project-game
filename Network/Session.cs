@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Network
 {
-    public class SessionComponent
+    public class Session
     {
         private string _name;
         public string Name { get => _name; set => _name = value; }
@@ -14,12 +14,12 @@ namespace Network
         private string _sessionId;
         public string SessionId { get => _sessionId; set => _sessionId = value; }
 
-        public SessionComponent()
+        public Session()
         {
             
         }
 
-        public SessionComponent(string name)
+        public Session(string name)
         {
             this._name = name;
             this._sessionId = Guid.NewGuid().ToString();

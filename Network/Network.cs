@@ -11,21 +11,21 @@ namespace Network
             String roleResult = Console.ReadLine();
 
             NetworkComponent networkComponent = new NetworkComponent();
-            ClientComponent clientComponent = new ClientComponent(networkComponent);
-            networkComponent.Client = clientComponent;
+            ClientController clientController = new ClientController(networkComponent);
+            networkComponent.Client = clientController;
             
             if (roleResult != null && roleResult.ToLower() == "host")
             {
                 Console.WriteLine("Name of your session?");
-                clientComponent.CreateGame(Console.ReadLine());
+                clientController.CreateGame(Console.ReadLine());
                 
                 Console.Read();
             }
             else if (roleResult != null && roleResult.ToLower() == "client")
             {
-                clientComponent.FindGames();
+                clientController.FindGames();
                 Console.WriteLine("Type the sessionID of the game you would like to join.");
-                clientComponent.JoinGame(Console.ReadLine());
+                clientController.JoinGame(Console.ReadLine());
                 
                 Console.Read();
             }
