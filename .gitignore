@@ -2,6 +2,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,windows,dotnetcore,linux
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,dotnetcore,linux
 
+# Test coverage results
+TestResults
+
 ### DotnetCore ###
 # .NET Core build folders
 bin/
@@ -84,8 +87,12 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,dotnetcore,linux
+.idea/
+ASD-project.sln.DotSettings.user
+
+*.coverage
+# End of https://www.toptal.com/developers/gitignore/api/macos,windows,dotnetcore,linux
 
 #.idea folder ignore
 .idea/
-
-ASD-project.sln.DotSettings.user
+*.user

@@ -1,0 +1,16 @@
+﻿aggressiveness = high
+explore = random
+combat = offensive
+ 
+ 
+combat{
+    when player nearby player then attack
+ 
+    attack{
+        when health less than 50 then flee otherwise engage
+     }
+ 
+    engage{
+        when inventory contains "knife" then use "knife"
+    }
+}
