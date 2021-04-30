@@ -19,6 +19,7 @@ namespace Agent.Services
             _pipeline = new Pipeline();
             _fileHandler = new FileHandler();
             _fileToDictionaryMapper = new FileToDictionaryMapper();
+            _agentConfigurations = new List<AgentConfiguration>();
         }
         
         public void StartConfiguration()
@@ -70,9 +71,11 @@ namespace Agent.Services
            agentConfiguration.Settings = _fileToDictionaryMapper.MapFileToConfiguration(filepath);
 
            _agentConfigurations.Add(agentConfiguration);
-
-
-
+        }
+        
+        public List<AgentConfiguration> GetConfigurations()
+        {
+            return _agentConfigurations;
         }
     }
 }

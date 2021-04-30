@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Agent.Tests.Services
 {
     [ExcludeFromCodeCoverage]
-    public class TestNpcConfigurationService
+    public class NpcConfigurationServiceTest
     {
         private FileToDictionaryMapper _mapper;
         private NpcConfigurationService _npcConfigurationService;
@@ -23,11 +23,10 @@ namespace Agent.Tests.Services
             _mapper = new FileToDictionaryMapper();
             _npcConfigurations = new List<NpcConfiguration>();
             _npcConfigurationService = new NpcConfigurationService(_npcConfigurations, _mapper);
-
         }
 
         [Test]
-        public void TestCreateNewNpcConfiguration()
+        public void Test_CreateNewNpcConfiguration_WithNewNpc()
         {
             //Arrange
             var filepath = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest.txt";
