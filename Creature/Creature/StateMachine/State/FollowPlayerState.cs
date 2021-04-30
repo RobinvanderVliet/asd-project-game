@@ -8,6 +8,11 @@ namespace Creature.Creature.StateMachine.State
 {
     public class FollowPlayerState : CreatureState
     {
+        public FollowPlayerState(ICreatureData creatureData) : base(creatureData)
+        {
+            _creatureData = creatureData;
+        }
+
         public override void Do(ICreatureData creatureData)
         {
             PathFinder pathFinder = new PathFinder(creatureData.World.Nodes);

@@ -5,6 +5,13 @@ namespace Creature.Creature.StateMachine.State
 {
     public abstract class CreatureState : IComparable
     {
+        protected ICreatureData _creatureData;
+
+        public CreatureState(ICreatureData creatureData)
+        {
+            _creatureData = creatureData;
+        }
+
         public virtual void Do() 
         {
             throw new NotImplementedException();
