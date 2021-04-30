@@ -7,43 +7,43 @@ namespace Player.Tests
     [ExcludeFromCodeCoverage]
     public class BitcoinTest
     {
-        private Bitcoin sut;
+        private Bitcoin _sut;
         
         [SetUp]
         public void Setup()
         {
-            sut = new Bitcoin(20);
+            _sut = new Bitcoin(20);
         }
         
         [Test]
         public void Test_GetAmount_GetsAmountSuccessfully()
         {
-            Assert.AreEqual(20, sut.Amount);
+            Assert.AreEqual(20, _sut.Amount);
         }
         
         [Test]
         public void Test_SetAmount_SetsAmountSuccessfully()
         {
             var amount = 5;
-            sut.Amount = amount;
+            _sut.Amount = amount;
             
-            Assert.AreEqual(amount, sut.Amount);
+            Assert.AreEqual(amount, _sut.Amount);
         }
         
         [Test]
         public void Test_AddAmount_AddsGivenAmountSuccessfully()
         {
-            sut.AddAmount(20);
+            _sut.AddAmount(20);
             
-            Assert.AreEqual(40, sut.Amount);
+            Assert.AreEqual(40, _sut.Amount);
         }
         
         [Test]
         public void Test_RemoveAmount_RemovesGivenAmountSuccessfully()
         {
-            sut.RemoveAmount(10);
+            _sut.RemoveAmount(10);
             
-            Assert.AreEqual(10, sut.Amount);
+            Assert.AreEqual(10, _sut.Amount);
         }
     }
 }

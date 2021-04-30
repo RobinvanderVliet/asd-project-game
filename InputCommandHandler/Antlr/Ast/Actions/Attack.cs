@@ -5,13 +5,15 @@ namespace InputCommandHandler.Antlr.Ast.Actions
 {
     public class Attack : Command, IEquatable<Attack>
     {
-        public Direction direction;
+        private Direction _direction;
+        public Direction Direction { get => _direction; private set => _direction = value; }
+        // public Direction Direction { get; private set; }
 
         public override ASTNode AddChild(ASTNode child)
         {
             if (child is Direction)
             {
-                direction = (Direction) child;
+                _direction = (Direction) child;
             }
 
             return this;
@@ -31,7 +33,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
                 return false;
             }
 
-            return direction.Equals(other.direction);
+            return _direction.Equals(other._direction);
         }
     }
 }

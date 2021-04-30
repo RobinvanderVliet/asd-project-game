@@ -8,18 +8,18 @@ namespace Player.Tests
     [ExcludeFromCodeCoverage]
     public class InventoryTest
     {
-        private Inventory sut;
+        private Inventory _sut;
         
         [SetUp]
         public void Setup()
         {
-            sut = new Inventory();
+            _sut = new Inventory();
         }
         
         [Test]
         public void Test_GetItemList_GetsItemListSuccessfully()
         {
-            Assert.AreEqual(new List<Item>(), sut.ItemList);
+            Assert.AreEqual(new List<Item>(), _sut.ItemList);
         }
         
         [Test]
@@ -27,27 +27,27 @@ namespace Player.Tests
         {
             var ItemList = new List<IItem>();
             ItemList.Add(new Item("ItemName", "Description"));
-            sut.ItemList = ItemList;
+            _sut.ItemList = ItemList;
             
-            Assert.AreEqual(ItemList, sut.ItemList);
+            Assert.AreEqual(ItemList, _sut.ItemList);
         }
         
         [Test]
         public void Test_GetItem_GetsRightItem()
         {
             Item item = new Item("ItemName", "Description");
-            sut.ItemList.Add(item);
+            _sut.ItemList.Add(item);
             
-            Assert.AreEqual(item, sut.GetItem("ItemName"));
+            Assert.AreEqual(item, _sut.GetItem("ItemName"));
         }
         
         [Test]
         public void Test_GetItem_ReturnsNull()
         {
             Item item = new Item("ItemName", "Description");
-            sut.ItemList.Add(item);
+            _sut.ItemList.Add(item);
             
-            Assert.AreEqual(null, sut.GetItem("UnexistingItemName"));
+            Assert.AreEqual(null, _sut.GetItem("UnexistingItemName"));
         }
         
         [Test]
@@ -55,31 +55,31 @@ namespace Player.Tests
         {
             Item item = new Item("ItemName", "Description");
             
-            sut.AddItem(item);
+            _sut.AddItem(item);
             
-            Assert.AreEqual(item, sut.GetItem("ItemName"));
+            Assert.AreEqual(item, _sut.GetItem("ItemName"));
         }
         
         [Test]
         public void Test_RemoveItem_RemovesItemSuccessfully()
         {
             Item item = new Item("ItemName", "Description");
-            sut.ItemList.Add(item);
+            _sut.ItemList.Add(item);
             
-            sut.RemoveItem(item);
+            _sut.RemoveItem(item);
             
-            Assert.AreEqual(new List<IItem>(), sut.ItemList);
+            Assert.AreEqual(new List<IItem>(), _sut.ItemList);
         }
         
         [Test]
         public void Test_EmptyInventory_EmptiesInventorySuccessfully()
         {
             Item item = new Item("ItemName", "Description");
-            sut.AddItem(item);
+            _sut.AddItem(item);
             
-            sut.EmptyInventory();
+            _sut.EmptyInventory();
             
-            Assert.AreEqual(new List<IItem>(), sut.ItemList);
+            Assert.AreEqual(new List<IItem>(), _sut.ItemList);
         }
     }
 }

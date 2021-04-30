@@ -6,12 +6,13 @@ namespace InputCommandHandler.Antlr.Ast.Actions
 {
     public class Drop : Command, IEquatable<Drop>
     {
-        public Message itemName;
+        private Message _itemName;
+        public Message ItemName { get => _itemName; private set => _itemName = value; }
         
         public ArrayList GetChildren()
         {
             var children = new ArrayList();
-            children.Add(itemName);
+            children.Add(_itemName);
             return children;
         }
 
@@ -19,7 +20,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         {
             if (child is Message)
             {
-                itemName = (Message) child;
+                _itemName = (Message) child;
             }
 
             return this;
@@ -27,9 +28,9 @@ namespace InputCommandHandler.Antlr.Ast.Actions
 
         public ASTNode RemoveChild(ASTNode child)
         {
-            if (child is Message && child == itemName)
+            if (child is Message && child == _itemName)
             {
-                itemName = null;
+                _itemName = null;
             }
 
             return this;

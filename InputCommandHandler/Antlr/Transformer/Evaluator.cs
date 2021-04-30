@@ -18,13 +18,13 @@ namespace InputCommandHandler.Antlr.Transformer
 
         public void Apply(AST ast)
         {
-            TransformNode(ast.root);
+            TransformNode(ast.Root);
         }
 
         private void TransformNode(ASTNode node)
         {
             var input = (Input)node;
-            var nodeBody = input.body;
+            var nodeBody = input.Body;
             for (int i = 0; i < nodeBody.Count; i++)
                 switch (nodeBody[i])
                 {
@@ -63,14 +63,14 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformMove(Move move)
         {
-            switch (move.steps.value)
+            switch (move.Steps.Value)
             {
                 case < MINIMUM_STEPS:
                     throw new MoveException($"Too few steps, the minimum is {MINIMUM_STEPS}.");
                 case > MAXIMUM_STEPS:
                     throw new MoveException($"Too many steps, the maximum is {MAXIMUM_STEPS}.");
                 default:
-                    _playerService.HandleDirection(move.direction.value, move.steps.value);
+                    _playerService.HandleDirection(move.Direction.Value, move.Steps.Value);
                     break;
             }
         }
@@ -82,12 +82,12 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformDrop(Drop drop)
         {
-            _playerService.DropItem(drop.itemName.value);
+            _playerService.DropItem(drop.ItemName.Value);
         }
 
         private void TransformAttack(Attack attack)
         {
-            _playerService.Attack(attack.direction.value);
+            _playerService.Attack(attack.Direction.Value);
         }
 
         private void TransformExit()
@@ -112,12 +112,12 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformSay(Say say)
         {
-            _playerService.Say(say.message.value);
+            _playerService.Say(say.Message.Value);
         }
 
         private void TransformShout(Shout shout)
         {
-            _playerService.Shout(shout.message.value);
+            _playerService.Shout(shout.Message.Value);
         }
     }
 }

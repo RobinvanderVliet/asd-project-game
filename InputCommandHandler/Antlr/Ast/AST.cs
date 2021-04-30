@@ -5,21 +5,22 @@ namespace InputCommandHandler.Antlr.Ast
 {
     public class AST : IEquatable<AST>
     {
-        public Input root;
+        private Input _root;
+        public Input Root { get => _root; private set => _root = value; }
 
         public AST()
         {
-            root = new Input();
+            _root = new Input();
         }
 
         public AST(Input input)
         {
-            root = input;
+            _root = input;
         }
 
         public void SetRoot(Input input)
         {
-            root = input;
+            _root = input;
         }
 
         [ExcludeFromCodeCoverage]
@@ -28,7 +29,7 @@ namespace InputCommandHandler.Antlr.Ast
             if (other == null)
                 return false;
 
-            return root.Equals(other.root);
+            return _root.Equals(other._root);
         }
 
         [ExcludeFromCodeCoverage]

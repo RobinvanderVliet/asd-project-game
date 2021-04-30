@@ -12,14 +12,14 @@ namespace InputCommandHandler.Tests
     [ExcludeFromCodeCoverage]
     public class EvaluatorTests
     {
-        private Evaluator sut;
+        private Evaluator _sut;
         private Mock<IPlayerService> _mockedPlayerService;
         
         [SetUp]
         public void Setup()
         {
             _mockedPlayerService = new Mock<IPlayerService>();
-            sut = new Evaluator(_mockedPlayerService.Object);
+            _sut = new Evaluator(_mockedPlayerService.Object);
         }
 
         [Test]
@@ -28,7 +28,7 @@ namespace InputCommandHandler.Tests
             var ast = MoveAST(1, "up");
 
             _mockedPlayerService.Setup(x => x.HandleDirection("up", 1));
-            sut.Apply(ast);
+            _sut.Apply(ast);
             _mockedPlayerService.VerifyAll();
         }
         
@@ -37,7 +37,7 @@ namespace InputCommandHandler.Tests
         {
             var ast = MoveAST(0, "up");
             
-            Assert.Throws<MoveException>(() => sut.Apply(ast));
+            Assert.Throws<MoveException>(() => _sut.Apply(ast));
         }
         
         [Test]
@@ -45,7 +45,7 @@ namespace InputCommandHandler.Tests
         {
             var ast = MoveAST(11, "up");
             
-            Assert.Throws<MoveException>(() => sut.Apply(ast));
+            Assert.Throws<MoveException>(() => _sut.Apply(ast));
         }
 
         public static AST MoveAST(int steps, string direction)
@@ -63,7 +63,7 @@ namespace InputCommandHandler.Tests
             var ast = PickupAST();
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.PickupItem());
 
-            sut.Apply(ast);
+            _sut.Apply(ast);
 
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.PickupItem(), Times.Once);
         }
@@ -81,7 +81,7 @@ namespace InputCommandHandler.Tests
             var ast = DropAST("item");
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.DropItem("item"));
 
-            sut.Apply(ast);
+            _sut.Apply(ast);
 
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem("item"), Times.Once);
         }
@@ -101,7 +101,7 @@ namespace InputCommandHandler.Tests
             var ast = AttackAST(direction);
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Attack(direction) );
 
-            sut.Apply(ast);
+            _sut.Apply(ast);
 
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Attack(direction) , Times.Once);
         }
@@ -120,7 +120,7 @@ namespace InputCommandHandler.Tests
             var ast = SayAST("test");
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Say("test"));
 
-            sut.Apply(ast);
+            _sut.Apply(ast);
 
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Say("test"), Times.Once);
         }
@@ -139,7 +139,7 @@ namespace InputCommandHandler.Tests
             var ast = ShoutAST("test");
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Shout("test"));
 
-            sut.Apply(ast);
+            _sut.Apply(ast);
 
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Shout("test"), Times.Once);
         }
@@ -158,7 +158,7 @@ namespace InputCommandHandler.Tests
             var ast = ExitAst();
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.ExitCurrentGame());
 
-            sut.Apply(ast);
+            _sut.Apply(ast);
 
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.ExitCurrentGame(), Times.Once);
         }
@@ -176,7 +176,7 @@ namespace InputCommandHandler.Tests
             var ast = PauseAst();
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Pause());
 
-            sut.Apply(ast);
+            _sut.Apply(ast);
 
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Pause(), Times.Once);
         }
@@ -194,7 +194,7 @@ namespace InputCommandHandler.Tests
             var ast = ResumeAst();
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Resume());
 
-            sut.Apply(ast);
+            _sut.Apply(ast);
 
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Resume(), Times.Once);
         }
@@ -212,7 +212,7 @@ namespace InputCommandHandler.Tests
             var ast = ReplaceAst();
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.ReplaceByAgent());
 
-            sut.Apply(ast);
+            _sut.Apply(ast);
 
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.ReplaceByAgent(), Times.Once);
         }

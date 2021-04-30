@@ -11,7 +11,8 @@ namespace InputCommandHandler.Antlrr
 {
     public class Pipeline : IAntlrErrorListener<IToken>
     {
-        public AST Ast { get; private set; }
+        private AST _ast;
+        public AST Ast { get => _ast; private set => _ast = value; }
 
         public void SyntaxError(IRecognizer recognizer, 
                                 IToken offendingSymbol, 
@@ -49,17 +50,17 @@ namespace InputCommandHandler.Antlrr
             var walker = new ParseTreeWalker();
             walker.Walk(listener, parseTree);
 
-            Ast = listener.getAST();
+            _ast = listener.getAST();
         }
 
 
         public void Transform(IPlayerService playerService)
         {
-            if (Ast == null)
+            if (_ast == null)
             {
                 return;
             }
-            new Evaluator(playerService).Apply(Ast);
+            new Evaluator(playerService).Apply(_ast);
         }
     }
 }

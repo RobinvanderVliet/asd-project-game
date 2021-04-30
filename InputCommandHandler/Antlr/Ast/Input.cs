@@ -6,18 +6,17 @@ namespace InputCommandHandler.Antlr.Ast
 {
     public class Input : ASTNode, IEquatable<Input>
     {
-        public ArrayList body;
+        private ArrayList _body;
+        public ArrayList Body { get => _body; private set => _body = value; }
 
         public Input()
         {
-            body = new ArrayList();
+            _body = new ArrayList();
         }
-
-        
 
         public override ASTNode AddChild(ASTNode child)
         {
-            body.Add(child);
+            _body.Add(child);
             return this;
         }
 
@@ -33,17 +32,17 @@ namespace InputCommandHandler.Antlr.Ast
             if (other == null)
                 return false;
 
-            if (body.Count != other.body.Count) 
+            if (_body.Count != other._body.Count) 
                 return false;
 
-            for (int i = 0; i < body.Count; i++)
+            for (int i = 0; i < _body.Count; i++)
             {
-                if (!body[i].Equals(other.body[i]))
+                if (!_body[i].Equals(other._body[i]))
                 {
                     return false;
                 }
             }
-              return true;
+            return true;
         }
         
     }

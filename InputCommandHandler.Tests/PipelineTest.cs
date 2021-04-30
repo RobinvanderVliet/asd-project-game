@@ -15,25 +15,25 @@ namespace InputCommandHandler.Tests
     {
         private Mock<IPlayerModel> mockedPlayer;
         private Mock<Evaluator> mockedEvaluator;
-        private Pipeline sut;
+        private Pipeline _sut;
 
         [SetUp]
         public void SetUp()
         {
-            sut = new Pipeline();
+            _sut = new Pipeline();
         }
 
         [Test]
         public void Test_ParseCommand_ThrowsSyntaxErrorWhenCommandNotRecognised()
         {
-            Assert.Throws<CommandSyntaxException>(() => sut.ParseCommand("me forward"));
+            Assert.Throws<CommandSyntaxException>(() => _sut.ParseCommand("me forward"));
         }
 
         [Test]
         public void Test_ParseCommand_ParsingACommandWorksAsExpected()
         {
-            sut.ParseCommand("move forward");
-            AST ast = sut.Ast;
+            _sut.ParseCommand("move forward");
+            AST ast = _sut.Ast;
             AST exp = MoveCommand(1, "forward");
 
             Assert.AreEqual(exp, ast);

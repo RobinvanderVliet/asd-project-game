@@ -4,7 +4,8 @@ namespace InputCommandHandler.Antlr.Ast
 {
     public class Message : ASTNode, IEquatable<Message>
     {
-        public string value;
+        private string _value;
+        public string Value { get => _value; private set => _value = value; }
 
         public Message()
         {
@@ -12,12 +13,12 @@ namespace InputCommandHandler.Antlr.Ast
 
         public Message(string value)
         {
-            this.value = value;
+            _value = value;
         }
 
         public override bool Equals(object obj)
         {
-            return this.Equals(obj as Message);
+            return Equals(obj as Message);
         }
 
         public bool Equals(Message other)
@@ -25,7 +26,7 @@ namespace InputCommandHandler.Antlr.Ast
             if (other == null)
                 return false;
 
-            return value == other.value;
+            return _value == other._value;
         }
     }
 }

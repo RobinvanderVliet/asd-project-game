@@ -5,16 +5,18 @@ namespace InputCommandHandler.Antlr.Ast
 {
     public class Step : ASTNode, IEquatable<Step>
     {
-        public int value;
+        private int _value;
+        public int Value { get => _value; private set => _value = value; }
+        // public int Value { get; private set; }
 
         public Step()
         {
-            value = 1;
+            Value = 1;
         }
 
         public Step(int value)
         {
-            this.value = value;
+            Value = value;
         }
 
         [ExcludeFromCodeCoverage]
@@ -23,7 +25,7 @@ namespace InputCommandHandler.Antlr.Ast
             if (other == null)
                 return false;
 
-            return value == other.value;
+            return Value == other.Value;
         }
 
         [ExcludeFromCodeCoverage]

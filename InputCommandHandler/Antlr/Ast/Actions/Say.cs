@@ -6,12 +6,13 @@ namespace InputCommandHandler.Antlr.Ast.Actions
 {
     public class Say : Command, IEquatable<Say>
     {
-        public Message message;
+        private Message _message;
+        public Message Message { get => _message; private set => _message = value; }
 
         public ArrayList GetChildren()
         {
             var children = new ArrayList();
-            children.Add(message);
+            children.Add(_message);
             return children;
         }
 
@@ -19,7 +20,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         {
             if (child is Message)
             {
-                message = (Message) child;
+                _message = (Message) child;
             }
 
             return this;
@@ -27,9 +28,9 @@ namespace InputCommandHandler.Antlr.Ast.Actions
 
         public ASTNode RemoveChild(ASTNode child)
         {
-            if (child is Message && child == message)
+            if (child is Message && child == _message)
             {
-                message = null;
+                _message = null;
             }
 
             return this;
@@ -47,7 +48,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
             if (other == null)
                 return false;
 
-            return message.Equals(other.message);
+            return _message.Equals(other._message);
         }
     }
 }

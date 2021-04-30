@@ -9,14 +9,14 @@ namespace Player.Tests
     [ExcludeFromCodeCoverage]
     public class PlayerServiceTest
     {
-        private PlayerService sut;
+        private PlayerService _sut;
         private Mock<IPlayerModel> _mockedPlayerModel;
         
         [SetUp]
         public void Setup()
         {
             _mockedPlayerModel = new Mock<IPlayerModel>();
-            sut = new PlayerService(_mockedPlayerModel.Object);
+            _sut = new PlayerService(_mockedPlayerModel.Object);
         }
         
         [Test]
@@ -25,7 +25,7 @@ namespace Player.Tests
             int health = 10;
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.AddHealth(health));
             
-            sut.AddHealth(health);
+            _sut.AddHealth(health);
             
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.AddHealth(health));
         }
@@ -36,7 +36,7 @@ namespace Player.Tests
             int health = 10;
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.RemoveHealth(health));
             
-            sut.RemoveHealth(health);
+            _sut.RemoveHealth(health);
             
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.RemoveHealth(health));
         }
@@ -47,7 +47,7 @@ namespace Player.Tests
             int stamina = 10;
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.AddStamina(stamina));
             
-            sut.AddStamina(stamina);
+            _sut.AddStamina(stamina);
             
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.AddStamina(stamina));
         }
@@ -58,7 +58,7 @@ namespace Player.Tests
             int stamina = 10;
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.RemoveStamina(stamina));
             
-            sut.RemoveStamina(stamina);
+            _sut.RemoveStamina(stamina);
             
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.RemoveStamina(stamina));
         }
@@ -69,7 +69,7 @@ namespace Player.Tests
             Item item = new Item("ItemName", "Description");
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.GetItem("ItemName")).Returns(item);
 
-            Assert.AreEqual(item, sut.GetItem("ItemName"));
+            Assert.AreEqual(item, _sut.GetItem("ItemName"));
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.GetItem("ItemName"));
         }
         
@@ -79,7 +79,7 @@ namespace Player.Tests
             Item item = new Item("ItemName", "Description");
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.AddInventoryItem(item));
 
-            sut.AddInventoryItem(item);
+            _sut.AddInventoryItem(item);
             
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.AddInventoryItem(item));
         }
@@ -90,7 +90,7 @@ namespace Player.Tests
             Item item = new Item("ItemName", "Description");
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.RemoveInventoryItem(item));
 
-            sut.RemoveInventoryItem(item);
+            _sut.RemoveInventoryItem(item);
             
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.RemoveInventoryItem(item));
         }
@@ -100,7 +100,7 @@ namespace Player.Tests
         {
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.EmptyInventory());
 
-            sut.EmptyInventory();
+            _sut.EmptyInventory();
             
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.EmptyInventory());
         }
@@ -111,7 +111,7 @@ namespace Player.Tests
             int amount = 10;
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.AddBitcoins(amount));
 
-            sut.AddBitcoins(amount);
+            _sut.AddBitcoins(amount);
             
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.AddBitcoins(amount));
         }
@@ -122,7 +122,7 @@ namespace Player.Tests
             int amount = 10;
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.RemoveBitcoins(amount));
 
-            sut.RemoveBitcoins(amount);
+            _sut.RemoveBitcoins(amount);
             
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.RemoveBitcoins(amount));
         }
@@ -133,7 +133,7 @@ namespace Player.Tests
             int dmg = 5;
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.GetAttackDamage()).Returns(dmg);
 
-            Assert.AreEqual(dmg, sut.GetAttackDamage());
+            Assert.AreEqual(dmg, _sut.GetAttackDamage());
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.GetAttackDamage());
         }
         
@@ -142,7 +142,7 @@ namespace Player.Tests
         {
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.PickupItem());
 
-            sut.PickupItem();
+            _sut.PickupItem();
             
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.PickupItem());
         }
@@ -153,7 +153,7 @@ namespace Player.Tests
             string itemName = "Test";
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.DropItem(itemName));
 
-            sut.DropItem(itemName);
+            _sut.DropItem(itemName);
             
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.DropItem(itemName));
         }
@@ -168,7 +168,7 @@ namespace Player.Tests
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(newMovement));
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.CurrentPosition).Returns(playerPosition);
 
-            sut.HandleDirection(direction_right, steps);
+            _sut.HandleDirection(direction_right, steps);
             
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(newMovement), Times.Once);
         }
@@ -183,7 +183,7 @@ namespace Player.Tests
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(newMovement));
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.CurrentPosition).Returns(playerPosition);
 
-            sut.HandleDirection(direction_left, steps);
+            _sut.HandleDirection(direction_left, steps);
             
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(newMovement), Times.Once);
         }
@@ -198,7 +198,7 @@ namespace Player.Tests
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(newMovement));
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.CurrentPosition).Returns(playerPosition);
 
-            sut.HandleDirection(direction_left, steps);
+            _sut.HandleDirection(direction_left, steps);
             
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(newMovement), Times.Once);
         }
@@ -213,7 +213,7 @@ namespace Player.Tests
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(newMovement));
             _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.CurrentPosition).Returns(playerPosition);
 
-            sut.HandleDirection(direction_left, steps);
+            _sut.HandleDirection(direction_left, steps);
             
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(newMovement), Times.Once);
         }

@@ -6,14 +6,21 @@ namespace InputCommandHandler.Antlr.Ast.Actions
 {
     public class Move : Command, IEquatable<Move>
     {
-        public Direction direction;
-        public Step steps = new Step();
+        private Direction _direction;
+        public Direction Direction { get => _direction; private set => _direction = value; }
+        private Step _steps;
+        public Step Steps { get => _steps; private set => _steps = value; }
+
+        public Move()
+        {
+            _steps = new Step();
+        }
         
         public ArrayList GetChildren()
         {
             var children = new ArrayList();
-            children.Add(direction);
-            children.Add(steps);
+            children.Add(Direction);
+            children.Add(Steps);
             return children;
         }
         
@@ -21,11 +28,11 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         {
             if (child is Direction)
             {
-                direction = (Direction) child;
+                Direction = (Direction) child;
             }
             else if (child is Step)
             {
-                steps = (Step) child;
+                Steps = (Step) child;
             }
 
             return this;
@@ -33,13 +40,13 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         
         public ASTNode RemoveChild(ASTNode child)
         {
-            if (child is Direction && child == direction)
+            if (child is Direction && child == Direction)
             {
-                direction = null;
+                Direction = null;
             }
-            else if (child is Step && child == steps)
+            else if (child is Step && child == Steps)
             {
-                steps = null;
+                Steps = null;
             }
 
             return this;
@@ -57,7 +64,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
             if (other == null)
                 return false;
 
-            return direction.Equals(other.direction) && steps.Equals(other.steps);
+            return Direction.Equals(other.Direction) && Steps.Equals(other.Steps);
         }
     }
 }

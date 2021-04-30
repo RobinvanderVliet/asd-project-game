@@ -30,16 +30,17 @@ namespace ASD_project
                 // AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
                 // agentConfigurationService.StartConfiguration();
                 
-                //moet later vervangen worden
-                // InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
-                // PlayerModel playerModel = new PlayerModel("Name", new Inventory(), new Bitcoin(20), new RadiationLevel(1));
-                // IPlayerService playerService = new PlayerService(playerModel); 
-                // while (true) // moet vervangen worden met variabele: isQuit 
-                // {
-                //     inputHandler.HandleCommands(playerService);
-                // }
-                
                 new WorldGeneration.Program();
+                
+                //moet later vervangen worden
+                InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
+                PlayerModel playerModel = new PlayerModel("Name", new Inventory(), new Bitcoin(20), new RadiationLevel(1));
+                IPlayerService playerService = new PlayerService(playerModel); 
+                Console.WriteLine("Type input messages below");
+                while (true) // moet vervangen worden met variabele: isQuit 
+                {
+                    inputHandler.HandleCommands(playerService);
+                }
             }
         }
     }

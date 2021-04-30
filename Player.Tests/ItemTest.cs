@@ -7,42 +7,42 @@ namespace Player.Tests
     [ExcludeFromCodeCoverage]
     public class ItemTest
     {
-        private Item sut;
+        private Item _sut;
         
         [SetUp]
         public void Setup()
         {
-            sut = new Item("ItemName", "Description");
+            _sut = new Item("ItemName", "Description");
         }
         
         [Test]
         public void Test_GetItemName_GetsItemNameSuccessfully()
         {
-            Assert.AreEqual("ItemName", sut.ItemName);
+            Assert.AreEqual("ItemName", _sut.ItemName);
         }
         
         [Test]
         public void Test_SetItemName_SetsItemNameSuccessfully()
         {
             var itemName = "New name";
-            sut.ItemName = itemName;
+            _sut.ItemName = itemName;
             
-            Assert.AreEqual(itemName, sut.ItemName);
+            Assert.AreEqual(itemName, _sut.ItemName);
         }
         
         [Test]
         public void Test_GetDescription_GetsDescriptionSuccessfully()
         {
-            Assert.AreEqual("Description", sut.Description);
+            Assert.AreEqual("Description", _sut.Description);
         }
         
         [Test]
         public void Test_SetDescription_SetsDescriptionSuccessfully()
         {
             var description = "New description";
-            sut.Description = description;
+            _sut.Description = description;
             
-            Assert.AreEqual(description, sut.Description);
+            Assert.AreEqual(description, _sut.Description);
         }
     }
 }

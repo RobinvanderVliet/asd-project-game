@@ -5,11 +5,12 @@ namespace InputCommandHandler.Antlr.Ast
 {
     public class Direction : ASTNode, IEquatable<Direction>
     {
-        public string value;
+        private string _value;
+        public string Value { get => _value; private set => _value = value; }
 
         public Direction(string value)
         {
-            this.value = value;
+            _value = value;
         }
 
         [ExcludeFromCodeCoverage]
@@ -18,7 +19,7 @@ namespace InputCommandHandler.Antlr.Ast
             if (other == null)
                 return false;
 
-            return value == other.value;
+            return _value == other._value;
         }
 
         [ExcludeFromCodeCoverage]

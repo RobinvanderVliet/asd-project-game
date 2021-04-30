@@ -8,18 +8,18 @@ namespace InputCommandHandler.Antlr.Parser
 {
     public class ASTListener : PlayerCommandsBaseListener
     {
-        private AST ast;
+        private AST _ast;
         private Stack _currentContainer;
 
         public ASTListener()
         {
-            ast = new AST();
+            _ast = new AST();
             _currentContainer = new Stack();
         }
 
         public AST getAST()
         {
-            return ast;
+            return _ast;
         }
 
         public override void EnterMove(PlayerCommandsParser.MoveContext context)
@@ -29,7 +29,7 @@ namespace InputCommandHandler.Antlr.Parser
 
         public override void ExitMove(PlayerCommandsParser.MoveContext context)
         {
-            ast.root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterAttack(PlayerCommandsParser.AttackContext context)
@@ -39,7 +39,7 @@ namespace InputCommandHandler.Antlr.Parser
 
         public override void ExitAttack(PlayerCommandsParser.AttackContext context)
         {
-            ast.root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterDrop(PlayerCommandsParser.DropContext context)
@@ -49,7 +49,7 @@ namespace InputCommandHandler.Antlr.Parser
 
         public override void ExitDrop(PlayerCommandsParser.DropContext context)
         {
-            ast.root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterPickup(PlayerCommandsParser.PickupContext context)
@@ -59,7 +59,7 @@ namespace InputCommandHandler.Antlr.Parser
 
         public override void ExitPickup(PlayerCommandsParser.PickupContext context)
         {
-            ast.root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterExit(PlayerCommandsParser.ExitContext context)
@@ -69,7 +69,7 @@ namespace InputCommandHandler.Antlr.Parser
 
         public override void ExitExit(PlayerCommandsParser.ExitContext context)
         {
-            ast.root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterSay(PlayerCommandsParser.SayContext context)
@@ -79,7 +79,7 @@ namespace InputCommandHandler.Antlr.Parser
 
         public override void ExitSay(PlayerCommandsParser.SayContext context)
         {
-            ast.root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterShout(PlayerCommandsParser.ShoutContext context)
@@ -89,7 +89,7 @@ namespace InputCommandHandler.Antlr.Parser
 
         public override void ExitShout(PlayerCommandsParser.ShoutContext context)
         {
-            ast.root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterReplace(PlayerCommandsParser.ReplaceContext context)
@@ -99,7 +99,7 @@ namespace InputCommandHandler.Antlr.Parser
 
         public override void ExitReplace(PlayerCommandsParser.ReplaceContext context)
         {
-            ast.root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterPause(PlayerCommandsParser.PauseContext context)
@@ -109,7 +109,7 @@ namespace InputCommandHandler.Antlr.Parser
 
         public override void ExitPause(PlayerCommandsParser.PauseContext context)
         {
-            ast.root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
         
         public override void EnterResume(PlayerCommandsParser.ResumeContext context)
@@ -119,7 +119,7 @@ namespace InputCommandHandler.Antlr.Parser
 
         public override void ExitResume(PlayerCommandsParser.ResumeContext context)
         {
-            ast.root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterDirection(PlayerCommandsParser.DirectionContext context)
