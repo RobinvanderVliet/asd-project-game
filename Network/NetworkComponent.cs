@@ -7,6 +7,7 @@ namespace Network
     {
         private WebSocketConnection _webSocketConnection;
         private string _originId;
+        public string OriginId { get => _originId;}
         private IPacketListener _host;
         public IPacketListener Host { get => _host; set => _host = value; }
         private IPacketHandler _client;

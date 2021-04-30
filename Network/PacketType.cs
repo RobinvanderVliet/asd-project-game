@@ -6,6 +6,7 @@
         Move,
         GameAvailability,
         GameAvailable,
-        RequestToJoinGame
+        RequestToJoinGame,
+        ClientJoinedGame
     }
 }

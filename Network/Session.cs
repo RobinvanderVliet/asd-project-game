@@ -13,6 +13,7 @@ namespace Network
 
         private string _sessionId;
         public string SessionId { get => _sessionId; set => _sessionId = value; }
+        private List<string> _joinedClients = new();
 
         public Session()
         {
@@ -28,6 +29,16 @@ namespace Network
         public void GenerateSessionId()
         {
             _sessionId = Guid.NewGuid().ToString();
+        }
+
+        public void AddClient(string originId)
+        {
+            _joinedClients.Add(originId);
+        }
+
+        public List<string> GetAllClients()
+        {
+            return _joinedClients;
         }
     }
 }

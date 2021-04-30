@@ -46,6 +46,5 @@ namespace Network
             packetDTO.Header = packetHeaderDTO;
             return packetDTO;
         }
-
     }
 }

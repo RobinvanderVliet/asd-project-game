@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Network
 {
@@ -8,7 +9,6 @@ namespace Network
         private NetworkComponent _networkComponent;
         private IPacketHandler _client;
         private Session _session;
-        private List<string> _joinedPlayers = new();
 
         public HostController(NetworkComponent networkComponent, IPacketHandler client, Session session)
         {
@@ -38,10 +38,18 @@ namespace Network
 
             if (packetType == PacketType.RequestToJoinGame && IsTheSameSession(sessionId))
             {
-                _joinedPlayers.Add(packet.Header.OriginID);
+                _session.AddClient(packet.Header.OriginID);
                 Console.WriteLine("A new player with the id: " + packet.Header.OriginID + " joined your session.");
                 
-                // TODO: Notify all players that someone new joined the session.
+                // Notify all clients that a new client joined.
+                PacketDTO packetDTO = new PacketBuilder()
+                    .SetTarget("client")
+                    .SetSessionID(_session.SessionId)
+                    .SetPacketType(PacketType.ClientJoinedGame)
+                    .SetPayload(JsonConvert.SerializeObject(_session.GetAllClients()))
+                    .Build();
+                
+                _networkComponent.SendPacket(packetDTO);
                 return;
             }
             

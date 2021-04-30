@@ -36,7 +36,6 @@ namespace Network
             packet.Header.Target = "host"; // Make target into enum
             packet.Payload = payload;
 
-
             if (_hostController != null)
             {
                 _hostController.ReceivePacket(packet); //host must check for session?
@@ -52,6 +51,7 @@ namespace Network
         {
             _session = new Session(sessionName);
             _session.GenerateSessionId();
+            _session.AddClient(_networkComponent.OriginId); // Add yourself to the clients in this session.
             _hostController = new HostController(_networkComponent, this, _session);
         }
 
