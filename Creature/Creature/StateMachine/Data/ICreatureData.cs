@@ -1,5 +1,4 @@
-﻿using Creature.Creature.StateMachine.State;
-using Creature.World;
+﻿using Creature.World;
 
 namespace Creature.Creature.StateMachine.Data
 {

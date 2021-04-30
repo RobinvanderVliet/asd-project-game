@@ -1,5 +1,4 @@
 ﻿using Creature.Creature.StateMachine.Data;
-using Creature.Creature.StateMachine.State;
 using Creature.World;
 using System;
 using System.Numerics;

@@ -1,5 +1,4 @@
 ﻿using Creature.Creature.StateMachine.Data;
-using System;
 
 namespace Creature.Creature.StateMachine.State
 {

@@ -4,7 +4,6 @@ using Creature.Creature.StateMachine.CustomRuleSet;
 using Creature.Creature.StateMachine.Data;
 using Creature.Creature.StateMachine.Event;
 using Creature.Creature.StateMachine.State;
-using System;
 
 namespace Creature.Creature.StateMachine
 {

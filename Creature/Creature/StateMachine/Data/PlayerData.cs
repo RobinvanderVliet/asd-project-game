@@ -1,5 +1,4 @@
-﻿using Creature.Creature.StateMachine.State;
-using Creature.World;
+﻿using Creature.World;
 using System.Numerics;
 
 namespace Creature.Creature.StateMachine.Data
