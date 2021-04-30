@@ -60,7 +60,7 @@ namespace Creature.World
                 ICreature player = _players[0];
                 if (Vector2.DistanceSquared(creature.CreatureStateMachine.CreatureData.Position, player.CreatureStateMachine.CreatureData.Position) < creature.CreatureStateMachine.CreatureData.VisionRange)
                 {
-                    creature.CreatureStateMachine.FireEvent(new SpottedPlayerEvent(), player.CreatureStateMachine.CreatureData);
+                    creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.SPOTTED_PLAYER, player.CreatureStateMachine.CreatureData);
 
                     Vector2 monsterPosition = creature.CreatureStateMachine.CreatureData.Position;
                     Vector2 playerPosition = player.CreatureStateMachine.CreatureData.Position;
@@ -70,13 +70,13 @@ namespace Creature.World
                         || (monsterPosition.Y + 1f) == playerPosition.Y && (monsterPosition.X == playerPosition.X)
                         || (monsterPosition.Y - 1f) == playerPosition.Y && (monsterPosition.X == playerPosition.X))
                     {
-                        creature.CreatureStateMachine.FireEvent(new PlayerInRangeEvent(), player.CreatureStateMachine.CreatureData);
+                        creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.PLAYER_IN_RANGE, player.CreatureStateMachine.CreatureData);
                     }
                 }
-                //else
-                //{
-                //    creature.CreatureStateMachine.FireEvent(new LostPlayerEvent(), player.CreatureStateMachine.CreatureData);
-                //}
+                else
+                {
+                    creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.LOST_PLAYER, player.CreatureStateMachine.CreatureData);
+                }
             }
 
             for (int y = _size; y > 0; y--) {

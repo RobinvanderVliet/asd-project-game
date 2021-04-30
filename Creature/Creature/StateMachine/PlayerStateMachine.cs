@@ -10,7 +10,7 @@ namespace Creature.Creature.StateMachine
     class PlayerStateMachine : ICreatureStateMachine
     {
         private RuleSet _ruleset;
-        private PassiveStateMachine<CreatureState, CreatureEvent> _passiveStateMachine;
+        private PassiveStateMachine<CreatureState, CreatureEvent.Event> _passiveStateMachine;
         private PlayerData _playerData;
 
         public PlayerStateMachine(PlayerData playerData, RuleSet ruleSet)
@@ -24,19 +24,19 @@ namespace Creature.Creature.StateMachine
             set => _playerData = (PlayerData)value;
         }
 
-        public void FireEvent(CreatureEvent creatureEvent, object argument)
+        public void FireEvent(CreatureEvent.Event creatureEvent, object argument)
         {
             _passiveStateMachine.Fire(creatureEvent, argument);
         }
 
-        public void FireEvent(CreatureEvent creatureEvent)
+        public void FireEvent(CreatureEvent.Event creatureEvent)
         {
             _passiveStateMachine.Fire(creatureEvent);
         }
 
         public void StartStateMachine()
         {
-            var builder = new StateMachineDefinitionBuilder<CreatureState, CreatureEvent>();
+            var builder = new StateMachineDefinitionBuilder<CreatureState, CreatureEvent.Event>();
 
             // TODO: implement statemachine for player
 

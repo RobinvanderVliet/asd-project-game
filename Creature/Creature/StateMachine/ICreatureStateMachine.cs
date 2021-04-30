@@ -21,13 +21,13 @@ namespace Creature.Creature.StateMachine
         /// </summary>
         /// <param name="creatureEvent">Event that occured.</param>
         /// <param name="argument">Relevant information about this event. For example: the Player that was spotted.</param>
-        public void FireEvent(CreatureEvent creatureEvent, object argument);
+        public void FireEvent(CreatureEvent.Event creatureEvent, object argument);
 
         /// <summary>
         /// Fire events on a ICreatureStateMachine.
         /// An event can be 'spotting a player', 'being attacked', etc.
         /// </summary>
         /// <param name="creatureEvent">Event that occured.</param>
-        public void FireEvent(CreatureEvent creatureEvent);
+        public void FireEvent(CreatureEvent.Event creatureEvent);
     }
 }
