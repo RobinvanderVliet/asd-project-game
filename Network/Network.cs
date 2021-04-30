@@ -18,11 +18,16 @@ namespace Network
             {
                 Console.WriteLine("Name of your session?");
                 clientComponent.CreateGame(Console.ReadLine());
+                
                 Console.Read();
             }
             else if (roleResult != null && roleResult.ToLower() == "client")
             {
                 clientComponent.FindGames();
+                Console.WriteLine("Type the sessionID of the game you would like to join.");
+                clientComponent.JoinGame(Console.ReadLine());
+                
+                Console.Read();
             }
         }
     }

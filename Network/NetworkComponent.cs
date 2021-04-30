@@ -1,9 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace Network
 {
@@ -18,8 +14,8 @@ namespace Network
 
         public NetworkComponent()
         {
-            this._webSocketConnection = new WebSocketConnection(this);
-            this._originId = Guid.NewGuid().ToString();
+            _webSocketConnection = new WebSocketConnection(this);
+            _originId = Guid.NewGuid().ToString();
         }
 
         public void ReceivePacket(PacketDTO packet)

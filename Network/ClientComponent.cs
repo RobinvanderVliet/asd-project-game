@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Network
 {
@@ -7,6 +9,7 @@ namespace Network
         private NetworkComponent _networkComponent;
         private HostComponent _hostComponent;
         private SessionComponent _session;
+        private Dictionary<string, PacketDTO> _availableGames = new();
 
         public ClientComponent(NetworkComponent networkComponent)
         {
@@ -15,8 +18,14 @@ namespace Network
 
         public bool HandlePacket(PacketDTO packet)
         {
-            // check for session id
-            throw new NotImplementedException();
+            if (packet.Header.PacketType == PacketType.GameAvailable)
+            {
+                _availableGames.Add(packet.Header.SessionID, packet);
+                Console.WriteLine(packet.Header.SessionID);
+                return true;
+            }
+
+            return true;
         }
 
         public void SendPayload(string payload, PacketType packetType)
@@ -47,6 +56,20 @@ namespace Network
             _hostComponent = new HostComponent(_networkComponent, this, _session);
         }
 
+        public void JoinGame(string sessionId)
+        {
+            PacketDTO packetDto;
+            
+            if (!_availableGames.TryGetValue(sessionId, out packetDto)) {
+                Console.WriteLine("Could not find game!");
+                return;
+            }
+            
+            _session = new SessionComponent(packetDto.Payload);
+            _session.SessionId = sessionId;
+            Console.WriteLine("You joined game: " + _session.Name);
+        }
+
         public void FindGames()
         {
             PacketDTO packetDTO = new PacketBuilder()
@@ -56,7 +79,6 @@ namespace Network
                 .Build();
 
             _networkComponent.SendPacket(packetDTO);
-            Console.Read();
         }
     }
 }
