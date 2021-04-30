@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Network
 {
@@ -15,15 +13,10 @@ namespace Network
         public string SessionId { get => _sessionId; set => _sessionId = value; }
         private List<string> _joinedClients = new();
 
-        public Session()
-        {
-            
-        }
-
         public Session(string name)
         {
-            this._name = name;
-            this._sessionId = Guid.NewGuid().ToString();
+            _name = name;
+            _sessionId = Guid.NewGuid().ToString();
         }
 
         public void GenerateSessionId()
@@ -34,6 +27,7 @@ namespace Network
         public void AddClient(string originId)
         {
             _joinedClients.Add(originId);
+            _joinedClients = _joinedClients.Distinct().ToList(); // Remove possible duplicates.
         }
 
         public List<string> GetAllClients()
