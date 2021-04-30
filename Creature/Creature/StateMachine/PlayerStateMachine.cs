@@ -26,18 +26,12 @@ namespace Creature.Creature.StateMachine
 
         public void FireEvent(CreatureEvent creatureEvent, object argument)
         {
-            if (creatureEvent.GetType() == typeof(CreatureEvent))
-            {
-                _passiveStateMachine.Fire(creatureEvent, argument);
-            }
+            _passiveStateMachine.Fire(creatureEvent, argument);
         }
 
         public void FireEvent(CreatureEvent creatureEvent)
         {
-            if (creatureEvent.GetType() == typeof(CreatureEvent))
-            {
-                _passiveStateMachine.Fire(creatureEvent);
-            }
+            _passiveStateMachine.Fire(creatureEvent);
         }
 
         public void StartStateMachine()
@@ -46,8 +40,8 @@ namespace Creature.Creature.StateMachine
 
             // TODO: implement statemachine for player
 
-            _passiveStateMachine = builder.Build().CreatePassiveStateMachine();
-            _passiveStateMachine.Start();
+            //_passiveStateMachine = builder.Build().CreatePassiveStateMachine();
+            //_passiveStateMachine.Start();
         }
     }
 }

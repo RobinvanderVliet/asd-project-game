@@ -6,7 +6,6 @@ namespace Creature
     public class Monster : ICreature
     {
         private MonsterStateMachine _monsterStateMachine;
-        private ICreatureData _monsterData;
 
         public ICreatureStateMachine CreatureStateMachine
         {
@@ -15,7 +14,8 @@ namespace Creature
 
         public Monster(MonsterData monsterData)
         {
-            _monsterData = monsterData;
+            _monsterStateMachine = new(monsterData, null);
+            _monsterStateMachine.StartStateMachine();
         }
 
         public void ApplyDamage(double amount)

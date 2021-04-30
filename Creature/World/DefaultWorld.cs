@@ -73,10 +73,10 @@ namespace Creature.World
                         creature.CreatureStateMachine.FireEvent(new PlayerInRangeEvent(), player.CreatureStateMachine.CreatureData);
                     }
                 }
-                else
-                {
-                    creature.CreatureStateMachine.FireEvent(new LostPlayerEvent(), player.CreatureStateMachine.CreatureData);
-                }
+                //else
+                //{
+                //    creature.CreatureStateMachine.FireEvent(new LostPlayerEvent(), player.CreatureStateMachine.CreatureData);
+                //}
             }
 
             for (int y = _size; y > 0; y--) {

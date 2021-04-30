@@ -4,6 +4,7 @@ using Creature.Creature.StateMachine.CustomRuleSet;
 using Creature.Creature.StateMachine.Data;
 using Creature.Creature.StateMachine.Event;
 using Creature.Creature.StateMachine.State;
+using System;
 
 namespace Creature.Creature.StateMachine
 {
@@ -27,18 +28,12 @@ namespace Creature.Creature.StateMachine
 
         public void FireEvent(CreatureEvent creatureEvent, object argument)
         {
-            if (creatureEvent.GetType() == typeof(CreatureEvent))
-            {
-                _passiveStateMachine.Fire(creatureEvent, argument);
-            }
+             _passiveStateMachine.Fire(creatureEvent, argument);
         }
 
         public void FireEvent(CreatureEvent creatureEvent)
         {
-            if (creatureEvent.GetType() == typeof(CreatureEvent))
-            {
-                _passiveStateMachine.Fire(creatureEvent);
-            }
+            _passiveStateMachine.Fire(creatureEvent);
         }
 
         public void StartStateMachine()
@@ -53,22 +48,24 @@ namespace Creature.Creature.StateMachine
             CreatureEvent lostPlayerEvent = new LostPlayerEvent();
             CreatureEvent spottedPlayerEvent = new SpottedPlayerEvent();
             CreatureEvent regainedHealthAndOutOfRangeEvent = new RegainedHealthAndOutOfRangeEvent();
+            CreatureEvent regainedHealthAndInRangeEvent = new RegainedHealthAndInRangeEvent();
             CreatureEvent playerOutOfRangeEvent = new PlayerOutOfRangeEvent();
             CreatureEvent playerInRangeEvent = new PlayerInRangeEvent();
             CreatureEvent AlmostDeadEvent = new AlmostDeadEvent();
+
 
             // Wandering
             builder.In(followPlayerState).On(lostPlayerEvent).Goto(wanderState);
 
             // Follow player
-            builder.In(wanderState).On(spottedPlayerEvent).Goto(followPlayerState).Execute<ICreatureData>(new FollowPlayerState(CreatureData).Do);
+            builder.In(wanderState).On(spottedPlayerEvent).Goto(followPlayerState).Execute(()=> Console.WriteLine("sdjdkjsdkj"));
             builder.In(useConsumableState).On(regainedHealthAndOutOfRangeEvent).Goto(followPlayerState).Execute<ICreatureData>(new FollowPlayerState(CreatureData).Do);
             builder.In(attackPlayerState).On(playerOutOfRangeEvent).Goto(followPlayerState).Execute<ICreatureData>(new FollowPlayerState(CreatureData).Do);
 
             // Attack player
             builder.In(followPlayerState).On(playerInRangeEvent).Goto(attackPlayerState).Execute<ICreatureData>(new AttackPlayerState(CreatureData).Do);
             builder.In(attackPlayerState).On(playerInRangeEvent).Execute<ICreatureData>(new AttackPlayerState(CreatureData).Do);
-            builder.In(useConsumableState).On(regainedHealthAndOutOfRangeEvent).Goto(attackPlayerState).Execute<ICreatureData>(new AttackPlayerState(CreatureData).Do);
+            builder.In(useConsumableState).On(regainedHealthAndInRangeEvent).Goto(attackPlayerState).Execute<ICreatureData>(new AttackPlayerState(CreatureData).Do);
 
             // Use potion
             builder.In(attackPlayerState).On(AlmostDeadEvent).Goto(useConsumableState).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
@@ -78,6 +75,8 @@ namespace Creature.Creature.StateMachine
 
             _passiveStateMachine = builder.Build().CreatePassiveStateMachine();
             _passiveStateMachine.Start();
+
+            //_passiveStateMachine.Fire(new SpottedPlayerEvent());
         }
     }
 }
