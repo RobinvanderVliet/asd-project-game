@@ -58,24 +58,23 @@ namespace Network
 
         public void JoinGame(string sessionId)
         {
-            PacketDTO packetDto;
-            
-            if (!_availableGames.TryGetValue(sessionId, out packetDto)) {
+            if (!_availableGames.TryGetValue(sessionId, out PacketDTO packetDTO)) {
                 Console.WriteLine("Could not find game!");
                 return;
             }
             
-            _session = new Session(packetDto.Payload);
+            _session = new Session(packetDTO.Payload);
             _session.SessionId = sessionId;
             Console.WriteLine("Trying to join game with name: " + _session.Name);
 
-            PacketDTO packetDTO = new PacketBuilder()
+            PacketDTO newPacketDTO = new PacketBuilder()
                 .SetTarget("host")
+                .SetSessionID(_session.SessionId)
                 .SetPacketType(PacketType.RequestToJoinGame)
                 .SetPayload("payload")
                 .Build();
             
-            _networkComponent.SendPacket(packetDto);
+            _networkComponent.SendPacket(newPacketDTO);
         }
 
         public void FindGames()

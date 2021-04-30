@@ -8,7 +8,7 @@ namespace Network
         private NetworkComponent _networkComponent;
         private IPacketHandler _client;
         private Session _session;
-        private List<string> _joinedPlayers;
+        private List<string> _joinedPlayers = new();
 
         public HostController(NetworkComponent networkComponent, IPacketHandler client, Session session)
         {
@@ -36,7 +36,7 @@ namespace Network
                 return;
             }
 
-            if (packetType == PacketType.RequestToJoinGame && isTheSameSession(sessionId))
+            if (packetType == PacketType.RequestToJoinGame && IsTheSameSession(sessionId))
             {
                 _joinedPlayers.Add(packet.Header.OriginID);
                 Console.WriteLine("A new player with the id: " + packet.Header.OriginID + " joined your session.");
@@ -60,7 +60,7 @@ namespace Network
             }
         }
 
-        private bool isTheSameSession(string sessionId)
+        private bool IsTheSameSession(string sessionId)
         {
             return sessionId == _session.SessionId;
         }
