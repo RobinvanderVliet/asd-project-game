@@ -22,7 +22,7 @@ namespace Agent.Services
             }
 
             var content = String.Empty;
-            ;
+            
             try
             {
                 content = _fileHandler.ImportFile(input);
