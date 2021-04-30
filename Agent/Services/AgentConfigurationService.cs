@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Agent.exceptions;
 using Agent.Mapper;
 using Agent.Models;
 
@@ -23,6 +25,12 @@ namespace Agent.Services
             agentConfiguration.Settings = FileToDictionaryMapper.MapFileToConfiguration(filepath);
 
             _agentConfigurations.Add(agentConfiguration);
+           _agentConfigurations.Add(agentConfiguration);
+        }
+        
+        public List<AgentConfiguration> GetConfigurations()
+        {
+            return _agentConfigurations;
         }
     }
 }
