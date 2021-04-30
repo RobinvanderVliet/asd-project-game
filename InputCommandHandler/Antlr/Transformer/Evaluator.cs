@@ -66,9 +66,9 @@ namespace InputCommandHandler.Antlr.Transformer
             switch (move.steps.value)
             {
                 case < MINIMUM_STEPS:
-                    throw new MoveException("Too few steps, the minimum is 1.");
+                    throw new MoveException($"Too few steps, the minimum is {MINIMUM_STEPS}.");
                 case > MAXIMUM_STEPS:
-                    throw new MoveException("Too many steps, the maximum is 10.");
+                    throw new MoveException($"Too many steps, the maximum is {MAXIMUM_STEPS}.");
                 default:
                     _playerService.HandleDirection(move.direction.value, move.steps.value);
                     break;
