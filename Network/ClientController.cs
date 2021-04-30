@@ -21,7 +21,7 @@ namespace Network
             if (packet.Header.PacketType == PacketType.GameAvailable)
             {
                 _availableGames.Add(packet.Header.SessionID, packet);
-                Console.WriteLine(packet.Header.SessionID);
+                Console.WriteLine(packet.Header.SessionID + ": " + packet.Payload);
                 return true;
             }
 
@@ -67,7 +67,15 @@ namespace Network
             
             _session = new Session(packetDto.Payload);
             _session.SessionId = sessionId;
-            Console.WriteLine("You joined game: " + _session.Name);
+            Console.WriteLine("Trying to join game with name: " + _session.Name);
+
+            PacketDTO packetDTO = new PacketBuilder()
+                .SetTarget("host")
+                .SetPacketType(PacketType.RequestToJoinGame)
+                .SetPayload("payload")
+                .Build();
+            
+            _networkComponent.SendPacket(packetDto);
         }
 
         public void FindGames()
