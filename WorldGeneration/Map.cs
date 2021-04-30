@@ -9,39 +9,46 @@ namespace WorldGeneration
     {
         private readonly int _chunkSize;
         private readonly int _seed;
-        public List<Chunk> _chunks;
+        private List<Chunk> _chunks;
         private Database.Database _db;
+        private List<int[]> _chunksWithinLoadingRange;
 
         public Map(int chunkSize = 10, int seed = 0620520399, string dbLocation = "C:\\Temp\\ChunkDatabase.db", string dbCollectionName = "Chunks")
         {
             _chunkSize = chunkSize;
             _seed = seed;
             _db = new Database.Database(dbLocation, dbCollectionName);
+            _chunks = new List<Chunk>();
         }
 
         public void LoadArea(int playerX, int playerY, int viewDistance)
         {
-            var chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
-            _chunks = new List<Chunk>();
-
-            var lastY = -1000;
-            foreach (var chunkXY in chunksWithinLoadingRange)
+            _chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
+            foreach (var chunkXY in _chunksWithinLoadingRange)
             {
-                if (chunkXY[0] > lastY)
-                {
-                    Console.WriteLine(" ");
-                    lastY = chunkXY[0];
+                if (!_chunks.Exists(chunk => chunk.X == chunkXY[0] && chunk.Y == chunkXY[1]))
+                { // chunk isn't loaded in local memory yet
+                    var chunk = _db.GetChunk(chunkXY[0], chunkXY[1]);
+                    _chunks.Add(chunk == null
+                        ? GenerateNewChunk(chunkXY[0], chunkXY[1])
+                        : _db.GetChunk(chunkXY[0], chunkXY[1]));
                 }
-                //Console.Write(" {" + chunkXY[0] + " " + chunkXY[1] + "} ");
-                
-                var chunk = _db.GetChunk(chunkXY[0], chunkXY[1]);
-                _chunks.Add(chunk == null
-                    ? GenerateNewChunk(chunkXY[0], chunkXY[1])
-                    : _db.GetChunk(chunkXY[0], chunkXY[1]));
             }
         }
 
-        private IEnumerable<int[]> CalculateChunksToLoad(int playerX, int playerY, int viewDistance)
+        private async void forgetUnloadedChunks()
+        {
+            foreach (var loadedChunk in _chunks)
+            {
+                var a = _chunksWithinLoadingRange.Exists(
+                    chunkWithinLoadingRange => 
+                        chunkWithinLoadingRange[0] == loadedChunk.X 
+                        && chunkWithinLoadingRange[1] == loadedChunk.Y);
+                if(_chunksWithinLoadingRange)
+            }
+        }
+
+        private List<int[]> CalculateChunksToLoad(int playerX, int playerY, int viewDistance)
         {
             var maxX = (playerX + viewDistance * 2 + _chunkSize) / _chunkSize; 
             //playerX + viewDistance = viewscreen, viewscreen * 2 for buffer, + chunkSize for getting the nearest chunk, even if it's huge. / chunksize to get it to chunk coordinates

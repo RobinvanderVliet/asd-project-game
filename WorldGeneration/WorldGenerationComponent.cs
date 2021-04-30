@@ -15,6 +15,8 @@ namespace WorldGeneration
             map.DeleteMap();
             map.LoadArea(3, 0, 30);
             map.DisplayMap(3,0,30);
+            map.LoadArea(3, 0, 30);
+            map.DisplayMap(3,0,30);
             
             
             /*

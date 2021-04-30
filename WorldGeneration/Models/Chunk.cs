@@ -57,8 +57,12 @@ namespace WorldGeneration.Models
             
             var yPos = Math.Abs(y);
             var chunkYPos = Math.Abs(Y);
+            while (x < 0)
+            {
+                x = x + RowSize;
+            }
             var y1 = (RowSize * RowSize - RowSize) -  (Math.Abs(chunkYPos * RowSize - yPos) * RowSize);
-            var x1 = (x+1000000) % RowSize;
+            var x1 = x % RowSize;
             
             //Console.Write(/*", y1 = " + y1 + */", x1 = " + x1);
             //Console.Write(" total: " + (x1 + y1));
