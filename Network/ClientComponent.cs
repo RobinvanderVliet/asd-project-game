@@ -46,5 +46,17 @@ namespace Network
             _session.GenerateSessionId();
             _hostComponent = new HostComponent(_networkComponent, this, _session);
         }
+
+        public void FindGames()
+        {
+            PacketDTO packetDTO = new PacketBuilder()
+                .SetTarget("host")
+                .SetPacketType(PacketType.GameAvailability)
+                .SetPayload("testPayload")
+                .Build();
+
+            _networkComponent.SendPacket(packetDTO);
+            Console.Read();
+        }
     }
 }

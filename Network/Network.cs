@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Network
 {
@@ -27,16 +22,8 @@ namespace Network
             }
             else if (roleResult != null && roleResult.ToLower() == "client")
             {
-                PacketDTO packetDTO = new PacketBuilder()
-                    .SetTarget("host")
-                    .SetPacketType(PacketType.GameAvailability)
-                    .SetPayload("testPayload")
-                    .Build();
-
-                networkComponent.SendPacket(packetDTO);
+                clientComponent.FindGames();
             }
         }
-        
-        
     }
 }
