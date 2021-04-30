@@ -11,6 +11,7 @@
             _networkComponent = networkComponent;
             _client = client;
             _session = session;
+            _networkComponent.Host = this;
         }
 
         public void ReceivePacket(PacketDTO packet)
@@ -40,11 +41,6 @@
                     //TODO: send error
                 }
             }
-        }
-        
-        public void CreateGame()
-        {
-            // TODO: Implement methods.
         }
     }
 }

@@ -15,24 +15,15 @@ namespace Network
 
             String roleResult = Console.ReadLine();
 
-            ClientComponent clientComponent = new ClientComponent();
-            SessionComponent sessionComponent = new SessionComponent();
-            NetworkComponent networkComponent = new NetworkComponent(clientComponent);
-            HostComponent hostComponent;
+            NetworkComponent networkComponent = new NetworkComponent();
+            ClientComponent clientComponent = new ClientComponent(networkComponent);
+            networkComponent.Client = clientComponent;
             
             if (roleResult != null && roleResult.ToLower() == "host")
             {
                 Console.WriteLine("Name of your session?");
-                String nameResult = Console.ReadLine();
-                sessionComponent.Name = nameResult;
-                sessionComponent.GenerateSessionId();
-                hostComponent = new HostComponent(networkComponent, clientComponent, sessionComponent);
-                networkComponent.Host = hostComponent;
-                
-                hostComponent.CreateGame();
-
+                clientComponent.CreateGame(Console.ReadLine());
                 Console.Read();
-
             }
             else if (roleResult != null && roleResult.ToLower() == "client")
             {

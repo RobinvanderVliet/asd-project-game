@@ -14,12 +14,12 @@ namespace Network
         private IPacketListener _host;
         public IPacketListener Host { get => _host; set => _host = value; }
         private IPacketHandler _client;
+        public IPacketHandler Client { get => _client; set => _client = value; }
 
-        public NetworkComponent(IPacketHandler client)
+        public NetworkComponent()
         {
             this._webSocketConnection = new WebSocketConnection(this);
             this._originId = Guid.NewGuid().ToString();
-            this._client = client;
         }
 
         public void ReceivePacket(PacketDTO packet)

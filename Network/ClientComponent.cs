@@ -8,9 +8,9 @@ namespace Network
         private HostComponent _hostComponent;
         private SessionComponent _session;
 
-
-        public ClientComponent()
+        public ClientComponent(NetworkComponent networkComponent)
         {
+            _networkComponent = networkComponent;
         }
 
         public bool HandlePacket(PacketDTO packet)
@@ -40,6 +40,11 @@ namespace Network
             }
         }
 
-
+        public void CreateGame(string sessionName)
+        {
+            _session = new SessionComponent(sessionName);
+            _session.GenerateSessionId();
+            _hostComponent = new HostComponent(_networkComponent, this, _session);
+        }
     }
 }
