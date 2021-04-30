@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Creature.Creature.StateMachine.Data;
+using System;
 
 namespace Creature.Creature.StateMachine.State
 {
@@ -8,7 +9,7 @@ namespace Creature.Creature.StateMachine.State
             throw new NotImplementedException();
         }
 
-        public virtual void Do(object argument) {
+        public virtual void Do(ICreatureData creatureData) {
             throw new NotImplementedException();
         }
 
