@@ -9,7 +9,7 @@ namespace Agent
 {
     public class FileHandler
     {
-        public string ImportFile(string filepath)
+        public virtual string ImportFile(string filepath)
         {
             if (Path.GetExtension(filepath) == ".txt" || Path.GetExtension(filepath) == ".cfg")
             {
@@ -34,29 +34,20 @@ namespace Agent
             
         }
 
-        public void ExportFile(string content)
+        public void ExportFile(string content, string fileName)
         {
-            //TODO change file name to selected by user
-            string tmpFileName = "agentFile.cfg";
             string safeFileLocation = String.Format(Path.GetFullPath(Path.Combine
-                        (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\" + tmpFileName;
+                        (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\" + fileName;
 
-            try
+            CreateDirectory(safeFileLocation);
+
+            using (FileStream fileStream = new FileStream(safeFileLocation, FileMode.Create, FileAccess.Write))
             {
-                CreateDirectory(safeFileLocation);
-
-                using (FileStream fileStream = new FileStream(safeFileLocation, FileMode.Create, FileAccess.Write))
+                using (StreamWriter streamWriter = new StreamWriter(fileStream))
                 {
-                    using (StreamWriter streamWriter = new StreamWriter(fileStream))
-                    {
-                        streamWriter.Write(content);
-                    };   
-                };
-            }
-            catch (FileException)
-            {
-                throw;
-            }
+                    streamWriter.Write(content);
+                };   
+            };
         }
         public void CreateDirectory(string filepath)
         {

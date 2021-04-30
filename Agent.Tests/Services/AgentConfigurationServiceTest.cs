@@ -26,7 +26,7 @@ namespace Agent.Tests.Services
                 "resource\\agent_test.cfg";
 
             //Act
-            _sut.CreateAgentConfiguration("Agent", filepath);
+            _sut.CreateConfiguration("Agent", filepath);
 
             //Assert
             Assert.True(_sut.GetConfigurations().Count > 0);

@@ -4,14 +4,14 @@ using Agent.Mapper;
 
 namespace Agent.Services
 {
-    public abstract class BaseConfigurationService
+    public class BaseConfigurationService
     {
         private Pipeline _pipeline;
-        private FileHandler _fileHandler;
+        private FileHandler _fileHandler { get; set; }
         private const string Cancelcommand = "cancel";
         private FileToDictionaryMapper _fileToDictionaryMapper;
         
-        public void StartConfiguration()
+        public void StartConfiguration(ConfigurationType configurationType)
         {
             Console.WriteLine("Please provide a path to your code file");
             var input = Console.ReadLine();
@@ -30,7 +30,7 @@ namespace Agent.Services
             catch (FileException e)
             {
                 Console.WriteLine("Something went wrong: " + e);
-                StartConfiguration();
+                StartConfiguration(configurationType);
             }
             
             try
@@ -38,21 +38,35 @@ namespace Agent.Services
                 _pipeline.ParseString(content);
                 _pipeline.CheckAst();
                 var output = _pipeline.GenerateAst();
-                _fileHandler.ExportFile(output);
+
+                string fileName = String.Empty;
+                if (configurationType.Equals(ConfigurationType.Agent))
+                {
+                    fileName = "agent/" + "agent-config.cfg";
+                }
+                else
+                {
+                    fileName = "npc/" + "npc-config.cfg";
+                }
+
+                _fileHandler.ExportFile(output, fileName);
             }
             catch (SyntaxErrorException e)
             {
                 Console.WriteLine("Syntax error: " + e.Message);
-                StartConfiguration();
+                StartConfiguration(configurationType);
             }
             catch (SemanticErrorException e)
             {
                 Console.WriteLine("Semantic error: " + e.Message);
-                StartConfiguration();
+                StartConfiguration(configurationType);
             }
         }
 
-        public abstract void CreateConfiguration(string name, string filepath);
+        public virtual void CreateConfiguration(string name, string filepath)
+        {
+            
+        }
         
         public Pipeline Pipeline
         {

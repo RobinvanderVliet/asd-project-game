@@ -15,6 +15,7 @@ namespace Agent.Services
             Pipeline = new Pipeline();
             FileHandler = new FileHandler();
             FileToDictionaryMapper = new FileToDictionaryMapper();
+            _agentConfigurations = new List<AgentConfiguration>();
         }
 
         public override void CreateConfiguration(string agentName, string filepath)
@@ -25,12 +26,16 @@ namespace Agent.Services
             agentConfiguration.Settings = FileToDictionaryMapper.MapFileToConfiguration(filepath);
 
             _agentConfigurations.Add(agentConfiguration);
-           _agentConfigurations.Add(agentConfiguration);
         }
         
         public List<AgentConfiguration> GetConfigurations()
         {
             return _agentConfigurations;
+        }
+        
+        public void StartConfig()
+        {
+            StartConfiguration(ConfigurationType.Agent);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Agent.Services
 
         public void StartConfig()
         {
-            StartConfiguration();
+            StartConfiguration(ConfigurationType.Npc);
         }
     }
 }

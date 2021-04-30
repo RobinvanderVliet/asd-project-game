@@ -43,15 +43,12 @@ namespace Agent.Tests
         [Test]
         public void Test_ExportFile()
         {
-            var expected = "combat when player nearby player then attack combat";
+            var expected = "combat=defensive\nexplore=random";
+            var fileLocation = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\";
+            var fileName = "agentFile.cfg";
+            _sut.ExportFile(expected, fileName);
 
-            _sut.ExportFile("combat when player nearby player then attack combat");
-
-            var fileLocation = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\agentFile.cfg";
-
-            var actual = File.ReadAllText(fileLocation);
-
-            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(expected, _sut.ImportFile(fileLocation + fileName));
         }
     }
 }
