@@ -1,9 +1,13 @@
 using Microsoft.Extensions.Logging;
 using System;
+using InputCommandHandler;
+using Player.Model;
+using Player.Services;
+using Microsoft.Extensions.Logging;
+using System;
 using WorldGeneration;
 using Player;
 using Agent.Services;
-using Chat;
 
 namespace ASD_project
 {
@@ -23,18 +27,20 @@ namespace ASD_project
                 Console.WriteLine("Game is gestart");
 
                 // TODO: Remove from this method, team 2 will provide a command for it
-                //AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
-                //agentConfigurationService.StartConfiguration();
+                // AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
+                // agentConfigurationService.StartConfiguration();
+                
+                new WorldGeneration.Program();
                 
                 //moet later vervangen worden
-                // ChatComponent chat = new ChatComponent();
-                // PlayerModel playerModel = new PlayerModel();
-                // do
-                // {
-                //     chat.HandleCommands(playerModel);
-                // } while (true); // moet vervangen worden met variabele: isQuit 
-                //
-                new WorldGeneration.Program();
+                InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
+                PlayerModel playerModel = new PlayerModel("Name", new Inventory(), new Bitcoin(20), new RadiationLevel(1));
+                IPlayerService playerService = new PlayerService(playerModel); 
+                Console.WriteLine("Type input messages below");
+                while (true) // moet vervangen worden met variabele: isQuit 
+                {
+                    inputHandler.HandleCommands(playerService);
+                }
             }
         }
     }
