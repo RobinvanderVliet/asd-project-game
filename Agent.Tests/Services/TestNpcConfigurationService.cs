@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Agent.Mapper;
 using Agent.Models;
 using Agent.Services;
+using Agent.Services.interfaces;
 using NUnit.Framework;
 
 namespace Agent.Tests.Services
@@ -14,7 +14,7 @@ namespace Agent.Tests.Services
     public class TestNpcConfigurationService
     {
         private FileToDictionaryMapper _mapper;
-        private NpcConfigurationService _npcConfigurationService;
+        private INpcConfigurationService _npcConfigurationService;
         private List<NpcConfiguration> _npcConfigurations;
 
         [SetUp]
@@ -23,7 +23,6 @@ namespace Agent.Tests.Services
             _mapper = new FileToDictionaryMapper();
             _npcConfigurations = new List<NpcConfiguration>();
             _npcConfigurationService = new NpcConfigurationService(_npcConfigurations, _mapper);
-
         }
 
         [Test]
@@ -33,7 +32,7 @@ namespace Agent.Tests.Services
             var filepath = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest.txt";
             
             //Act
-            _npcConfigurationService.CreateNpcConfiguration("TestNPCName", filepath);
+            _npcConfigurationService.CreateConfiguration("TestNPCName", filepath);
             
             //Assert
             Assert.True(_npcConfigurationService.GetConfigurations().Count > 0);
