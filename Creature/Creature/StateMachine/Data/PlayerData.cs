@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using Creature.World;
+using System.Numerics;
 
 namespace Creature.Creature.StateMachine.Data
 {
@@ -9,6 +10,7 @@ namespace Creature.Creature.StateMachine.Data
         private int _health;
         private int _damage;
         private int _visionRange;
+        private IWorld _world;
 
         public bool IsAlive
         {
@@ -40,13 +42,20 @@ namespace Creature.Creature.StateMachine.Data
             set => _visionRange = value;
         }
 
-        public PlayerData(bool isAlive, Vector2 position, int health, int damage, int visionRange)
+        public IWorld World
+        {
+            get => _world;
+            set => _world = value;
+        }
+
+        public PlayerData(bool isAlive, Vector2 position, int health, int damage, int visionRange, IWorld world)
         {
             _alive = isAlive;
             _position = position;
             _health = health;
             _damage = damage;
             _visionRange = visionRange;
+            _world = world;
         }
     }
 }
