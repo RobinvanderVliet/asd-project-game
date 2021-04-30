@@ -1,4 +1,5 @@
-﻿using Creature.World;
+﻿using Creature.Creature.StateMachine.State;
+using Creature.World;
 
 namespace Creature.Creature.StateMachine.Data
 {
@@ -9,7 +10,6 @@ namespace Creature.Creature.StateMachine.Data
         int VisionRange { get; set; }
         int Damage { get; set; }
         int Health { get; set; }
-
         IWorld World { get; set;  }
 
     }

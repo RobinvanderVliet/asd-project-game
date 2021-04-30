@@ -72,6 +72,10 @@ namespace Creature.World
                     {
                         creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.PLAYER_IN_RANGE, player.CreatureStateMachine.CreatureData);
                     }
+                    else
+                    {
+                        creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.PLAYER_OUT_OF_RANGE, player.CreatureStateMachine.CreatureData);
+                    }
                 }
                 else
                 {
@@ -98,7 +102,6 @@ namespace Creature.World
                         {
                             line += "|";
                             addedLine = true;
-
                         }
                     }
                     if (!addedLine) line += "-";

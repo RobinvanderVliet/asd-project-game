@@ -12,6 +12,11 @@ namespace Creature.Creature.StateMachine.State
             _creatureData = creatureData;
         }
 
+        public override void Do()
+        {
+            //throw new NotImplementedException();
+        }
+
         public override void Do(ICreatureData creatureData)
         {
             PathFinder pathFinder = new PathFinder(_creatureData.World.Nodes);

@@ -12,7 +12,11 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+        }
+        public override void Do(ICreatureData creatureData)
+        {
+            //throw new NotImplementedException();
         }
     }
 }

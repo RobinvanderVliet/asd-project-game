@@ -14,12 +14,12 @@ namespace Creature.Creature.StateMachine.State
 
         public virtual void Do() 
         {
-            
+            //throw new NotImplementedException();
         }
 
         public virtual void Do(ICreatureData creatureData) 
         {
-            
+            //throw new NotImplementedException();
         }
 
         public int CompareTo(object obj)
