@@ -16,6 +16,6 @@ namespace Agent.Services
 
         public abstract List<Configuration> GetConfigurations();
 
-        public abstract void StartConfiguration(ConfigurationType configurationType);
+        public abstract void Configure();
     }
 }

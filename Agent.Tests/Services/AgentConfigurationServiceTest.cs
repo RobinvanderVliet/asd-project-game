@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Agent.Exceptions;
 using Agent.Mapper;
 using Agent.Models;
 
@@ -17,6 +18,7 @@ namespace Agent.Tests
     {
         AgentConfigurationService _sut;
         private Mock<FileHandler> _fileHandlerMock;
+        private Mock<Pipeline> _pipelineMock;
 
         [SetUp]
         public void Setup()
@@ -24,10 +26,12 @@ namespace Agent.Tests
             _sut = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper());
             _fileHandlerMock = new Mock<FileHandler>();
             _sut._fileHandler = _fileHandlerMock.Object;
+            _pipelineMock = new Mock<Pipeline>();
+            _sut._pipeline = _pipelineMock.Object;
         }
 
         [Test]
-        public void Test_StartConfiguration_SyntaxError()
+        public void Test_Configure_SyntaxError()
         {
             //Arrange
             var input = String.Format(Path.GetFullPath(Path.Combine
@@ -36,19 +40,61 @@ namespace Agent.Tests
             Mock<ConsoleRetriever> mockedRetriever = new();
             mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns(input).Returns("cancel");
 
-            _sut.consoleRetriever = mockedRetriever.Object;
+            _sut._consoleRetriever = mockedRetriever.Object;
 
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("wrong:wrong");
 
             //Act
-            _sut.StartConfiguration(ConfigurationType.Agent);
+            _sut.Configure();
 
             //Assert
-            Assert.AreEqual("missing '=' at 'wrong'", _sut.testVar);
+            Assert.AreEqual("missing '=' at 'wrong'", _sut.lastError);
+        }
+        
+        [Test]
+        public void Test_Configure_CatchesSemanticError()
+        {
+            //Arrange
+            var input = String.Format(Path.GetFullPath(Path.Combine
+                (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resources\\AgentTestFileWrongExtension.txt";
+            var error = "Semantic error";
+            
+            Mock<ConsoleRetriever> mockedRetriever = new();
+            mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns(input).Returns("cancel");
+            _sut._consoleRetriever = mockedRetriever.Object;
+            
+            _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("explore=high");
+            _pipelineMock.Setup(x => x.CheckAst()).Throws(new SemanticErrorException(error));
+
+            //Act
+            _sut.Configure();
+
+            //Assert
+            Assert.AreEqual(error, _sut.lastError);
+        }
+        
+        [Test]
+        public void Test_Configure_FileError()
+        {
+            //Arrange
+            var input = String.Format(Path.GetFullPath(Path.Combine
+                (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resources\\AgentTestFileWrongExtension.txt";
+            var error = "File not found";
+            
+            Mock<ConsoleRetriever> mockedRetriever = new();
+            mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns(input).Returns("cancel");
+            _sut._consoleRetriever = mockedRetriever.Object;
+            _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Throws(new FileException(error));
+
+            //Act
+            _sut.Configure();
+
+            //Assert
+            Assert.AreEqual(error, _sut.lastError);
         }
 
         [Test]
-        public void Test_StartConfiguration_SavesFileInAgentFolder()
+        public void Test_Configure_SavesFileInAgentFolder()
         {
             //Arrange
             var input = String.Format(Path.GetFullPath(Path.Combine
@@ -57,12 +103,12 @@ namespace Agent.Tests
             Mock<ConsoleRetriever> mockedRetriever = new();
             mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns(input);
             
-            _sut.consoleRetriever = mockedRetriever.Object;
+            _sut._consoleRetriever = mockedRetriever.Object;
 
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("aggressiveness=high");
 
             //Act
-            _sut.StartConfiguration(ConfigurationType.Agent);
+            _sut.Configure();
             
             //Assert
             _fileHandlerMock.Verify( x => x.ExportFile(It.IsAny<String>(), It.IsAny<String>()), Times.Exactly(1));
@@ -85,7 +131,7 @@ namespace Agent.Tests
         }
 
         [Test]
-        public void Test_StartConfiguration_Semantic()
+        public void Test_Configure_Semantic()
         {
             //TODO not for this sprint bc of decision
         }

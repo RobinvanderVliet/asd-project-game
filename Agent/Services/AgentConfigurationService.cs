@@ -12,9 +12,8 @@ namespace Agent.Services
     {
         private const string CANCEL_COMMAND = "cancel";
         private const string LOAD_COMMAND = "load";
-        public ConsoleRetriever consoleRetriever;
-        //This is needed for tests, dont delete!
-        public String testVar = "";
+        public ConsoleRetriever _consoleRetriever;
+        public String lastError = "";
         private InlineConfig inlineConfig;
         private List<Configuration> _agentConfigurations;
 
@@ -22,16 +21,16 @@ namespace Agent.Services
         {
             _fileToDictionaryMapper = fileToDictionaryMapper;
             _agentConfigurations = agentConfigurations; 
-            consoleRetriever = new ConsoleRetriever();
+            _consoleRetriever = new ConsoleRetriever();
             inlineConfig = new InlineConfig();
             _fileHandler = new FileHandler();
             _pipeline = new Pipeline();
         }
         
-        public override void StartConfiguration(ConfigurationType configurationType)
+        public override void Configure()
         {
             Console.WriteLine("Please provide a path to your code file");
-            var input = consoleRetriever.GetConsoleLine();
+            var input = _consoleRetriever.GetConsoleLine();
 
             if (input.Equals(CANCEL_COMMAND))
             {
@@ -43,47 +42,34 @@ namespace Agent.Services
                 inlineConfig.setup();
                 return;
             }
-
-            var content = String.Empty;
-            try
-            {
-                content = _fileHandler.ImportFile(input);
-            }
-            catch (FileException e)
-            {
-                Log.Logger.Information(e.Message);    
-                StartConfiguration(configurationType);
-            }
             
-
             try
             {
+                var content = _fileHandler.ImportFile(input);
                 _pipeline.ParseString(content);
                 _pipeline.CheckAst();
                 var output = _pipeline.GenerateAst();
-                
-                string fileName = String.Empty;
-                if (configurationType.Equals(ConfigurationType.Agent))
-                {
-                    fileName = "agent/" + "agent-config.cfg";
-                }
-                else
-                {
-                    fileName = "npc/" + "npc-config.cfg";
-                }
 
+                string fileName = "agent\\agent-config.cfg";
                 _fileHandler.ExportFile(output, fileName);
             }
             catch (SyntaxErrorException e)
             {
-                testVar = e.Message;
+                lastError = e.Message;
                 Log.Logger.Information("Syntax error: " + e.Message);
-                StartConfiguration(configurationType);
-            } 
+                Configure();
+            }
             catch (SemanticErrorException e)
             {
+                lastError = e.Message;
                 Log.Logger.Information("Semantic error: " + e.Message);
-                StartConfiguration(configurationType);
+                Configure();
+            }
+            catch (FileException e)
+            {
+                lastError = e.Message;
+                Log.Logger.Information("File error: " + e.Message);
+                Configure();
             }
         }
         
