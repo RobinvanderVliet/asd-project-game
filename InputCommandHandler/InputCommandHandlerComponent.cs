@@ -9,6 +9,8 @@ namespace InputCommandHandler
     {
         public void HandleCommands(IPlayerService playerService)
         {
+            var Temp = GetCommand();
+
             SendCommand(GetCommand(), playerService);
         }
 
