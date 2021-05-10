@@ -29,8 +29,8 @@
             }
             else if(packet.Header.SessionID == _session.SessionId)
             {
-                bool success = _client.HandlePacket(packet);
-                if (success)
+                bool succesfullyHandledPacket = _client.HandlePacket(packet);
+                if (succesfullyHandledPacket)
                 {
                     packet.Header.Target = "client";
                     _networkComponent.SendPacket(packet);

@@ -27,10 +27,8 @@ namespace Network
             }
             else
             {
-                //foreach(IPacketHandler in _subscribers.)
+                return _subscribers.GetValueOrDefault(packet.Header.PacketType).HandlePacket(packet);
             }
-
-            return true;
         }
 
         public void SendPayload(string payload, PacketType packetType)
