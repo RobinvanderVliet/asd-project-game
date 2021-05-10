@@ -11,52 +11,49 @@ namespace Agent
 {
     public class FileHandler
     {
+        private String[] allowedTypes = new[] {".txt", ".cfg"};
+
         public virtual string ImportFile(string filepath)
         {
-            try
+            if (!File.Exists(filepath))
             {
-                if (Path.GetExtension(filepath).Equals(".txt") || Path.GetExtension(filepath).Equals(".cfg"))
-                {
-                    using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
-                    {
-                        using (StreamReader reader = new StreamReader(fileStream))
-                        {
-                            string fileData = reader.ReadToEnd();
+                throw new FileException("File not found!");
+            }
 
-                            reader.Close();
+            if (!allowedTypes.Contains(Path.GetExtension(filepath)))
+            {
+                throw new FileException("The provided file is of an incorrect extension");
+            }
 
-                            return fileData;
-                        };
-                    }
-                }
-                else 
+            using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
+            {
+                using (StreamReader reader = new StreamReader(fileStream))
                 {
-                    throw new FileException("File given is not of the correct file type");
+                    string fileData = reader.ReadToEnd();
+
+                    reader.Close();
+
+                    return fileData;
                 }
             }
-            catch (FileException e)
-            {
-                Log.Logger.Information(e.Message);
-                return null;
-            }
-            
         }
 
         public virtual void ExportFile(string content, string fileName)
         {
             string safeFileLocation = String.Format(Path.GetFullPath(Path.Combine
-                        (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\" + fileName;
+                (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\" + fileName;
 
             CreateDirectory(safeFileLocation);
-            
+
             using (FileStream fileStream = File.Open(safeFileLocation, FileMode.OpenOrCreate))
             {
                 using (StreamWriter streamWriter = new StreamWriter(fileStream))
                 {
                     streamWriter.Write(content);
-                };   
-            };
+                }
+            }
         }
+
         public void CreateDirectory(string filepath)
         {
             string directoryName = Path.GetDirectoryName(filepath);
@@ -67,5 +64,3 @@ namespace Agent
         }
     }
 }
-
-
