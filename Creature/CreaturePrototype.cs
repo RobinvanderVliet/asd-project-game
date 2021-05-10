@@ -1,7 +1,12 @@
-﻿using Creature.Creature.StateMachine.Data;
+﻿using Agent.Mapper;
+using Agent.Services;
+using Agent.Models;
+using Creature.Creature.StateMachine.Data;
 using Creature.World;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
+using Creature.Creature.StateMachine.CustomRuleSet;
 
 namespace Creature
 {
@@ -11,13 +16,20 @@ namespace Creature
         {
             IWorld world = new DefaultWorld(25);
 
+            NpcConfigurationService npcConfigurationService = new NpcConfigurationService(new List<NpcConfiguration>(), new FileToDictionaryMapper());
+            npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
+            npcConfigurationService.CreateNpcConfiguration("zombie", "C:\\Users\\Bram\\source\\repos\\asd-project-game\\ASD-Game\\resource\\npc\\monster.cfg");
+            
             PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world);
             MonsterData monsterData = new MonsterData(new Vector2(10, 10), 20, 5, 50, world, false);
             MonsterData monsterData2 = new MonsterData(new Vector2(20, 20), 20, 5, 50, world, false);
 
-            ICreature player = new Player(playerData);
-            ICreature creature = new Monster(monsterData);
-            ICreature creature2 = new Monster(monsterData2);
+            RuleSet monsterRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[0].Settings);
+            RuleSet playerRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[1].Settings);
+
+            ICreature player = new Player(playerData, playerRuleSet);
+            ICreature creature = new Monster(monsterData, monsterRuleSet);
+            ICreature creature2 = new Monster(monsterData2, monsterRuleSet);
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);
