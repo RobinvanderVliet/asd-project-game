@@ -20,12 +20,12 @@ namespace Creature
 
         public void ApplyDamage(double amount)
         {
-            // TODO: Get from statemachine
+            _monsterStateMachine.CreatureData.Health -= amount;
         }
 
         public void HealAmount(double amount)
         {
-            // TODO: get from statemachine
+            _monsterStateMachine.CreatureData.Health += amount;
         }
     }
 }
