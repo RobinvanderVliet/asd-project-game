@@ -18,7 +18,7 @@ namespace Creature
 
             NpcConfigurationService npcConfigurationService = new NpcConfigurationService(new List<NpcConfiguration>(), new FileToDictionaryMapper());
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
-            npcConfigurationService.CreateNpcConfiguration("zombie", "C:\\Users\\Bram\\source\\repos\\asd-project-game\\ASD-Game\\resource\\npc\\monster.cfg");
+            npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
             
             PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world);
             MonsterData monsterData = new MonsterData(new Vector2(10, 10), 20, 5, 50, world, false);
