@@ -10,15 +10,18 @@ namespace Agent.Services
         private Pipeline _pipeline;
         private FileHandler _fileHandler;
         private const string CancelCommand = "cancel";
+        private const string LoadCommand = "load";
         public ConsoleRetriever consoleRetriever;
         //This is needed for tests, dont delete!
         public String testVar = "";
+        InlineConfig inlineConfig;
 
         public AgentConfigurationService()
         {
             _pipeline = new Pipeline();
             _fileHandler = new FileHandler();
             consoleRetriever = new ConsoleRetriever();
+            inlineConfig = new InlineConfig();
         }
         
         public void StartConfiguration()
@@ -28,6 +31,12 @@ namespace Agent.Services
 
             if (input.Equals(CancelCommand))
             {
+                return;
+            }
+            
+            if (input.Equals(LoadCommand)) 
+            {
+                inlineConfig.setup();
                 return;
             }
 
