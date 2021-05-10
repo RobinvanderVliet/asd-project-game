@@ -1,5 +1,7 @@
 ﻿using System;
 using Agent.exceptions;
+using Agent.Exceptions;
+using Serilog;
 
 namespace Agent.Services
 {
@@ -7,21 +9,34 @@ namespace Agent.Services
     {
         private Pipeline _pipeline;
         private FileHandler _fileHandler;
-        private const string CancelCommand = "cancel"; 
+        private const string CancelCommand = "cancel";
+        private const string LOADCOMMAND = "load";
+        public ConsoleRetriever consoleRetriever;
+        //This is needed for tests, dont delete!
+        public String testVar = "";
+        private InlineConfig inlineConfig;
 
         public AgentConfigurationService()
         {
             _pipeline = new Pipeline();
             _fileHandler = new FileHandler();
+            consoleRetriever = new ConsoleRetriever();
+            inlineConfig = new InlineConfig();
         }
         
         public void StartConfiguration()
         {
             Console.WriteLine("Please provide a path to your code file");
-            var input = Console.ReadLine();
+            var input = consoleRetriever.GetConsoleLine();
 
             if (input.Equals(CancelCommand))
             {
+                return;
+            }
+            
+            if (input.Equals(LOADCOMMAND)) 
+            {
+                inlineConfig.setup();
                 return;
             }
 
@@ -32,7 +47,7 @@ namespace Agent.Services
             }
             catch (FileException e)
             {
-                Console.WriteLine("Something went wrong: " + e);    
+                Log.Logger.Information(e.Message);    
                 StartConfiguration();
             }
             
@@ -46,14 +61,17 @@ namespace Agent.Services
             }
             catch (SyntaxErrorException e)
             {
-                Console.WriteLine("Syntax error: " + e.Message);
+                testVar = e.Message;
+                Log.Logger.Information("Syntax error: " + e.Message);
                 StartConfiguration();
             } 
             catch (SemanticErrorException e)
             {
-                Console.WriteLine("Semantic error: " + e.Message);
+                Log.Logger.Information("Semantic error: " + e.Message);
                 StartConfiguration();
             }
         }
     }
+
+    
 }
