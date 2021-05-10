@@ -1,7 +1,12 @@
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
+using Agent.Mapper;
+using Agent.Models;
+using Agent.Services;
 using Creature;
+using Creature.Creature.StateMachine.CustomRuleSet;
 using Creature.Creature.StateMachine.Data;
 using Creature.World;
 
@@ -38,13 +43,22 @@ namespace ASD_project
                 
                 //Group 4 NPC
                 IWorld world = new DefaultWorld(25);
-                PlayerData playerData = new PlayerData(true, new Vector2(5, 5), 20, 5, 10, world);
-                MonsterData monsterData = new MonsterData(true, new Vector2(10, 10), 20, 5, 50, world, false);
-                MonsterData monsterData2 = new MonsterData(true, new Vector2(20, 20), 20, 5, 50, world, false);
+                
+                NpcConfigurationService npcConfigurationService = new NpcConfigurationService(new List<NpcConfiguration>(), new FileToDictionaryMapper());
+                npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
+                npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
+                
+                PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world);
+                MonsterData monsterData = new MonsterData(new Vector2(10, 10), 20, 5, 50, world, false);
+                MonsterData monsterData2 = new MonsterData(new Vector2(20, 20), 20, 5, 50, world, false);
 
-                ICreature player = new Creature.Player(playerData);
-                ICreature creature = new Monster(monsterData);
-                ICreature creature2 = new Monster(monsterData2);
+                RuleSet monsterRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[0].Settings);
+                RuleSet playerRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[1].Settings);
+
+                ICreature player = new Creature.Player(playerData, playerRuleSet);
+                ICreature creature = new Monster(monsterData, monsterRuleSet);
+                ICreature creature2 = new Monster(monsterData2, monsterRuleSet);
+                
                 world.GenerateWorldNodes();
                 world.SpawnPlayer(player);
                 world.SpawnCreature(creature);
