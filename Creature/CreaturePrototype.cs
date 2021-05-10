@@ -1,4 +1,5 @@
-﻿using Creature.World;
+﻿using Creature.Creature.StateMachine.Data;
+using Creature.World;
 using System;
 using System.Numerics;
 
@@ -9,9 +10,14 @@ namespace Creature
         static void Main(string[] args)
         {
             IWorld world = new DefaultWorld(25);
-            ICreature player = new Player(10, new Vector2(3, 2));
-            ICreature creature = new Monster(world, new Vector2(10, 10), 2, 6, 50);
-            ICreature creature2 = new Monster(world, new Vector2(20, 20), 2, 6, 50);
+
+            PlayerData playerData = new PlayerData(true, new Vector2(5, 5), 20, 5, 10, world);
+            MonsterData monsterData = new MonsterData(true, new Vector2(10, 10), 20, 5, 50, world, false);
+            MonsterData monsterData2 = new MonsterData(true, new Vector2(20, 20), 20, 5, 50, world, false);
+
+            ICreature player = new Player(playerData);
+            ICreature creature = new Monster(monsterData);
+            ICreature creature2 = new Monster(monsterData2);
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);
@@ -24,12 +30,12 @@ namespace Creature
             {
                 string input = Console.ReadLine();
 
-                MovePlayer(player, input);
+                MovePlayer(playerData, input);
                 world.Render();
             }
         }
 
-        private static void MovePlayer(ICreature player, string input)
+        private static void MovePlayer(ICreatureData player, string input)
         {
             switch (input)
             {
