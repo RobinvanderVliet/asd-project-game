@@ -42,14 +42,14 @@ namespace Agent
             
         }
 
-        public void ExportFile(string content, string fileName)
+        public virtual void ExportFile(string content, string fileName)
         {
             string safeFileLocation = String.Format(Path.GetFullPath(Path.Combine
                         (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\" + fileName;
 
             CreateDirectory(safeFileLocation);
-
-            using (FileStream fileStream = new FileStream(safeFileLocation, FileMode.Create, FileAccess.Write))
+            
+            using (FileStream fileStream = File.Open(safeFileLocation, FileMode.OpenOrCreate))
             {
                 using (StreamWriter streamWriter = new StreamWriter(fileStream))
                 {
@@ -60,15 +60,9 @@ namespace Agent
         public void CreateDirectory(string filepath)
         {
             string directoryName = Path.GetDirectoryName(filepath);
-
-            if (directoryName.Length > 0)
+            if (!Directory.Exists(directoryName))
             {
                 Directory.CreateDirectory(directoryName);
-            }
-
-            if (!File.Exists(filepath))
-            {
-                File.Create(filepath);
             }
         }
     }
