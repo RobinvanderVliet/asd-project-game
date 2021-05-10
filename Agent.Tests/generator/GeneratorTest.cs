@@ -10,14 +10,14 @@ namespace Agent.Tests.generator
     public class GeneratorTest
     {
 
-        private Generator sut;
-        private Fixtures fix;
+        private Generator _sut;
+        private Fixtures _fix;
 
         [SetUp]
         public void Setup()
         {
-            sut = new Generator();
-            fix = new Fixtures();
+            _sut = new Generator();
+            _fix = new Fixtures();
         }
 
         [Test]
@@ -27,16 +27,16 @@ namespace Agent.Tests.generator
         public void Test_Generator_Level1(String input)
         {
             //Arrange
-            AST ast = fix.GetFixture(input);
+            AST ast = _fix.GetFixture(input);
 
             //Act
-            var result = sut.Execute(ast);
+            var result = _sut.Execute(ast);
 
             //Assert
             Assert.True(result.Length != 0);
-            Assert.True(result.Contains("player"));
-            Assert.True(result.Contains("nearby"));
-            Assert.False(result.Contains("????"));
+            Assert.True(result.Contains("combat_default_player_comparable=player"));
+            Assert.True(result.Contains("combat_default_player_comparision=nearby"));
+            Assert.True(result.Contains("combat_default_player_comparision_true=attack"));
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace Agent.Tests.generator
         public void Test_Generator_Exception(String input)
         {
             //Arrange
-            AST ast = fix.GetFixture(input);
+            AST ast = _fix.GetFixture(input);
 
             Mock<Configuration> mockedNode = new();
             mockedNode.Setup(x => x.GetChildren()).Throws(new Exception());
@@ -52,7 +52,7 @@ namespace Agent.Tests.generator
             ast.SetRoot(mockedNode.Object);
 
             //Act
-            var result = sut.Execute(ast);
+            var result = _sut.Execute(ast);
             //Assert
             Assert.AreEqual(result, new Exception().Message);
         }

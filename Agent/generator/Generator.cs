@@ -9,7 +9,7 @@ namespace Agent
 {
     public class Generator
     {
-        String stringBuilder = "";
+        private String _stringBuilder = "";
 
         public String Execute(AST ast)
         {
@@ -22,10 +22,10 @@ namespace Agent
             }
             catch (Exception e)
             {
-                stringBuilder += e.Message;
+                _stringBuilder += e.Message;
             }
 
-            return stringBuilder;
+            return _stringBuilder;
         }
 
         public void GenerateConfiguration(Node parent) 
@@ -47,7 +47,7 @@ namespace Agent
                     text += GenerateCondition(child, ((Setting)parent).SettingName, "default");
                 }
             }
-            stringBuilder += text;
+            _stringBuilder += text;
         }
 
         private String GenerateRule(Rule parent)
