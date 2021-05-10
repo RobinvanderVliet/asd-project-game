@@ -9,18 +9,22 @@ namespace Agent.Services
     {
         private Pipeline _pipeline;
         private FileHandler _fileHandler;
-        private const string CancelCommand = "cancel"; 
+        private const string CancelCommand = "cancel";
+        public ConsoleRetriever consoleRetriever;
+        //This is needed for tests, dont delete!
+        public String testVar = "";
 
         public AgentConfigurationService()
         {
             _pipeline = new Pipeline();
             _fileHandler = new FileHandler();
+            consoleRetriever = new ConsoleRetriever();
         }
         
         public void StartConfiguration()
         {
             Console.WriteLine("Please provide a path to your code file");
-            var input = Console.ReadLine();
+            var input = consoleRetriever.GetConsoleLine();
 
             if (input.Equals(CancelCommand))
             {
@@ -48,6 +52,7 @@ namespace Agent.Services
             }
             catch (SyntaxErrorException e)
             {
+                testVar = e.Message;
                 Log.Logger.Information("Syntax error: " + e.Message);
                 StartConfiguration();
             } 
@@ -56,6 +61,14 @@ namespace Agent.Services
                 Log.Logger.Information("Semantic error: " + e.Message);
                 StartConfiguration();
             }
+        }
+    }
+
+    public class ConsoleRetriever 
+    {
+        public virtual String GetConsoleLine() 
+        {
+            return Console.ReadLine();
         }
     }
 }
