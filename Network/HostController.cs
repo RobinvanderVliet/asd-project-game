@@ -1,10 +1,13 @@
-﻿namespace Network
+﻿using System.Collections.Generic;
+
+namespace Network
 {
     public class HostController : IPacketListener
     {
         private NetworkComponent _networkComponent;
         private IPacketHandler _client;
         private Session _session;
+        private List<PacketDTO> _packetQueue;
 
         public HostController(NetworkComponent networkComponent, IPacketHandler client, Session session)
         {
@@ -12,6 +15,7 @@
             _client = client;
             _session = session;
             _networkComponent.Host = this;
+            _packetQueue = new();
         }
 
         public void ReceivePacket(PacketDTO packet)
@@ -29,16 +33,31 @@
             }
             else if(packet.Header.SessionID == _session.SessionId)
             {
-                bool succesfullyHandledPacket = _client.HandlePacket(packet);
-                if (succesfullyHandledPacket)
-                {
-                    packet.Header.Target = "client";
-                    _networkComponent.SendPacket(packet);
-                }
-                else
-                {
-                    //TODO: send error
-                }
+                _packetQueue.Add(packet);
+                HandleQueue();
+            }
+        }
+
+        private void HandleQueue()
+        {
+            foreach(var packet in _packetQueue)
+            {
+                HandlePacket(packet);
+                _packetQueue.Remove(packet);
+            }
+        }
+
+        private void HandlePacket(PacketDTO packet)
+        {
+            bool succesfullyHandledPacket = _client.HandlePacket(packet);
+            if (succesfullyHandledPacket)
+            {
+                packet.Header.Target = "client";
+                _networkComponent.SendPacket(packet);
+            }
+            else
+            {
+                //TODO: send error
             }
         }
     }
