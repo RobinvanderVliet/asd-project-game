@@ -15,7 +15,7 @@ namespace Agent
         {
             try
             {
-                if (Path.GetExtension(filepath) == ".txt" || Path.GetExtension(filepath) == ".cfg")
+                if (Path.GetExtension(filepath).Equals(".txt") || Path.GetExtension(filepath).Equals(".cfg"))
                 {
                     using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
                     {
@@ -37,7 +37,6 @@ namespace Agent
             catch (FileException e)
             {
                 Log.Logger.Information(e.Message);
-                //idk functie breekt anders
                 return null;
             }
             

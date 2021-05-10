@@ -22,7 +22,7 @@ namespace Agent.Tests
         }
 
         [Test]
-        public void SyntaxErrorExceptionTest()
+        public void Test_StartConfiguration_SyntaxError()
         {
             var input = String.Format(Path.GetFullPath(Path.Combine
                         (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\test_parse_exception.txt";
@@ -38,7 +38,7 @@ namespace Agent.Tests
         }
 
         [Test]
-        public void SemanticErrorExceptionTest()
+        public void Test_StartConfiguration_Semantic()
         {
             //TODO not for this sprint bc of decision
         }

@@ -10,11 +10,11 @@ namespace Agent.Services
         private Pipeline _pipeline;
         private FileHandler _fileHandler;
         private const string CancelCommand = "cancel";
-        private const string LoadCommand = "load";
+        private const string LOADCOMMAND = "load";
         public ConsoleRetriever consoleRetriever;
         //This is needed for tests, dont delete!
         public String testVar = "";
-        InlineConfig inlineConfig;
+        private InlineConfig inlineConfig;
 
         public AgentConfigurationService()
         {
@@ -34,7 +34,7 @@ namespace Agent.Services
                 return;
             }
             
-            if (input.Equals(LoadCommand)) 
+            if (input.Equals(LOADCOMMAND)) 
             {
                 inlineConfig.setup();
                 return;
@@ -73,11 +73,5 @@ namespace Agent.Services
         }
     }
 
-    public class ConsoleRetriever 
-    {
-        public virtual String GetConsoleLine() 
-        {
-            return Console.ReadLine();
-        }
-    }
+    
 }
