@@ -24,6 +24,7 @@ namespace Agent.Tests
         [Test]
         public void Test_StartConfiguration_SyntaxError()
         {
+            //Arrange
             var input = String.Format(Path.GetFullPath(Path.Combine
                         (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\test_parse_exception.txt";
 
@@ -32,8 +33,10 @@ namespace Agent.Tests
 
             sut.consoleRetriever = mockedRetriever.Object;
 
+            //Act
             sut.StartConfiguration();
 
+            //Assert
             Assert.AreEqual("mismatched input '<EOF>' expecting '='", sut.testVar);
         }
 
