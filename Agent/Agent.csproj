@@ -8,10 +8,15 @@
     <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
     <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.6" PrivateAssets="all" />
     <PackageReference Include="Serilog" Version="2.10.0" />
+    <Antlr4 Remove="antlr\transformer\**" />
+    <Compile Remove="antlr\transformer\**" />
+    <EmbeddedResource Remove="antlr\transformer\**" />
+    <None Remove="antlr\transformer\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="antlr\transformer" />
+    <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
+    <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.6" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>

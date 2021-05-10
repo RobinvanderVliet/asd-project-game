@@ -28,7 +28,7 @@ namespace Agent
             return _stringBuilder;
         }
 
-        public void GenerateConfiguration(Node parent) 
+        private void GenerateConfiguration(Node parent) 
         {
             String text = "";
             if (parent is Rule)
