@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ASD_project
+namespace Player
 {
-    class WalkEvent : IEvent
+    public interface IEvent
     {
-
-       
     }
 }

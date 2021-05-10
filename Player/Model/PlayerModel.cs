@@ -164,5 +164,10 @@ namespace Player.Model
                 _currentPosition[i] = _currentPosition[i] + newMovement[i];
             }
         }
+
+        public int[] GetPlayerPosition()
+        {
+            return _currentPosition;
+        }
     }
 }

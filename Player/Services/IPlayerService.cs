@@ -1,4 +1,5 @@
-﻿using Player.Model;
+﻿using System.Collections.Generic;
+using Player.Model;
 
 namespace Player.Services
 {
@@ -27,6 +28,8 @@ namespace Player.Services
         public void RemoveStamina(int amount);
 
         public IItem GetItem(string itemName);
+
+        public List<IEvent> GetEvents();
 
         public void AddInventoryItem(IItem item);
 

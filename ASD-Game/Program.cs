@@ -36,6 +36,7 @@ namespace ASD_project
                     services.AddScoped<IItem, Item>();
                     services.AddScoped<IBitcoin, Bitcoin>();
                     services.AddScoped<IRadiationLevel, RadiationLevel>();
+                    services.AddScoped<IEvent, WalkEvent>(); 
                 })
                 .UseSerilog()
                 .Build();

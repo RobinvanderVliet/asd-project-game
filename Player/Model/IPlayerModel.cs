@@ -1,4 +1,4 @@
-namespace Player.Model
+﻿namespace Player.Model
 {
     public interface IPlayerModel
     {
@@ -39,6 +39,8 @@ namespace Player.Model
         public void DropItem(string itemName);
         
         public void SetNewPlayerPosition(int[] newMovement);
-        
+
+        public int[] GetPlayerPosition();
+
     }
 }

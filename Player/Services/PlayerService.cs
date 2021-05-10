@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using Player.Model;
 
 namespace Player.Services
@@ -6,11 +8,19 @@ namespace Player.Services
     public class PlayerService : IPlayerService
     {
         private readonly IPlayerModel _playerModel;
+        private readonly IEvent _event;
         private const int DEFAULT_STEPS = 0;
+        private List<IEvent> eventList = new List<IEvent>();
 
-        public PlayerService(IPlayerModel playerModel)
+        public List<IEvent> GetEvents()
+        {
+            return eventList; 
+        }
+
+        public PlayerService(IPlayerModel playerModel, IEvent gameEvent)
         {
             _playerModel = playerModel;
+            _event = gameEvent;
         }
 
         public void Attack(string direction)
@@ -158,8 +168,11 @@ namespace Player.Services
                     newMovement[1] = stepsValue;
                     break;
             }
-
+            var walkEvent = new WalkEvent {newMovement = new int[2]};
+            
             _playerModel.SetNewPlayerPosition(newMovement);
+            walkEvent.newMovement = _playerModel.GetPlayerPosition();
+            AddEvent(walkEvent);
 
             // the next line of code should be changed by sending newPosition to a relevant method
             WriteCommand(_playerModel.CurrentPosition);
@@ -171,6 +184,11 @@ namespace Player.Services
             // returns the new position
             _playerModel.CurrentPosition = newPosition;
             Console.WriteLine("X: " + newPosition[0] + ". Y: " + newPosition[1]);
+        }
+
+        private void AddEvent(IEvent gameEvent)
+        {
+            eventList.Add(gameEvent);
         }
     }
 }

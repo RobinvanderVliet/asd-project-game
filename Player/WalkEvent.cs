@@ -4,9 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ASD_project
+namespace Player
 {
-    public interface IEvent
+    public class WalkEvent : IEvent
     {
+        public Array newMovement { get; set; }
+
+        
+
+
     }
 }
