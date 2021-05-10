@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <OutputType>Exe</OutputType>
-    <StartupObject>Creature.CreaturePrototype</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
