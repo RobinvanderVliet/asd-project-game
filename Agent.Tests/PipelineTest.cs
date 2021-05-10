@@ -84,8 +84,7 @@ namespace Agent.Tests
         {
             //Arrange
 
-            //Act
-            //Assert
+            //Act & Assert
             Assert.Throws<SyntaxErrorException>(() => sut.SyntaxError(It.IsAny<IRecognizer>(), It.IsAny<IToken>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<String>(), It.IsAny<RecognitionException>()));
         }
 
@@ -96,8 +95,6 @@ namespace Agent.Tests
             sut.Errors.Add("error 1");
             sut.Errors.Add("error 2");
             sut.Errors.Add("error 3");
-            //Extra check voor input, voor het wissen;
-            Assert.AreEqual(sut.Errors.Count, 3);
 
             //Act
             sut.ClearErrors();

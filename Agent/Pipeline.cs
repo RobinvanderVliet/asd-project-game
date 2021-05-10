@@ -15,13 +15,13 @@ namespace Agent
     {
         private AST _ast;
 
-        private List<string> errors;
+        private List<string> _errors;
         private Checker _checker;
         private Generator generator;
 
         public Pipeline()
         {
-            errors = new List<string>();
+            _errors = new List<string>();
             // transformer = new Transformer();
             generator = new Generator();
         }
@@ -31,7 +31,7 @@ namespace Agent
             AntlrInputStream inputStream = new AntlrInputStream(input);
             AgentConfigurationLexer lexer = new AgentConfigurationLexer(inputStream);
             lexer.RemoveErrorListeners();
-            errors.Clear();
+            _errors.Clear();
 
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             AgentConfigurationParser parser = new AgentConfigurationParser(tokens);
@@ -66,11 +66,11 @@ namespace Agent
             set => _ast = value;
         }
 
-        public List<string> Errors => errors;
+        public List<string> Errors => _errors;
 
         public void ClearErrors()
         {
-            errors.Clear();
+            _errors.Clear();
         }
         
         public Checker Checker
