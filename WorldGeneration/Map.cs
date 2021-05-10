@@ -24,6 +24,7 @@ namespace WorldGeneration
         public void LoadArea(int playerX, int playerY, int viewDistance)
         {
             _chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
+            ForgetUnloadedChunks();
             foreach (var chunkXY in _chunksWithinLoadingRange)
             {
                 if (!_chunks.Exists(chunk => chunk.X == chunkXY[0] && chunk.Y == chunkXY[1]))
@@ -36,15 +37,20 @@ namespace WorldGeneration
             }
         }
 
-        private async void forgetUnloadedChunks()
+        private void ForgetUnloadedChunks()
         {
             foreach (var loadedChunk in _chunks)
             {
-                var a = _chunksWithinLoadingRange.Exists(
-                    chunkWithinLoadingRange => 
-                        chunkWithinLoadingRange[0] == loadedChunk.X 
-                        && chunkWithinLoadingRange[1] == loadedChunk.Y);
-                if(_chunksWithinLoadingRange)
+                if (!_chunksWithinLoadingRange.Exists(
+                    chunkWithinLoadingRange =>
+                        chunkWithinLoadingRange[0] == loadedChunk.X
+                        && chunkWithinLoadingRange[1] == loadedChunk.Y))
+                {
+                    if (!_chunks.Remove(loadedChunk))
+                    {
+                        throw new Exception("Failed to remove chunk from loaded chunks");
+                    }
+                }
             }
         }
 
@@ -72,8 +78,6 @@ namespace WorldGeneration
 
         public void DisplayMap(int playerX, int playerY, int viewDistance)
         {
-            Console.WriteLine("Starting point Y: " +  (playerY - viewDistance) + ", Ending point Y: " + ((playerY - viewDistance) + (viewDistance * 2)));
-            Console.WriteLine("Starting point X: " +  (playerX - viewDistance) + ", Ending point X: " + ((playerX - viewDistance) + (viewDistance * 2)));
             for (var y = (playerY + viewDistance); y > ((playerY + viewDistance) - (viewDistance * 2)); y--)
             {
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2)); x++)
@@ -87,7 +91,6 @@ namespace WorldGeneration
                     {
                         Console.Write(" " + chunk.Map[chunk.GetPositionInTileArrayByWorldCoordinates(x, y)].Symbol);
                     }
-                    //Console.Write(" [" + x +" " + y + " " + chunk.GetPositionInTileArrayByWorldCoordinates(x, y) /*+ " " + chunk.X + " " + chunk.Y*/ + "]");
                 }
                 Console.WriteLine("");
             }
