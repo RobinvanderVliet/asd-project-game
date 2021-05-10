@@ -1,4 +1,5 @@
 ﻿using Creature.Creature.StateMachine;
+using Creature.Creature.StateMachine.CustomRuleSet;
 using Creature.Creature.StateMachine.Data;
 
 namespace Creature
@@ -12,9 +13,9 @@ namespace Creature
             get => _playerStateMachine;
         }
 
-        public Player(PlayerData playerData)
+        public Player(PlayerData playerData, RuleSet ruleSet)
         {
-            _playerStateMachine = new(playerData, null);
+            _playerStateMachine = new(playerData, ruleSet);
             _playerStateMachine.StartStateMachine();
         }
 

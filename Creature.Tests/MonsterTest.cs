@@ -1,12 +1,8 @@
 ﻿using NUnit.Framework;
-using System.Collections.Generic;
 using Moq;
 using Creature.World;
 using System.Numerics;
-using Creature.Consumable;
-using Creature.Pathfinder;
 using Creature.Creature.StateMachine.Data;
-using Creature.Creature.StateMachine.Event;
 
 namespace Creature.Tests
 {
@@ -25,7 +21,7 @@ namespace Creature.Tests
             int visionRange = 10;
 
             MonsterData monsterData = new MonsterData(position, health, _damage, visionRange, worldMock.Object, false);
-            _sut = new Monster(monsterData);
+            _sut = new Monster(monsterData, null);
         }
 
         [Test]

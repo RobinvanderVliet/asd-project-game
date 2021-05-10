@@ -8,4 +8,8 @@
     <PackageReference Include="Appccelerate.StateMachine" Version="5.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Agent\Agent.csproj" />
+  </ItemGroup>
+
 </Project>
