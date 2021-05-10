@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Agent.Exceptions;
+using NUnit.Framework;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Agent.Exceptions;
+using Serilog;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,26 +13,32 @@ namespace Agent
     {
         public string ImportFile(string filepath)
         {
-            if (Path.GetExtension(filepath) == ".txt" || Path.GetExtension(filepath) == ".cfg")
+            try
             {
-                if (!File.Exists(filepath))
+                if (Path.GetExtension(filepath).Equals(".txt") || Path.GetExtension(filepath).Equals(".cfg"))
                 {
-                    throw new FileException("File does not exists");
-                }
-                    
-                using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
-                {
-                    using (StreamReader reader = new StreamReader(fileStream))
+                    using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
                     {
-                        string fileData = reader.ReadToEnd();
+                        using (StreamReader reader = new StreamReader(fileStream))
+                        {
+                            string fileData = reader.ReadToEnd();
 
-                        reader.Close();
+                            reader.Close();
 
-                        return fileData;
-                    };
+                            return fileData;
+                        };
+                    }
+                }
+                else 
+                {
+                    throw new FileException("File given is not of the correct file type");
                 }
             }
-            throw new FileException("File given is not of the correct file type");
+            catch (FileException e)
+            {
+                Log.Logger.Information(e.Message);
+                return null;
+            }
             
         }
 
@@ -75,9 +83,4 @@ namespace Agent
     }
 }
 
-[Serializable]
-public class FileException : IOException
-{
-    public FileException() { }
-    public FileException(String massage) : base(String.Format(massage)) { }
-}
+
