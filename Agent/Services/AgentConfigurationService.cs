@@ -1,5 +1,7 @@
 ﻿using System;
 using Agent.exceptions;
+using Agent.Exceptions;
+using Serilog;
 
 namespace Agent.Services
 {
@@ -32,7 +34,7 @@ namespace Agent.Services
             }
             catch (FileException e)
             {
-                Console.WriteLine("Something went wrong: " + e);    
+                Log.Logger.Information(e.Message);    
                 StartConfiguration();
             }
             
@@ -46,12 +48,12 @@ namespace Agent.Services
             }
             catch (SyntaxErrorException e)
             {
-                Console.WriteLine("Syntax error: " + e.Message);
+                Log.Logger.Information("Syntax error: " + e.Message);
                 StartConfiguration();
             } 
             catch (SemanticErrorException e)
             {
-                Console.WriteLine("Semantic error: " + e.Message);
+                Log.Logger.Information("Semantic error: " + e.Message);
                 StartConfiguration();
             }
         }
