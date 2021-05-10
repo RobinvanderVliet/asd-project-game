@@ -2,24 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using WorldGeneration.Models;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
 {
-    public class Map
+    public class World
     {
         private readonly int _chunkSize;
         private readonly int _seed;
         private IList<Chunk> _chunks;
+        public IList<IPlayer> _players { get; }
 
-        public Map(int chunkSize = 10, int seed = 0620520399)
+        public World(IList<IPlayer> players, int chunkSize = 10, int seed = 0620520399)
         {
+            _players = players;
             _chunkSize = chunkSize;
             _seed = seed;
         }
 
-        public void LoadArea(int[] playerLocation, int viewDistance)
+        public void LoadAreaForPlayer(IPlayer player, int viewDistance)
         {
-            var chunksWithinLoadingRange = CalculateChunksToLoad(playerLocation, viewDistance);
+            var chunksWithinLoadingRange = CalculateChunksToLoadForPlayer(player.CurrentPosition, viewDistance);
             var chunks = new List<Chunk>();
             var db = new Database.Database();
 
@@ -31,10 +34,10 @@ namespace WorldGeneration
                     : db.GetChunk(chunkXY[0], chunkXY[1]));
             }
 
-            DisplayMap(0, 0, viewDistance, chunks);
+            DisplayMap(player, viewDistance, chunks);
         }
 
-        private IEnumerable<int[]> CalculateChunksToLoad(int[] playerLocation, int viewDistance)
+        private IEnumerable<int[]> CalculateChunksToLoadForPlayer(int[] playerLocation, int viewDistance)
         {
             var maxX = (playerLocation[0] + viewDistance * 2 + _chunkSize) / _chunkSize;
             var minX = (playerLocation[0] - viewDistance * 2 - _chunkSize * 2) /
@@ -50,10 +53,10 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
 
-        private void DisplayMap(int playerx, int playery, int viewDistance, IReadOnlyCollection<Chunk> chunks)
+        private void DisplayMap(IPlayer player, int viewDistance, IReadOnlyCollection<Chunk> chunks)
         {
-            for (var y = playery; y < viewDistance * 2 + 1; y++)
-            for (var x = playerx; x < viewDistance * 2 + 1; x++)
+            for (var y = player.CurrentPosition[1]; y < viewDistance * 2 + 1; y++)
+            for (var x = player.CurrentPosition[0]; x < viewDistance * 2 + 1; x++)
             {
                 var chunk = chunks.FirstOrDefault(chunk =>
                     chunk.X * _chunkSize <= x && chunk.X * _chunkSize > x - _chunkSize && chunk.Y * _chunkSize >= y &&
