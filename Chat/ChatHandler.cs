@@ -1,4 +1,6 @@
-﻿using Network;
+﻿using Chat.DTO;
+using Network;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Chat
 {
-    public class ChatHandler : IPacketHandler
+    public class ChatHandler : IPacketHandler, IChatHandler
     {
         private ClientController _clientController;
 
@@ -19,14 +21,36 @@ namespace Chat
 
         public void SendSay(string message)
         {
-            _clientController.SendPayload(message, PacketType.Chat);
+            var chatDTO = new ChatDTO(ChatType.Say, message);
+            SendChat(chatDTO);
+        }
+
+        public void SendShout(string message)
+        {
+            var chatDTO = new ChatDTO(ChatType.Shout, message);
+            SendChat(chatDTO);
+        }
+
+        private void SendChat(ChatDTO chatDTO)
+        {
+            var payload = JsonConvert.SerializeObject(chatDTO);
+            _clientController.SendPayload(payload, PacketType.Chat);
         }
 
         public bool HandlePacket(PacketDTO packet)
         {
-            Console.WriteLine(packet.Payload);
+            var chatDTO = JsonConvert.DeserializeObject<ChatDTO>(packet.Payload);
+
+            switch (chatDTO.ChatType)
+            {
+                case ChatType.Say:
+                    Console.WriteLine($"say: {chatDTO.Message}");
+                    return true;
+                case ChatType.Shout:
+                    Console.WriteLine($"shout: {chatDTO.Message}");
+                    return true;
+            }
             return true;
         }
-
     }
 }

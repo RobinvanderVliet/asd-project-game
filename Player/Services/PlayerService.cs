@@ -1,4 +1,5 @@
 ﻿using System;
+using Chat;
 using Player.Model;
 
 namespace Player.Services
@@ -6,11 +7,13 @@ namespace Player.Services
     public class PlayerService : IPlayerService
     {
         private readonly IPlayerModel _playerModel;
+        private readonly IChatHandler _chatHandler;
         private const int DEFAULT_STEPS = 0;
 
-        public PlayerService(IPlayerModel playerModel)
+        public PlayerService(IPlayerModel playerModel, IChatHandler chatHandler)
         {
             _playerModel = playerModel;
+            _chatHandler = chatHandler;
         }
 
         public void Attack(string direction)
@@ -55,6 +58,7 @@ namespace Player.Services
 
         public void Say(string messageValue)
         {
+            _chatHandler.SendSay(messageValue);
             //code for chat with other players in team chat
             Console.WriteLine(_playerModel.Name + " sent message: " + messageValue);
         }

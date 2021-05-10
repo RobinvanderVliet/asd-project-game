@@ -7,6 +7,9 @@ using System.IO;
 using Player.Model;
 using WorldGeneration;
 using Player;
+using Chat;
+using Player.Services;
+using Network;
 
 namespace ASD_project
 {
@@ -36,6 +39,9 @@ namespace ASD_project
                     services.AddScoped<IItem, Item>();
                     services.AddScoped<IBitcoin, Bitcoin>();
                     services.AddScoped<IRadiationLevel, RadiationLevel>();
+                    services.AddScoped<NetworkComponent, NetworkComponent>();
+                    services.AddScoped<ClientController, ClientController>();
+                    services.AddScoped<IChatHandler, ChatHandler>();
                 })
                 .UseSerilog()
                 .Build();

@@ -37,6 +37,7 @@ namespace Network
                 .SetTarget("host")
                 .SetPacketType(packetType)
                 .SetPayload(payload)
+                .SetSessionID(_session.SessionId)
                 .Build();
 
             if (_hostController != null)
@@ -45,7 +46,6 @@ namespace Network
             }
             else
             {
-                packet.Header.SessionID = _session.SessionId; 
                 _networkComponent.SendPacket(packet);
             }
         }
