@@ -20,12 +20,12 @@ namespace Creature
 
         public void ApplyDamage(double amount)
         {
-            throw new System.NotImplementedException();
+            _playerStateMachine.CreatureData.Health -= amount;
         }
 
         public void HealAmount(double amount)
         {
-            throw new System.NotImplementedException();
+            _playerStateMachine.CreatureData.Health += amount;
         }
     }
 }

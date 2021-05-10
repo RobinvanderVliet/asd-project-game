@@ -11,9 +11,9 @@ namespace Creature
         {
             IWorld world = new DefaultWorld(25);
 
-            PlayerData playerData = new PlayerData(true, new Vector2(5, 5), 20, 5, 10, world);
-            MonsterData monsterData = new MonsterData(true, new Vector2(10, 10), 20, 5, 50, world, false);
-            MonsterData monsterData2 = new MonsterData(true, new Vector2(20, 20), 20, 5, 50, world, false);
+            PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world);
+            MonsterData monsterData = new MonsterData(new Vector2(10, 10), 20, 5, 50, world, false);
+            MonsterData monsterData2 = new MonsterData(new Vector2(20, 20), 20, 5, 50, world, false);
 
             ICreature player = new Player(playerData);
             ICreature creature = new Monster(monsterData);

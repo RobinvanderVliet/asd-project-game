@@ -5,18 +5,13 @@ namespace Creature.Creature.StateMachine.Data
 {
     public class PlayerData : ICreatureData
     {
-        private bool _alive;
         private Vector2 _position;
-        private int _health;
+        private double _health;
         private int _damage;
         private int _visionRange;
         private IWorld _world;
 
-        public bool IsAlive
-        {
-            get => _alive;
-            set => _alive = value;
-        }
+        public bool IsAlive { get => _health > 0; }
 
         public Vector2 Position
         {
@@ -24,7 +19,7 @@ namespace Creature.Creature.StateMachine.Data
             set => _position = value;
         }
 
-        public int Health
+        public double Health
         {
             get => _health;
             set => _health = value;
@@ -48,9 +43,8 @@ namespace Creature.Creature.StateMachine.Data
             set => _world = value;
         }
 
-        public PlayerData(bool isAlive, Vector2 position, int health, int damage, int visionRange, IWorld world)
+        public PlayerData(Vector2 position, double health, int damage, int visionRange, IWorld world)
         {
-            _alive = isAlive;
             _position = position;
             _health = health;
             _damage = damage;
