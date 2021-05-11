@@ -22,11 +22,11 @@ namespace DatabaseHandler.Repository
         }
 
         [ExcludeFromCodeCoverage]
-        public async Task<int> CreateAsync(Chunk obj)
+        public async Task<string> CreateAsync(Chunk obj)
         {
             var db = _connection.GetConnectionAsync();
             var result = await db.GetCollection<Chunk>(_collection).InsertAsync(obj);
-            return result.AsInt32;
+            return result.RawValue.ToString();
         }
 
         [ExcludeFromCodeCoverage]

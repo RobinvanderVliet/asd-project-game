@@ -23,20 +23,9 @@ namespace ASD_project
                 this._log = log;
             }
 
-            public async void Run()
+            public void Run()
             {
                 Console.WriteLine("Game is gestart");
-
-                var chunk = new Chunk()
-                {
-                    X = 10,
-                    Y = 10,
-                    RowSize = 5,
-                    Map = Array.Empty<ITile>()
-                };
-                
-                using var db = new DbConnection().GetConnection();
-                var result = db.GetCollection<Chunk>("Chunks").Insert(chunk);
 
                 // TODO: Remove from this method, team 2 will provide a command for it
                 //AgentConfigurationService agentConfigurationService = new AgentConfigurationService();

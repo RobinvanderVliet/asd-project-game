@@ -6,7 +6,7 @@ namespace DatabaseHandler.Repository
 {
     public interface IChunkRepository
     {
-        Task<int> CreateAsync(Chunk obj);
+        Task<string> CreateAsync(Chunk obj);
         Task<Chunk> ReadAsync(Chunk obj);
         Task<Chunk> UpdateAsync(Chunk obj);
         Task<int> DeleteAsync(Chunk obj);

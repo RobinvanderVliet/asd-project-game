@@ -43,7 +43,7 @@ namespace DatabaseHandler.Tests
             _repository.Setup(chunkRepo => chunkRepo.CreateAsync(It.IsAny<Chunk>())).ReturnsAsync((Chunk item) =>
             {
                 _chunkInMemoryDatabase.Add(item);
-                return 1;
+                return "succeeded";
             });
             
             // Act

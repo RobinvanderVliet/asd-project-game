@@ -16,7 +16,7 @@ namespace DatabaseHandler.Services
             _repository = repository;
         }
 
-        public async Task<int> CreateAsync(Chunk obj)
+        public async Task<string> CreateAsync(Chunk obj)
         {
             try
             {
