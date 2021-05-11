@@ -7,13 +7,6 @@ namespace Creature.Pathfinder
         public const int nodeSize = 1;
         public Node parent;
         public Vector2 position;
-        public Vector2 Center
-        {
-            get
-            {
-                return new Vector2(position.X + nodeSize / 2, position.Y + nodeSize / 2);
-            }
-        }
         public float distanceToTarget;
         public float cost;
         public float weight;
@@ -34,8 +27,8 @@ namespace Creature.Pathfinder
             this.position = pos;
             this.distanceToTarget = -1;
             this.cost = 1;
-            this.weight = weight;
             this.isWalkable = isWalkable;
+            this.weight = weight;
         }
     }
 }

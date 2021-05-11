@@ -27,59 +27,67 @@ namespace Creature
                 return _grid.Count;
             }
         }
+
         public Stack<Node> FindPath(Vector2 startPosition, Vector2 endPosition)
         {
             Node startNode = new Node(new Vector2((int)(startPosition.X / Node.nodeSize), (int)(startPosition.Y / Node.nodeSize)), true);
             Node endNode = new Node(new Vector2((int)(endPosition.X / Node.nodeSize), (int)(endPosition.Y / Node.nodeSize)), true);
 
-            Stack<Node> path = new Stack<Node>();
-            List<Node> openList = new List<Node>();
+            Dictionary<Node, Node> currentPath = new Dictionary<Node, Node>();
+            Stack<Node> pathStack = new Stack<Node>();
+
+            PriorityQueue<Node> openList = new PriorityQueue<Node>();
             List<Node> closedList = new List<Node>();
+
             List<Node> adjacencies;
-            Node current = startNode;
+            Node currentNode = startNode;
 
-            // Add start node to OpenList
-            openList.Add(startNode);
+            openList.Enqueue(currentNode, 0);
+            currentPath[startNode] = currentNode;
+            closedList.Add(currentNode);
 
-            while (openList.Count != 0 && !closedList.Exists(x => x.position == endNode.position))
+            while (openList.Count > 0 && !(currentNode.position.X.Equals(endNode.position.X) && currentNode.position.Y.Equals(endNode.position.Y)))
             {
-                current = openList[0];
-                openList.Remove(current);
-                closedList.Add(current);
-                adjacencies = GetAdjacentNodes(current);
+                Node lowestCostNode = openList.Dequeue();
+                currentPath[lowestCostNode] = currentNode;
 
-                foreach (Node n in adjacencies)
+                currentNode = lowestCostNode;
+
+                adjacencies = GetAdjacentNodes(currentNode);
+
+                foreach (Node adjNode in adjacencies)
                 {
-                    if (!closedList.Contains(n) && n.isWalkable)
+                    if (adjNode.isWalkable && (!closedList.Contains(adjNode) || currentNode.FScore < adjNode.FScore))
                     {
-                        if (!openList.Contains(n))
+                        if (closedList.Contains(adjNode))
                         {
-                            n.parent = current;
-                            n.distanceToTarget = Math.Abs(n.position.X - endNode.position.X) + Math.Abs(n.position.Y - endNode.position.Y);
-                            n.cost = n.weight + n.parent.cost;
-                            openList.Add(n);
-                            openList = openList.OrderBy(node => node.FScore).ToList<Node>();
+                            closedList.Remove(adjNode);
+                            currentPath.Remove(adjNode);
                         }
+
+                        closedList.Add(adjNode);
+                        adjNode.parent = currentNode;
+                        adjNode.distanceToTarget = Math.Abs(adjNode.position.X - endNode.position.X) + Math.Abs(adjNode.position.Y - endNode.position.Y);
+                        adjNode.cost = adjNode.weight + adjNode.parent.cost;
+                        openList.Enqueue(adjNode, adjNode.FScore);
                     }
                 }
             }
 
-            // Construct path, if end was not closed return null
-            if (!closedList.Exists(x => x.position == endNode.position))
-            {
+            if (currentNode == null) 
                 return null;
+
+            pathStack.Push(currentNode);
+
+            while (currentNode != startNode && currentNode != null)
+            {
+                pathStack.Push(currentNode);
+                currentNode = currentPath[currentNode];
             }
 
-            // If the end was reached, return the path
-            Node temp = closedList[closedList.IndexOf(current)];
-            if (temp == null) return null;
-            do
-            {
-                path.Push(temp);
-                temp = temp.parent;
-            } while (temp != startNode && temp != null);
-            return path;
+            return pathStack;
         }
+
         private List<Node> GetAdjacentNodes(Node node)
         {
             List<Node> temp = new List<Node>();
