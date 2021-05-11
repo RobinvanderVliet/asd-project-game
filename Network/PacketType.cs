@@ -4,10 +4,6 @@
     {
         Chat,
         Move,
-        Session,
-        GameAvailability,
-        GameAvailable,
-        RequestToJoinGame,
-        ClientJoinedGame
+        Session
     }
 }
