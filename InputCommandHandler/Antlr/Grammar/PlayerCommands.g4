@@ -57,9 +57,9 @@ command:
     REPLACE #replace |
     PAUSE #pause |
     RESUME #resume |
-    CREATE_SESSION SPACE message #createsession |
-    JOIN_SESSION SPACE message #joinsession |
-    FIND_SESSION #findsesion;
+    CREATE_SESSION SPACE message #createSession |
+    JOIN_SESSION SPACE message #joinSession |
+    FIND_SESSION #findSession;
 
 
 forward: FORWARD | UP | NORTH;
