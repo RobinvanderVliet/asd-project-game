@@ -64,8 +64,8 @@ namespace InputCommandHandler.Antlr.Transformer
                     case JoinSession:
                         TransformJoinSession((JoinSession)nodeBody[i]);
                         break;
-                    case FindSession:
-                        TransformFindSession((FindSession)nodeBody[i]);
+                    case RequestSessions:
+                        TransformRequestSessions((RequestSessions)nodeBody[i]);
                         break;
                 }
         }
@@ -139,9 +139,9 @@ namespace InputCommandHandler.Antlr.Transformer
             _playerService.JoinSession(joinSession.Message.Value);
         }
 
-        private void TransformFindSession(FindSession findSession)
+        private void TransformRequestSessions(RequestSessions requestSessions)
         {
-            _playerService.FindSession();
+            _playerService.RequestSessions();
         }
         
     }
