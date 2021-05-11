@@ -22,7 +22,7 @@ PAUSE : 'pause';
 RESUME : 'resume';
 CREATE_SESSION : 'create_session';
 JOIN_SESSION : 'join_session';
-FIND_SESSION : 'find_session';
+REQUEST_SESSIONS : 'request_sessions';
 
 FORWARD: 'forward';
 UP: 'up';
@@ -59,7 +59,7 @@ command:
     RESUME #resume |
     CREATE_SESSION SPACE message #createSession |
     JOIN_SESSION SPACE message #joinSession |
-    FIND_SESSION #findSession;
+    REQUEST_SESSIONS #requestSessions;
 
 
 forward: FORWARD | UP | NORTH;
