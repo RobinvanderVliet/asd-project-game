@@ -20,6 +20,9 @@ SHOUT: 'shout';
 REPLACE: 'replace';
 PAUSE : 'pause';
 RESUME : 'resume';
+CREATE_SESSION : 'create_session';
+JOIN_SESSION : 'join_session';
+FIND_SESSION : 'find_session';
 
 FORWARD: 'forward';
 UP: 'up';
@@ -53,7 +56,10 @@ command:
     SHOUT SPACE message #shout |
     REPLACE #replace |
     PAUSE #pause |
-    RESUME #resume;
+    RESUME #resume |
+    CREATE_SESSION SPACE message #createSession |
+    JOIN_SESSION SPACE message #joinSession |
+    FIND_SESSION #findSession;
 
 
 forward: FORWARD | UP | NORTH;
