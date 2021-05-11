@@ -28,7 +28,7 @@ namespace Network
                     _hostController.ReceivePacket(packet);
                 }
             }
-            else if(packet.Header.Target == "client" && _clientController != null)
+            else if((packet.Header.Target == "client" || packet.Header.Target == _originId) && _clientController != null)
             {
                 _clientController.HandlePacket(packet);
             }
