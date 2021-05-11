@@ -25,8 +25,10 @@ namespace Network
         {
             if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session)
             {
-                _packetQueue.Add(packet);
-                HandleQueue();
+                HandlePacket(packet);
+                
+                //_packetQueue.Add(packet);
+                //HandleQueue();
             }
            
         }
