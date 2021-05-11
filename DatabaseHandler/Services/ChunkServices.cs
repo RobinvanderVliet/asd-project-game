@@ -15,8 +15,8 @@ namespace DatabaseHandler.Services
         {
             _repository = repository;
         }
-        
-        public Chunk Create(Chunk obj)
+
+        public async Task<int> CreateAsync(Chunk obj)
         {
             try
             {
@@ -42,11 +42,11 @@ namespace DatabaseHandler.Services
             }
         }
 
-        public Chunk Update(Chunk oldObj, Chunk newObj)
+        public async Task<Chunk> UpdateAsync(Chunk obj)
         {
             try
             {
-                return _repository.Update(oldObj, newObj);
+                return await _repository.UpdateAsync(obj);
             }
             catch (LiteException ex)
             {
@@ -55,7 +55,7 @@ namespace DatabaseHandler.Services
             }
         }
 
-        public Chunk Delete(Chunk obj)
+        public async Task<int> DeleteAsync(Chunk obj)
         {
             try
             {

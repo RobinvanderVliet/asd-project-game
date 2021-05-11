@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using LiteDB;
 using Microsoft.Extensions.Logging;
@@ -6,53 +7,63 @@ using WorldGeneration.Models;
 
 namespace DatabaseHandler.Repository
 {
+    [ExcludeFromCodeCoverage]
     public class ChunkRepository : IChunkRepository
     {
         private readonly IDbConnection _connection;
         private readonly string _collection;
 
+        [ExcludeFromCodeCoverage]
         public ChunkRepository(IDbConnection connection, string collection = "Chunks")
         {
             _connection = connection;
+            _connection.SetConnectionString("Filename=.\\Chunks.db");
             _collection = collection;
         }
-        
-        public Chunk Create(Chunk obj)
+
+        [ExcludeFromCodeCoverage]
+        public async Task<int> CreateAsync(Chunk obj)
         {
-            var db = _connection.GetConnection();
-            var result = db.GetCollection<Chunk>(_collection).Insert(obj);
-            return obj;
+            var db = _connection.GetConnectionAsync();
+            var result = await db.GetCollection<Chunk>(_collection).InsertAsync(obj);
+            return result.AsInt32;
         }
 
-        public Chunk Read(Chunk obj)
+        [ExcludeFromCodeCoverage]
+        public async Task<Chunk> ReadAsync(Chunk obj)
         {
-            var db = _connection.GetConnection();
-            var chunk =  db.GetCollection<Chunk>(_collection).FindOne(chunk => chunk.X.Equals(obj.X) && chunk.Y.Equals(obj.Y));
+            var db = _connection.GetConnectionAsync();
+            var chunk = await db.GetCollection<Chunk>(_collection)
+                .FindOneAsync(c => c.X.Equals(obj.X) && c.Y.Equals(obj.Y));
             return chunk;
         }
 
-        public Chunk Update(Chunk oldObj, Chunk newObj)
+        [ExcludeFromCodeCoverage]
+        public async Task<Chunk> UpdateAsync(Chunk obj)
         {
-            //using var db = _connection.getConnectionASync();
-            //return await db.GetCollection<Chunk>(_collection).UpdateAsync();
-            throw new System.NotImplementedException();
+            var db = _connection.GetConnectionAsync();
+            var results = await db.GetCollection<Chunk>(_collection).UpdateAsync(obj);
+            return results ? obj : null;
         }
 
-        public Chunk Delete(Chunk obj)
+        [ExcludeFromCodeCoverage]
+        public async Task<int> DeleteAsync(Chunk obj)
         {
-            //using var db = _connection.getConnectionASync();
-            //return await db.GetCollection<Chunk>(_collection).DeleteAsync();
-            throw new System.NotImplementedException();
+            var db = _connection.GetConnectionAsync();
+            var results = await db.GetCollection<Chunk>(_collection).DeleteManyAsync(chunk => chunk.X.Equals(obj.X) && chunk.Y.Equals(obj.Y));
+            return results;
         }
 
-        public IEnumerable<Chunk> GetAll()
+        [ExcludeFromCodeCoverage]
+        public async Task<IEnumerable<Chunk>> GetAllAsync()
         {
             var db = _connection.GetConnection();
             var chunks = db.GetCollection<Chunk>(_collection).Query().ToList();
             return chunks;
         }
 
-        public int DeleteAll()
+        [ExcludeFromCodeCoverage]
+        public async Task<int> DeleteAllAsync()
         {
             var db = _connection.GetConnection();
             var result = db.GetCollection<Chunk>(_collection).DeleteAll();

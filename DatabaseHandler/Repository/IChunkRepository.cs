@@ -6,11 +6,11 @@ namespace DatabaseHandler.Repository
 {
     public interface IChunkRepository
     {
-        Chunk Create(Chunk obj);
-        Chunk Read(Chunk obj);
-        Chunk Update(Chunk oldObj, Chunk newObj);
-        Chunk Delete(Chunk obj);
-        IEnumerable<Chunk> GetAll();
-        int DeleteAll();
+        Task<int> CreateAsync(Chunk obj);
+        Task<Chunk> ReadAsync(Chunk obj);
+        Task<Chunk> UpdateAsync(Chunk obj);
+        Task<int> DeleteAsync(Chunk obj);
+        Task<IEnumerable<Chunk>> GetAllAsync();
+        Task<int> DeleteAllAsync();
     }
 }
