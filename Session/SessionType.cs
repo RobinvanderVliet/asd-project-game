@@ -2,8 +2,8 @@ namespace Session
 {
     public enum SessionType
     {
-        RequestSession,
-        RequestSessionResponse,
+        RequestSessions,
+        RequestSessionsResponse,
         RequestToJoinSession,
         ClientJoinedSession
     }

@@ -8,7 +8,7 @@ namespace Network
     {
         private NetworkComponent _networkComponent;
         private HostController _hostController;
-        private Session _session;
+        private string _sessionId;
         private Dictionary<string, PacketDTO> _availableGames = new();
         private Dictionary<PacketType, IPacketHandler> _subscribers = new();
 
@@ -19,7 +19,18 @@ namespace Network
 
         public bool HandlePacket(PacketDTO packet)
         {
-            if (packet.Header.PacketType == PacketType.GameAvailable)
+            if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session)
+            {
+                return _subscribers.GetValueOrDefault(packet.Header.PacketType).HandlePacket(packet);
+            }
+            else
+            {
+                return false;
+            }
+
+
+
+/*            if (packet.Header.PacketType == PacketType.GameAvailable)
             {
                 _availableGames.Add(packet.Header.SessionID, packet);
                 Console.WriteLine(packet.Header.SessionID + ": " + packet.Payload);
@@ -50,7 +61,26 @@ namespace Network
             else
             {
                 return _subscribers.GetValueOrDefault(packet.Header.PacketType).HandlePacket(packet);
+            }*/
+        }
+
+        public void SetSessionId(string sessionId)
+        {
+            _sessionId = sessionId;
+            if(_hostController != null)
+            {
+                _hostController.SetSessionId(sessionId);
             }
+        }
+
+        public void CreateHostController()
+        {
+            _hostController = new HostController(_networkComponent, this, _sessionId);
+        }
+
+        public string GetOriginId()
+        {
+            return _networkComponent.OriginId;
         }
 
         public void SendPayload(string payload, PacketType packetType)
@@ -64,7 +94,7 @@ namespace Network
                 .SetTarget("host")
                 .SetPacketType(packetType)
                 .SetPayload(payload)
-                .SetSessionID(_session.SessionId)
+                .SetSessionID(_sessionId)
                 .Build();
 
             if (_hostController != null)

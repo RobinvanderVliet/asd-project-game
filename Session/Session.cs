@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Network
+namespace Session
 {
     public class Session
     {

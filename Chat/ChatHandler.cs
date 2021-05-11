@@ -22,16 +22,16 @@ namespace Chat
         public void SendSay(string message)
         {
             var chatDTO = new ChatDTO(ChatType.Say, message);
-            SendChat(chatDTO);
+            SendChatDTO(chatDTO);
         }
 
         public void SendShout(string message)
         {
             var chatDTO = new ChatDTO(ChatType.Shout, message);
-            SendChat(chatDTO);
+            SendChatDTO(chatDTO);
         }
 
-        private void SendChat(ChatDTO chatDTO)
+        private void SendChatDTO(ChatDTO chatDTO)
         {
             var payload = JsonConvert.SerializeObject(chatDTO);
             _clientController.SendPayload(payload, PacketType.Chat);

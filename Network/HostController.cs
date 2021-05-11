@@ -8,27 +8,34 @@ namespace Network
     {
         private NetworkComponent _networkComponent;
         private IPacketHandler _client;
-        private Session _session;
+        private string _sessionId;
         private List<PacketDTO> _packetQueue;
 
-        public HostController(NetworkComponent networkComponent, IPacketHandler client, Session session)
+        public HostController(NetworkComponent networkComponent, IPacketHandler client, string sessionId)
         {
             _networkComponent = networkComponent;
             _client = client;
-            _session = session;
+            _sessionId = sessionId;
             _networkComponent.HostController = this;
             _packetQueue = new();
         }
 
         public void ReceivePacket(PacketDTO packet)
         {
-            PacketType packetType = packet.Header.PacketType;
-            string sessionId = packet.Header.SessionID;
+            if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session)
+            {
+                _packetQueue.Add(packet);
+                HandleQueue();
+            }
             
-            if (packetType == PacketType.GameAvailability)
+/*
+            PacketType packetType = packet.Header.PacketType;
+            string sessionId = packet.Header.SessionID;*/
+            
+/*            if (packetType == PacketType.GameAvailability)
             {
                 PacketDTO packetDto = new PacketBuilder()
-                    .SetSessionID(_session.SessionId)
+                    .SetSessionID(_sessionId)
                     .SetTarget("client")
                     .SetPacketType(PacketType.GameAvailable)
                     .SetPayload(_session.Name)
@@ -36,18 +43,13 @@ namespace Network
 
                 _networkComponent.SendPacket(packetDto);
                 return;
-            }
+            }*/
 
-            if (packetType == PacketType.RequestToJoinGame && IsTheSameSession(sessionId))
+/*            if (packetType == PacketType.RequestToJoinGame && IsTheSameSession(sessionId))
             {
                 AddPlayerToSession(packet);
                 return;
-            }
-            else if(packet.Header.SessionID == _session.SessionId)
-            {
-                _packetQueue.Add(packet);
-                HandleQueue();
-            }
+            }*/
         }
 
         private void HandleQueue()
@@ -73,9 +75,14 @@ namespace Network
             }
         }
 
+        internal void SetSessionId(string sessionId)
+        {
+            _sessionId = sessionId;
+        }
+
         private void AddPlayerToSession(PacketDTO packet)
         {
-            _session.AddClient(packet.Header.OriginID);
+/*            _session.AddClient(packet.Header.OriginID);
             Console.WriteLine("A new player with the id: " + packet.Header.OriginID + " joined your session.");
 
             // Notify all clients that a new client joined.
@@ -84,14 +91,14 @@ namespace Network
                 .SetSessionID(_session.SessionId)
                 .SetPacketType(PacketType.ClientJoinedGame)
                 .SetPayload(JsonConvert.SerializeObject(_session.GetAllClients()))
-                .Build();
+                .Build();*/
 
-            _networkComponent.SendPacket(packetDTO);
+/*            _networkComponent.SendPacket(packetDTO);*/
         }
 
         private bool IsTheSameSession(string sessionId)
         {
-            return sessionId == _session.SessionId;
+            return sessionId == _sessionId;
         }
     }
 }
