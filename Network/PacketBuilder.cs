@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Network
 {
-    class PacketBuilder
+    public class PacketBuilder
     {
         PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
         PacketDTO packetDTO = new PacketDTO();
