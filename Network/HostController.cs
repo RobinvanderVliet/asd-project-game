@@ -64,8 +64,8 @@ namespace Network
 
         private void HandlePacket(PacketDTO packet)
         {
-            HandlerResponseDTO succesfullyHandledPacket = _client.HandlePacket(packet);
-            if (!succesfullyHandledPacket.ReturnToSender)
+            HandlerResponseDTO handlerResponse = _client.HandlePacket(packet);
+            if (!handlerResponse.ReturnToSender)
             {
                 packet.Header.Target = "client";
                 _networkComponent.SendPacket(packet);
@@ -73,6 +73,7 @@ namespace Network
             else
             {
                 packet.Header.Target = packet.Header.OriginID;
+                packet.HandlerResponse = handlerResponse;
                 _networkComponent.SendPacket(packet);
             }
         }

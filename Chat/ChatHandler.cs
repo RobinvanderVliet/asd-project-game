@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Network.DTO;
 
 namespace Chat
 {
@@ -37,7 +38,7 @@ namespace Chat
             _clientController.SendPayload(payload, PacketType.Chat);
         }
 
-        public bool HandlePacket(PacketDTO packet)
+        public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var chatDTO = JsonConvert.DeserializeObject<ChatDTO>(packet.Payload);
 
@@ -45,12 +46,12 @@ namespace Chat
             {
                 case ChatType.Say:
                     Console.WriteLine($"say: {chatDTO.Message}");
-                    return true;
+                    return new HandlerResponseDTO(false, null);
                 case ChatType.Shout:
                     Console.WriteLine($"shout: {chatDTO.Message}");
-                    return true;
+                    return new HandlerResponseDTO(false, null);
             }
-            return true;
+            return new HandlerResponseDTO(false, null);
         }
     }
 }
