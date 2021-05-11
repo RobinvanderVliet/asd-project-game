@@ -1,6 +1,7 @@
 ﻿using System;
 using Chat;
 using Player.Model;
+using Session;
 
 namespace Player.Services
 {
@@ -8,6 +9,7 @@ namespace Player.Services
     {
         private readonly IPlayerModel _playerModel;
         private readonly IChatHandler _chatHandler;
+        private readonly ISessionHandler _sessionHandler;
         private const int DEFAULT_STEPS = 0;
 
         public PlayerService(IPlayerModel playerModel, IChatHandler chatHandler)
@@ -168,7 +170,22 @@ namespace Player.Services
             // the next line of code should be changed by sending newPosition to a relevant method
             WriteCommand(_playerModel.CurrentPosition);
         }
-        
+
+        public void CreateSession(string messageValue)
+        {
+            _sessionHandler.CreateSession(messageValue);
+        }
+
+        public void JoinSession(string messageValue)
+        {
+            _sessionHandler.JoinSession(messageValue);
+        }
+
+        public void FindSession()
+        {
+            _sessionHandler.FindSessions();
+        }
+
         // !!! METHODS BELOW ARE TEMPORARY, PROTOTYPE ONLY !!!
         private void WriteCommand(int[] newPosition)
         {

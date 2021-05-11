@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Chat\Chat.csproj" />
+    <ProjectReference Include="..\Session\Session.csproj" />
   </ItemGroup>
 
 </Project>
