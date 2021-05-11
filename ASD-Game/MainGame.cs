@@ -9,6 +9,7 @@ using WorldGeneration;
 using Player;
 using Agent.Services;
 using Chat;
+using Session;
 
 namespace ASD_project
 {
@@ -19,12 +20,14 @@ namespace ASD_project
             private readonly ILogger<MainGame> _log;
             private readonly IInventory _inventory;
             private readonly IChatHandler _chatHandler;
+            private readonly ISessionHandler _sessionHandler;
 
-            public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler)
+            public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler, ISessionHandler  sessionHandler)
             {
                 this._log = log;
                 _inventory = inventory;
                 _chatHandler = chatHandler;
+                _sessionHandler = sessionHandler;
             }
 
             public void Run()
@@ -40,7 +43,7 @@ namespace ASD_project
                 //moet later vervangen worden
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
                 PlayerModel playerModel = new PlayerModel("Name", _inventory, new Bitcoin(20), new RadiationLevel(1));
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler); 
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler); 
                 Console.WriteLine("Type input messages below");
                 while (true) // moet vervangen worden met variabele: isQuit 
                 {

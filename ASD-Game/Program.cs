@@ -10,6 +10,7 @@ using Player;
 using Chat;
 using Player.Services;
 using Network;
+using Session;
 
 namespace ASD_project
 {
@@ -42,6 +43,7 @@ namespace ASD_project
                     services.AddScoped<NetworkComponent, NetworkComponent>();
                     services.AddScoped<ClientController, ClientController>();
                     services.AddScoped<IChatHandler, ChatHandler>();
+                    services.AddScoped<ISessionHandler, SessionHandler>();
                 })
                 .UseSerilog()
                 .Build();

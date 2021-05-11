@@ -12,10 +12,11 @@ namespace Player.Services
         private readonly ISessionHandler _sessionHandler;
         private const int DEFAULT_STEPS = 0;
 
-        public PlayerService(IPlayerModel playerModel, IChatHandler chatHandler)
+        public PlayerService(IPlayerModel playerModel, IChatHandler chatHandler, ISessionHandler sessionHandler)
         {
             _playerModel = playerModel;
             _chatHandler = chatHandler;
+            _sessionHandler = sessionHandler;
         }
 
         public void Attack(string direction)
