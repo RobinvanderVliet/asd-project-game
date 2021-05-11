@@ -12,7 +12,7 @@ namespace Network
 
             NetworkComponent networkComponent = new NetworkComponent();
             ClientController clientController = new ClientController(networkComponent);
-            networkComponent.Client = clientController;
+            networkComponent.ClientController = clientController;
             
             if (roleResult != null && roleResult.ToLower() == "host")
             {

@@ -8,10 +8,10 @@ namespace Network
         private WebSocketConnection _webSocketConnection;
         private string _originId;
         public string OriginId { get => _originId;}
-        private IPacketListener _host;
-        public IPacketListener Host { get => _host; set => _host = value; }
-        private IPacketHandler _client;
-        public IPacketHandler Client { get => _client; set => _client = value; }
+        private IPacketListener _hostController;
+        public IPacketListener HostController { get => _hostController; set => _hostController = value; }
+        private IPacketHandler _clientController;
+        public IPacketHandler ClientController { get => _clientController; set => _clientController = value; }
 
         public NetworkComponent()
         {
@@ -21,16 +21,16 @@ namespace Network
 
         public void ReceivePacket(PacketDTO packet)
         {
-            if(_host != null)
+            if(_hostController != null)
             {
                 if(packet.Header.Target == "host")
                 {
-                    _host.ReceivePacket(packet);
+                    _hostController.ReceivePacket(packet);
                 }
             }
-            else if(packet.Header.Target == "client" && _client != null)
+            else if(packet.Header.Target == "client" && _clientController != null)
             {
-                _client.HandlePacket(packet);
+                _clientController.HandlePacket(packet);
             }
         }
 

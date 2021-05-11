@@ -15,7 +15,7 @@ namespace Network
             _networkComponent = networkComponent;
             _client = client;
             _session = session;
-            _networkComponent.Host = this;
+            _networkComponent.HostController = this;
         }
 
         public void ReceivePacket(PacketDTO packet)
