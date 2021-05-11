@@ -52,6 +52,11 @@ namespace Network
 
         public void SendPayload(string payload, PacketType packetType)
         {
+            if (String.IsNullOrEmpty(payload))
+            {
+                throw new Exception("Payload is empty.");
+            }
+            
             PacketDTO packet = new PacketDTO();
 
             packet.Header = new PacketHeaderDTO();
