@@ -38,18 +38,7 @@ namespace Network
 
             if (packetType == PacketType.RequestToJoinGame && IsTheSameSession(sessionId))
             {
-                _session.AddClient(packet.Header.OriginID);
-                Console.WriteLine("A new player with the id: " + packet.Header.OriginID + " joined your session.");
-                
-                // Notify all clients that a new client joined.
-                PacketDTO packetDTO = new PacketBuilder()
-                    .SetTarget("client")
-                    .SetSessionID(_session.SessionId)
-                    .SetPacketType(PacketType.ClientJoinedGame)
-                    .SetPayload(JsonConvert.SerializeObject(_session.GetAllClients()))
-                    .Build();
-                
-                _networkComponent.SendPacket(packetDTO);
+                AddPlayerToSession(packet);
                 return;
             }
             
@@ -66,6 +55,22 @@ namespace Network
                     //TODO: send error
                 }
             }
+        }
+
+        private void AddPlayerToSession(PacketDTO packet)
+        {
+            _session.AddClient(packet.Header.OriginID);
+            Console.WriteLine("A new player with the id: " + packet.Header.OriginID + " joined your session.");
+
+            // Notify all clients that a new client joined.
+            PacketDTO packetDTO = new PacketBuilder()
+                .SetTarget("client")
+                .SetSessionID(_session.SessionId)
+                .SetPacketType(PacketType.ClientJoinedGame)
+                .SetPayload(JsonConvert.SerializeObject(_session.GetAllClients()))
+                .Build();
+
+            _networkComponent.SendPacket(packetDTO);
         }
 
         private bool IsTheSameSession(string sessionId)
