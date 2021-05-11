@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DatabaseHandler.Repository;
-using LiteDB;
 using WorldGeneration.Models;
 
 namespace DatabaseHandler.Services
@@ -16,82 +15,66 @@ namespace DatabaseHandler.Services
             _repository = repository;
         }
 
-        public async Task<string> CreateAsync(Chunk obj)
+        public Task<string> CreateAsync(Chunk obj)
         {
             try
             {
-                return _repository.Create(obj);
+                return _repository.CreateAsync(obj);
             }
-            catch (LiteException ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 throw;
             }
         }
 
-        public Chunk Read(Chunk obj)
+        public Task<Chunk> ReadAsync(Chunk obj)
         {
             try
             {
-                return _repository.Read(obj);
+                return _repository.ReadAsync(obj);
             }
-            catch (LiteException ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 throw;
             }
         }
 
-        public async Task<Chunk> UpdateAsync(Chunk obj)
+        public Task<Chunk> UpdateAsync(Chunk obj)
         {
             try
             {
-                return await _repository.UpdateAsync(obj);
+                return _repository.UpdateAsync(obj);
             }
-            catch (LiteException ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 throw;
             }
         }
 
-        public async Task<int> DeleteAsync(Chunk obj)
+        public Task<int> DeleteAsync(Chunk obj)
         {
             try
             {
-                return _repository.Delete(obj);
+                return _repository.DeleteAsync(obj);
             }
-            catch (LiteException ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 throw;
             }
         }
 
-        public IEnumerable<Chunk> GetAll()
+        public Task<IEnumerable<Chunk>> GetAllAsync()
         {
-            try
-            {
-                return _repository.GetAll();
-            }
-            catch (LiteException ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+            return _repository.GetAllAsync();
         }
 
-        public int DeleteAll()
+        public Task<int> DeleteAllAsync()
         {
-            try
-            {
-                return _repository.DeleteAll();
-            }
-            catch (LiteException ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
+            return _repository.DeleteAllAsync();
         }
     }
 }

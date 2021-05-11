@@ -7,9 +7,9 @@ namespace DatabaseHandler.Tests
     {
         public ChunkFaker()
         {
-            RuleFor(chunk => chunk.X, f => f.Random.Int(0, 50));
-            RuleFor(chunk => chunk.Y, f => f.Random.Int(0, 50));
-            RuleFor(chunk => chunk.RowSize, f => f.Random.Int(0, 10));
+            RuleFor(chunk => chunk.X, f => f.Random.Int(0, 10000));
+            RuleFor(chunk => chunk.Y, f => f.Random.Int(0, 10000));
+            RuleFor(chunk => chunk.RowSize, f => f.Random.Int(0, 500));
         }
     }
 }

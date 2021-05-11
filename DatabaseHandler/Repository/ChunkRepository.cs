@@ -25,7 +25,7 @@ namespace DatabaseHandler.Repository
         public async Task<string> CreateAsync(Chunk obj)
         {
             var db = _connection.GetConnectionAsync();
-            var result = await db.GetCollection<Chunk>(_collection).InsertAsync(obj);
+            var result = await db.GetCollection<Chunk>(_collection).InsertAsync(obj).ConfigureAwait(false);
             return result.RawValue.ToString();
         }
 
@@ -34,7 +34,7 @@ namespace DatabaseHandler.Repository
         {
             var db = _connection.GetConnectionAsync();
             var chunk = await db.GetCollection<Chunk>(_collection)
-                .FindOneAsync(c => c.X.Equals(obj.X) && c.Y.Equals(obj.Y));
+                .FindOneAsync(c => c.X.Equals(obj.X) && c.Y.Equals(obj.Y)).ConfigureAwait(false);
             return chunk;
         }
 
@@ -42,7 +42,7 @@ namespace DatabaseHandler.Repository
         public async Task<Chunk> UpdateAsync(Chunk obj)
         {
             var db = _connection.GetConnectionAsync();
-            var results = await db.GetCollection<Chunk>(_collection).UpdateAsync(obj);
+            var results = await db.GetCollection<Chunk>(_collection).UpdateAsync(obj).ConfigureAwait(false);
             return results ? obj : null;
         }
 
@@ -50,23 +50,23 @@ namespace DatabaseHandler.Repository
         public async Task<int> DeleteAsync(Chunk obj)
         {
             var db = _connection.GetConnectionAsync();
-            var results = await db.GetCollection<Chunk>(_collection).DeleteManyAsync(chunk => chunk.X.Equals(obj.X) && chunk.Y.Equals(obj.Y));
+            var results = await db.GetCollection<Chunk>(_collection).DeleteManyAsync(chunk => chunk.X.Equals(obj.X) && chunk.Y.Equals(obj.Y)).ConfigureAwait(false);
             return results;
         }
 
         [ExcludeFromCodeCoverage]
         public async Task<IEnumerable<Chunk>> GetAllAsync()
         {
-            var db = _connection.GetConnection();
-            var chunks = db.GetCollection<Chunk>(_collection).Query().ToList();
+            var db = _connection.GetConnectionAsync();
+            var chunks = await db.GetCollection<Chunk>(_collection).Query().ToListAsync().ConfigureAwait(false);
             return chunks;
         }
 
         [ExcludeFromCodeCoverage]
         public async Task<int> DeleteAllAsync()
         {
-            var db = _connection.GetConnection();
-            var result = db.GetCollection<Chunk>(_collection).DeleteAll();
+            var db = _connection.GetConnectionAsync();
+            var result = await db.GetCollection<Chunk>(_collection).DeleteAllAsync().ConfigureAwait(false);
             return result;
         }
     }
