@@ -131,17 +131,17 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformCreateSession(CreateSession createSession)
         {
-            
+            _playerService.CreateSession(createSession.Message.Value);
         }
 
         private void TransformJoinSession(JoinSession joinSession)
         {
-            
+            _playerService.JoinSession(joinSession.Message.Value);
         }
 
         private void TransformFindSession(FindSession findSession)
         {
-            
+            _playerService.FindSession();
         }
         
     }
