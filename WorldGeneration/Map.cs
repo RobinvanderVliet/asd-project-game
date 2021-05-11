@@ -10,7 +10,7 @@ namespace WorldGeneration
     {
         private readonly int _chunkSize;
         private readonly int _seed;
-        private List<Chunk> _chunks; //idk why it says this can be readonly, in line 33 i add chunks and in line 49 i remove chunks. NOT readonly
+        private List<Chunk> _chunks; // idk why it says this can be readonly, in line 33 i add chunks and in line 49 i remove chunks. NOT readonly
         private readonly Database.Database _db;
         private List<int[]> _chunksWithinLoadingRange;
 
@@ -22,7 +22,7 @@ namespace WorldGeneration
             _chunks = new List<Chunk>();
         }
 
-        //checks if there are new chunks that have to be loaded
+        // checks if there are new chunks that have to be loaded
         private void LoadArea(int playerX, int playerY, int viewDistance)
         {
             _chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
@@ -39,7 +39,7 @@ namespace WorldGeneration
             }
         }
 
-        //cleanup function to forget chunks out of loading range
+        // cleanup function to forget chunks out of loading range
         private void ForgetUnloadedChunks()
         {
             foreach (var loadedChunk in _chunks)
@@ -59,11 +59,11 @@ namespace WorldGeneration
 
         private List<int[]> CalculateChunksToLoad(int playerX, int playerY, int viewDistance)
         {
-            //viewDistance * 2 is to get a full screen
-            //, + playerX to get to the right location
-            //, + chunksize to add some loading buffer
-            //, / chunksize to convert tile coordinates to world coordinates
-            //same for the other variables
+            // viewDistance * 2 is to get a full screen
+            // , + playerX to get to the right location
+            // , + chunksize to add some loading buffer
+            // , / chunksize to convert tile coordinates to world coordinates
+            // same for the other variables
             var maxX = (playerX + viewDistance * 2 + _chunkSize) / _chunkSize; 
             var minX = (playerX - viewDistance * 2 - _chunkSize) / _chunkSize;
             var maxY = (playerY + viewDistance * 2 + _chunkSize) / _chunkSize + 1;
@@ -128,7 +128,7 @@ namespace WorldGeneration
             _db.DeleteTileMap();
         }
         
-        //find a LOADED tile by the coordinates
+        // find a LOADED tile by the coordinates
         public ITile GetLoadedTileByXAndY(int x, int y)
         {
             return GetChunkForTileXAndY(x, y).GetTileByWorldCoordinates(x, y);

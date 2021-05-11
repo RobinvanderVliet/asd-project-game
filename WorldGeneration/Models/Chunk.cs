@@ -19,7 +19,7 @@ namespace WorldGeneration.Models
             RowSize = rowSize;
         }
         
-        //writes out the symbols for the tilemap of the current chunk in the proper shape. Mostly for debug purposes at this point
+        // writes out the symbols for the tilemap of the current chunk in the proper shape. Mostly for debug purposes at this point
         public void DisplayChunk()
         {
             for (var i = 0; i < Map.Length; i++)
@@ -33,7 +33,7 @@ namespace WorldGeneration.Models
             Console.WriteLine("");
         }
 
-        //returns the coordinates relative to the start (left top) of the chunk. 0,0 is the left top. First value is x, second is y.
+        // returns the coordinates relative to the start (left top) of the chunk. 0,0 is the left top. First value is x, second is y.
         private int[] GetTileCoordinatesInChunk(int indexInArray)
         {
             var x = indexInArray % RowSize;
@@ -41,7 +41,7 @@ namespace WorldGeneration.Models
             return new[] {x, y};
         }
 
-        //returns the coordinates relative to the center of the world. First value is x, second is y.
+        // returns the coordinates relative to the center of the world. First value is x, second is y.
         private int[] GetTileCoordinatesInWorld(int indexInArray)
         {
             var internalCoordinates = GetTileCoordinatesInChunk(indexInArray);

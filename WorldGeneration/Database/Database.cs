@@ -17,7 +17,7 @@ namespace WorldGeneration.Database
             _mapCollection = mapCollection;
         }
 
-        //read function name
+        // read function name
         public void InsertChunkIntoDatabase(Chunk chunk)
         {
             try
@@ -32,7 +32,7 @@ namespace WorldGeneration.Database
             }
         }
 
-        //returns Chunk from database after finding it by Chunk x and y.
+        // returns Chunk from database after finding it by Chunk x and y.
         public Chunk GetChunk(int chunkXValue, int chunkYValue)
         {
             try
@@ -48,13 +48,13 @@ namespace WorldGeneration.Database
                     case 0:
                         return null;
                     case >1:
-                        throw new DatabaseException("There were multiple matching chunks found. bad! this bad!");
+                        throw new DatabaseException("There were multiple matching chunks found where a single was expected");
                     case 1:
                         return new Chunk(queryresults.First().x, queryresults.First().y, queryresults.First().map,
                             queryresults.First().rowSize);
                     default:
                         throw new DatabaseException(
-                            "Extremely unexpected result from query. like, this is only here in case of a count being negative or null. So pretty much unreachable code.");
+                            "Result count is negative or null");
                 }
             }
             catch (Exception e)
@@ -64,7 +64,7 @@ namespace WorldGeneration.Database
             }
         }
 
-        //returns all Chunks from the database in a list. Throws a error if there are no Chunks.
+        // returns all Chunks from the database in a list. Throws a error if there are no Chunks.
         public IEnumerable<Chunk> GetAllChunks()
         {
             try
@@ -95,7 +95,7 @@ namespace WorldGeneration.Database
             }
         }
 
-        //Drops the Chunks collection.
+        // Drops the Chunks collection.
         public void DeleteTileMap()
         {
             try
@@ -110,7 +110,7 @@ namespace WorldGeneration.Database
             }
         }
 
-        //Returns the collection connection.    
+        // Returns the collection connection.    
         private ILiteCollection<Chunk> GetMapCollection(ILiteDatabase db)
         {
             return db.GetCollection<Chunk>(_mapCollection);
