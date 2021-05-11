@@ -183,7 +183,7 @@ namespace Player.Services
 
         public void FindSession()
         {
-            _sessionHandler.FindSessions();
+            _sessionHandler.RequestSessions();
         }
 
         // !!! METHODS BELOW ARE TEMPORARY, PROTOTYPE ONLY !!!
