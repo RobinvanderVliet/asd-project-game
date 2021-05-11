@@ -28,29 +28,7 @@ namespace Network
                 _packetQueue.Add(packet);
                 HandleQueue();
             }
-            
-/*
-            PacketType packetType = packet.Header.PacketType;
-            string sessionId = packet.Header.SessionID;*/
-            
-/*            if (packetType == PacketType.GameAvailability)
-            {
-                PacketDTO packetDto = new PacketBuilder()
-                    .SetSessionID(_sessionId)
-                    .SetTarget("client")
-                    .SetPacketType(PacketType.GameAvailable)
-                    .SetPayload(_session.Name)
-                    .Build();
-
-                _networkComponent.SendPacket(packetDto);
-                return;
-            }*/
-
-/*            if (packetType == PacketType.RequestToJoinGame && IsTheSameSession(sessionId))
-            {
-                AddPlayerToSession(packet);
-                return;
-            }*/
+           
         }
 
         private void HandleQueue()
@@ -78,30 +56,9 @@ namespace Network
             }
         }
 
-        internal void SetSessionId(string sessionId)
+        public void SetSessionId(string sessionId)
         {
             _sessionId = sessionId;
-        }
-
-        private void AddPlayerToSession(PacketDTO packet)
-        {
-/*            _session.AddClient(packet.Header.OriginID);
-            Console.WriteLine("A new player with the id: " + packet.Header.OriginID + " joined your session.");
-
-            // Notify all clients that a new client joined.
-            PacketDTO packetDTO = new PacketBuilder()
-                .SetTarget("client")
-                .SetSessionID(_session.SessionId)
-                .SetPacketType(PacketType.ClientJoinedGame)
-                .SetPayload(JsonConvert.SerializeObject(_session.GetAllClients()))
-                .Build();*/
-
-/*            _networkComponent.SendPacket(packetDTO);*/
-        }
-
-        private bool IsTheSameSession(string sessionId)
-        {
-            return sessionId == _sessionId;
         }
     }
 }

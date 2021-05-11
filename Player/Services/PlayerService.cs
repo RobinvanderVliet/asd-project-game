@@ -181,9 +181,9 @@ namespace Player.Services
             _sessionHandler.JoinSession(messageValue);
         }
 
-        public void FindSession()
+        public void RequestSessions()
         {
-            _sessionHandler.FindSessions();
+            _sessionHandler.RequestSessions();
         }
 
         // !!! METHODS BELOW ARE TEMPORARY, PROTOTYPE ONLY !!!
