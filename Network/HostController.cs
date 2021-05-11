@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Network.DTO;
 using Newtonsoft.Json;
 
 namespace Network
@@ -63,15 +64,16 @@ namespace Network
 
         private void HandlePacket(PacketDTO packet)
         {
-            bool succesfullyHandledPacket = _client.HandlePacket(packet);
-            if (succesfullyHandledPacket)
+            HandlerResponseDTO succesfullyHandledPacket = _client.HandlePacket(packet);
+            if (!succesfullyHandledPacket.ReturnToSender)
             {
                 packet.Header.Target = "client";
                 _networkComponent.SendPacket(packet);
             }
             else
             {
-                //TODO: send error
+                packet.Header.Target = packet.Header.OriginID;
+                _networkComponent.SendPacket(packet);
             }
         }
 

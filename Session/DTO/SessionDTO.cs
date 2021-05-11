@@ -6,8 +6,9 @@ namespace Session.DTO
         
         public string Name { get; set; }
 
-        public SessionDTO(SessionType sessionType)
+        public SessionDTO(SessionType sessionType, string name)
         {
+            Name = name;
             SessionType = sessionType;
         }
     }

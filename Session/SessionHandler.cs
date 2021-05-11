@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Network.DTO;
 
 namespace Session
 {
@@ -60,7 +61,7 @@ namespace Session
             _clientController.SendPayload(payload, PacketType.Session);
         }
 
-        public bool HandlePacket(PacketDTO packet)
+        public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
 
@@ -68,18 +69,21 @@ namespace Session
             {
                 case SessionType.RequestSessions:
                     return requestSessions();
-                case ChatType.Shout:
-                    Console.WriteLine($"shout: {chatDTO.Message}");
+                case SessionType.RequestSessionsResponse:
+                    return true;
+                case SessionType.RequestToJoinSession:
+                    return true;
+                case SessionType.ClientJoinedSession:
                     return true;
             }
             return true;
         }
 
-        private bool requestSessions()
+        private HandlerResponseDTO requestSessions()
         {
-
-
-
+            var sessionDTO = new SessionDTO(SessionType.RequestSessionsResponse, _session.Name);
+            var jsonObject = JsonConvert.SerializeObject(sessionDTO);
+            return new HandlerResponseDTO(true, jsonObject);
         }
     }
 }

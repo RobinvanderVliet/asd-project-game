@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Network.DTO;
 using Newtonsoft.Json;
 
 namespace Network
@@ -17,7 +18,7 @@ namespace Network
             _networkComponent = networkComponent;
         }
 
-        public bool HandlePacket(PacketDTO packet)
+        public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session)
             {
@@ -25,7 +26,7 @@ namespace Network
             }
             else
             {
-                return false;
+                return new HandlerResponseDTO(true, null);
             }
 
 
