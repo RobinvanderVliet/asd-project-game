@@ -10,7 +10,7 @@ namespace DatabaseHandler
     {
         private readonly ILogger<DbConnection> _log;
         private string _connectionString;
-        
+
         public DbConnection(ILogger<DbConnection> log)
         {
             _log = log;
@@ -35,11 +35,8 @@ namespace DatabaseHandler
         {
             try
             {
-                if (_connectionString == null)
-                {
-                    throw new ArgumentNullException($"Connection string is not declared?");
-                }
-                
+                if (_connectionString == null) throw new ArgumentNullException("Connection string is not declared?");
+
                 var connection = new LiteDatabaseAsync(_connectionString);
                 return connection;
             }

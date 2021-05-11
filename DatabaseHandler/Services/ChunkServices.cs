@@ -2,17 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DatabaseHandler.Repository;
+using Microsoft.Extensions.Logging;
 using WorldGeneration.Models;
 
 namespace DatabaseHandler.Services
 {
     public class ChunkServices : IChunkServices
     {
+        private readonly ILogger<ChunkServices> _log;
         private readonly IChunkRepository _repository;
-        
-        public ChunkServices( IChunkRepository repository)
+
+        public ChunkServices(IChunkRepository repository, ILogger<ChunkServices> log)
         {
             _repository = repository;
+            _log = log;
         }
 
         public Task<string> CreateAsync(Chunk obj)
@@ -23,7 +26,7 @@ namespace DatabaseHandler.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _log.LogError("Exception: {Message}", ex.Message);
                 throw;
             }
         }
@@ -36,7 +39,7 @@ namespace DatabaseHandler.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _log.LogError("Exception: {Message}", ex.Message);
                 throw;
             }
         }
@@ -49,7 +52,7 @@ namespace DatabaseHandler.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _log.LogError("Exception: {Message}", ex.Message);
                 throw;
             }
         }
@@ -62,7 +65,7 @@ namespace DatabaseHandler.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _log.LogError("Exception: {Message}", ex.Message);
                 throw;
             }
         }

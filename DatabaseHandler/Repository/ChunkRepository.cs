@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using LiteDB;
-using Microsoft.Extensions.Logging;
 using WorldGeneration.Models;
 
 namespace DatabaseHandler.Repository
@@ -50,7 +48,8 @@ namespace DatabaseHandler.Repository
         public async Task<int> DeleteAsync(Chunk obj)
         {
             var db = _connection.GetConnectionAsync();
-            var results = await db.GetCollection<Chunk>(_collection).DeleteManyAsync(chunk => chunk.X.Equals(obj.X) && chunk.Y.Equals(obj.Y)).ConfigureAwait(false);
+            var results = await db.GetCollection<Chunk>(_collection)
+                .DeleteManyAsync(chunk => chunk.X.Equals(obj.X) && chunk.Y.Equals(obj.Y)).ConfigureAwait(false);
             return results;
         }
 
