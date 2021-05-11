@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using WebSocketSharp;
 using Microsoft.Extensions.Configuration;
@@ -91,7 +91,8 @@ namespace Network
         {
             var config = new ConfigurationBuilder().SetBasePath(AppDomain.CurrentDomain.BaseDirectory).AddJsonFile("appsettings.json").Build();
             var section = config.GetSection(nameof(WebSocketConnectionConfig));
-            _webSocketConnectionConfig = section.Get<WebSocketConnectionConfig>();
+            var result = section.Get<WebSocketConnectionConfig>();
+            _webSocketConnectionConfig = result;
         }
     }
 }

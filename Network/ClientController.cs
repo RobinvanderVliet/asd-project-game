@@ -10,6 +10,7 @@ namespace Network
         private HostController _hostController;
         private Session _session;
         private Dictionary<string, PacketDTO> _availableGames = new();
+        private Dictionary<PacketType, IPacketHandler> _subscribers = new();
 
         public ClientController(NetworkComponent networkComponent)
         {
@@ -46,8 +47,10 @@ namespace Network
 
                 return true;
             }
-
-            return true;
+            else
+            {
+                return _subscribers.GetValueOrDefault(packet.Header.PacketType).HandlePacket(packet);
+            }
         }
 
         public void SendPayload(string payload, PacketType packetType)
@@ -56,13 +59,13 @@ namespace Network
             {
                 throw new Exception("Payload is empty.");
             }
-            
-            PacketDTO packet = new PacketDTO();
 
-            packet.Header = new PacketHeaderDTO();
-            packet.Header.PacketType = packetType;
-            packet.Header.Target = "host"; // Make target into enum
-            packet.Payload = payload;
+            PacketDTO packet = new PacketBuilder()
+                .SetTarget("host")
+                .SetPacketType(packetType)
+                .SetPayload(payload)
+                .SetSessionID(_session.SessionId)
+                .Build();
 
             if (_hostController != null)
             {
@@ -70,7 +73,6 @@ namespace Network
             }
             else
             {
-                packet.Header.SessionID = _session.SessionId;
                 _networkComponent.SendPacket(packet);
             }
         }
@@ -119,6 +121,11 @@ namespace Network
         private bool IsTheSameSession(string sessionId)
         {
             return sessionId == _session.SessionId;
+        }
+
+        public void SubscribeToPacketType(IPacketHandler packetHandler, PacketType packetType)
+        {
+            _subscribers.Add(packetType, packetHandler);
         }
     }
 }

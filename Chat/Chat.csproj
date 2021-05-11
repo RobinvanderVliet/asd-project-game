@@ -11,10 +11,6 @@
     </PackageReference>
     <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="antlr\grammar\PlayerCommands.g4" />
-  </ItemGroup>
   
   <ItemGroup>
     <Reference Include="Player, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
@@ -23,7 +19,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\Player\Player.csproj" />
+    <ProjectReference Include="..\Network\Network.csproj" />
   </ItemGroup>
 
 </Project>

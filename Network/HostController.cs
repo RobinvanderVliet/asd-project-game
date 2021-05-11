@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -9,6 +9,7 @@ namespace Network
         private NetworkComponent _networkComponent;
         private IPacketHandler _client;
         private Session _session;
+        private List<PacketDTO> _packetQueue;
 
         public HostController(NetworkComponent networkComponent, IPacketHandler client, Session session)
         {
@@ -16,6 +17,7 @@ namespace Network
             _client = client;
             _session = session;
             _networkComponent.HostController = this;
+            _packetQueue = new();
         }
 
         public void ReceivePacket(PacketDTO packet)
@@ -41,19 +43,33 @@ namespace Network
                 AddPlayerToSession(packet);
                 return;
             }
-            
-            if(packet.Header.SessionID == _session.SessionId)
+            else if(packet.Header.SessionID == _session.SessionId)
             {
-                bool success = _client.HandlePacket(packet);
-                if (success)
-                {
-                    packet.Header.Target = "client";
-                    _networkComponent.SendPacket(packet);
-                }
-                else
-                {
-                    //TODO: send error
-                }
+                _packetQueue.Add(packet);
+                HandleQueue();
+            }
+        }
+
+        private void HandleQueue()
+        {
+            foreach(var packet in _packetQueue)
+            {
+                HandlePacket(packet);
+                _packetQueue.Remove(packet);
+            }
+        }
+
+        private void HandlePacket(PacketDTO packet)
+        {
+            bool succesfullyHandledPacket = _client.HandlePacket(packet);
+            if (succesfullyHandledPacket)
+            {
+                packet.Header.Target = "client";
+                _networkComponent.SendPacket(packet);
+            }
+            else
+            {
+                //TODO: send error
             }
         }
 
