@@ -10,7 +10,6 @@ namespace Network
         private NetworkComponent _networkComponent;
         private HostController _hostController;
         private string _sessionId;
-        private Dictionary<string, PacketDTO> _availableGames = new();
         private Dictionary<PacketType, IPacketHandler> _subscribers = new();
 
         public ClientController(NetworkComponent networkComponent)
@@ -65,17 +64,12 @@ namespace Network
 
             if (_hostController != null)
             {
-                _hostController.ReceivePacket(packet); //host must check for session?
+                _hostController.ReceivePacket(packet);
             }
             else
             {
                 _networkComponent.SendPacket(packet);
             }
-        }
-
-        private bool IsTheSameSession(string sessionId)
-        {
-            return sessionId == _sessionId;
         }
 
         public void SubscribeToPacketType(IPacketHandler packetHandler, PacketType packetType)
