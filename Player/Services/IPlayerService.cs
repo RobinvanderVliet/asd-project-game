@@ -48,6 +48,6 @@ namespace Player.Services
 
         public void CreateSession(string messageValue);
         public void JoinSession(string messageValue);
-        public void FindSession();
+        public void RequestSessions();
     }
 }

@@ -102,12 +102,12 @@ namespace InputCommandHandler.Antlr.Parser
             _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
-        public override void EnterFindSession(PlayerCommandsParser.FindSessionContext context)
+        public override void EnterRequestSessions(PlayerCommandsParser.RequestSessionsContext context)
         {
-            _currentContainer.Push(new FindSession());
+            _currentContainer.Push(new RequestSessions());
         }
 
-        public override void ExitFindSession(PlayerCommandsParser.FindSessionContext context)
+        public override void ExitRequestSessions(PlayerCommandsParser.RequestSessionsContext context)
         {
             _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
