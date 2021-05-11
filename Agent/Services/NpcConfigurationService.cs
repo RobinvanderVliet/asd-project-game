@@ -11,11 +11,8 @@ namespace Agent.Services
 {
     public class NpcConfigurationService : BaseConfigurationService
     {
-        private const string CANCEL_COMMAND = "cancel";
         private List<Configuration> _npcConfigurations;
-        public ConsoleRetriever _consoleRetriever;
-        public String lastError = "";
-        
+
         public NpcConfigurationService(List<Configuration> npcConfigurations, FileToDictionaryMapper fileToDictionaryMapper)
         {
             _npcConfigurations = npcConfigurations;
@@ -29,9 +26,7 @@ namespace Agent.Services
         {
             var npcConfiguration = new NpcConfiguration();
             npcConfiguration.NpcName = npcName;
-
             npcConfiguration.Settings = _fileToDictionaryMapper.MapFileToConfiguration(filepath);
-            
             _npcConfigurations.Add(npcConfiguration);
         }
 
@@ -45,12 +40,10 @@ namespace Agent.Services
             //TODO: Seems like duplicate code for now, but must be refactored later to match anticipated feature 'Configure NPC during a game'
             Console.WriteLine("What NPC do you wish to configure?");
             var npc = _consoleRetriever.GetConsoleLine();
-            
             if (npc.Equals(CANCEL_COMMAND))
             {
                 return;
             }
-            
             Console.WriteLine("Please provide code for the NPC");
             var code = _consoleRetriever.GetConsoleLine();
             
@@ -61,7 +54,6 @@ namespace Agent.Services
                 _pipeline.ParseString(code);
                 _pipeline.CheckAst();
                 var output = _pipeline.GenerateAst();
-
                 string fileName = "npc\\" + npc + "-config.cfg";
                 _fileHandler.ExportFile(output, fileName);
             }

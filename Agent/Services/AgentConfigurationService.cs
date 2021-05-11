@@ -10,10 +10,6 @@ namespace Agent.Services
 {
     public class AgentConfigurationService : BaseConfigurationService
     {
-        private const string CANCEL_COMMAND = "cancel";
-        private const string LOAD_COMMAND = "load";
-        public ConsoleRetriever _consoleRetriever;
-        public String lastError = "";
         private InlineConfig inlineConfig;
         private List<Configuration> _agentConfigurations;
 
@@ -77,9 +73,7 @@ namespace Agent.Services
         {
             var agentConfiguration = new AgentConfiguration();
             agentConfiguration.AgentName = agentName;
-
             agentConfiguration.Settings = _fileToDictionaryMapper.MapFileToConfiguration(filepath);
-
             _agentConfigurations.Add(agentConfiguration);
         }
         
