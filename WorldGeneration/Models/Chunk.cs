@@ -3,7 +3,7 @@ using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Models
 {
-    public class Chunk
+    public class Chunk : IEquatable<Chunk>
     {
         public Chunk(int x, int y, ITile[] map, int rowSize)
         {
@@ -54,6 +54,11 @@ namespace WorldGeneration.Models
         {
             // return (x % RowSize) + (Y * RowSize + (y - Y * RowSize) * RowSize);
             return x % RowSize + (Y * RowSize - y) * RowSize;
+        }
+
+        public bool Equals(Chunk other)
+        {
+            return other != null && X == other.X && Y == other.Y && RowSize == other.RowSize;
         }
     }
 }
