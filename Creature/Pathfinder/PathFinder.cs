@@ -33,7 +33,6 @@ namespace Creature
             Node startNode = new Node(new Vector2((int)(startPosition.X / Node.nodeSize), (int)(startPosition.Y / Node.nodeSize)), true);
             Node endNode = new Node(new Vector2((int)(endPosition.X / Node.nodeSize), (int)(endPosition.Y / Node.nodeSize)), true);
 
-            Dictionary<Node, Node> currentPath = new Dictionary<Node, Node>();
             Stack<Node> pathStack = new Stack<Node>();
 
             PriorityQueue<Node> openList = new PriorityQueue<Node>();
@@ -42,47 +41,49 @@ namespace Creature
             List<Node> adjacencies;
             Node currentNode = startNode;
 
-            openList.Enqueue(currentNode, 0);
-            currentPath[startNode] = currentNode;
-            closedList.Add(currentNode);
+            openList.Enqueue(currentNode);
 
-            while (openList.Count > 0 && !(currentNode.position.X.Equals(endNode.position.X) && currentNode.position.Y.Equals(endNode.position.Y)))
+            while (openList.Count > 0)
             {
-                Node lowestCostNode = openList.Dequeue();
-                currentPath[lowestCostNode] = currentNode;
+                currentNode = openList.Dequeue();
 
-                currentNode = lowestCostNode;
+                if (currentNode.position.X.Equals(endNode.position.X) && currentNode.position.Y.Equals(endNode.position.Y))
+                {
+                    break;
+                }
+
+                //closedList.Add(currentNode);
 
                 adjacencies = GetAdjacentNodes(currentNode);
 
                 foreach (Node adjNode in adjacencies)
                 {
-                    if (adjNode.isWalkable && (!closedList.Contains(adjNode) || currentNode.FScore < adjNode.FScore))
+                    if ((!closedList.Contains(adjNode) && adjNode.isWalkable) || currentNode.FScore < adjNode.FScore)
                     {
-                        if (closedList.Contains(adjNode))
-                        {
-                            closedList.Remove(adjNode);
-                            currentPath.Remove(adjNode);
-                        }
-
                         closedList.Add(adjNode);
-                        adjNode.parent = currentNode;
-                        adjNode.distanceToTarget = Math.Abs(adjNode.position.X - endNode.position.X) + Math.Abs(adjNode.position.Y - endNode.position.Y);
-                        adjNode.cost = adjNode.weight + adjNode.parent.cost;
-                        openList.Enqueue(adjNode, adjNode.FScore);
+
+                        //if (!openList.Contains(adjNode))
+                        //{
+                            adjNode.parent = currentNode;
+                            adjNode.distanceToTarget = Math.Abs(adjNode.position.X - endNode.position.X) + Math.Abs(adjNode.position.Y - endNode.position.Y);
+                            adjNode.cost = adjNode.weight + adjNode.parent.cost;
+                            openList.Enqueue(adjNode);
+                        //}
+                            
                     }
                 }
             }
 
-            if (currentNode == null) 
+            if (currentNode == null)
                 return null;
 
-            pathStack.Push(currentNode);
+            if (currentNode == startNode)
+                pathStack.Push(currentNode);
 
             while (currentNode != startNode && currentNode != null)
             {
                 pathStack.Push(currentNode);
-                currentNode = currentPath[currentNode];
+                currentNode = currentNode.parent;
             }
 
             return pathStack;
