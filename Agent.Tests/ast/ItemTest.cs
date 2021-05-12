@@ -10,19 +10,15 @@ namespace Agent.Tests.ast
     public class ItemTest
     {
         private Item _sut;
-        private const string Type = "Item";
+        private const string TYPE = "Item";
         
         [SetUp]
         public void Setup()
         {
-            this._sut = new Item(Type);
+            this._sut = new Item(TYPE);
         }
         
-        /*
-         * GetNodeType()
-         *
-         * Test of de juiste type terug gegeven wordt
-         */
+    
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
@@ -31,13 +27,9 @@ namespace Agent.Tests.ast
             //Act
             var result = this._sut.GetNodeType();
             //Assert
-            Assert.AreEqual(Type, result);
+            Assert.AreEqual(TYPE, result);
         }
-        /*
-         * AddSubjectToChild()
-         *
-         * Test if the stat is added to item
-        */
+    
         [Test]
         public void Test_AddChild_AddItem()
         {
@@ -52,11 +44,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual("Stat", result);
         }
         
-        /*
-         * AddItemToChild()
-         *
-         * Test if the node is added to item
-        */
+     
         [Test]
         public void Test_AddChild_AddNoe()
         {
