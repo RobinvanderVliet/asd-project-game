@@ -1,17 +1,23 @@
-namespace Player.Model
+﻿using Player.Model;
+
+namespace Player.Services
 {
-    public interface IPlayerModel
+    public interface IPlayerService
     {
-        public string Name { get; set; }
-        public int Health { get; set; }
-        public int Stamina { get; set; }
+        public void Attack(string direction);
 
-        //public Tile _currentTile { get; set; }
-        public IInventory Inventory { get; set; }
-        public IBitcoin Bitcoins { get; set; }
-        public IRadiationLevel RadiationLevel { get; set; }
-        public int[] CurrentPosition { get; set; }
+        public void ExitCurrentGame();
 
+        public void Pause();
+        
+        public void Resume();
+        
+        public void ReplaceByAgent();
+
+        public void Say(string messageValue);
+
+        public void Shout(string messageValue);
+        
         public void AddHealth(int amount);
 
         public void RemoveHealth(int amount);
@@ -36,9 +42,9 @@ namespace Player.Model
         
         public void PickupItem();
 
-        public void DropItem(string itemName);
+        public void DropItem(string itemNameValue);
         
-        public void SetNewPlayerPosition(int[] newMovement);
-        
+        public void HandleDirection(string directionValue, int stepsValue);
+
     }
 }
