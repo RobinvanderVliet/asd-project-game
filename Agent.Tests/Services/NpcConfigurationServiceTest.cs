@@ -6,7 +6,6 @@ using Agent.exceptions;
 using Agent.Mapper;
 using Agent.Models;
 using Agent.Services;
-using Agent.Services.interfaces;
 using Moq;
 using NUnit.Framework;
 

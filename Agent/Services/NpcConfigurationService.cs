@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Agent.exceptions;
 using Agent.Mapper;
 using Agent.Models;
-using Agent.Services.interfaces;
 using Serilog;
 using Configuration = Agent.Models.Configuration;
 
@@ -46,9 +45,6 @@ namespace Agent.Services
             }
             Console.WriteLine("Please provide code for the NPC");
             var code = _consoleRetriever.GetConsoleLine();
-            
-            
-            
             try
             {
                 _pipeline.ParseString(code);
