@@ -7,7 +7,6 @@ namespace InputCommandHandler.Antlr.Ast
     {
         private int _step;
         public int StepValue { get => _step; private set => _step = value; }
-        // public int Value { get; private set; }
 
         public Step()
         {
