@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using WorldGeneration.Models;
 using WorldGeneration.Models.Interfaces;
 
@@ -14,12 +15,28 @@ namespace WorldGeneration
         private readonly Database.Database _db;
         private List<int[]> _chunksWithinLoadingRange;
 
-        public Map(int chunkSize = 10, int seed = 0620520399, string dbLocation = "C:\\Temp\\ChunkDatabase.db", string dbCollectionName = "Chunks")
+        private static NoiseMapGenerator _noiseMapGenerator;
+
+        public Map(
+            int chunkSize = 10
+            , int seed = -1123581321
+            , string dbLocation = "C:\\Temp\\ChunkDatabase.db"
+            , string dbCollectionName = "Chunks"
+            , NoiseMapGenerator noiseMapGenerator = NoiseMapGenerator
+        )
         {
             _chunkSize = chunkSize;
-            _seed = seed;
             _db = new Database.Database(dbLocation, dbCollectionName);
             _chunks = new List<Chunk>();
+
+            if (seed == -1123581321)
+            {
+                _seed = new Random().Next(1, 999999);
+            }
+            else
+            {
+                _seed = seed;
+            }
         }
 
         // checks if there are new chunks that have to be loaded
@@ -103,7 +120,7 @@ namespace WorldGeneration
 
         private Chunk GenerateNewChunk(int chunkX, int chunkY)
         {
-            var chunk = NoiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize, _seed);
+            var chunk = noiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize, _seed);
             _db.InsertChunkIntoDatabase(chunk);
             return chunk;
         }
