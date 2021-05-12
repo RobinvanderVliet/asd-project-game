@@ -16,7 +16,7 @@ namespace Player.Tests
         public void Setup()
         {
             _mockedPlayerModel = new Mock<IPlayerModel>();
-            _sut = new PlayerService(_mockedPlayerModel.Object);
+            _sut = new PlayerService(_mockedPlayerModel.Object, null, null); //TODO Chat en session handeler meegeven aan player constructor
         }
         
         [Test]
