@@ -29,18 +29,19 @@ namespace Agent.Tests
 
             Assert.AreEqual(expected, result);
         }
-        [Test]
-        public void Test_Import_WrongFile()
-        { 
-            //Method to 
-            var fileLocation = String.Format(Path.GetFullPath(Path.Combine
-                        (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\import_test_file_1.php";
-
-            var exception = Assert.Throws<FileException>(() =>
-                _sut.ImportFile(fileLocation));
-
-            Assert.AreEqual("File given is not of the correct file type", exception.Message);
-        }
+        
+        // [Test]
+        // public void Test_Import_WrongFile()
+        // { 
+        //     //Method to 
+        //     var fileLocation = String.Format(Path.GetFullPath(Path.Combine
+        //                 (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\import_test_file_1.php";
+        //
+        //     var exception = Assert.Throws<FileException>(() =>
+        //         _sut.ImportFile(fileLocation));
+        //
+        //     Assert.AreEqual("File given is not of the correct file type", exception.Message);
+        // }
 
         [Test]
         public void Test_ExportFile()
