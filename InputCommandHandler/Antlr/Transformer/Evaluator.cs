@@ -63,14 +63,14 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformMove(Move move)
         {
-            switch (move.Steps.Value)
+            switch (move.Steps.StepValue)
             {
                 case < MINIMUM_STEPS:
                     throw new MoveException($"Too few steps, the minimum is {MINIMUM_STEPS}.");
                 case > MAXIMUM_STEPS:
                     throw new MoveException($"Too many steps, the maximum is {MAXIMUM_STEPS}.");
                 default:
-                    _playerService.HandleDirection(move.Direction.Value, move.Steps.Value);
+                    _playerService.HandleDirection(move.Direction.DirectionValue, move.Steps.StepValue);
                     break;
             }
         }
@@ -82,12 +82,12 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformDrop(Drop drop)
         {
-            _playerService.DropItem(drop.ItemName.Value);
+            _playerService.DropItem(drop.ItemName.MessageValue);
         }
 
         private void TransformAttack(Attack attack)
         {
-            _playerService.Attack(attack.Direction.Value);
+            _playerService.Attack(attack.Direction.DirectionValue);
         }
 
         private void TransformExit()
@@ -112,12 +112,12 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformSay(Say say)
         {
-            _playerService.Say(say.Message.Value);
+            _playerService.Say(say.Message.MessageValue);
         }
 
         private void TransformShout(Shout shout)
         {
-            _playerService.Shout(shout.Message.Value);
+            _playerService.Shout(shout.Message.MessageValue);
         }
     }
 }
