@@ -45,6 +45,7 @@ namespace Network
         private void HandlePacket(PacketDTO packet)
         {
             HandlerResponseDTO handlerResponse = _client.HandlePacket(packet);
+            packet.Header.SessionID = _sessionId;
             if (!handlerResponse.ReturnToSender)
             {
                 packet.Header.Target = "client";
