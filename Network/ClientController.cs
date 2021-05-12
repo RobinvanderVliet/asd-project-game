@@ -15,6 +15,7 @@ namespace Network
         public ClientController(NetworkComponent networkComponent)
         {
             _networkComponent = networkComponent;
+            _networkComponent.ClientController = this;
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
