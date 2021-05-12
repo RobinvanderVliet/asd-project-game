@@ -7,7 +7,6 @@ namespace InputCommandHandler.Antlr.Ast.Actions
     {
         private Direction _direction;
         public Direction Direction { get => _direction; private set => _direction = value; }
-        // public Direction Direction { get; private set; }
 
         public override ASTNode AddChild(ASTNode child)
         {

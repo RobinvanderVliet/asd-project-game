@@ -55,7 +55,6 @@ command:
     PAUSE #pause |
     RESUME #resume;
 
-
 forward: FORWARD | UP | NORTH;
 backward: BACKWARD | DOWN | SOUTH;
 left: LEFT | WEST;

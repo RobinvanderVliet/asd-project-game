@@ -17,12 +17,7 @@ namespace Agent.Tests.ast
             _config = new Configuration();
         }
 
-        /*
-         * GetNodeType()
-         *
-         * Test of de juiste type terug gegeven wordt
-         * @author Abdul     
-        */
+    
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
@@ -33,12 +28,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual(result, TYPE);
         }
 
-        /*
-         * AddChild()
-         *
-         * Test of de Rule toegevoegd wordt aan de Configuration
-         * @author Abdul     
-        */
+        
         [Test]
         public void Test_AddChild()
         {
@@ -53,12 +43,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual(result, "Rule");
         }
 
-        /*
-         * RemoveChild()
-         *
-         * Test of de Rule is verwijderd van de Node
-         * @author Abdul
-        */
+     
         [Test]
         public void Test_RemoveChild()
         {

@@ -1,5 +1,8 @@
-﻿namespace Network
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Network
 {
+    [ExcludeFromCodeCoverage]
     public class PayloadHeaderDTO
     {
         public string Target { get; set; }
