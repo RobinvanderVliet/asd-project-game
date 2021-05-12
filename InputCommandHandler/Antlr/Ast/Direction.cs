@@ -19,7 +19,7 @@ namespace InputCommandHandler.Antlr.Ast
             if (other == null)
                 return false;
 
-            return _direction == other._direction;
+            return _direction == other.DirectionValue;
         }
 
         [ExcludeFromCodeCoverage]
