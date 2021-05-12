@@ -15,8 +15,7 @@ namespace Agent.Mapper
                     
                     string content = fileHandler.ImportFile(filepath);
                     
-                    //Possible problems with mac/linux users because only \r or \n is used
-                    var splitContent = content.Split("\r\n");
+                    var splitContent = content.Split(Environment.NewLine);
                     
                     foreach (var setting in splitContent)
                     {

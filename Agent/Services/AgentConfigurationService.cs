@@ -3,79 +3,86 @@ using System.Collections.Generic;
 using Agent.exceptions;
 using Agent.Mapper;
 using Agent.Models;
+using Agent.Exceptions;
+using Serilog;
 
 namespace Agent.Services
 {
-    public class AgentConfigurationService
+    public class AgentConfigurationService : BaseConfigurationService
     {
-        private Pipeline _pipeline;
-        private FileHandler _fileHandler;
-        private FileToDictionaryMapper _fileToDictionaryMapper;
-        private List<AgentConfiguration> _agentConfigurations;
-        private const string CancelCommand = "cancel"; 
+        private InlineConfig inlineConfig;
+        private List<Configuration> _agentConfigurations;
 
-        public AgentConfigurationService()
+        public AgentConfigurationService(List<Configuration> agentConfigurations, FileToDictionaryMapper fileToDictionaryMapper)
         {
-            _pipeline = new Pipeline();
+            _fileToDictionaryMapper = fileToDictionaryMapper;
+            _agentConfigurations = agentConfigurations; 
+            _consoleRetriever = new ConsoleRetriever();
+            inlineConfig = new InlineConfig();
             _fileHandler = new FileHandler();
-            _fileToDictionaryMapper = new FileToDictionaryMapper();
-            _agentConfigurations = new List<AgentConfiguration>();
+            _pipeline = new Pipeline();
         }
         
-        public void StartConfiguration()
+        public override void Configure()
         {
             Console.WriteLine("Please provide a path to your code file");
-            var input = Console.ReadLine();
+            var input = _consoleRetriever.GetConsoleLine();
 
-            if (input.Equals(CancelCommand))
+            if (input.Equals(CANCEL_COMMAND))
             {
                 return;
             }
-
-            var content = String.Empty;;
-            try
+            
+            if (input.Equals(LOAD_COMMAND)) 
             {
-                content = _fileHandler.ImportFile(input);
-            }
-            catch (FileException e)
-            {
-                Console.WriteLine("Something went wrong: " + e);    
-                StartConfiguration();
+                inlineConfig.setup();
+                return;
             }
             
-
             try
             {
+                var content = _fileHandler.ImportFile(input);
                 _pipeline.ParseString(content);
                 _pipeline.CheckAst();
                 var output = _pipeline.GenerateAst();
-                _fileHandler.ExportFile(output);
+
+                string fileName = "agent\\agent-config.cfg";
+                _fileHandler.ExportFile(output, fileName);
             }
             catch (SyntaxErrorException e)
             {
-                Console.WriteLine("Syntax error: " + e.Message);
-                StartConfiguration();
-            } 
+                lastError = e.Message;
+                Log.Logger.Information("Syntax error: " + e.Message);
+                Configure();
+            }
             catch (SemanticErrorException e)
             {
-                Console.WriteLine("Semantic error: " + e.Message);
-                StartConfiguration();
+                lastError = e.Message;
+                Log.Logger.Information("Semantic error: " + e.Message);
+                Configure();
+            }
+            catch (FileException e)
+            {
+                lastError = e.Message;
+                Log.Logger.Information("File error: " + e.Message);
+                Configure();
             }
         }
-
-        public void CreateAgentConfiguration(string agentName, string filepath)
+        
+        public override void CreateConfiguration(string agentName, string filepath)
         {
             var agentConfiguration = new AgentConfiguration();
             agentConfiguration.AgentName = agentName;
-
-           agentConfiguration.Settings = _fileToDictionaryMapper.MapFileToConfiguration(filepath);
-
-           _agentConfigurations.Add(agentConfiguration);
+            agentConfiguration.Settings = _fileToDictionaryMapper.MapFileToConfiguration(filepath);
+            _agentConfigurations.Add(agentConfiguration);
         }
         
-        public List<AgentConfiguration> GetConfigurations()
+        public override List<Configuration> GetConfigurations()
         {
             return _agentConfigurations;
         }
+        
     }
+
+    
 }

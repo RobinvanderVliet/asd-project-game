@@ -46,7 +46,7 @@ namespace Agent
             _ast = astAgentListener.GetAST();
         }
 
-        public void CheckAst()
+        public virtual void CheckAst()
         {
             // checker = new Checker(ast);
             // TODO: Implement checker calls
