@@ -16,7 +16,7 @@ namespace Session
         public Session(string name)
         {
             _name = name;
-            _sessionId = Guid.NewGuid().ToString();
+            // _sessionId = Guid.NewGuid().ToString();
         }
 
         public void GenerateSessionId()
