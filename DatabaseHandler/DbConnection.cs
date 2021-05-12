@@ -17,11 +17,7 @@ namespace DatabaseHandler
             _log = log;
         }
 
-        public string GetConnectionString()
-        {
-            return _connectionString;
-        }
-
+        [ExcludeFromCodeCoverage]
         public void SetConnectionString(string connectionString)
         {
             _connectionString = connectionString;
@@ -39,7 +35,7 @@ namespace DatabaseHandler
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _log.LogError("Exception: {Message}", ex.Message);
                 throw;
             }
         }

@@ -10,6 +10,7 @@ using DatabaseHandler.Services;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using WorldGeneration;
 using Player;
+using Player.Model;
 
 namespace ASD_project
 {
@@ -35,7 +36,10 @@ namespace ASD_project
                 {
                     services.AddTransient<IMainGame, MainGame>();
                     services.AddScoped<IPlayerModel, PlayerModel>();
-                    services.SetDatabaseHandlerDependencies();
+                    services.AddSingleton<IDbConnection, DbConnection>();
+                    services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+                    services.AddScoped(typeof(IServices<>), typeof(Services<>));
+
                 })
                 .UseSerilog()
                 .Build();

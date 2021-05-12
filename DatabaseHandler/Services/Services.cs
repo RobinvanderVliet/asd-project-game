@@ -2,23 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DatabaseHandler.Repository;
+using LiteDB;
 using Microsoft.Extensions.Logging;
 using WorldGeneration.Models;
 
 namespace DatabaseHandler.Services
 {
-    public class ChunkServices : IChunkServices
+    public class Services<T> : IServices<T>
     {
-        private readonly ILogger<ChunkServices> _log;
-        private readonly IChunkRepository _repository;
+        private readonly ILogger<Services<T>> _log;
+        private readonly IRepository<T> _repository;
 
-        public ChunkServices(IChunkRepository repository, ILogger<ChunkServices> log)
+        public Services(IRepository<T> repository, ILogger<Services<T>> log)
         {
             _repository = repository;
             _log = log;
         }
 
-        public Task<string> CreateAsync(Chunk obj)
+        public Task<BsonValue> CreateAsync(T obj)
         {
             try
             {
@@ -31,7 +32,7 @@ namespace DatabaseHandler.Services
             }
         }
 
-        public Task<Chunk> ReadAsync(Chunk obj)
+        public Task<T> ReadAsync(T obj)
         {
             try
             {
@@ -44,7 +45,7 @@ namespace DatabaseHandler.Services
             }
         }
 
-        public Task<Chunk> UpdateAsync(Chunk obj)
+        public Task<int> UpdateAsync(T obj)
         {
             try
             {
@@ -57,7 +58,7 @@ namespace DatabaseHandler.Services
             }
         }
 
-        public Task<int> DeleteAsync(Chunk obj)
+        public Task<int> DeleteAsync(T obj)
         {
             try
             {
@@ -70,7 +71,7 @@ namespace DatabaseHandler.Services
             }
         }
 
-        public Task<IEnumerable<Chunk>> GetAllAsync()
+        public Task<IEnumerable<T>> GetAllAsync()
         {
             return _repository.GetAllAsync();
         }
