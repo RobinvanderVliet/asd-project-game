@@ -11,7 +11,7 @@ namespace WorldGeneration
         private readonly int _chunkSize;
         private readonly int _seed;
         private IList<Chunk> _chunks;
-        public IList<IPlayer> _players { get; }
+        public IList<IPlayer> _players { get; set; }
 
         public World(IList<IPlayer> players, int chunkSize = 10, int seed = 0620520399)
         {
@@ -53,16 +53,17 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
 
-        private void DisplayMap(IPlayer player, int viewDistance, IReadOnlyCollection<Chunk> chunks)
+        private void DisplayMap(IPlayer currentPlayer, int viewDistance, IReadOnlyCollection<Chunk> chunks)
         {
-            for (var y = player.CurrentPosition[1]; y < viewDistance * 2 + 1; y++)
-            for (var x = player.CurrentPosition[0]; x < viewDistance * 2 + 1; x++)
+            for (var y = currentPlayer.CurrentPosition[1]; y < viewDistance * 2 + 1; y++)
+            for (var x = currentPlayer.CurrentPosition[0]; x < viewDistance * 2 + 1; x++)
             {
                 var chunk = chunks.FirstOrDefault(chunk =>
                     chunk.X * _chunkSize <= x && chunk.X * _chunkSize > x - _chunkSize && chunk.Y * _chunkSize >= y &&
                     chunk.Y * _chunkSize < y + _chunkSize);
                 if (chunk == null) throw new Exception("this chunk should not be null");
-                Console.Write(" " + chunk.Map[chunk.GetPositionInTileArrayByWorldCoordinates(x, y)].Symbol);
+                var tile = chunk.Map[chunk.GetPositionInTileArrayByWorldCoordinates(x, y)];
+                Console.Write(DisplaySymbol(currentPlayer, tile));
                 if (x == viewDistance * 2) Console.WriteLine("");
             }
         }
@@ -71,5 +72,26 @@ namespace WorldGeneration
         {
             return NoiseMapGenerator.GenerateChunk(x, y, _chunkSize, _seed);
         }
+        
+        private bool IsPlayerOnTile(ITile tile, IPlayer player)
+        {
+            return tile.X == player.CurrentPosition[0] && tile.Y == player.CurrentPosition[1];
+        }
+
+        private string DisplaySymbol(IPlayer currentPlayer, ITile tile)
+        {
+            if (IsPlayerOnTile(tile, currentPlayer))
+            {
+                return " " + currentPlayer.Symbol;
+            }
+            foreach (var player in _players)
+            {
+                if (player.Name == currentPlayer.Name) continue;
+                // moet nog een check komen of het friendly of enemy player is
+                player.Symbol = CharacterSymbol.ENEMY_PLAYER;
+                return " " + player.Symbol;
+            }
+            return " " + tile.Symbol;
+            }
     }
 }
