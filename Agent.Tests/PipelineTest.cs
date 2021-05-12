@@ -42,16 +42,16 @@ namespace Agent.Tests
             Mock<Configuration> mockedAst = new();
             mockedAst.Setup(x => x.GetChildren()).Throws(new Exception());
 
-            sut.ParseString(SCRIPT);
-            sut.Ast.SetRoot(mockedAst.Object);
+            _sut.ParseString(SCRIPT);
+            _sut.Ast.SetRoot(mockedAst.Object);
 
             //Act
-            var result = sut.GenerateAst();
+            var result = _sut.GenerateAst();
 
             //Assert
             Assert.NotNull(result);
             Assert.AreEqual(result, new Exception().Message);
-            Assert.IsEmpty(sut.Errors);
+            Assert.IsEmpty(_sut.Errors);
         }
 
         [Test]
@@ -59,15 +59,15 @@ namespace Agent.Tests
         {
             //Arrange
             AST ast = new AST();
-            sut.Ast = ast;
+            _sut.Ast = ast;
 
             Mock<Checker> mockedChecker = new Mock<Checker>(ast);
             mockedChecker.Setup(x => x.Check(ast)).Verifiable();
 
-            sut.Checker = mockedChecker.Object;
+            _sut.Checker = mockedChecker.Object;
 
             //Act
-            sut.CheckAst();
+            _sut.CheckAst();
 
             //Assert
             mockedChecker.Verify(x => x.Check(ast), Times.Once);
@@ -79,22 +79,22 @@ namespace Agent.Tests
             //Arrange
 
             //Act & Assert
-            Assert.Throws<SyntaxErrorException>(() => sut.SyntaxError(It.IsAny<IRecognizer>(), It.IsAny<IToken>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<String>(), It.IsAny<RecognitionException>()));
+            Assert.Throws<SyntaxErrorException>(() => _sut.SyntaxError(It.IsAny<IRecognizer>(), It.IsAny<IToken>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<String>(), It.IsAny<RecognitionException>()));
         }
 
         [Test]
         public void Test_ClearErrors1()
         {
             //Arrange
-            sut.Errors.Add("error 1");
-            sut.Errors.Add("error 2");
-            sut.Errors.Add("error 3");
+            _sut.Errors.Add("error 1");
+            _sut.Errors.Add("error 2");
+            _sut.Errors.Add("error 3");
 
             //Act
-            sut.ClearErrors();
+            _sut.ClearErrors();
 
             //Assert
-            Assert.AreEqual(sut.Errors.Count, 0);
+            Assert.AreEqual(_sut.Errors.Count, 0);
 
         }
     }
