@@ -10,6 +10,7 @@ namespace DatabaseHandler.Repository
     public class ChunkRepository : IChunkRepository
     {
         private readonly IDbConnection _connection;
+        private readonly string _collection;
         private readonly ILiteDatabaseAsync _db;
 
         [ExcludeFromCodeCoverage]

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using LiteDB;
 using LiteDB.Async;
 using Microsoft.Extensions.Logging;
 
@@ -28,10 +29,6 @@ namespace DatabaseHandler
 
         [ExcludeFromCodeCoverage]
         public ILiteDatabaseAsync GetConnectionAsync()
-        {
-        }
-        
-        public ILiteDatabase GetConnection()
         {
             try
             {
