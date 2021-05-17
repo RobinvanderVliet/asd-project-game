@@ -1,6 +1,8 @@
 using Moq;
 using Network;
+using Newtonsoft.Json;
 using NUnit.Framework;
+using Session.DTO;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Session.Tests
@@ -46,22 +48,17 @@ namespace Session.Tests
         [Test]
         public void Test_RequestSessions()
         {
-            // Arrange ------------
-            string testSessionName = "testSessionName";
+            //Arrange ---------
+            SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
+            var payload = JsonConvert.SerializeObject(sessionDTO);
 
-            _mockedClientController.Setup(mock => mock.CreateHostController());
+            _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Session));
 
-            // Act ----------------
-            _sessionHandler.CreateSession(testSessionName);
+            //Act ---------
+            _sessionHandler.RequestSessions();
 
-            // Assert -------------
-            _mockedClientController.Verify(mock => mock.CreateHostController(), Times.Once());
-        }
-
-        [Test]
-        public void Test_SendSessionDTO()
-        {
-            Assert.Pass();
+            //Assert ---------
+            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
         }
 
         [Test]
