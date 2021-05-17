@@ -24,9 +24,18 @@ namespace Session.Tests
             _sessionHandler = new SessionHandler(_mockedClientController.Object);
         }
 
+        // TODO: fix this test
         [Test]
         public void Test_JoinSession()
         {
+            // Arrange ------------
+            string testSessionId = "testSessionId";
+
+            // Act ----------------
+            _sessionHandler.JoinSession(testSessionId);
+
+            // Assert -------------
+            //_mockedClientController.Verify(mock => mock.SetSessionId(testSessionId), Times.Once());
             Assert.Pass();
         }
 
