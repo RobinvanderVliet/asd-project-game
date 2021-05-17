@@ -63,7 +63,7 @@ namespace Player.Services
         {
             _chatHandler.SendSay(messageValue);
             //code for chat with other players in team chat
-            Console.WriteLine(_playerModel.Name + " sent message: " + messageValue);
+            // Console.WriteLine(_playerModel.Name + " sent message: " + messageValue);
         }
 
         public void Shout(string messageValue)
