@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Network
 {
-    public class ClientController : IPacketHandler
+    public class ClientController : IPacketHandler, IClientController
     {
         private NetworkComponent _networkComponent;
         private HostController _hostController;
