@@ -1,17 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using Player.ActionHandlers;
+using Player.DTO;
 using Player.Model;
 
 namespace Player.Services
 {
     public class PlayerService : IPlayerService
     {
-        private readonly IPlayerModel _playerModel;
+        private readonly IPlayerModel _currentPlayer;
+        private List<PlayerDTO> _playerPositions;
         private readonly IMoveHandler _moveHandler;
 
-        public PlayerService(IPlayerModel playerModel, IMoveHandler moveHandler)
+        public PlayerService(IPlayerModel currentPlayer, List<PlayerDTO> playerPositions, IMoveHandler moveHandler)
         {
-            _playerModel = playerModel;
+            _currentPlayer = currentPlayer;
+            _playerPositions = playerPositions;
             _moveHandler = moveHandler;
         }
 
@@ -58,78 +62,78 @@ namespace Player.Services
         public void Say(string messageValue)
         {
             //code for chat with other players in team chat
-            Console.WriteLine(_playerModel.Name + " sent message: " + messageValue);
+            Console.WriteLine(_currentPlayer.Name + " sent message: " + messageValue);
         }
 
         public void Shout(string messageValue)
         {
             //code for chat with other players in general chat
-            Console.WriteLine(_playerModel.Name + " sent message: " + messageValue);
+            Console.WriteLine(_currentPlayer.Name + " sent message: " + messageValue);
         }
 
         public void AddHealth(int amount)
         {
-            _playerModel.AddHealth(amount);
+            _currentPlayer.AddHealth(amount);
         }
 
         public void RemoveHealth(int amount)
         {
-            _playerModel.RemoveHealth(amount);
+            _currentPlayer.RemoveHealth(amount);
         }
 
         public void AddStamina(int amount)
         {
-            _playerModel.AddStamina(amount);
+            _currentPlayer.AddStamina(amount);
         }
 
         public void RemoveStamina(int amount)
         {
-            _playerModel.RemoveStamina(amount);
+            _currentPlayer.RemoveStamina(amount);
         }
 
         public IItem GetItem(string itemName)
         {
-            return _playerModel.GetItem(itemName);
+            return _currentPlayer.GetItem(itemName);
         }
 
         public void AddInventoryItem(IItem item)
         {
-            _playerModel.AddInventoryItem(item);
+            _currentPlayer.AddInventoryItem(item);
         }
 
         public void RemoveInventoryItem(IItem item)
         {
-            _playerModel.RemoveInventoryItem(item);
+            _currentPlayer.RemoveInventoryItem(item);
         }
 
         public void EmptyInventory()
         {
-            _playerModel.EmptyInventory();
+            _currentPlayer.EmptyInventory();
         }
 
         public void AddBitcoins(int amount)
         {
-            _playerModel.AddBitcoins(amount);
+            _currentPlayer.AddBitcoins(amount);
         }
 
         public void RemoveBitcoins(int amount)
         {
-            _playerModel.RemoveBitcoins(amount);
+            _currentPlayer.RemoveBitcoins(amount);
         }
 
         public int GetAttackDamage()
         {
-            return _playerModel.GetAttackDamage();
+            return _currentPlayer.GetAttackDamage();
         }
 
         public void PickupItem()
         {
-            _playerModel.PickupItem();
+            _currentPlayer.PickupItem();
         }
 
         public void DropItem(string itemNameValue)
         {
-            _playerModel.DropItem(itemNameValue);
+            _currentPlayer.DropItem(itemNameValue);
         }
 
         public void HandleDirection(string directionValue, int stepsValue)
@@ -158,11 +162,23 @@ namespace Player.Services
                     break;
             }
 
-            _playerModel.SetNewPlayerPosition(x, y);
-            _moveHandler.SendMove(this, _playerModel.XPosition, _playerModel.YPosition);
+            _currentPlayer.SetNewPlayerPosition(x, y);
+            _moveHandler.SendMove(this, _currentPlayer.XPosition, _currentPlayer.YPosition);
 
             // the next line of code should be changed by sending newPosition to a relevant method
-            Console.WriteLine("X: " + _playerModel.XPosition + ". Y: " + _playerModel.YPosition);
+            Console.WriteLine("X: " + _currentPlayer.XPosition + ". Y: " + _currentPlayer.YPosition);
+        }
+        
+        public void ChangePositionOfAPlayer(PlayerDTO player)
+        {
+            foreach (var playerPosition in _playerPositions)
+            {
+                if (player.PlayerName == playerPosition.PlayerName)
+                {
+                    playerPosition.X = player.X;
+                    playerPosition.Y = player.Y;
+                }
+            }
         }
     }
 }

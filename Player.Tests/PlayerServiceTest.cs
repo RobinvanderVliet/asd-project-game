@@ -1,7 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Moq;
 using NUnit.Framework;
 using Player.ActionHandlers;
+using Player.DTO;
 using Player.Model;
 using Player.Services;
 
@@ -12,14 +14,16 @@ namespace Player.Tests
     {
         private PlayerService _sut;
         private Mock<IPlayerModel> _mockedPlayerModel;
+        private List<PlayerDTO> _mockedPlayerList;
         private Mock<IMoveHandler> _mockedMoveHandler;
         
         [SetUp]
         public void Setup()
         {
             _mockedPlayerModel = new Mock<IPlayerModel>();
+            _mockedPlayerList = new List<PlayerDTO>();
             _mockedMoveHandler = new Mock<IMoveHandler>();
-            _sut = new PlayerService(_mockedPlayerModel.Object, _mockedMoveHandler.Object);
+            _sut = new PlayerService(_mockedPlayerModel.Object, _mockedPlayerList, _mockedMoveHandler.Object);
         }
         
         [Test]

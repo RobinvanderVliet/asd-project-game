@@ -5,9 +5,12 @@ using Player.Model;
 using Player.Services;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using WorldGeneration;
 using Player;
 using Agent.Services;
+using Player.ActionHandlers;
+using Player.DTO;
 
 namespace ASD_project
 {
@@ -16,10 +19,12 @@ namespace ASD_project
         public class MainGame : IMainGame
         {
             private readonly ILogger<MainGame> _log;
+            private readonly IMoveHandler _moveHandler;
 
-            public MainGame(ILogger<MainGame> log)
+            public MainGame(ILogger<MainGame> log, IMoveHandler moveHandler)
             {
-                this._log = log;
+                _log = log;
+                _moveHandler = moveHandler;
             }
 
             public void Run()
@@ -35,7 +40,15 @@ namespace ASD_project
                 //moet later vervangen worden
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
                 PlayerModel playerModel = new PlayerModel("Name", new Inventory(), new Bitcoin(20), new RadiationLevel(1));
-                IPlayerService playerService = new PlayerService(playerModel); 
+                //lobby start
+                //networkcomponent heeft lijst van players
+                //die players moeten toegevoegd worden aan playerPositions
+                List<PlayerDTO> playerPositions = new List<PlayerDTO>
+                {
+                    new PlayerDTO("Joe", 10, 10),
+                    new PlayerDTO("Mama", 40, 40)
+                };
+                IPlayerService playerService = new PlayerService(playerModel, playerPositions, _moveHandler);
                 Console.WriteLine("Type input messages below");
                 while (true) // moet vervangen worden met variabele: isQuit 
                 {
