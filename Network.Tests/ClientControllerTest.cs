@@ -107,7 +107,7 @@ namespace Network.Tests
         {
             //Arrange
             var packetType = PacketType.Chat;
-            var expectedHandlerResponse = new HandlerResponseDTO(SendAction.SendToClients, null);
+            var expectedHandlerResponse = new HandlerResponseDTO(SendAction.ReturnToSender, null);
             var givenPacket = new PacketBuilder()
                 .SetTarget("client")
                 .SetPacketType(packetType)
