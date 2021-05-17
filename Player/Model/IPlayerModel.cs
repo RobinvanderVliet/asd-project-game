@@ -1,3 +1,5 @@
+using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+
 namespace Player.Model
 {
     public interface IPlayerModel
@@ -10,8 +12,9 @@ namespace Player.Model
         public IInventory Inventory { get; set; }
         public IBitcoin Bitcoins { get; set; }
         public IRadiationLevel RadiationLevel { get; set; }
-        public int[] CurrentPosition { get; set; }
+        public int XPosition { get; set; }
 
+        public int YPosition { get; set; }
         public void AddHealth(int amount);
 
         public void RemoveHealth(int amount);
@@ -38,7 +41,7 @@ namespace Player.Model
 
         public void DropItem(string itemName);
         
-        public void SetNewPlayerPosition(int[] newMovement);
+        public void SetNewPlayerPosition(int x, int y);
         
     }
 }

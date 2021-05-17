@@ -1,4 +1,5 @@
 ﻿using System;
+using Player.ActionHandlers;
 using Player.Model;
 
 namespace Player.Services
@@ -6,11 +7,12 @@ namespace Player.Services
     public class PlayerService : IPlayerService
     {
         private readonly IPlayerModel _playerModel;
-        private const int DEFAULT_STEPS = 0;
+        private readonly IMoveHandler _moveHandler;
 
-        public PlayerService(IPlayerModel playerModel)
+        public PlayerService(IPlayerModel playerModel, IMoveHandler moveHandler)
         {
             _playerModel = playerModel;
+            _moveHandler = moveHandler;
         }
 
         public void Attack(string direction)
@@ -64,7 +66,7 @@ namespace Player.Services
             //code for chat with other players in general chat
             Console.WriteLine(_playerModel.Name + " sent message: " + messageValue);
         }
-        
+
         public void AddHealth(int amount)
         {
             _playerModel.AddHealth(amount);
@@ -119,7 +121,7 @@ namespace Player.Services
         {
             return _playerModel.GetAttackDamage();
         }
-        
+
         public void PickupItem()
         {
             _playerModel.PickupItem();
@@ -129,48 +131,38 @@ namespace Player.Services
         {
             _playerModel.DropItem(itemNameValue);
         }
-        
+
         public void HandleDirection(string directionValue, int stepsValue)
         {
-            var newMovement = new int[2];
+            int x = 0;
+            int y = 0;
             switch (directionValue)
             {
                 case "right":
                 case "east":
-                    newMovement[0] = stepsValue;
-                    newMovement[1] = DEFAULT_STEPS;
+                    x = stepsValue;
                     break;
                 case "left":
                 case "west":
-                    newMovement[0] = -stepsValue;
-                    newMovement[1] = DEFAULT_STEPS;
+                    x = -stepsValue;
                     break;
                 case "forward":
                 case "up":
                 case "north":
-                    newMovement[0] = DEFAULT_STEPS;
-                    newMovement[1] = -stepsValue;
+                    y = -stepsValue;
                     break;
                 case "backward":
                 case "down":
                 case "south":
-                    newMovement[0] = DEFAULT_STEPS;
-                    newMovement[1] = stepsValue;
+                    y = stepsValue;
                     break;
             }
 
-            _playerModel.SetNewPlayerPosition(newMovement);
+            _playerModel.SetNewPlayerPosition(x, y);
+            //_moveHandler.SendMove(this, _playerModel.XPosition, _playerModel.YPosition);
 
             // the next line of code should be changed by sending newPosition to a relevant method
-            WriteCommand(_playerModel.CurrentPosition);
-        }
-        
-        // !!! METHODS BELOW ARE TEMPORARY, PROTOTYPE ONLY !!!
-        private void WriteCommand(int[] newPosition)
-        {
-            // returns the new position
-            _playerModel.CurrentPosition = newPosition;
-            Console.WriteLine("X: " + newPosition[0] + ". Y: " + newPosition[1]);
+            Console.WriteLine("X: " + _playerModel.XPosition + ". Y: " + _playerModel.YPosition);
         }
     }
 }
