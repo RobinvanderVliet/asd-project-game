@@ -10,7 +10,7 @@ using NUnit.Framework.Internal;
 namespace Agent.Tests.Mapper
 {
     [ExcludeFromCodeCoverage]
-    public class TestFileToDictionaryMapper
+    public class FileToDictionaryMapperTest
     {
         private FileToDictionaryMapper _mapper;
 
