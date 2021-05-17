@@ -12,11 +12,11 @@ namespace Session
 {
     public class SessionHandler : IPacketHandler, ISessionHandler
     {
-        private ClientController _clientController;
+        private IClientController _clientController;
         private Session _session;
         private Dictionary<string, PacketDTO> _availableSessions = new();
 
-        public SessionHandler(ClientController clientController)
+        public SessionHandler(IClientController clientController)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Session);

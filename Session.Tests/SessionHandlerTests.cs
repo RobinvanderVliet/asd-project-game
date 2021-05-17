@@ -13,14 +13,15 @@ namespace Session.Tests
         SessionHandler _sessionHandler;
 
         //Declaration of mocks
-        private Mock<ClientController> _mockedClientController;
+        private Mock<IClientController> _mockedClientController;
         private Mock<Session> _session;
 
         [SetUp]
         public void Setup()
         {
-            _mockedClientController = new Mock<ClientController>();
+            _mockedClientController = new Mock<IClientController>();
             _session = new Mock<Session>();
+            _sessionHandler = new SessionHandler(_mockedClientController.Object);
         }
 
         [Test]
@@ -32,7 +33,15 @@ namespace Session.Tests
         [Test]
         public void Test_CreateSession()
         {
-            Assert.Pass();
+            // Arrange ------------
+            string sessionName = "testSessionName";
+            _mockedClientController.Setup(mock => mock.CreateHostController());
+
+            // Act ----------------
+            _sessionHandler.CreateSession(sessionName);
+
+            // Assert -------------
+            _mockedClientController.Verify(mock => mock.CreateHostController(), Times.Once());
         }
 
         [Test]
