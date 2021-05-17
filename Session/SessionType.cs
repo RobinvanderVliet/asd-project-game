@@ -5,6 +5,8 @@ namespace Session
         RequestSessions,
         RequestSessionsResponse,
         RequestToJoinSession,
-        ClientJoinedSession
+        ClientJoinedSession,
+        ReceivedPing,
+        ReceivedPingResponse
     }
 }

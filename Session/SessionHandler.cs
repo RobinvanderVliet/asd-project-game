@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Network.DTO;
 
@@ -30,6 +31,13 @@ namespace Session
             }
             else
             {
+                //TODO: MOVE TO EVENT START GAME
+                new Thread(() =>
+                {
+                    SendPing();
+                    Thread.Sleep(1000);
+                }).Start();
+                
                 SessionDTO sessionDto = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
                 _session = new Session(sessionDto.Name);
                 _session.SessionId = sessionId;
@@ -75,6 +83,11 @@ namespace Session
                         return addPlayerToSession(packet);
                     case SessionType.ClientJoinedSession:
                         return clientJoinedSession(packet);
+                    case SessionType.ReceivedPing:
+                        return handlePingRequest();
+                    case SessionType.ReceivedPingResponse:
+                        handlePingResponse(packet.Payload);
+                        return new HandlerResponseDTO(false, null);
                 }
             }
             else
@@ -85,6 +98,26 @@ namespace Session
                 }
             }
             return new HandlerResponseDTO(false, null);
+        }
+
+        private void handlePingResponse(String payload)
+        {
+            if (payload.Equals("pong"))
+            {
+                
+            }
+            else
+            {
+                // TODO: Host moet overgenomen worden door backup host
+                
+            }
+            
+        }
+
+        private HandlerResponseDTO handlePingRequest()
+        {
+            String pingResponse = "pong";
+            return new HandlerResponseDTO(true, pingResponse);
         }
 
         private HandlerResponseDTO handleRequestSessions()
@@ -131,6 +164,12 @@ namespace Session
                 }
             }
             return new HandlerResponseDTO(false, null);
+        }
+
+        public void SendPing()
+        {
+            //if(_clientController.GetOriginId())
+            _clientController.SendPayload("ping", PacketType.Session);
         }
     }
 }
