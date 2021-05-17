@@ -19,4 +19,8 @@
       <ProjectReference Include="..\WorldGeneration\WorldGeneration.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Model" />
+    </ItemGroup>
+
 </Project>

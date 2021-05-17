@@ -55,7 +55,7 @@ namespace DatabaseHandler.Tests
         {
             // Arrange
             var chunk = _chunkFaker.Generate();
-            _repository.Setup(chunkRepo => chunkRepo.CreateAsync(It.IsAny<Chunk>())).ReturnsAsync((Chunk item) =>
+            _repository.Setup(chunkRepo => chunkRepo.InsertAsync(It.IsAny<Chunk>())).ReturnsAsync((Chunk item) =>
             {
                 _chunkInMemoryDatabase.Add(item);
                 return "succeeded";
@@ -63,7 +63,7 @@ namespace DatabaseHandler.Tests
             _services = new Services<Chunk>(_repository.Object, _log);
             
             // Act
-            var createChunk = _services.CreateAsync(chunk).Result;
+            var createChunk = _services.InsertAsync(chunk).Result;
             var result = _services.ReadAsync(chunk).Result;
 
             // Assert
@@ -84,7 +84,7 @@ namespace DatabaseHandler.Tests
         {
             // Arrange
             var chunk = _chunkFaker.Generate();
-            _repository.Setup(chunkRepo => chunkRepo.CreateAsync(It.IsAny<Chunk>())).ReturnsAsync((Chunk item) =>
+            _repository.Setup(chunkRepo => chunkRepo.InsertAsync(It.IsAny<Chunk>())).ReturnsAsync((Chunk item) =>
             {
                 if (_chunkInMemoryDatabase.Contains(item))
                 {
@@ -96,12 +96,12 @@ namespace DatabaseHandler.Tests
             _services = new Services<Chunk>(_repository.Object, _log);
             
             // Act
-            var createChunk = _services.CreateAsync(chunk).Result;
+            var createChunk = _services.InsertAsync(chunk).Result;
 
             // Assert
             Assert.Throws<InvalidOperationException>(() =>
             {
-                var errorChunk = _services.CreateAsync(chunk).Result;
+                var errorChunk = _services.InsertAsync(chunk).Result;
             });
         }
 

@@ -1,15 +1,13 @@
-﻿using LiteDB;
-using System;
+﻿using System;
+using LiteDB;
 
-namespace DataBaseHandler.Model.Host
+namespace DatabaseHandler.Poco
 {
-    public class MainGameModel
+    public class MainGamePoco
     {
         [BsonId]
         public Guid MainGameGuid { get; set; }
         //public PlayerModel PlayerHostGuid { get; set; }
-
-
 
     }
 }

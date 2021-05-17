@@ -6,7 +6,7 @@ namespace DatabaseHandler.Repository
 {
     public interface IRepository<T>
     {
-        Task<BsonValue> CreateAsync(T obj);
+        Task<BsonValue> InsertAsync(T obj);
         Task<T> ReadAsync(T obj);
         Task<int> UpdateAsync(T obj);
         Task<int> DeleteAsync(T obj);

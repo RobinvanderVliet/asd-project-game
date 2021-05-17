@@ -23,7 +23,7 @@ namespace DatabaseHandler.Repository
         }
 
         [ExcludeFromCodeCoverage]
-        public async Task<BsonValue> CreateAsync(T obj)
+        public async Task<BsonValue> InsertAsync(T obj)
         {
             var result = await _db.GetCollection<T>(_collection).InsertAsync(obj).ConfigureAwait(false);
             return result;

@@ -10,24 +10,24 @@ namespace DatabaseHandler.Services
 {
     public class Services<T> : IServices<T>
     {
-        private readonly ILogger<Services<T>> _log;
+  //      private readonly ILogger<Services<T>> _log;
         private readonly IRepository<T> _repository;
 
-        public Services(IRepository<T> repository, ILogger<Services<T>> log)
+        public Services(IRepository<T> repository)
         {
             _repository = repository;
-            _log = log;
+          //  _log = log;
         }
 
-        public Task<BsonValue> CreateAsync(T obj)
+        public Task<BsonValue> InsertAsync(T obj)
         {
             try
             {
-                return _repository.CreateAsync(obj);
+                return _repository.InsertAsync(obj);
             }
             catch (Exception ex)
             {
-                _log.LogError("Exception: {Message}", ex.Message);
+             //   _log.LogError("Exception: {Message}", ex.Message);
                 throw;
             }
         }
@@ -40,7 +40,7 @@ namespace DatabaseHandler.Services
             }
             catch (Exception ex)
             {
-                _log.LogError("Exception: {Message}", ex.Message);
+         //       _log.LogError("Exception: {Message}", ex.Message);
                 throw;
             }
         }
@@ -53,7 +53,7 @@ namespace DatabaseHandler.Services
             }
             catch (Exception ex)
             {
-                _log.LogError("Exception: {Message}", ex.Message);
+      //          _log.LogError("Exception: {Message}", ex.Message);
                 throw;
             }
         }
@@ -66,7 +66,7 @@ namespace DatabaseHandler.Services
             }
             catch (Exception ex)
             {
-                _log.LogError("Exception: {Message}", ex.Message);
+ //               _log.LogError("Exception: {Message}", ex.Message);
                 throw;
             }
         }
