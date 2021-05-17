@@ -5,7 +5,8 @@ namespace DataBaseHandler.Model.Host
 {
     public class MainGameModel
     {
-        public Guid GameGuid { get; set; }
+        [BsonId]
+        public Guid MainGameGuid { get; set; }
         //public PlayerModel PlayerHostGuid { get; set; }
 
 
