@@ -5,9 +5,9 @@ using WorldGeneration.Models.TerrainTiles;
 
 namespace WorldGeneration
 {
-    public abstract class NoiseMapGenerator : INoiseMapGenerator
+    public class NoiseMapGenerator : INoiseMapGenerator
     {
-        public static int[,] GenerateAreaMap(int size, int seed)
+        public int[,] GenerateAreaMap(int size, int seed)
         {
             var noise = new FastNoiseLite();
             noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
@@ -39,7 +39,7 @@ namespace WorldGeneration
             return new Chunk(chunkX, chunkY, map, chunkRowSize);
         }
 
-        private static ITile GetTileFromNoise(float noise)
+        private ITile GetTileFromNoise(float noise)
         {
             return (noise * 10) switch
             {

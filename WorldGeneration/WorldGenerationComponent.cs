@@ -7,7 +7,7 @@ namespace WorldGeneration
         public Program()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            var map = new Map(4, 2243);
+            var map = MapFactory.GenerateMap();
             map.DeleteMap();
             map.DisplayMap(3,0,30);
         }

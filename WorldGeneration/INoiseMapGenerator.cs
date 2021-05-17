@@ -1,5 +1,4 @@
 using WorldGeneration.Models;
-using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
 {

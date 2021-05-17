@@ -11,32 +11,24 @@ namespace WorldGeneration
     {
         private readonly int _chunkSize;
         private readonly int _seed;
-        private List<Chunk> _chunks; // idk why it says this can be readonly, in line 33 i add chunks and in line 49 i remove chunks. NOT readonly
+        private List<Chunk> _chunks; // idk why it says this can be readonly, around line 33 i add chunks and around line 49 i remove chunks. NOT readonly
         private readonly Database.Database _db;
         private List<int[]> _chunksWithinLoadingRange;
 
-        private static NoiseMapGenerator _noiseMapGenerator;
+        private INoiseMapGenerator _noiseMapGenerator;
 
         public Map(
-            int chunkSize = 10
-            , int seed = -1123581321
-            , string dbLocation = "C:\\Temp\\ChunkDatabase.db"
-            , string dbCollectionName = "Chunks"
-            , NoiseMapGenerator noiseMapGenerator = NoiseMapGenerator
+            INoiseMapGenerator noiseMapGenerator
+            , Database.Database db
+            , int chunkSize
+            , int seed
         )
         {
             _chunkSize = chunkSize;
-            _db = new Database.Database(dbLocation, dbCollectionName);
+            _db = db;
             _chunks = new List<Chunk>();
-
-            if (seed == -1123581321)
-            {
-                _seed = new Random().Next(1, 999999);
-            }
-            else
-            {
-                _seed = seed;
-            }
+            _seed = seed;
+            _noiseMapGenerator = noiseMapGenerator;
         }
 
         // checks if there are new chunks that have to be loaded
@@ -120,7 +112,7 @@ namespace WorldGeneration
 
         private Chunk GenerateNewChunk(int chunkX, int chunkY)
         {
-            var chunk = noiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize, _seed);
+            var chunk = _noiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize, _seed);
             _db.InsertChunkIntoDatabase(chunk);
             return chunk;
         }
