@@ -52,7 +52,7 @@ namespace Session
 
         public void RequestSessions()
         {
-            var sessionDTO = new SessionDTO(SessionType.RequestSessions);
+            SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             sendSessionDTO(sessionDTO);
         }
 
@@ -64,7 +64,7 @@ namespace Session
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-            var sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
+            SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
             if (packet.Header.Target == "client" || packet.Header.Target == "host")
             {
                 switch (sessionDTO.SessionType)
@@ -80,19 +80,22 @@ namespace Session
                         return new HandlerResponseDTO(SendAction.Ignore, null);
                 }
             }
-            else
+            else if (packet.Header.Target == _clientController.GetOriginId())
             {
                 if (sessionDTO.SessionType == SessionType.RequestSessions)
                 {
                     return addRequestedSessions(packet);
                 }
+
+                return new HandlerResponseDTO(SendAction.Ignore, null);
             }
-            return new HandlerResponseDTO(SendAction.SendToClients, null);
+            
+            return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
         private HandlerResponseDTO handleRequestSessions()
         {
-            var sessionDTO = new SessionDTO(SessionType.RequestSessionsResponse);
+            SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessionsResponse);
             sessionDTO.Name = _session.Name;
             var jsonObject = JsonConvert.SerializeObject(sessionDTO);
             return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
@@ -101,9 +104,9 @@ namespace Session
         private HandlerResponseDTO addRequestedSessions(PacketDTO packet)
         {
             _availableSessions.TryAdd(packet.Header.SessionID, packet);
-            var sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
+            SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
             Console.WriteLine(packet.Header.SessionID + " Name: " + sessionDTO.Name); //TODO add to output
-            return new HandlerResponseDTO(SendAction.SendToClients, null);
+            return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
         private HandlerResponseDTO addPlayerToSession(PacketDTO packet)
@@ -124,18 +127,20 @@ namespace Session
                 
                 return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDto));
             }
-            
-            SessionDTO sessionDtoClients = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
-            _session.EmptyClients();
-
-            Console.Out.WriteLine("Players in your session:");
-            foreach (string client in sessionDtoClients.ClientIds)
+            else
             {
-                _session.AddClient(client);
-                Console.Out.WriteLine(client);
-            }
+                SessionDTO sessionDtoClients = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
+                _session.EmptyClients();
 
-            return new HandlerResponseDTO(SendAction.SendToClients, null);
+                Console.Out.WriteLine("Players in your session:");
+                foreach (string client in sessionDtoClients.ClientIds)
+                {
+                    _session.AddClient(client);
+                    Console.Out.WriteLine(client);
+                }
+
+                return new HandlerResponseDTO(SendAction.Ignore, null);
+            }
         }
     }
 }

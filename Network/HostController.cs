@@ -25,7 +25,6 @@ namespace Network
             {
                 HandlePacket(packet);
             }
-           
         }
 
         private void HandlePacket(PacketDTO packet)
