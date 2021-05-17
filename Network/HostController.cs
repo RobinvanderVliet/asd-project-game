@@ -5,19 +5,19 @@ using Newtonsoft.Json;
 
 namespace Network
 {
-    public class HostController : IPacketListener
+    public class HostController : IPacketListener, IHostController
     {
-        private NetworkComponent _networkComponent;
+        private INetworkComponent _networkComponent;
         private IPacketHandler _client;
         private string _sessionId;
         private List<PacketDTO> _packetQueue;
 
-        public HostController(NetworkComponent networkComponent, IPacketHandler client, string sessionId)
+        public HostController(INetworkComponent networkComponent, IPacketHandler client, string sessionId)
         {
             _networkComponent = networkComponent;
             _client = client;
             _sessionId = sessionId;
-            _networkComponent.HostController = this;
+            _networkComponent.SetHostController(this);
             _packetQueue = new();
         }
 
