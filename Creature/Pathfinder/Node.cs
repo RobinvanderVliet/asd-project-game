@@ -38,11 +38,5 @@ namespace Creature.Pathfinder
             return FScore < otherFScore ? -1 : FScore > otherFScore ? 1 : 0;
         }
 
-        //public int CompareTo(Node other) 
-        //{ 
-        //    int number = FScore.CompareTo(other.FScore);
-        //    return number;
-        //}
-
     }
 }

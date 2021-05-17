@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,12 +25,12 @@ namespace Creature.Pathfinder
             }
             return false;
         }
-
-        //public T Peek()
-        //{
-        //    T frontItem = elements[0];
-        //    return frontItem;
-        //}
+        [ExcludeFromCodeCoverage]
+        public T Peek()
+        {
+            T frontItem = elements[0];
+            return frontItem;
+        }
 
         public void Enqueue(T item)
         {
@@ -64,17 +65,5 @@ namespace Creature.Pathfinder
             }
             return firstItem;
         }
-
-        //public void Enqueue(T item)
-        //{
-        //    elements.Add(item);
-        //}
-
-        //public T Dequeue()
-        //{
-        //    T bestItem = elements[0];
-        //    elements.RemoveAt(0);
-        //    return bestItem;
-        //}
     }
 }
