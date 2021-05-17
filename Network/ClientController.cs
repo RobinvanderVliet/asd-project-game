@@ -7,15 +7,15 @@ namespace Network
 {
     public class ClientController : IPacketHandler, IClientController
     {
-        private NetworkComponent _networkComponent;
+        private INetworkComponent _networkComponent;
         private HostController _hostController;
         private string _sessionId;
         private Dictionary<PacketType, IPacketHandler> _subscribers = new();
 
-        public ClientController(NetworkComponent networkComponent)
+        public ClientController(INetworkComponent networkComponent)
         {
             _networkComponent = networkComponent;
-            _networkComponent.ClientController = this;
+            _networkComponent.SetClientController(this);
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
@@ -46,7 +46,7 @@ namespace Network
 
         public string GetOriginId()
         {
-            return _networkComponent.OriginId;
+            return _networkComponent.GetOriginId();
         }
 
         public void SendPayload(string payload, PacketType packetType)

@@ -3,15 +3,14 @@ using Newtonsoft.Json;
 
 namespace Network
 {
-    public class NetworkComponent : IPacketListener
+    public class NetworkComponent : IPacketListener, INetworkComponent
     {
         private WebSocketConnection _webSocketConnection;
         private string _originId;
-        public string OriginId { get => _originId;}
         private IPacketListener _hostController;
-        public IPacketListener HostController { get => _hostController; set => _hostController = value; }
+        public IPacketListener HostController { get => _hostController;}
         private IPacketHandler _clientController;
-        public IPacketHandler ClientController { get => _clientController; set => _clientController = value; }
+        public IPacketHandler ClientController { get => _clientController;}
 
         public NetworkComponent()
         {
@@ -39,6 +38,21 @@ namespace Network
             packet.Header.OriginID = _originId;
             string serializedPacket = JsonConvert.SerializeObject(packet);
             _webSocketConnection.Send(serializedPacket);
+        }
+
+        public void SetClientController(IPacketHandler clientController)
+        {
+            _clientController = clientController;
+        }
+
+        public void SetHostController(IPacketListener hostController)
+        {
+            _hostController = hostController;
+        }
+        
+        public string GetOriginId()
+        {
+            return _originId;
         }
     }
 }
