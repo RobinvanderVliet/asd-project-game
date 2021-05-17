@@ -12,13 +12,13 @@ namespace Agent.Tests.checker
     [ExcludeFromCodeCoverage]
     public class TestCheckerFunctions
     {
-        private Checker sut;
+        private Checker _sut;
 
         [SetUp]
         public void Setup()
         {
             Mock<AST> ast = new Mock<AST>();
-            sut = new Checker(ast.Object);
+            this._sut = new Checker(ast.Object);
         }
 
 
@@ -31,7 +31,7 @@ namespace Agent.Tests.checker
             item.AddChild(stat);
 
             //Act
-            bool result = sut.CheckItemAndAllowedStat(item);
+            bool result = this._sut.CheckItemAndAllowedStat(item);
             
             //Assert
             Assert.False(result);
@@ -53,7 +53,7 @@ namespace Agent.Tests.checker
             testNodes.Add(whenNode);
 
             //Act
-            sut.CheckStatCombination(testNodes);
+            this._sut.CheckStatCombination(testNodes);
             
             //Assert
             Assert.AreNotEqual(String.Empty, item.GetError().ToString());

@@ -5,9 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.parser
 {
-    /*
-   Maakt AST trees voor de verschillende test bestanden om te vergelijken in de tests  
-  */
+   
     [ExcludeFromCodeCoverage]
     public static class Fixtures
     {

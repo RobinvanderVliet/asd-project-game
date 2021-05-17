@@ -3,9 +3,11 @@ using Moq;
 using Creature.World;
 using System.Numerics;
 using Creature.Creature.StateMachine.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Creature.Tests
 {
+    [ExcludeFromCodeCoverage]
     class MonsterTest
     {
         private Monster _sut;

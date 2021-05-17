@@ -5,11 +5,13 @@ using Creature.Creature.StateMachine.Data;
 using Creature.World;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Creature.Creature.StateMachine.CustomRuleSet;
 
 namespace Creature
 {
+    [ExcludeFromCodeCoverage]
     class CreaturePrototype
     {
         static void Main(string[] args)

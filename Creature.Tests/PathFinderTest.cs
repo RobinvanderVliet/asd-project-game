@@ -2,10 +2,12 @@
 using NUnit.Framework;
 using Moq;
 using Creature.Pathfinder;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace Creature.Tests
 {
+    [ExcludeFromCodeCoverage]
     [TestFixture]
     class PathFinderTest
     {
