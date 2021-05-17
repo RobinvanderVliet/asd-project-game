@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Models
 {
-    public abstract class Character : ICharacter
+    public class Character : ICharacter
     {
         public string Symbol { get; set; }
         public int[] CurrentPosition { get; set; }
