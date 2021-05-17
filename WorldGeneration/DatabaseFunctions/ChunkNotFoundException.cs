@@ -1,5 +1,5 @@
 ﻿#nullable enable
-namespace WorldGeneration.Database
+namespace WorldGeneration.DatabaseFunctions
 {
     public class ChunkNotFoundException : DatabaseException
     {

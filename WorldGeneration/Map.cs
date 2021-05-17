@@ -11,15 +11,15 @@ namespace WorldGeneration
     {
         private readonly int _chunkSize;
         private readonly int _seed;
-        private List<Chunk> _chunks; // idk why it says this can be readonly, around line 33 i add chunks and around line 49 i remove chunks. NOT readonly
-        private readonly Database.Database _db;
+        private List<Chunk> _chunks;// NOT readonly, don't listen to the compiler
+        private readonly DatabaseFunctions.Database _db;
         private List<int[]> _chunksWithinLoadingRange;
 
         private INoiseMapGenerator _noiseMapGenerator;
 
         public Map(
             INoiseMapGenerator noiseMapGenerator
-            , Database.Database db
+            , DatabaseFunctions.Database db
             , int chunkSize
             , int seed
         )
