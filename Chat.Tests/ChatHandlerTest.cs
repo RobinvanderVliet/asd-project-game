@@ -16,7 +16,7 @@ namespace Chat.Tests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
-    class ChatHandlerTests
+    class ChatHandlerTest
     {
         //Declaration and initialisation of constant variables
         private ChatHandler _chatHandler;
@@ -85,7 +85,7 @@ namespace Chat.Tests
                 _chatHandler.HandlePacket(_packetDTO);
 
                 //Assert ---------
-                string expected = string.Format("say: Hello World\r\n", Environment.NewLine);
+                string expected = string.Format(" said: Hello World\r\n", Environment.NewLine);
                 Assert.AreEqual(expected, sw.ToString());
             }                 
         }
@@ -106,7 +106,7 @@ namespace Chat.Tests
                 _chatHandler.HandlePacket(_packetDTO);
 
                 //Assert ---------
-                string expected = string.Format("say: Hello World\r\n", Environment.NewLine);
+                string expected = string.Format(" shouted: Hello World\r\n", Environment.NewLine);
                 Assert.AreEqual(expected, sw.ToString());
             }
         }
