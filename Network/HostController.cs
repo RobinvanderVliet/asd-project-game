@@ -32,13 +32,13 @@ namespace Network
         {
             HandlerResponseDTO handlerResponse = _client.HandlePacket(packet);
             packet.Header.SessionID = _sessionId;
-            if (!handlerResponse.ReturnToSender)
+            if (handlerResponse.Action == SendAction.SendToClients)
             {
                 packet.Header.Target = "client";
                 packet.HandlerResponse = handlerResponse;
                 _networkComponent.SendPacket(packet);
             }
-            else
+            else if (handlerResponse.Action == SendAction.ReturnToSender)
             {
                 packet.Header.Target = packet.Header.OriginID;
                 packet.HandlerResponse = handlerResponse;

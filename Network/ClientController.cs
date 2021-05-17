@@ -25,7 +25,7 @@ namespace Network
                 return _subscribers.GetValueOrDefault(packet.Header.PacketType).HandlePacket(packet);
             }
 
-            return new HandlerResponseDTO(true, null);
+            return new HandlerResponseDTO(SendAction.ReturnToSender, null);
         }
 
         public void SetSessionId(string sessionId)

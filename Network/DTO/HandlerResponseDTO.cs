@@ -8,12 +8,12 @@ namespace Network.DTO
 {
     public class HandlerResponseDTO
     {
-        public bool ReturnToSender { get; set; }
+        public SendAction Action { get; set; }
         public string ResultMessage { get; set; }
     
-        public HandlerResponseDTO(bool returnToSender, string resultMessage)
+        public HandlerResponseDTO(SendAction action, string resultMessage)
         {
-            ReturnToSender = returnToSender;
+            Action = action;
             ResultMessage = resultMessage;
         }
     }

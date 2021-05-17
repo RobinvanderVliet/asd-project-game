@@ -77,7 +77,7 @@ namespace Session
                             return addPlayerToSession(packet);
                         }
 
-                        return new HandlerResponseDTO(false, null);
+                        return new HandlerResponseDTO(SendAction.Ignore, null);
                 }
             }
             else
@@ -87,7 +87,7 @@ namespace Session
                     return addRequestedSessions(packet);
                 }
             }
-            return new HandlerResponseDTO(false, null);
+            return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
         private HandlerResponseDTO handleRequestSessions()
@@ -95,7 +95,7 @@ namespace Session
             var sessionDTO = new SessionDTO(SessionType.RequestSessionsResponse);
             sessionDTO.Name = _session.Name;
             var jsonObject = JsonConvert.SerializeObject(sessionDTO);
-            return new HandlerResponseDTO(true, jsonObject);
+            return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
         }
 
         private HandlerResponseDTO addRequestedSessions(PacketDTO packet)
@@ -103,7 +103,7 @@ namespace Session
             _availableSessions.TryAdd(packet.Header.SessionID, packet);
             var sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
             Console.WriteLine(packet.Header.SessionID + " Name: " + sessionDTO.Name); //TODO add to output
-            return new HandlerResponseDTO(false, null);
+            return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
         private HandlerResponseDTO addPlayerToSession(PacketDTO packet)
@@ -122,7 +122,7 @@ namespace Session
                 }
                 
                 
-                return new HandlerResponseDTO(false, JsonConvert.SerializeObject(sessionDto));
+                return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDto));
             }
             
             SessionDTO sessionDtoClients = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
@@ -135,7 +135,7 @@ namespace Session
                 Console.Out.WriteLine(client);
             }
 
-            return new HandlerResponseDTO(false, null);
+            return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
     }
 }

@@ -48,12 +48,12 @@ namespace Chat
             {
                 case ChatType.Say:
                     HandleSay(chatDTO.Message, chatDTO.OriginId);
-                    return new HandlerResponseDTO(false, null);
+                    return new HandlerResponseDTO(SendAction.SendToClients, null);
                 case ChatType.Shout:
                     HandleShout(chatDTO.Message, chatDTO.OriginId);
-                    return new HandlerResponseDTO(false, null);
+                    return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
-            return new HandlerResponseDTO(false, null);
+            return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
         private void HandleSay(string message, string originId)
