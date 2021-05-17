@@ -1,47 +1,61 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace Network
 {
-    public class NetworkComponent : IPacketListener
+    public class NetworkComponent : IPacketListener, INetworkComponent
     {
-        private WebSocketConnection _webSocketConnection;
+        private IWebSocketConnection _webSocketConnection;
         private string _originId;
-        private IPacketListener _host;
-        private IPacketHandler _client;
+        private IPacketListener _hostController;
+        private IPacketHandler _clientController;
 
-        public NetworkComponent(IPacketHandler client)
+        public NetworkComponent()
         {
-            this._webSocketConnection = new WebSocketConnection(this);
-            this._originId = Guid.NewGuid().ToString();
-            this._client = client;
+            _webSocketConnection = new WebSocketConnection(this);
+            _originId = Guid.NewGuid().ToString();
         }
 
         public void ReceivePacket(PacketDTO packet)
         {
-            if(_host != null)
+            if(_hostController != null)
             {
                 if(packet.Header.Target == "host")
                 {
-                    _host.ReceivePacket(packet);
+                    _hostController.ReceivePacket(packet);
                 }
             }
-            else if(packet.Header.Target == "client" && _client != null)
+            else if((packet.Header.Target == "client" || packet.Header.Target == _originId) && _clientController != null)
             {
-                _client.HandlePacket(packet);
+                _clientController.HandlePacket(packet);
             }
         }
 
-
-        public void SendPayload(PacketDTO packet)
+        public void SendPacket(PacketDTO packet)
         {
             packet.Header.OriginID = _originId;
             string serializedPacket = JsonConvert.SerializeObject(packet);
             _webSocketConnection.Send(serializedPacket);
+        }
+
+        public void SetWebSocketConnection(IWebSocketConnection webSocketConnection)
+        {
+            _webSocketConnection = webSocketConnection;
+        }
+
+        public void SetClientController(IPacketHandler clientController)
+        {
+            _clientController = clientController;
+        }
+
+        public void SetHostController(IPacketListener hostController)
+        {
+            _hostController = hostController;
+        }
+        
+        public string GetOriginId()
+        {
+            return _originId;
         }
     }
 }

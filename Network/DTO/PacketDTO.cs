@@ -1,8 +1,11 @@
-﻿namespace Network
+﻿using Network.DTO;
+
+namespace Network
 {
-    public class ObjectPayloadDTO
+    public class PacketDTO
     {
-        public PayloadHeaderDTO Header { get; set; }
+        public PacketHeaderDTO Header { get; set; }
         public string Payload { get; set; }
+        public HandlerResponseDTO HandlerResponse { get; set; }
     }
 }
