@@ -35,7 +35,9 @@ namespace Network.Temporary
 
         private void SetMapSeed(int seed)
         {
+            // Note that this creates the map that will be used by the players in the game and overwrites the old map object. So this call should only be done with the game starts.
             gameMap = MapFactory.GenerateMap(seed: seed);
+            // Set the map used by the game as the generated map.
         }
         
 
