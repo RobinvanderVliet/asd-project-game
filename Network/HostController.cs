@@ -35,6 +35,7 @@ namespace Network
             if (!handlerResponse.ReturnToSender)
             {
                 packet.Header.Target = "client";
+                packet.HandlerResponse = handlerResponse;
                 _networkComponent.SendPacket(packet);
             }
             else

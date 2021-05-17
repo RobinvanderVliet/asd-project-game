@@ -47,6 +47,7 @@ namespace Session
             _session.AddClient(_clientController.GetOriginId());
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
+            Console.Out.WriteLine("Created session with the name: " + _session.Name);
         }
 
         public void RequestSessions()
@@ -111,6 +112,7 @@ namespace Session
 
             if (packet.Header.Target == "host")
             {
+                Console.WriteLine(sessionDto.ClientIds[0] + " Has joined your session: ");
                 _session.AddClient(sessionDto.ClientIds[0]);
                 sessionDto.ClientIds = new List<string>();
 
@@ -119,18 +121,20 @@ namespace Session
                     sessionDto.ClientIds.Add(client);
                 }
                 
-                Console.WriteLine(sessionDto.ClientIds[0] + " Has joined your session: ");
+                
                 return new HandlerResponseDTO(false, JsonConvert.SerializeObject(sessionDto));
             }
             
             SessionDTO sessionDtoClients = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
             _session.EmptyClients();
-            
+
+            Console.Out.WriteLine("Players in your session:");
             foreach (string client in sessionDtoClients.ClientIds)
             {
                 _session.AddClient(client);
+                Console.Out.WriteLine(client);
             }
-            
+
             return new HandlerResponseDTO(false, null);
         }
     }
