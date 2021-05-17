@@ -18,7 +18,7 @@ namespace Network.Tests
         //Declaration and initialisation of constant variables
 
         //Declaration of variables
-        private NetworkComponent _networkComponent;
+        private NetworkComponent _sut;
         private PacketHeaderDTO _packetHeaderDTO;
         private PacketDTO _packetDTO;
 
@@ -30,10 +30,11 @@ namespace Network.Tests
         [SetUp]
         public void Setup()
         {
-            _networkComponent = new NetworkComponent();
             _mockedHostController = new Mock<IPacketListener>();
             _mockedClientController = new Mock<IPacketHandler>();
             _mockedWebSocketConnection = new Mock<IWebSocketConnection>();
+            _sut = new NetworkComponent(_mockedWebSocketConnection.Object);
+            _sut.SetClientController(_mockedClientController.Object);
             _packetHeaderDTO = new PacketHeaderDTO();
             _packetDTO = new PacketDTO();
         }
@@ -42,43 +43,45 @@ namespace Network.Tests
         public void Test_ReceivePacket_SendPacketToHostControllerWithTargetHost()
         {
             //Arrange ---------
-            _networkComponent.SetHostController(_mockedHostController.Object);       
+            _sut.SetHostController(_mockedHostController.Object);       
             _packetHeaderDTO.Target = "host";
             _packetDTO.Header = _packetHeaderDTO;
             _mockedHostController.Setup(mock => mock.ReceivePacket(_packetDTO));
 
             //Act ---------
-            _networkComponent.ReceivePacket(_packetDTO);
+            _sut.ReceivePacket(_packetDTO);
 
             //Assert ---------
             _mockedHostController.Verify(mock => mock.ReceivePacket(_packetDTO), Times.Once());
         }
+
         [Test]
         public void Test_ReceivePacket_DoNothingWhenNoHostControllerIsSetWithTargetHost()
         {
             //Arrange ---------
-            _networkComponent.SetHostController(null);
+            _sut.SetHostController(null);
             _packetHeaderDTO.Target = "host";
             _packetDTO.Header = _packetHeaderDTO;
             _mockedHostController.Setup(mock => mock.ReceivePacket(_packetDTO));
 
             //Act ---------
-            _networkComponent.ReceivePacket(_packetDTO);
+            _sut.ReceivePacket(_packetDTO);
 
             //Assert ---------
             _mockedHostController.Verify(mock => mock.ReceivePacket(_packetDTO), Times.Never());
         }
+
         [Test]
         public void Test_ReceivePacket_SendPacketToClientControllerWithTargetClient()
         {
             //Arrange ---------
-            _networkComponent.SetClientController(_mockedClientController.Object);
+            _sut.SetClientController(_mockedClientController.Object);
             _packetHeaderDTO.Target = "client";
             _packetDTO.Header = _packetHeaderDTO;
             _mockedClientController.Setup(mock => mock.HandlePacket(_packetDTO));
 
             //Act ---------
-            _networkComponent.ReceivePacket(_packetDTO);
+            _sut.ReceivePacket(_packetDTO);
 
             //Assert ---------
             _mockedClientController.Verify(mock => mock.HandlePacket(_packetDTO), Times.Once());
@@ -88,13 +91,13 @@ namespace Network.Tests
         public void Test_ReceivePacket_SendPacketToClientControllerWithTargetOriginID()
         {
             //Arrange ---------
-            _networkComponent.SetClientController(_mockedClientController.Object);
-            _packetHeaderDTO.Target = _networkComponent.GetOriginId();
+            _sut.SetClientController(_mockedClientController.Object);
+            _packetHeaderDTO.Target = _sut.GetOriginId();
             _packetDTO.Header = _packetHeaderDTO;
             _mockedClientController.Setup(mock => mock.HandlePacket(_packetDTO));
 
             //Act ---------
-            _networkComponent.ReceivePacket(_packetDTO);
+            _sut.ReceivePacket(_packetDTO);
 
             //Assert ---------
             _mockedClientController.Verify(mock => mock.HandlePacket(_packetDTO), Times.Once());
@@ -104,13 +107,13 @@ namespace Network.Tests
         public void Test_ReceivePacket_DoNothingWhenNoClientControllerIsSetWithTargetClient()
         {
             //Arrange ---------
-            _networkComponent.SetClientController(null);
+            _sut.SetClientController(null);
             _packetHeaderDTO.Target = "client";
             _packetDTO.Header = _packetHeaderDTO;
             _mockedClientController.Setup(mock => mock.HandlePacket(_packetDTO));
 
             //Act ---------
-            _networkComponent.ReceivePacket(_packetDTO);
+            _sut.ReceivePacket(_packetDTO);
 
             //Assert ---------
             _mockedClientController.Verify(mock => mock.HandlePacket(_packetDTO), Times.Never());
@@ -120,13 +123,13 @@ namespace Network.Tests
         public void Test_ReceivePacket_DoNothingWhenNoClientControllerIsSetWithTargetOriginId()
         {
             //Arrange ---------
-            _networkComponent.SetClientController(null);
-            _packetHeaderDTO.Target = _networkComponent.GetOriginId();
+            _sut.SetClientController(null);
+            _packetHeaderDTO.Target = _sut.GetOriginId();
             _packetDTO.Header = _packetHeaderDTO;
             _mockedClientController.Setup(mock => mock.HandlePacket(_packetDTO));
 
             //Act ---------
-            _networkComponent.ReceivePacket(_packetDTO);
+            _sut.ReceivePacket(_packetDTO);
 
             //Assert ---------
             _mockedClientController.Verify(mock => mock.HandlePacket(_packetDTO), Times.Never());
@@ -136,14 +139,14 @@ namespace Network.Tests
         public void Test_SendPacket_SendsPacketToWebSocket()
         {
             //Arrange ---------
-            _networkComponent.SetWebSocketConnection(_mockedWebSocketConnection.Object);
-            _packetHeaderDTO.OriginID = _networkComponent.GetOriginId();
+            _sut.SetWebSocketConnection(_mockedWebSocketConnection.Object);
+            _packetHeaderDTO.OriginID = _sut.GetOriginId();
             _packetDTO.Header = _packetHeaderDTO;
             string serializedPacket = JsonConvert.SerializeObject(_packetDTO);
             _mockedWebSocketConnection.Setup(mock => mock.Send(serializedPacket));
 
             //Act ---------
-            _networkComponent.SendPacket(_packetDTO);
+            _sut.SendPacket(_packetDTO);
 
             //Assert ---------
             _mockedWebSocketConnection.Verify(mock => mock.Send(serializedPacket), Times.Once());

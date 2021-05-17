@@ -13,6 +13,13 @@ namespace Network
         public NetworkComponent()
         {
             _webSocketConnection = new WebSocketConnection(this);
+            
+        }
+
+        public NetworkComponent(IWebSocketConnection webSocketConnection)
+        {
+            //Constructor solely used for testing purposes
+            _webSocketConnection = webSocketConnection;
             _originId = Guid.NewGuid().ToString();
         }
 
