@@ -12,9 +12,9 @@ namespace Chat
 {
     public class ChatHandler : IPacketHandler, IChatHandler
     {
-        private ClientController _clientController;
+        private IClientController _clientController;
 
-        public ChatHandler(ClientController clientController)
+        public ChatHandler(IClientController clientController)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Chat);
@@ -34,7 +34,7 @@ namespace Chat
 
         private void SendChatDTO(ChatDTO chatDTO)
         {
-            var payload = JsonConvert.SerializeObject(chatDTO);
+            var payload = JsonConvert.SerializeObject(chatDTO);        
             _clientController.SendPayload(payload, PacketType.Chat);
         }
 
@@ -45,13 +45,23 @@ namespace Chat
             switch (chatDTO.ChatType)
             {
                 case ChatType.Say:
-                    Console.WriteLine($"say: {chatDTO.Message}");
+                    HandleSay(chatDTO.Message);
                     return new HandlerResponseDTO(false, null);
                 case ChatType.Shout:
-                    Console.WriteLine($"shout: {chatDTO.Message}");
+                    HandleShout(chatDTO.Message);
                     return new HandlerResponseDTO(false, null);
             }
             return new HandlerResponseDTO(false, null);
+        }
+
+        private void HandleSay(string message)
+        {
+            Console.WriteLine($"say: {message}");
+        }
+
+        private void HandleShout(string message)
+        {
+            Console.WriteLine($"say: {message}");
         }
     }
 }

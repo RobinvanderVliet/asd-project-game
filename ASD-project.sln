@@ -53,7 +53,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InputCommandHandler", "Inpu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InputCommandHandler.Tests", "InputCommandHandler.Tests\InputCommandHandler.Tests.csproj", "{4463D8C9-577E-4FEE-9D33-C034DB404289}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Session", "Session\Session.csproj", "{2CC43D14-B5A7-4558-9980-E80810E90330}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session", "Session\Session.csproj", "{2CC43D14-B5A7-4558-9980-E80810E90330}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Session.Tests", "Session.Tests\Session.Tests.csproj", "{E6798022-665C-4C32-BE31-7B67044573D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -149,6 +151,10 @@ Global
 		{2CC43D14-B5A7-4558-9980-E80810E90330}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CC43D14-B5A7-4558-9980-E80810E90330}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CC43D14-B5A7-4558-9980-E80810E90330}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6798022-665C-4C32-BE31-7B67044573D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6798022-665C-4C32-BE31-7B67044573D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6798022-665C-4C32-BE31-7B67044573D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6798022-665C-4C32-BE31-7B67044573D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
