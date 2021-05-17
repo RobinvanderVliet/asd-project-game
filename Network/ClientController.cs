@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Network.DTO;
 using Newtonsoft.Json;
 
@@ -8,7 +9,7 @@ namespace Network
     public class ClientController : IPacketHandler, IClientController
     {
         private INetworkComponent _networkComponent;
-        private HostController _hostController;
+        private IHostController _hostController;
         private string _sessionId;
         private Dictionary<PacketType, IPacketHandler> _subscribers = new();
 
@@ -24,10 +25,13 @@ namespace Network
             {
                 return _subscribers.GetValueOrDefault(packet.Header.PacketType).HandlePacket(packet);
             }
-
-            return new HandlerResponseDTO(SendAction.ReturnToSender, null);
+            else
+            {
+                return new HandlerResponseDTO(SendAction.ReturnToSender, null);
+            }
         }
 
+        [ExcludeFromCodeCoverage]
         public void SetSessionId(string sessionId)
         {
             _sessionId = sessionId;
@@ -37,11 +41,13 @@ namespace Network
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public void CreateHostController()
         {
             _hostController = new HostController(_networkComponent, this, _sessionId);
         }
 
+        [ExcludeFromCodeCoverage]
         public string GetOriginId()
         {
             return _networkComponent.GetOriginId();
@@ -74,6 +80,11 @@ namespace Network
         public void SubscribeToPacketType(IPacketHandler packetHandler, PacketType packetType)
         {
             _subscribers.Add(packetType, packetHandler);
+        }
+
+        public void setHostController(IHostController hostController)
+        {
+            _hostController = hostController;
         }
     }
 }

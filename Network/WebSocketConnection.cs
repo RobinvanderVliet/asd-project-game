@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Network
 {
-    public class WebSocketConnection
+    public class WebSocketConnection : IWebSocketConnection
     {
         private WebSocket _websocket;
         private WebSocketConnectionConfig _webSocketConnectionConfig;
