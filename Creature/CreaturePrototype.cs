@@ -1,6 +1,12 @@
-﻿using Creature.World;
+﻿using Agent.Mapper;
+using Agent.Services;
+using Agent.Models;
+using Creature.Creature.StateMachine.Data;
+using Creature.World;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
+using Creature.Creature.StateMachine.CustomRuleSet;
 
 namespace Creature
 {
@@ -9,9 +15,21 @@ namespace Creature
         static void Main(string[] args)
         {
             IWorld world = new DefaultWorld(25);
-            ICreature player = new Player(10, new Vector2(3, 2));
-            ICreature creature = new Monster(world, new Vector2(10, 10), 2, 6, 50);
-            ICreature creature2 = new Monster(world, new Vector2(20, 20), 2, 6, 50);
+
+            NpcConfigurationService npcConfigurationService = new NpcConfigurationService(new List<NpcConfiguration>(), new FileToDictionaryMapper());
+            npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
+            npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
+            
+            PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world);
+            MonsterData monsterData = new MonsterData(new Vector2(10, 10), 20, 5, 50, world, false);
+            MonsterData monsterData2 = new MonsterData(new Vector2(20, 20), 20, 5, 50, world, false);
+
+            RuleSet monsterRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[0].Settings);
+            RuleSet playerRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[1].Settings);
+
+            ICreature player = new Player(playerData, playerRuleSet);
+            ICreature creature = new Monster(monsterData, monsterRuleSet);
+            ICreature creature2 = new Monster(monsterData2, monsterRuleSet);
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);
@@ -24,12 +42,12 @@ namespace Creature
             {
                 string input = Console.ReadLine();
 
-                MovePlayer(player, input);
+                MovePlayer(playerData, input);
                 world.Render();
             }
         }
 
-        private static void MovePlayer(ICreature player, string input)
+        private static void MovePlayer(ICreatureData player, string input)
         {
             switch (input)
             {
