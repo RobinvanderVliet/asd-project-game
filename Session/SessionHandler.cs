@@ -104,7 +104,7 @@ namespace Session
 
         private HandlerResponseDTO addRequestedSessions(PacketDTO packet)
         {
-            _availableSessions.Add(packet.Header.SessionID, packet);
+            _availableSessions.TryAdd(packet.Header.SessionID, packet);
             var sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
             Console.WriteLine(packet.Header.SessionID + " Name: " + sessionDTO.Name); //TODO add to output
             return new HandlerResponseDTO(false, null);
