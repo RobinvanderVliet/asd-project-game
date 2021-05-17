@@ -34,5 +34,10 @@ namespace Session
         {
             return _joinedClients;
         }
+
+        public void EmptyClients()
+        {
+            _joinedClients = new List<string>();
+        }
     }
 }

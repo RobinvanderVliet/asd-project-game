@@ -4,7 +4,6 @@ namespace Session
     {
         RequestSessions,
         RequestSessionsResponse,
-        RequestToJoinSession,
-        ClientJoinedSession
+        RequestToJoinSession
     }
 }

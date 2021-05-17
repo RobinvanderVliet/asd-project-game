@@ -23,12 +23,14 @@ namespace Chat
         public void SendSay(string message)
         {
             var chatDTO = new ChatDTO(ChatType.Say, message);
+            chatDTO.OriginId = _clientController.GetOriginId();
             SendChatDTO(chatDTO);
         }
 
         public void SendShout(string message)
         {
             var chatDTO = new ChatDTO(ChatType.Shout, message);
+            chatDTO.OriginId = _clientController.GetOriginId();
             SendChatDTO(chatDTO);
         }
 
@@ -45,23 +47,23 @@ namespace Chat
             switch (chatDTO.ChatType)
             {
                 case ChatType.Say:
-                    HandleSay(chatDTO.Message);
+                    HandleSay(chatDTO.Message, chatDTO.OriginId);
                     return new HandlerResponseDTO(false, null);
                 case ChatType.Shout:
-                    HandleShout(chatDTO.Message);
+                    HandleShout(chatDTO.Message, chatDTO.OriginId);
                     return new HandlerResponseDTO(false, null);
             }
             return new HandlerResponseDTO(false, null);
         }
 
-        private void HandleSay(string message)
+        private void HandleSay(string message, string originId)
         {
-            Console.WriteLine($"say: {message}");
+            Console.WriteLine($"{originId} said: {message}");
         }
 
-        private void HandleShout(string message)
+        private void HandleShout(string message, string originId)
         {
-            Console.WriteLine($"say: {message}");
+            Console.WriteLine($"{originId} shouted: {message}");
         }
     }
 }

@@ -38,7 +38,7 @@ namespace ASD_project
                 // AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
                 // agentConfigurationService.StartConfiguration();
                 
-                new WorldGeneration.Program();
+                // new WorldGeneration.Program();
                 
                 //moet later vervangen worden
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
