@@ -76,8 +76,10 @@ namespace Session
                         {
                             return addPlayerToSession(packet);
                         }
-
-                        return new HandlerResponseDTO(SendAction.Ignore, null);
+                        else
+                        {
+                            return new HandlerResponseDTO(SendAction.Ignore, null);
+                        }
                 }
             }
             else if (packet.Header.Target == _clientController.GetOriginId())
@@ -105,35 +107,35 @@ namespace Session
         {
             _availableSessions.TryAdd(packet.Header.SessionID, packet);
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
-            Console.WriteLine(packet.Header.SessionID + " Name: " + sessionDTO.Name); //TODO add to output
+            Console.WriteLine(packet.Header.SessionID + " Name: " + sessionDTO.Name);
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
         private HandlerResponseDTO addPlayerToSession(PacketDTO packet)
         {
-            SessionDTO sessionDto = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
+            SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
 
             if (packet.Header.Target == "host")
             {
-                Console.WriteLine(sessionDto.ClientIds[0] + " Has joined your session: ");
-                _session.AddClient(sessionDto.ClientIds[0]);
-                sessionDto.ClientIds = new List<string>();
+                Console.WriteLine(sessionDTO.ClientIds[0] + " Has joined your session: ");
+                _session.AddClient(sessionDTO.ClientIds[0]);
+                sessionDTO.ClientIds = new List<string>();
 
                 foreach (string client in _session.GetAllClients())
                 {
-                    sessionDto.ClientIds.Add(client);
+                    sessionDTO.ClientIds.Add(client);
                 }
                 
                 
-                return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDto));
+                return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
             }
             else
             {
-                SessionDTO sessionDtoClients = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
+                SessionDTO sessionDTOClients = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
                 _session.EmptyClients();
 
                 Console.Out.WriteLine("Players in your session:");
-                foreach (string client in sessionDtoClients.ClientIds)
+                foreach (string client in sessionDTOClients.ClientIds)
                 {
                     _session.AddClient(client);
                     Console.Out.WriteLine(client);
