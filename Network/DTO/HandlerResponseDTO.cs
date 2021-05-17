@@ -16,5 +16,12 @@ namespace Network.DTO
             Action = action;
             ResultMessage = resultMessage;
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is HandlerResponseDTO dTO &&
+                   Action == dTO.Action &&
+                   ResultMessage == dTO.ResultMessage;
+        }
     }
 }
