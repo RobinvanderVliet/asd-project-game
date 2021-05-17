@@ -3,7 +3,7 @@ using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Models
 {
-    public class Chunk
+    public class Chunk : IEquatable<Chunk>
     {
         public Chunk(int x, int y, ITile[] map, int rowSize)
         {
@@ -53,6 +53,36 @@ namespace WorldGeneration.Models
         public int GetPositionInTileArrayByWorldCoordinates(int x, int y)
         {
             return (x % RowSize) + ((RowSize * RowSize - RowSize) - (Y * RowSize - y) * RowSize);
+        }
+
+        public bool Equals(Chunk other)
+        {
+            if (ReferenceEquals(null, other)) 
+                return false;
+            
+            if (ReferenceEquals(this, other)) 
+                return true;
+            
+            return X == other.X && Y == other.Y && RowSize == other.RowSize;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) 
+                return false;
+            
+            if (ReferenceEquals(this, obj)) 
+                return true;
+            
+            if (obj.GetType() != GetType()) 
+                return false;
+            
+            return Equals((Chunk) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(X, Y, RowSize);
         }
     }
 }
