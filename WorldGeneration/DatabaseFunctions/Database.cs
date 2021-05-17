@@ -4,20 +4,20 @@ using System.Linq;
 using LiteDB;
 using WorldGeneration.Models;
 
-namespace WorldGeneration.Database
+namespace WorldGeneration.DatabaseFunctions
 {
     public class Database
     {
         private readonly string _databaseLocation;
         private readonly string _mapCollection;
 
-        public Database(string databaseLocation = "C:\\Temp\\ChunkDatabase.db", string mapCollection = "Chunks")
+        public Database(string databaseLocation, string mapCollection)
         {
             _databaseLocation = databaseLocation;
             _mapCollection = mapCollection;
         }
 
-        //read function name
+        // read function name
         public void InsertChunkIntoDatabase(Chunk chunk)
         {
             try
@@ -32,32 +32,29 @@ namespace WorldGeneration.Database
             }
         }
 
-        //returns Chunk from database after finding it by Chunk x and y.
+        // returns Chunk from database after finding it by Chunk x and y.
         public Chunk GetChunk(int chunkXValue, int chunkYValue)
         {
             try
             {
                 using var db = new LiteDatabase(_databaseLocation);
                 var collection = GetMapCollection(db);
-                var results = collection.Query()
+                var queryresults = collection.Query()
                     .Where(chunk => chunk.X.Equals(chunkXValue) && chunk.Y.Equals(chunkYValue))
                     .Select(queryOutput => new
-                        {map = queryOutput.Map, rowSize = queryOutput.RowSize, x = queryOutput.X, y = queryOutput.Y})
-                    .ToArray();
-
-                switch (results.Length)
+                        {map = queryOutput.Map, rowSize = queryOutput.RowSize, x = queryOutput.X, y = queryOutput.Y});
+                switch (queryresults.Count())
                 {
                     case 0:
                         return null;
-                    //throw new ChunkNotFoundException("There were no matching chunks found"); don't want log spam so switching to different implementation
                     case >1:
-                        throw new DatabaseException("There were multiple matching chunks found. bad! this bad!");
+                        throw new DatabaseException("There were multiple matching chunks found where a single was expected");
                     case 1:
-                        return new Chunk(results.First().x, results.First().y, results.First().map,
-                            results.First().rowSize);
+                        return new Chunk(queryresults.First().x, queryresults.First().y, queryresults.First().map,
+                            queryresults.First().rowSize);
                     default:
                         throw new DatabaseException(
-                            "Extremely unexpected result from query. like, this is only here in case of a count being negative or null. So pretty much unreachable code.");
+                            "Result count is negative or null");
                 }
             }
             catch (Exception e)
@@ -67,7 +64,7 @@ namespace WorldGeneration.Database
             }
         }
 
-        //returns all Chunks from the database in a list. Throws a error if there are no Chunks.
+        // returns all Chunks from the database in a list. Throws a error if there are no Chunks.
         public IEnumerable<Chunk> GetAllChunks()
         {
             try
@@ -98,7 +95,7 @@ namespace WorldGeneration.Database
             }
         }
 
-        //Drops the Chunks collection.
+        // Drops the Chunks collection.
         public void DeleteTileMap()
         {
             try
@@ -113,7 +110,7 @@ namespace WorldGeneration.Database
             }
         }
 
-        //Returns the collection connection.    
+        // Returns the collection connection.    
         private ILiteCollection<Chunk> GetMapCollection(ILiteDatabase db)
         {
             return db.GetCollection<Chunk>(_mapCollection);

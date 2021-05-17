@@ -5,9 +5,9 @@ using WorldGeneration.Models.TerrainTiles;
 
 namespace WorldGeneration
 {
-    public abstract class NoiseMapGenerator
+    public class NoiseMapGenerator : INoiseMapGenerator
     {
-        public static int[,] GenerateAreaMap(int size, int seed)
+        public int[,] GenerateAreaMap(int size, int seed)
         {
             var noise = new FastNoiseLite();
             noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
@@ -21,7 +21,7 @@ namespace WorldGeneration
             return noiseData;
         }
 
-        public static Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize, int seed)
+        public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize, int seed)
         {
             var noise = new FastNoiseLite();
             noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
@@ -30,13 +30,16 @@ namespace WorldGeneration
             noise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
             var map = new ITile[chunkRowSize * chunkRowSize];
             for (var y = 0; y < chunkRowSize; y++)
-            for (var x = 0; x < chunkRowSize; x++)
-                map[y * chunkRowSize + x] =
-                    GetTileFromNoise(noise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize));
+            {
+                for (var x = 0; x < chunkRowSize; x++)
+                {
+                    map[y * chunkRowSize + x] = GetTileFromNoise(noise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize));
+                }
+            }
             return new Chunk(chunkX, chunkY, map, chunkRowSize);
         }
 
-        private static ITile GetTileFromNoise(float noise)
+        private ITile GetTileFromNoise(float noise)
         {
             return (noise * 10) switch
             {

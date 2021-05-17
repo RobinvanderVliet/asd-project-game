@@ -1,7 +1,7 @@
 #nullable enable
 using System;
 
-namespace WorldGeneration.Database
+namespace WorldGeneration.DatabaseFunctions
 {
     public class DatabaseException : Exception
     {
