@@ -161,7 +161,7 @@ namespace Network.Tests
         public void Test_SendPayload_WithoutHostController()
         {
             //Arrange
-            string payload = "test payload";
+            string payload = "random string";
             var packetType = PacketType.Chat;
             _mockedNetworkComponent.Setup(mock => mock.SendPacket(It.IsAny<PacketDTO>()));
 
@@ -177,7 +177,7 @@ namespace Network.Tests
         {
             //Arrange
             var mockedHostController = new Mock<IHostController>();
-            string payload = "test payload";
+            string payload = "random string";
             var packetType = PacketType.Chat;
             mockedHostController.Setup(mock => mock.ReceivePacket(It.IsAny<PacketDTO>()));
             _sut.setHostController(mockedHostController.Object);
