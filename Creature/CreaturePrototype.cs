@@ -31,8 +31,8 @@ namespace Creature
             RuleSet playerRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[1].Settings);
 
             ICreature player = new Player(new PlayerStateMachine(playerData, playerRuleSet));
-            ICreature creature = new Monster(monsterData, monsterRuleSet);
-            ICreature creature2 = new Monster(monsterData2, monsterRuleSet);
+            ICreature creature = new Monster(new MonsterStateMachine(monsterData, monsterRuleSet));
+            ICreature creature2 = new Monster(new MonsterStateMachine(monsterData2, monsterRuleSet));
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);
