@@ -12,13 +12,13 @@ namespace Creature.Tests
     class PlayerTest
     {
         private Player _sut;
-        private Mock<ICreatureStateMachine> creatureStateMachineMock;
+        private Mock<ICreatureStateMachine> _creatureStateMachineMock;
 
         [SetUp]
         public void Setup()
         {
-            creatureStateMachineMock = new Mock<ICreatureStateMachine>();
-            _sut = new Player(creatureStateMachineMock.Object);
+            _creatureStateMachineMock = new Mock<ICreatureStateMachine>();
+            _sut = new Player(_creatureStateMachineMock.Object);
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace Creature.Tests
         {
             // Arrange ---------
             PlayerData playerData = new PlayerData(new Vector2(), 50, 10, 10, null);
-            creatureStateMachineMock.Setup(c => c.CreatureData).Returns(playerData);
+            _creatureStateMachineMock.Setup(c => c.CreatureData).Returns(playerData);
             
             // Act -------------
             _sut.ApplyDamage(30);
@@ -40,7 +40,7 @@ namespace Creature.Tests
         {
             // Arrange ---------
             PlayerData playerData = new PlayerData(new Vector2(), 30, 10, 10, null);
-            creatureStateMachineMock.Setup(c => c.CreatureData).Returns(playerData);
+            _creatureStateMachineMock.Setup(c => c.CreatureData).Returns(playerData);
             
             // Act -------------
             _sut.HealAmount(10);
@@ -58,7 +58,7 @@ namespace Creature.Tests
             _sut.Disconnect();
 
             // Assert ----------
-            creatureStateMachineMock.Verify(creatureStateMachine => creatureStateMachine.StartStateMachine());
+            _creatureStateMachineMock.Verify(creatureStateMachine => creatureStateMachine.StartStateMachine());
         }
     }
 }
