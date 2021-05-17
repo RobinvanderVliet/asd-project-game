@@ -73,12 +73,10 @@ namespace Session
                     case SessionType.RequestToJoinSession:
                         if (packet.Header.SessionID == _session?.SessionId)
                         {
-                            return addPlayerToSession(sessionDTO);
+                            return addPlayerToSession(packet);
                         }
 
                         return new HandlerResponseDTO(false, null);
-                    case SessionType.ClientJoinedSession:
-                        return clientJoinedSession(packet);
                 }
             }
             else
@@ -107,31 +105,32 @@ namespace Session
             return new HandlerResponseDTO(false, null);
         }
 
-        private HandlerResponseDTO addPlayerToSession(SessionDTO sessionDto)
+        private HandlerResponseDTO addPlayerToSession(PacketDTO packet)
         {
-            _session.AddClient(sessionDto.ClientIds[0]);
-            Console.WriteLine(sessionDto.ClientIds[0] + " Has joined your session: "); //TODO add to output
+            SessionDTO sessionDto = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
 
-            return new HandlerResponseDTO(false, null);
-        }
-
-        private HandlerResponseDTO clientJoinedSession(PacketDTO packet)
-        {
-            var sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
-            if (sessionDTO.ClientIds != null)
+            if (packet.Header.Target == "host")
             {
-                foreach (string client in sessionDTO.ClientIds)
-                {
-                    _session.AddClient(client);
-                }
-                Console.WriteLine("Clients in current session:");
-                int index = 1;
+                _session.AddClient(sessionDto.ClientIds[0]);
+                sessionDto.ClientIds = new List<string>();
+
                 foreach (string client in _session.GetAllClients())
                 {
-                    Console.WriteLine(index + ". " + client);
-                    index++;
+                    sessionDto.ClientIds.Add(client);
                 }
+                
+                Console.WriteLine(sessionDto.ClientIds[0] + " Has joined your session: ");
+                return new HandlerResponseDTO(false, JsonConvert.SerializeObject(sessionDto));
             }
+            
+            SessionDTO sessionDtoClients = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
+            _session.EmptyClients();
+            
+            foreach (string client in sessionDtoClients.ClientIds)
+            {
+                _session.AddClient(client);
+            }
+            
             return new HandlerResponseDTO(false, null);
         }
     }
