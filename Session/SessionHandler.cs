@@ -3,9 +3,6 @@ using Newtonsoft.Json;
 using Session.DTO;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Network.DTO;
 
 namespace Session
@@ -114,7 +111,6 @@ namespace Session
         {
             _session.AddClient(sessionDto.ClientIds[0]);
             Console.WriteLine(sessionDto.ClientIds[0] + " Has joined your session: "); //TODO add to output
-            
 
             return new HandlerResponseDTO(false, null);
         }
