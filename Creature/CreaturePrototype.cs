@@ -1,9 +1,11 @@
 ﻿using Creature.World;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace Creature
 {
+    [ExcludeFromCodeCoverage]
     class CreaturePrototype
     {
         static void Main(string[] args)
