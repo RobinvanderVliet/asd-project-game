@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Session
 {
+    [ExcludeFromCodeCoverage]
     public class Session
     {
         private string _name;
@@ -37,7 +39,7 @@ namespace Session
 
         public void EmptyClients()
         {
-            _joinedClients = new List<string>();
+            _joinedClients.Clear();
         }
     }
 }
