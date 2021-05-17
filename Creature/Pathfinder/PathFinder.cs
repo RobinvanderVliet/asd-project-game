@@ -1,4 +1,5 @@
-﻿using Creature.Pathfinder;
+﻿using Creature.Exceptions;
+using Creature.Pathfinder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace Creature
 {
     public class PathFinder
     {
-        List<List<Node>> _grid;
+        private List<List<Node>> _grid;
         public PathFinder(List<List<Node>> nodes)
         {
             _grid = nodes;
@@ -76,6 +77,9 @@ namespace Creature
 
             if (currentNode == null)
                 return null;
+
+            if (currentNode.position.X != endNode.position.X && currentNode.position.Y != endNode.position.Y)
+                throw new PathHasNoDestinationException();
 
             if (currentNode == startNode)
                 pathStack.Push(currentNode);
