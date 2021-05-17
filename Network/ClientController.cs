@@ -24,10 +24,8 @@ namespace Network
             {
                 return _subscribers.GetValueOrDefault(packet.Header.PacketType).HandlePacket(packet);
             }
-            else
-            {
-                return new HandlerResponseDTO(true, null);
-            }
+
+            return new HandlerResponseDTO(true, null);
         }
 
         public void SetSessionId(string sessionId)

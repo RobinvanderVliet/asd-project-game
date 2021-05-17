@@ -74,7 +74,12 @@ namespace Session
                     case SessionType.RequestSessions:
                         return handleRequestSessions();
                     case SessionType.RequestToJoinSession:
-                        return addPlayerToSession(sessionDTO);
+                        if (packet.Header.SessionID == _session?.SessionId)
+                        {
+                            return addPlayerToSession(sessionDTO);
+                        }
+
+                        return new HandlerResponseDTO(false, null);
                     case SessionType.ClientJoinedSession:
                         return clientJoinedSession(packet);
                 }
