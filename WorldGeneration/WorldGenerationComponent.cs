@@ -2,9 +2,9 @@ using System;
 
 namespace WorldGeneration
 {
-    public class Program
+    public class WorldGenerationComponent 
     {
-        public Program()
+        public WorldGenerationComponent(IList<IPlayer> players)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             var map = MapFactory.GenerateMap();

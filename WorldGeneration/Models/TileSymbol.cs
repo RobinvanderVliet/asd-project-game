@@ -1,6 +1,6 @@
 namespace WorldGeneration.Models
 {
-    public static class TileSymbol
+    public static class TileSymbol 
     {
         public const string DOOR = "/";
         public const string HOUSE = "+";
