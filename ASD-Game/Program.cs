@@ -40,8 +40,8 @@ namespace ASD_project
                     services.AddScoped<IItem, Item>();
                     services.AddScoped<IBitcoin, Bitcoin>();
                     services.AddScoped<IRadiationLevel, RadiationLevel>();
-                    services.AddScoped<NetworkComponent, NetworkComponent>();
-                    services.AddScoped<ClientController, ClientController>();
+                    services.AddScoped<INetworkComponent, NetworkComponent>();
+                    services.AddScoped<IClientController, ClientController>();
                     services.AddScoped<IChatHandler, ChatHandler>();
                     services.AddScoped<ISessionHandler, SessionHandler>();
                 })

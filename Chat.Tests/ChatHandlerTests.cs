@@ -7,6 +7,8 @@ using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 using Moq;
 using Network;
+using Chat.DTO;
+using Newtonsoft.Json;
 
 namespace Chat.Tests
 {
@@ -20,13 +22,13 @@ namespace Chat.Tests
 
 
         //Declaration of mocks
-        private Mock<ClientController> _mockedClientController;
+        private Mock<IClientController> _mockedClientController;
    
 
         [SetUp]
         public void Setup()
         {
-            _mockedClientController = new Mock<ClientController>();
+            _mockedClientController = new Mock<IClientController>();
             _chatHandler = new ChatHandler(_mockedClientController.Object);
             
         }
@@ -36,12 +38,14 @@ namespace Chat.Tests
         {
             //Arrange ---------
             string message = "Hello World";
-            _mockedClientController.Setup(mock => mock.SendPayload(message, PacketType.Chat));
+            ChatDTO chatDTO = new ChatDTO(ChatType.Say, message);
+            var payload = JsonConvert.SerializeObject(chatDTO);
+            _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Chat));
 
             //Act ---------
             _chatHandler.SendSay(message);
             //Assert ---------
-            _mockedClientController.Verify(mock => mock.SendPayload(message, PacketType.Chat), Times.Once());
+            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Chat), Times.Once());
         }
 
         [Test]
@@ -49,12 +53,14 @@ namespace Chat.Tests
         {
             //Arrange ---------
             string message = "Hello World";
-            _mockedClientController.Setup(mock => mock.SendPayload(message, PacketType.Chat));
+            ChatDTO chatDTO = new ChatDTO(ChatType.Shout, message);
+            var payload = JsonConvert.SerializeObject(chatDTO);
+            _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Chat));
 
             //Act ---------
             _chatHandler.SendShout(message);
             //Assert ---------
-            _mockedClientController.Verify(mock => mock.SendPayload(message, PacketType.Chat), Times.Once());
+            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Chat), Times.Once());
         }
     }
 }
