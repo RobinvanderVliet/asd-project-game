@@ -16,14 +16,18 @@ namespace Network.Tests
     [TestFixture]
     class HostControllerTest
     {
+        //Declaration and initialisation of constant variables
+
+        //Declaration of variables
         private HostController _hostController;
-        private Mock<INetworkComponent> _mockedNetworkComponent;
-        private Mock<IPacketHandler> _mockedClientController;
         private string _sessionId = "TestSession";
         private PacketHeaderDTO _packetHeaderDTO;
         private HandlerResponseDTO _handlerResponseDTO;
         private PacketDTO _packetDTO;
-       
+
+        //Declaration of mocks
+        private Mock<INetworkComponent> _mockedNetworkComponent;
+        private Mock<IPacketHandler> _mockedClientController;
 
         [SetUp]
         public void Setup()

@@ -15,14 +15,17 @@ namespace Network.Tests
     [TestFixture]
     class NetworkComponentTest
     {
+        //Declaration and initialisation of constant variables
 
+        //Declaration of variables
         private NetworkComponent _networkComponent;
+        private PacketHeaderDTO _packetHeaderDTO;
+        private PacketDTO _packetDTO;
+
+        //Declaration of mocks
         private Mock<IPacketListener> _mockedHostController;
         private Mock<IPacketHandler> _mockedClientController;
         private Mock<IWebSocketConnection> _mockedWebSocketConnection;
-
-        private PacketHeaderDTO _packetHeaderDTO;
-        private PacketDTO _packetDTO;
 
         [SetUp]
         public void Setup()

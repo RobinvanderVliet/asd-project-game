@@ -19,16 +19,14 @@ namespace Chat.Tests
     class ChatHandlerTest
     {
         //Declaration and initialisation of constant variables
-        private ChatHandler _chatHandler;
-        //Declaration of variables
 
+        //Declaration of variables
+        private ChatHandler _chatHandler;
+        private PacketDTO _packetDTO;
+        private ChatDTO _chatDTO;
 
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;
-
-        private PacketDTO _packetDTO;
-
-        private ChatDTO _chatDTO;
 
         [SetUp]
         public void Setup()
