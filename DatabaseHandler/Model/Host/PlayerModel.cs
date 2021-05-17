@@ -9,10 +9,10 @@ namespace DataBaseHandler.Model.Host
         public Guid PlayerGuid { get; set; }
 
 
-        [BsonCtor]
+        
         public PlayerModel(Guid playerGuid, MainGameModel gameGuid)
         {
-            playerGuid = playerGuid;
+            PlayerGuid = playerGuid;
             GameGuid = gameGuid;
 
         }
