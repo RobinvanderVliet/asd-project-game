@@ -28,7 +28,10 @@ namespace DatabaseHandler
         {
             try
             {
-                if (_connectionString == null) throw new ArgumentNullException("Connection string is not declared?");
+                if (_connectionString == null)
+                {
+                    throw new ArgumentNullException($"Connection string is not declared. Please check the connection string.");
+                }
 
                 var connection = new LiteDatabaseAsync(_connectionString);
                 return connection;

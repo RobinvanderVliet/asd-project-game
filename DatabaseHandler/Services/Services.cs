@@ -27,7 +27,7 @@ namespace DatabaseHandler.Services
             }
             catch (Exception ex)
             {
-                _log.LogError("Exception: {Message}", ex.Message);
+                _log.LogError("Exception thrown trying to create a {Obj}: {Message}", typeof(T), ex.Message);
                 throw;
             }
         }
@@ -40,7 +40,7 @@ namespace DatabaseHandler.Services
             }
             catch (Exception ex)
             {
-                _log.LogError("Exception: {Message}", ex.Message);
+                _log.LogError("Exception thrown trying to read a {Obj} from database: {Message}", typeof(T), ex.Message);
                 throw;
             }
         }
@@ -53,7 +53,7 @@ namespace DatabaseHandler.Services
             }
             catch (Exception ex)
             {
-                _log.LogError("Exception: {Message}", ex.Message);
+                _log.LogError("Exception thrown trying to update a {Obj}: {Message}", typeof(T), ex.Message);
                 throw;
             }
         }
@@ -66,7 +66,7 @@ namespace DatabaseHandler.Services
             }
             catch (Exception ex)
             {
-                _log.LogError("Exception: {Message}", ex.Message);
+                _log.LogError("Exception thrown trying to delete {Obj} from database: {Message}", typeof(T), ex.Message);
                 throw;
             }
         }
