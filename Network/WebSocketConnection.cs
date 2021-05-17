@@ -4,6 +4,7 @@ using WebSocketSharp;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using System.IO;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Network
 {
@@ -20,21 +21,6 @@ namespace Network
             this._packetListener = packetListener;
             AddBehaviorToWebsocket();
 
-            try
-            {
-                _websocket.Connect();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
-
-        public WebSocketConnection(WebSocket webSocket)
-        {
-            this._websocket = webSocket;
-            AddBehaviorToWebsocket();
             try
             {
                 _websocket.Connect();
