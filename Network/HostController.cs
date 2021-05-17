@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Network.DTO;
 using Newtonsoft.Json;
 
@@ -45,6 +46,7 @@ namespace Network
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public void SetSessionId(string sessionId)
         {
             _sessionId = sessionId;
