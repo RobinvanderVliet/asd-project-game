@@ -1,7 +1,9 @@
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Lobby.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class Tests
     {
         [SetUp]

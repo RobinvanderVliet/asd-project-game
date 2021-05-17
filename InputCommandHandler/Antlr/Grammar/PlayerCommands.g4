@@ -61,7 +61,6 @@ command:
     JOIN_SESSION SPACE message #joinSession |
     REQUEST_SESSIONS #requestSessions;
 
-
 forward: FORWARD | UP | NORTH;
 backward: BACKWARD | DOWN | SOUTH;
 left: LEFT | WEST;

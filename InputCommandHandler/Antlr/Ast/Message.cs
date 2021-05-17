@@ -4,16 +4,16 @@ namespace InputCommandHandler.Antlr.Ast
 {
     public class Message : ASTNode, IEquatable<Message>
     {
-        private string _value;
-        public string Value { get => _value; private set => _value = value; }
+        private string _message;
+        public string MessageValue { get => _message; private set => _message = value; }
 
         public Message()
         {
         }
 
-        public Message(string value)
+        public Message(string message)
         {
-            _value = value.Replace("\"", "");
+            _message = message;
         }
 
         public override bool Equals(object obj)
@@ -26,7 +26,7 @@ namespace InputCommandHandler.Antlr.Ast
             if (other == null)
                 return false;
 
-            return _value == other._value;
+            return _message == other.MessageValue;
         }
     }
 }
