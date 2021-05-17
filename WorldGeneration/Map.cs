@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using WorldGeneration.Models;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
 {
@@ -9,70 +11,136 @@ namespace WorldGeneration
     {
         private readonly int _chunkSize;
         private readonly int _seed;
-        private IList<Chunk> _chunks;
+        private List<Chunk> _chunks;// NOT readonly, don't listen to the compiler
+        private readonly DatabaseFunctions.Database _db;
+        private List<int[]> _chunksWithinLoadingRange;
 
-        public Map(int chunkSize = 10, int seed = 0620520399)
+        private INoiseMapGenerator _noiseMapGenerator;
+
+        public Map(
+            INoiseMapGenerator noiseMapGenerator
+            , DatabaseFunctions.Database db
+            , int chunkSize
+            , int seed
+        )
         {
             _chunkSize = chunkSize;
+            _db = db;
+            _chunks = new List<Chunk>();
             _seed = seed;
+            _noiseMapGenerator = noiseMapGenerator;
         }
 
-        public void LoadArea(int[] playerLocation, int viewDistance)
+        // checks if there are new chunks that have to be loaded
+        private void LoadArea(int playerX, int playerY, int viewDistance)
         {
-            var chunksWithinLoadingRange = CalculateChunksToLoad(playerLocation, viewDistance);
-            var chunks = new List<Chunk>();
-            var db = new Database.Database();
-
-            foreach (var chunkXY in chunksWithinLoadingRange)
+            _chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
+            ForgetUnloadedChunks();
+            foreach (var chunkXY in _chunksWithinLoadingRange)
             {
-                var chunk = db.GetChunk(chunkXY[0], chunkXY[1]);
-                chunks.Add(chunk == null
-                    ? GenerateNewChunk(chunkXY[0], chunkXY[1])
-                    : db.GetChunk(chunkXY[0], chunkXY[1]));
-            }
-
-            DisplayMap(0, 0, viewDistance, chunks);
-        }
-
-        private IEnumerable<int[]> CalculateChunksToLoad(int[] playerLocation, int viewDistance)
-        {
-            var maxX = (playerLocation[0] + viewDistance * 2 + _chunkSize) / _chunkSize;
-            var minX = (playerLocation[0] - viewDistance * 2 - _chunkSize * 2) /
-                       _chunkSize; // chunks beginnen links bovenin, dus daarom *2
-            var maxY = (playerLocation[1] + viewDistance * 2 + _chunkSize * 2) / _chunkSize;
-            var minY = (playerLocation[1] - viewDistance * 2 - _chunkSize) / _chunkSize;
-            var chunksWithinLoadingRange = new List<int[]>();
-
-
-            for (var x = minX; x <= maxX; x++)
-            for (var y = minY; y < maxY; y++)
-                chunksWithinLoadingRange.Add(new[] {x, y});
-            return chunksWithinLoadingRange;
-        }
-
-        private void DisplayMap(int playerx, int playery, int viewDistance, IReadOnlyCollection<Chunk> chunks)
-        {
-            for (var y = playery; y < viewDistance * 2 + 1; y++)
-            {
-                for (var x = playerx; x < viewDistance * 2 + 1; x++)
-                {
-                    var chunk = chunks.FirstOrDefault(chunk =>
-                        chunk.X * _chunkSize <= x 
-                        && chunk.X * _chunkSize > x - _chunkSize 
-                        && chunk.Y * _chunkSize >= y 
-                        && chunk.Y * _chunkSize < y + _chunkSize);
-                    if (chunk == null) throw new Exception("this chunk should not be null");
-                    Console.Write(" " + chunk.Map[chunk.GetPositionInTileArrayByWorldCoordinates(x, y)].Symbol);
-                    if (x == viewDistance * 2) Console.WriteLine("");
+                if (!_chunks.Exists(chunk => chunk.X == chunkXY[0] && chunk.Y == chunkXY[1]))
+                { // chunk isn't loaded in local memory yet
+                    var chunk = _db.GetChunk(chunkXY[0], chunkXY[1]);
+                    _chunks.Add(chunk == null
+                        ? GenerateNewChunk(chunkXY[0], chunkXY[1])
+                        : _db.GetChunk(chunkXY[0], chunkXY[1]));
                 }
             }
         }
 
-        private Chunk GenerateNewChunk(int x, int y)
+        // cleanup function to forget chunks out of loading range
+        private void ForgetUnloadedChunks()
         {
-            var chunk = NoiseMapGenerator.GenerateChunk(x, y, _chunkSize, _seed);
-            new Database.Database().InsertChunkIntoDatabase(chunk);
+            foreach (var loadedChunk in _chunks)
+            {
+                if (!_chunksWithinLoadingRange.Exists(
+                    chunkWithinLoadingRange =>
+                        chunkWithinLoadingRange[0] == loadedChunk.X
+                        && chunkWithinLoadingRange[1] == loadedChunk.Y))
+                {
+                    if (!_chunks.Remove(loadedChunk))
+                    {
+                        throw new Exception("Failed to remove chunk from loaded chunks");
+                    }
+                }
+            }
+        }
+
+        private List<int[]> CalculateChunksToLoad(int playerX, int playerY, int viewDistance)
+        {
+            // viewDistance * 2 is to get a full screen
+            // , + playerX to get to the right location
+            // , + chunksize to add some loading buffer
+            // , / chunksize to convert tile coordinates to world coordinates
+            // same for the other variables
+            var maxX = (playerX + viewDistance * 2 + _chunkSize) / _chunkSize; 
+            var minX = (playerX - viewDistance * 2 - _chunkSize) / _chunkSize;
+            var maxY = (playerY + viewDistance * 2 + _chunkSize) / _chunkSize + 1;
+            var minY = (playerY - viewDistance * 2 - _chunkSize) / _chunkSize;
+            var chunksWithinLoadingRange = new List<int[]>();
+
+            for (var x = minX; x <= maxX; x++)
+            {
+                for (var y = minY; y < maxY; y++)
+                {
+                    chunksWithinLoadingRange.Add(new[] {x, y});
+                }
+            }
+            return chunksWithinLoadingRange;
+        }
+
+        public void DisplayMap(int playerX, int playerY, int viewDistance)
+        {
+            LoadArea(playerX, playerY, viewDistance);
+            for (var y = (playerY + viewDistance); y > ((playerY + viewDistance) - (viewDistance * 2)); y--)
+            {
+                for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2)); x++)
+                {
+                    var chunk = GetChunkForTileXAndY(x, y);
+                    if (x == 0 && y == 0)
+                    {
+                        Console.Write(" " + '0'); // mark world center
+                    }
+                    else
+                    {
+                        Console.Write(" " + chunk.Map[chunk.GetPositionInTileArrayByWorldCoordinates(x, y)].Symbol);
+                    }
+                }
+                Console.WriteLine("");
+            }
+        }
+
+        private Chunk GenerateNewChunk(int chunkX, int chunkY)
+        {
+            var chunk = _noiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize, _seed);
+            _db.InsertChunkIntoDatabase(chunk);
             return chunk;
+        }
+
+        private Chunk GetChunkForTileXAndY(int x, int y)
+        {
+            var chunk = _chunks.FirstOrDefault(chunk =>
+                chunk.X * _chunkSize <= x 
+                && chunk.X * _chunkSize > x - _chunkSize 
+                && chunk.Y * _chunkSize >= y &&
+                chunk.Y * _chunkSize < y + _chunkSize);
+            
+            if (chunk == null)
+            {
+                throw new Exception("Tried to find a chunk that has not been loaded");
+            }
+            return chunk;
+        }
+
+        public void DeleteMap()
+        {
+            _db.DeleteTileMap();
+        }
+        
+        // find a LOADED tile by the coordinates
+        public ITile GetLoadedTileByXAndY(int x, int y)
+        {
+            return GetChunkForTileXAndY(x, y).GetTileByWorldCoordinates(x, y);
         }
     }
 }
