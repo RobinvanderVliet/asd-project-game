@@ -1,6 +1,8 @@
 using Moq;
 using Network;
+using Newtonsoft.Json;
 using NUnit.Framework;
+using Session.DTO;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Session.Tests
@@ -13,14 +15,13 @@ namespace Session.Tests
         SessionHandler _sessionHandler;
 
         //Declaration of mocks
-        private Mock<ClientController> _mockedClientController;
-        private Mock<Session> _session;
+        private Mock<IClientController> _mockedClientController;
 
         [SetUp]
         public void Setup()
         {
-            _mockedClientController = new Mock<ClientController>();
-            _session = new Mock<Session>();
+            _mockedClientController = new Mock<IClientController>();
+            _sessionHandler = new SessionHandler(_mockedClientController.Object);
         }
 
         [Test]
@@ -32,19 +33,32 @@ namespace Session.Tests
         [Test]
         public void Test_CreateSession()
         {
-            Assert.Pass();
+            // Arrange ------------
+            string testSessionName = "testSessionName";
+
+            _mockedClientController.Setup(mock => mock.CreateHostController());
+
+            // Act ----------------
+            _sessionHandler.CreateSession(testSessionName);
+
+            // Assert -------------
+            _mockedClientController.Verify(mock => mock.CreateHostController(), Times.Once());
         }
 
         [Test]
         public void Test_RequestSessions()
         {
-            Assert.Pass();
-        }
+            //Arrange ---------
+            SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
+            var payload = JsonConvert.SerializeObject(sessionDTO);
 
-        [Test]
-        public void Test_SendSessionDTO()
-        {
-            Assert.Pass();
+            _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Session));
+
+            //Act ---------
+            _sessionHandler.RequestSessions();
+
+            //Assert ---------
+            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
         }
 
         [Test]
