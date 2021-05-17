@@ -89,25 +89,39 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
 
-        public void DisplayMap(int playerX, int playerY, int viewDistance)
+        public void DisplayMap(IPlayer player, int viewDistance, IList<IPlayer> players)
         {
+            var playerX = player.CurrentPosition[0];
+            var playerY = player.CurrentPosition[1];
             LoadArea(playerX, playerY, viewDistance);
             for (var y = (playerY + viewDistance); y > ((playerY + viewDistance) - (viewDistance * 2)); y--)
             {
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2)); x++)
                 {
-                    var chunk = GetChunkForTileXAndY(x, y);
-                    if (x == 0 && y == 0)
-                    {
-                        Console.Write(" " + '0'); // mark world center
-                    }
-                    else
-                    {
-                        Console.Write(" " + chunk.Map[chunk.GetPositionInTileArrayByWorldCoordinates(x, y)].Symbol);
-                    }
+                    var tile = GetLoadedTileByXAndY(x, y);
+                    Console.Write(GetDisplaySymbol(player, tile, players));
                 }
                 Console.WriteLine("");
             }
+        }
+        public string GetDisplaySymbol(IPlayer currentPlayer, ITile tile, IList<IPlayer> characters)
+        {
+            if (IsPlayerOnTile(tile, currentPlayer))
+            {
+                return " " + currentPlayer.Symbol;
+            }
+            foreach (var character in characters)
+            {
+                //if (player.Name == currentPlayer.Name) continue;
+                // moet nog een check komen of het friendly of enemy player is
+                // player.Symbol = CharacterSymbol.ENEMY_PLAYER;
+                return " " + character.Symbol;
+            }
+            return " " + tile.Symbol;
+        }
+        private bool IsPlayerOnTile(ITile tile, IPlayer player)
+        {
+            return tile.X == player.CurrentPosition[0] && tile.Y == player.CurrentPosition[1];
         }
 
         private Chunk GenerateNewChunk(int chunkX, int chunkY)
@@ -131,6 +145,9 @@ namespace WorldGeneration
             }
             return chunk;
         }
+     
+
+      
 
         public void DeleteMap()
         {

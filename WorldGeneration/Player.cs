@@ -4,7 +4,7 @@ using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
 {
-   public class Player : IPlayer
+   public class Player :  IPlayer 
    {
       public string Symbol { get; set; }
       public int[] CurrentPosition { get; set; }
