@@ -22,7 +22,7 @@ namespace Agent.Tests.Mapper
         }
 
         [Test]
-        public void TestCorrectFileMapping()
+        public void Test_MapFileToConfiguration_Successful()
         {
             //Arrange
             Dictionary<String, String> expectedDictionary = new Dictionary<string, string>();
@@ -42,7 +42,7 @@ namespace Agent.Tests.Mapper
         }
         
         [Test]
-        public void TestNotCorrectFileMapping()
+        public void Test_MapFileToConfiguration_Unsuccessful()
         {
             //Arrange
             var filepath = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest_2.txt";

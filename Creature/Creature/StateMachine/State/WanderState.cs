@@ -1,4 +1,5 @@
-﻿using Creature.Creature.StateMachine.Data;
+﻿using System;
+using Creature.Creature.StateMachine.Data;
 
 namespace Creature.Creature.StateMachine.State
 {
@@ -11,11 +12,11 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do()
         {
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
         public override void Do(ICreatureData creatureData)
         {
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

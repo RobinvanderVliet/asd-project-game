@@ -14,17 +14,17 @@ namespace Creature.Creature.StateMachine.State
 
         public virtual void Do() 
         {
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public virtual void Do(ICreatureData creatureData) 
         {
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public int CompareTo(object obj)
         {
-            throw new InvalidOperationException("State machine should not be compared to");
+            throw new InvalidOperationException("State machine is not a comparable object.");
         }
     }
 }

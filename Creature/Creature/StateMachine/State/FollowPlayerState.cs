@@ -1,4 +1,5 @@
-﻿using Creature.Creature.StateMachine.Data;
+﻿using System;
+using Creature.Creature.StateMachine.Data;
 using Creature.Pathfinder;
 using System.Collections.Generic;
 using System.Numerics;
@@ -14,7 +15,7 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do()
         {
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void Do(ICreatureData creatureData)
