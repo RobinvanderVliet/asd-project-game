@@ -9,10 +9,12 @@ namespace WorldGeneration.Models.HazardousTiles
         public string Symbol { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
-        public GasTile(int radius = 1)
+        public GasTile(int x, int y, int radius = 1)
         {
             Symbol = TileSymbol.GAS;
             IsAccessible = true;
+            X = x;
+            Y = y;
 
             Radius = radius;
         }

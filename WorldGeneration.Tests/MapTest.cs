@@ -72,7 +72,7 @@ namespace WorldGeneration.Tests
         {
             //Arrange ---------
             //Act ---------
-            _sut.DisplayMap(0,0, 1);
+            //_sut.DisplayMap(0,0, 1);
             //Assert ---------
         }
         
@@ -81,7 +81,7 @@ namespace WorldGeneration.Tests
         {
             //Arrange ---------
             //Act ---------
-            _sut.DisplayMap(0,0, 1);
+            //_sut.DisplayMap(0,0, 1);
             //Assert ---------
         }
         

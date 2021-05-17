@@ -35,20 +35,16 @@ namespace ASD_project
                 // TODO: Remove from this method, team 2 will provide a command for it
                 // AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
                 // agentConfigurationService.StartConfiguration();
-                
-                
-                
-                
-                
+
                 //moet later vervangen worden
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
                 IList<IPlayer> players = new List<IPlayer>();
                 players.Add(new WorldGeneration.Player("henk", new []{0,0}));
-                players.Add(new WorldGeneration.Player("pietje", new []{15,15}));
+                //players.Add(new WorldGeneration.Player("pietje", new []{15,15}));
                     
                
                 World world = new World(players);
-                world.LoadAreaForPlayer(players.First(),10);
+                world.DisplayWorld(8, players.First());
                 
                 Console.WriteLine("Type input messages below");
             }

@@ -33,22 +33,24 @@ namespace WorldGeneration
             {
                 for (var x = 0; x < chunkRowSize; x++)
                 {
-                    map[y * chunkRowSize + x] = GetTileFromNoise(noise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize));
+                    map[y * chunkRowSize + x] = GetTileFromNoise(noise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize)
+                        , x + chunkRowSize * chunkX
+                        , chunkRowSize * chunkY - chunkRowSize + y);
                 }
             }
             return new Chunk(chunkX, chunkY, map, chunkRowSize);
         }
 
-        private ITile GetTileFromNoise(float noise)
+        private ITile GetTileFromNoise(float noise, int x, int y)
         {
             return (noise * 10) switch
             {
-                (< -8) => new WaterTile(),
-                (< -4) => new DirtTile(),
-                (< 2) => new GrassTile(),
-                (< 3) => new SpikeTile(),
-                (< 8) => new StreetTile(),
-                _ => new GasTile()
+                (< -8) => new WaterTile(x, y),
+                (< -4) => new DirtTile(x, y),
+                (< 2) => new GrassTile(x, y),
+                (< 3) => new SpikeTile(x, y),
+                (< 8) => new StreetTile(x, y),
+                _ => new GasTile(x, y)
             };
         }
     }

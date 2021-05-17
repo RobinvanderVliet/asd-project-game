@@ -9,10 +9,12 @@ namespace WorldGeneration.Models.HazardousTiles
         public string Symbol { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
-        public SpikeTile()
+        public SpikeTile(int x, int y)
         {
             Symbol = TileSymbol.SPIKE;
             IsAccessible = true;
+            X = x;
+            Y = y;
             Damage = new Random().Next(2, 11);
         }
 

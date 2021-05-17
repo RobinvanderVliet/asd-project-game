@@ -1,4 +1,5 @@
-﻿using WorldGeneration.Models.Interfaces;
+using System.Runtime.Intrinsics.X86;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Models.TerrainTiles
 {
@@ -8,10 +9,12 @@ namespace WorldGeneration.Models.TerrainTiles
         public string Symbol { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
-        public WaterTile()
+        public WaterTile(int x, int y)
         {
             Symbol = TileSymbol.WATER;
             IsAccessible = false;
+            X = x;
+            Y = y;
         }
     }
 }

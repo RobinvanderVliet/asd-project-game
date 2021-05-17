@@ -1,4 +1,6 @@
-﻿namespace WorldGeneration.Models.Interfaces
+﻿using System.Runtime.Intrinsics.X86;
+
+namespace WorldGeneration.Models.Interfaces
 {
     public interface ITile
     {

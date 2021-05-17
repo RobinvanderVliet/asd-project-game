@@ -22,6 +22,7 @@ namespace WorldGeneration
         public void DisplayWorld(int viewDistance, IPlayer player)
         {
             // in toekomst moet er ook characters worden meegegeven. 
+            _map.DeleteMap();
             _map.DisplayMap(player, viewDistance, _players);
         }
     }

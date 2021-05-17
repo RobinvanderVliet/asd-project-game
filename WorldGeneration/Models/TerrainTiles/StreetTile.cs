@@ -9,10 +9,12 @@ namespace WorldGeneration.Models.TerrainTiles
         public string Symbol { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
-        public StreetTile()
+        public StreetTile(int x, int y)
         {
             Symbol = TileSymbol.STREET;
             IsAccessible = true;
+            X = x;
+            Y = y;
         }
     }
 }
