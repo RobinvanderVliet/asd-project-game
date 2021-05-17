@@ -94,8 +94,8 @@ namespace Session.Tests
             HandlerResponseDTO actualResult = _sessionHandler.HandlePacket(_packetDTO);
 
             // Assert ----------
-            HandlerResponseDTO expectedResult = new HandlerResponseDTO(true, "testSessionName");
-            Assert.AreEqual(expectedResult.ReturnToSender, actualResult.ReturnToSender);
+            HandlerResponseDTO expectedResult = new HandlerResponseDTO(SendAction.ReturnToSender, "testSessionName");
+            Assert.AreEqual(expectedResult.Action, actualResult.Action);
         }
 
         [Test]
@@ -118,8 +118,8 @@ namespace Session.Tests
             HandlerResponseDTO actualResult = _sessionHandler.HandlePacket(_packetDTO);
 
             // Assert ----------
-            HandlerResponseDTO expectedResult = new HandlerResponseDTO(false, "testSessionName");
-            Assert.AreEqual(expectedResult.ReturnToSender, actualResult.ReturnToSender);
+            HandlerResponseDTO expectedResult = new HandlerResponseDTO(SendAction.Ignore, "testSessionName");
+            Assert.AreEqual(expectedResult.Action, actualResult.Action);
         }
 
         [Test]
