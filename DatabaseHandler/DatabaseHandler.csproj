@@ -2,6 +2,9 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
+        <Description>DatabaseHandler is a class library that allows static access to a database for reasing and writing data.</Description>
+        <Title>Database Handler</Title>
+        <Authors>Ugur Ekim</Authors>
     </PropertyGroup>
 
     <ItemGroup>
