@@ -93,5 +93,22 @@ namespace WorldGeneration
             }
             return " " + tile.Symbol;
             }
+        
+        public void MovePlayer(string playerName, int positionX, int positionY)
+        {
+            foreach (var player in _players)
+            {
+                if (player.Name != playerName) continue;
+                if (player.CurrentPosition[0] == positionX && player.CurrentPosition[1] == positionY)
+                {
+                    // Player is trying to move to the exact same position.
+                }
+                else
+                {
+                    player.CurrentPosition = new[] {positionX, positionY};
+                    // Update the map to show new position.
+                }
+            }
+        }
     }
 }
