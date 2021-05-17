@@ -4,9 +4,13 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.IO;
-using Player.Model;
+using DatabaseHandler;
+using DatabaseHandler.Repository;
+using DatabaseHandler.Services;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using WorldGeneration;
 using Player;
+using Player.Model;
 
 namespace ASD_project
 {
@@ -32,13 +36,14 @@ namespace ASD_project
                 {
                     services.AddTransient<IMainGame, MainGame>();
                     services.AddScoped<IPlayerModel, PlayerModel>();
-                    services.AddScoped<IInventory, Inventory>();
-                    services.AddScoped<IItem, Item>();
-                    services.AddScoped<IBitcoin, Bitcoin>();
-                    services.AddScoped<IRadiationLevel, RadiationLevel>();
+                    services.AddSingleton<IDbConnection, DbConnection>();
+                    services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+                    services.AddScoped(typeof(IServices<>), typeof(Services<>));
+
                 })
                 .UseSerilog()
                 .Build();
+            
 
             var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);
             svc.Run();

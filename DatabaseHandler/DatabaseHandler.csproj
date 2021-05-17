@@ -2,14 +2,21 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
+        <Description>DatabaseHandler is a class library that allows static access to a database for reasing and writing data.</Description>
+        <Title>Database Handler</Title>
+        <Authors>Ugur Ekim</Authors>
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Model\Client" />
+      <PackageReference Include="LiteDB" Version="5.0.10" />
+      <PackageReference Include="LiteDB.Async" Version="0.0.8" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="LiteDB" Version="5.0.10" />
+      <ProjectReference Include="..\WorldGeneration\WorldGeneration.csproj" />
     </ItemGroup>
 
 </Project>

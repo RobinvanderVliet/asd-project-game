@@ -3,8 +3,17 @@ using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Models
 {
-    public class Chunk
+    public class Chunk : IEquatable<Chunk>
     {
+        public int X { get; set; }
+        public int Y { get; set; }
+        public ITile[] Map { get; set; }
+        public int RowSize { get; set; }
+        
+        public Chunk()
+        {
+        }
+        
         public Chunk(int x, int y, ITile[] map, int rowSize)
         {
             X = x;
@@ -13,15 +22,8 @@ namespace WorldGeneration.Models
             RowSize = rowSize;
         }
 
-        public Chunk()
-        {
-        }
 
-        public int X { get; set; }
-        public int Y { get; set; }
-        public ITile[] Map { get; set; }
-        public int RowSize { get; set; }
-
+        
         //writes out the symbols for the tilemap of the current chunk in the proper shape.
         public void DisplayChunk()
         {
@@ -52,8 +54,37 @@ namespace WorldGeneration.Models
 
         public int GetPositionInTileArrayByWorldCoordinates(int x, int y)
         {
-            // return (x % RowSize) + (Y * RowSize + (y - Y * RowSize) * RowSize);
-            return x % RowSize + (Y * RowSize - y) * RowSize;
+            return (x % RowSize) + ((RowSize * RowSize - RowSize) - (Y * RowSize - y) * RowSize);
+        }
+
+        public bool Equals(Chunk other)
+        {
+            if (ReferenceEquals(null, other)) 
+                return false;
+            
+            if (ReferenceEquals(this, other)) 
+                return true;
+            
+            return X == other.X && Y == other.Y && RowSize == other.RowSize;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) 
+                return false;
+            
+            if (ReferenceEquals(this, obj)) 
+                return true;
+            
+            if (obj.GetType() != GetType()) 
+                return false;
+            
+            return Equals((Chunk) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(X, Y, RowSize);
         }
     }
 }

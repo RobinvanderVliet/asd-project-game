@@ -53,20 +53,26 @@ namespace WorldGeneration
         private void DisplayMap(int playerx, int playery, int viewDistance, IReadOnlyCollection<Chunk> chunks)
         {
             for (var y = playery; y < viewDistance * 2 + 1; y++)
-            for (var x = playerx; x < viewDistance * 2 + 1; x++)
             {
-                var chunk = chunks.FirstOrDefault(chunk =>
-                    chunk.X * _chunkSize <= x && chunk.X * _chunkSize > x - _chunkSize && chunk.Y * _chunkSize >= y &&
-                    chunk.Y * _chunkSize < y + _chunkSize);
-                if (chunk == null) throw new Exception("this chunk should not be null");
-                Console.Write(" " + chunk.Map[chunk.GetPositionInTileArrayByWorldCoordinates(x, y)].Symbol);
-                if (x == viewDistance * 2) Console.WriteLine("");
+                for (var x = playerx; x < viewDistance * 2 + 1; x++)
+                {
+                    var chunk = chunks.FirstOrDefault(chunk =>
+                        chunk.X * _chunkSize <= x 
+                        && chunk.X * _chunkSize > x - _chunkSize 
+                        && chunk.Y * _chunkSize >= y 
+                        && chunk.Y * _chunkSize < y + _chunkSize);
+                    if (chunk == null) throw new Exception("this chunk should not be null");
+                    Console.Write(" " + chunk.Map[chunk.GetPositionInTileArrayByWorldCoordinates(x, y)].Symbol);
+                    if (x == viewDistance * 2) Console.WriteLine("");
+                }
             }
         }
 
         private Chunk GenerateNewChunk(int x, int y)
         {
-            return NoiseMapGenerator.GenerateChunk(x, y, _chunkSize, _seed);
+            var chunk = NoiseMapGenerator.GenerateChunk(x, y, _chunkSize, _seed);
+            new Database.Database().InsertChunkIntoDatabase(chunk);
+            return chunk;
         }
     }
 }

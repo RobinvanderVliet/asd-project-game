@@ -3,14 +3,6 @@ using System;
 using InputCommandHandler;
 using Player.Model;
 using Player.Services;
-using Microsoft.Extensions.Logging;
-using System;
-using WorldGeneration;
-using Player;
-using Agent.Services;
-using DatabaseHandler;
-
-
 
 namespace ASD_project
 {
@@ -33,20 +25,17 @@ namespace ASD_project
                 // AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
                 // agentConfigurationService.StartConfiguration();
                 
-             //   new WorldGeneration.Program();
+                new WorldGeneration.Program();
                 
                 //moet later vervangen worden
-                // InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
-                // PlayerModel playerModel = new PlayerModel("Name", new Inventory(), new Bitcoin(20), new RadiationLevel(1));
-                // IPlayerService playerService = new PlayerService(playerModel); 
-                // Console.WriteLine("Type input messages below");
-                // while (true) // moet vervangen worden met variabele: isQuit 
-                // {
-                //     inputHandler.HandleCommands(playerService);
-                // }
-
-                new DatabaseConnection().SetupDatabase();
-
+                InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
+                PlayerModel playerModel = new PlayerModel("Name", new Inventory(), new Bitcoin(20), new RadiationLevel(1));
+                IPlayerService playerService = new PlayerService(playerModel); 
+                Console.WriteLine("Type input messages below");
+                while (true) // moet vervangen worden met variabele: isQuit 
+                {
+                    inputHandler.HandleCommands(playerService);
+                }
             }
         }
     }
