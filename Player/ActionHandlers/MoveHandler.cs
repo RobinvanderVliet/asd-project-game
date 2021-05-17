@@ -26,7 +26,7 @@ namespace Player.ActionHandlers
         
         private void SendMoveDTO(MoveDTO moveDTO)
         {
-            var payload = JsonConvert.SerializeObject(moveDTO);        
+            var payload = JsonConvert.SerializeObject(moveDTO);
             _clientController.SendPayload(payload, PacketType.Move);
         }
         
@@ -44,7 +44,8 @@ namespace Player.ActionHandlers
            // als host dan in globale db aanpassen voor die speler (hostcontoller (HandlePacket))
            
            // als speler waarvan positie gewijzigd is dan in eigen db aanpassen
-           if (player.Equals(_player))
+           if (player.PlayerName == _player.//playerName
+                                                        )
            {
                // ja: dan aanpassen in mijn (_player) db
                //_player.setData(int x, int y);
