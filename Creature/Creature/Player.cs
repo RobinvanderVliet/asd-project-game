@@ -1,6 +1,4 @@
 ﻿using Creature.Creature.StateMachine;
-using Creature.Creature.StateMachine.CustomRuleSet;
-using Creature.Creature.StateMachine.Data;
 
 namespace Creature
 {
