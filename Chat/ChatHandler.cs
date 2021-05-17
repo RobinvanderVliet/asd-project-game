@@ -45,13 +45,23 @@ namespace Chat
             switch (chatDTO.ChatType)
             {
                 case ChatType.Say:
-                    Console.WriteLine($"say: {chatDTO.Message}");
+                    HandleSay(chatDTO.Message);
                     return new HandlerResponseDTO(false, null);
                 case ChatType.Shout:
-                    Console.WriteLine($"shout: {chatDTO.Message}");
+                    HandleShout(chatDTO.Message);
                     return new HandlerResponseDTO(false, null);
             }
             return new HandlerResponseDTO(false, null);
+        }
+
+        private void HandleSay(string message)
+        {
+            Console.WriteLine($"say: {message}");
+        }
+
+        private void HandleShout(string message)
+        {
+            Console.WriteLine($"say: {message}");
         }
     }
 }
