@@ -12,9 +12,9 @@ namespace Chat
 {
     public class ChatHandler : IPacketHandler, IChatHandler
     {
-        private ClientController _clientController;
+        private IClientController _clientController;
 
-        public ChatHandler(ClientController clientController)
+        public ChatHandler(IClientController clientController)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Chat);
@@ -34,7 +34,7 @@ namespace Chat
 
         private void SendChatDTO(ChatDTO chatDTO)
         {
-            var payload = JsonConvert.SerializeObject(chatDTO);
+            var payload = JsonConvert.SerializeObject(chatDTO);        
             _clientController.SendPayload(payload, PacketType.Chat);
         }
 
