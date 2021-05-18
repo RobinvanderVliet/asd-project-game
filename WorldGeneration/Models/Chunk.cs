@@ -21,19 +21,6 @@ namespace WorldGeneration.Models
             RowSize = rowSize;
         }
 
-        //writes out the symbols for the tilemap of the current chunk in the proper shape.
-        public void DisplayChunk()
-        {
-            for (var i = 0; i < Map.Length; i++)
-            {
-                if (i % RowSize == 0) Console.WriteLine(" ");
-
-                Console.Write(" " + Map[i].Symbol);
-            }
-
-            Console.WriteLine("");
-        }
-
         //returns the coordinates relative to the start (left top) of the chunk. 0,0 is the left top. First value is x, second is y.
         public int[] GetTileCoordinatesInChunk(int indexInArray)
         {
