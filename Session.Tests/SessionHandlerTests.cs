@@ -344,5 +344,43 @@ namespace Session.Tests
             HandlerResponseDTO expectedResult = new HandlerResponseDTO(SendAction.Ignore, null);
             Assert.AreEqual(expectedResult, actualResult);
         }
+        
+        [Test]
+        public void Test_HandlePacket_RequestToJoinSessionAsSecondClient()
+        {
+            // Arrange ---------
+            string generatedSessionId = "";
+            _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>())).Callback<string>(r => generatedSessionId = r);
+            _sut.CreateSession("testSessionName");
+
+            string originId = "testOriginId";
+            string originIdHost = "testOriginIdHost";
+
+            SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
+            sessionDTO.ClientIds = new List<string>();
+            sessionDTO.ClientIds.Add(originId);
+
+            var payload = JsonConvert.SerializeObject(sessionDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            packetHeaderDTO.OriginID = originId;
+            packetHeaderDTO.SessionID = generatedSessionId;
+            packetHeaderDTO.PacketType = PacketType.Session;
+            packetHeaderDTO.Target = "client";
+            _packetDTO.Header = packetHeaderDTO;
+            SessionDTO sessionDTOInHandlerResponse = new SessionDTO(SessionType.RequestToJoinSession);
+            sessionDTOInHandlerResponse.ClientIds = sessionDTO.ClientIds;
+            sessionDTOInHandlerResponse.ClientIds.Add(originIdHost);
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
+            _packetDTO.HandlerResponse = handlerResponseDTO;
+
+            _mockedClientController.SetupSequence(x => x.GetOriginId()).Returns(originIdHost);
+
+            // Act -------------
+            _sut.HandlePacket(_packetDTO);
+
+            // Assert ----------
+            _mockedClientController.Verify(mock => mock.MarkBackupHost(), Times.Once);
+        }
     }
 }

@@ -6,52 +6,59 @@ using System.Threading.Tasks;
 
 namespace Network
 {
-    class BackupHostService 
+
+    public class BackupHostService : IBackupHostService
     {
         private Boolean _isBackupHost;
 
-        //database shit
-        private Database database;
-
+        // //database shit
+        // private Database database;
+        //
         public BackupHostService() 
         {
             _isBackupHost = false;
         }
+        //
+        // public void UpdateBackupDatabase(DatabaseModel data)
+        // {
+        //     try
+        //     {
+        //         if (CheckExists(data))
+        //         {
+        //             //todo update database
+        //         }
+        //         else
+        //         {
+        //             AddToBackupDatabase(data);
+        //         }
+        //
+        //         //save in database
+        //     }
+        //     catch (Exception)
+        //     {
+        //         Console.WriteLine("Some data did not save succesfull, please contact your host!");
+        //     }
+        //
+        // }
+        //
+        // private void AddToBackupDatabase(DatabaseModel data) {
+        // //todo call add function
+        // }
+        //
+        // private Boolean CheckExists(DatabaseModel data)
+        // {
+        //     return false; //todo
+        // }
+        //
 
-        public void UpdateBackupDatabase(DatabaseModel data)
+        public void enableBackupHost()
         {
-            try
-            {
-                if (CheckExists(data))
-                {
-                    //todo update database
-                }
-                else
-                {
-                    AddToBackupDatabase(data);
-                }
-
-                //save in database
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Some data did not save succesfull, please contact your host!");
-            }
-
+            _isBackupHost = true;
         }
 
-        private void AddToBackupDatabase(DatabaseModel data) {
-        //todo call add function
-        }
-
-        private Boolean CheckExists(DatabaseModel data)
+        public Boolean isBackupHost()
         {
-            return false; //todo
-        }
-
-        public Boolean IsBackupHost
-        {
-            get => _isBackupHost; set => _isBackupHost = value;
+            return _isBackupHost;
         }
     }
 }

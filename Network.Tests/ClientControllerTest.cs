@@ -15,12 +15,14 @@ namespace Network.Tests
         private readonly string _sessionId = "1";
         
         private Mock<INetworkComponent> _mockedNetworkComponent;
+        private Mock<IBackupHostService> _mockedBackupHostService;
 
         [SetUp]
         public void Setup()
         {
             _mockedNetworkComponent = new Mock<INetworkComponent>();
-            _sut = new ClientController(_mockedNetworkComponent.Object);
+            _mockedBackupHostService = new Mock<IBackupHostService>();
+            _sut = new ClientController(_mockedNetworkComponent.Object, _mockedBackupHostService.Object);
         }
 
         [Test]
@@ -197,6 +199,18 @@ namespace Network.Tests
             
             //Assert
             mockedHostController.Verify(mock => mock.SetSessionId(_sessionId), Times.Once);
+        }
+        
+        [Test]
+        public void Test_MarkBackupHost_WhenSecondPlayerJoinsSession()
+        {
+            //Arrange
+
+            //Act
+            _sut.MarkBackupHost();
+            
+            //Assert
+            _mockedBackupHostService.Verify(mock => mock.enableBackupHost(), Times.Once);
         }
     }
 }

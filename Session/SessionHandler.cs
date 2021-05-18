@@ -143,9 +143,8 @@ namespace Session
                 if (sessionDTOClients.ClientIds.Count > 0) {
                     if (sessionDTOClients.ClientIds[1].Equals(_clientController.GetOriginId()))
                     {
-                        //_clientController.BackupHostService.IsBackupHost(true);
-                        Console.WriteLine("Lol jij is die back up :P");
-                        Console.WriteLine("Backup goes Brrrrr");
+                        _clientController.MarkBackupHost();
+                        Console.WriteLine("You have been marked as the backup host");
                     }
                 }
 

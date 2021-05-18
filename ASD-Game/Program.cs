@@ -44,6 +44,7 @@ namespace ASD_project
                     services.AddScoped<IClientController, ClientController>();
                     services.AddScoped<IChatHandler, ChatHandler>();
                     services.AddScoped<ISessionHandler, SessionHandler>();
+                    services.AddScoped<IBackupHostService, BackupHostService>();
                 })
                 .UseSerilog()
                 .Build();
