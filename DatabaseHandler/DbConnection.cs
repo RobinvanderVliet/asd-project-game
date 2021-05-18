@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using DatabaseHandler.Poco;
 using LiteDB;
 using LiteDB.Async;
@@ -41,7 +42,8 @@ namespace DatabaseHandler
         {
             try
             {
-                var connection = new LiteDatabaseAsync("Filename=.\\Mama.db");
+                var currentDirectory = Directory.GetCurrentDirectory();
+                var connection = new LiteDatabaseAsync(currentDirectory + "\\Mama.db");
                 return connection;
             }
             catch (Exception ex)
