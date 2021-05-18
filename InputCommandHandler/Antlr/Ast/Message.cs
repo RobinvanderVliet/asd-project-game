@@ -13,7 +13,7 @@ namespace InputCommandHandler.Antlr.Ast
 
         public Message(string message)
         {
-            _message = message;
+            _message = message.Replace("\"", "");
         }
 
         public override bool Equals(object obj)

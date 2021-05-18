@@ -8,12 +8,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using WorldGeneration;
-using Player;
 using Agent.Services;
 using WorldGeneration.Models;
 using WorldGeneration.Models.Interfaces;
 using Player = WorldGeneration.Player;
+using Chat;
+using Session;
+using Player.ActionHandlers;
+using Player.DTO;
 
 namespace ASD_project
 {
@@ -22,10 +26,19 @@ namespace ASD_project
         public class MainGame : IMainGame
         {
             private readonly ILogger<MainGame> _log;
+            private readonly IInventory _inventory;
+            private readonly IChatHandler _chatHandler;
+            private readonly ISessionHandler _sessionHandler;
+            private readonly IMoveHandler _moveHandler;
 
-            public MainGame(ILogger<MainGame> log)
+            public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler,
+                ISessionHandler sessionHandler, IMoveHandler moveHandler)
             {
                 this._log = log;
+                _inventory = inventory;
+                _chatHandler = chatHandler;
+                _sessionHandler = sessionHandler;
+                _moveHandler = moveHandler;
             }
 
             public void Run()
@@ -45,6 +58,17 @@ namespace ASD_project
                 World world = new World(players, 66666666);
                 world.DisplayWorld(8, players.First());
                 
+                IPlayerModel playerModel = new PlayerModel("Name", _inventory, new Bitcoin(20), new RadiationLevel(1));
+                //lobby start
+                //networkcomponent heeft lijst van players
+                //die players moeten toegevoegd worden aan playerPositions
+                List<PlayerDTO> playerPositions = new List<PlayerDTO>
+                {
+                    new PlayerDTO("Joe", 10, 10),
+                    new PlayerDTO("Mama", 40, 40)
+                };
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler,
+                    playerPositions, _moveHandler);
                 Console.WriteLine("Type input messages below");
             }
         }

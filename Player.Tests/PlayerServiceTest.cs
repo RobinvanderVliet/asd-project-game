@@ -1,8 +1,13 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Chat;
 using Moq;
 using NUnit.Framework;
+using Player.ActionHandlers;
+using Player.DTO;
 using Player.Model;
 using Player.Services;
+using Session;
 
 namespace Player.Tests
 {
@@ -11,12 +16,20 @@ namespace Player.Tests
     {
         private PlayerService _sut;
         private Mock<IPlayerModel> _mockedPlayerModel;
+        private List<PlayerDTO> _mockedPlayerList;
+        private Mock<IMoveHandler> _mockedMoveHandler;
+        private Mock<IChatHandler> _mockedChatHandler;
+        private Mock<ISessionHandler> _mockedSessionHandler;
         
         [SetUp]
         public void Setup()
         {
             _mockedPlayerModel = new Mock<IPlayerModel>();
-            _sut = new PlayerService(_mockedPlayerModel.Object);
+            _mockedPlayerList = new List<PlayerDTO>();
+            _mockedMoveHandler = new Mock<IMoveHandler>();
+            _mockedChatHandler = new Mock<IChatHandler>();
+            _mockedSessionHandler = new Mock<ISessionHandler>();
+            _sut = new PlayerService(_mockedPlayerModel.Object, _mockedChatHandler.Object, _mockedSessionHandler.Object, _mockedPlayerList, _mockedMoveHandler.Object);
         }
         
         [Test]
@@ -163,14 +176,15 @@ namespace Player.Tests
         {
             var direction_right = "right";
             int steps = 5;
-            int[] newMovement = {steps, 0};
-            int[] playerPosition = {31, 11};
-            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(newMovement));
-            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.CurrentPosition).Returns(playerPosition);
+            int x = 26;
+            int y = 11;
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(steps, 0));
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.XPosition).Returns(x);
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.YPosition).Returns(y);;
 
             _sut.HandleDirection(direction_right, steps);
             
-            _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(newMovement), Times.Once);
+            _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(steps, 0), Times.Once);
         }
         
         [Test]
@@ -178,14 +192,15 @@ namespace Player.Tests
         {
             var direction_left = "left";
             int steps = 5;
-            int[] newMovement = {-steps, 0};
-            int[] playerPosition = {31, 11};
-            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(newMovement));
-            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.CurrentPosition).Returns(playerPosition);
+            int x = 26;
+            int y = 11;
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(-steps, 0));
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.XPosition).Returns(x);
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.YPosition).Returns(y);
 
             _sut.HandleDirection(direction_left, steps);
             
-            _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(newMovement), Times.Once);
+            _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(-steps, 0), Times.Once);
         }
         
         [Test]
@@ -193,14 +208,15 @@ namespace Player.Tests
         {
             var direction_left = "forward";
             int steps = 5;
-            int[] newMovement = {0, -steps};
-            int[] playerPosition = {31, 11};
-            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(newMovement));
-            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.CurrentPosition).Returns(playerPosition);
+            int x = 26;
+            int y = 11;
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(0, -steps));
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.XPosition).Returns(x);
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.YPosition).Returns(y);
 
             _sut.HandleDirection(direction_left, steps);
             
-            _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(newMovement), Times.Once);
+            _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(0, -steps), Times.Once);
         }
         
         [Test]
@@ -208,14 +224,15 @@ namespace Player.Tests
         {
             var direction_left = "backward";
             int steps = 5;
-            int[] newMovement = {0, steps};
-            int[] playerPosition = {31, 11};
-            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(newMovement));
-            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.CurrentPosition).Returns(playerPosition);
+            int x = 26;
+            int y = 11;
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(0, steps));
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.XPosition).Returns(x);
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.YPosition).Returns(y);
 
             _sut.HandleDirection(direction_left, steps);
             
-            _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(newMovement), Times.Once);
+            _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(0, steps), Times.Once);
         }
     }
 }

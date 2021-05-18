@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Agent.exceptions;
+using Agent.Mapper;
+using Agent.Models;
 
 namespace Agent.Services
 {
@@ -7,12 +10,16 @@ namespace Agent.Services
     {
         private Pipeline _pipeline;
         private FileHandler _fileHandler;
+        private FileToDictionaryMapper _fileToDictionaryMapper;
+        private List<AgentConfiguration> _agentConfigurations;
         private const string CancelCommand = "cancel"; 
 
         public AgentConfigurationService()
         {
             _pipeline = new Pipeline();
             _fileHandler = new FileHandler();
+            _fileToDictionaryMapper = new FileToDictionaryMapper();
+            _agentConfigurations = new List<AgentConfiguration>();
         }
         
         public void StartConfiguration()
@@ -54,6 +61,21 @@ namespace Agent.Services
                 Console.WriteLine("Semantic error: " + e.Message);
                 StartConfiguration();
             }
+        }
+
+        public void CreateAgentConfiguration(string agentName, string filepath)
+        {
+            var agentConfiguration = new AgentConfiguration();
+            agentConfiguration.AgentName = agentName;
+
+           agentConfiguration.Settings = _fileToDictionaryMapper.MapFileToConfiguration(filepath);
+
+           _agentConfigurations.Add(agentConfiguration);
+        }
+        
+        public List<AgentConfiguration> GetConfigurations()
+        {
+            return _agentConfigurations;
         }
     }
 }

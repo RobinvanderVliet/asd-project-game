@@ -21,8 +21,10 @@ namespace Player.Model
         private IRadiationLevel _radiationLevel;
         public IRadiationLevel RadiationLevel { get => _radiationLevel; set => _radiationLevel = value; }
 
-        private int[] _currentPosition;
-        public int[] CurrentPosition { get => _currentPosition; set => _currentPosition = value; }
+        private int _xPosition;
+        private int _yPosition;
+        public int XPosition { get => _xPosition; set => _xPosition = value; }
+        public int YPosition { get => _yPosition; set => _yPosition = value; }
 
         //random default values for health&stamina for now
         private const int HEALTHCAP = 100;
@@ -41,7 +43,8 @@ namespace Player.Model
             //random default value for now
             _bitcoins = bitcoins;
             _radiationLevel = radiationLevel;
-            _currentPosition = new[] {26, 11};
+            _xPosition = 26; 
+            _yPosition = 11;
         }
 
         public void AddHealth(int amount)
@@ -157,12 +160,10 @@ namespace Player.Model
             }
         }
 
-        public void SetNewPlayerPosition(int[] newMovement)
+        public void SetNewPlayerPosition(int x, int y)
         {
-            for (var i = 0; i <= 1; i++)
-            {
-                _currentPosition[i] = _currentPosition[i] + newMovement[i];
-            }
+            _xPosition += x;
+            _yPosition += y;
         }
     }
 }
