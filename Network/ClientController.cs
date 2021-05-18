@@ -30,7 +30,6 @@ namespace Network
             }
         }
 
-        [ExcludeFromCodeCoverage]
         public void SetSessionId(string sessionId)
         {
             _sessionId = sessionId;
@@ -81,7 +80,7 @@ namespace Network
             _subscribers.Add(packetType, packetHandler);
         }
 
-        public void setHostController(IHostController hostController)
+        public void SetHostController(IHostController hostController)
         {
             _hostController = hostController;
         }

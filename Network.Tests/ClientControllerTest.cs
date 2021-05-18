@@ -1,8 +1,8 @@
 ﻿using System;
-using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 using Moq;
 using Network.DTO;
+using NUnit.Framework;
 
 namespace Network.Tests
 {
@@ -176,7 +176,7 @@ namespace Network.Tests
             string payload = "random string";
             var packetType = PacketType.Chat;
             mockedHostController.Setup(mock => mock.ReceivePacket(It.IsAny<PacketDTO>()));
-            _sut.setHostController(mockedHostController.Object);
+            _sut.SetHostController(mockedHostController.Object);
 
             //Act
             _sut.SendPayload(payload, packetType);
@@ -185,5 +185,18 @@ namespace Network.Tests
             mockedHostController.Verify(mock => mock.ReceivePacket(It.IsAny<PacketDTO>()), Times.Once);
         }
 
+        [Test]
+        public void Test_SetSessionId_WhenHostControllerIsSet()
+        {
+            //Arrange
+            Mock<IHostController> mockedHostController = new Mock<IHostController>();
+            _sut.SetHostController(mockedHostController.Object);
+            
+            //Act
+            _sut.SetSessionId(_SESSIONID);
+            
+            //Assert
+            mockedHostController.Verify(mock => mock.SetSessionId(_SESSIONID), Times.Once);
+        }
     }
 }
