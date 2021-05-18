@@ -16,6 +16,7 @@ namespace Session
         private IClientController _clientController;
         private Session _session;
         private Dictionary<string, PacketDTO> _availableSessions = new();
+        private bool _hostActive = true;
 
         public SessionHandler(IClientController clientController)
         {
@@ -32,10 +33,12 @@ namespace Session
             else
             {
                 //TODO: MOVE TO EVENT START GAME
+                //TODO: IF backuphost is true :)
                 new Thread(() =>
                 {
                     SendPing();
                     Thread.Sleep(1000);
+                    checkIfHostActive();
                 }).Start();
                 
                 SessionDTO sessionDto = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
@@ -91,10 +94,10 @@ namespace Session
                         {
                             return new HandlerResponseDTO(SendAction.Ignore, null);
                         }
-                    case SessionType.ReceivedPing:
+                    case SessionType.SendPing:
                         return handlePingRequest();
                     case SessionType.ReceivedPingResponse:
-                        handlePingResponse(packet.Payload);
+                        handlePingResponse(sessionDTO.Name);
                         return new HandlerResponseDTO(SendAction.Ignore, null);
                 }
             }
@@ -111,24 +114,28 @@ namespace Session
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
+        private void checkIfHostActive() 
+        {
+            if (!_hostActive) 
+            {
+                //Je word host :)
+            }
+        }
+
         private void handlePingResponse(String payload)
         {
             if (payload.Equals("pong"))
             {
-                
+                _hostActive = true;
             }
-            else
-            {
-                // TODO: Host moet overgenomen worden door backup host
-                
-            }
-            
         }
 
         private HandlerResponseDTO handlePingRequest()
         {
-            String pingResponse = "pong";
-            return new HandlerResponseDTO(SendAction.ReturnToSender, pingResponse);
+            SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessionsResponse);
+            sessionDTO.Name = "pong";
+            var jsonObject = JsonConvert.SerializeObject(sessionDTO);
+            return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
         }
 
         private HandlerResponseDTO handleRequestSessions()
@@ -183,8 +190,11 @@ namespace Session
 
         public void SendPing()
         {
-            //if(_clientController.GetOriginId())
-            _clientController.SendPayload("ping", PacketType.Session);
+            SessionDTO sessionDTO = new SessionDTO(SessionType.SendPing);
+            sessionDTO.Name = "ping";
+            var jsonObject = JsonConvert.SerializeObject(sessionDTO);
+            _hostActive = false;
+            _clientController.SendPayload(jsonObject, PacketType.Session);
         }
     }
 }
