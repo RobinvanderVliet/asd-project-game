@@ -91,13 +91,11 @@ namespace Session
                         {
                             return new HandlerResponseDTO(SendAction.Ignore, null);
                         }
-                    case SessionType.ClientJoinedSession:
-                        return clientJoinedSession(packet);
                     case SessionType.ReceivedPing:
                         return handlePingRequest();
                     case SessionType.ReceivedPingResponse:
                         handlePingResponse(packet.Payload);
-                        return new HandlerResponseDTO(false, null);
+                        return new HandlerResponseDTO(SendAction., null);
                 }
             }
             else if (packet.Header.Target == _clientController.GetOriginId())
@@ -130,7 +128,7 @@ namespace Session
         private HandlerResponseDTO handlePingRequest()
         {
             String pingResponse = "pong";
-            return new HandlerResponseDTO(true, pingResponse);
+            return new HandlerResponseDTO(SendAction.ReturnToSender, pingResponse);
         }
 
         private HandlerResponseDTO handleRequestSessions()
