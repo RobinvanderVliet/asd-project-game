@@ -82,6 +82,36 @@ namespace InputCommandHandler.Antlr.Parser
             _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
+        public override void EnterCreateSession(PlayerCommandsParser.CreateSessionContext context)
+        {
+            _currentContainer.Push(new CreateSession());
+        }
+
+        public override void ExitCreateSession(PlayerCommandsParser.CreateSessionContext context)
+        {
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+        }
+
+        public override void EnterJoinSession(PlayerCommandsParser.JoinSessionContext context)
+        {
+            _currentContainer.Push(new JoinSession());
+        }
+
+        public override void ExitJoinSession(PlayerCommandsParser.JoinSessionContext context)
+        {
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+        }
+
+        public override void EnterRequestSessions(PlayerCommandsParser.RequestSessionsContext context)
+        {
+            _currentContainer.Push(new RequestSessions());
+        }
+
+        public override void ExitRequestSessions(PlayerCommandsParser.RequestSessionsContext context)
+        {
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+        }
+
         public override void EnterShout(PlayerCommandsParser.ShoutContext context)
         {
             _currentContainer.Push(new Shout());
@@ -111,7 +141,7 @@ namespace InputCommandHandler.Antlr.Parser
         {
             _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
-        
+
         public override void EnterResume(PlayerCommandsParser.ResumeContext context)
         {
             _currentContainer.Push(new Resume());
@@ -143,7 +173,7 @@ namespace InputCommandHandler.Antlr.Parser
             Move move = (Move) _currentContainer.Peek();
             move.AddChild(new Step(Convert.ToInt32(context.GetText())));
         }
-        
+
         public override void EnterMessage(PlayerCommandsParser.MessageContext context)
         {
             var action = _currentContainer.Peek();
@@ -157,6 +187,14 @@ namespace InputCommandHandler.Antlr.Parser
             {
                 Shout shout = (Shout) action;
                 shout.AddChild(new Message(context.GetText()));
+            }
+            else if (action is CreateSession createSession)
+            {
+                createSession.AddChild(new Message(context.GetText()));
+            }
+            else if (action is JoinSession joinSession)
+            {
+                joinSession.AddChild(new Message(context.GetText()));
             }
         }
     }
