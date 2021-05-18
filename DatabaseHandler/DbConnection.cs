@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using DatabaseHandler.Poco;
 using LiteDB;
 using LiteDB.Async;
 using Microsoft.Extensions.Logging;
@@ -9,12 +10,10 @@ namespace DatabaseHandler
     [ExcludeFromCodeCoverage]
     public class DbConnection : IDbConnection
     {
-        private readonly ILogger<DbConnection> _log;
         private string _connectionString;
 
-        public DbConnection(ILogger<DbConnection> log)
+        public DbConnection()
         {
-            _log = log;
         }
 
         [ExcludeFromCodeCoverage]
@@ -22,23 +21,32 @@ namespace DatabaseHandler
         {
             _connectionString = connectionString;
         }
+        
+        public void SetForeignKeys()
+        {
+            var col = GetConnectionAsync().GetCollection<PlayerPoco>(GetDbName<PlayerPoco>());
+            var game = GetConnectionAsync().GetCollection<MainGamePoco>(GetDbName<MainGamePoco>());
+            BsonMapper.Global.Entity<PlayerPoco>()
+                .DbRef(x => x.GameGuid, GetDbName<MainGamePoco>());
+        }
+        
+        private string GetDbName<T>()
+        {
+            var name = typeof(T).Name + "s";
+            return name;
+        }
 
         [ExcludeFromCodeCoverage]
         public ILiteDatabaseAsync GetConnectionAsync()
         {
             try
             {
-                if (_connectionString == null)
-                {
-                    throw new ArgumentNullException($"Connection string is not declared. Please check the connection string.");
-                }
-
-                var connection = new LiteDatabaseAsync(_connectionString);
+                var connection = new LiteDatabaseAsync("Filename=.\\Mama.db");
                 return connection;
             }
             catch (Exception ex)
             {
-                _log.LogError("Exception: {Message}", ex.Message);
+                Console.WriteLine("Exception: {Message}", ex.Message);
                 throw;
             }
         }

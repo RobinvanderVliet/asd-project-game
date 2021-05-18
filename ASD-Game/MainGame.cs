@@ -1,6 +1,11 @@
 using Microsoft.Extensions.Logging;
 using System;
+using DatabaseHandler;
+using DatabaseHandler.Poco;
+using DatabaseHandler.Repository;
+using DatabaseHandler.Services;
 using InputCommandHandler;
+using Microsoft.Extensions.Logging.Abstractions;
 using Player.Model;
 using Player.Services;
 
@@ -21,21 +26,24 @@ namespace ASD_project
             {
                 Console.WriteLine("Game is gestart");
 
-                // TODO: Remove from this method, team 2 will provide a command for it
-                // AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
-                // agentConfigurationService.StartConfiguration();
+                var tmp = new DbConnection();
+                tmp.SetForeignKeys();
                 
-                new WorldGeneration.Program();
-                
-                //moet later vervangen worden
-                InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
-                PlayerModel playerModel = new PlayerModel("Name", new Inventory(), new Bitcoin(20), new RadiationLevel(1));
-                IPlayerService playerService = new PlayerService(playerModel); 
-                Console.WriteLine("Type input messages below");
-                while (true) // moet vervangen worden met variabele: isQuit 
-                {
-                    inputHandler.HandleCommands(playerService);
-                }
+                var repository = new Repository<PlayerPoco>();
+                var repositoryMainGame = new Repository<MainGamePoco>();
+                var tmpServicePlayerPoco = new Services<PlayerPoco>(repository, new NullLogger<Services<PlayerPoco>>());
+                var tmpServiceMainGamePoco = new Services<MainGamePoco>(repositoryMainGame, new NullLogger<Services<MainGamePoco>>());
+                var tmpGuidGame = Guid.NewGuid();
+                var tmpObject = new MainGamePoco {MainGameGuid = Guid.NewGuid()};
+                var tmpPlayer = new PlayerPoco {PlayerGuid = Guid.NewGuid(), GameGuid = tmpObject};
+
+
+                tmpServiceMainGamePoco.CreateAsync(tmpObject);
+                tmpServicePlayerPoco.CreateAsync(tmpPlayer);
+                var result1 = tmpServicePlayerPoco.GetAllAsync();
+                result1.Wait();
+                var result2 = tmpServiceMainGamePoco.GetAllAsync();
+                result2.Wait();
             }
         }
     }

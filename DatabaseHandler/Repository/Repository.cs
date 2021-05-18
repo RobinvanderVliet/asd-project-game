@@ -11,15 +11,19 @@ namespace DatabaseHandler.Repository
     public class Repository<T> : IRepository<T>
     {
         private readonly string _collection;
+        private readonly IDbConnection _connection;
         private readonly ILiteDatabaseAsync _db;
 
         [ExcludeFromCodeCoverage]
-        public Repository(IDbConnection connection, string connectionString = null, string collection = null)
+        public Repository(string connectionString = null, string collection = null)
         {
-            connection.SetConnectionString(connectionString ?? "Filename=.\\" + typeof(T).Name + ".db");
+            /*
+             * TODO: Connection string zo aanpassen dat je alleen filename meegeeft.
+             */
             _collection = collection ?? typeof(T).Name;
-            _db = connection.GetConnectionAsync();
-
+            _connection = new DbConnection();
+            _db = _connection.GetConnectionAsync();
+            _connection.SetConnectionString(connectionString ?? "Filename=.\\" + typeof(T).Name + ".db");
         }
 
         [ExcludeFromCodeCoverage]

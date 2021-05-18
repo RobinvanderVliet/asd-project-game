@@ -15,7 +15,11 @@ namespace DatabaseHandler.Services
 
         public Services(IRepository<T> repository, ILogger<Services<T>> log)
         {
-            _repository = repository;
+            /*
+             * TODO: Kijken of dit hier al geinitisaliseerd kan worden.
+             * Voor unit tests moet er wel geimplementeerd kunnen worden...
+             */
+            _repository = repository ?? new Repository<T>();
             _log = log;
         }
 
