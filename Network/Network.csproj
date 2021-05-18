@@ -14,4 +14,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataTransfer\DataTransfer.csproj" />
+  </ItemGroup>
 </Project>
