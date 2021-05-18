@@ -80,8 +80,9 @@ namespace Creature.Creature.NeuralNetworking
 
             return false;
         }
+
         //returns a copy of this node
-        Node Clone()
+        public Node Clone()
         {
             Node clone = new Node(number);
             clone.layer = layer;
