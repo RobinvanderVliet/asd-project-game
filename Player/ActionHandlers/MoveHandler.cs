@@ -10,18 +10,18 @@ namespace Player.ActionHandlers
     public class MoveHandler : IMoveHandler, IPacketHandler
     {
         private IClientController _clientController;
-        private IPlayerService _player;
+        private IPlayerModel _currentPlayer;
 
-        public MoveHandler(IClientController clientController, IPlayerService player)
+        public MoveHandler(IClientController clientController)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Move);
-            _player = player;
         }
 
-        public void SendMove(IPlayerModel player, int x, int y)
+        public void SendMove(IPlayerModel player)
         {
-            var playerDTO = new PlayerDTO(player.Name, x, y);
+            _currentPlayer = player;
+            var playerDTO = new PlayerDTO(player.Name, player.XPosition, player.YPosition);
             var moveDTO = new MoveDTO(playerDTO);
             SendMoveDTO(moveDTO);
         } 
@@ -41,8 +41,12 @@ namespace Player.ActionHandlers
                 
        private void HandleMove(PlayerDTO player)
        {
+           if (player.PlayerName.Equals(_currentPlayer.Name))
+           {
+               
+           }
            // aanroepen daadwerkelijke functie voor aanpassen x en y in wereld (dus in arraylist)
-           _player.ChangePositionOfAPlayer(player);
+           //_player.ChangePositionOfAPlayer(player);
            // als host dan in globale db aanpassen voor die speler (hostcontoller (HandlePacket))
            
            // als speler waarvan positie gewijzigd is dan in eigen db aanpassen
