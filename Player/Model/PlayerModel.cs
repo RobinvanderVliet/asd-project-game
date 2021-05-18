@@ -1,5 +1,6 @@
 ﻿using System;
 using Player.Exceptions;
+using WorldGeneration.Models;
 
 namespace Player.Model
 {
@@ -25,6 +26,11 @@ namespace Player.Model
         private int _yPosition;
         public int XPosition { get => _xPosition; set => _xPosition = value; }
         public int YPosition { get => _yPosition; set => _yPosition = value; }
+        
+        public string Symbol { get => _symbol; set => _symbol = value; }
+        public ConsoleColor Color { get; set; }
+        public int Team { get; set; }
+        private string _symbol = CharacterSymbol.CURRENT_PLAYER;
 
         //random default values for health&stamina for now
         private const int HEALTHCAP = 100;

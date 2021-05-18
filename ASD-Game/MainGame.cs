@@ -53,10 +53,10 @@ namespace ASD_project
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
                 IList<IPlayer> players = new List<IPlayer>();
                 players.Add(new WorldGeneration.Player("henk", 3, 0));
-                players.Add(new WorldGeneration.Player("pietje", 9, 5));                   
+                players.Add(new WorldGeneration.Player("pietje", 5, 4));                   
                
                 World world = new World(players, 66666666);
-                world.DisplayWorld(8, players.First());
+                world.DisplayWorld(4, players.First());
                 
                 IPlayerModel playerModel = new PlayerModel("Name", _inventory, new Bitcoin(20), new RadiationLevel(1));
                 //lobby start
@@ -70,6 +70,10 @@ namespace ASD_project
                 IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler,
                     playerPositions, _moveHandler);
                 Console.WriteLine("Type input messages below");
+                while (true) // moet vervangen worden met variabele: isQuit 
+                {    
+                    inputHandler.HandleCommands(playerService);
+                }
             }
         }
     }

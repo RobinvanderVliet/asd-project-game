@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Player.DTO;
+using Player.Model;
 using WorldGeneration.Models;
 using WorldGeneration.Models.Interfaces;
 
@@ -89,7 +91,7 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
 
-        public void DisplayMap(IPlayer player, int viewDistance, IList<IPlayer> players)
+        public void DisplayMap(IPlayerModel player, int viewDistance, IList<PlayerDTO> players)
         {
             var playerX = player.XPosition;
             var playerY = player.YPosition;
@@ -105,21 +107,27 @@ namespace WorldGeneration
             }
         }
         
-        private string GetDisplaySymbol(IPlayer currentPlayer, ITile tile, IList<IPlayer> players)
+        private string GetDisplaySymbol(IPlayerModel currentPlayer, ITile tile, IList<PlayerDTO> players)
         {
             bool currentPlayerOnTile = IsPlayerOnTile(tile, currentPlayer);
             if (currentPlayerOnTile)
             {
                 return currentPlayer.Symbol;
             }
-            foreach (var playerOnTile in players.Where(player => player.XPosition == tile.XPosition && player.YPosition - 1 == tile.YPosition))
+            foreach (var playerOnTile in players.Where(player => player.X == tile.XPosition && player.Y - 1 == tile.YPosition))
             {
-                return playerOnTile.Symbol;
+                if (playerOnTile.Team != currentPlayer.Team || playerOnTile.Team == 0)
+                {
+                    return CharacterSymbol.ENEMY_PLAYER;
+                }
+              
+                return CharacterSymbol.FRIENDLY_PLAYER;
+                
             }
             return tile.Symbol;
         }
 
-        private bool IsPlayerOnTile(ITile tile, IPlayer player)
+        private bool IsPlayerOnTile(ITile tile, IPlayerModel player)
         {
             return tile.XPosition == player.XPosition && tile.YPosition == player.YPosition - 1;
         }

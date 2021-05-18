@@ -41,6 +41,9 @@ namespace Player.ActionHandlers
                 
        private void HandleMove(PlayerDTO player)
        {
+           
+           // worldService.updateArraylistposition(player, x, y);
+           
            if (player.PlayerName.Equals(_currentPlayer.Name))
            {
                
