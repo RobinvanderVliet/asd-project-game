@@ -1,6 +1,5 @@
 using NUnit.Framework;
 using Moq;
-using WebSocketSharp;
 using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 using System.Threading;
