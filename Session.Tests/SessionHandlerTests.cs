@@ -131,6 +131,23 @@ namespace Session.Tests
         }
 
         [Test]
+        public void Test_SendPing()
+        {
+            // Arrange ---------
+            SessionDTO sessionDTO = new SessionDTO(SessionType.SendPing);
+            sessionDTO.Name = "ping";
+            var payload = JsonConvert.SerializeObject(sessionDTO);
+
+            _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Session));
+
+            // Act ---------
+            _sut.SendPing();
+
+            // Assert ---------
+            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
+        }
+
+        [Test]
         public void Test_HandlePacket_RequestSessionsAtClientOrHost()
         {
             // Arrange ---------
