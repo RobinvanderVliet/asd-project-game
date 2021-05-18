@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using Player.ActionHandlers;
 using Player.DTO;
+using Chat;
 using Player.Model;
+using Session;
 
 namespace Player.Services
 {
@@ -11,9 +13,13 @@ namespace Player.Services
         private readonly IPlayerModel _currentPlayer;
         private List<PlayerDTO> _playerPositions;
         private readonly IMoveHandler _moveHandler;
+        private readonly IChatHandler _chatHandler;
+        private readonly ISessionHandler _sessionHandler;
 
-        public PlayerService(IPlayerModel currentPlayer, List<PlayerDTO> playerPositions, IMoveHandler moveHandler)
+        public PlayerService(IPlayerModel currentPlayer, IChatHandler chatHandler, ISessionHandler sessionHandler, List<PlayerDTO> playerPositions, IMoveHandler moveHandler)
         {
+            _chatHandler = chatHandler;
+            _sessionHandler = sessionHandler;
             _currentPlayer = currentPlayer;
             _playerPositions = playerPositions;
             _moveHandler = moveHandler;
@@ -61,8 +67,9 @@ namespace Player.Services
 
         public void Say(string messageValue)
         {
+            _chatHandler.SendSay(messageValue);
             //code for chat with other players in team chat
-            Console.WriteLine(_currentPlayer.Name + " sent message: " + messageValue);
+            //Console.WriteLine(_currentPlayer.Name + " sent message: " + messageValue);
         }
 
         public void Shout(string messageValue)
@@ -179,6 +186,21 @@ namespace Player.Services
                     playerPosition.Y = player.Y;
                 }
             }
+        }
+        
+        public void CreateSession(string messageValue)
+        {
+            _sessionHandler.CreateSession(messageValue);
+        }
+
+        public void JoinSession(string messageValue)
+        {
+            _sessionHandler.JoinSession(messageValue);
+        }
+
+        public void RequestSessions()
+        {
+            _sessionHandler.RequestSessions();
         }
     }
 }

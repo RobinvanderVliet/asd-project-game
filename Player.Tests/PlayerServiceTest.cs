@@ -16,6 +16,8 @@ namespace Player.Tests
         private Mock<IPlayerModel> _mockedPlayerModel;
         private List<PlayerDTO> _mockedPlayerList;
         private Mock<IMoveHandler> _mockedMoveHandler;
+        private Mock<IChatHandler> _mockedChatHandler;
+        private Mock<ISessionHandler> _mockedSessionHandler;
         
         [SetUp]
         public void Setup()
@@ -23,7 +25,9 @@ namespace Player.Tests
             _mockedPlayerModel = new Mock<IPlayerModel>();
             _mockedPlayerList = new List<PlayerDTO>();
             _mockedMoveHandler = new Mock<IMoveHandler>();
-            _sut = new PlayerService(_mockedPlayerModel.Object, _mockedPlayerList, _mockedMoveHandler.Object);
+            _mockedChatHandler = new Mock<IChatHandler>();
+            _mockedSessionHandler = new Mock<ISessionHandler>();
+            _sut = new PlayerService(_mockedPlayerModel.Object, _mockedChatHandler, _mockedSessionHandler, _mockedPlayerList, _mockedMoveHandler.Object);
         }
         
         [Test]
