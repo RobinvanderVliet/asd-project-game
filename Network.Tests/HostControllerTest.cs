@@ -13,7 +13,7 @@ namespace Network.Tests
 
         //Declaration of variables
         private HostController _sut;
-        private string _SESSIONID = "TestSession";
+        private string _sessionId = "TestSession";
         private PacketHeaderDTO _packetHeaderDTO;
         private HandlerResponseDTO _handlerResponseDTO;
         private PacketDTO _packetDTO;
@@ -27,7 +27,7 @@ namespace Network.Tests
         {
             _mockedNetworkComponent = new Mock<INetworkComponent>();
             _mockedClientController = new Mock<IPacketHandler>();
-            _sut = new HostController(_mockedNetworkComponent.Object, _mockedClientController.Object, _SESSIONID);
+            _sut = new HostController(_mockedNetworkComponent.Object, _mockedClientController.Object, _sessionId);
             _packetHeaderDTO = new PacketHeaderDTO();
             _packetDTO = new PacketDTO();
         }
