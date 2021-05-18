@@ -4,27 +4,4 @@
         <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
-    <ItemGroup>
-      <Folder Include="DTO\Agent" />
-      <Folder Include="DTO\Character" />
-      <Folder Include="DTO\Chat" />
-      <Folder Include="DTO\Creature" />
-      <Folder Include="DTO\Lobby" />
-      <Folder Include="DTO\Network" />
-      <Folder Include="DTO\Player" />
-      <Folder Include="DTO\Session" />
-      <Folder Include="DTO\UserInterface" />
-      <Folder Include="DTO\World" />
-      <Folder Include="POCO\Agent" />
-      <Folder Include="POCO\Character" />
-      <Folder Include="POCO\Chat" />
-      <Folder Include="POCO\Creature" />
-      <Folder Include="POCO\Lobby" />
-      <Folder Include="POCO\Network" />
-      <Folder Include="POCO\Player" />
-      <Folder Include="POCO\Session" />
-      <Folder Include="POCO\UserInterface" />
-      <Folder Include="POCO\World" />
-    </ItemGroup>
-
 </Project>
