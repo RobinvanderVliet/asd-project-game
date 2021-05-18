@@ -193,10 +193,10 @@ namespace Network.Tests
             _sut.SetHostController(mockedHostController.Object);
             
             //Act
-            _sut.SetSessionId(_SESSIONID);
+            _sut.SetSessionId(_sessionId);
             
             //Assert
-            mockedHostController.Verify(mock => mock.SetSessionId(_SESSIONID), Times.Once);
+            mockedHostController.Verify(mock => mock.SetSessionId(_sessionId), Times.Once);
         }
     }
 }
