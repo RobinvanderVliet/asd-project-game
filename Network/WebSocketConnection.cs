@@ -14,8 +14,8 @@ namespace Network
         public WebSocketConnection(IPacketListener packetListener)
         {
             LoadConfigVariables();
-            this._websocket = new WebSocket($"ws://{_webSocketConnectionConfig.Ip}:{_webSocketConnectionConfig.Port}/{_webSocketConnectionConfig.Path}");
-            this._packetListener = packetListener;
+            _websocket = new WebSocket($"ws://{_webSocketConnectionConfig.Ip}:{_webSocketConnectionConfig.Port}/{_webSocketConnectionConfig.Path}");
+            _packetListener = packetListener;
             AddBehaviorToWebsocket();
 
             try
