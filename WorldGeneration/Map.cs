@@ -91,8 +91,8 @@ namespace WorldGeneration
 
         public void DisplayMap(IPlayer player, int viewDistance, IList<IPlayer> players)
         {
-            var playerX = player.CurrentPosition[0];
-            var playerY = player.CurrentPosition[1];
+            var playerX = player.PlayerX;
+            var playerY = player.PlayerY;
             LoadArea(playerX, playerY, viewDistance);
             for (var y = (playerY + viewDistance); y > ((playerY + viewDistance) - (viewDistance * 2) -1); y--)
             {
@@ -100,7 +100,6 @@ namespace WorldGeneration
                 {
                     var tile = GetLoadedTileByXAndY(x, y);
                     Console.Write(GetDisplaySymbol(player, tile, players));
-                    //Console.Write(" % " + tile.X + " " + tile.Y);
                 }
                 Console.WriteLine("");
             }
@@ -108,13 +107,12 @@ namespace WorldGeneration
         
         private string GetDisplaySymbol(IPlayer currentPlayer, ITile tile, IList<IPlayer> players)
         {
-            //return " " + tile.Y;
             if (IsPlayerOnTile(tile, currentPlayer))
             {
                 return " " + currentPlayer.Symbol;
             }
 
-            foreach (var playerOnTile in players.Where(player => player.CurrentPosition[0] == tile.X && player.CurrentPosition[1] - 1 == tile.Y))
+            foreach (var playerOnTile in players.Where(player => player.PlayerX == tile.X && player.PlayerY - 1 == tile.Y))
             {
                 return " " + playerOnTile.Symbol;
             }
@@ -123,11 +121,7 @@ namespace WorldGeneration
         }
         private bool IsPlayerOnTile(ITile tile, IPlayer player)
         {
-            var X = tile.X;
-            var Y = tile.Y;
-            var x = player.CurrentPosition[0];
-            var y = player.CurrentPosition[1];
-            return tile.X == player.CurrentPosition[0] && tile.Y == player.CurrentPosition[1] - 1;
+            return tile.X == player.PlayerX && tile.Y == player.PlayerY - 1;
         }
 
         private Chunk GenerateNewChunk(int chunkX, int chunkY)

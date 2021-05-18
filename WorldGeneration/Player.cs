@@ -7,17 +7,19 @@ namespace WorldGeneration
    public class Player :  IPlayer 
    {
       public string Symbol { get; set; }
-      public int[] CurrentPosition { get; set; }
+      public int PlayerX { get; set; }
+      public int PlayerY { get; set; }
       public string Name { get; set; }
       public int Health { get; set; }
       public int RadiationLevel { get; set; }
       public int Armor { get; set; }
       public int Bitcoins { get; set; }
 
-      public Player(string name, int[] currentPosition)
+      public Player(string name, int playerX, int playerY)
       {
          Name = name;
-         CurrentPosition = currentPosition;
+         PlayerX = playerX;
+         PlayerY = playerY;
          Symbol = CharacterSymbol.CURRENT_PLAYER;
       }
    }
