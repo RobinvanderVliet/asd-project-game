@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Session.DTO;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Network.DTO;
 
 namespace Session
@@ -145,12 +146,23 @@ namespace Session
                     {
                         _clientController.MarkBackupHost();
                         Console.WriteLine("You have been marked as the backup host");
+                        
+                        Thread.Sleep(10000);
+                        SwapToHost();
                     }
                 }
 
 
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
+        }
+        
+        public void SwapToHost()
+        {
+            _clientController.CreateHostController();
+            // TODO: Enable Heartbeat check and enable agents
+            
+            Console.Out.WriteLine("You are now the new host!");
         }
     }
 }
