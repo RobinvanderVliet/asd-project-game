@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Network.DTO;
+using System.Timers;
+using Timer = System.Timers.Timer;
 
 namespace Session
 {
@@ -17,6 +19,7 @@ namespace Session
         private Session _session;
         private Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;
+        private Timer _hostPingTimer;
 
         public SessionHandler(IClientController clientController)
         {
@@ -32,15 +35,6 @@ namespace Session
             }
             else
             {
-                //TODO: MOVE TO EVENT START GAME
-                //TODO: IF backuphost is true :)
-                new Thread(() =>
-                {
-                    SendPing();
-                    Thread.Sleep(1000);
-                    checkIfHostActive();
-                }).Start();
-                
                 SessionDTO sessionDto = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
                 _session = new Session(sessionDto.Name);
                 _session.SessionId = sessionId;
@@ -95,10 +89,7 @@ namespace Session
                             return new HandlerResponseDTO(SendAction.Ignore, null);
                         }
                     case SessionType.SendPing:
-                        return handlePingRequest();
-                    case SessionType.ReceivedPingResponse:
-                        handlePingResponse(sessionDTO.Name);
-                        return new HandlerResponseDTO(SendAction.Ignore, null);
+                        return handlePingRequest(packet);
                 }
             }
             else if (packet.Header.Target == _clientController.GetOriginId())
@@ -107,6 +98,9 @@ namespace Session
                 {
                     return addRequestedSessions(packet);
                 }
+                else if (sessionDTO.SessionType == SessionType.SendPing) {
+                    return handlePingRequest(packet);
+                }
 
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
@@ -114,28 +108,30 @@ namespace Session
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
-        private void checkIfHostActive() 
+        private void CheckIfHostActive() 
         {
             if (!_hostActive) 
             {
+                Console.WriteLine("Look at me, I'm the captain now");
+                _hostPingTimer.Stop();
                 //Je word host :)
             }
         }
-
-        private void handlePingResponse(String payload)
+        
+        private HandlerResponseDTO handlePingRequest(PacketDTO packet)
         {
-            if (payload.Equals("pong"))
+            if (packet.HandlerResponse != null)
             {
+                Console.WriteLine("pong"); //TODO verwijderen
                 _hostActive = true;
+                return new HandlerResponseDTO(SendAction.Ignore, null);
             }
-        }
-
-        private HandlerResponseDTO handlePingRequest()
-        {
-            SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessionsResponse);
-            sessionDTO.Name = "pong";
-            var jsonObject = JsonConvert.SerializeObject(sessionDTO);
-            return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
+            else {
+                SessionDTO sessionDTO = new SessionDTO(SessionType.ReceivedPingResponse);
+                sessionDTO.Name = "pong";
+                var jsonObject = JsonConvert.SerializeObject(sessionDTO);
+                return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
+            }
         }
 
         private HandlerResponseDTO handleRequestSessions()
@@ -183,6 +179,11 @@ namespace Session
                     _session.AddClient(client);
                     Console.Out.WriteLine(client);
                 }
+                //TODO: MOVE TO EVENT START GAME
+                //TODO: IF backuphost is true :)
+                //if (this._clientController.backupHostService.) {
+                PingHostTimer();
+                //}
 
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
@@ -190,11 +191,29 @@ namespace Session
 
         public void SendPing()
         {
+            Console.WriteLine("ping"); //TODO verwijderen
             SessionDTO sessionDTO = new SessionDTO(SessionType.SendPing);
             sessionDTO.Name = "ping";
             var jsonObject = JsonConvert.SerializeObject(sessionDTO);
             _hostActive = false;
             _clientController.SendPayload(jsonObject, PacketType.Session);
         }
+
+        private void PingHostTimer()
+        {
+            _hostPingTimer = new System.Timers.Timer(5000);
+            _hostPingTimer.Enabled = true;
+            _hostPingTimer.AutoReset = true;
+            _hostPingTimer.Elapsed += HostPingEvent;
+            _hostPingTimer.Start();
+        }
+
+        public void HostPingEvent(Object source, ElapsedEventArgs e)
+        {
+            SendPing();
+            Thread.Sleep(2000);
+            CheckIfHostActive();
+        }
+        
     }
 }
