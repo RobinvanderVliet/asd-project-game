@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 namespace InputCommandHandler.Antlr.Ast.Actions
 {
@@ -32,6 +33,18 @@ namespace InputCommandHandler.Antlr.Ast.Actions
             }
 
             return this;
+        }
+        
+        [ExcludeFromCodeCoverage]
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as Drop);
+        }
+
+        [ExcludeFromCodeCoverage]
+        public bool Equals(Drop other)
+        {
+            return true;
         }
     }
 }
