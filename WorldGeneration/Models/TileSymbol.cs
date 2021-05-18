@@ -5,12 +5,12 @@ namespace WorldGeneration.Models
         public const string DOOR = "/";
         public const string HOUSE = "+";
         public const string WALL = "\u25A0";
-        public const string GAS = "%";
-        public const string SPIKE = "^";
+        public const string GAS = "&";
+        public const string SPIKE = "\u25B2";
         public const string CHEST = "n";
         public const string DIRT = ".";
         public const string GRASS = ",";
-        public const string STREET = "_";
+        public const string STREET = "\u2591";
         public const string WATER = "~";
     }
 }

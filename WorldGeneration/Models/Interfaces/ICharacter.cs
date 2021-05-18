@@ -8,8 +8,8 @@ namespace WorldGeneration.Models.Interfaces
 {
     public interface ICharacter
     {
-        public string Symbol { get; set; }
-        public int PlayerX { get; set; }
-        public int PlayerY { get; set; }
+        string Symbol { get; set; }
+        int XPosition { get; set; }
+        int YPosition { get; set; }
     }
 }

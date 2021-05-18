@@ -6,7 +6,7 @@ namespace WorldGeneration.Models
     public class Character : ICharacter
     {
         public string Symbol { get; set; }
-        public int PlayerX { get; set; }
-        public int PlayerY { get; set; }
+        public int XPosition { get; set; }
+        public int YPosition { get; set; }
     }
 }

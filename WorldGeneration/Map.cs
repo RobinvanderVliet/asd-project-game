@@ -11,7 +11,7 @@ namespace WorldGeneration
     {
         private readonly int _chunkSize;
         private readonly int _seed;
-        private List<Chunk> _chunks;// NOT readonly, don't listen to the compiler
+        private List<Chunk> _chunks; // NOT readonly, don't listen to the compiler
         private readonly DatabaseFunctions.Database _db;
         private List<int[]> _chunksWithinLoadingRange;
 
@@ -91,15 +91,15 @@ namespace WorldGeneration
 
         public void DisplayMap(IPlayer player, int viewDistance, IList<IPlayer> players)
         {
-            var playerX = player.PlayerX;
-            var playerY = player.PlayerY;
+            var playerX = player.XPosition;
+            var playerY = player.YPosition;
             LoadArea(playerX, playerY, viewDistance);
             for (var y = (playerY + viewDistance); y > ((playerY + viewDistance) - (viewDistance * 2) -1); y--)
             {
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
                 {
                     var tile = GetLoadedTileByXAndY(x, y);
-                    Console.Write(GetDisplaySymbol(player, tile, players));
+                    Console.Write($" {GetDisplaySymbol(player, tile, players)}");
                 }
                 Console.WriteLine("");
             }
@@ -107,21 +107,21 @@ namespace WorldGeneration
         
         private string GetDisplaySymbol(IPlayer currentPlayer, ITile tile, IList<IPlayer> players)
         {
-            if (IsPlayerOnTile(tile, currentPlayer))
+            bool currentPlayerOnTile = IsPlayerOnTile(tile, currentPlayer);
+            if (currentPlayerOnTile)
             {
-                return " " + currentPlayer.Symbol;
+                return currentPlayer.Symbol;
+            }          
+            foreach (var playerOnTile in players.Where(player => player.XPosition == tile.XPosition && player.YPosition - 1 == tile.YPosition))
+            {  
+                return playerOnTile.Symbol;
             }
-
-            foreach (var playerOnTile in players.Where(player => player.PlayerX == tile.X && player.PlayerY - 1 == tile.Y))
-            {
-                return " " + playerOnTile.Symbol;
-            }
-            
-            return " " + tile.Symbol;
+            return tile.Symbol;
         }
+
         private bool IsPlayerOnTile(ITile tile, IPlayer player)
         {
-            return tile.X == player.PlayerX && tile.Y == player.PlayerY - 1;
+            return tile.XPosition == player.XPosition && tile.YPosition == player.YPosition - 1;
         }
 
         private Chunk GenerateNewChunk(int chunkX, int chunkY)

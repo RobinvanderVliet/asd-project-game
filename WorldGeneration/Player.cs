@@ -7,8 +7,8 @@ namespace WorldGeneration
    public class Player :  IPlayer 
    {
       public string Symbol { get; set; }
-      public int PlayerX { get; set; }
-      public int PlayerY { get; set; }
+      public int XPosition { get; set; }
+      public int YPosition { get; set; }
       public string Name { get; set; }
       public int Health { get; set; }
       public int RadiationLevel { get; set; }
@@ -18,8 +18,8 @@ namespace WorldGeneration
       public Player(string name, int playerX, int playerY)
       {
          Name = name;
-         PlayerX = playerX;
-         PlayerY = playerY;
+         XPosition = playerX;
+         YPosition = playerY;
          Symbol = CharacterSymbol.CURRENT_PLAYER;
       }
    }

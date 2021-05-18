@@ -6,7 +6,7 @@ namespace WorldGeneration.Models.Interfaces
     {
         bool IsAccessible { get; set; }
         string Symbol { get; set; }
-        int X { get; set; }
-        int Y { get; set; }
+        int XPosition { get; set; }
+        int YPosition { get; set; }
     }
 }

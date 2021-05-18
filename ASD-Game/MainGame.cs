@@ -39,9 +39,8 @@ namespace ASD_project
                 //moet later vervangen worden
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
                 IList<IPlayer> players = new List<IPlayer>();
-                players.Add(new WorldGeneration.Player("henk", 3,0));
-                players.Add(new WorldGeneration.Player("pietje", 2, 1));
-                    
+                players.Add(new WorldGeneration.Player("henk", 3, 0));
+                players.Add(new WorldGeneration.Player("pietje", 2, 1));                   
                
                 World world = new World(players, 66666666);
                 world.DisplayWorld(8, players.First());
