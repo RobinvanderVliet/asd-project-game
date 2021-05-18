@@ -17,12 +17,7 @@ namespace Agent.Tests.ast
             _rule = new Rule(null,null);
         }
 
-        /*
-         * GetNodeType()
-         *
-         * Test of de juiste type terug gegeven wordt
-         * @author Abdul     
-        */
+     
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
@@ -33,12 +28,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual(result, TYPE);
         }
 
-        /*
-         * AddChild()
-         *
-         * Test of de Setting toegevoegd wordt aan de Rule
-         * @author Abdul     
-        */
+   
         [Test]
         public void Test_AddChild_Setting()
         {
@@ -47,19 +37,13 @@ namespace Agent.Tests.ast
             _rule.AddChild(setting);
 
             //Act
-
-
+            
             var result = ( _rule.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual(result, "Setting");
         }
-
-        /*
-         * AddChild()
-         *
-         * Test of de Node toegevoegd wordt aan de Rule
-        */
+        
         [Test]
         public void Test_AddChild_Node()
         {
@@ -76,12 +60,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual(result, "Node");
         }
         
-        /*
-         * RemoveChild()
-         *
-         * Test of de Setting verwijderd wordt van de Rule
-         * @author Abdul
-        */
+    
         [Test]
         public void Test_RemoveChild_Setting()
         {
@@ -98,11 +77,7 @@ namespace Agent.Tests.ast
          Assert.True(result);
         }
         
-        /*
-        * RemoveChild()
-         *
-         * Test of de node verwijderd wordt van de Rule
-        */
+     
         [Test]
         public void Test_RemoveChild_Node()
         {

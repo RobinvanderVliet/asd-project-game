@@ -1,40 +1,49 @@
-// tests not functional
-
-/*using NUnit.Framework;
+using NUnit.Framework;
 using Moq;
-using WebSocketSharp;
+using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
+using System.Threading;
 
 namespace Network.Tests
 {
+    [ExcludeFromCodeCoverage]
     [TestFixture]
     public class WebSocketConnectionTest
     {
-        private WebSocketConnection _subject;
-        private WebSocket _mockedWebsocket;
-        private Mock<WebSocket> _websocketMock;
+        //Tests in this class are dependent on a working websocket.
+        //Therefore these tests should not be regarded as unit tests but rather as integration tests.
+
+        private WebSocketConnection _receivingSut;
+        private WebSocketConnection _sendingSut;
+        private Mock<IPacketListener> _mockedPacketListener;
 
         [SetUp]
         public void Setup()
         {
-            _websocketMock = new Mock<WebSocket>("ws://localhost:9999");
-            _mockedWebsocket = _websocketMock.Object;
-            _subject = new WebSocketConnection(_mockedWebsocket); 
+            _mockedPacketListener = new Mock<IPacketListener>();
+            _receivingSut = new WebSocketConnection(_mockedPacketListener.Object);
+            _sendingSut = new WebSocketConnection(_mockedPacketListener.Object);
+            Thread.Sleep(500);
         }
 
 
 
         [Test]
-        public void TestSendCallsSendOnWebsocket()
+        public void Test_Send_IsBeingReceived()
         {
             // Arrange
-            string messageTest = "test";
-            Mock.Get(_mockedWebsocket).Setup(x => x.Send(It.IsAny<string>()));
+            PacketDTO packetToSend = new PacketBuilder().SetTarget("client").SetPayload("testPayload").SetPacketType(PacketType.Chat).SetOriginID("originId").Build();
+            string serializedPacketToSend = JsonConvert.SerializeObject(packetToSend);
+
+            PacketDTO receivedPacket = null;
+            _mockedPacketListener.Setup(mock => mock.ReceivePacket(It.IsAny<PacketDTO>())).Callback<PacketDTO>(r => receivedPacket = r);
 
             // Act
-            _subject.Send(messageTest);
+            _sendingSut.Send(serializedPacketToSend);
+            Thread.Sleep(300);
 
             // Assert
-            Mock.Get(_mockedWebsocket).Verify(x => x.Send(messageTest), Times.Once);
+            Assert.AreEqual(packetToSend, receivedPacket);
         }
     }
-}*/
+}

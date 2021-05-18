@@ -1,8 +1,14 @@
-﻿using NUnit.Framework;
+﻿using Creature.Creature.StateMachine.Data;
+using Creature.World;
+using Moq;
+using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace Creature.Tests
 {
+    [ExcludeFromCodeCoverage]
+    [TestFixture]
     class PlayerTest
     {
         private ICreature _sut;
@@ -11,9 +17,13 @@ namespace Creature.Tests
         public void Setup()
         {
             Vector2 position = new Vector2(10, 10);
+            Mock<IWorld> worldMock = new Mock<IWorld>();
             int health = 20;
+            int damage = 5;
+            int visionRange = 10;
 
-            _sut = new Player(health, position);
+            PlayerData playerData = new PlayerData(position, health, damage, visionRange, worldMock.Object);
+            _sut = new Player(playerData, null);
         }
 
         [Test]
@@ -25,20 +35,20 @@ namespace Creature.Tests
             _sut.ApplyDamage(30);
 
             // Assert ----------
-            Assert.That(_sut.IsAlive == false);
+            Assert.False(_sut.CreatureStateMachine.CreatureData.IsAlive);
         }
 
         [Test]
-        public void Test_HealAmount_DoesNotRevivePlayer()
+        public void Test_HealAmount__Healts_Player()
         {
             // Arrange ---------
 
             // Act -------------
-            _sut.ApplyDamage(30);
-            _sut.HealAmount(50);
+            _sut.ApplyDamage(10);
+            _sut.HealAmount(10);
 
             // Assert ----------
-            Assert.That(_sut.IsAlive == false);
+            Assert.AreEqual(_sut.CreatureStateMachine.CreatureData.Health, 20);
         }
     }
 }
