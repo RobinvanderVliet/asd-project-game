@@ -2,12 +2,10 @@ using Newtonsoft.Json;
 using System;
 using WebSocketSharp;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using System.IO;
 
 namespace Network
 {
-    public class WebSocketConnection
+    public class WebSocketConnection : IWebSocketConnection
     {
         private WebSocket _websocket;
         private WebSocketConnectionConfig _webSocketConnectionConfig;
@@ -16,25 +14,10 @@ namespace Network
         public WebSocketConnection(IPacketListener packetListener)
         {
             LoadConfigVariables();
-            this._websocket = new WebSocket($"ws://{_webSocketConnectionConfig.Ip}:{_webSocketConnectionConfig.Port}/{_webSocketConnectionConfig.Path}");
-            this._packetListener = packetListener;
+            _websocket = new WebSocket($"ws://{_webSocketConnectionConfig.Ip}:{_webSocketConnectionConfig.Port}/{_webSocketConnectionConfig.Path}");
+            _packetListener = packetListener;
             AddBehaviorToWebsocket();
 
-            try
-            {
-                _websocket.Connect();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
-
-        public WebSocketConnection(WebSocket webSocket)
-        {
-            this._websocket = webSocket;
-            AddBehaviorToWebsocket();
             try
             {
                 _websocket.Connect();

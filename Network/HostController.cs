@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Network.DTO;
-using Newtonsoft.Json;
 
 namespace Network
 {
@@ -10,7 +8,6 @@ namespace Network
         private INetworkComponent _networkComponent;
         private IPacketHandler _client;
         private string _sessionId;
-        private List<PacketDTO> _packetQueue;
 
         public HostController(INetworkComponent networkComponent, IPacketHandler client, string sessionId)
         {
@@ -18,7 +15,6 @@ namespace Network
             _client = client;
             _sessionId = sessionId;
             _networkComponent.SetHostController(this);
-            _packetQueue = new();
         }
 
         public void ReceivePacket(PacketDTO packet)
@@ -26,19 +22,6 @@ namespace Network
             if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session)
             {
                 HandlePacket(packet);
-                
-                //_packetQueue.Add(packet);
-                //HandleQueue();
-            }
-           
-        }
-
-        private void HandleQueue()
-        {
-            foreach(var packet in _packetQueue)
-            {
-                HandlePacket(packet);
-                _packetQueue.Remove(packet);
             }
         }
 
@@ -46,12 +29,13 @@ namespace Network
         {
             HandlerResponseDTO handlerResponse = _client.HandlePacket(packet);
             packet.Header.SessionID = _sessionId;
-            if (!handlerResponse.ReturnToSender)
+            if (handlerResponse.Action == SendAction.SendToClients)
             {
                 packet.Header.Target = "client";
+                packet.HandlerResponse = handlerResponse;
                 _networkComponent.SendPacket(packet);
             }
-            else
+            else if (handlerResponse.Action == SendAction.ReturnToSender)
             {
                 packet.Header.Target = packet.Header.OriginID;
                 packet.HandlerResponse = handlerResponse;
@@ -59,6 +43,7 @@ namespace Network
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public void SetSessionId(string sessionId)
         {
             _sessionId = sessionId;

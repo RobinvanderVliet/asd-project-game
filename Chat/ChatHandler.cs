@@ -2,10 +2,6 @@
 using Network;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Network.DTO;
 
 namespace Chat
@@ -23,12 +19,14 @@ namespace Chat
         public void SendSay(string message)
         {
             var chatDTO = new ChatDTO(ChatType.Say, message);
+            chatDTO.OriginId = _clientController.GetOriginId();
             SendChatDTO(chatDTO);
         }
 
         public void SendShout(string message)
         {
             var chatDTO = new ChatDTO(ChatType.Shout, message);
+            chatDTO.OriginId = _clientController.GetOriginId();
             SendChatDTO(chatDTO);
         }
 
@@ -45,23 +43,23 @@ namespace Chat
             switch (chatDTO.ChatType)
             {
                 case ChatType.Say:
-                    HandleSay(chatDTO.Message);
-                    return new HandlerResponseDTO(false, null);
+                    HandleSay(chatDTO.Message, chatDTO.OriginId);
+                    return new HandlerResponseDTO(SendAction.SendToClients, null);
                 case ChatType.Shout:
-                    HandleShout(chatDTO.Message);
-                    return new HandlerResponseDTO(false, null);
+                    HandleShout(chatDTO.Message, chatDTO.OriginId);
+                    return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
-            return new HandlerResponseDTO(false, null);
+            return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
-        private void HandleSay(string message)
+        private void HandleSay(string message, string originId)
         {
-            Console.WriteLine($"say: {message}");
+            Console.WriteLine($"{originId} said: {message}");
         }
 
-        private void HandleShout(string message)
+        private void HandleShout(string message, string originId)
         {
-            Console.WriteLine($"say: {message}");
+            Console.WriteLine($"{originId} shouted: {message}");
         }
     }
 }

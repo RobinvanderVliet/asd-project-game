@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 using Moq;
@@ -16,25 +12,23 @@ namespace Chat.Tests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
-    class ChatHandlerTests
+    class ChatHandlerTest
     {
         //Declaration and initialisation of constant variables
-        private ChatHandler _chatHandler;
-        //Declaration of variables
 
+        //Declaration of variables
+        private ChatHandler _sut;
+        private PacketDTO _packetDTO;
+        private ChatDTO _chatDTO;
 
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;
-
-        private PacketDTO _packetDTO;
-
-        private ChatDTO _chatDTO;
 
         [SetUp]
         public void Setup()
         {
             _mockedClientController = new Mock<IClientController>();
-            _chatHandler = new ChatHandler(_mockedClientController.Object);
+            _sut = new ChatHandler(_mockedClientController.Object);
             _packetDTO = new PacketDTO();
 
         }
@@ -49,7 +43,7 @@ namespace Chat.Tests
             _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Chat));
 
             //Act ---------
-            _chatHandler.SendSay(message);
+            _sut.SendSay(message);
             //Assert ---------
             _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Chat), Times.Once());
         }
@@ -64,9 +58,24 @@ namespace Chat.Tests
             _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Chat));
 
             //Act ---------
-            _chatHandler.SendShout(message);
+            _sut.SendShout(message);
             //Assert ---------
             _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Chat), Times.Once());
+        }
+
+        [Test]
+        public void Test_HandlePacket_HandleInvalidChatTypeProperly()
+        {
+            //Arrange ---------
+            var payload = "{\"ChatType\":8,\"Message\":\"Hello World\",\"OriginId\":null}";
+            _packetDTO.Payload = payload;
+
+            //Act ---------
+            HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
+
+            //Assert ---------
+            HandlerResponseDTO ExpectedResult = new HandlerResponseDTO(SendAction.Ignore, null);
+            Assert.AreEqual(ExpectedResult, actualResult);
         }
 
         [Test]
@@ -82,11 +91,13 @@ namespace Chat.Tests
             {
                 //Act ---------
                 Console.SetOut(sw);
-                _chatHandler.HandlePacket(_packetDTO);
+                HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
 
                 //Assert ---------
-                string expected = string.Format("say: Hello World\r\n", Environment.NewLine);
+                HandlerResponseDTO ExpectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
+                string expected = string.Format(" said: Hello World\r\n", Environment.NewLine);
                 Assert.AreEqual(expected, sw.ToString());
+                Assert.AreEqual(ExpectedResult, actualResult);
             }                 
         }
 
@@ -103,11 +114,13 @@ namespace Chat.Tests
             {
                 //Act ---------
                 Console.SetOut(sw);
-                _chatHandler.HandlePacket(_packetDTO);
+                HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
 
                 //Assert ---------
-                string expected = string.Format("say: Hello World\r\n", Environment.NewLine);
+                HandlerResponseDTO ExpectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
+                string expected = string.Format(" shouted: Hello World\r\n", Environment.NewLine);
                 Assert.AreEqual(expected, sw.ToString());
+                Assert.AreEqual(ExpectedResult, actualResult);
             }
         }
     }

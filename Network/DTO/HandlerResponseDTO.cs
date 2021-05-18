@@ -1,20 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Network.DTO
 {
+    [ExcludeFromCodeCoverage]
     public class HandlerResponseDTO
     {
-        public bool ReturnToSender { get; set; }
+        public SendAction Action { get; set; }
         public string ResultMessage { get; set; }
     
-        public HandlerResponseDTO(bool returnToSender, string resultMessage)
+        public HandlerResponseDTO(SendAction action, string resultMessage)
         {
-            ReturnToSender = returnToSender;
+            Action = action;
             ResultMessage = resultMessage;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is HandlerResponseDTO dTO &&
+                   Action == dTO.Action &&
+                   ResultMessage == dTO.ResultMessage;
         }
     }
 }

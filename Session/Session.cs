@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Session
 {
+    [ExcludeFromCodeCoverage]
     public class Session
     {
         private string _name;
@@ -16,7 +18,6 @@ namespace Session
         public Session(string name)
         {
             _name = name;
-            // _sessionId = Guid.NewGuid().ToString();
         }
 
         public void GenerateSessionId()
@@ -27,12 +28,18 @@ namespace Session
         public void AddClient(string originId)
         {
             _joinedClients.Add(originId);
-            _joinedClients = _joinedClients.Distinct().ToList(); // Remove possible duplicates.
+            // Remove possible duplicates.
+            _joinedClients = _joinedClients.Distinct().ToList();
         }
 
         public List<string> GetAllClients()
         {
             return _joinedClients;
+        }
+
+        public void EmptyClients()
+        {
+            _joinedClients.Clear();
         }
     }
 }

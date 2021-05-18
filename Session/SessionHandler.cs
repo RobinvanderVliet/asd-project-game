@@ -44,8 +44,10 @@ namespace Session
                 _clientController.SetSessionId(sessionId);
                 Console.WriteLine("Trying to join game with name: " + _session.Name);
 
-                var sesssionDTO = new SessionDTO(SessionType.RequestToJoinSession);
-                sendSessionDTO(sesssionDTO);
+                SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
+                sessionDTO.ClientIds = new List<string>();
+                sessionDTO.ClientIds.Add(_clientController.GetOriginId());
+                sendSessionDTO(sessionDTO);
             }
         }
 
@@ -56,11 +58,12 @@ namespace Session
             _session.AddClient(_clientController.GetOriginId());
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
+            Console.Out.WriteLine("Created session with the name: " + _session.Name);
         }
 
         public void RequestSessions()
         {
-            var sessionDTO = new SessionDTO(SessionType.RequestSessions);
+            SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             sendSessionDTO(sessionDTO);
         }
 
@@ -72,7 +75,7 @@ namespace Session
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-            var sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
+            SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
             if (packet.Header.Target == "client" || packet.Header.Target == "host")
             {
                 switch (sessionDTO.SessionType)
@@ -80,7 +83,14 @@ namespace Session
                     case SessionType.RequestSessions:
                         return handleRequestSessions();
                     case SessionType.RequestToJoinSession:
-                        return addPlayerToSession(packet);
+                        if (packet.Header.SessionID == _session?.SessionId)
+                        {
+                            return addPlayerToSession(packet);
+                        }
+                        else
+                        {
+                            return new HandlerResponseDTO(SendAction.Ignore, null);
+                        }
                     case SessionType.ClientJoinedSession:
                         return clientJoinedSession(packet);
                     case SessionType.ReceivedPing:
@@ -90,14 +100,17 @@ namespace Session
                         return new HandlerResponseDTO(false, null);
                 }
             }
-            else
+            else if (packet.Header.Target == _clientController.GetOriginId())
             {
                 if (sessionDTO.SessionType == SessionType.RequestSessions)
                 {
                     return addRequestedSessions(packet);
                 }
+
+                return new HandlerResponseDTO(SendAction.Ignore, null);
             }
-            return new HandlerResponseDTO(false, null);
+            
+            return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
         private void handlePingResponse(String payload)
@@ -122,48 +135,52 @@ namespace Session
 
         private HandlerResponseDTO handleRequestSessions()
         {
-            var sessionDTO = new SessionDTO(SessionType.RequestSessionsResponse);
+            SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessionsResponse);
             sessionDTO.Name = _session.Name;
             var jsonObject = JsonConvert.SerializeObject(sessionDTO);
-            return new HandlerResponseDTO(true, jsonObject);
+            return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
         }
 
         private HandlerResponseDTO addRequestedSessions(PacketDTO packet)
         {
-            _availableSessions.Add(packet.Header.SessionID, packet);
-            var sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
-            Console.WriteLine(packet.Header.SessionID + " Name: " + sessionDTO.Name); //TODO add to output
-            return new HandlerResponseDTO(false, null);
+            _availableSessions.TryAdd(packet.Header.SessionID, packet);
+            SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
+            Console.WriteLine(packet.Header.SessionID + " Name: " + sessionDTO.Name);
+            return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
         private HandlerResponseDTO addPlayerToSession(PacketDTO packet)
         {
-            _session.AddClient(packet.Header.OriginID);
-            Console.WriteLine("A new player with the id: " + packet.Header.OriginID + " joined your session."); //TODO add to output
-            var sessionDTO = new SessionDTO(SessionType.ClientJoinedSession);
-            sessionDTO.ClientIds = _session.GetAllClients();
-            var jsonObject = JsonConvert.SerializeObject(sessionDTO);
-            return new HandlerResponseDTO(false, jsonObject);
-        }
+            SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
 
-        private HandlerResponseDTO clientJoinedSession(PacketDTO packet)
-        {
-            var sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
-            if (sessionDTO.ClientIds != null)
+            if (packet.Header.Target == "host")
             {
-                foreach (string client in sessionDTO.ClientIds)
-                {
-                    _session.AddClient(client);
-                }
-                Console.WriteLine("Clients in current session:");
-                int index = 1;
+                Console.WriteLine(sessionDTO.ClientIds[0] + " Has joined your session: ");
+                _session.AddClient(sessionDTO.ClientIds[0]);
+                sessionDTO.ClientIds = new List<string>();
+
                 foreach (string client in _session.GetAllClients())
                 {
-                    Console.WriteLine(index + ". " + client);
-                    index++;
+                    sessionDTO.ClientIds.Add(client);
                 }
+                
+                
+                return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
             }
-            return new HandlerResponseDTO(false, null);
+            else
+            {
+                SessionDTO sessionDTOClients = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
+                _session.EmptyClients();
+
+                Console.Out.WriteLine("Players in your session:");
+                foreach (string client in sessionDTOClients.ClientIds)
+                {
+                    _session.AddClient(client);
+                    Console.Out.WriteLine(client);
+                }
+
+                return new HandlerResponseDTO(SendAction.Ignore, null);
+            }
         }
 
         public void SendPing()
