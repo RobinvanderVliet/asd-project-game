@@ -12,7 +12,7 @@ namespace Network.Tests
     {
 
         private ClientController _sut;
-        private readonly string _SESSIONID = "1";
+        private readonly string _sessionId = "1";
         
         private Mock<INetworkComponent> _mockedNetworkComponent;
 
