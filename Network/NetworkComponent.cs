@@ -13,7 +13,7 @@ namespace Network
         public NetworkComponent()
         {
             _webSocketConnection = new WebSocketConnection(this);
-            
+            _originId = Guid.NewGuid().ToString();
         }
 
         public NetworkComponent(IWebSocketConnection webSocketConnection)
