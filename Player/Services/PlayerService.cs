@@ -16,7 +16,9 @@ namespace Player.Services
         private readonly IChatHandler _chatHandler;
         private readonly ISessionHandler _sessionHandler;
 
-        public PlayerService(IPlayerModel currentPlayer, IChatHandler chatHandler, ISessionHandler sessionHandler, List<PlayerDTO> playerPositions, IMoveHandler moveHandler)
+        public PlayerService(IPlayerModel currentPlayer, IChatHandler chatHandler
+            , ISessionHandler sessionHandler, List<PlayerDTO> playerPositions
+            , IMoveHandler moveHandler)
         {
             _chatHandler = chatHandler;
             _sessionHandler = sessionHandler;

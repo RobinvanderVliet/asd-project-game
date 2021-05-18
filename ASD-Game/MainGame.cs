@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using WorldGeneration;
 using Agent.Services;
 using WorldGeneration.Models;
@@ -51,12 +52,16 @@ namespace ASD_project
 
                 //moet later vervangen worden
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
-                IList<IPlayer> players = new List<IPlayer>();
-                players.Add(new WorldGeneration.Player("henk", 3, 0));
-                players.Add(new WorldGeneration.Player("pietje", 5, 4));                   
-               
-                World world = new World(players, 66666666);
-                world.DisplayWorld(4, players.First());
+                IList<PlayerDTO> players = new List<PlayerDTO>();
+                players.Add(new PlayerDTO("henk", 3, 0));
+                players.Add(new PlayerDTO("pietje", 5, 4));
+                var currentPlayer = new PlayerModel("Gerard", _inventory, new Bitcoin(21), new RadiationLevel(0));
+                IList<ICharacter> characters = new List<ICharacter>();
+                World world = new World(players, currentPlayer, characters, 66666666);
+                world.DisplayWorld(4);
+                
+                
+                
                 
                 IPlayerModel playerModel = new PlayerModel("Name", _inventory, new Bitcoin(20), new RadiationLevel(1));
                 //lobby start
@@ -67,8 +72,7 @@ namespace ASD_project
                     new PlayerDTO("Joe", 10, 10),
                     new PlayerDTO("Mama", 40, 40)
                 };
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler,
-                    playerPositions, _moveHandler);
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, playerPositions, _moveHandler);
                 Console.WriteLine("Type input messages below");
                 while (true) // moet vervangen worden met variabele: isQuit 
                 {    

@@ -91,7 +91,7 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
 
-        public void DisplayMap(IPlayerModel player, int viewDistance, IList<PlayerDTO> players)
+        public void DisplayMap(IPlayerModel player, int viewDistance, IList<PlayerDTO> players, IList<ICharacter> characters)
         {
             var playerX = player.XPosition;
             var playerY = player.YPosition;
@@ -101,13 +101,13 @@ namespace WorldGeneration
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
                 {
                     var tile = GetLoadedTileByXAndY(x, y);
-                    Console.Write($" {GetDisplaySymbol(player, tile, players)}");
+                    Console.Write($" {GetDisplaySymbol(player, tile, players, characters)}");
                 }
                 Console.WriteLine("");
             }
         }
         
-        private string GetDisplaySymbol(IPlayerModel currentPlayer, ITile tile, IList<PlayerDTO> players)
+        private string GetDisplaySymbol(IPlayerModel currentPlayer, ITile tile, IList<PlayerDTO> players, IList<ICharacter> characters)
         {
             bool currentPlayerOnTile = IsPlayerOnTile(tile, currentPlayer);
             if (currentPlayerOnTile)
@@ -120,7 +120,6 @@ namespace WorldGeneration
                 {
                     return CharacterSymbol.ENEMY_PLAYER;
                 }
-              
                 return CharacterSymbol.FRIENDLY_PLAYER;
                 
             }
