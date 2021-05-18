@@ -4,8 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 using WorldGeneration.Models;
@@ -14,7 +12,7 @@ namespace DatabaseHandler.Tests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
-    public class ChunkServicesTest
+    public class ServicesTest
     {
         private ChunkFaker _chunkFaker;
         private MockRepository _mockRepository;
