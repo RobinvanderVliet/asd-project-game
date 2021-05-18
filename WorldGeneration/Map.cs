@@ -111,9 +111,9 @@ namespace WorldGeneration
             if (currentPlayerOnTile)
             {
                 return currentPlayer.Symbol;
-            }          
+            }
             foreach (var playerOnTile in players.Where(player => player.XPosition == tile.XPosition && player.YPosition - 1 == tile.YPosition))
-            {  
+            {
                 return playerOnTile.Symbol;
             }
             return tile.Symbol;
