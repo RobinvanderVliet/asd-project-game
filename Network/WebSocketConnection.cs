@@ -2,9 +2,6 @@ using Newtonsoft.Json;
 using System;
 using WebSocketSharp;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using System.IO;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Network
 {
