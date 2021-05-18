@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Network;
+using Network.DTO;
+using Newtonsoft.Json;
 using Player.DTO;
 using Player.Model;
 using Player.Services;
@@ -33,8 +35,8 @@ namespace Player.ActionHandlers
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
-            HandleMove(moveDTO.Message);
-            return new HandlerResponseDTO(false, null);
+            HandleMove(moveDTO.Player);
+            return new HandlerResponseDTO(SendAction.Ignore, null);
         }
                 
        private void HandleMove(PlayerDTO player)
@@ -44,12 +46,12 @@ namespace Player.ActionHandlers
            // als host dan in globale db aanpassen voor die speler (hostcontoller (HandlePacket))
            
            // als speler waarvan positie gewijzigd is dan in eigen db aanpassen
-           if (player.PlayerName == _player.//playerName
-                                                        )
-           {
+           //if (player.PlayerName == _player.//playerName
+              //                                          )
+           //{
                // ja: dan aanpassen in mijn (_player) db
                //_player.setData(int x, int y);
-           }
+           //}
        }
         
     }

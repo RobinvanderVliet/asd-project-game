@@ -170,7 +170,7 @@ namespace Player.Services
             }
 
             _currentPlayer.SetNewPlayerPosition(x, y);
-            _moveHandler.SendMove(this, _currentPlayer.XPosition, _currentPlayer.YPosition);
+            _moveHandler.SendMove(_currentPlayer, _currentPlayer.XPosition, _currentPlayer.YPosition);
 
             // the next line of code should be changed by sending newPosition to a relevant method
             Console.WriteLine("X: " + _currentPlayer.XPosition + ". Y: " + _currentPlayer.YPosition);

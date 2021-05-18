@@ -3,11 +3,8 @@ using System;
 using InputCommandHandler;
 using Player.Model;
 using Player.Services;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using WorldGeneration;
-using Player;
 using Agent.Services;
 using Chat;
 using Session;
@@ -26,7 +23,8 @@ namespace ASD_project
             private readonly ISessionHandler _sessionHandler;
             private readonly IMoveHandler _moveHandler;
 
-            public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler, ISessionHandler sessionHandler, IMoveHandler moveHandler)
+            public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler,
+                ISessionHandler sessionHandler, IMoveHandler moveHandler)
             {
                 this._log = log;
                 _inventory = inventory;
@@ -42,12 +40,12 @@ namespace ASD_project
                 // TODO: Remove from this method, team 2 will provide a command for it
                 // AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
                 // agentConfigurationService.StartConfiguration();
-                
+
                 new WorldGeneration.Program();
-                
+
                 //moet later vervangen worden
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
-                PlayerModel playerModel = new PlayerModel("Name",  _inventory, new Bitcoin(20), new RadiationLevel(1));
+                IPlayerModel playerModel = new PlayerModel("Name", _inventory, new Bitcoin(20), new RadiationLevel(1));
                 //lobby start
                 //networkcomponent heeft lijst van players
                 //die players moeten toegevoegd worden aan playerPositions
@@ -56,7 +54,8 @@ namespace ASD_project
                     new PlayerDTO("Joe", 10, 10),
                     new PlayerDTO("Mama", 40, 40)
                 };
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, _moveHandler); 
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler,
+                    playerPositions, _moveHandler);
                 Console.WriteLine("Type input messages below");
                 while (true) // moet vervangen worden met variabele: isQuit 
                 {

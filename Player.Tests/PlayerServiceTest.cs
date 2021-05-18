@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Chat;
 using Moq;
 using NUnit.Framework;
 using Player.ActionHandlers;
 using Player.DTO;
 using Player.Model;
 using Player.Services;
+using Session;
 
 namespace Player.Tests
 {
@@ -27,7 +29,7 @@ namespace Player.Tests
             _mockedMoveHandler = new Mock<IMoveHandler>();
             _mockedChatHandler = new Mock<IChatHandler>();
             _mockedSessionHandler = new Mock<ISessionHandler>();
-            _sut = new PlayerService(_mockedPlayerModel.Object, _mockedChatHandler, _mockedSessionHandler, _mockedPlayerList, _mockedMoveHandler.Object);
+            _sut = new PlayerService(_mockedPlayerModel.Object, _mockedChatHandler.Object, _mockedSessionHandler.Object, _mockedPlayerList, _mockedMoveHandler.Object);
         }
         
         [Test]

@@ -1,9 +1,9 @@
-﻿using Player.Services;
+﻿using Player.Model;
 
 namespace Player.ActionHandlers
 {
     public interface IMoveHandler
     {
-        public void SendMove(IPlayerService player, int x, int y);
+        public void SendMove(IPlayerModel player, int x, int y);
     }
 }
