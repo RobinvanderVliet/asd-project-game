@@ -95,7 +95,7 @@ namespace Session
                         return handlePingRequest();
                     case SessionType.ReceivedPingResponse:
                         handlePingResponse(packet.Payload);
-                        return new HandlerResponseDTO(SendAction., null);
+                        return new HandlerResponseDTO(SendAction.Ignore, null);
                 }
             }
             else if (packet.Header.Target == _clientController.GetOriginId())
