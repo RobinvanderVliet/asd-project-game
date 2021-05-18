@@ -19,12 +19,7 @@ namespace Agent.Tests.ast
             _setting = new Setting("Setting");
         }
 
-        /*
-         * GetNodeType()
-         *
-         * Test of de juiste type terug gegeven wordt
-         * @author Abdul     
-        */
+    
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
@@ -35,12 +30,7 @@ namespace Agent.Tests.ast
             Assert.AreEqual(result, TYPE);
         }
 
-        /*
-         * AddChild()
-         *
-         * Test if the action is added to Setting
-         * @author Abdul     
-        */
+   
         [Test]
         public void Test_AddChild_Action()
         {
@@ -55,12 +45,8 @@ namespace Agent.Tests.ast
             //Assert
             Assert.AreEqual(result, "Action");
         }
-
-        /*
-         * AddChild()
-         *
-         * Test if the condition is added to Setting   
-        */
+        
+   
         [Test]
         public void Test_AddChild_Condition()
         {
@@ -76,11 +62,6 @@ namespace Agent.Tests.ast
             Assert.AreEqual("Condition", result);
         }
         
-        /*
-         * AddChild()
-         *
-         * Test if the node is added to Setting
-        */
         [Test]
         public void Test_AddChild_Node()
         {

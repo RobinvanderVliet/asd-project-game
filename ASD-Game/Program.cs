@@ -4,8 +4,13 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.IO;
+using Player.Model;
 using WorldGeneration;
 using Player;
+using Chat;
+using Player.Services;
+using Network;
+using Session;
 
 namespace ASD_project
 {
@@ -31,6 +36,14 @@ namespace ASD_project
                 {
                     services.AddTransient<IMainGame, MainGame>();
                     services.AddScoped<IPlayerModel, PlayerModel>();
+                    services.AddScoped<IInventory, Inventory>();
+                    services.AddScoped<IItem, Item>();
+                    services.AddScoped<IBitcoin, Bitcoin>();
+                    services.AddScoped<IRadiationLevel, RadiationLevel>();
+                    services.AddScoped<INetworkComponent, NetworkComponent>();
+                    services.AddScoped<IClientController, ClientController>();
+                    services.AddScoped<IChatHandler, ChatHandler>();
+                    services.AddScoped<ISessionHandler, SessionHandler>();
                 })
                 .UseSerilog()
                 .Build();
