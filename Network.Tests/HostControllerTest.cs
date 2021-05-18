@@ -13,7 +13,7 @@ namespace Network.Tests
 
         //Declaration of variables
         private HostController _sut;
-        private string _SESSIONID = "TestSession";
+        private string _sessionId = "TestSession";
         private PacketHeaderDTO _packetHeaderDTO;
         private HandlerResponseDTO _handlerResponseDTO;
         private PacketDTO _packetDTO;
