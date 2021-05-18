@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Creature.Creature.NeuralNetworking
 {
-    class Class1
+    class Species
     {
     }
 }
