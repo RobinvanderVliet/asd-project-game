@@ -41,6 +41,10 @@ namespace Network
                 packet.HandlerResponse = handlerResponse;
                 _networkComponent.SendPacket(packet);
             }
+            else if (handlerResponse.Action == SendAction.Catch)
+            {
+                
+            }
         }
 
         [ExcludeFromCodeCoverage]
