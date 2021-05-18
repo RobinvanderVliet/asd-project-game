@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="DTO\Agent" />
+      <Folder Include="DTO\Character" />
+      <Folder Include="DTO\Chat" />
+      <Folder Include="DTO\Creature" />
+      <Folder Include="DTO\Lobby" />
+      <Folder Include="DTO\Network" />
+      <Folder Include="DTO\Player" />
+      <Folder Include="DTO\Session" />
+      <Folder Include="DTO\UserInterface" />
+      <Folder Include="DTO\World" />
+    </ItemGroup>
+
+</Project>
