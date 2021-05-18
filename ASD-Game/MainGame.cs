@@ -1,13 +1,13 @@
 using Microsoft.Extensions.Logging;
 using System;
+using DatabaseHandler;
+using DatabaseHandler.Poco;
+using DatabaseHandler.Repository;
+using DatabaseHandler.Services;
 using InputCommandHandler;
+using Microsoft.Extensions.Logging.Abstractions;
 using Player.Model;
 using Player.Services;
-using Microsoft.Extensions.Logging;
-using System;
-using WorldGeneration;
-using Player;
-using Agent.Services;
 
 namespace ASD_project
 {
@@ -16,31 +16,37 @@ namespace ASD_project
         public class MainGame : IMainGame
         {
             private readonly ILogger<MainGame> _log;
+            private readonly IDbConnection _connection;
+            private readonly IRepository<PlayerPoco> _playerRepository;
+            private readonly IRepository<MainGamePoco> _mainGameRepository;
 
-            public MainGame(ILogger<MainGame> log)
+            public MainGame(ILogger<MainGame> log, IDbConnection connection, IRepository<PlayerPoco> playerRepository, IRepository<MainGamePoco> mainGameRepository)
             {
-                this._log = log;
+                _log = log;
+                _connection = connection;
+                _playerRepository = playerRepository;
+                _mainGameRepository = mainGameRepository;
             }
 
             public void Run()
             {
                 Console.WriteLine("Game is gestart");
+                _connection.SetForeignKeys();
+                var tmpServicePlayerPoco = new Services<PlayerPoco>(_playerRepository);
+                var tmpServiceMainGamePoco = new Services<MainGamePoco>(_mainGameRepository);
+                
+                var tmpGuidGame = Guid.NewGuid();
+                var tmpObject = new MainGamePoco {MainGameGuid = tmpGuidGame};
+                var tmpPlayer = new PlayerPoco {PlayerGuid = Guid.NewGuid(), GameGuid = tmpObject};
 
-                // TODO: Remove from this method, team 2 will provide a command for it
-                // AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
-                // agentConfigurationService.StartConfiguration();
-                
-                new WorldGeneration.Program();
-                
-                //moet later vervangen worden
-                InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
-                PlayerModel playerModel = new PlayerModel("Name", new Inventory(), new Bitcoin(20), new RadiationLevel(1));
-                IPlayerService playerService = new PlayerService(playerModel); 
-                Console.WriteLine("Type input messages below");
-                while (true) // moet vervangen worden met variabele: isQuit 
-                {
-                    inputHandler.HandleCommands(playerService);
-                }
+
+                tmpServiceMainGamePoco.CreateAsync(tmpObject);
+                tmpServicePlayerPoco.CreateAsync(tmpPlayer);
+                var result1 = tmpServicePlayerPoco.GetAllAsync();
+                result1.Wait();
+                var result2 = tmpServiceMainGamePoco.GetAllAsync();
+                result2.Wait();
+                Console.WriteLine("lol");
             }
         }
     }
