@@ -16,21 +16,21 @@ namespace Agent.Tests.Services
         {
             _sut = new AgentConfigurationService();
         }
-        
-        [Test]
-        public void Test_CreateNewAgentConfiguration_WithNewAgent()
-        {
-            //Arrange
-            var filepath =
-                String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) +
-                "resource\\agent_test.cfg";
-
-            //Act
-            _sut.CreateAgentConfiguration("Agent", filepath);
-
-            //Assert
-            Assert.True(_sut.GetConfigurations().Count > 0);
-            Assert.AreEqual(_sut.GetConfigurations()[0].GetSetting("explore"), "random");
-        }
+        //
+        // [Test]
+        // public void Test_CreateNewAgentConfiguration_WithNewAgent()
+        // {
+        //     //Arrange
+        //     var filepath =
+        //         String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) +
+        //         "resource\\agent_test.cfg";
+        //
+        //     //Act
+        //     _sut.CreateAgentConfiguration("Agent", filepath);
+        //
+        //     //Assert
+        //     Assert.True(_sut.GetConfigurations().Count > 0);
+        //     Assert.AreEqual(_sut.GetConfigurations()[0].GetSetting("explore"), "random");
+        // }
     }
 }
