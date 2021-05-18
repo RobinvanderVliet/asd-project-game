@@ -140,6 +140,15 @@ namespace Session
                     _session.AddClient(client);
                     Console.Out.WriteLine(client);
                 }
+                if (sessionDTOClients.ClientIds.Count > 0) {
+                    if (sessionDTOClients.ClientIds[1].Equals(_clientController.GetOriginId()))
+                    {
+                        //_clientController.BackupHostService.IsBackupHost(true);
+                        Console.WriteLine("Lol jij is die back up :P");
+                        Console.WriteLine("Backup goes Brrrrr");
+                    }
+                }
+
 
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
