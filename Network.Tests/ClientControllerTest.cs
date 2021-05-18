@@ -33,11 +33,11 @@ namespace Network.Tests
                 .SetTarget("client")
                 .SetPacketType(packetType)
                 .SetPayload("random string")
-                .SetSessionID(_SESSIONID)
+                .SetSessionID(_sessionId)
                 .Build();
             Mock<IPacketHandler> mockedPacketHandler = new Mock<IPacketHandler>();
             mockedPacketHandler.Setup(mock => mock.HandlePacket(givenPacket)).Returns(expectedHandlerResponse);
-            _sut.SetSessionId(_SESSIONID);
+            _sut.SetSessionId(_sessionId);
             _sut.SubscribeToPacketType(mockedPacketHandler.Object, packetType);
 
             //Act
@@ -62,7 +62,7 @@ namespace Network.Tests
                 .Build();
             Mock<IPacketHandler> mockedPacketHandler = new Mock<IPacketHandler>();
             mockedPacketHandler.Setup(mock => mock.HandlePacket(givenPacket)).Returns(expectedHandlerResponse);
-            _sut.SetSessionId(_SESSIONID);
+            _sut.SetSessionId(_sessionId);
             _sut.SubscribeToPacketType(mockedPacketHandler.Object, packetType);
 
             //Act
@@ -83,11 +83,11 @@ namespace Network.Tests
                 .SetTarget("client")
                 .SetPacketType(packetType)
                 .SetPayload("random string")
-                .SetSessionID(_SESSIONID)
+                .SetSessionID(_sessionId)
                 .Build();
             Mock<IPacketHandler> mockedPacketHandler = new Mock<IPacketHandler>();
             mockedPacketHandler.Setup(mock => mock.HandlePacket(givenPacket)).Returns(expectedHandlerResponse);
-            _sut.SetSessionId(_SESSIONID);
+            _sut.SetSessionId(_sessionId);
             _sut.SubscribeToPacketType(mockedPacketHandler.Object, packetType);
 
             //Act
@@ -112,7 +112,7 @@ namespace Network.Tests
                 .Build();
             Mock<IPacketHandler> mockedPacketHandler = new Mock<IPacketHandler>();
             mockedPacketHandler.Setup(mock => mock.HandlePacket(givenPacket)).Returns(expectedHandlerResponse);
-            _sut.SetSessionId(_SESSIONID);
+            _sut.SetSessionId(_sessionId);
             _sut.SubscribeToPacketType(mockedPacketHandler.Object, packetType);
 
             //Act
