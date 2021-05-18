@@ -9,14 +9,14 @@ namespace Agent.Tests.generator
     public class GeneratorTest
     {
 
-        private Generator sut;
-        private Fixtures fix;
+        private Generator _sut;
+        private Fixtures _fix;
 
         [SetUp]
         public void Setup()
         {
-            sut = new Generator();
-            fix = new Fixtures();
+            this._sut = new Generator();
+            this._fix = new Fixtures();
         }
 
         [Test]
@@ -26,10 +26,10 @@ namespace Agent.Tests.generator
         public void Test_Generator_Level1(String input)
         {
             //Arrange
-            AST ast = fix.GetFixture(input);
+            AST ast = this._fix.GetFixture(input);
 
             //Act
-            var result = sut.Execute(ast);
+            var result = this._sut.Execute(ast);
 
             //Assert
             Assert.True(true);

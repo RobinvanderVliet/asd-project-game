@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 using Moq;
 using Creature.World;
 using Creature.Pathfinder;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace Creature.Tests
 {
+    [ExcludeFromCodeCoverage]
     class DefaultWorldTest
     {
         private Mock<ICreature> _firstCreatureMock;
