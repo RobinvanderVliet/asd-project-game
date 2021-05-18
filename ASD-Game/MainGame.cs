@@ -16,21 +16,24 @@ namespace ASD_project
         public class MainGame : IMainGame
         {
             private readonly ILogger<MainGame> _log;
+            private readonly IDbConnection _connection;
+            private readonly IRepository<PlayerPoco> _playerRepository;
+            private readonly IRepository<MainGamePoco> _mainGameRepository;
 
-            public MainGame(ILogger<MainGame> log)
+            public MainGame(ILogger<MainGame> log, IDbConnection connection, IRepository<PlayerPoco> playerRepository, IRepository<MainGamePoco> mainGameRepository)
             {
-                this._log = log;
+                _log = log;
+                _connection = connection;
+                _playerRepository = playerRepository;
+                _mainGameRepository = mainGameRepository;
             }
 
             public void Run()
             {
                 Console.WriteLine("Game is gestart");
-                
-                // TODO: Iets verzinnen voor die repo/services inits
-                var repository = new Repository<PlayerPoco>();
-                var repositoryMainGame = new Repository<MainGamePoco>();
-                var tmpServicePlayerPoco = new Services<PlayerPoco>(repository, new NullLogger<Services<PlayerPoco>>());
-                var tmpServiceMainGamePoco = new Services<MainGamePoco>(repositoryMainGame, new NullLogger<Services<MainGamePoco>>());
+                _connection.SetForeignKeys();
+                var tmpServicePlayerPoco = new Services<PlayerPoco>(_playerRepository);
+                var tmpServiceMainGamePoco = new Services<MainGamePoco>(_mainGameRepository);
                 
                 var tmpGuidGame = Guid.NewGuid();
                 var tmpObject = new MainGamePoco {MainGameGuid = tmpGuidGame};
@@ -43,6 +46,7 @@ namespace ASD_project
                 result1.Wait();
                 var result2 = tmpServiceMainGamePoco.GetAllAsync();
                 result2.Wait();
+                Console.WriteLine("lol");
             }
         }
     }

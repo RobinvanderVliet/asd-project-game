@@ -21,7 +21,6 @@ namespace DatabaseHandler.Tests
         private Mock<IRepository<Chunk>> _repository;
         private IServices<Chunk> _services;
         private IList<Chunk> _chunkInMemoryDatabase;
-        private ILogger<Services<Chunk>> _log;
         
         [SetUp]
         public void Setup()
@@ -30,7 +29,6 @@ namespace DatabaseHandler.Tests
             _repository = _mockRepository.Create<IRepository<Chunk>>();
             _chunkFaker = new ChunkFaker();
             _chunkInMemoryDatabase = _chunkFaker.Generate(50);
-            _log = new NullLogger<Services<Chunk>>();
             
             _repository.Setup(repo => repo.ReadAsync(It.IsAny<Chunk>()))
                 .ReturnsAsync((Chunk item) => _chunkInMemoryDatabase.Single(c => c.X == item.X && c.Y == item.Y));
@@ -60,7 +58,7 @@ namespace DatabaseHandler.Tests
                 _chunkInMemoryDatabase.Add(item);
                 return "succeeded";
             });
-            _services = new Services<Chunk>(_repository.Object, _log);
+            _services = new Services<Chunk>(_repository.Object);
             
             // Act
             var createChunk = _services.CreateAsync(chunk).Result;
@@ -93,7 +91,7 @@ namespace DatabaseHandler.Tests
                 _chunkInMemoryDatabase.Add(item);
                 return "succeeded";
             });
-            _services = new Services<Chunk>(_repository.Object, _log);
+            _services = new Services<Chunk>(_repository.Object);
             
             // Act
             var createChunk = _services.CreateAsync(chunk).Result;
@@ -118,7 +116,7 @@ namespace DatabaseHandler.Tests
         {
             // Arrange
             var chunk = GetRandomChunk();
-            _services = new Services<Chunk>(_repository.Object, _log);
+            _services = new Services<Chunk>(_repository.Object);
             
             // Act
             var result = _services.ReadAsync(chunk).Result;
@@ -142,7 +140,7 @@ namespace DatabaseHandler.Tests
         public void Test_ReadAsync_ReturnsExceptionBecauseItDoesntExist()
         {
             // Arrange
-            _services = new Services<Chunk>(_repository.Object, _log);
+            _services = new Services<Chunk>(_repository.Object);
             // Act & Assert
             Assert.Throws<InvalidOperationException>(() =>
             {
@@ -174,7 +172,7 @@ namespace DatabaseHandler.Tests
                     return 1;
                 }
             );
-            _services = new Services<Chunk>(_repository.Object, _log);
+            _services = new Services<Chunk>(_repository.Object);
             
             // Act
             chunk.RowSize = 1337;
@@ -208,7 +206,7 @@ namespace DatabaseHandler.Tests
                     throw new InvalidOperationException();
                 }
             );
-            _services = new Services<Chunk>(_repository.Object, _log);
+            _services = new Services<Chunk>(_repository.Object);
             
             // Act & Assert
             Assert.Throws<InvalidOperationException>(() =>
@@ -235,7 +233,7 @@ namespace DatabaseHandler.Tests
             var chunk = GetRandomChunk();
             _repository.Setup(chunkRepo => chunkRepo.DeleteAsync(It.IsAny<Chunk>())).ReturnsAsync(
                 (Chunk item) => _chunkInMemoryDatabase.Remove(item) ? 1 : 0);
-            _services = new Services<Chunk>(_repository.Object, _log);
+            _services = new Services<Chunk>(_repository.Object);
             
             // Act
             var result = _services.DeleteAsync(chunk).Result;
@@ -262,7 +260,7 @@ namespace DatabaseHandler.Tests
             // Arrange
             _repository.Setup(chunkRepo => chunkRepo.DeleteAsync(It.IsAny<Chunk>())).ReturnsAsync(
                 (Chunk item) => _chunkInMemoryDatabase.Remove(item) ? 1 : throw new InvalidOperationException());
-            _services = new Services<Chunk>(_repository.Object, _log);
+            _services = new Services<Chunk>(_repository.Object);
             
             // Act & Assert
             Assert.Throws<InvalidOperationException>(() =>
@@ -286,7 +284,7 @@ namespace DatabaseHandler.Tests
         {
             // Arrange
             _repository.Setup(chunkRepo => chunkRepo.GetAllAsync()).ReturnsAsync(_chunkInMemoryDatabase);
-            _services = new Services<Chunk>(_repository.Object, _log);
+            _services = new Services<Chunk>(_repository.Object);
             
             // Act
             var expected = _chunkInMemoryDatabase;
@@ -315,7 +313,7 @@ namespace DatabaseHandler.Tests
                 _chunkInMemoryDatabase.Clear();
                 return 1;
             });
-            _services = new Services<Chunk>(_repository.Object, _log);
+            _services = new Services<Chunk>(_repository.Object);
             
             // Act
             var deleteAction = _services.DeleteAllAsync().Result;

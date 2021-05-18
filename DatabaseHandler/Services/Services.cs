@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using DatabaseHandler.Repository;
 using LiteDB;
 using Microsoft.Extensions.Logging;
-using WorldGeneration.Models;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace DatabaseHandler.Services
 {
@@ -13,10 +13,11 @@ namespace DatabaseHandler.Services
         private readonly ILogger<Services<T>> _log;
         private readonly IRepository<T> _repository;
 
-        public Services(IRepository<T> repository, ILogger<Services<T>> log)
+        public Services(IRepository<T> repository)
         {
-            _repository = repository ?? new Repository<T>();
-            _log = log;
+            
+            _repository = repository;
+            _log = new NullLogger<Services<T>>();
         }
 
         public Task<BsonValue> CreateAsync(T obj)

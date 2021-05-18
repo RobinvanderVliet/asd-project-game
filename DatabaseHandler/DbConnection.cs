@@ -4,42 +4,18 @@ using System.IO;
 using DatabaseHandler.Poco;
 using LiteDB;
 using LiteDB.Async;
-using Microsoft.Extensions.Logging;
 
 namespace DatabaseHandler
 {
     [ExcludeFromCodeCoverage]
     public class DbConnection : IDbConnection
     {
-        private string _connectionString;
-        private static readonly Lazy<IDbConnection> Lazy = new(() => new DbConnection());
-        public static IDbConnection Instance => Lazy.Value;  
-
-        public DbConnection()
-        {
-            SetForeignKeys();
-        }
 
         [ExcludeFromCodeCoverage]
-        public void SetConnectionString(string connectionString)
+        public void SetForeignKeys()
         {
-            _connectionString = connectionString;
-        }
-        
-        [ExcludeFromCodeCoverage]
-        private void SetForeignKeys()
-        {
-            var col = GetConnectionAsync().GetCollection<PlayerPoco>(GetDbName<PlayerPoco>());
-            var game = GetConnectionAsync().GetCollection<MainGamePoco>(GetDbName<MainGamePoco>());
             BsonMapper.Global.Entity<PlayerPoco>()
-                .DbRef(x => x.GameGuid, GetDbName<MainGamePoco>());
-        }
-        
-        [ExcludeFromCodeCoverage]
-        private string GetDbName<T>()
-        {
-            var name = typeof(T).Name + "s";
-            return name;
+                .DbRef(x => x.GameGuid, nameof(MainGamePoco));
         }
 
         [ExcludeFromCodeCoverage]
@@ -48,7 +24,7 @@ namespace DatabaseHandler
             try
             {
                 var currentDirectory = Directory.GetCurrentDirectory();
-                var connection = new LiteDatabaseAsync(@"Filename="  + currentDirectory + "\\Mama.db;connection=shared;");
+                var connection = new LiteDatabaseAsync(@"Filename="  + currentDirectory + "\\ASD-Game.db;connection=shared;");
                 return connection;
             }
             catch (Exception ex)
