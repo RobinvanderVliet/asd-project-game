@@ -17,11 +17,8 @@ namespace DatabaseHandler.Repository
         [ExcludeFromCodeCoverage]
         public Repository(string connectionString = null, string collection = null)
         {
-            /*
-             * TODO: Connection string zo aanpassen dat je alleen filename meegeeft.
-             */
             _collection = collection ?? typeof(T).Name;
-            _connection = new DbConnection();
+            _connection = DbConnection.Instance;
             _db = _connection.GetConnectionAsync();
             _connection.SetConnectionString(connectionString ?? "Filename=.\\" + typeof(T).Name + ".db");
         }

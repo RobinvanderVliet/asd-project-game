@@ -25,16 +25,15 @@ namespace ASD_project
             public void Run()
             {
                 Console.WriteLine("Game is gestart");
-
-                var tmp = new DbConnection();
-                tmp.SetForeignKeys();
                 
+                // TODO: Iets verzinnen voor die repo/services inits
                 var repository = new Repository<PlayerPoco>();
                 var repositoryMainGame = new Repository<MainGamePoco>();
                 var tmpServicePlayerPoco = new Services<PlayerPoco>(repository, new NullLogger<Services<PlayerPoco>>());
                 var tmpServiceMainGamePoco = new Services<MainGamePoco>(repositoryMainGame, new NullLogger<Services<MainGamePoco>>());
+                
                 var tmpGuidGame = Guid.NewGuid();
-                var tmpObject = new MainGamePoco {MainGameGuid = Guid.NewGuid()};
+                var tmpObject = new MainGamePoco {MainGameGuid = tmpGuidGame};
                 var tmpPlayer = new PlayerPoco {PlayerGuid = Guid.NewGuid(), GameGuid = tmpObject};
 
 

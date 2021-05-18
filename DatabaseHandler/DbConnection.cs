@@ -12,9 +12,12 @@ namespace DatabaseHandler
     public class DbConnection : IDbConnection
     {
         private string _connectionString;
+        private static readonly Lazy<IDbConnection> Lazy = new(() => new DbConnection());
+        public static IDbConnection Instance => Lazy.Value;  
 
         public DbConnection()
         {
+            SetForeignKeys();
         }
 
         [ExcludeFromCodeCoverage]
@@ -23,7 +26,8 @@ namespace DatabaseHandler
             _connectionString = connectionString;
         }
         
-        public void SetForeignKeys()
+        [ExcludeFromCodeCoverage]
+        private void SetForeignKeys()
         {
             var col = GetConnectionAsync().GetCollection<PlayerPoco>(GetDbName<PlayerPoco>());
             var game = GetConnectionAsync().GetCollection<MainGamePoco>(GetDbName<MainGamePoco>());
@@ -31,6 +35,7 @@ namespace DatabaseHandler
                 .DbRef(x => x.GameGuid, GetDbName<MainGamePoco>());
         }
         
+        [ExcludeFromCodeCoverage]
         private string GetDbName<T>()
         {
             var name = typeof(T).Name + "s";
@@ -43,7 +48,7 @@ namespace DatabaseHandler
             try
             {
                 var currentDirectory = Directory.GetCurrentDirectory();
-                var connection = new LiteDatabaseAsync(currentDirectory + "\\Mama.db");
+                var connection = new LiteDatabaseAsync(@"Filename="  + currentDirectory + "\\Mama.db;connection=shared;");
                 return connection;
             }
             catch (Exception ex)
