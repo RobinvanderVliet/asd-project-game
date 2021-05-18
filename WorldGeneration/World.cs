@@ -12,10 +12,10 @@ namespace WorldGeneration
         public IList<IPlayer> _players { get; set; }
         public IList<ICharacter> _characters { get; set; }
 
-        public World(IList<IPlayer> players)
+        public World(IList<IPlayer> players, int seed)
         {
             _players = players;
-            _map = MapFactory.GenerateMap();
+            _map = MapFactory.GenerateMap(seed: seed);
         }
 
        
