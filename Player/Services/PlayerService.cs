@@ -170,7 +170,7 @@ namespace Player.Services
             }
 
            // _currentPlayer.SetNewPlayerPosition(x, y);
-            _moveHandler.SendMove(_currentPlayer);
+            _moveHandler.SendMove(this);
 
             // the next line of code should be changed by sending newPosition to a relevant method
             Console.WriteLine("X: " + _currentPlayer.XPosition + ". Y: " + _currentPlayer.YPosition);
@@ -201,6 +201,31 @@ namespace Player.Services
         public void RequestSessions()
         {
             _sessionHandler.RequestSessions();
+        }
+
+        public string GetName()
+        {
+           return _currentPlayer.Name;
+        }
+
+        public int GetX()
+        {
+            return _currentPlayer.XPosition;
+        }
+
+        public int GetY()
+        {
+            return _currentPlayer.YPosition;
+        }
+
+        public void SetX(int x)
+        {
+            _currentPlayer.XPosition = x;
+        }
+
+        public void SetY(int y)
+        {
+            _currentPlayer.YPosition = y;
         }
     }
 }

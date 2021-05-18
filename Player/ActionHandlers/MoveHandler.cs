@@ -1,8 +1,8 @@
-﻿using Network;
+﻿using System;
+using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Player.DTO;
-using Player.Model;
 using Player.Services;
 
 namespace Player.ActionHandlers
@@ -10,7 +10,7 @@ namespace Player.ActionHandlers
     public class MoveHandler : IMoveHandler, IPacketHandler
     {
         private IClientController _clientController;
-        private IPlayerModel _currentPlayer;
+        private IPlayerService _currentPlayer;
 
         public MoveHandler(IClientController clientController)
         {
@@ -18,13 +18,13 @@ namespace Player.ActionHandlers
             _clientController.SubscribeToPacketType(this, PacketType.Move);
         }
 
-        public void SendMove(IPlayerModel player)
+        public void SendMove(IPlayerService player)
         {
             _currentPlayer = player;
-            var playerDTO = new PlayerDTO(player.Name, player.XPosition, player.YPosition);
+            var playerDTO = new PlayerDTO(_currentPlayer.GetName(), _currentPlayer.GetX(), _currentPlayer.GetY());
             var moveDTO = new MoveDTO(playerDTO);
             SendMoveDTO(moveDTO);
-        } 
+        }
         
         private void SendMoveDTO(MoveDTO moveDTO)
         {
@@ -35,28 +35,38 @@ namespace Player.ActionHandlers
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
-            HandleMove(moveDTO.Player);
-            return new HandlerResponseDTO(SendAction.Ignore, null);
+            if (packet.Header.Target == "host")
+            {
+                //handlemove
+            }
+            else if (packet.Header.Target == "client")
+            {
+                // Adjust playerService Arraylist.
+                _currentPlayer.ChangePositionOfAPlayer(moveDTO.Player);
+            }
+
+            // HandleMove(moveDTO.Player); 
+            // return new HandlerResponseDTO(SendAction.Ignore, null);
+            return null;
         }
-                
-       private void HandleMove(PlayerDTO player)
-       {
-           if (player.PlayerName.Equals(_currentPlayer.Name))
-           {
-               
-           }
-           // aanroepen daadwerkelijke functie voor aanpassen x en y in wereld (dus in arraylist)
-           //_player.ChangePositionOfAPlayer(player);
-           // als host dan in globale db aanpassen voor die speler (hostcontoller (HandlePacket))
            
-           // als speler waarvan positie gewijzigd is dan in eigen db aanpassen
-           //if (player.PlayerName == _player.//playerName
-              //                                          )
-           //{
-               // ja: dan aanpassen in mijn (_player) db
-               //_player.setData(int x, int y);
-           //}
-       }
-        
+       //  private HandlerResponseDTO HandleMove(PlayerDTO player)
+       // {
+       //     if (player.PlayerName.Equals(_currentPlayer.GetName()))
+       //     {
+       //       _currentPlayer.SetX(player.X);
+       //       _currentPlayer.SetY(player.Y);
+       //       // Make changes in database
+       //     }
+       //
+       //     bool moveIsPossible = false;
+       //     // check if the move is possible
+       //     if(moveIsPossible){}
+       //     else{}
+       //     
+       //     _currentPlayer.ChangePositionOfAPlayer(player);
+       //
+       //     return null;
+       // }
     }
 }

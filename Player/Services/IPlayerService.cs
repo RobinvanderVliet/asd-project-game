@@ -54,5 +54,15 @@ namespace Player.Services
         public void JoinSession(string messageValue);
         
         public void RequestSessions();
+
+        public string GetName();
+        
+        public int GetX();
+        
+        public int GetY();
+
+        public void SetX(int x);
+        
+        public void SetY(int y);
     }
 }
