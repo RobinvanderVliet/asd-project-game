@@ -346,7 +346,7 @@ namespace Session.Tests
         }
         
         [Test]
-        public void Test_HandlePacket_RequestHeartbeat_Returns_Catch()
+        public void Test_HandlePacket_RequestHeartbeatReturnsCatch()
         {
             // Arrange ---------
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestHeartbeat);
