@@ -20,11 +20,5 @@ namespace Creature
         /// </summary>
         /// <param name="amount">Damage the creature deals to enemies</param>
         public void HealAmount(double amount);
-
-        /// <summary>
-        /// Allows Creatures to send chat messages.
-        /// </summary>
-        /// <param name="message">The text you want to send in chat.</param>
-        public void SendChatMessenge(string message);
     }
 }

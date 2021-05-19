@@ -28,10 +28,5 @@ namespace Creature
         {
             _monsterStateMachine.CreatureData.Health += amount;
         }
-
-        public void SendChatMessenge(string message)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
