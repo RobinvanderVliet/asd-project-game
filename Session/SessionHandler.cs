@@ -28,14 +28,10 @@ namespace Session
             }
             else
             {
-                new Thread(() =>
+                Timer timer = new Timer((e) =>
                 {
-                    while (true)
-                    {
-                        SendHeartbeat();
-                        Thread.Sleep(1000);
-                    }
-                }).Start();
+                    SendHeartbeat();
+                }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
                 
                 SessionDTO sessionDto = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
                 _session = new Session(sessionDto.Name);
