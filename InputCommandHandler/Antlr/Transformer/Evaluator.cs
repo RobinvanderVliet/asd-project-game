@@ -78,6 +78,9 @@ namespace InputCommandHandler.Antlr.Transformer
                     case RequestSessions:
                         TransformRequestSessions((RequestSessions)nodeBody[i]);
                         break;
+                    case StartSession:
+                        Console.WriteLine("yo hij doet het");
+                        break;
                 }
         }
 
@@ -142,22 +145,23 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformCreateSession(CreateSession createSession)
         {
-            //PlayerSErvice moet niet meer de CreateSEssion gedeelde doen -> Bestaat op dit moment nog niet. methode kan wel hier blijven staan :)
             _sessionService.CreateSession(createSession.Message.MessageValue);
         }
 
         private void TransformJoinSession(JoinSession joinSession)
         {
-            //PlayerSErvice moet niet meer de JoinSEssion gedeelde doen -> Bestaat op dit moment nog niet.methode kan wel hier blijven staan :)
-
             _sessionService.JoinSession(joinSession.Message.MessageValue);
         }
 
         private void TransformRequestSessions(RequestSessions requestSessions)
         {
-            //PlayerSErvice moet niet meer de RequestSEssion gedeelde doen -> Bestaat op dit moment nog niet.methode kan wel hier blijven staan :)
-
             _sessionService.RequestSessions();
+        }
+
+        private void TransformStartSession(StartSession startSession)
+        {
+            _sessionService.StartSession(startSession.Message.MessageValue);
+            // argument could be removed
         }
         
     }

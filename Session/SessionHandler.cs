@@ -64,6 +64,26 @@ namespace Session
             sendSessionDTO(sessionDTO);
         }
 
+        public void StartSession(string sessionID)
+        {
+            List<string> allClients = _session.GetAllClients();
+            Dictionary<string, int[]> players = new Dictionary<string, int[]>();
+
+            int playerX = 14;
+            int playerY = 33;
+            foreach (string element in allClients)
+            {
+                int[] playerPosition = new int[2];
+                playerPosition[0] = playerX;
+                playerPosition[1] = playerY;
+                players.Add(element, playerPosition);
+                playerX++; 
+                playerY++;
+            }
+
+            throw new NotImplementedException();
+        }
+
         private void sendSessionDTO(SessionDTO sessionDTO)
         {
             var payload = JsonConvert.SerializeObject(sessionDTO);
@@ -100,6 +120,8 @@ namespace Session
                         {
                             return new HandlerResponseDTO(SendAction.Ignore, null);
                         }
+                    case SessionType.StartSession:
+                        return StartSession(packet);
                 }
             }
             else if (packet.Header.Target == _clientController.GetOriginId())
@@ -129,6 +151,11 @@ namespace Session
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
             Console.WriteLine(packet.Header.SessionID + " Name: " + sessionDTO.Name);
             return new HandlerResponseDTO(SendAction.Ignore, null);
+        }
+
+        private HandlerResponseDTO StartSession(PacketDTO packet)
+        {
+
         }
 
         private HandlerResponseDTO addPlayerToSession(PacketDTO packet)

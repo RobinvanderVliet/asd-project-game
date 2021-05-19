@@ -9,7 +9,6 @@ namespace DatabaseHandler.Poco
 {
     public class ItemPoco
     {
-s
 
         [BsonId]
         public String ItemName { get; set; }

@@ -30,8 +30,9 @@ namespace ASD_project
             private readonly IRepository<PlayerPoco> _playerRepository;
         //    private readonly IRepository<MainGamePoco> _mainGameRepository;
             private Boolean GameStarted = true;
+            private List<PlayerDTO> playerPositions;
 
-            
+
 
             public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler,
                 ISessionHandler sessionHandler, IMoveHandler moveHandler, IRepository<PlayerPoco> playerRepository)
@@ -81,7 +82,7 @@ namespace ASD_project
                 //networkcomponent heeft lijst van players -> Session heeft lijst van spelers toch?
                 //die players moeten toegevoegd worden aan playerPositions -> Moet de host doen en dit sturen naar de clients wanneer session_start gerund wordt. Kan een list sturen naar alle
                 // clients
-                List<PlayerDTO> playerPositions = new List<PlayerDTO>
+                playerPositions = new List<PlayerDTO>
                 {
                     new PlayerDTO("Joe", 10, 10),
                     new PlayerDTO("Mama", 40, 40)
@@ -131,20 +132,32 @@ namespace ASD_project
                 {
                     inputHandler.HandleSession(sessionService);
 
-                    if (sessionService.InSession())
-                    {
-                        //create player
-                        Console.WriteLine("In session Main");
-                        
-                        inputHandler.HandleCommands(playerService);
+                    if (sessionService.inSession)
+                    {                        
+                        Console.WriteLine("create player");
+                        String playername = Console.ReadLine();
+                        if (playername.Length != 0)
+                        {
+                            IPlayerService player = createPlayer(playername);
+                            inputHandler.HandleCommands(player);
+                        }
                     }
                     
                     //if sessionService.GameStarted 
                     // inputHandler.HandleCommands(playerService);
 
-                   
+                    
 
                 }
+
+            }
+
+            private IPlayerService createPlayer(String name)
+            {
+                IPlayerModel playerModel = new PlayerModel(name, _inventory, new Bitcoin(20), new RadiationLevel(1));
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler,
+                    playerPositions, _moveHandler);
+                return playerService;
             }
         }
     }

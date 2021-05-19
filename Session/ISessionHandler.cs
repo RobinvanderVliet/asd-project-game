@@ -7,6 +7,6 @@ namespace Session
         public Boolean JoinSession(string sessionId);
         public Boolean CreateSession(string sessionName);
         public void RequestSessions();
-
+        public void StartSession(string messageValue);
     }
 }
