@@ -11,13 +11,13 @@ namespace Network
         private IHeartbeatHandler _heartbeat;
         private string _sessionId;
 
-        public HostController(INetworkComponent networkComponent, IPacketHandler client, string sessionId)
+        public HostController(INetworkComponent networkComponent, IPacketHandler client, string sessionId, IHeartbeatHandler heartbeat)
         {
             _networkComponent = networkComponent;
             _client = client;
             _sessionId = sessionId;
             _networkComponent.SetHostController(this);
-            _heartbeat = new HeartbeatHandler();
+            _heartbeat = heartbeat;
         }
 
         public void ReceivePacket(PacketDTO packet)
