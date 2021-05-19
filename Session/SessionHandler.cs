@@ -86,6 +86,7 @@ namespace Session
                             return new HandlerResponseDTO(SendAction.Ignore, null);
                         }
                     case SessionType.SendPing:
+                        Console.WriteLine(packet.Header.Target);
                         return handlePingRequest(packet);
                 }
             }
@@ -111,13 +112,17 @@ namespace Session
             {
                 Console.Out.WriteLine("hans");
                 _hostPingTimer.Dispose();
+                _hostActive = true;
                 SwapToHost();
-                _clientController.MarkBackupHost();
+                // _clientController.MarkBackupHost();
             }
         }
         
         private HandlerResponseDTO handlePingRequest(PacketDTO packet)
         {
+            if (packet.Header.Target.Equals("Client")) {
+                return new HandlerResponseDTO(SendAction.Ignore, null);
+            }
             if (packet.HandlerResponse != null)
             {
                 Console.WriteLine("pong"); //TODO verwijderen
@@ -181,16 +186,13 @@ namespace Session
                 if (sessionDTOClients.ClientIds.Count > 0) {
                     if (sessionDTOClients.ClientIds[1].Equals(_clientController.GetOriginId()))
                     {
-                        _clientController.MarkBackupHost();
-                        Console.WriteLine("You have been marked as the backup host");
+                        if (!_clientController.IsBackupHost()) {
+                            _clientController.MarkBackupHost();
+                            PingHostTimer();
+                            Console.WriteLine("You have been marked as the backup host");
+                        }
                     }
                 }
-                
-                if (_clientController.IsBackupHost()) {
-                    Console.Write("eteiygfasgfagseflagwelfy");
-                    PingHostTimer();
-                }
-
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
         }
@@ -207,7 +209,7 @@ namespace Session
 
         private void PingHostTimer()
         {
-            _hostPingTimer = new System.Timers.Timer(5000);
+            _hostPingTimer = new System.Timers.Timer(1000);
             _hostPingTimer.Enabled = true;
             _hostPingTimer.AutoReset = true;
             _hostPingTimer.Elapsed += HostPingEvent;
@@ -217,7 +219,7 @@ namespace Session
         public void HostPingEvent(Object source, ElapsedEventArgs e)
         {
             SendPing();
-            Thread.Sleep(2000);
+            Thread.Sleep(500);
             CheckIfHostActive();
         }
         
@@ -226,8 +228,6 @@ namespace Session
         {
             _clientController.CreateHostController();
             _clientController.UnmarkBackupHost();
-            _hostPingTimer.Stop();
-            _hostActive = true;
             // TODO: Enable Heartbeat check and enable agents, maybe this will be done when hostcontroller is activated?
             // TODO: Make new client backup host
             
