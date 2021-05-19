@@ -1,34 +1,45 @@
 ﻿using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace Network
 {
-    class BackupHostService 
+    public interface IBackupHostService {
+
+        public void UpdateBackupDatabase(PacketDTO data);
+        public void EnableBackupHost();
+        public Boolean IsBackupHost();
+    }
+
+    public class BackupHostService : IBackupHostService
     {
         private Boolean _isBackupHost;
 
         //database shit
-        private Database database;
 
         public BackupHostService() 
         {
             _isBackupHost = false;
         }
 
-        public void UpdateBackupDatabase(DatabaseModel data)
+        public void UpdateBackupDatabase(PacketDTO data)
         {
             try
             {
-                if (CheckExists(data))
+                //convert packet to poco
+                var poco = ConvertDataToPoco(data);
+
+                if (CheckExists(poco))
                 {
-                    //todo update database
+                    AlterBackupDatabase(poco);
                 }
                 else
                 {
-                    AddToBackupDatabase(data);
+                    AddToBackupDatabase(poco);
                 }
 
                 //save in database
@@ -40,18 +51,55 @@ namespace Network
 
         }
 
-        private void AddToBackupDatabase(DatabaseModel data) {
+        private Object ConvertDataToPoco(PacketDTO packet)
+        {
+            //convert the payload to poco for inserting
+            switch (packet.Header.PacketType)
+            {
+                //todo change to proper enums
+                case PacketType.Move:
+                    var definition = new { PlayerGUID = "", GameGUID="" , X = "", Y="" };
+                    return JsonConvert.DeserializeAnonymousType(packet.Payload, definition);
+                default:
+                    throw new UnknownEnumException("an unhandled action type is recieved");
+            }
+        }
+
+        private void AlterBackupDatabase(Object data)
+        {
+            //todo call update function
+        }
+
+        private void AddToBackupDatabase(Object data) {
         //todo call add function
         }
 
-        private Boolean CheckExists(DatabaseModel data)
+        private Boolean CheckExists(Object data)
         {
             return false; //todo
         }
 
-        public Boolean IsBackupHost
+        public void EnableBackupHost()
         {
-            get => _isBackupHost; set => _isBackupHost = value;
+            _isBackupHost = true;
+        }
+
+        public bool IsBackupHost()
+        {
+            return _isBackupHost;
+        }
+    }
+
+    [Serializable]
+    internal class UnknownEnumException : Exception
+    {
+        public UnknownEnumException()
+        {
+        }
+
+        public UnknownEnumException(string message) : base(message)
+        {
+            Console.WriteLine(message);
         }
     }
 }

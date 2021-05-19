@@ -9,6 +9,7 @@ namespace Network
     {
         private INetworkComponent _networkComponent;
         private IHostController _hostController;
+        private BackupHostService _backupService;
         private string _sessionId;
         private Dictionary<PacketType, IPacketHandler> _subscribers = new();
 
@@ -16,12 +17,17 @@ namespace Network
         {
             _networkComponent = networkComponent;
             _networkComponent.SetClientController(this);
+            _backupService = new();
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session)
             {
+                if (_backupService.IsBackupHost())
+                {
+                    _backupService.UpdateBackupDatabase(packet);
+                }
                 return _subscribers.GetValueOrDefault(packet.Header.PacketType).HandlePacket(packet);
             }
             else
@@ -84,5 +90,6 @@ namespace Network
         {
             _hostController = hostController;
         }
+
     }
 }
