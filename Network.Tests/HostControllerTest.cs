@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Network.DTO;
 using Moq;
+using Network.Enum;
 
 namespace Network.Tests
 {

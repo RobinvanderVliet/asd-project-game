@@ -1,4 +1,6 @@
-﻿namespace Network
+﻿using Network.Enum;
+
+namespace Network
 {
     public class PacketHeaderDTO
     {

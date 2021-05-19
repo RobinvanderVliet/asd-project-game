@@ -7,6 +7,7 @@ using Chat.DTO;
 using Network.DTO;
 using Newtonsoft.Json;
 using System.IO;
+using Network.Enum;
 
 namespace Chat.Tests
 {

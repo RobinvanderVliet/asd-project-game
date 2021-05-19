@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Network.DTO;
+using Network.Enum;
 
 namespace Network
 {
