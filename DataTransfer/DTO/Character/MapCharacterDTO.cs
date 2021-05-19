@@ -12,11 +12,11 @@ namespace DataTransfer.DTO.Character
         public ConsoleColor Color;
         public ConsoleColor BackgroundColor;
         public int Team;
-        
+
         public MapCharacterDTO(int xPosition
             , int yPosition
-            , string symbol
             , string name
+            , string symbol = null
             , ConsoleColor color = ConsoleColor.White
             , ConsoleColor backgroundColor = ConsoleColor.Black
             , int team = 0)

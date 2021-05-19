@@ -1,12 +1,13 @@
-﻿using DataTransfer.DTO.Player;
+﻿using DataTransfer.DTO.Character;
+using DataTransfer.DTO.Player;
 using Player.Services;
 
 namespace Player.DTO
 {
     public class MoveDTO
     {
-        public PlayerPositionDTO PlayerPosition{ get; set; }
-        public MoveDTO(PlayerPositionDTO playerPosition)
+        public MapCharacterDTO PlayerPosition{ get; set; }
+        public MoveDTO(MapCharacterDTO playerPosition)
         {
             PlayerPosition = playerPosition;
         }

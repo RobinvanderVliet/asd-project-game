@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Chat\Chat.csproj" />
     <ProjectReference Include="..\Session\Session.csproj" />
+    <ProjectReference Include="..\WorldGeneration\WorldGeneration.csproj" />
   </ItemGroup>
 
 </Project>

@@ -51,6 +51,7 @@ namespace WorldGeneration
         // cleanup function to forget chunks out of loading range
         private void ForgetUnloadedChunks()
         {
+            /*
             foreach (var loadedChunk in _chunks)
             {
                 if (!_chunksWithinLoadingRange.Exists(
@@ -64,6 +65,7 @@ namespace WorldGeneration
                     }
                 }
             }
+            */
         }
 
         private List<int[]> CalculateChunksToLoad(int playerX, int playerY, int viewDistance)

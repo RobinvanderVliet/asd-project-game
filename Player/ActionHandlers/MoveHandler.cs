@@ -5,6 +5,7 @@ using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Player.DTO;
+using WorldGeneration;
 
 namespace Player.ActionHandlers
 {
@@ -12,6 +13,7 @@ namespace Player.ActionHandlers
     {
         private IClientController _clientController;
         private PlayerDTO _currentPlayer;
+        private WorldService _worldService;
 
         public MoveHandler(IClientController clientController)
         {
@@ -19,8 +21,9 @@ namespace Player.ActionHandlers
             _clientController.SubscribeToPacketType(this, PacketType.Move);
         }
 
-        public void SendMove(PlayerPositionDTO player)
+        public void SendMove(MapCharacterDTO player, WorldService worldService)
         {
+            _worldService = worldService;
             //_currentPlayer = player;
             //var playerPostionDTO = new PlayerPositionDTO(player.XPosition, player.YPosition, player.Name, player.Team);
             var moveDTO = new MoveDTO(player);
@@ -40,8 +43,11 @@ namespace Player.ActionHandlers
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
                 
-       private void HandleMove(PlayerPositionDTO playerPosition)
+       private void HandleMove(MapCharacterDTO playerPosition)
        {
+           _worldService.UpdateCharacterPosition(playerPosition);
+           
+           
            // worldService.updateArraylistposition(player, x, y);
            
            // aanroepen daadwerkelijke functie voor aanpassen x en y in wereld (dus in arraylist)

@@ -1,11 +1,10 @@
-﻿using DataTransfer.DTO.Player;
-using Player.DTO;
-using Player.Model;
+﻿using DataTransfer.DTO.Character;
+using WorldGeneration;
 
 namespace Player.ActionHandlers
 {
     public interface IMoveHandler
     {
-        public void SendMove(PlayerPositionDTO player);
+        public void SendMove(MapCharacterDTO player, WorldService worldService);
     }
 }

@@ -3,23 +3,14 @@ using System;
 using InputCommandHandler;
 using Player.Model;
 using Player.Services;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Collections.Generic;
-using System.Collections.Immutable;
 using WorldGeneration;
-using Agent.Services;
-using WorldGeneration.Models;
 using WorldGeneration.Models.Interfaces;
-using Player = WorldGeneration.Player;
 using Chat;
+using DataTransfer.DTO.Character;
 using DataTransfer.DTO.Player;
 using Session;
 using Player.ActionHandlers;
-using Player.DTO;
 
 namespace ASD_project
 {
@@ -53,27 +44,25 @@ namespace ASD_project
 
                 //moet later vervangen worden
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
-                IList<PlayerPositionDTO> players = new List<PlayerPositionDTO>();
-                players.Add(new PlayerPositionDTO("henk", 3, 0));
-                players.Add(new PlayerPositionDTO("pietje", 5, 4));
-                var currentPlayer = new PlayerModel("Gerard", _inventory, new Bitcoin(21), new RadiationLevel(0));
+                List<MapCharacterDTO> players = new List<MapCharacterDTO>();
+                players.Add(new MapCharacterDTO(3, 0, "henk"));
+                players.Add(new MapCharacterDTO(5, 4, "pietje"));
                 IList<ICharacter> characters = new List<ICharacter>();
-                World world = new World(players, currentPlayer, characters, 66666666);
-                world.DisplayWorld(4);
+
                 
                 
                 
                 
-                IPlayerModel playerModel = new PlayerModel("Name", _inventory, new Bitcoin(20), new RadiationLevel(1));
+                
+                IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
+                MapCharacterDTO playerDTO = new MapCharacterDTO(playerModel.XPosition, playerModel.YPosition,
+                    playerModel.Name, playerModel.Symbol);
+                var worldService = new WorldService(new World(666, 5, playerDTO));
+                worldService.displayWorld();
                 //lobby start
                 //networkcomponent heeft lijst van players
                 //die players moeten toegevoegd worden aan playerPositions
-                List<PlayerPositionDTO> playerPositions = new List<PlayerPositionDTO>
-                {
-                    new PlayerPositionDTO("Joe", 10, 10),
-                    new PlayerPositionDTO("Mama", 40, 40)
-                };
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, playerPositions, _moveHandler);
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, players, _moveHandler, worldService);
                 Console.WriteLine("Type input messages below");
                 while (true) // moet vervangen worden met variabele: isQuit 
                 {    

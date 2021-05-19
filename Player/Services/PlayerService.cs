@@ -7,26 +7,33 @@ using DataTransfer.DTO.Character;
 using DataTransfer.DTO.Player;
 using Player.Model;
 using Session;
+using WorldGeneration;
+using WorldGeneration.Models;
 
 namespace Player.Services
 {
     public class PlayerService : IPlayerService
     {
         private readonly IPlayerModel _currentPlayer;
-        private List<PlayerPositionDTO> _playerPositions;
+        private List<MapCharacterDTO> _playerPositions;
         private readonly IMoveHandler _moveHandler;
         private readonly IChatHandler _chatHandler;
         private readonly ISessionHandler _sessionHandler;
+        private readonly WorldService _worldService;
 
-        public PlayerService(IPlayerModel currentPlayer, IChatHandler chatHandler
-            , ISessionHandler sessionHandler, List<PlayerPositionDTO> playerPositions
-            , IMoveHandler moveHandler)
+        public PlayerService(IPlayerModel currentPlayer
+            , IChatHandler chatHandler
+            , ISessionHandler sessionHandler
+            , List<MapCharacterDTO> playerPositions
+            , IMoveHandler moveHandler
+            , WorldService worldService)
         {
             _chatHandler = chatHandler;
             _sessionHandler = sessionHandler;
             _currentPlayer = currentPlayer;
             _playerPositions = playerPositions;
             _moveHandler = moveHandler;
+            _worldService = worldService;
         }
 
         public void Attack(string direction)
@@ -164,19 +171,29 @@ namespace Player.Services
                 case "forward":
                 case "up":
                 case "north":
-                    y = -stepsValue;
+                    y = +stepsValue;
                     break;
                 case "backward":
                 case "down":
                 case "south":
-                    y = stepsValue;
+                    y = -stepsValue;
                     break;
             }
 
             
-           // _currentPlayer.SetNewPlayerPosition(x, y);
-           var dto = new PlayerPositionDTO(_currentPlayer.XPosition, _currentPlayer.YPosition,_currentPlayer.Name);
-            _moveHandler.SendMove(dto);
+            _currentPlayer.SetNewPlayerPosition(x, y);
+            //MapCharacterDTO dto = new CharacterDTO(0, 0, _currentPlayer.);
+            // foreach (var player in _playerPositions)
+            // {
+            //     if (player.Name.Equals(_currentPlayer.Name))
+            //     {
+            //         dto = player;
+            //     }
+            // }
+            var dto = new MapCharacterDTO(_currentPlayer.XPosition, _currentPlayer.YPosition, _currentPlayer.Name, _currentPlayer.Symbol);
+
+            _moveHandler.SendMove(dto, _worldService);
+            
 
             // the next line of code should be changed by sending newPosition to a relevant method
             Console.WriteLine("X: " + _currentPlayer.XPosition + ". Y: " + _currentPlayer.YPosition);
@@ -186,10 +203,10 @@ namespace Player.Services
         {
             foreach (var player in _playerPositions)
             {
-                if (player.PlayerName == playerPosition.PlayerName)
+                if (player.Name == playerPosition.PlayerName)
                 {
-                    playerPosition.X = player.X;
-                    playerPosition.Y = player.Y;
+                    playerPosition.X = player.XPosition;
+                    playerPosition.Y = player.YPosition;
                 }
             }
         }
