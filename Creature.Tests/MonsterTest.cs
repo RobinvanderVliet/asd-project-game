@@ -21,7 +21,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_Constructor_Starts_State_Machine()
+        public void Test_MonsterStateMachine_StartsStateMachine()
         {
             // Assert ----------
             _creatureStateMachineMock.Verify(creatureStateMachine => creatureStateMachine.StartStateMachine());
