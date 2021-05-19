@@ -91,12 +91,12 @@ namespace ASD_project
                 IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
                 MapCharacterDTO playerDTO = new MapCharacterDTO(playerModel.XPosition, playerModel.YPosition,
                     playerModel.Name, playerModel.Symbol);
-                var worldService = new WorldService(new World(6686, 5, playerDTO));
-                worldService.DisplayWorld();
+                // var worldService = new WorldService(new World(6686, 5, playerDTO));
+                // worldService.DisplayWorld();
                 //lobby start
                 //networkcomponent heeft lijst van players
                 //die players moeten toegevoegd worden aan playerPositions
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, players, _moveHandler, worldService);
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, players, _moveHandler);
                 Console.WriteLine("Type input messages below");
 
                 ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
@@ -140,16 +140,16 @@ namespace ASD_project
 
             }
 
-            private IPlayerService createPlayer(String name, WorldService world)
-            {
-                IPlayerModel playerModel = new PlayerModel(name, _inventory, new Bitcoin(20), new RadiationLevel(1));
-                
-                
-                playerPositions.Add(new MapCharacterDTO(3, 0, playerModel.Name));
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler,
-                    playerPositions, _moveHandler, world);
-                return playerService;
-            }
+            // private IPlayerService createPlayer(String name, WorldService world)
+            // {
+            //     IPlayerModel playerModel = new PlayerModel(name, _inventory, new Bitcoin(20), new RadiationLevel(1));
+            //     
+            //     
+            //     playerPositions.Add(new MapCharacterDTO(3, 0, playerModel.Name));
+            //     IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler,
+            //         playerPositions, _moveHandler);
+            //     return playerService;
+            // }
         }
     }
 }

@@ -5,6 +5,7 @@ using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
 using WorldGeneration;
+using WorldGeneration.Models;
 
 namespace Session
 {
@@ -16,9 +17,9 @@ namespace Session
         private IWorldService _worldService;
         public GameSessionHandler(IClientController clientController, IWorldService worldService)
         {
-            _worldService = worldService;
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
+            _worldService = worldService;
         }
         
         public void SendGameSession(string messageValue, ISessionHandler sessionHandler)
@@ -49,18 +50,29 @@ namespace Session
                 Console.WriteLine("Ik ben de host, ga iets doen met de database");
             }
 
-            // if (_clientController.GetOriginId() == startGameDto.id)
-            // {
-            //     // doe iets met eigen database
-                    // eigen model?
-            // }
+            foreach (var player in startGameDto.PlayerLocations)
+            {
+                if (_clientController.GetOriginId() == player.Key)
+                {
+                    MapCharacterDTO currentPlayer = new MapCharacterDTO(player.Value[0], player.Value[1], player.Key);
+                    
+                }
+            }
+            _worldService.GenerateWorld(6969);
 
             foreach (var player in startGameDto.PlayerLocations)
             {
-                MapCharacterDTO mapCharacterDto = new MapCharacterDTO(player.Value[0], player.Value[1], player.Key);
-                _worldService.AddCharacterToWorld(mapCharacterDto);
+                if (_clientController.GetOriginId() == player.Key) 
+                {
+                    _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, CharacterSymbol.CURRENT_PLAYER), true);
+                } 
+                else 
+                {
+                    _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, CharacterSymbol.ENEMY_PLAYER), false);
+                }
             }
             
+            _worldService.DisplayWorld();
         }
     }
 }

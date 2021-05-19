@@ -1,3 +1,4 @@
+using System;
 using DataTransfer.DTO.Character;
 
 namespace WorldGeneration
@@ -6,9 +7,9 @@ namespace WorldGeneration
     {
         private World _world;
 
-        public WorldService(World world)
+        public WorldService()
         {
-            _world = world;
+            // _world = new World();
         }
 
         public void UpdateCharacterPosition(MapCharacterDTO mapCharacterDto)
@@ -16,9 +17,9 @@ namespace WorldGeneration
             _world.UpdateCharacterPosition(mapCharacterDto);
         }
 
-        public void AddCharacterToWorld(MapCharacterDTO characterPositionDTO)
+        public void AddCharacterToWorld(MapCharacterDTO mapCharacterDto, Boolean isCurrentPlayer)
         {
-            _world.AddCharacterToWorld(characterPositionDTO);
+            _world.AddCharacterToWorld(mapCharacterDto, isCurrentPlayer);
         }
 
         public void DisplayWorld()
@@ -29,6 +30,11 @@ namespace WorldGeneration
         public void DeleteMap()
         {
             _world.deleteMap();
+        }
+
+        public void GenerateWorld(int seed)
+        {
+            _world = new World(seed, 6);
         }
     }
 }

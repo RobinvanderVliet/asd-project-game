@@ -26,15 +26,14 @@ namespace Player.Services
             , IChatHandler chatHandler
             , ISessionHandler sessionHandler
             , List<MapCharacterDTO> playerPositions
-            , IMoveHandler moveHandler
-            , WorldService worldService)
+            , IMoveHandler moveHandler)
         {
             _chatHandler = chatHandler;
             _sessionHandler = sessionHandler;
             _currentPlayer = currentPlayer;
             _playerPositions = playerPositions;
             _moveHandler = moveHandler;
-            _worldService = worldService;
+            // _worldService = worldService;
         }
 
         public void Attack(string direction)
@@ -193,7 +192,7 @@ namespace Player.Services
             // }
             var dto = new MapCharacterDTO(_currentPlayer.XPosition, _currentPlayer.YPosition, _currentPlayer.Name, _currentPlayer.Symbol);
 
-            _moveHandler.SendMove(dto, _worldService);
+            // _moveHandler.SendMove(dto, _worldService);
             
 
             // the next line of code should be changed by sending newPosition to a relevant method

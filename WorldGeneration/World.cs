@@ -12,12 +12,11 @@ namespace WorldGeneration
         private IList<MapCharacterDTO> Characters { get; set; }
         private readonly int _viewDistance;
 
-        public World(int seed, int viewDistance, MapCharacterDTO currentPlayer)
+        public World(int seed, int viewDistance)
         {
             Characters = new List<MapCharacterDTO>();
-            AddCharacterToWorld(currentPlayer);
+            // AddCharacterToWorld(currentPlayer);
             _map = MapFactory.GenerateMap(seed: seed);
-            CurrentPlayer = currentPlayer;
             _viewDistance = viewDistance;
         }
 
@@ -47,9 +46,14 @@ namespace WorldGeneration
             DisplayWorld();
         }
 
-        public void AddCharacterToWorld(MapCharacterDTO characterPositionDTO)
+        public void AddCharacterToWorld(MapCharacterDTO mapCharacterDto, Boolean isCurrentPlayer)
         {
-            Characters.Add(characterPositionDTO);
+            if (isCurrentPlayer)
+            {
+                CurrentPlayer = mapCharacterDto;
+            }
+            
+            Characters.Add(mapCharacterDto);
         }
 
         public void DisplayWorld()
