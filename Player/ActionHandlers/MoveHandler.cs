@@ -41,39 +41,41 @@ namespace Player.ActionHandlers
             }
             else if (packet.Header.Target == "client")
             {
-                // Adjust playerService Arraylist.
+                //adjust playerlist
+                
                 //moet op id vergeleken worden
                 if (moveDTO.Player.PlayerName == _currentPlayer.GetName())
                 {
+                    //adjust actual player
+                    _currentPlayer.ChangePositionOfAPlayer(moveDTO.Player);
+                    
+                    //change database
                     CreateAsync(moveDTO.Player);
                 }
-                
-                //moet aangepast worden
-                _currentPlayer.ChangePositionOfAPlayer(moveDTO.Player);
             }
 
             // HandleMove(moveDTO.Player); 
-            // return new HandlerResponseDTO(SendAction.Ignore, null);
-            return null;
+            return new HandlerResponseDTO(SendAction.Ignore, null);
+            // return null;
         }
-           
-       //  private HandlerResponseDTO HandleMove(PlayerDTO player)
-       // {
-       //     if (player.PlayerName.Equals(_currentPlayer.GetName()))
-       //     {
-       //       _currentPlayer.SetX(player.X);
-       //       _currentPlayer.SetY(player.Y);
-       //       // Make changes in database
-       //     }
-       //
-       //     bool moveIsPossible = false;
-       //     // check if the move is possible
-       //     if(moveIsPossible){}
-       //     else{}
-       //     
-       //     _currentPlayer.ChangePositionOfAPlayer(player);
-       //
-       //     return null;
-       // }
+
+        //  private HandlerResponseDTO HandleMove(PlayerDTO player)
+        // {
+        //     if (player.PlayerName.Equals(_currentPlayer.GetName()))
+        //     {
+        //       _currentPlayer.SetX(player.X);
+        //       _currentPlayer.SetY(player.Y);
+        //       // Make changes in database
+        //     }
+        //
+        //     bool moveIsPossible = false;
+        //     // check if the move is possible
+        //     if(moveIsPossible){}
+        //     else{}
+        //     
+        //     _currentPlayer.ChangePositionOfAPlayer(player);
+        //
+        //     return null;
+        // }
     }
 }
