@@ -21,10 +21,7 @@ namespace Creature
 
         public void ApplyDamage(double amount)
         {
-            _health -= amount;
-            Console.WriteLine("You suffered: " + amount + " damage. Remaining health: " + _health + ".");
-            if (_health < 0)
-                _alive = false;
+            _playerStateMachine.CreatureData.Health -= amount;
         }
 
         public void HealAmount(double amount)
