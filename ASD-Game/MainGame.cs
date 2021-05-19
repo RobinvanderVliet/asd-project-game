@@ -62,16 +62,7 @@ namespace ASD_project
                 //lobby start
                 //networkcomponent heeft lijst van players
                 //die players moeten toegevoegd worden aan playerPositions
-// <<<<<<< HEAD
-                List<PlayerDTO> playerPositions = new List<PlayerDTO>
-                {
-                    new PlayerDTO("Joe", 10, 10),
-                    new PlayerDTO("Mama", 40, 40)
-                };
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, playerPositions, _moveHandler);
-// =======
-                // IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, players, _moveHandler, worldService);
-// >>>>>>> sub-task/VDFZEH-376-speler-locatie-aanpassen-bij-beweging
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, players, _moveHandler, worldService);
                 Console.WriteLine("Type input messages below");
                 while (true) // moet vervangen worden met variabele: isQuit 
                 {    

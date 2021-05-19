@@ -50,7 +50,7 @@ namespace Player.ActionHandlers
                 //adjust playerlist
                 
                 //moet op id vergeleken worden
-                // if (moveDTO.PlayerPosition. == _currentPlayer.Name)
+                // if (moveDTO.PlayerPosition. == _currentPlayer.)
                 // {
                     //adjust actual player
                     // _currentPlayer.ChangePositionOfAPlayer(moveDTO.Player);
