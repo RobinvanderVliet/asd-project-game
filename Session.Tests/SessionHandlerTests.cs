@@ -344,5 +344,25 @@ namespace Session.Tests
             HandlerResponseDTO expectedResult = new HandlerResponseDTO(SendAction.Ignore, null);
             Assert.AreEqual(expectedResult, actualResult);
         }
+        
+        [Test]
+        public void Test_HandlePacket_RequestHeartbeat_Returns_Catch()
+        {
+            // Arrange ---------
+            SessionDTO sessionDTO = new SessionDTO(SessionType.RequestHeartbeat);
+            var payload = JsonConvert.SerializeObject(sessionDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            packetHeaderDTO.PacketType = PacketType.Session;
+            packetHeaderDTO.Target = "host";
+            _packetDTO.Header = packetHeaderDTO;
+
+            // Act -------------
+            HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
+
+            // Assert ----------
+            HandlerResponseDTO expectedResult = new HandlerResponseDTO(SendAction.Catch, "heartbeat");
+            Assert.AreEqual(expectedResult.Action, actualResult.Action);
+        }
     }
 }

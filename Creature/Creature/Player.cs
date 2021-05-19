@@ -1,22 +1,19 @@
 ﻿using Creature.Creature.StateMachine;
-using Creature.Creature.StateMachine.CustomRuleSet;
-using Creature.Creature.StateMachine.Data;
 
 namespace Creature
 {
     public class Player : ICreature
     {
-        private PlayerStateMachine _playerStateMachine;
+        private ICreatureStateMachine _playerStateMachine;
 
         public ICreatureStateMachine CreatureStateMachine
         {
             get => _playerStateMachine;
         }
 
-        public Player(PlayerData playerData, RuleSet ruleSet)
+        public Player(ICreatureStateMachine playerStateMachine)
         {
-            _playerStateMachine = new(playerData, ruleSet);
-            _playerStateMachine.StartStateMachine();
+            _playerStateMachine = playerStateMachine;
         }
 
         public void ApplyDamage(double amount)
@@ -27,6 +24,10 @@ namespace Creature
         public void HealAmount(double amount)
         {
             _playerStateMachine.CreatureData.Health += amount;
+        }
+        public void Disconnect()
+        {
+            _playerStateMachine.StartStateMachine();
         }
     }
 }

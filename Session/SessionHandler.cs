@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Session.DTO;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Network.DTO;
 
 namespace Session
@@ -27,6 +28,11 @@ namespace Session
             }
             else
             {
+                Timer timer = new Timer((e) =>
+                {
+                    SendHeartbeat();
+                }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
+                
                 SessionDTO sessionDto = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
                 _session = new Session(sessionDto.Name);
                 _session.SessionId = sessionId;
@@ -56,6 +62,11 @@ namespace Session
             sendSessionDTO(sessionDTO);
         }
 
+        public void SendHeartbeat()
+        {
+            _clientController.SendPayload("heartbeat", PacketType.Session);
+        }
+
         private void sendSessionDTO(SessionDTO sessionDTO)
         {
             var payload = JsonConvert.SerializeObject(sessionDTO);
@@ -69,6 +80,8 @@ namespace Session
             {
                 switch (sessionDTO.SessionType)
                 {
+                    case SessionType.RequestHeartbeat:
+                        return handleHeartbeat();
                     case SessionType.RequestSessions:
                         return handleRequestSessions();
                     case SessionType.RequestToJoinSession:
@@ -95,6 +108,13 @@ namespace Session
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
+        private HandlerResponseDTO handleHeartbeat()
+        {
+            SessionDTO sessionDto = new SessionDTO(SessionType.RequestHeartbeat);
+            var jsonObject = JsonConvert.SerializeObject(sessionDto);
+            return new HandlerResponseDTO(SendAction.Catch, jsonObject);
+        }
+        
         private HandlerResponseDTO handleRequestSessions()
         {
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessionsResponse);

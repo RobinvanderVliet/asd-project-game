@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Creature.Creature.StateMachine;
 using Creature.Creature.StateMachine.CustomRuleSet;
 
 namespace Creature
@@ -29,9 +30,9 @@ namespace Creature
             RuleSet monsterRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[0].Settings);
             RuleSet playerRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[1].Settings);
 
-            ICreature player = new Player(playerData, playerRuleSet);
-            ICreature creature = new Monster(monsterData, monsterRuleSet);
-            ICreature creature2 = new Monster(monsterData2, monsterRuleSet);
+            ICreature player = new Player(new PlayerStateMachine(playerData, playerRuleSet));
+            ICreature creature = new Monster(new MonsterStateMachine(monsterData, monsterRuleSet));
+            ICreature creature2 = new Monster(new MonsterStateMachine(monsterData2, monsterRuleSet));
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);
