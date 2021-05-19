@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using DatabaseHandler.Poco;
 using DatabaseHandler.Repository;
 using LiteDB;
 using Microsoft.Extensions.Logging;
@@ -8,16 +10,16 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace DatabaseHandler.Services
 {
-    public class Services<T> : IServices<T>
+    public class ServicesDb<T> : IServicesDb<T>
     {
-        private readonly ILogger<Services<T>> _log;
+        private readonly ILogger<ServicesDb<T>> _log;
         private readonly IRepository<T> _repository;
 
-        public Services(IRepository<T> repository)
+        public ServicesDb(IRepository<T> repository)
         {
             
             _repository = repository;
-            _log = new NullLogger<Services<T>>();
+            _log = new NullLogger<ServicesDb<T>>();
         }
 
         public Task<BsonValue> CreateAsync(T obj)
@@ -58,6 +60,8 @@ namespace DatabaseHandler.Services
                 throw;
             }
         }
+
+
 
         public Task<int> DeleteAsync(T obj)
         {

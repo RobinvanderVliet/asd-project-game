@@ -10,7 +10,7 @@ namespace DatabaseHandler.Poco
 
         public Guid GameGUID { get; set; }
         [BsonId]
-        public Guid PlayerGUID { get; set; }
+        public string PlayerGUID { get; set; }
 
         //player info
         public String PlayerName { get; set; }
