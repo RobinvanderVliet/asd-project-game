@@ -19,7 +19,9 @@ namespace Session
             _clientController.SubscribeToPacketType(this, PacketType.Session);
         }
 
-        public void JoinSession(string sessionId)
+
+
+        public Boolean JoinSession(string sessionId)
         {
             if (!_availableSessions.TryGetValue(sessionId, out PacketDTO packetDTO))
             {
@@ -37,23 +39,49 @@ namespace Session
                 sessionDTO.ClientIds = new List<string>();
                 sessionDTO.ClientIds.Add(_clientController.GetOriginId());
                 sendSessionDTO(sessionDTO);
+                _session.InSession = true;
             }
+            return _session.InSession;
         }
 
-        public void CreateSession(string sessionName)
+        public Boolean CreateSession(string sessionName)
         {
             _session = new Session(sessionName);
             _session.GenerateSessionId();
             _session.AddClient(_clientController.GetOriginId());
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
+            _session.InSession = true;
+            
             Console.Out.WriteLine("Created session with the name: " + _session.Name);
+
+            return _session.InSession;
         }
 
         public void RequestSessions()
         {
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             sendSessionDTO(sessionDTO);
+        }
+
+        public void StartSession(string sessionID)
+        {
+            List<string> allClients = _session.GetAllClients();
+            Dictionary<string, int[]> players = new Dictionary<string, int[]>();
+
+            int playerX = 14;
+            int playerY = 33;
+            foreach (string element in allClients)
+            {
+                int[] playerPosition = new int[2];
+                playerPosition[0] = playerX;
+                playerPosition[1] = playerY;
+                players.Add(element, playerPosition);
+                playerX++; 
+                playerY++;
+            }
+
+            throw new NotImplementedException();
         }
 
         private void sendSessionDTO(SessionDTO sessionDTO)
@@ -64,6 +92,18 @@ namespace Session
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
+            // If packet.header.target == Host
+            // If sessionType.StartSession
+            // startSession -> Get list of all players -> Give x and y cordinats.
+            // Create database
+            // Insert into database
+            // Generate Worldseed
+            // Put in Database
+            
+            // Send list of player location to all clients 
+            // Send worldseed to players
+            // if client has worldseed and list of players start game.
+            
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
             if (packet.Header.Target == "client" || packet.Header.Target == "host")
             {
@@ -80,6 +120,8 @@ namespace Session
                         {
                             return new HandlerResponseDTO(SendAction.Ignore, null);
                         }
+                    case SessionType.StartSession:
+                        return StartSession(packet);
                 }
             }
             else if (packet.Header.Target == _clientController.GetOriginId())
@@ -109,6 +151,11 @@ namespace Session
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
             Console.WriteLine(packet.Header.SessionID + " Name: " + sessionDTO.Name);
             return new HandlerResponseDTO(SendAction.Ignore, null);
+        }
+
+        private HandlerResponseDTO StartSession(PacketDTO packet)
+        {
+
         }
 
         private HandlerResponseDTO addPlayerToSession(PacketDTO packet)

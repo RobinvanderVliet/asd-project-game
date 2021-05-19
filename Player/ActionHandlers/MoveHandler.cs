@@ -40,6 +40,7 @@ namespace Player.ActionHandlers
         
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
+            //Check welk actie het is:
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
             if (packet.Header.Target == "host")
             {
@@ -77,6 +78,15 @@ namespace Player.ActionHandlers
             // }
 
             // _currentPlayer.ChangePositionOfAPlayer(player);
+        }
+        
+        private void InsertToDatabase(MoveDTO moveDto)
+        {
+           //Get database
+           //Check database
+           //Insert Database
+           //if inserted then send to all a message
+        }
         
             return null;
         }
