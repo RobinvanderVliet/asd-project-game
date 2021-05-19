@@ -234,5 +234,60 @@ namespace Player.Tests
             
             _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.SetNewPlayerPosition(0, steps), Times.Once);
         }
+        
+        [Test]
+        public void Test_Say_CallsFunctionFromChatHandler()
+        {
+            // Arrange
+            const string message = "hello world";
+            _mockedChatHandler.Setup(mock => mock.SendSay(message));
+
+            // Act
+            _sut.Say(message);
+
+            // Assert
+            _mockedChatHandler.Verify(mock => mock.SendSay(message), Times.Once);
+        }
+
+        [Test]
+        public void Test_CreateSession_CallsFunctionFromSessionHandler()
+        {
+            // Arrange
+            const string sessionName = "cool world";
+            _mockedSessionHandler.Setup(mock => mock.CreateSession(sessionName));
+
+            // Act
+            _sut.CreateSession(sessionName);
+
+            // Assert
+            _mockedSessionHandler.Verify(mock => mock.CreateSession(sessionName), Times.Once);
+        }
+
+        [Test]
+        public void Test_RequestSessions_CallsFunctionFromSessionHandler()
+        {
+            // Arrange
+            _mockedSessionHandler.Setup(mock => mock.RequestSessions());
+
+            // Act
+            _sut.RequestSessions();
+            
+            // Assert
+            _mockedSessionHandler.Verify(mock => mock.RequestSessions(), Times.Once);
+        }
+
+        [Test]
+        public void Test_JoinSession_CallsFunctionFromSessionHandler()
+        {
+            // Arrange
+            const string sessionId = "1234-1234";
+            _mockedSessionHandler.Setup(mock => mock.JoinSession(sessionId));
+            
+            // Act
+            _sut.JoinSession(sessionId);
+            
+            // Assert
+            _mockedSessionHandler.Verify(mock => mock.JoinSession(sessionId));
+        }
     }
 }

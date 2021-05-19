@@ -12,4 +12,8 @@
     <ProjectReference Include="..\Player\Player.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataTransfer\DataTransfer.csproj" />
+  </ItemGroup>
+
 </Project>
