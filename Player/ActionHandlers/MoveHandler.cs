@@ -1,28 +1,34 @@
-﻿using System;
+using System;
+using System.Diagnostics.Eventing.Reader;
+using DataTransfer.DTO.Character;
+using DataTransfer.DTO.Player;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Player.DTO;
 using Player.Services;
+using WorldGeneration;
 
 namespace Player.ActionHandlers
 {
     public class MoveHandler : IMoveHandler, IPacketHandler
     {
         private IClientController _clientController;
-        private IPlayerService _currentPlayer;
+        private PlayerDTO _currentPlayer;
+        private WorldService _worldService;
 
         public MoveHandler(IClientController clientController)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Move);
         }
-
-        public void SendMove(IPlayerService player)
+        
+        public void SendMove(MapCharacterDTO player, WorldService worldService)
         {
-            _currentPlayer = player;
-            var playerDTO = new PlayerDTO(_currentPlayer.GetName(), _currentPlayer.GetX(), _currentPlayer.GetY());
-            var moveDTO = new MoveDTO(playerDTO);
+            _worldService = worldService;
+            //_currentPlayer = player;
+            //var playerPostionDTO = new PlayerPositionDTO(player.XPosition, player.YPosition, player.Name, player.Team);
+            var moveDTO = new MoveDTO(player);
             SendMoveDTO(moveDTO);
         }
         
@@ -44,38 +50,35 @@ namespace Player.ActionHandlers
                 //adjust playerlist
                 
                 //moet op id vergeleken worden
-                if (moveDTO.Player.PlayerName == _currentPlayer.GetName())
-                {
+                // if (moveDTO.PlayerPosition. == _currentPlayer.Name)
+                // {
                     //adjust actual player
-                    _currentPlayer.ChangePositionOfAPlayer(moveDTO.Player);
+                    // _currentPlayer.ChangePositionOfAPlayer(moveDTO.Player);
                     
                     //change database
-                    CreateAsync(moveDTO.Player);
-                }
+                    // CreateAsync(moveDTO.Player);
+                // }
             }
 
-            // HandleMove(moveDTO.Player); 
+            HandleMove(moveDTO.PlayerPosition);
             return new HandlerResponseDTO(SendAction.Ignore, null);
             // return null;
         }
 
-        //  private HandlerResponseDTO HandleMove(PlayerDTO player)
-        // {
-        //     if (player.PlayerName.Equals(_currentPlayer.GetName()))
-        //     {
-        //       _currentPlayer.SetX(player.X);
-        //       _currentPlayer.SetY(player.Y);
-        //       // Make changes in database
-        //     }
-        //
-        //     bool moveIsPossible = false;
-        //     // check if the move is possible
-        //     if(moveIsPossible){}
-        //     else{}
-        //     
-        //     _currentPlayer.ChangePositionOfAPlayer(player);
-        //
-        //     return null;
-        // }
+         private HandlerResponseDTO HandleMove(MapCharacterDTO playerPosition)
+        {
+            // if (player.PlayerName.Equals(_currentPlayer.GetName()))
+            // {
+                _worldService.UpdateCharacterPosition(playerPosition);
+
+                // _currentPlayer.SetX(player.X);
+                // _currentPlayer.SetY(player.Y);
+                // Make changes in database
+            // }
+
+            // _currentPlayer.ChangePositionOfAPlayer(player);
+        
+            return null;
+        }
     }
 }

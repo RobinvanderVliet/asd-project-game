@@ -1,10 +1,12 @@
-﻿using Player.Model;
+using Player.Model;
 using Player.Services;
+using DataTransfer.DTO.Character;
+using WorldGeneration;
 
 namespace Player.ActionHandlers
 {
     public interface IMoveHandler
     {
-        public void SendMove(IPlayerService player);
+        public void SendMove(MapCharacterDTO player, WorldService worldService);
     }
 }

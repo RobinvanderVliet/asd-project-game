@@ -17,4 +17,8 @@
     <Content Include="antlr\grammar\AgentConfiguration.g4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataTransfer\DataTransfer.csproj" />
+  </ItemGroup>
+
 </Project>

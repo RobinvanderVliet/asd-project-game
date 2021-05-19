@@ -7,8 +7,8 @@ namespace WorldGeneration.Models.LootableTiles
     {
         public bool IsAccessible { get; set; }
         public string Symbol { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
+        public int XPosition { get; set; }
+        public int YPosition { get; set; }
         public ChestTile()
         {
             Symbol = TileSymbol.CHEST;
