@@ -86,7 +86,6 @@ namespace Session
                             return new HandlerResponseDTO(SendAction.Ignore, null);
                         }
                     case SessionType.SendPing:
-                        Console.WriteLine(packet.Header.Target);
                         return handlePingRequest(packet);
                 }
             }
@@ -110,17 +109,15 @@ namespace Session
         {
             if (!_hostActive) 
             {
-                Console.Out.WriteLine("hans");
                 _hostPingTimer.Dispose();
                 _hostActive = true;
-                SwapToHost();
-                // _clientController.MarkBackupHost();
+                SwapToHost();;
             }
         }
         
         private HandlerResponseDTO handlePingRequest(PacketDTO packet)
         {
-            if (packet.Header.Target.Equals("Client")) {
+            if (packet.Header.Target.Equals("client")) {
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
             if (packet.HandlerResponse != null)
@@ -187,8 +184,8 @@ namespace Session
                     if (sessionDTOClients.ClientIds[1].Equals(_clientController.GetOriginId()))
                     {
                         _clientController.MarkBackupHost();
-                            PingHostTimer();
-                            Console.WriteLine("You have been marked as the backup host");
+                        PingHostTimer();
+                        Console.WriteLine("You have been marked as the backup host");
                     }
                 }
                 return new HandlerResponseDTO(SendAction.Ignore, null);
@@ -230,6 +227,11 @@ namespace Session
             // TODO: Make new client backup host
             
             Console.Out.WriteLine("You are now the new host!");
+        }
+
+        public Timer getHostPingTimer()
+        {
+            return _hostPingTimer;
         }
     }
 }

@@ -398,6 +398,46 @@ namespace Session.Tests
 
             // Assert ----------
             _mockedClientController.Verify(mock => mock.MarkBackupHost(), Times.Once);
+            Assert.IsTrue(_sut.getHostPingTimer().Enabled);
+            Assert.IsTrue(_sut.getHostPingTimer().AutoReset);
+            Assert.AreEqual(1000, _sut.getHostPingTimer().Interval);
+        }
+        
+        [Test]
+        public void Test_HandlePacket_HostHandlePing()
+        {
+            // Arrange ---------
+            string generatedSessionId = "";
+            _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>())).Callback<string>(r => generatedSessionId = r);
+            _sut.CreateSession("testSessionName");
+
+            string originId = "testOriginId";
+            string originIdHost = "testOriginIdHost";
+
+            SessionDTO sessionDTO = new SessionDTO(SessionType.SendPing);
+            sessionDTO.Name = "ping";
+
+            var payload = JsonConvert.SerializeObject(sessionDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            packetHeaderDTO.OriginID = originId;
+            packetHeaderDTO.SessionID = generatedSessionId;
+            packetHeaderDTO.PacketType = PacketType.Session;
+            packetHeaderDTO.Target = "host";
+            _packetDTO.Header = packetHeaderDTO;
+            SessionDTO sessionDTOInHandlerResponse = new SessionDTO(SessionType.ReceivedPingResponse);
+            sessionDTOInHandlerResponse.Name = "pong";
+            var jsonObject = JsonConvert.SerializeObject(sessionDTOInHandlerResponse);
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
+            // _packetDTO.HandlerResponse = handlerResponseDTO;
+
+            _mockedClientController.SetupSequence(x => x.GetOriginId()).Returns(originIdHost);
+
+            // Act -------------
+            HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
+
+            // Assert ----------
+            Assert.AreEqual(handlerResponseDTO, actualResult);
         }
     }
 }
