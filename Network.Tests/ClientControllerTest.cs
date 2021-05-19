@@ -210,7 +210,31 @@ namespace Network.Tests
             _sut.MarkBackupHost();
             
             //Assert
-            _mockedBackupHostService.Verify(mock => mock.enableBackupHost(), Times.Once);
+            _mockedBackupHostService.Verify(mock => mock.EnableBackupHost(), Times.Once);
+        }
+        
+        [Test]
+        public void Test_MarkBackupHost_WhenHostDisconnects()
+        {
+            //Arrange
+
+            //Act
+            _sut.UnmarkBackupHost();
+            
+            //Assert
+            _mockedBackupHostService.Verify(mock => mock.DisableBackupHost(), Times.Once);
+        }
+        
+        [Test]
+        public void Test_MarkBackupHost_WhenAnotherPlayerJoinsSession()
+        {
+            //Arrange
+
+            //Act
+            _sut.IsBackupHost();
+            
+            //Assert
+            _mockedBackupHostService.Verify(mock => mock.IsBackupHost(), Times.Once);
         }
     }
 }

@@ -183,14 +183,12 @@ namespace Session
                     Console.Out.WriteLine(client);
                 }
                 
-                if (sessionDTOClients.ClientIds.Count > 0) {
+                if (sessionDTOClients.ClientIds.Count > 0 && !_clientController.IsBackupHost()) {
                     if (sessionDTOClients.ClientIds[1].Equals(_clientController.GetOriginId()))
                     {
-                        if (!_clientController.IsBackupHost()) {
-                            _clientController.MarkBackupHost();
+                        _clientController.MarkBackupHost();
                             PingHostTimer();
                             Console.WriteLine("You have been marked as the backup host");
-                        }
                     }
                 }
                 return new HandlerResponseDTO(SendAction.Ignore, null);
