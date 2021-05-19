@@ -6,15 +6,14 @@ namespace Network
 {
     public class HeartbeatHandler : IHeartbeatHandler
     {
+        private List<HeartbeatDTO> _players;
+        TimeSpan waitTime = TimeSpan.FromMilliseconds(1000);
 
-        private List<HeartbeatDTO> Players;
-        TimeSpan waitTime = TimeSpan.FromSeconds(1);
-
-        public void RecieveHeartbeat(PacketDTO packet)
+        public void ReceiveHeartbeat(PacketDTO packet)
         {
             if(!PlayerKnown(packet.Header.SessionID))
             { 
-               Players.Add(new HeartbeatDTO(packet.Header.SessionID));
+               _players.Add(new HeartbeatDTO(packet.Header.SessionID));
             }
             else
             {
@@ -26,7 +25,7 @@ namespace Network
 
         private void CheckStatus()
         {
-            foreach(HeartbeatDTO player in Players)
+            foreach(HeartbeatDTO player in _players)
             {
                 if(player.status == 0)
                 {
@@ -42,7 +41,7 @@ namespace Network
 
         private bool PlayerKnown(string sessionID) 
         {
-            foreach(HeartbeatDTO player in Players)
+            foreach(HeartbeatDTO player in _players)
             {
                 if(sessionID == player.sessionID)
                 {
@@ -54,7 +53,7 @@ namespace Network
 
         private void UpdateStatus()
         {
-            foreach (HeartbeatDTO player in Players)
+            foreach (HeartbeatDTO player in _players)
             {
                 if (DateTime.Now - player.time >= waitTime)
                 {
@@ -70,7 +69,7 @@ namespace Network
 
         private void UpdatePlayer(string sessionID)
         {
-            foreach(HeartbeatDTO player in Players)
+            foreach(HeartbeatDTO player in _players)
             {
                 if(player.sessionID == sessionID)
                 {
