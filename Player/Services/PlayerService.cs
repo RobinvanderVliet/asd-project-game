@@ -207,6 +207,7 @@ namespace Player.Services
                 {
                     playerPosition.X = player.XPosition;
                     playerPosition.Y = player.YPosition;
+                    
                 }
             }
         }

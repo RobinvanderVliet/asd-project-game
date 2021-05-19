@@ -58,7 +58,7 @@ namespace ASD_project
                 MapCharacterDTO playerDTO = new MapCharacterDTO(playerModel.XPosition, playerModel.YPosition,
                     playerModel.Name, playerModel.Symbol);
                 var worldService = new WorldService(new World(666, 5, playerDTO));
-                worldService.displayWorld();
+                worldService.DisplayWorld();
                 //lobby start
                 //networkcomponent heeft lijst van players
                 //die players moeten toegevoegd worden aan playerPositions

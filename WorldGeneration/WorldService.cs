@@ -16,9 +16,14 @@ namespace WorldGeneration
             _world.UpdateCharacterPosition(mapCharacterDto);
         }
 
-        public void displayWorld()
+        public void DisplayWorld()
         {
             _world.DisplayWorld();
+        }
+        
+        public void DeleteMap()
+        {
+            _world.deleteMap();
         }
     }
 }

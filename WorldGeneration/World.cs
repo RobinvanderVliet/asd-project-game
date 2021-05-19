@@ -15,7 +15,7 @@ namespace WorldGeneration
         public World(int seed, int viewDistance, MapCharacterDTO currentPlayer)
         {
             Characters = new List<MapCharacterDTO>();
-            Characters.Add(currentPlayer);
+            AddCharacterToWorld(currentPlayer);
             _map = MapFactory.GenerateMap(seed: seed);
             CurrentPlayer = currentPlayer;
             _viewDistance = viewDistance;
@@ -41,10 +41,15 @@ namespace WorldGeneration
                 character.YPosition = characterPositionDTO.YPosition;
             } else
             {
-                Characters.Add(characterPositionDTO);
+                throw new Exception("Could not find referenced character, it has not been initialized in the world");
             }
 
             DisplayWorld();
+        }
+
+        public void AddCharacterToWorld(MapCharacterDTO characterPositionDTO)
+        {
+            Characters.Add(characterPositionDTO);
         }
 
         public void DisplayWorld()
@@ -53,10 +58,13 @@ namespace WorldGeneration
             {
                 return;
             }
-            // TODO: Add characters 
             Console.Clear();
-            _map.DeleteMap(); // TODO: delete line
             _map.DisplayMap(CurrentPlayer, _viewDistance, Characters);
+        }
+
+        public void deleteMap()
+        {
+            _map.DeleteMap();
         }
     }
 }
