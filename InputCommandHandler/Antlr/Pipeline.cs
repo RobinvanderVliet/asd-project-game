@@ -6,6 +6,7 @@ using InputCommandHandler.Antlr.Parser;
 using InputCommandHandler.Antlr.Transformer;
 using InputCommandHandler.Exceptions;
 using Player.Services;
+using Session;
 
 namespace InputCommandHandler.Antlrr
 {
@@ -51,6 +52,16 @@ namespace InputCommandHandler.Antlrr
             walker.Walk(listener, parseTree);
 
             _ast = listener.getAST();
+        }
+
+        public void Transform(ISessionService sessionService)
+        {
+            if (_ast == null)
+            {
+                return;
+            }
+            
+            new Evaluator(sessionService).Apply(_ast);
         }
 
 

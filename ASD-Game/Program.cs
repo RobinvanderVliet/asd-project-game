@@ -4,7 +4,10 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.IO;
-using Player.Model;
+using DatabaseHandler;
+using DatabaseHandler.Repository;
+using DatabaseHandler.Services;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using WorldGeneration;
 using Player;
 using Chat;
@@ -12,6 +15,7 @@ using Player.Services;
 using Network;
 using Player.ActionHandlers;
 using Session;
+using Player.Model;
 
 namespace ASD_project
 {
@@ -47,9 +51,14 @@ namespace ASD_project
                     services.AddScoped<IChatHandler, ChatHandler>();
                     services.AddScoped<ISessionHandler, SessionHandler>();
                     services.AddScoped<IMoveHandler, MoveHandler>();
+                    services.AddSingleton<IDbConnection, DbConnection>();
+                    services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+                    services.AddScoped(typeof(IServicesDb<>), typeof(ServicesDb<>));
+
                 })
                 .UseSerilog()
                 .Build();
+            
 
             var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);
             svc.Run();

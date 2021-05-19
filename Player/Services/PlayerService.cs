@@ -18,6 +18,7 @@ namespace Player.Services
         private List<MapCharacterDTO> _playerPositions;
         private readonly IMoveHandler _moveHandler;
         private readonly IChatHandler _chatHandler;
+        //session handler in aparte classe gebruiken, kan maybe blijven staan? Weet niet of die nog gebrukt gaat worden. :(
         private readonly ISessionHandler _sessionHandler;
         private readonly WorldService _worldService;
 
@@ -212,19 +213,6 @@ namespace Player.Services
             }
         }
         
-        public void CreateSession(string messageValue)
-        {
-            _sessionHandler.CreateSession(messageValue);
-        }
-
-        public void JoinSession(string messageValue)
-        {
-            _sessionHandler.JoinSession(messageValue);
-        }
-
-        public void RequestSessions()
-        {
-            _sessionHandler.RequestSessions();
-        }
+     
     }
 }

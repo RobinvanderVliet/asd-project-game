@@ -1,6 +1,11 @@
 using Microsoft.Extensions.Logging;
 using System;
+using DatabaseHandler;
+using DatabaseHandler.Poco;
+using DatabaseHandler.Repository;
+using DatabaseHandler.Services;
 using InputCommandHandler;
+using Microsoft.Extensions.Logging.Abstractions;
 using Player.Model;
 using Player.Services;
 using System.Collections.Generic;
@@ -23,16 +28,43 @@ namespace ASD_project
             private readonly IChatHandler _chatHandler;
             private readonly ISessionHandler _sessionHandler;
             private readonly IMoveHandler _moveHandler;
+            private readonly IRepository<PlayerPoco> _playerRepository;
+        //    private readonly IRepository<MainGamePoco> _mainGameRepository;
+            private Boolean GameStarted = true;
+            private List<PlayerDTO> playerPositions;
+
+
 
             public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler,
-                ISessionHandler sessionHandler, IMoveHandler moveHandler)
+                ISessionHandler sessionHandler, IMoveHandler moveHandler, IRepository<PlayerPoco> playerRepository)
             {
                 this._log = log;
                 _inventory = inventory;
                 _chatHandler = chatHandler;
                 _sessionHandler = sessionHandler;
                 _moveHandler = moveHandler;
+                _playerRepository = playerRepository;
+              //  _mainGameRepository = mainGameRepository;
             }
+
+        //needs to be in GameStartupClass? From Session to Game
+           //  public void SetupDataBaseForGame1()
+           //  {
+            //     var tmpServicePlayerPoco = new Services<PlayerPoco>(_playerRepository);
+           //      var tmpServiceMainGamePoco = new Services<MainGamePoco>(_mainGameRepository);
+           //      
+           //      var tmpGuidGame = Guid.NewGuid();
+           //      var tmpObject = new MainGamePoco {MainGameGuid = tmpGuidGame, GameName = "Game1"};
+           //      var tmpPlayer = new PlayerPoco {PlayerGuid = Guid.NewGuid(), GameGuid = tmpObject, PlayerName = "Player1"};
+           //      var tmpPlayer2 = new PlayerPoco {PlayerGuid = Guid.NewGuid(), GameGuid = tmpObject, PlayerName = "Player2"};
+           //      
+           //      tmpServiceMainGamePoco.CreateAsync(tmpObject);
+           //      tmpServicePlayerPoco.CreateAsync(tmpPlayer);
+           //      tmpServicePlayerPoco.CreateAsync(tmpPlayer2);
+           // //     var result1 = tmpServicePlayerPoco.GetAllAsync();
+           //    //  Game1Started = true; 
+           //
+           //  }
 
             public void Run()
             {
@@ -64,10 +96,60 @@ namespace ASD_project
                 //die players moeten toegevoegd worden aan playerPositions
                 IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, players, _moveHandler, worldService);
                 Console.WriteLine("Type input messages below");
-                while (true) // moet vervangen worden met variabele: isQuit 
-                {    
-                    inputHandler.HandleCommands(playerService);
+
+                ISessionService sessionService = new SessionService(_sessionHandler);
+                
+                
+                inputHandler.HandleSession(sessionService);
+              
+                 //OF
+                 //Menu
+                 //Create or select player/Game
+                 //Handlecommands
+                 //Sessions
+                 
+                 //GameSessionHandler
+                 //Wordt gestart vanaf startSesion();
+                     //Maakt databases aan
+                 //Zet spelers op locatie.
+                 //Geeft aan dat game gestart is: while boolean op true ?. 
+                // inputHandler.HandlePlayer(sessionService);
+                
+                
+               
+                while (true) 
+                {
+                    inputHandler.HandleSession(sessionService);
+
+                    if (sessionService.inSession)
+                    {                        
+                        Console.WriteLine("create player");
+                        String playername = Console.ReadLine();
+                        if (playername.Length != 0)
+                        {
+                            IPlayerService player = createPlayer(playername);
+                            inputHandler.HandleSession(sessionService);
+
+                            
+                         //   inputHandler.HandleCommands(player);
+                        }
+                    }
+                    
+                    //if sessionService.GameStarted 
+                    // inputHandler.HandleCommands(playerService);
+
+                    
+
                 }
+
+            }
+
+            private IPlayerService createPlayer(String name)
+            {
+                IPlayerModel playerModel = new PlayerModel(name, _inventory, new Bitcoin(20), new RadiationLevel(1));
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler,
+                    playerPositions, _moveHandler);
+                return playerService;
             }
         }
     }
