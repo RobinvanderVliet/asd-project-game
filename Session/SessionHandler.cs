@@ -61,10 +61,11 @@ namespace Session
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             sendSessionDTO(sessionDTO);
         }
-
+        
         public void SendHeartbeat()
         {
-            _clientController.SendPayload("heartbeat", PacketType.Session);
+            SessionDTO sessionDTO = new SessionDTO(SessionType.RequestHeartbeat);
+            sendSessionDTO(sessionDTO);
         }
 
         private void sendSessionDTO(SessionDTO sessionDTO)
