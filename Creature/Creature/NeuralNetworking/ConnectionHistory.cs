@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Creature.Creature.NeuralNetworking
 {
-    class ConnectionHistory
+    public class ConnectionHistory
     {
         public int fromNode;
         public int toNode;
@@ -26,7 +23,8 @@ namespace Creature.Creature.NeuralNetworking
         public Boolean Matches(Genome genome, Node from, Node to)
         {
             if (genome.genes.Count == innovationNumbers.Count)
-            { //if the number of connections are different then the genoemes aren't the same
+            { 
+                //if the number of connections are different then the genoemes aren't the same
                 if (from.number == fromNode && to.number == toNode)
                 {
                     //next check if all the innovation numbers match from the genome

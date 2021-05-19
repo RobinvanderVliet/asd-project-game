@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Creature.Creature.NeuralNetworking
 {
-    class Node
+    public class Node
     {
 
         public int number {get; set;}
@@ -52,7 +49,8 @@ namespace Creature.Creature.NeuralNetworking
         public Boolean IsConnectedTo(Node node)
         {
             if (node.layer == layer)
-            {//nodes in the same layer cannot be connected
+            {
+                //nodes in the same layer cannot be connected
                 return false;
             }
 
