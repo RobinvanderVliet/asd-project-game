@@ -155,7 +155,7 @@ namespace Session
 
         private HandlerResponseDTO StartSession(PacketDTO packet)
         {
-
+            return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
         private HandlerResponseDTO addPlayerToSession(PacketDTO packet)

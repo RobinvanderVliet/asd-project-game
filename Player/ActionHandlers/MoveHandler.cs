@@ -66,7 +66,7 @@ namespace Player.ActionHandlers
             // return null;
         }
 
-         private HandlerResponseDTO HandleMove(MapCharacterDTO playerPosition)
+        private HandlerResponseDTO HandleMove(MapCharacterDTO playerPosition)
         {
             // if (player.PlayerName.Equals(_currentPlayer.GetName()))
             // {
@@ -78,6 +78,7 @@ namespace Player.ActionHandlers
             // }
 
             // _currentPlayer.ChangePositionOfAPlayer(player);
+            return new HandlerResponseDTO(SendAction.Ignore, null);
         }
         
         private void InsertToDatabase(MoveDTO moveDto)
@@ -86,9 +87,6 @@ namespace Player.ActionHandlers
            //Check database
            //Insert Database
            //if inserted then send to all a message
-        }
-        
-            return null;
         }
     }
 }

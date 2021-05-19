@@ -81,11 +81,10 @@ namespace ASD_project
                 List<MapCharacterDTO> players = new List<MapCharacterDTO>();
                 players.Add(new MapCharacterDTO(3, 0, "henk"));
                 players.Add(new MapCharacterDTO(5, 4, "pietje"));
-                IList<ICharacter> characters = new List<ICharacter>();
+                // IList<ICharacter> characters = new List<ICharacter>();
                 
                 IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
-                MapCharacterDTO playerDTO = new MapCharacterDTO(playerModel.XPosition, playerModel.YPosition,
-                    playerModel.Name, playerModel.Symbol);
+                MapCharacterDTO playerDTO = new MapCharacterDTO(playerModel.XPosition, playerModel.YPosition, playerModel.Name, playerModel.Symbol);
                 var worldService = new WorldService(new World(666, 5, playerDTO));
                 worldService.displayWorld();
                 
@@ -94,15 +93,7 @@ namespace ASD_project
                 //die players moeten toegevoegd worden aan playerPositions -> Moet de host doen en dit sturen naar de clients wanneer session_start gerund wordt. Kan een list sturen naar alle
                 // clients
                 
-                playerPositions = new List<PlayerDTO>
-                {
-                    new PlayerDTO("Joe", 10, 10),
-                    new PlayerDTO("Mama", 40, 40)
-                };
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler,
-                    playerPositions, _moveHandler);
-                Console.WriteLine("Type input messages below");
-
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, players, _moveHandler, worldService);
                 ISessionService sessionService = new SessionService(_sessionHandler);
                 
                 inputHandler.HandleSession(sessionService);
@@ -139,17 +130,18 @@ namespace ASD_project
                 
                 while (true) 
                 {
-                    inputHandler.HandleSession(sessionService);
-
+                    // inputHandler.HandleSession(sessionService);
+Console.WriteLine("test");
                     if (sessionService.inSession)
                     {                        
-                        Console.WriteLine("create player");
-                        String playername = Console.ReadLine();
-                        if (playername.Length != 0)
-                        {
-                            IPlayerService player = createPlayer(playername);
-                            inputHandler.HandleCommands(player);
-                        }
+                        // Console.WriteLine("create player");
+                        // String playername = Console.ReadLine();
+                        // if (playername.Length != 0)
+                        // {
+                            // IPlayerService player = createPlayer(playername);
+                            Console.WriteLine("Type input messages below");
+                            inputHandler.HandleCommands(playerService);
+                        // }
                     }
                     
                     //if sessionService.GameStarted 
@@ -159,13 +151,13 @@ namespace ASD_project
                 }
             }
 
-            private IPlayerService createPlayer(String name)
-            {
-                IPlayerModel playerModel = new PlayerModel(name, _inventory, new Bitcoin(20), new RadiationLevel(1));
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler,
-                    playerPositions, _moveHandler);
-                return playerService;
-            }
+            // private IPlayerService createPlayer(String name)
+            // {
+            //     IPlayerModel playerModel = new PlayerModel(name, _inventory, new Bitcoin(20), new RadiationLevel(1));
+            //     IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler,
+            //         playerPositions, _moveHandler);
+            //     return playerService;
+            // }
         }
     }
 }
