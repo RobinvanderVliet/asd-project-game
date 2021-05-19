@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Session.DTO;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Network.DTO;
 using System.Timers;
 using Timer = System.Timers.Timer;
@@ -108,9 +109,10 @@ namespace Session
         {
             if (!_hostActive) 
             {
-                Console.WriteLine("Look at me, I'm the captain now");
-                _hostPingTimer.Stop();
-                //Je word host :)
+                Console.Out.WriteLine("hans");
+                _hostPingTimer.Dispose();
+                SwapToHost();
+                _clientController.MarkBackupHost();
             }
         }
         
@@ -175,22 +177,19 @@ namespace Session
                     _session.AddClient(client);
                     Console.Out.WriteLine(client);
                 }
-                //TODO: MOVE TO EVENT START GAME
-                //TODO: IF backuphost is true :)
-                //if (this._clientController.backupHostService.) {
-                PingHostTimer();
-                //}
+                
                 if (sessionDTOClients.ClientIds.Count > 0) {
                     if (sessionDTOClients.ClientIds[1].Equals(_clientController.GetOriginId()))
                     {
                         _clientController.MarkBackupHost();
                         Console.WriteLine("You have been marked as the backup host");
-                        
-                        Thread.Sleep(10000);
-                        SwapToHost();
                     }
                 }
-
+                
+                if (_clientController.IsBackupHost()) {
+                    Console.Write("eteiygfasgfagseflagwelfy");
+                    PingHostTimer();
+                }
 
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
@@ -226,7 +225,11 @@ namespace Session
         public void SwapToHost()
         {
             _clientController.CreateHostController();
-            // TODO: Enable Heartbeat check and enable agents
+            _clientController.UnmarkBackupHost();
+            _hostPingTimer.Stop();
+            _hostActive = true;
+            // TODO: Enable Heartbeat check and enable agents, maybe this will be done when hostcontroller is activated?
+            // TODO: Make new client backup host
             
             Console.Out.WriteLine("You are now the new host!");
         }

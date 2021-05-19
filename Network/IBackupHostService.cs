@@ -4,7 +4,10 @@ namespace Network
 {
     public interface IBackupHostService
     {
-        public void enableBackupHost();
-        public Boolean isBackupHost();
+        public void EnableBackupHost();
+        
+        public void DisableBackupHost();
+        
+        public Boolean IsBackupHost();
     }
 }

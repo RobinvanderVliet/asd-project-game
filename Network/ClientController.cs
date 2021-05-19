@@ -89,7 +89,17 @@ namespace Network
 
         public void MarkBackupHost()
         {
-            _backupHostService.enableBackupHost();
+            _backupHostService.EnableBackupHost();
+        }
+
+        public void UnmarkBackupHost()
+        {
+            _backupHostService.DisableBackupHost();
+        }
+
+        public Boolean IsBackupHost()
+        {
+            return _backupHostService.IsBackupHost();
         }
     }
 }
