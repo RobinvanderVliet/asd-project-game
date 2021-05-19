@@ -28,7 +28,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_ApplyDamage_Deals_Damage()
+        public void Test_ApplyDamage_DealsDamage()
         {
             // Arrange ---------
             MonsterData monsterData = new MonsterData(new Vector2(), 50, 10, 10, null, false);
@@ -43,7 +43,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_HealAmount_Heals_Monster()
+        public void Test_HealAmount_HealsMonster()
         {
             // Arrange ---------
             MonsterData monsterData = new MonsterData(new Vector2(), 30, 10, 10, null, false);

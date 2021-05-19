@@ -22,7 +22,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_ApplyDamage_Deals_Damage()
+        public void Test_ApplyDamage_DealsDamage()
         {
             // Arrange ---------
             PlayerData playerData = new PlayerData(new Vector2(), 50, 10, 10, null);
@@ -36,7 +36,7 @@ namespace Creature.Tests
         }
         
         [Test]
-        public void Test_HealAmount_Heals_Player()
+        public void Test_HealAmount_HealsPlayer()
         {
             // Arrange ---------
             PlayerData playerData = new PlayerData(new Vector2(), 30, 10, 10, null);
@@ -50,7 +50,7 @@ namespace Creature.Tests
         }
         
         [Test]
-        public void Test_Disconnect_Starts_State_Machine()
+        public void Test_Disconnect_StartsStateMachine()
         {
             // Arrange ---------
 
