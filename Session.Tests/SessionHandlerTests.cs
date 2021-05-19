@@ -439,5 +439,77 @@ namespace Session.Tests
             // Assert ----------
             Assert.AreEqual(handlerResponseDTO, actualResult);
         }
+
+        [Test]
+        public void Test_HandlePacket_BackuphostHandlePong()
+        {
+            // Arrange ---------
+            string generatedSessionId = "";
+            _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>())).Callback<string>(r => generatedSessionId = r);
+            _sut.CreateSession("testSessionName");
+
+            string originId = "testOriginId";
+            string originIdHost = "testOriginIdHost";
+
+            SessionDTO sessionDTO = new SessionDTO(SessionType.SendPing);
+            sessionDTO.Name = "ping";
+
+            var payload = JsonConvert.SerializeObject(sessionDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDto = new PacketHeaderDTO();
+            packetHeaderDto.OriginID = originId;
+            packetHeaderDto.SessionID = generatedSessionId;
+            packetHeaderDto.PacketType = PacketType.Session;
+            packetHeaderDto.Target = originId;
+            _packetDTO.Header = packetHeaderDto;
+            HandlerResponseDTO expectedHandlerResponse = new HandlerResponseDTO(SendAction.Ignore, null);
+            _packetDTO.HandlerResponse = expectedHandlerResponse;
+
+            _mockedClientController.SetupSequence(x => x.GetOriginId()).Returns(originId);
+
+            // Act -------------
+            HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
+
+            // Assert ----------
+            Assert.AreEqual(expectedHandlerResponse.Action, actualResult.Action);
+            Assert.AreEqual(expectedHandlerResponse.ResultMessage, actualResult.ResultMessage);
+            Assert.IsTrue(_sut.getHostActive());
+        }
+        
+        [Test]
+        public void Test_HandlePacket_ClientHandlePong()
+        {
+            // Arrange ---------
+            string generatedSessionId = "";
+            _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>())).Callback<string>(r => generatedSessionId = r);
+            _sut.CreateSession("testSessionName");
+
+            string originId = "testOriginId";
+            string originIdHost = "testOriginIdHost";
+
+            SessionDTO sessionDTO = new SessionDTO(SessionType.SendPing);
+            sessionDTO.Name = "ping";
+
+            var payload = JsonConvert.SerializeObject(sessionDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDto = new PacketHeaderDTO();
+            packetHeaderDto.OriginID = originId;
+            packetHeaderDto.SessionID = generatedSessionId;
+            packetHeaderDto.PacketType = PacketType.Session;
+            packetHeaderDto.Target = "client";
+            _packetDTO.Header = packetHeaderDto;
+            HandlerResponseDTO expectedHandlerResponse = new HandlerResponseDTO(SendAction.Ignore, null);
+            _packetDTO.HandlerResponse = expectedHandlerResponse;
+
+            _mockedClientController.SetupSequence(x => x.GetOriginId()).Returns(originId);
+
+            // Act -------------
+            HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
+
+            // Assert ----------
+            Assert.AreEqual(expectedHandlerResponse.Action, actualResult.Action);
+            Assert.AreEqual(expectedHandlerResponse.ResultMessage, actualResult.ResultMessage);
+        }
     }
+    
 }

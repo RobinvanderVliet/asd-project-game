@@ -233,5 +233,10 @@ namespace Session
         {
             return _hostPingTimer;
         }
+
+        public bool getHostActive()
+        {
+            return _hostActive;
+        }
     }
 }
