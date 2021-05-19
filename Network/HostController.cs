@@ -8,14 +8,16 @@ namespace Network
     {
         private INetworkComponent _networkComponent;
         private IPacketHandler _client;
+        private IHeartbeatHandler _heartbeat;
         private string _sessionId;
 
-        public HostController(INetworkComponent networkComponent, IPacketHandler client, string sessionId)
+        public HostController(INetworkComponent networkComponent, IPacketHandler client, string sessionId, IHeartbeatHandler heartbeat)
         {
             _networkComponent = networkComponent;
             _client = client;
             _sessionId = sessionId;
             _networkComponent.SetHostController(this);
+            _heartbeat = heartbeat;
         }
 
         public void ReceivePacket(PacketDTO packet)
@@ -42,6 +44,10 @@ namespace Network
                 packet.Header.Target = packet.Header.OriginID;
                 packet.HandlerResponse = handlerResponse;
                 _networkComponent.SendPacket(packet);
+            }
+            else if (handlerResponse.Action == SendAction.Catch)
+            {
+                _heartbeat.ReceiveHeartbeat(packet);
             }
         }
 
