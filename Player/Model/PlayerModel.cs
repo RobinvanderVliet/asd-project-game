@@ -8,6 +8,10 @@ namespace Player.Model
     {
         private string _name;
         public string Name { get => _name; set => _name = value; }
+
+        private string _id;
+        public string Id { get => _id; set => _id = value; }
+        
         private int _health;
         public int Health { get => _health; set => _health = value; }
         private int _stamina;

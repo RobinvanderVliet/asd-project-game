@@ -22,27 +22,30 @@ namespace WorldGeneration
 
         public void UpdateCharacterPosition(MapCharacterDTO characterPositionDTO)
         {
-            if (CurrentPlayer.Name == characterPositionDTO.Name)
-            {
-                CurrentPlayer.XPosition = characterPositionDTO.XPosition;
-                CurrentPlayer.YPosition = characterPositionDTO.YPosition;
-            }
+            // if (CurrentPlayer.Name == characterPositionDTO.Name)
+            // {
+            //     CurrentPlayer.XPosition = characterPositionDTO.XPosition;
+            //     CurrentPlayer.YPosition = characterPositionDTO.YPosition;
+            // }
+            //
+            // var charactersWithTheSameName = Characters.Where(character => characterPositionDTO.Name == character.Name);
+            // if (charactersWithTheSameName.Count() > 1)
+            // {
+            //     throw new Exception("Duplicate characters found in world");
+            // }
+            // if (charactersWithTheSameName.Count() > 0)
+            // {
+            //     var character = charactersWithTheSameName.First();
+            //     character.XPosition = characterPositionDTO.XPosition;
+            //     character.YPosition = characterPositionDTO.YPosition;
+            // } else
+            // {
+            //     throw new Exception("Could not find referenced character, it has not been initialized in the world");
+            // }
             
-            var charactersWithTheSameName = Characters.Where(character => characterPositionDTO.Name == character.Name);
-            if (charactersWithTheSameName.Count() > 1)
-            {
-                throw new Exception("Duplicate characters found in world");
-            }
-            if (charactersWithTheSameName.Count() > 0)
-            {
-                var character = charactersWithTheSameName.First();
-                character.XPosition = characterPositionDTO.XPosition;
-                character.YPosition = characterPositionDTO.YPosition;
-            } else
-            {
-                throw new Exception("Could not find referenced character, it has not been initialized in the world");
-            }
-
+            CurrentPlayer.XPosition = characterPositionDTO.XPosition;
+            CurrentPlayer.YPosition = characterPositionDTO.YPosition;
+            
             DisplayWorld();
         }
 

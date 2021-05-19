@@ -6,6 +6,8 @@ namespace Player.Model
     public interface IPlayerModel
     {
         public string Name { get; set; }
+        
+        public string Id { get; set; }
         public int Health { get; set; }
         public int Stamina { get; set; }
 

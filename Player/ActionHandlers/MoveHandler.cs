@@ -29,21 +29,21 @@ namespace Player.ActionHandlers
         private Dictionary<string, int[]> _PlayerLocations  {get; set;}
         private IWorldService _worldService;
 
-        public MoveHandler(IClientController clientController)
+        public MoveHandler(IClientController clientController, IWorldService worldService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Move);
-            // _worldService = worldService;
+            _worldService = worldService;
         }
 
-        // public void SendMove(MapCharacterDTO player, IWorldService worldService)
-        // {
-        //     _worldService = worldService;
-        //     //_currentPlayer = player;
-        //     //var playerPostionDTO = new PlayerPositionDTO(player.XPosition, player.YPosition, player.Name, player.Team);
-        //     var moveDTO = new MoveDTO(player);
-        //     SendMoveDTO(moveDTO);
-        // } 
+        public void SendMove(MapCharacterDTO player)
+        {
+  
+            // _currentPlayer = player;
+            // var playerPostionDTO = new PlayerPositionDTO(player.XPosition, player.YPosition, player.Name, player.Team);
+            var moveDTO = new MoveDTO(player);
+            SendMoveDTO(moveDTO);
+        } 
        
         private void SendMoveDTO(MoveDTO moveDTO)
         {

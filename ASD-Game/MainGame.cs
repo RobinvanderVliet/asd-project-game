@@ -102,7 +102,7 @@ namespace ASD_project
                 ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
                 
                 
-                inputHandler.HandleSession(sessionService);
+                // inputHandler.HandleSession(sessionService);
               
                  //OF
                  //Menu
@@ -121,7 +121,7 @@ namespace ASD_project
                
                 while (true) 
                 {   
-                    if (sessionService.inGame)
+                    if (_gameSessionHandler.InGame)
                     {
                         // Console.WriteLine("create player");
                         // String playername = Console.ReadLine();

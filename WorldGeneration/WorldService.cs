@@ -7,11 +7,6 @@ namespace WorldGeneration
     {
         private World _world;
 
-        public WorldService()
-        {
-            // _world = new World();
-        }
-
         public void UpdateCharacterPosition(MapCharacterDTO mapCharacterDto)
         {
             _world.UpdateCharacterPosition(mapCharacterDto);
