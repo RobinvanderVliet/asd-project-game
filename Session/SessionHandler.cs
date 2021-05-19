@@ -37,7 +37,7 @@ namespace Session
                 SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
                 sessionDTO.ClientIds = new List<string>();
                 sessionDTO.ClientIds.Add(_clientController.GetOriginId());
-                sessionDto.SessionSeed = _session.SessionSeed;
+                sessionDTO.SessionSeed = sessionDto.SessionSeed;
                 sendSessionDTO(sessionDTO);
             }
         }
@@ -111,7 +111,7 @@ namespace Session
         {
             _availableSessions.TryAdd(packet.Header.SessionID, packet);
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
-            Console.WriteLine(packet.Header.SessionID + " Name: " + sessionDTO.Name);
+            Console.WriteLine(packet.Header.SessionID + " Name: " + sessionDTO.Name + " Seed: " +sessionDTO.SessionSeed);
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
