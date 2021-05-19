@@ -39,6 +39,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="resource\agent\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="resource\config\agent" />
     <Folder Include="resource\config\npc" />
   </ItemGroup>
