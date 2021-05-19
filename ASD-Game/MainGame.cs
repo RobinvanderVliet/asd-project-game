@@ -28,6 +28,7 @@ namespace ASD_project
             private readonly IChatHandler _chatHandler;
             private readonly ISessionHandler _sessionHandler;
             private readonly IMoveHandler _moveHandler;
+            private readonly IGameSessionHandler _gameSessionHandler;
             private readonly IRepository<PlayerPoco> _playerRepository;
         //    private readonly IRepository<MainGamePoco> _mainGameRepository;
             private Boolean GameStarted = true;
@@ -36,7 +37,7 @@ namespace ASD_project
 
 
             public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler,
-                ISessionHandler sessionHandler, IMoveHandler moveHandler, IRepository<PlayerPoco> playerRepository)
+                ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IRepository<PlayerPoco> playerRepository)
             {
                 this._log = log;
                 _inventory = inventory;
@@ -44,7 +45,8 @@ namespace ASD_project
                 _sessionHandler = sessionHandler;
                 _moveHandler = moveHandler;
                 _playerRepository = playerRepository;
-              //  _mainGameRepository = mainGameRepository;
+                _gameSessionHandler = gameSessionHandler;
+                //  _mainGameRepository = mainGameRepository;
             }
 
         //needs to be in GameStartupClass? From Session to Game
@@ -89,7 +91,7 @@ namespace ASD_project
                 IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
                 MapCharacterDTO playerDTO = new MapCharacterDTO(playerModel.XPosition, playerModel.YPosition,
                     playerModel.Name, playerModel.Symbol);
-                var worldService = new WorldService(new World(666, 5, playerDTO));
+                var worldService = new WorldService(new World(6686, 5, playerDTO));
                 worldService.DisplayWorld();
                 //lobby start
                 //networkcomponent heeft lijst van players
@@ -97,7 +99,7 @@ namespace ASD_project
                 IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, players, _moveHandler, worldService);
                 Console.WriteLine("Type input messages below");
 
-                ISessionService sessionService = new SessionService(_sessionHandler);
+                ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
                 
                 
                 inputHandler.HandleSession(sessionService);

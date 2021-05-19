@@ -2,6 +2,6 @@ namespace Session
 {
     public interface IGameSessionHandler
     {
-        //public void SendGameSession();
+        public void SendGameSession(string messageValue, ISessionHandler sessionHandler);
     }
 }

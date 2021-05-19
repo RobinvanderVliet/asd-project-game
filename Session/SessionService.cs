@@ -5,13 +5,15 @@ namespace Session
     public class SessionService : ISessionService
     {
         private ISessionHandler _sessionHandler;
+        private readonly IGameSessionHandler _gameSessionHandler; 
         public Boolean inSession { get; set; }
 
         public Boolean inGame { get; set; }
 
-        public SessionService(ISessionHandler sessionHandler)
+        public SessionService(ISessionHandler sessionHandler, IGameSessionHandler gameSessionHandler)
         {
             _sessionHandler = sessionHandler;
+            _gameSessionHandler = gameSessionHandler;
 
         }
 
@@ -37,7 +39,8 @@ namespace Session
 
         public void StartSession(string messageValue)
         {
-            _sessionHandler.StartSession(messageValue);
+            _gameSessionHandler.SendGameSession(messageValue, _sessionHandler);
+            //_sessionHandler.StartSession(messageValue);
             inGame = true; 
         }
 

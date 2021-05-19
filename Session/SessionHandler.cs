@@ -77,7 +77,7 @@ namespace Session
             sendSessionDTO(sessionDTO);
         }
 
-        private StartGameDto SetupGameHost()
+        public StartGameDto SetupGameHost()
         {
             var tmp = new DbConnection();
             tmp.SetForeignKeys();
@@ -183,23 +183,23 @@ namespace Session
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
-        private HandlerResponseDTO StartSession(PacketDTO packet)
-        {
-            if (packet.Header.Target == "host")
-            {
-                Console.WriteLine("starting Game");
-             StartGameDto startGameDto = SetupGameHost();
-             var jsonObject = JsonConvert.SerializeObject(startGameDto);
-             sendGameSessionDTO(startGameDto);
-             
-             return new HandlerResponseDTO(SendAction.SendToClients, jsonObject);
-             
-            }
-            else
-            {
-                return new HandlerResponseDTO(SendAction.Ignore, "You're not the host");
-            }
-        }
+        // private HandlerResponseDTO StartSession(PacketDTO packet)
+        // {
+        //     if (packet.Header.Target == "host")
+        //     {
+        //         Console.WriteLine("starting Game");
+        //      StartGameDto startGameDto = SetupGameHost();
+        //      var jsonObject = JsonConvert.SerializeObject(startGameDto);
+        //      sendGameSessionDTO(startGameDto);
+        //      
+        //      return new HandlerResponseDTO(SendAction.SendToClients, jsonObject);
+        //      
+        //     }
+        //     else
+        //     {
+        //         return new HandlerResponseDTO(SendAction.Ignore, "You're not the host");
+        //     }
+        // }
 
         private HandlerResponseDTO addPlayerToSession(PacketDTO packet)
         {

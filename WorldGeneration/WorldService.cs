@@ -2,7 +2,7 @@ using DataTransfer.DTO.Character;
 
 namespace WorldGeneration
 {
-    public class WorldService
+    public class WorldService : IWorldService
     {
         private World _world;
 
@@ -14,6 +14,11 @@ namespace WorldGeneration
         public void UpdateCharacterPosition(MapCharacterDTO mapCharacterDto)
         {
             _world.UpdateCharacterPosition(mapCharacterDto);
+        }
+
+        public void AddCharacterToWorld(MapCharacterDTO characterPositionDTO)
+        {
+            _world.AddCharacterToWorld(characterPositionDTO);
         }
 
         public void DisplayWorld()

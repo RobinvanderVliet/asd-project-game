@@ -1,4 +1,5 @@
 ﻿using System;
+using Session.DTO;
 
 namespace Session
 {
@@ -8,5 +9,6 @@ namespace Session
         public Boolean CreateSession(string sessionName);
         public void RequestSessions();
         public void StartSession(string messageValue);
+        public StartGameDto SetupGameHost();
     }
 }
