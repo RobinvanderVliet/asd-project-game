@@ -53,7 +53,7 @@ namespace ASD_project
                     services.AddScoped<IMoveHandler, MoveHandler>();
                     services.AddSingleton<IDbConnection, DbConnection>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-                    services.AddScoped(typeof(IServices<>), typeof(Services<>));
+                    services.AddScoped(typeof(IServicesDb<>), typeof(ServicesDb<>));
 
                 })
                 .UseSerilog()

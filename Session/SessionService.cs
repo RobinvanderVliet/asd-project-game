@@ -12,6 +12,11 @@ namespace Session
             _sessionHandler = sessionHandler;
 
         }
+
+        public void getSessionName()
+        {
+            
+        }
         
         public void CreateSession(string messageValue)
         {

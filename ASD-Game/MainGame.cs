@@ -49,7 +49,7 @@ namespace ASD_project
         //needs to be in GameStartupClass? From Session to Game
            //  public void SetupDataBaseForGame1()
            //  {
-           //      var tmpServicePlayerPoco = new Services<PlayerPoco>(_playerRepository);
+            //     var tmpServicePlayerPoco = new Services<PlayerPoco>(_playerRepository);
            //      var tmpServiceMainGamePoco = new Services<MainGamePoco>(_mainGameRepository);
            //      
            //      var tmpGuidGame = Guid.NewGuid();
@@ -82,11 +82,13 @@ namespace ASD_project
                 //networkcomponent heeft lijst van players -> Session heeft lijst van spelers toch?
                 //die players moeten toegevoegd worden aan playerPositions -> Moet de host doen en dit sturen naar de clients wanneer session_start gerund wordt. Kan een list sturen naar alle
                 // clients
-                playerPositions = new List<PlayerDTO>
-                {
-                    new PlayerDTO("Joe", 10, 10),
-                    new PlayerDTO("Mama", 40, 40)
-                };
+                // playerPositions = new List<PlayerDTO>
+                // {
+                //     new PlayerDTO("Joe", 10, 10),
+                //     new PlayerDTO("Mama", 40, 40)
+                // };
+                
+                
                 IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler,
                     playerPositions, _moveHandler);
                 Console.WriteLine("Type input messages below");
@@ -95,24 +97,7 @@ namespace ASD_project
                 
                 
                 inputHandler.HandleSession(sessionService);
-                //
-                // if (Game1Started)
-                // {
-                //     SetupDataBaseForGame1();
-                // }
-                // else
-                // {
-                //     //GetGameData
-                // } 
-                //Buiten commands om Of extra inputHandler die geen Player Nodig heeft. //_SessionHandler gelijk meegeven aan maingame -> Superclasse maybe niet mooi wel makkelijk voor nu
-                //Menu
-                //Sessions
-                    //Create or select player
-                        //If select player: Show only the game where the player is part of dan door naar handlecommands met player. 
-                        //If create player: Insert name create new player enz dan door naar handlecommands met player
-                    //HandleCommands
-                    
-                    
+              
                  //OF
                  //Menu
                  //Create or select player/Game
@@ -139,7 +124,10 @@ namespace ASD_project
                         if (playername.Length != 0)
                         {
                             IPlayerService player = createPlayer(playername);
-                            inputHandler.HandleCommands(player);
+                            inputHandler.HandleSession(sessionService);
+
+                            
+                         //   inputHandler.HandleCommands(player);
                         }
                     }
                     

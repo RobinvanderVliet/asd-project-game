@@ -79,7 +79,7 @@ namespace InputCommandHandler.Antlr.Transformer
                         TransformRequestSessions((RequestSessions)nodeBody[i]);
                         break;
                     case StartSession:
-                        Console.WriteLine("yo hij doet het");
+                        TransformStartSession((StartSession)nodeBody[i]);
                         break;
                 }
         }
@@ -161,7 +161,6 @@ namespace InputCommandHandler.Antlr.Transformer
         private void TransformStartSession(StartSession startSession)
         {
             _sessionService.StartSession(startSession.Message.MessageValue);
-            // argument could be removed
         }
         
     }

@@ -4,6 +4,12 @@ using Session.DTO;
 using System;
 using System.Collections.Generic;
 using Network.DTO;
+using DatabaseHandler;
+using DatabaseHandler.Poco;
+using DatabaseHandler.Services;
+using DatabaseHandler.Repository;
+
+
 
 namespace Session
 {
@@ -18,7 +24,13 @@ namespace Session
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Session);
         }
+        
+        public void StartSession(string sessionID)
+        {
+            var dto =  SetupGameHost();
+               sendGameSessionDTO(dto);
 
+        }
 
 
         public Boolean JoinSession(string sessionId)
@@ -64,8 +76,21 @@ namespace Session
             sendSessionDTO(sessionDTO);
         }
 
-        public void StartSession(string sessionID)
+        private StartGameDto SetupGameHost()
         {
+            var tmp = new DbConnection();
+            tmp.SetForeignKeys();
+         
+            var playerRepository = new Repository<PlayerPoco>(tmp);
+            var tmpServicePlayer = new ServicesDb<PlayerPoco>(playerRepository);
+            var tmpGameRepostory = new Repository<GamePoco>(tmp);
+            var tmpServiceGame = new ServicesDb<GamePoco>(tmpGameRepostory);
+
+            Guid gameGuid = new Guid();
+            var tmpObject = new GamePoco {GameGUID = gameGuid};
+            tmpServiceGame.CreateAsync(tmpObject);
+            
+            
             List<string> allClients = _session.GetAllClients();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
 
@@ -77,11 +102,26 @@ namespace Session
                 playerPosition[0] = playerX;
                 playerPosition[1] = playerY;
                 players.Add(element, playerPosition);
+                var tmpPlayer = new PlayerPoco {PlayerGUID = element, GameGUID =  gameGuid, PositionX = playerX, PositionY = playerY};
+                tmpServicePlayer.CreateAsync(tmpPlayer);
+               
                 playerX++; 
                 playerY++;
             }
 
-            throw new NotImplementedException();
+            StartGameDto startGameDto = new StartGameDto();
+            startGameDto.GameName = gameGuid.ToString();
+            startGameDto.PlayerLocations = players;
+
+            return startGameDto;
+        }
+
+       
+
+        private void sendGameSessionDTO(StartGameDto startGameDto)
+        {
+            var payload = JsonConvert.SerializeObject(startGameDto);
+            _clientController.SendPayload(payload, PacketType.StartGame);
         }
 
         private void sendSessionDTO(SessionDTO sessionDTO)
@@ -92,19 +132,10 @@ namespace Session
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-            // If packet.header.target == Host
-            // If sessionType.StartSession
-            // startSession -> Get list of all players -> Give x and y cordinats.
-            // Create database
-            // Insert into database
-            // Generate Worldseed
-            // Put in Database
-            
-            // Send list of player location to all clients 
-            // Send worldseed to players
-            // if client has worldseed and list of players start game.
             
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
+
+  
             if (packet.Header.Target == "client" || packet.Header.Target == "host")
             {
                 switch (sessionDTO.SessionType)
@@ -120,8 +151,6 @@ namespace Session
                         {
                             return new HandlerResponseDTO(SendAction.Ignore, null);
                         }
-                    case SessionType.StartSession:
-                        return StartSession(packet);
                 }
             }
             else if (packet.Header.Target == _clientController.GetOriginId())
@@ -155,7 +184,20 @@ namespace Session
 
         private HandlerResponseDTO StartSession(PacketDTO packet)
         {
-
+            if (packet.Header.Target == "host")
+            {
+                Console.WriteLine("starting Game");
+             StartGameDto startGameDto = SetupGameHost();
+             var jsonObject = JsonConvert.SerializeObject(startGameDto);
+             sendGameSessionDTO(startGameDto);
+             
+             return new HandlerResponseDTO(SendAction.SendToClients, jsonObject);
+             
+            }
+            else
+            {
+                return new HandlerResponseDTO(SendAction.Ignore, "You're not the host");
+            }
         }
 
         private HandlerResponseDTO addPlayerToSession(PacketDTO packet)
@@ -172,8 +214,7 @@ namespace Session
                 {
                     sessionDTO.ClientIds.Add(client);
                 }
-                
-                
+
                 return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
             }
             else
