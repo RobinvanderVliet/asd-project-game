@@ -20,7 +20,7 @@ namespace Network
 
         public void ReceivePacket(PacketDTO packet)
         {
-            if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session)
+            if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session || packet.Header.PacketType == PacketType.GameSession)
             {
                 HandlePacket(packet);
             }

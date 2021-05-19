@@ -29,7 +29,8 @@ namespace Session
         {
             var dto =  SetupGameHost();
                sendGameSessionDTO(dto);
-
+            
+// bericht naar alle clients dat sessie is gestart
         }
 
 
@@ -86,7 +87,7 @@ namespace Session
             var tmpGameRepostory = new Repository<GamePoco>(tmp);
             var tmpServiceGame = new ServicesDb<GamePoco>(tmpGameRepostory);
 
-            Guid gameGuid = new Guid();
+            Guid gameGuid = Guid.NewGuid();
             var tmpObject = new GamePoco {GameGUID = gameGuid};
             tmpServiceGame.CreateAsync(tmpObject);
             
@@ -121,7 +122,7 @@ namespace Session
         private void sendGameSessionDTO(StartGameDto startGameDto)
         {
             var payload = JsonConvert.SerializeObject(startGameDto);
-            _clientController.SendPayload(payload, PacketType.Session);
+            _clientController.SendPayload(payload, PacketType.GameSession);
         }
 
         private void sendSessionDTO(SessionDTO sessionDTO)

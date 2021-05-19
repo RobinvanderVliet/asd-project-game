@@ -7,6 +7,8 @@ namespace Session
         private ISessionHandler _sessionHandler;
         public Boolean inSession { get; set; }
 
+        public Boolean inGame { get; set; }
+
         public SessionService(ISessionHandler sessionHandler)
         {
             _sessionHandler = sessionHandler;
@@ -36,6 +38,7 @@ namespace Session
         public void StartSession(string messageValue)
         {
             _sessionHandler.StartSession(messageValue);
+            inGame = true; 
         }
 
     }

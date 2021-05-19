@@ -118,28 +118,22 @@ namespace ASD_project
                 
                
                 while (true) 
-                {
-                    inputHandler.HandleSession(sessionService);
-
-                    if (sessionService.inSession)
-                    {                        
-                        Console.WriteLine("create player");
-                        String playername = Console.ReadLine();
-                        if (playername.Length != 0)
-                        {
-                            IPlayerService player = createPlayer(playername, worldService);
-                            inputHandler.HandleSession(sessionService);
-
-                            
-                         //   inputHandler.HandleCommands(player);
-                        }
+                {   
+                    if (sessionService.inGame)
+                    {
+                        // Console.WriteLine("create player");
+                        // String playername = Console.ReadLine();
+                        // if (playername.Length != 0)
+                        // {
+                        // IPlayerService player = createPlayer(playername);
+                        Console.WriteLine("Type input messages below");
+                        inputHandler.HandleCommands(playerService);
+                        // }
                     }
-                    
-                    //if sessionService.GameStarted 
-                    // inputHandler.HandleCommands(playerService);
-
-                    
-
+                    else
+                    {
+                        inputHandler.HandleSession(sessionService);
+                    }
                 }
 
             }
