@@ -17,6 +17,8 @@ namespace Session
         private Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;
         private Timer _hostPingTimer;
+        private const int WAITTIMEPINGTIMER = 500;
+        private const int INTERVALTIMEPINGTIMER = 1000;
 
         public SessionHandler(IClientController clientController)
         {
@@ -111,7 +113,7 @@ namespace Session
             {
                 _hostPingTimer.Dispose();
                 _hostActive = true;
-                SwapToHost();;
+                SwapToHost();
             }
         }
         
@@ -127,8 +129,10 @@ namespace Session
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
             else {
-                SessionDTO sessionDTO = new SessionDTO(SessionType.ReceivedPingResponse);
-                sessionDTO.Name = "pong";
+                SessionDTO sessionDTO = new SessionDTO {
+                    SessionType = SessionType.ReceivedPingResponse,
+                    Name = "pong"
+                };
                 var jsonObject = JsonConvert.SerializeObject(sessionDTO);
                 return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
             }
@@ -195,8 +199,10 @@ namespace Session
         private void SendPing()
         {
             Console.WriteLine("ping"); //TODO verwijderen
-            SessionDTO sessionDTO = new SessionDTO(SessionType.SendPing);
-            sessionDTO.Name = "ping";
+            SessionDTO sessionDTO = new SessionDTO{
+                SessionType = SessionType.SendPing,
+                Name = "ping"
+            };
             var jsonObject = JsonConvert.SerializeObject(sessionDTO);
             _hostActive = false;
             _clientController.SendPayload(jsonObject, PacketType.Session);
@@ -204,7 +210,7 @@ namespace Session
 
         private void PingHostTimer()
         {
-            _hostPingTimer = new System.Timers.Timer(1000);
+            _hostPingTimer = new System.Timers.Timer(INTERVALTIMEPINGTIMER);
             _hostPingTimer.Enabled = true;
             _hostPingTimer.AutoReset = true;
             _hostPingTimer.Elapsed += HostPingEvent;
@@ -214,7 +220,7 @@ namespace Session
         public void HostPingEvent(Object source, ElapsedEventArgs e)
         {
             SendPing();
-            Thread.Sleep(500);
+            Thread.Sleep(WAITTIMEPINGTIMER);
             CheckIfHostActive();
         }
         
@@ -226,7 +232,7 @@ namespace Session
             // TODO: Enable Heartbeat check and enable agents, maybe this will be done when hostcontroller is activated?
             // TODO: Make new client backup host
             
-            Console.Out.WriteLine("You are now the new host!");
+            Console.Out.WriteLine("Look at me, I'm the captain (Host) now!");
         }
 
         public Timer getHostPingTimer()

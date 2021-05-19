@@ -142,8 +142,8 @@ namespace Session.Tests
 
             _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Session));
 
-            
             this._sut.setHostPingTimer(new Timer());
+            
             // Act ---------
             Thread threadSut = new Thread(() => _sut.HostPingEvent(null,null));
             Thread threadHost = new Thread(() =>  this._sut.setHostActive(true));
@@ -178,9 +178,9 @@ namespace Session.Tests
             var payload = JsonConvert.SerializeObject(sessionDTO);
 
             _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Session));
-
             
             this._sut.setHostPingTimer(new Timer());
+            
             // Act ---------
             _sut.HostPingEvent(null,null);
 
@@ -190,7 +190,6 @@ namespace Session.Tests
             this._mockedClientController.Verify(mock => mock.UnmarkBackupHost(), Times.Once);
             Assert.IsTrue(this._sut.getHostActive());
         }
-        
 
         [Test]
         public void Test_HandlePacket_RequestSessionsAtClientOrHost()
@@ -425,21 +424,29 @@ namespace Session.Tests
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";
 
-            SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
-            sessionDTO.ClientIds = new List<string>();
+            SessionDTO sessionDTO = new SessionDTO {
+                SessionType = SessionType.RequestToJoinSession,
+                ClientIds = new List<string>()
+            };
             sessionDTO.ClientIds.Add(originId);
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
-            packetHeaderDTO.OriginID = originId;
-            packetHeaderDTO.SessionID = generatedSessionId;
-            packetHeaderDTO.PacketType = PacketType.Session;
-            packetHeaderDTO.Target = "client";
+            
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO {
+                OriginID = originId,
+                SessionID = generatedSessionId,
+                PacketType = PacketType.Session,
+                Target = "client"
+            };
             _packetDTO.Header = packetHeaderDTO;
-            SessionDTO sessionDTOInHandlerResponse = new SessionDTO(SessionType.RequestToJoinSession);
-            sessionDTOInHandlerResponse.ClientIds = sessionDTO.ClientIds;
+            
+            SessionDTO sessionDTOInHandlerResponse = new SessionDTO {
+                SessionType = SessionType.RequestToJoinSession,
+                ClientIds = sessionDTO.ClientIds
+            };
             sessionDTOInHandlerResponse.ClientIds.Add(originIdHost);
+            
             HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients,
                 JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
             _packetDTO.HandlerResponse = handlerResponseDTO;
@@ -468,22 +475,28 @@ namespace Session.Tests
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";
 
-            SessionDTO sessionDTO = new SessionDTO(SessionType.SendPing);
-            sessionDTO.Name = "ping";
+            SessionDTO sessionDTO = new SessionDTO {
+                SessionType = SessionType.SendPing,
+                Name = "ping"
+            };
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
-            packetHeaderDTO.OriginID = originId;
-            packetHeaderDTO.SessionID = generatedSessionId;
-            packetHeaderDTO.PacketType = PacketType.Session;
-            packetHeaderDTO.Target = "host";
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO {
+                OriginID = originId,
+                SessionID = generatedSessionId,
+                PacketType = PacketType.Session,
+                Target = "host"
+            };
+            
             _packetDTO.Header = packetHeaderDTO;
-            SessionDTO sessionDTOInHandlerResponse = new SessionDTO(SessionType.ReceivedPingResponse);
-            sessionDTOInHandlerResponse.Name = "pong";
+            SessionDTO sessionDTOInHandlerResponse = new SessionDTO {
+                SessionType = SessionType.ReceivedPingResponse,
+                Name = "pong"
+            };
+            
             var jsonObject = JsonConvert.SerializeObject(sessionDTOInHandlerResponse);
             HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
-            // _packetDTO.HandlerResponse = handlerResponseDTO;
 
             _mockedClientController.SetupSequence(x => x.GetOriginId()).Returns(originIdHost);
 
@@ -506,17 +519,21 @@ namespace Session.Tests
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";
 
-            SessionDTO sessionDTO = new SessionDTO(SessionType.SendPing);
-            sessionDTO.Name = "ping";
+            SessionDTO sessionDTO = new SessionDTO {
+                SessionType = SessionType.SendPing,
+                Name = "ping"
+            };
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            PacketHeaderDTO packetHeaderDto = new PacketHeaderDTO();
-            packetHeaderDto.OriginID = originId;
-            packetHeaderDto.SessionID = generatedSessionId;
-            packetHeaderDto.PacketType = PacketType.Session;
-            packetHeaderDto.Target = originId;
+            PacketHeaderDTO packetHeaderDto = new PacketHeaderDTO {
+                OriginID = originId,
+                SessionID = generatedSessionId,
+                PacketType = PacketType.Session,
+                Target = originId
+            };
             _packetDTO.Header = packetHeaderDto;
+            
             HandlerResponseDTO expectedHandlerResponse = new HandlerResponseDTO(SendAction.Ignore, null);
             _packetDTO.HandlerResponse = expectedHandlerResponse;
 
@@ -543,17 +560,22 @@ namespace Session.Tests
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";
 
-            SessionDTO sessionDTO = new SessionDTO(SessionType.SendPing);
-            sessionDTO.Name = "ping";
+            SessionDTO sessionDTO = new SessionDTO {
+                SessionType = SessionType.SendPing,
+                Name = "ping"
+            };
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            PacketHeaderDTO packetHeaderDto = new PacketHeaderDTO();
-            packetHeaderDto.OriginID = originId;
-            packetHeaderDto.SessionID = generatedSessionId;
-            packetHeaderDto.PacketType = PacketType.Session;
-            packetHeaderDto.Target = "client";
+            
+            PacketHeaderDTO packetHeaderDto = new PacketHeaderDTO {
+                OriginID = originId,
+                SessionID = generatedSessionId,
+                PacketType = PacketType.Session,
+                Target = "client"
+            };
             _packetDTO.Header = packetHeaderDto;
+            
             HandlerResponseDTO expectedHandlerResponse = new HandlerResponseDTO(SendAction.Ignore, null);
             _packetDTO.HandlerResponse = expectedHandlerResponse;
 
