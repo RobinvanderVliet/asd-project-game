@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using WorldGeneration;
 
+
 namespace Session
 {
     [ExcludeFromCodeCoverage]
@@ -16,12 +17,12 @@ namespace Session
         public string SessionId { get => _sessionId; set => _sessionId = value; }
         private List<string> _joinedClients = new();
 
-        private int SessionSeed { get; set; }
+        private int _sessionSeed;
+        public int SessionSeed { get => _sessionSeed; set => _sessionSeed = value; }
 
         public Session(string name)
         {
             _name = name;
-            SessionSeed = MapFactory.GenerateSeed();
         }
 
         public void GenerateSessionId()

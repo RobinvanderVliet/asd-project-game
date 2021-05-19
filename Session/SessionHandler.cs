@@ -4,6 +4,7 @@ using Session.DTO;
 using System;
 using System.Collections.Generic;
 using Network.DTO;
+using WorldGeneration;
 
 namespace Session
 {
@@ -36,6 +37,7 @@ namespace Session
                 SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
                 sessionDTO.ClientIds = new List<string>();
                 sessionDTO.ClientIds.Add(_clientController.GetOriginId());
+                sessionDto.SessionSeed = _session.SessionSeed;
                 sendSessionDTO(sessionDTO);
             }
         }
@@ -45,6 +47,7 @@ namespace Session
             _session = new Session(sessionName);
             _session.GenerateSessionId();
             _session.AddClient(_clientController.GetOriginId());
+            _session.SessionSeed = MapFactory.GenerateSeed();
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
             Console.Out.WriteLine("Created session with the name: " + _session.Name);
@@ -99,6 +102,7 @@ namespace Session
         {
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessionsResponse);
             sessionDTO.Name = _session.Name;
+            sessionDTO.SessionSeed = _session.SessionSeed;
             var jsonObject = JsonConvert.SerializeObject(sessionDTO);
             return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
         }
@@ -133,7 +137,8 @@ namespace Session
             {
                 SessionDTO sessionDTOClients = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
                 _session.EmptyClients();
-
+                _session.SessionSeed = sessionDTO.SessionSeed;
+                Console.Out.WriteLine(_session.SessionSeed);
                 Console.Out.WriteLine("Players in your session:");
                 foreach (string client in sessionDTOClients.ClientIds)
                 {

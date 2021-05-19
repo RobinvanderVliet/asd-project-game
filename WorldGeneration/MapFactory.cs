@@ -19,7 +19,8 @@ namespace WorldGeneration
 
         public static int GenerateSeed()
         {
-            return new Random().Next(1, 999999);
+            var randomSeed = new Random().Next(1, 999999);
+            return randomSeed;
         }
     }
 }
