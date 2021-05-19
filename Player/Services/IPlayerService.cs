@@ -1,4 +1,5 @@
-﻿using Player.DTO;
+﻿using DataTransfer.DTO.Player;
+using Player.DTO;
 using Player.Model;
 
 namespace Player.Services
@@ -47,7 +48,7 @@ namespace Player.Services
 
         public void HandleDirection(string directionValue, int stepsValue);
         
-        public void ChangePositionOfAPlayer(PlayerDTO player);
+        public void ChangePositionOfAPlayer(PlayerPositionDTO playerPosition);
         
         public void CreateSession(string messageValue);
         

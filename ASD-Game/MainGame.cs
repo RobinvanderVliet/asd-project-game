@@ -16,6 +16,7 @@ using WorldGeneration.Models;
 using WorldGeneration.Models.Interfaces;
 using Player = WorldGeneration.Player;
 using Chat;
+using DataTransfer.DTO.Player;
 using Session;
 using Player.ActionHandlers;
 using Player.DTO;
@@ -52,9 +53,9 @@ namespace ASD_project
 
                 //moet later vervangen worden
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
-                IList<PlayerDTO> players = new List<PlayerDTO>();
-                players.Add(new PlayerDTO("henk", 3, 0));
-                players.Add(new PlayerDTO("pietje", 5, 4));
+                IList<PlayerPositionDTO> players = new List<PlayerPositionDTO>();
+                players.Add(new PlayerPositionDTO("henk", 3, 0));
+                players.Add(new PlayerPositionDTO("pietje", 5, 4));
                 var currentPlayer = new PlayerModel("Gerard", _inventory, new Bitcoin(21), new RadiationLevel(0));
                 IList<ICharacter> characters = new List<ICharacter>();
                 World world = new World(players, currentPlayer, characters, 66666666);
@@ -67,10 +68,10 @@ namespace ASD_project
                 //lobby start
                 //networkcomponent heeft lijst van players
                 //die players moeten toegevoegd worden aan playerPositions
-                List<PlayerDTO> playerPositions = new List<PlayerDTO>
+                List<PlayerPositionDTO> playerPositions = new List<PlayerPositionDTO>
                 {
-                    new PlayerDTO("Joe", 10, 10),
-                    new PlayerDTO("Mama", 40, 40)
+                    new PlayerPositionDTO("Joe", 10, 10),
+                    new PlayerPositionDTO("Mama", 40, 40)
                 };
                 IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, playerPositions, _moveHandler);
                 Console.WriteLine("Type input messages below");

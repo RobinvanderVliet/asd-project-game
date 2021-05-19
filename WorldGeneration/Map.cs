@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using DataTransfer.DTO.Character;
+using DataTransfer.DTO.Player;
 using Player.DTO;
 using Player.Model;
 using WorldGeneration.Models;
@@ -91,37 +93,40 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
 
-        public void DisplayMap(IPlayerModel player, int viewDistance, IList<PlayerDTO> players, IList<ICharacter> characters)
+        public void DisplayMap(IPlayerModel currentPlayer, int viewDistance, IList<MapCharacterDTO> characters)
         {
-            var playerX = player.XPosition;
-            var playerY = player.YPosition;
+            var playerX = currentPlayer.XPosition;
+            var playerY = currentPlayer.YPosition;
             LoadArea(playerX, playerY, viewDistance);
             for (var y = (playerY + viewDistance); y > ((playerY + viewDistance) - (viewDistance * 2) -1); y--)
             {
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
                 {
                     var tile = GetLoadedTileByXAndY(x, y);
-                    Console.Write($" {GetDisplaySymbol(player, tile, players, characters)}");
+                    Console.Write($" {GetDisplaySymbol(currentPlayer, tile, players, characters)}");
                 }
                 Console.WriteLine("");
             }
         }
         
-        private string GetDisplaySymbol(IPlayerModel currentPlayer, ITile tile, IList<PlayerDTO> players, IList<ICharacter> characters)
+        private string GetDisplaySymbol(IPlayerModel currentPlayer, ITile tile, IList<MapCharacterDTO> characters)
         {
             bool currentPlayerOnTile = IsPlayerOnTile(tile, currentPlayer);
             if (currentPlayerOnTile)
             {
                 return currentPlayer.Symbol;
             }
-            foreach (var playerOnTile in players.Where(player => player.X == tile.XPosition && player.Y - 1 == tile.YPosition))
+            foreach (var characterOnTile in characters.Where(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition))
             {
-                if (playerOnTile.Team != currentPlayer.Team || playerOnTile.Team == 0)
+                if (characterOnTile.Symbol == CharacterSymbol.FRIENDLY_PLAYER)
                 {
-                    return CharacterSymbol.ENEMY_PLAYER;
+                    if (characterOnTile.Team != currentPlayer.Team || characterOnTile.Team == 0)
+                    {
+                        return CharacterSymbol.ENEMY_PLAYER;
+                    }
+                    return CharacterSymbol.FRIENDLY_PLAYER;
                 }
-                return CharacterSymbol.FRIENDLY_PLAYER;
-                
+                return characterOnTile.Symbol;
             }
             return tile.Symbol;
         }

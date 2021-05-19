@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Chat;
+using DataTransfer.DTO.Player;
 using Moq;
 using NUnit.Framework;
 using Player.ActionHandlers;
@@ -16,7 +17,7 @@ namespace Player.Tests
     {
         private PlayerService _sut;
         private Mock<IPlayerModel> _mockedPlayerModel;
-        private List<PlayerDTO> _mockedPlayerList;
+        private List<PlayerPositionDTO> _mockedPlayerList;
         private Mock<IMoveHandler> _mockedMoveHandler;
         private Mock<IChatHandler> _mockedChatHandler;
         private Mock<ISessionHandler> _mockedSessionHandler;
@@ -25,7 +26,7 @@ namespace Player.Tests
         public void Setup()
         {
             _mockedPlayerModel = new Mock<IPlayerModel>();
-            _mockedPlayerList = new List<PlayerDTO>();
+            _mockedPlayerList = new List<PlayerPositionDTO>();
             _mockedMoveHandler = new Mock<IMoveHandler>();
             _mockedChatHandler = new Mock<IChatHandler>();
             _mockedSessionHandler = new Mock<ISessionHandler>();

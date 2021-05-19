@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+using DataTransfer.DTO.Character;
+using DataTransfer.DTO.Player;
 using Player.DTO;
 using Player.Model;
 using WorldGeneration.Models.Interfaces;
@@ -9,24 +13,31 @@ namespace WorldGeneration
     public class World
     {
         private Map _map;
-        private IPlayerModel _currentPlayer { get; set; }
-        public IList<PlayerDTO> _players { get; set; }
-        public IList<ICharacter> _characters { get; set; }
+        private MapCharacterDTO CurrentPlayer { get; set; }
+        private IList<MapCharacterDTO> Characters { get; set; }
 
-        public World(IList<PlayerDTO> players, IPlayerModel currentPlayer, IList<ICharacter> characters, int seed)
+        public World(IList<MapCharacterDTO> characters, MapCharacterDTO currentPlayer, int seed)
         {
-            _players = players;
+            Characters = characters;
             _map = MapFactory.GenerateMap(seed: seed);
-            _currentPlayer = currentPlayer;
-            _characters = characters;
+            CurrentPlayer = currentPlayer;
         }
-        
-        public void UpdatePlayerPosition(PlayerDTO playerDto)
+
+        public void UpdateCharacterPosition(MapCharacterDTO characterPositionDTO)
         {
-            foreach (var player in _players.Where(player => playerDto.PlayerName == player.PlayerName))
+            var characters = Characters.Where(character => characterPositionDTO.Name == character.Name);
+            if (characters.Count() > 1)
             {
-                player.X = playerDto.X;
-                player.Y = playerDto.Y;
+                throw new Exception("Duplicate characters found in world");
+            }
+            if (characters.Count() > 0)
+            {
+                var character = characters.First();
+                character.XPosition = characterPositionDTO.XPosition;
+                character.YPosition = characterPositionDTO.YPosition;
+            } else
+            {
+                Characters.Add(characterPositionDTO);
             }
         }
 
@@ -34,7 +45,7 @@ namespace WorldGeneration
         {
             // TOTO: Add characters 
             _map.DeleteMap();
-            _map.DisplayMap(_currentPlayer, viewDistance, _players, _characters);
+            _map.DisplayMap(CurrentPlayer, viewDistance, Characters);
         }
     }
 }

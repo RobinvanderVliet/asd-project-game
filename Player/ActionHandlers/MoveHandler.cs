@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics.Eventing.Reader;
+using DataTransfer.DTO.Character;
+using DataTransfer.DTO.Player;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
@@ -12,7 +14,7 @@ namespace Player.ActionHandlers
     public class MoveHandler : IMoveHandler, IPacketHandler
     {
         private IClientController _clientController;
-        private IPlayerModel _currentPlayer;
+        private PlayerDTO _currentPlayer;
 
         public MoveHandler(IClientController clientController)
         {
@@ -20,11 +22,11 @@ namespace Player.ActionHandlers
             _clientController.SubscribeToPacketType(this, PacketType.Move);
         }
 
-        public void SendMove(IPlayerModel player)
+        public void SendMove(PlayerDTO player)
         {
             _currentPlayer = player;
-            var playerDTO = new PlayerDTO(player.Name, player.XPosition, player.YPosition);
-            var moveDTO = new MoveDTO(playerDTO);
+            var playerPostionDTO = new PlayerPositionDTO(player.XPosition, player.YPosition, player.Name, player.Team);
+            var moveDTO = new MoveDTO(playerPostionDTO);
             SendMoveDTO(moveDTO);
         } 
         
@@ -37,20 +39,14 @@ namespace Player.ActionHandlers
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
-            HandleMove(moveDTO.Player);
+            HandleMove(moveDTO.PlayerPosition);
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
                 
-       private void HandleMove(PlayerDTO player)
+       private void HandleMove(PlayerPositionDTO playerPosition)
        {
-           
-           
            // worldService.updateArraylistposition(player, x, y);
            
-           if (player.PlayerName.Equals(_currentPlayer.Name))
-           {
-               
-           }
            // aanroepen daadwerkelijke functie voor aanpassen x en y in wereld (dus in arraylist)
            //_player.ChangePositionOfAPlayer(player);
            // als host dan in globale db aanpassen voor die speler (hostcontoller (HandlePacket))

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Player.ActionHandlers;
 using Player.DTO;
 using Chat;
+using DataTransfer.DTO.Player;
 using Player.Model;
 using Session;
 
@@ -11,13 +12,13 @@ namespace Player.Services
     public class PlayerService : IPlayerService
     {
         private readonly IPlayerModel _currentPlayer;
-        private List<PlayerDTO> _playerPositions;
+        private List<PlayerPositionDTO> _playerPositions;
         private readonly IMoveHandler _moveHandler;
         private readonly IChatHandler _chatHandler;
         private readonly ISessionHandler _sessionHandler;
 
         public PlayerService(IPlayerModel currentPlayer, IChatHandler chatHandler
-            , ISessionHandler sessionHandler, List<PlayerDTO> playerPositions
+            , ISessionHandler sessionHandler, List<PlayerPositionDTO> playerPositions
             , IMoveHandler moveHandler)
         {
             _chatHandler = chatHandler;
@@ -178,9 +179,9 @@ namespace Player.Services
             Console.WriteLine("X: " + _currentPlayer.XPosition + ". Y: " + _currentPlayer.YPosition);
         }
         
-        public void ChangePositionOfAPlayer(PlayerDTO player)
+        public void ChangePositionOfAPlayer(PlayerPositionDTO playerPosition)
         {
-            foreach (var playerPosition in _playerPositions)
+            foreach (var player in _playerPositions)
             {
                 if (player.PlayerName == playerPosition.PlayerName)
                 {
