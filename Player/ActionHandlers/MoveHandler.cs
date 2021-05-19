@@ -54,13 +54,20 @@ namespace Player.ActionHandlers
         {
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
             HandleMove(moveDTO.PlayerPosition);
+            
             if (packet.Header.PacketType == PacketType.Move)
             {
+                
                 Console.WriteLine("Game started in MoveHandler :)");
+                
             } else if (packet.Header.PacketType == PacketType.Move)
             {
-             Console.WriteLine("Moved in moveHandler :)");   
+                
+                Console.WriteLine("Moved in moveHandler :)");   
+             
             }
+            
+            
             //
             // var packetDTO = JsonConvert.DeserializeObject<StartGameDto>(packet.Payload);
             // var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
