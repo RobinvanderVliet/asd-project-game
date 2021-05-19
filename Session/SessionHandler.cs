@@ -68,15 +68,7 @@ namespace Session
 
         public void SendHeartbeat()
         {
-            HeartbeatDTO heartbeatDto = new HeartbeatDTO(SessionType.RequestHeartbeat);
-            heartbeatDto.Name = "My personal DTO";
-            sendHeartbeatDTO(heartbeatDto);
-        }
-
-        private void sendHeartbeatDTO(HeartbeatDTO heartbeatDto)
-        {
-            var payload = JsonConvert.SerializeObject(heartbeatDto);        
-            _clientController.SendPayload(payload, PacketType.Session);
+            _clientController.SendPayload("heartbeat", PacketType.Session);
         }
 
         private void sendSessionDTO(SessionDTO sessionDTO)
@@ -122,8 +114,8 @@ namespace Session
 
         private HandlerResponseDTO handleHeartbeat()
         {
-            HeartbeatDTO heartbeatDto = new HeartbeatDTO(SessionType.RequestHeartbeat);
-            var jsonObject = JsonConvert.SerializeObject(heartbeatDto);
+            SessionDTO sessionDto = new SessionDTO(SessionType.RequestHeartbeat);
+            var jsonObject = JsonConvert.SerializeObject(sessionDto);
             return new HandlerResponseDTO(SendAction.Catch, jsonObject);
         }
         
