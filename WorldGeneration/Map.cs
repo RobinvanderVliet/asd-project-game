@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using DataTransfer.DTO.Character;
-using DataTransfer.DTO.Player;
-using Player.DTO;
-using Player.Model;
 using WorldGeneration.Models;
 using WorldGeneration.Models.Interfaces;
 
@@ -93,7 +89,7 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
 
-        public void DisplayMap(IPlayerModel currentPlayer, int viewDistance, IList<MapCharacterDTO> characters)
+        public void DisplayMap(MapCharacterDTO currentPlayer, int viewDistance, IList<MapCharacterDTO> characters)
         {
             var playerX = currentPlayer.XPosition;
             var playerY = currentPlayer.YPosition;
@@ -103,13 +99,13 @@ namespace WorldGeneration
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
                 {
                     var tile = GetLoadedTileByXAndY(x, y);
-                    Console.Write($" {GetDisplaySymbol(currentPlayer, tile, players, characters)}");
+                    Console.Write($" {GetDisplaySymbol(currentPlayer, tile, characters)}");
                 }
                 Console.WriteLine("");
             }
         }
         
-        private string GetDisplaySymbol(IPlayerModel currentPlayer, ITile tile, IList<MapCharacterDTO> characters)
+        private string GetDisplaySymbol(MapCharacterDTO currentPlayer, ITile tile, IList<MapCharacterDTO> characters)
         {
             bool currentPlayerOnTile = IsPlayerOnTile(tile, currentPlayer);
             if (currentPlayerOnTile)
@@ -131,7 +127,7 @@ namespace WorldGeneration
             return tile.Symbol;
         }
 
-        private bool IsPlayerOnTile(ITile tile, IPlayerModel player)
+        private bool IsPlayerOnTile(ITile tile, MapCharacterDTO player)
         {
             return tile.XPosition == player.XPosition && tile.YPosition == player.YPosition - 1;
         }

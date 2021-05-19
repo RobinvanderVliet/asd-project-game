@@ -6,6 +6,6 @@ namespace Player.ActionHandlers
 {
     public interface IMoveHandler
     {
-        public void SendMove(PlayerDTO player);
+        public void SendMove(PlayerPositionDTO player);
     }
 }

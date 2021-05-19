@@ -5,9 +5,6 @@ using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Player.DTO;
-using Player.Model;
-using Player.Services;
-using WorldGeneration;
 
 namespace Player.ActionHandlers
 {
@@ -22,11 +19,11 @@ namespace Player.ActionHandlers
             _clientController.SubscribeToPacketType(this, PacketType.Move);
         }
 
-        public void SendMove(PlayerDTO player)
+        public void SendMove(PlayerPositionDTO player)
         {
-            _currentPlayer = player;
-            var playerPostionDTO = new PlayerPositionDTO(player.XPosition, player.YPosition, player.Name, player.Team);
-            var moveDTO = new MoveDTO(playerPostionDTO);
+            //_currentPlayer = player;
+            //var playerPostionDTO = new PlayerPositionDTO(player.XPosition, player.YPosition, player.Name, player.Team);
+            var moveDTO = new MoveDTO(player);
             SendMoveDTO(moveDTO);
         } 
         

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Player.ActionHandlers;
 using Player.DTO;
 using Chat;
+using DataTransfer.DTO.Character;
 using DataTransfer.DTO.Player;
 using Player.Model;
 using Session;
@@ -172,8 +173,10 @@ namespace Player.Services
                     break;
             }
 
+            
            // _currentPlayer.SetNewPlayerPosition(x, y);
-            _moveHandler.SendMove(_currentPlayer);
+           var dto = new PlayerPositionDTO(_currentPlayer.XPosition, _currentPlayer.YPosition,_currentPlayer.Name);
+            _moveHandler.SendMove(dto);
 
             // the next line of code should be changed by sending newPosition to a relevant method
             Console.WriteLine("X: " + _currentPlayer.XPosition + ". Y: " + _currentPlayer.YPosition);

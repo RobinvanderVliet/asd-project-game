@@ -1,4 +1,3 @@
-using System.Runtime.Intrinsics.X86;
 using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Models.TerrainTiles

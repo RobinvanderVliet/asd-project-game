@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using DataTransfer.DTO.Character;
-using DataTransfer.DTO.Player;
-using Player.DTO;
-using Player.Model;
-using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
 {
@@ -25,14 +20,20 @@ namespace WorldGeneration
 
         public void UpdateCharacterPosition(MapCharacterDTO characterPositionDTO)
         {
-            var characters = Characters.Where(character => characterPositionDTO.Name == character.Name);
-            if (characters.Count() > 1)
+            if (CurrentPlayer.Name == characterPositionDTO.Name)
+            {
+                CurrentPlayer.XPosition = characterPositionDTO.XPosition;
+                CurrentPlayer.YPosition = characterPositionDTO.YPosition;
+            }
+            
+            var charactersWithTheSameName = Characters.Where(character => characterPositionDTO.Name == character.Name);
+            if (charactersWithTheSameName.Count() > 1)
             {
                 throw new Exception("Duplicate characters found in world");
             }
-            if (characters.Count() > 0)
+            if (charactersWithTheSameName.Count() > 0)
             {
-                var character = characters.First();
+                var character = charactersWithTheSameName.First();
                 character.XPosition = characterPositionDTO.XPosition;
                 character.YPosition = characterPositionDTO.YPosition;
             } else
