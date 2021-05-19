@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Session.DTO;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Network.DTO;
 
 namespace Session
@@ -27,6 +28,15 @@ namespace Session
             }
             else
             {
+                new Thread(() =>
+                {
+                    while (true)
+                    {
+                        SendHeartbeat();
+                        Thread.Sleep(1000);
+                    }
+                }).Start();
+                
                 SessionDTO sessionDto = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
                 _session = new Session(sessionDto.Name);
                 _session.SessionId = sessionId;
@@ -56,6 +66,19 @@ namespace Session
             sendSessionDTO(sessionDTO);
         }
 
+        public void SendHeartbeat()
+        {
+            HeartbeatDTO heartbeatDto = new HeartbeatDTO(SessionType.RequestHeartbeat);
+            heartbeatDto.Name = "My personal DTO";
+            sendHeartbeatDTO(heartbeatDto);
+        }
+
+        private void sendHeartbeatDTO(HeartbeatDTO heartbeatDto)
+        {
+            var payload = JsonConvert.SerializeObject(heartbeatDto);        
+            _clientController.SendPayload(payload, PacketType.Session);
+        }
+
         private void sendSessionDTO(SessionDTO sessionDTO)
         {
             var payload = JsonConvert.SerializeObject(sessionDTO);
@@ -69,6 +92,8 @@ namespace Session
             {
                 switch (sessionDTO.SessionType)
                 {
+                    case SessionType.RequestHeartbeat:
+                        return handleHeartbeat();
                     case SessionType.RequestSessions:
                         return handleRequestSessions();
                     case SessionType.RequestToJoinSession:
@@ -95,6 +120,13 @@ namespace Session
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
+        private HandlerResponseDTO handleHeartbeat()
+        {
+            HeartbeatDTO heartbeatDto = new HeartbeatDTO(SessionType.RequestHeartbeat);
+            var jsonObject = JsonConvert.SerializeObject(heartbeatDto);
+            return new HandlerResponseDTO(SendAction.Catch, jsonObject);
+        }
+        
         private HandlerResponseDTO handleRequestSessions()
         {
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessionsResponse);

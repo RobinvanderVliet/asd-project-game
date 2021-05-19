@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Network.DTO;
 
@@ -21,6 +22,7 @@ namespace Network
         {
             if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session)
             {
+                Console.WriteLine(packet.Payload);
                 HandlePacket(packet);
             }
         }

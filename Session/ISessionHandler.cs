@@ -5,5 +5,6 @@
         public void JoinSession(string sessionId);
         public void CreateSession(string sessionName);
         public void RequestSessions();
+        public void SendHeartbeat();
     }
 }
