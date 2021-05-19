@@ -9,60 +9,66 @@ namespace Creature.Pathfinder
 {
     public class PriorityQueue<T> where T : IComparable<T>
     {
-        private List<T> elements = new List<T>();
+        private List<T> _elements;
+
+        public PriorityQueue()
+        {
+            _elements = new List<T>();
+        }
 
         public int Count
         {
-            get { return elements.Count; }
+            get { return _elements.Count; }
         }
 
         public bool Contains(T item)
         {
-            foreach (var element in elements)
+            foreach (var element in _elements)
             {
                 if (element.Equals(item))
                     return true;
             }
             return false;
         }
+
         [ExcludeFromCodeCoverage]
         public T Peek()
         {
-            T frontItem = elements[0];
+            T frontItem = _elements[0];
             return frontItem;
         }
 
         public void Enqueue(T item)
         {
-            int i = elements.Count;
-            elements.Add(item);
-            while (i > 0 && elements[(i - 1) / 2].CompareTo(item) > 0)
+            int i = _elements.Count;
+            _elements.Add(item);
+            while (i > 0 && _elements[(i - 1) / 2].CompareTo(item) > 0)
             {
-                elements[i] = elements[(i - 1) / 2];
+                _elements[i] = _elements[(i - 1) / 2];
                 i = (i - 1) / 2;
             }
-            elements[i] = item;
+            _elements[i] = item;
         }
 
         public T Dequeue()
         {
-            T firstItem = elements[0];
-            T tempItem = elements[elements.Count - 1];
-            elements.RemoveAt(elements.Count - 1);
-            if (elements.Count > 0)
+            T firstItem = _elements[0];
+            T tempItem = _elements[_elements.Count - 1];
+            _elements.RemoveAt(_elements.Count - 1);
+            if (_elements.Count > 0)
             {
                 int i = 0;
-                while (i < elements.Count / 2)
+                while (i < _elements.Count / 2)
                 {
                     int j = (2 * i) + 1;
-                    if ((j < elements.Count - 1) && (elements[j].CompareTo(elements[j + 1]) > 0)) 
+                    if ((j < _elements.Count - 1) && (_elements[j].CompareTo(_elements[j + 1]) > 0)) 
                         ++j;
-                    if (elements[j].CompareTo(tempItem) >= 0)
+                    if (_elements[j].CompareTo(tempItem) >= 0)
                         break;
-                    elements[i] = elements[j];
+                    _elements[i] = _elements[j];
                     i = j;
                 }
-                elements[i] = tempItem;
+                _elements[i] = tempItem;
             }
             return firstItem;
         }
