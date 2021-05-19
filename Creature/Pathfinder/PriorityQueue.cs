@@ -55,7 +55,8 @@ namespace Creature.Pathfinder
                 while (i < elements.Count / 2)
                 {
                     int j = (2 * i) + 1;
-                    if ((j < elements.Count - 1) && (elements[j].CompareTo(elements[j + 1]) > 0)) ++j;
+                    if ((j < elements.Count - 1) && (elements[j].CompareTo(elements[j + 1]) > 0)) 
+                        ++j;
                     if (elements[j].CompareTo(tempItem) >= 0)
                         break;
                     elements[i] = elements[j];

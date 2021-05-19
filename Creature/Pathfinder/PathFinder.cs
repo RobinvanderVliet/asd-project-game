@@ -47,29 +47,38 @@ namespace Creature
             while (openList.Count > 0)
             {
                 currentNode = openList.Dequeue();
+                closedList.Add(currentNode);
 
                 if (currentNode.position.X.Equals(endNode.position.X) && currentNode.position.Y.Equals(endNode.position.Y))
                 {
                     break;
                 }
 
-                //closedList.Add(currentNode);
-
                 adjacencies = GetAdjacentNodes(currentNode);
 
                 foreach (Node adjNode in adjacencies)
                 {
-                    if ((!closedList.Contains(adjNode) && adjNode.isWalkable) || currentNode.FScore < adjNode.FScore)
+                    if (adjNode.isWalkable)
                     {
-                        closedList.Add(adjNode);
 
-                        //if (!openList.Contains(adjNode))
-                        //{
+                        if (openList.Contains(adjNode))
+                        {
+                            if (currentNode.FScore <= adjNode.FScore)
+                                continue;
+                        }
+
+                        if (closedList.Contains(adjNode))
+                        {
+                            if (!(currentNode.FScore <= adjNode.FScore))
+                                closedList.Remove(adjNode);
+                        }
+                        else
+                        {
                             adjNode.parent = currentNode;
                             adjNode.distanceToTarget = Math.Abs(adjNode.position.X - endNode.position.X) + Math.Abs(adjNode.position.Y - endNode.position.Y);
                             adjNode.cost = adjNode.weight + adjNode.parent.cost;
                             openList.Enqueue(adjNode);
-                        //}
+                        }
                             
                     }
                 }
