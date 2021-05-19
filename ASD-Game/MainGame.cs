@@ -31,7 +31,7 @@ namespace ASD_project
             private readonly IRepository<PlayerPoco> _playerRepository;
         //    private readonly IRepository<MainGamePoco> _mainGameRepository;
             private Boolean GameStarted = true;
-            private List<PlayerDTO> playerPositions;
+            private List<MapCharacterDTO> playerPositions;
 
 
 
@@ -127,7 +127,7 @@ namespace ASD_project
                         String playername = Console.ReadLine();
                         if (playername.Length != 0)
                         {
-                            IPlayerService player = createPlayer(playername);
+                            IPlayerService player = createPlayer(playername, worldService);
                             inputHandler.HandleSession(sessionService);
 
                             
@@ -144,11 +144,14 @@ namespace ASD_project
 
             }
 
-            private IPlayerService createPlayer(String name)
+            private IPlayerService createPlayer(String name, WorldService world)
             {
                 IPlayerModel playerModel = new PlayerModel(name, _inventory, new Bitcoin(20), new RadiationLevel(1));
+                
+                
+                playerPositions.Add(new MapCharacterDTO(3, 0, playerModel.Name));
                 IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler,
-                    playerPositions, _moveHandler);
+                    playerPositions, _moveHandler, world);
                 return playerService;
             }
         }

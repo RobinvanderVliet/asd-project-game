@@ -27,8 +27,6 @@ namespace Player.ActionHandlers
         private string Game;
         private string playerGuid; 
         private Dictionary<string, int[]> _PlayerLocations  {get; set;}
- 
-        private PlayerDTO _currentPlayer;
         private WorldService _worldService;
 
         public MoveHandler(IClientController clientController)
@@ -56,7 +54,7 @@ namespace Player.ActionHandlers
         {
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
             HandleMove(moveDTO.PlayerPosition);
-            if (packet.Header.PacketType == PacketType.StartGame)
+            if (packet.Header.PacketType == PacketType.Move)
             {
                 Console.WriteLine("Game started in MoveHandler :)");
             } else if (packet.Header.PacketType == PacketType.Move)

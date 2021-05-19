@@ -121,7 +121,7 @@ namespace Session
         private void sendGameSessionDTO(StartGameDto startGameDto)
         {
             var payload = JsonConvert.SerializeObject(startGameDto);
-            _clientController.SendPayload(payload, PacketType.StartGame);
+            _clientController.SendPayload(payload, PacketType.Move);
         }
 
         private void sendSessionDTO(SessionDTO sessionDTO)
