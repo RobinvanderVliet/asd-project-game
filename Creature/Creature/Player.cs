@@ -1,9 +1,11 @@
 ﻿using Creature.Creature.StateMachine;
+using Network;
 
 namespace Creature
 {
     public class Player : ICreature
     {
+        private ClientController _clientController;
         private ICreatureStateMachine _playerStateMachine;
 
         public ICreatureStateMachine CreatureStateMachine
@@ -13,6 +15,7 @@ namespace Creature
 
         public Player(ICreatureStateMachine playerStateMachine)
         {
+            _clientController = new ClientController(new NetworkComponent());
             _playerStateMachine = playerStateMachine;
         }
 
@@ -28,6 +31,11 @@ namespace Creature
         public void Disconnect()
         {
             _playerStateMachine.StartStateMachine();
+        }
+        
+        public void SendChatMessenge(string message)
+        {
+            _clientController.SendPayload(message, PacketType.Chat);
         }
     }
 }
