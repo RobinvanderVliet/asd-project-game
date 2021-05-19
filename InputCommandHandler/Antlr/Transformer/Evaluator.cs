@@ -58,6 +58,15 @@ namespace InputCommandHandler.Antlr.Transformer
                     case Shout:
                         TransformShout((Shout)nodeBody[i]);
                         break;
+                    case CreateSession:
+                        TransformCreateSession((CreateSession)nodeBody[i]);
+                        break;
+                    case JoinSession:
+                        TransformJoinSession((JoinSession)nodeBody[i]);
+                        break;
+                    case RequestSessions:
+                        TransformRequestSessions((RequestSessions)nodeBody[i]);
+                        break;
                 }
         }
 
@@ -119,5 +128,21 @@ namespace InputCommandHandler.Antlr.Transformer
         {
             _playerService.Shout(shout.Message.MessageValue);
         }
+
+        private void TransformCreateSession(CreateSession createSession)
+        {
+            _playerService.CreateSession(createSession.Message.MessageValue);
+        }
+
+        private void TransformJoinSession(JoinSession joinSession)
+        {
+            _playerService.JoinSession(joinSession.Message.MessageValue);
+        }
+
+        private void TransformRequestSessions(RequestSessions requestSessions)
+        {
+            _playerService.RequestSessions();
+        }
+        
     }
 }
