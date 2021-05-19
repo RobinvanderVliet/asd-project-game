@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DataTransfer.DTO.Character;
 
 namespace WorldGeneration
@@ -19,6 +20,11 @@ namespace WorldGeneration
         public void displayWorld()
         {
             _world.DisplayWorld();
+        }
+        
+        public List<MapCharacterDTO> getPlayerList()
+        {
+            return _world.Characters;
         }
     }
 }

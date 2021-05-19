@@ -80,6 +80,7 @@ namespace InputCommandHandler.Antlr.Transformer
                         break;
                     case StartSession:
                         Console.WriteLine("yo hij doet het");
+                        TransformStartSession((StartSession)nodeBody[i]);
                         break;
                 }
         }

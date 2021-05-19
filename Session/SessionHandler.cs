@@ -81,7 +81,7 @@ namespace Session
                 playerY++;
             }
 
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         private void sendSessionDTO(SessionDTO sessionDTO)

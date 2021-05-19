@@ -9,7 +9,7 @@ namespace WorldGeneration
     {
         private Map _map;
         private MapCharacterDTO CurrentPlayer { get; set; }
-        private IList<MapCharacterDTO> Characters { get; set; }
+        public List<MapCharacterDTO> Characters { get; set; }
         private readonly int _viewDistance;
 
         public World(int seed, int viewDistance, MapCharacterDTO currentPlayer)

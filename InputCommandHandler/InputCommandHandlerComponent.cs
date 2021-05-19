@@ -15,10 +15,10 @@ namespace InputCommandHandler
 
         public void HandleSession(ISessionService sessionService)
         {
-            SendCommand(GetCommand(), sessionService);
+            SendCommandSession(GetCommand(), sessionService);
         }
 
-        private static void SendCommand(string commando, ISessionService sessionService)
+        private static void SendCommandSession(string commando, ISessionService sessionService)
         {
             try
             {

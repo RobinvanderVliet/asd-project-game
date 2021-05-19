@@ -96,7 +96,7 @@ namespace ASD_project
                 IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, players, _moveHandler, worldService);
                 ISessionService sessionService = new SessionService(_sessionHandler);
                 
-                inputHandler.HandleSession(sessionService);
+                // inputHandler.HandleSession(sessionService);
                 //
                 // if (Game1Started)
                 // {
@@ -130,10 +130,8 @@ namespace ASD_project
                 
                 while (true) 
                 {
-                    // inputHandler.HandleSession(sessionService);
-Console.WriteLine("test");
-                    if (sessionService.inSession)
-                    {                        
+                    if (sessionService.inGame)
+                    {
                         // Console.WriteLine("create player");
                         // String playername = Console.ReadLine();
                         // if (playername.Length != 0)
@@ -143,11 +141,10 @@ Console.WriteLine("test");
                             inputHandler.HandleCommands(playerService);
                         // }
                     }
-                    
-                    //if sessionService.GameStarted 
-                    // inputHandler.HandleCommands(playerService);
-
-// >>>>>>> sub-task/VDFZEH-385-host-checkt-binnengekomen-bericht-en-verwerkt-dit
+                    else
+                    {
+                        inputHandler.HandleSession(sessionService);
+                    }
                 }
             }
 
