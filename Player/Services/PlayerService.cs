@@ -3,27 +3,38 @@ using System.Collections.Generic;
 using Player.ActionHandlers;
 using Player.DTO;
 using Chat;
+using DataTransfer.DTO.Character;
+using DataTransfer.DTO.Player;
 using Player.Model;
 using Session;
+using WorldGeneration;
+using WorldGeneration.Models;
 
 namespace Player.Services
 {
     public class PlayerService : IPlayerService
     {
         private readonly IPlayerModel _currentPlayer;
-        private List<PlayerDTO> _playerPositions;
+        private List<MapCharacterDTO> _playerPositions;
         private readonly IMoveHandler _moveHandler;
         private readonly IChatHandler _chatHandler;
         //session handler in aparte classe gebruiken, kan maybe blijven staan? Weet niet of die nog gebrukt gaat worden. :(
         private readonly ISessionHandler _sessionHandler;
+        private readonly WorldService _worldService;
 
-        public PlayerService(IPlayerModel currentPlayer, IChatHandler chatHandler, ISessionHandler sessionHandler, List<PlayerDTO> playerPositions, IMoveHandler moveHandler)
+        public PlayerService(IPlayerModel currentPlayer
+            , IChatHandler chatHandler
+            , ISessionHandler sessionHandler
+            , List<MapCharacterDTO> playerPositions
+            , IMoveHandler moveHandler
+            , WorldService worldService)
         {
             _chatHandler = chatHandler;
             _sessionHandler = sessionHandler;
             _currentPlayer = currentPlayer;
             _playerPositions = playerPositions;
             _moveHandler = moveHandler;
+            _worldService = worldService;
         }
 
         public void Attack(string direction)
@@ -161,32 +172,43 @@ namespace Player.Services
                 case "forward":
                 case "up":
                 case "north":
-                    y = -stepsValue;
+                    y = +stepsValue;
                     break;
                 case "backward":
                 case "down":
                 case "south":
-                    y = stepsValue;
+                    y = -stepsValue;
                     break;
             }
 
-           // _currentPlayer.SetNewPlayerPosition(x, y);
-            _moveHandler.SendMove(_currentPlayer);
             
-         
+            _currentPlayer.SetNewPlayerPosition(x, y);
+            //MapCharacterDTO dto = new CharacterDTO(0, 0, _currentPlayer.);
+            // foreach (var player in _playerPositions)
+            // {
+            //     if (player.Name.Equals(_currentPlayer.Name))
+            //     {
+            //         dto = player;
+            //     }
+            // }
+            var dto = new MapCharacterDTO(_currentPlayer.XPosition, _currentPlayer.YPosition, _currentPlayer.Name, _currentPlayer.Symbol);
+
+            _moveHandler.SendMove(dto, _worldService);
+            
 
             // the next line of code should be changed by sending newPosition to a relevant method
             Console.WriteLine("X: " + _currentPlayer.XPosition + ". Y: " + _currentPlayer.YPosition);
         }
         
-        public void ChangePositionOfAPlayer(PlayerDTO player)
+        public void ChangePositionOfAPlayer(PlayerPositionDTO playerPosition)
         {
-            foreach (var playerPosition in _playerPositions)
+            foreach (var player in _playerPositions)
             {
-                if (player.PlayerName == playerPosition.PlayerName)
+                if (player.Name == playerPosition.PlayerName)
                 {
-                    playerPosition.X = player.X;
-                    playerPosition.Y = player.Y;
+                    playerPosition.X = player.XPosition;
+                    playerPosition.Y = player.YPosition;
+                    
                 }
             }
         }

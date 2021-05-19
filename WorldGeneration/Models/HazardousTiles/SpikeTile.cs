@@ -7,12 +7,14 @@ namespace WorldGeneration.Models.HazardousTiles
     {
         public bool IsAccessible { get; set; }
         public string Symbol { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-        public SpikeTile()
+        public int XPosition { get; set; }
+        public int YPosition { get; set; }
+        public SpikeTile(int x, int y)
         {
             Symbol = TileSymbol.SPIKE;
             IsAccessible = true;
+            XPosition = x;
+            YPosition = y;
             Damage = new Random().Next(2, 11);
         }
 

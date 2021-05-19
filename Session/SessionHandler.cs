@@ -1,4 +1,4 @@
-﻿using Network;
+using Network;
 using Newtonsoft.Json;
 using Session.DTO;
 using System;
@@ -121,7 +121,7 @@ namespace Session
         private void sendGameSessionDTO(StartGameDto startGameDto)
         {
             var payload = JsonConvert.SerializeObject(startGameDto);
-            _clientController.SendPayload(payload, PacketType.StartGame);
+            _clientController.SendPayload(payload, PacketType.Session);
         }
 
         private void sendSessionDTO(SessionDTO sessionDTO)

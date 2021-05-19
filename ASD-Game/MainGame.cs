@@ -10,11 +10,12 @@ using Player.Model;
 using Player.Services;
 using System.Collections.Generic;
 using WorldGeneration;
-using Agent.Services;
+using WorldGeneration.Models.Interfaces;
 using Chat;
+using DataTransfer.DTO.Character;
+using DataTransfer.DTO.Player;
 using Session;
 using Player.ActionHandlers;
-using Player.DTO;
 
 namespace ASD_project
 {
@@ -30,7 +31,7 @@ namespace ASD_project
             private readonly IRepository<PlayerPoco> _playerRepository;
         //    private readonly IRepository<MainGamePoco> _mainGameRepository;
             private Boolean GameStarted = true;
-            private List<PlayerDTO> playerPositions;
+            private List<MapCharacterDTO> playerPositions;
 
 
 
@@ -73,24 +74,27 @@ namespace ASD_project
                 // AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
                 // agentConfigurationService.StartConfiguration();
 
-             //   new WorldGeneration.Program();
-
                 //moet later vervangen worden
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
-                IPlayerModel playerModel = new PlayerModel("Name", _inventory, new Bitcoin(20), new RadiationLevel(1));
+                List<MapCharacterDTO> players = new List<MapCharacterDTO>();
+                players.Add(new MapCharacterDTO(3, 0, "henk"));
+                players.Add(new MapCharacterDTO(5, 4, "pietje"));
+                IList<ICharacter> characters = new List<ICharacter>();
+
+                
+                
+                
+                
+                
+                IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
+                MapCharacterDTO playerDTO = new MapCharacterDTO(playerModel.XPosition, playerModel.YPosition,
+                    playerModel.Name, playerModel.Symbol);
+                var worldService = new WorldService(new World(666, 5, playerDTO));
+                worldService.DisplayWorld();
                 //lobby start
-                //networkcomponent heeft lijst van players -> Session heeft lijst van spelers toch?
-                //die players moeten toegevoegd worden aan playerPositions -> Moet de host doen en dit sturen naar de clients wanneer session_start gerund wordt. Kan een list sturen naar alle
-                // clients
-                // playerPositions = new List<PlayerDTO>
-                // {
-                //     new PlayerDTO("Joe", 10, 10),
-                //     new PlayerDTO("Mama", 40, 40)
-                // };
-                
-                
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler,
-                    playerPositions, _moveHandler);
+                //networkcomponent heeft lijst van players
+                //die players moeten toegevoegd worden aan playerPositions
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, players, _moveHandler, worldService);
                 Console.WriteLine("Type input messages below");
 
                 ISessionService sessionService = new SessionService(_sessionHandler);
@@ -123,7 +127,7 @@ namespace ASD_project
                         String playername = Console.ReadLine();
                         if (playername.Length != 0)
                         {
-                            IPlayerService player = createPlayer(playername);
+                            IPlayerService player = createPlayer(playername, worldService);
                             inputHandler.HandleSession(sessionService);
 
                             
@@ -140,11 +144,14 @@ namespace ASD_project
 
             }
 
-            private IPlayerService createPlayer(String name)
+            private IPlayerService createPlayer(String name, WorldService world)
             {
                 IPlayerModel playerModel = new PlayerModel(name, _inventory, new Bitcoin(20), new RadiationLevel(1));
+                
+                
+                playerPositions.Add(new MapCharacterDTO(3, 0, playerModel.Name));
                 IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler,
-                    playerPositions, _moveHandler);
+                    playerPositions, _moveHandler, world);
                 return playerService;
             }
         }

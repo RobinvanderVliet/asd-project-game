@@ -1,3 +1,4 @@
+using System;
 using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 namespace Player.Model
@@ -15,6 +16,9 @@ namespace Player.Model
         public int XPosition { get; set; }
 
         public int YPosition { get; set; }
+        public string Symbol { get; set; }
+        public ConsoleColor Color { get; set; }
+        public int Team { get; set; }
         public void AddHealth(int amount);
 
         public void RemoveHealth(int amount);

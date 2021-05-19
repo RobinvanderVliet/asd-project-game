@@ -1,3 +1,7 @@
+﻿using System.Diagnostics.Eventing.Reader;
+using DataTransfer.DTO.Character;
+using DataTransfer.DTO.Player;
+using Network;
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +13,7 @@ using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Player.DTO;
+using WorldGeneration;
 using Player.Model;
 using Player.Services;
 using Session.DTO;
@@ -22,7 +27,7 @@ namespace Player.ActionHandlers
         private string Game;
         private string playerGuid; 
         private Dictionary<string, int[]> _PlayerLocations  {get; set;}
- 
+        private WorldService _worldService;
 
         public MoveHandler(IClientController clientController)
         {
@@ -30,11 +35,12 @@ namespace Player.ActionHandlers
             _clientController.SubscribeToPacketType(this, PacketType.Move);
         }
 
-        public void SendMove(IPlayerModel player)
+        public void SendMove(MapCharacterDTO player, WorldService worldService)
         {
-            _currentPlayer = player;
-            var playerDTO = new PlayerDTO(player.Name, player.XPosition, player.YPosition, _clientController.GetOriginId());
-            var moveDTO = new MoveDTO(playerDTO);
+            _worldService = worldService;
+            //_currentPlayer = player;
+            //var playerPostionDTO = new PlayerPositionDTO(player.XPosition, player.YPosition, player.Name, player.Team);
+            var moveDTO = new MoveDTO(player);
             SendMoveDTO(moveDTO);
         } 
         
@@ -46,13 +52,22 @@ namespace Player.ActionHandlers
         
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-            if (packet.Header.PacketType == PacketType.StartGame)
+            var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
+            HandleMove(moveDTO.PlayerPosition);
+            
+            if (packet.Header.PacketType == PacketType.Move)
             {
+                
                 Console.WriteLine("Game started in MoveHandler :)");
+                
             } else if (packet.Header.PacketType == PacketType.Move)
             {
-             Console.WriteLine("Moved in moveHandler :)");   
+                
+                Console.WriteLine("Moved in moveHandler :)");   
+             
             }
+            
+            
             //
             // var packetDTO = JsonConvert.DeserializeObject<StartGameDto>(packet.Payload);
             // var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
@@ -139,10 +154,16 @@ namespace Player.ActionHandlers
             
         }
                 
-       private void HandleMove(PlayerDTO player)
+       private void HandleMove(MapCharacterDTO playerPosition)
        {
-
-        
+           _worldService.UpdateCharacterPosition(playerPosition);
+           
+           
+           // worldService.updateArraylistposition(player, x, y);
+           
+           // aanroepen daadwerkelijke functie voor aanpassen x en y in wereld (dus in arraylist)
+           //_player.ChangePositionOfAPlayer(player);
+           // als host dan in globale db aanpassen voor die speler (hostcontoller (HandlePacket))
            
          
        }
