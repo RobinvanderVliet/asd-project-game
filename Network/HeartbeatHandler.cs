@@ -1,13 +1,10 @@
 ﻿using Network.DTO;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Network
 {
-    public class HeartbeatComponent
+    public class HeartbeatHandler : IHeartbeatHandler
     {
 
         private List<HeartbeatDTO> Players;
@@ -19,6 +16,11 @@ namespace Network
             { 
                Players.Add(new HeartbeatDTO(packet.Header.SessionID));
             }
+            else
+            {
+                UpdatePlayer(packet.Header.SessionID);
+                UpdateStatus();
+            }
             
         }
 
@@ -28,14 +30,14 @@ namespace Network
             {
                 if(player.status == 0)
                 {
-                    enablePlayerAgent();
+                    EnablePlayerAgent();
                 }
             }
         }
 
-        private void enablePlayerAgent()
+        private void EnablePlayerAgent()
         {
-
+            Console.WriteLine("Agent is enabled");
         }
 
         private bool PlayerKnown(string sessionID) 
@@ -50,7 +52,7 @@ namespace Network
             return false;
         }
 
-        public void updateStatus()
+        private void UpdateStatus()
         {
             foreach (HeartbeatDTO player in Players)
             {
@@ -61,6 +63,18 @@ namespace Network
                 else
                 {
                     player.status = 1;
+                }
+            }
+            CheckStatus();
+        }
+
+        private void UpdatePlayer(string sessionID)
+        {
+            foreach(HeartbeatDTO player in Players)
+            {
+                if(player.sessionID == sessionID)
+                {
+                    player.time = DateTime.Now;
                 }
             }
         }

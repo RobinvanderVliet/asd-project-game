@@ -42,7 +42,8 @@ namespace Network
         [ExcludeFromCodeCoverage]
         public void CreateHostController()
         {
-            _hostController = new HostController(_networkComponent, this, _sessionId);
+            IHeartbeatHandler _heartbeatHandler = new HeartbeatHandler();
+            _hostController = new HostController(_networkComponent, this, _heartbeatHandler, _sessionId);
         }
 
         [ExcludeFromCodeCoverage]
