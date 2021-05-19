@@ -6,7 +6,7 @@ namespace Network
 {
     public class HeartbeatHandler : IHeartbeatHandler
     {
-        private List<HeartbeatDTO> _players;
+        private List<HeartbeatDTO> _players = new List<HeartbeatDTO>();
         TimeSpan waitTime = TimeSpan.FromMilliseconds(1000);
 
         public void ReceiveHeartbeat(PacketDTO packet)
@@ -41,6 +41,10 @@ namespace Network
 
         private bool PlayerKnown(string sessionID) 
         {
+            if(_players == null)
+            {
+                return false;
+            }
             foreach(HeartbeatDTO player in _players)
             {
                 if(sessionID == player.sessionID)
