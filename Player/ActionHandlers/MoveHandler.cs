@@ -1,4 +1,5 @@
-﻿using Network;
+﻿using System;
+using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Player.DTO;
@@ -34,28 +35,34 @@ namespace Player.ActionHandlers
         
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
+            //Check welk actie het is:
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
+            
+            //check if pakketje is host: Zo ja Controlleer of het kan zert dan in database en stuur naar alle clients een bericht
+            
+           
+            //check if pakketje is client: Zo ja voer het uit. 
             HandleMove(moveDTO.Player);
             return new HandlerResponseDTO(SendAction.Ignore, null);
+        }
+
+        private void InsertToDatabase(MoveDTO moveDto)
+        {
+           //Get database
+           //Check database
+           //Insert Database
+           //if inserted then send to all a message
+           
+            
+            
         }
                 
        private void HandleMove(PlayerDTO player)
        {
-           if (player.PlayerName.Equals(_currentPlayer.Name))
-           {
-               
-           }
-           // aanroepen daadwerkelijke functie voor aanpassen x en y in wereld (dus in arraylist)
-           //_player.ChangePositionOfAPlayer(player);
-           // als host dan in globale db aanpassen voor die speler (hostcontoller (HandlePacket))
+
+        
            
-           // als speler waarvan positie gewijzigd is dan in eigen db aanpassen
-           //if (player.PlayerName == _player.//playerName
-              //                                          )
-           //{
-               // ja: dan aanpassen in mijn (_player) db
-               //_player.setData(int x, int y);
-           //}
+         
        }
         
     }

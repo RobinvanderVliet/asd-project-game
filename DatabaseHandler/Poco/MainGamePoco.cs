@@ -8,5 +8,6 @@ namespace DatabaseHandler.Poco
     public class MainGamePoco
     {
         [BsonId] public Guid MainGameGuid { get; set; }
+        public String GameName { get; set; }
     }
 }

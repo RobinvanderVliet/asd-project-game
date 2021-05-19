@@ -49,10 +49,6 @@ namespace Player.Services
         
         public void ChangePositionOfAPlayer(PlayerDTO player);
         
-        public void CreateSession(string messageValue);
-        
-        public void JoinSession(string messageValue);
-        
-        public void RequestSessions();
+       
     }
 }

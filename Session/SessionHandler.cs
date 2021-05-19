@@ -19,7 +19,9 @@ namespace Session
             _clientController.SubscribeToPacketType(this, PacketType.Session);
         }
 
-        public void JoinSession(string sessionId)
+
+
+        public Boolean JoinSession(string sessionId)
         {
             if (!_availableSessions.TryGetValue(sessionId, out PacketDTO packetDTO))
             {
@@ -37,10 +39,12 @@ namespace Session
                 sessionDTO.ClientIds = new List<string>();
                 sessionDTO.ClientIds.Add(_clientController.GetOriginId());
                 sendSessionDTO(sessionDTO);
+                Console.Out.WriteLine("In session");
             }
+            return _session.InSession;
         }
 
-        public void CreateSession(string sessionName)
+        public Boolean CreateSession(string sessionName)
         {
             _session = new Session(sessionName);
             _session.GenerateSessionId();
@@ -48,6 +52,9 @@ namespace Session
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
             Console.Out.WriteLine("Created session with the name: " + _session.Name);
+            _session.InSession = true;
+
+            return _session.InSession;
         }
 
         public void RequestSessions()
@@ -64,6 +71,18 @@ namespace Session
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
+            // If packet.header.target == Host
+            // If sessionType.StartSession
+            // startSession -> Get list of all players -> Give x and y cordinats.
+            // Create database
+            // Insert into database
+            // Generate Worldseed
+            // Put in Database
+            
+            // Send list of player location to all clients 
+            // Send worldseed to players
+            // if client has worldseed and list of players start game.
+            
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
             if (packet.Header.Target == "client" || packet.Header.Target == "host")
             {

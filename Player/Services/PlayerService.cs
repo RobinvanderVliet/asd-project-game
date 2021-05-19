@@ -14,6 +14,7 @@ namespace Player.Services
         private List<PlayerDTO> _playerPositions;
         private readonly IMoveHandler _moveHandler;
         private readonly IChatHandler _chatHandler;
+        //session handler in aparte classe gebruiken, kan maybe blijven staan? Weet niet of die nog gebrukt gaat worden. :(
         private readonly ISessionHandler _sessionHandler;
 
         public PlayerService(IPlayerModel currentPlayer, IChatHandler chatHandler, ISessionHandler sessionHandler, List<PlayerDTO> playerPositions, IMoveHandler moveHandler)
@@ -171,6 +172,8 @@ namespace Player.Services
 
            // _currentPlayer.SetNewPlayerPosition(x, y);
             _moveHandler.SendMove(_currentPlayer);
+            
+         
 
             // the next line of code should be changed by sending newPosition to a relevant method
             Console.WriteLine("X: " + _currentPlayer.XPosition + ". Y: " + _currentPlayer.YPosition);
@@ -188,19 +191,6 @@ namespace Player.Services
             }
         }
         
-        public void CreateSession(string messageValue)
-        {
-            _sessionHandler.CreateSession(messageValue);
-        }
-
-        public void JoinSession(string messageValue)
-        {
-            _sessionHandler.JoinSession(messageValue);
-        }
-
-        public void RequestSessions()
-        {
-            _sessionHandler.RequestSessions();
-        }
+     
     }
 }
