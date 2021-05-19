@@ -43,7 +43,6 @@ namespace Creature.Tests
         {
             // Arrange ---------
             Stack<Node> actualPath = new Stack<Node>();
-            Stack<Node> path = new Stack<Node>();
             actualPath = _pathfinder.Object.FindPath(_startPos, _endPos);
             
             // Act -------------
