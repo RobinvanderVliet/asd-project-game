@@ -6,6 +6,6 @@
         public void CreateSession(string sessionName);
         public void RequestSessions();
 
-        public void SendPing();
+        //public void SendPing();
     }
 }

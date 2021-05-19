@@ -192,7 +192,7 @@ namespace Session
             }
         }
 
-        public void SendPing()
+        private void SendPing()
         {
             Console.WriteLine("ping"); //TODO verwijderen
             SessionDTO sessionDTO = new SessionDTO(SessionType.SendPing);
@@ -237,6 +237,16 @@ namespace Session
         public bool getHostActive()
         {
             return _hostActive;
+        }
+        
+        public void setHostActive(Boolean boolean)
+        {
+            _hostActive = boolean;
+        }
+
+        public void setHostPingTimer(Timer timer)
+        {
+            this._hostPingTimer = timer;
         }
     }
 }
