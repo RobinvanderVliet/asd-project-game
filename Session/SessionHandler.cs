@@ -39,7 +39,7 @@ namespace Session
                 sessionDTO.ClientIds = new List<string>();
                 sessionDTO.ClientIds.Add(_clientController.GetOriginId());
                 sendSessionDTO(sessionDTO);
-                Console.Out.WriteLine("In session");
+                _session.InSession = true;
             }
             return _session.InSession;
         }
@@ -51,8 +51,9 @@ namespace Session
             _session.AddClient(_clientController.GetOriginId());
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
-            Console.Out.WriteLine("Created session with the name: " + _session.Name);
             _session.InSession = true;
+            
+            Console.Out.WriteLine("Created session with the name: " + _session.Name);
 
             return _session.InSession;
         }

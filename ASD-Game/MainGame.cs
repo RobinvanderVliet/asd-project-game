@@ -28,13 +28,13 @@ namespace ASD_project
             private readonly ISessionHandler _sessionHandler;
             private readonly IMoveHandler _moveHandler;
             private readonly IRepository<PlayerPoco> _playerRepository;
-            private readonly IRepository<MainGamePoco> _mainGameRepository;
+        //    private readonly IRepository<MainGamePoco> _mainGameRepository;
             private Boolean GameStarted = true;
 
             
 
             public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler,
-                ISessionHandler sessionHandler, IMoveHandler moveHandler, IRepository<PlayerPoco> playerRepository, IRepository<MainGamePoco> mainGameRepository)
+                ISessionHandler sessionHandler, IMoveHandler moveHandler, IRepository<PlayerPoco> playerRepository)
             {
                 this._log = log;
                 _inventory = inventory;
@@ -42,27 +42,27 @@ namespace ASD_project
                 _sessionHandler = sessionHandler;
                 _moveHandler = moveHandler;
                 _playerRepository = playerRepository;
-                _mainGameRepository = mainGameRepository;
+              //  _mainGameRepository = mainGameRepository;
             }
 
         //needs to be in GameStartupClass? From Session to Game
-            public void SetupDataBaseForGame1()
-            {
-                var tmpServicePlayerPoco = new Services<PlayerPoco>(_playerRepository);
-                var tmpServiceMainGamePoco = new Services<MainGamePoco>(_mainGameRepository);
-                
-                var tmpGuidGame = Guid.NewGuid();
-                var tmpObject = new MainGamePoco {MainGameGuid = tmpGuidGame, GameName = "Game1"};
-                var tmpPlayer = new PlayerPoco {PlayerGuid = Guid.NewGuid(), GameGuid = tmpObject, PlayerName = "Player1"};
-                var tmpPlayer2 = new PlayerPoco {PlayerGuid = Guid.NewGuid(), GameGuid = tmpObject, PlayerName = "Player2"};
-                
-                tmpServiceMainGamePoco.CreateAsync(tmpObject);
-                tmpServicePlayerPoco.CreateAsync(tmpPlayer);
-                tmpServicePlayerPoco.CreateAsync(tmpPlayer2);
-           //     var result1 = tmpServicePlayerPoco.GetAllAsync();
-              //  Game1Started = true; 
-
-            }
+           //  public void SetupDataBaseForGame1()
+           //  {
+           //      var tmpServicePlayerPoco = new Services<PlayerPoco>(_playerRepository);
+           //      var tmpServiceMainGamePoco = new Services<MainGamePoco>(_mainGameRepository);
+           //      
+           //      var tmpGuidGame = Guid.NewGuid();
+           //      var tmpObject = new MainGamePoco {MainGameGuid = tmpGuidGame, GameName = "Game1"};
+           //      var tmpPlayer = new PlayerPoco {PlayerGuid = Guid.NewGuid(), GameGuid = tmpObject, PlayerName = "Player1"};
+           //      var tmpPlayer2 = new PlayerPoco {PlayerGuid = Guid.NewGuid(), GameGuid = tmpObject, PlayerName = "Player2"};
+           //      
+           //      tmpServiceMainGamePoco.CreateAsync(tmpObject);
+           //      tmpServicePlayerPoco.CreateAsync(tmpPlayer);
+           //      tmpServicePlayerPoco.CreateAsync(tmpPlayer2);
+           // //     var result1 = tmpServicePlayerPoco.GetAllAsync();
+           //    //  Game1Started = true; 
+           //
+           //  }
 
             public void Run()
             {
@@ -134,6 +134,7 @@ namespace ASD_project
                     if (sessionService.InSession())
                     {
                         //create player
+                        Console.WriteLine("In session Main");
                         
                         inputHandler.HandleCommands(playerService);
                     }

@@ -5,7 +5,7 @@ namespace Session
     public class SessionService : ISessionService
     {
         private ISessionHandler _sessionHandler;
-        public Boolean inSession = false; 
+        public Boolean inSession = false;
 
         public SessionService(ISessionHandler sessionHandler)
         {
@@ -15,12 +15,14 @@ namespace Session
         
         public void CreateSession(string messageValue)
         {
-            _sessionHandler.CreateSession(messageValue);
+            inSession = _sessionHandler.CreateSession(messageValue);
+            
+            Console.WriteLine(inSession);
         }
 
         public void JoinSession(string messageValue)
         {
-            _sessionHandler.JoinSession(messageValue);
+           inSession = _sessionHandler.JoinSession(messageValue);
         }
         
         public void RequestSessions()
@@ -35,7 +37,7 @@ namespace Session
 
         public Boolean InSession()
         {
-            return _sessionHandler.InSession();
+            return inSession;
         }
 
     }
