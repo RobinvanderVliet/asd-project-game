@@ -42,6 +42,13 @@ namespace Player.ActionHandlers
             else if (packet.Header.Target == "client")
             {
                 // Adjust playerService Arraylist.
+                //moet op id vergeleken worden
+                if (moveDTO.Player.PlayerName == _currentPlayer.GetName())
+                {
+                    CreateAsync(moveDTO.Player);
+                }
+                
+                //moet aangepast worden
                 _currentPlayer.ChangePositionOfAPlayer(moveDTO.Player);
             }
 

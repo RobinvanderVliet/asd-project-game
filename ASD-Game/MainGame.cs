@@ -54,8 +54,7 @@ namespace ASD_project
                     new PlayerDTO("Joe", 10, 10),
                     new PlayerDTO("Mama", 40, 40)
                 };
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler,
-                    playerPositions, _moveHandler);
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, playerPositions, _moveHandler);
                 Console.WriteLine("Type input messages below");
                 while (true) // moet vervangen worden met variabele: isQuit 
                 {
