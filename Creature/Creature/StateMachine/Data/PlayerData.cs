@@ -1,4 +1,5 @@
-﻿using Creature.World;
+﻿using Creature.Creature.StateMachine.CustomRuleSet;
+using Creature.World;
 using System.Numerics;
 
 namespace Creature.Creature.StateMachine.Data
@@ -10,6 +11,7 @@ namespace Creature.Creature.StateMachine.Data
         private int _damage;
         private int _visionRange;
         private IWorld _world;
+        private RuleSet _ruleSet;
 
         public bool IsAlive { get => _health > 0; }
 
@@ -43,13 +45,20 @@ namespace Creature.Creature.StateMachine.Data
             set => _world = value;
         }
 
-        public PlayerData(Vector2 position, double health, int damage, int visionRange, IWorld world)
+        public RuleSet RuleSet
+        {
+            get => _ruleSet;
+            set => _ruleSet = value;
+        }
+
+        public PlayerData(Vector2 position, double health, int damage, int visionRange, IWorld world, RuleSet ruleSet)
         {
             _position = position;
             _health = health;
             _damage = damage;
             _visionRange = visionRange;
             _world = world;
+            _ruleSet = ruleSet;
         }
     }
 }

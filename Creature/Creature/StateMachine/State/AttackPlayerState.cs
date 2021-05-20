@@ -1,4 +1,5 @@
-﻿using Creature.Creature.StateMachine.Data;
+﻿using Creature.Creature.StateMachine.CustomRuleSet;
+using Creature.Creature.StateMachine.Data;
 using System;
 
 namespace Creature.Creature.StateMachine.State
@@ -17,6 +18,9 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do(ICreatureData creatureData)
         {
+            ICreatureData playerData = creatureData;
+            playerData.Health -= playerData.
+
             throw new NotImplementedException();
         }
     }

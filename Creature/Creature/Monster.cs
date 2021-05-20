@@ -13,9 +13,9 @@ namespace Creature
             get => _monsterStateMachine;
         }
 
-        public Monster(MonsterData monsterData, RuleSet ruleSet)
+        public Monster(MonsterData monsterData)
         {
-            _monsterStateMachine = new(monsterData, ruleSet);
+            _monsterStateMachine = new(monsterData);
             _monsterStateMachine.StartStateMachine();
         }
 
