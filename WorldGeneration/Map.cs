@@ -60,26 +60,6 @@ namespace WorldGeneration
             }
         }
 
-        // cleanup function to forget chunks out of loading range
-        private void ForgetUnloadedChunks()
-        {
-            /*
-            foreach (var loadedChunk in _chunks)
-            {
-                if (!_chunksWithinLoadingRange.Exists(
-                    chunkWithinLoadingRange =>
-                        chunkWithinLoadingRange[0] == loadedChunk.X
-                        && chunkWithinLoadingRange[1] == loadedChunk.Y))
-                {
-                    if (!_chunks.Remove(loadedChunk))
-                    {
-                        throw new Exception("Failed to remove chunk from loaded chunks");
-                    }
-                }
-            }
-            */
-        }
-
         private List<int[]> CalculateChunksToLoad(int playerX, int playerY, int viewDistance)
         {
             // viewDistance * 2 is to get a full screen
