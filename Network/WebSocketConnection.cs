@@ -1,36 +1,23 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using WebSocketSharp;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using System.IO;
 
 namespace Network
 {
-    public class WebSocketConnection
+    public class WebSocketConnection : IWebSocketConnection
     {
         private WebSocket _websocket;
         private WebSocketConnectionConfig _webSocketConnectionConfig;
-        public WebSocketConnection()
+        private IPacketListener _packetListener;
+
+        public WebSocketConnection(IPacketListener packetListener)
         {
             LoadConfigVariables();
             _websocket = new WebSocket($"ws://{_webSocketConnectionConfig.Ip}:{_webSocketConnectionConfig.Port}/{_webSocketConnectionConfig.Path}");
+            _packetListener = packetListener;
             AddBehaviorToWebsocket();
-            try
-            {
-                _websocket.Connect();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
 
-        public WebSocketConnection(WebSocket webSocket)
-        {
-            this._websocket = webSocket;
-            AddBehaviorToWebsocket();
             try
             {
                 _websocket.Connect();
@@ -67,14 +54,8 @@ namespace Network
 
         private void OnMessage(object sender, MessageEventArgs e)
         {
-            ObjectPayloadDTO objectPayloadDTO = JsonConvert.DeserializeObject<ObjectPayloadDTO>(e.Data);
-            Console.WriteLine("Received: " + objectPayloadDTO.Header.Target);
-            Console.WriteLine("Received: " + objectPayloadDTO.Payload);
-
-            if (ObjectPayloadHandler.CheckHeader(objectPayloadDTO.Header))
-            {
-                ObjectPayloadHandler.CheckActionType(objectPayloadDTO);
-            }
+            PacketDTO packet = JsonConvert.DeserializeObject<PacketDTO>(e.Data);
+            _packetListener.ReceivePacket(packet);
         }
 
         public void Send(string message)
@@ -93,7 +74,8 @@ namespace Network
         {
             var config = new ConfigurationBuilder().SetBasePath(AppDomain.CurrentDomain.BaseDirectory).AddJsonFile("appsettings.json").Build();
             var section = config.GetSection(nameof(WebSocketConnectionConfig));
-            _webSocketConnectionConfig = section.Get<WebSocketConnectionConfig>();
+            var result = section.Get<WebSocketConnectionConfig>();
+            _webSocketConnectionConfig = result;
         }
     }
 }
