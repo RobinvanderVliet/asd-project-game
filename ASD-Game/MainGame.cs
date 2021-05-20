@@ -35,10 +35,11 @@ namespace ASD_project
             private Boolean GameStarted = true;
             private List<MapCharacterDTO> playerPositions;
             private readonly IClientController _clientController;
+            private readonly IWorldService _worldService;
 
 
             public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler,
-                ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IRepository<PlayerPoco> playerRepository, IClientController clientController)
+                ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IRepository<PlayerPoco> playerRepository, IClientController clientController, IWorldService worldService)
             {
                 this._log = log;
                 _inventory = inventory;
@@ -48,6 +49,7 @@ namespace ASD_project
                 _playerRepository = playerRepository;
                 _gameSessionHandler = gameSessionHandler;
                 _clientController = clientController;
+                _worldService = worldService;
                 //  _mainGameRepository = mainGameRepository;
             }
 
@@ -81,7 +83,7 @@ namespace ASD_project
                 //moet later vervangen worden
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
                 IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, _moveHandler, _clientController);
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, _moveHandler, _clientController, _worldService);
                 Console.WriteLine("Type input messages below");
 
                 ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);

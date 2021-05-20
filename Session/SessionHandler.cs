@@ -99,8 +99,8 @@ namespace Session
             List<string> allClients = _session.GetAllClients();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
 
-            int playerX = 26;
-            int playerY = 11;
+            int playerX = 26; // spawn position
+            int playerY = 11; // spawn position
             foreach (string element in allClients)
             {
                 int[] playerPosition = new int[2];
@@ -111,12 +111,12 @@ namespace Session
                     {PlayerGUID = element, GameGUID = gameGuid, PositionX = playerX, PositionY = playerY};
                 tmpServicePlayer.CreateAsync(tmpPlayer);
 
-                playerX+=2;
-                playerY+=2;
+                playerX+=2; // spawn position + 2 each client
+                playerY+=2; // spawn position + 2 each client
             }
 
             StartGameDto startGameDto = new StartGameDto();
-            startGameDto.GameName = gameGuid.ToString();
+            startGameDto.GameGuid = gameGuid.ToString();
             startGameDto.PlayerLocations = players;
 
             return startGameDto;

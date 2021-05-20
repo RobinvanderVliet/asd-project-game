@@ -10,5 +10,6 @@ namespace WorldGeneration
         void DisplayWorld();
         void DeleteMap();
         void GenerateWorld(int seed);
+        MapCharacterDTO getCurrentCharacterPositions();
     }
 }

@@ -157,7 +157,6 @@ namespace Player.ActionHandlers
                 
        private void HandleMove(MapCharacterDTO playerPosition) // hiervan move DTO maken
        {
-           Console.WriteLine("in de move actie");
            _worldService.UpdateCharacterPosition(playerPosition);
            _worldService.DisplayWorld();
            

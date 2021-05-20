@@ -40,7 +40,6 @@ namespace Session
         public void StartSession()
         {
             _gameSessionHandler.SendGameSession(_sessionHandler);
-            // inGame = true; 
         }
 
     }

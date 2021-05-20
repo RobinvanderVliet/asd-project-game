@@ -313,18 +313,5 @@ namespace Player.Tests
             Assert.AreEqual(1, _sut.RadiationLevel.Level);
             _mockedRadiationLevel.Verify(mockedRadiationLevel => mockedRadiationLevel.Level, Times.Once);
         }
-        
-        [Test]
-        public void Test_SetNewPlayerPosition_SetsNewPlayerPosition()
-        {
-            int[] test = {0, 5};
-            int expectedX = 26;
-            int expectedY = 16;
-            
-            _sut.SetNewPlayerPosition(0, 5);
-            
-            Assert.AreEqual(expectedX, _sut.XPosition);
-            Assert.AreEqual(expectedY, _sut.YPosition);
-        }
     }
 }
