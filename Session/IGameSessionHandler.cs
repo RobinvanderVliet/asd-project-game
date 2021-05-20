@@ -4,7 +4,6 @@ namespace Session
 {
     public interface IGameSessionHandler
     {
-        public Boolean InGame { get; set; }
-        public void SendGameSession(string messageValue, ISessionHandler sessionHandler);
+        public void SendGameSession(ISessionHandler sessionHandler);
     }
 }
