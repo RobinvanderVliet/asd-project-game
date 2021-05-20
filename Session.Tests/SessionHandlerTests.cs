@@ -349,7 +349,7 @@ namespace Session.Tests
         public void Test_HandlePacket_RequestHeartbeat_Returns_Catch()
         {
             // Arrange ---------
-            SessionDTO sessionDTO = new SessionDTO(SessionType.RequestHeartbeat);
+            SessionDTO sessionDTO = new SessionDTO(SessionType.SendHeartbeat);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
             PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();

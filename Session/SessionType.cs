@@ -5,6 +5,6 @@ namespace Session
         RequestSessions,
         RequestSessionsResponse,
         RequestToJoinSession,
-        RequestHeartbeat
+        SendHeartbeat
     }
 }
