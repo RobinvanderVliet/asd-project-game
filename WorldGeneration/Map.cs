@@ -4,6 +4,7 @@ using System.Linq;
 using DataTransfer.DTO.Character;
 using WorldGeneration.Models;
 using WorldGeneration.Models.Interfaces;
+using WorldGeneration.Services;
 
 namespace WorldGeneration
 {
@@ -13,6 +14,8 @@ namespace WorldGeneration
         private readonly int _seed;
         private List<Chunk> _chunks; // NOT readonly, don't listen to the compiler
         private readonly DatabaseFunctions.Database _db;
+
+        private ChunkService _chunkService;
         private List<int[]> _chunksWithinLoadingRange;
 
         private INoiseMapGenerator _noiseMapGenerator;
@@ -28,7 +31,7 @@ namespace WorldGeneration
             _db = db;
             _chunks = new List<Chunk>();
             _seed = seed;
-            _noiseMapGenerator = noiseMapGenerator;
+            _noiseMapGenerator = noiseMapGenerator;            
         }
 
         // checks if there are new chunks that have to be loaded
@@ -164,8 +167,8 @@ namespace WorldGeneration
         // find a LOADED tile by the coordinates
         public ITile GetLoadedTileByXAndY(int x, int y)
         {
-            var tile = GetChunkForTileXAndY(x, y).GetTileByWorldCoordinates(x, y);
-            return tile;
+            _chunkService = new ChunkService(GetChunkForTileXAndY(x, y));
+            return _chunkService.GetTileByWorldCoordinates(x, y);
         }
     }
 }

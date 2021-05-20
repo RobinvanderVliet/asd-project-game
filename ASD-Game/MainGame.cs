@@ -113,7 +113,6 @@ namespace ASD_project
                         // IPlayerService player = createPlayer(playername);
                         Console.WriteLine("Type input messages below");
                         inputHandler.HandleCommands(playerService, sessionService);
-                  
                 }
             }
 
