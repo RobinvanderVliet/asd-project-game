@@ -31,10 +31,10 @@ namespace WorldGeneration.Tests
             var seed = 5;
             
 
-            var map1 = new ITile[] {new GrassTile(), new GrassTile(), new GrassTile(), new GrassTile()};
-            var map2 = new ITile[] {new StreetTile(), new StreetTile(), new StreetTile(), new StreetTile()};
-            var map3 = new ITile[] {new WaterTile(), new WaterTile(), new WaterTile(), new WaterTile()};
-            var map4 = new ITile[] {new DirtTile(), new DirtTile(), new DirtTile(), new DirtTile()};
+            var map1 = new ITile[] {new GrassTile(1,1), new GrassTile(1,2), new GrassTile(1,3), new GrassTile(1,4)};
+            var map2 = new ITile[] {new StreetTile(1,1), new StreetTile(1,2), new StreetTile(1,3), new StreetTile(1,4)};
+            var map3 = new ITile[] {new WaterTile(1,1), new WaterTile(1,2), new WaterTile(1,3), new WaterTile(1,4)};
+            var map4 = new ITile[] {new DirtTile(1,1), new DirtTile(1,2), new DirtTile(1,3), new DirtTile(1,4)};
             var map5 = new ITile[] {new ChestTile(), new ChestTile(), new ChestTile(), new ChestTile()};
             var chunk1 = new Chunk(0, 0, map1, chunkSize);
             var chunk2 = new Chunk(-1, 0, map2, chunkSize);

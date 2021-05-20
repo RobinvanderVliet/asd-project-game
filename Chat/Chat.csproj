@@ -13,13 +13,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Reference Include="Player, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\Player\bin\Debug\net5.0\Player.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\Player\Player.csproj" />
+    <ProjectReference Include="..\DataTransfer\DataTransfer.csproj" />
+    <ProjectReference Include="..\Network\Network.csproj" />
   </ItemGroup>
 
 </Project>

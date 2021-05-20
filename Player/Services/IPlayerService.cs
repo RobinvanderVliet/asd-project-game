@@ -1,4 +1,6 @@
-﻿using Player.Model;
+﻿using DataTransfer.DTO.Player;
+using Player.DTO;
+using Player.Model;
 
 namespace Player.Services
 {
@@ -9,15 +11,15 @@ namespace Player.Services
         public void ExitCurrentGame();
 
         public void Pause();
-        
+
         public void Resume();
-        
+
         public void ReplaceByAgent();
 
         public void Say(string messageValue);
 
         public void Shout(string messageValue);
-        
+
         public void AddHealth(int amount);
 
         public void RemoveHealth(int amount);
@@ -39,12 +41,15 @@ namespace Player.Services
         public void RemoveBitcoins(int amount);
 
         public int GetAttackDamage();
-        
+
         public void PickupItem();
 
         public void DropItem(string itemNameValue);
-        
-        public void HandleDirection(string directionValue, int stepsValue);
 
+        public void HandleDirection(string directionValue, int stepsValue);
+        
+        public void ChangePositionOfAPlayer(PlayerPositionDTO playerPosition);
+        
+       
     }
 }

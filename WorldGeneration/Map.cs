@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
+using DataTransfer.DTO.Character;
 using WorldGeneration.Models;
 using WorldGeneration.Models.Interfaces;
 
@@ -11,7 +11,7 @@ namespace WorldGeneration
     {
         private readonly int _chunkSize;
         private readonly int _seed;
-        private List<Chunk> _chunks;// NOT readonly, don't listen to the compiler
+        private List<Chunk> _chunks; // NOT readonly, don't listen to the compiler
         private readonly DatabaseFunctions.Database _db;
         private List<int[]> _chunksWithinLoadingRange;
 
@@ -51,6 +51,7 @@ namespace WorldGeneration
         // cleanup function to forget chunks out of loading range
         private void ForgetUnloadedChunks()
         {
+            /*
             foreach (var loadedChunk in _chunks)
             {
                 if (!_chunksWithinLoadingRange.Exists(
@@ -64,6 +65,7 @@ namespace WorldGeneration
                     }
                 }
             }
+            */
         }
 
         private List<int[]> CalculateChunksToLoad(int playerX, int playerY, int viewDistance)
@@ -89,39 +91,47 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
 
-        public void DisplayMap(IPlayer player, int viewDistance, IList<IPlayer> players)
+        public void DisplayMap(MapCharacterDTO currentPlayer, int viewDistance, IList<MapCharacterDTO> characters)
         {
-            var playerX = player.PlayerX;
-            var playerY = player.PlayerY;
+            var playerX = currentPlayer.XPosition;
+            var playerY = currentPlayer.YPosition;
             LoadArea(playerX, playerY, viewDistance);
             for (var y = (playerY + viewDistance); y > ((playerY + viewDistance) - (viewDistance * 2) -1); y--)
             {
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
                 {
                     var tile = GetLoadedTileByXAndY(x, y);
-                    Console.Write(GetDisplaySymbol(player, tile, players));
+                    Console.Write($" {GetDisplaySymbol(currentPlayer, tile, characters)}");
                 }
                 Console.WriteLine("");
             }
         }
         
-        private string GetDisplaySymbol(IPlayer currentPlayer, ITile tile, IList<IPlayer> players)
+        private string GetDisplaySymbol(MapCharacterDTO currentPlayer, ITile tile, IList<MapCharacterDTO> characters)
         {
-            if (IsPlayerOnTile(tile, currentPlayer))
+            bool currentPlayerOnTile = IsPlayerOnTile(tile, currentPlayer);
+            if (currentPlayerOnTile)
             {
-                return " " + currentPlayer.Symbol;
+                return currentPlayer.Symbol;
             }
-
-            foreach (var playerOnTile in players.Where(player => player.PlayerX == tile.X && player.PlayerY - 1 == tile.Y))
+            foreach (var characterOnTile in characters.Where(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition))
             {
-                return " " + playerOnTile.Symbol;
+                if (characterOnTile.Symbol == CharacterSymbol.FRIENDLY_PLAYER)
+                {
+                    if (characterOnTile.Team != currentPlayer.Team || characterOnTile.Team == 0)
+                    {
+                        return CharacterSymbol.ENEMY_PLAYER;
+                    }
+                    return CharacterSymbol.FRIENDLY_PLAYER;
+                }
+                return characterOnTile.Symbol;
             }
-            
-            return " " + tile.Symbol;
+            return tile.Symbol;
         }
-        private bool IsPlayerOnTile(ITile tile, IPlayer player)
+
+        private bool IsPlayerOnTile(ITile tile, MapCharacterDTO player)
         {
-            return tile.X == player.PlayerX && tile.Y == player.PlayerY - 1;
+            return tile.XPosition == player.XPosition && tile.YPosition == player.YPosition - 1;
         }
 
         private Chunk GenerateNewChunk(int chunkX, int chunkY)

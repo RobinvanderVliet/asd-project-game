@@ -1,16 +1,38 @@
 ﻿using System;
+using System.Collections.Generic;
+using Player.ActionHandlers;
+using Player.DTO;
+using Chat;
+using DataTransfer.DTO.Character;
+using DataTransfer.DTO.Player;
 using Player.Model;
+using Session;
+using WorldGeneration;
+using WorldGeneration.Models;
 
 namespace Player.Services
 {
     public class PlayerService : IPlayerService
     {
-        private readonly IPlayerModel _playerModel;
-        private const int DEFAULT_STEPS = 0;
+        private readonly IPlayerModel _currentPlayer;
+        private List<MapCharacterDTO> _playerPositions;
+        private readonly IMoveHandler _moveHandler;
+        private readonly IChatHandler _chatHandler;
+        //session handler in aparte classe gebruiken, kan maybe blijven staan? Weet niet of die nog gebrukt gaat worden. :(
+        private readonly ISessionHandler _sessionHandler;
+        private readonly WorldService _worldService;
 
-        public PlayerService(IPlayerModel playerModel)
+        public PlayerService(IPlayerModel currentPlayer
+            , IChatHandler chatHandler
+            , ISessionHandler sessionHandler
+            , List<MapCharacterDTO> playerPositions
+            , IMoveHandler moveHandler)
         {
-            _playerModel = playerModel;
+            _chatHandler = chatHandler;
+            _sessionHandler = sessionHandler;
+            _currentPlayer = currentPlayer;
+            _playerPositions = playerPositions;
+            _moveHandler = moveHandler;
         }
 
         public void Attack(string direction)
@@ -55,122 +77,140 @@ namespace Player.Services
 
         public void Say(string messageValue)
         {
+            _chatHandler.SendSay(messageValue);
             //code for chat with other players in team chat
-            Console.WriteLine(_playerModel.Name + " sent message: " + messageValue);
+            //Console.WriteLine(_currentPlayer.Name + " sent message: " + messageValue);
         }
 
         public void Shout(string messageValue)
         {
             //code for chat with other players in general chat
-            Console.WriteLine(_playerModel.Name + " sent message: " + messageValue);
+            Console.WriteLine(_currentPlayer.Name + " sent message: " + messageValue);
         }
-        
+
         public void AddHealth(int amount)
         {
-            _playerModel.AddHealth(amount);
+            _currentPlayer.AddHealth(amount);
         }
 
         public void RemoveHealth(int amount)
         {
-            _playerModel.RemoveHealth(amount);
+            _currentPlayer.RemoveHealth(amount);
         }
 
         public void AddStamina(int amount)
         {
-            _playerModel.AddStamina(amount);
+            _currentPlayer.AddStamina(amount);
         }
 
         public void RemoveStamina(int amount)
         {
-            _playerModel.RemoveStamina(amount);
+            _currentPlayer.RemoveStamina(amount);
         }
 
         public IItem GetItem(string itemName)
         {
-            return _playerModel.GetItem(itemName);
+            return _currentPlayer.GetItem(itemName);
         }
 
         public void AddInventoryItem(IItem item)
         {
-            _playerModel.AddInventoryItem(item);
+            _currentPlayer.AddInventoryItem(item);
         }
 
         public void RemoveInventoryItem(IItem item)
         {
-            _playerModel.RemoveInventoryItem(item);
+            _currentPlayer.RemoveInventoryItem(item);
         }
 
         public void EmptyInventory()
         {
-            _playerModel.EmptyInventory();
+            _currentPlayer.EmptyInventory();
         }
 
         public void AddBitcoins(int amount)
         {
-            _playerModel.AddBitcoins(amount);
+            _currentPlayer.AddBitcoins(amount);
         }
 
         public void RemoveBitcoins(int amount)
         {
-            _playerModel.RemoveBitcoins(amount);
+            _currentPlayer.RemoveBitcoins(amount);
         }
 
         public int GetAttackDamage()
         {
-            return _playerModel.GetAttackDamage();
+            return _currentPlayer.GetAttackDamage();
         }
-        
+
         public void PickupItem()
         {
-            _playerModel.PickupItem();
+            _currentPlayer.PickupItem();
         }
 
         public void DropItem(string itemNameValue)
         {
-            _playerModel.DropItem(itemNameValue);
+            _currentPlayer.DropItem(itemNameValue);
         }
-        
+
         public void HandleDirection(string directionValue, int stepsValue)
         {
-            var newMovement = new int[2];
+            int x = 0;
+            int y = 0;
             switch (directionValue)
             {
                 case "right":
                 case "east":
-                    newMovement[0] = stepsValue;
-                    newMovement[1] = DEFAULT_STEPS;
+                    x = stepsValue;
                     break;
                 case "left":
                 case "west":
-                    newMovement[0] = -stepsValue;
-                    newMovement[1] = DEFAULT_STEPS;
+                    x = -stepsValue;
                     break;
                 case "forward":
                 case "up":
                 case "north":
-                    newMovement[0] = DEFAULT_STEPS;
-                    newMovement[1] = -stepsValue;
+                    y = +stepsValue;
                     break;
                 case "backward":
                 case "down":
                 case "south":
-                    newMovement[0] = DEFAULT_STEPS;
-                    newMovement[1] = stepsValue;
+                    y = -stepsValue;
                     break;
             }
 
-            _playerModel.SetNewPlayerPosition(newMovement);
+            
+            _currentPlayer.SetNewPlayerPosition(x, y);
+            //MapCharacterDTO dto = new CharacterDTO(0, 0, _currentPlayer.);
+            // foreach (var player in _playerPositions)
+            // {
+            //     if (player.Name.Equals(_currentPlayer.Name))
+            //     {
+            //         dto = player;
+            //     }
+            // }
+            var mapCharacterDto = new MapCharacterDTO(_currentPlayer.XPosition, _currentPlayer.YPosition, _currentPlayer.Name, _currentPlayer.Symbol);
+
+            _moveHandler.SendMove(mapCharacterDto);
+            
 
             // the next line of code should be changed by sending newPosition to a relevant method
-            WriteCommand(_playerModel.CurrentPosition);
+            Console.WriteLine("X: " + _currentPlayer.XPosition + ". Y: " + _currentPlayer.YPosition);
         }
         
-        // !!! METHODS BELOW ARE TEMPORARY, PROTOTYPE ONLY !!!
-        private void WriteCommand(int[] newPosition)
+        public void ChangePositionOfAPlayer(PlayerPositionDTO playerPosition)
         {
-            // returns the new position
-            _playerModel.CurrentPosition = newPosition;
-            Console.WriteLine("X: " + newPosition[0] + ". Y: " + newPosition[1]);
+            foreach (var player in _playerPositions)
+            {
+                if (player.Name == playerPosition.PlayerName)
+                {
+                    playerPosition.X = player.XPosition;
+                    playerPosition.Y = player.YPosition;
+                    
+                }
+            }
         }
+        
+     
     }
 }

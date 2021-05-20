@@ -2,6 +2,7 @@
 using InputCommandHandler.Antlrr;
 using InputCommandHandler.Exceptions;
 using Player.Services;
+using Session;
 
 namespace InputCommandHandler
 {
@@ -10,6 +11,25 @@ namespace InputCommandHandler
         public void HandleCommands(IPlayerService playerService)
         {
             SendCommand(GetCommand(), playerService);
+        }
+
+        public void HandleSession(ISessionService sessionService)
+        {
+            SendCommand(GetCommand(), sessionService);
+        }
+
+        private static void SendCommand(string commando, ISessionService sessionService)
+        {
+            try
+            {
+                var pipeline = new Pipeline();
+                pipeline.ParseCommand(commando);
+                pipeline.Transform(sessionService); // Transform commando to join/create session;
+            }
+            catch (CommandSyntaxException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         private static void SendCommand(string commando, IPlayerService playerService)

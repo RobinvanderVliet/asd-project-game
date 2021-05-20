@@ -16,5 +16,11 @@ namespace WorldGeneration
             
             return new Map(new NoiseMapGenerator(), new DatabaseFunctions.Database(dbLocation, collectionName), chunkSize, seed);
         }
+
+        public static int GenerateSeed()
+        {
+            var randomSeed = new Random().Next(1, 999999);
+            return randomSeed;
+        }
     }
 }
