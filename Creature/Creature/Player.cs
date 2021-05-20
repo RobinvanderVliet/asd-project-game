@@ -5,18 +5,17 @@ namespace Creature
 {
     public class Player : ICreature
     {
-        private ClientController _clientController;
         private ICreatureStateMachine _playerStateMachine;
+        private IClientController _clientController;
 
         public ICreatureStateMachine CreatureStateMachine
         {
             get => _playerStateMachine;
         }
 
-        public Player(ICreatureStateMachine playerStateMachine)
+        public Player(ICreatureStateMachine playerStateMachine, IClientController clientController)
         {
-            _clientController = new ClientController(new NetworkComponent());
-            SendChatMessenge("Starting Agent to replace player");
+            _clientController = clientController;
             _playerStateMachine = playerStateMachine;
         }
 
@@ -29,12 +28,14 @@ namespace Creature
         {
             _playerStateMachine.CreatureData.Health += amount;
         }
+        
         public void Disconnect()
         {
+            SendChatMessage("Starting Agent to replace player");
             _playerStateMachine.StartStateMachine();
         }
         
-        private void SendChatMessenge(string message)
+        private void SendChatMessage(string message)
         {
             _clientController.SendPayload(message, PacketType.Chat);
         }

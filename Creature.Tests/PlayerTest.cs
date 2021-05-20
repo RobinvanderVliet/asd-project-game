@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Creature.Creature.StateMachine;
 using Creature.Creature.StateMachine.Data;
+using Network;
 
 namespace Creature.Tests
 {
@@ -13,12 +14,14 @@ namespace Creature.Tests
     {
         private Player _sut;
         private Mock<ICreatureStateMachine> _creatureStateMachineMock;
+        private Mock<IClientController> _clientControllerMock;
 
         [SetUp]
         public void Setup()
         {
             _creatureStateMachineMock = new Mock<ICreatureStateMachine>();
-            _sut = new Player(_creatureStateMachineMock.Object);
+            _clientControllerMock = new Mock<IClientController>();
+            _sut = new Player(_creatureStateMachineMock.Object, _clientControllerMock.Object);
         }
 
         [Test]

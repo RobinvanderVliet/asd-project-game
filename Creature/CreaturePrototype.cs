@@ -9,6 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Creature.Creature.StateMachine;
 using Creature.Creature.StateMachine.CustomRuleSet;
+using Network;
 
 namespace Creature
 {
@@ -30,7 +31,7 @@ namespace Creature
             RuleSet monsterRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[0].Settings);
             RuleSet playerRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[1].Settings);
 
-            ICreature player = new Player(new PlayerStateMachine(playerData, playerRuleSet));
+            ICreature player = new Player(new PlayerStateMachine(playerData, playerRuleSet), new ClientController(new NetworkComponent()));
             ICreature creature = new Monster(new MonsterStateMachine(monsterData, monsterRuleSet));
             ICreature creature2 = new Monster(new MonsterStateMachine(monsterData2, monsterRuleSet));
 
