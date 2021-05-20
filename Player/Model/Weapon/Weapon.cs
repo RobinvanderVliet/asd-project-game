@@ -4,9 +4,12 @@ namespace Weapon
 {
     public class Weapon
     {
-        public WeaponSpeed WeaponSpeed { get; set; }
-        public int Damage { get; set; }
-        public int Distance { get; set; }
+        protected string Name { get; set; }
+        protected WeaponType WeaponType { get; set; }
+        protected Rarity Rarity { get; set; }
+        protected WeaponSpeed WeaponSpeed { get; set; }
+        protected int Damage { get; set; }
+        protected int Distance { get; set; }
 
         public int GetWeaponSpeed()
         {
