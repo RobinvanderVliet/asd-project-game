@@ -12,5 +12,9 @@ namespace Session.DTO
         {
             SessionType = sessionType;
         }
+        public SessionDTO()
+        {
+          
+        }
     }
 }

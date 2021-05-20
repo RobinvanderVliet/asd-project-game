@@ -9,48 +9,51 @@ namespace Agent.Services
     {
         private Pipeline _pipeline;
         private FileHandler _fileHandler;
-        private const string CancelCommand = "cancel";
+        private const string CANCELCOMMAND = "cancel";
         private const string LOADCOMMAND = "load";
-        public ConsoleRetriever consoleRetriever;
+
+        public ConsoleRetriever ConsoleRetriever;
+
         //This is needed for tests, dont delete!
-        public String testVar = "";
-        private InlineConfig inlineConfig;
+        public string testVar = "";
+        private InlineConfig _inlineConfig;
 
         public AgentConfigurationService()
         {
             _pipeline = new Pipeline();
             _fileHandler = new FileHandler();
-            consoleRetriever = new ConsoleRetriever();
-            inlineConfig = new InlineConfig();
+            ConsoleRetriever = new ConsoleRetriever();
+            _inlineConfig = new InlineConfig();
         }
-        
+
         public void StartConfiguration()
         {
             Console.WriteLine("Please provide a path to your code file");
-            var input = consoleRetriever.GetConsoleLine();
+            var input = ConsoleRetriever.GetConsoleLine();
 
-            if (input.Equals(CancelCommand))
+            if (input.Equals(CANCELCOMMAND))
             {
                 return;
             }
-            
-            if (input.Equals(LOADCOMMAND)) 
+
+            if (input.Equals(LOADCOMMAND))
             {
-                inlineConfig.setup();
+                _inlineConfig.setup();
                 return;
             }
 
-            var content = String.Empty;;
+            var content = string.Empty;
+            ;
             try
             {
                 content = _fileHandler.ImportFile(input);
             }
             catch (FileException e)
             {
-                Log.Logger.Information(e.Message);    
+                Log.Logger.Information(e.Message);
                 StartConfiguration();
             }
-            
+
 
             try
             {
@@ -64,7 +67,7 @@ namespace Agent.Services
                 testVar = e.Message;
                 Log.Logger.Information("Syntax error: " + e.Message);
                 StartConfiguration();
-            } 
+            }
             catch (SemanticErrorException e)
             {
                 Log.Logger.Information("Semantic error: " + e.Message);

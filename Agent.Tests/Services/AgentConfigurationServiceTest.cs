@@ -10,7 +10,7 @@ namespace Agent.Tests.Services
     public class AgentConfigurationServiceTest
     {
         private AgentConfigurationService _sut;
-        
+
         [SetUp]
         public void Setup()
         {
