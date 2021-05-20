@@ -1,6 +1,4 @@
-﻿using Network.Enum;
-
-namespace Network
+﻿namespace Network
 {
     public interface IClientController
     {

@@ -4,7 +4,6 @@ using Session.DTO;
 using System;
 using System.Collections.Generic;
 using Network.DTO;
-using Network.Enum;
 
 namespace Session
 {

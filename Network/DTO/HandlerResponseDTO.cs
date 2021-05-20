@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Network.Enum;
 
 namespace Network.DTO
 {

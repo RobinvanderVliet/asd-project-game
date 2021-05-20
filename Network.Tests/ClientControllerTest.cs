@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Moq;
 using Network.DTO;
-using Network.Enum;
 using NUnit.Framework;
 
 namespace Network.Tests

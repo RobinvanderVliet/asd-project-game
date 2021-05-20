@@ -3,7 +3,6 @@ using Network;
 using Newtonsoft.Json;
 using System;
 using Network.DTO;
-using Network.Enum;
 
 namespace Chat
 {

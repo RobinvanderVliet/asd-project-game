@@ -1,12 +1,9 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
-namespace Network.Enum
+﻿namespace Network
 {
-    [JsonConverter(typeof(StringEnumConverter))]
     public enum PacketType
     {
         Chat,
+        Move,
         Session
     }
 }

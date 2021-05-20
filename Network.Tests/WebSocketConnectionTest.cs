@@ -3,7 +3,6 @@ using Moq;
 using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 using System.Threading;
-using Network.Enum;
 
 namespace Network.Tests
 {

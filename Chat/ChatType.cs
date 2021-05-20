@@ -1,9 +1,5 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
-namespace Chat
+﻿namespace Chat
 {
-    [JsonConverter(typeof(StringEnumConverter))]
     public enum ChatType
     {
         Say,
