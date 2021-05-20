@@ -1,4 +1,4 @@
-﻿namespace Player.Model.Armor
+﻿namespace Player.Model.Armor.HazardProtected
 {
     public class HazardProtectedArmor : Armor
     {

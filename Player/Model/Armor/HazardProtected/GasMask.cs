@@ -1,6 +1,6 @@
 ﻿using Weapon.Enum;
 
-namespace Player.Model.Armor
+namespace Player.Model.Armor.HazardProtected
 {
     public class GasMask : HazardProtectedArmor
     {
