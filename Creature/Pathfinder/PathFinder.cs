@@ -9,29 +9,20 @@ namespace Creature
     public class PathFinder
     {
         private List<List<Node>> _grid;
+        private int _gridRows;
+        private int _gridCols;
+
         public PathFinder(List<List<Node>> nodes)
         {
             _grid = nodes;
-        }
-        int _gridRows
-        {
-            get
-            {
-                return _grid[0].Count;
-            }
-        }
-        int _gridCols
-        {
-            get
-            {
-                return _grid.Count;
-            }
+            _gridRows = _grid[0].Count;
+            _gridCols = _grid.Count;
         }
 
         public Stack<Node> FindPath(Vector2 startPosition, Vector2 endPosition)
         {
-            Node startNode = new Node(new Vector2((int)(startPosition.X / Node.NodeSize), (int)(startPosition.Y / Node.NodeSize)), true);
-            Node endNode = new Node(new Vector2((int)(endPosition.X / Node.NodeSize), (int)(endPosition.Y / Node.NodeSize)), true);
+            Node startNode = new Node(new Vector2((int)startPosition.X, (int)(startPosition.Y)), true);
+            Node endNode = new Node(new Vector2((int)endPosition.X, (int)(endPosition.Y)), true);
 
             Stack<Node> pathStack = new Stack<Node>();
 
@@ -59,7 +50,6 @@ namespace Creature
                 {
                     if (adjNode.IsWalkable)
                     {
-
                         if (openList.Contains(adjNode))
                         {
                             if (currentNode.FScore <= adjNode.FScore)
@@ -87,17 +77,12 @@ namespace Creature
                 }
             }
 
-            if (currentNode == null)
-            {
-                return null;
-            }
-
             if (currentNode.Position.X != endNode.Position.X && currentNode.Position.Y != endNode.Position.Y)
             {
                 throw new PathHasNoDestinationException();
             }
 
-            if (currentNode == startNode)
+            else if (currentNode == startNode)
             {
                 pathStack.Push(currentNode);
             }

@@ -5,12 +5,38 @@ namespace Creature.Pathfinder
 {
     public class Node : IComparable<Node>
     {
-        public const int NodeSize = 1;
-        public Node Parent;
-        public Vector2 Position;
-        public float DistanceToTarget;
-        public float Cost;
-        public float Weight;
+        private Node _parent;
+        private Vector2 _position;
+        private float _distanceToTarget;
+        private float _cost;
+        private float _weight;
+        private bool _isWalkable;
+
+        public Node Parent
+        {
+            get => _parent;
+            set => _parent = value;
+        }
+        public Vector2 Position
+        {
+            get => _position;
+            set => _position = value;
+        }
+        public float DistanceToTarget
+        {
+            get => _distanceToTarget;
+            set => _distanceToTarget = value;
+        }
+        public float Cost
+        {
+            get => _cost;
+            set => _cost = value;
+        }
+        public float Weight
+        {
+            get => _weight;
+            set => _weight = value;
+        }
         public float FScore
         {
             get
@@ -21,16 +47,20 @@ namespace Creature.Pathfinder
                     return -1;
             }
         }
-        public bool IsWalkable;
+        public bool IsWalkable
+        {
+            get => _isWalkable;
+            set => _isWalkable = value;
+        }
         
         public Node(Vector2 pos, bool isWalkable, float weight = 1)
         {
-            this.Parent = null;
-            this.Position = pos;
-            this.DistanceToTarget = -1;
-            this.Cost = 1;
-            this.IsWalkable = isWalkable;
-            this.Weight = weight;
+            _parent = null;
+            _position = pos;
+            _distanceToTarget = -1;
+            _cost = 1;
+            _isWalkable = isWalkable;
+            _weight = weight;
         }
 
         public int CompareTo(Node rhs)

@@ -18,7 +18,9 @@ namespace Creature.Pathfinder
 
         public int Count
         {
-            get { return _elements.Count; }
+            get { 
+                return _elements.Count; 
+            }
         }
 
         public bool Contains(T item)
@@ -26,7 +28,9 @@ namespace Creature.Pathfinder
             foreach (var element in _elements)
             {
                 if (element.Equals(item))
+                {
                     return true;
+                }
             }
             return false;
         }
@@ -61,10 +65,14 @@ namespace Creature.Pathfinder
                 while (i < _elements.Count / 2)
                 {
                     int j = (2 * i) + 1;
-                    if ((j < _elements.Count - 1) && (_elements[j].CompareTo(_elements[j + 1]) > 0)) 
+                    if ((j < _elements.Count - 1) && (_elements[j].CompareTo(_elements[j + 1]) > 0))
+                    {
                         ++j;
+                    }
                     if (_elements[j].CompareTo(tempItem) >= 0)
+                    {
                         break;
+                    }
                     _elements[i] = _elements[j];
                     i = j;
                 }
