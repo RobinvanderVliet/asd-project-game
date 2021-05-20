@@ -47,7 +47,7 @@ namespace Agent.Tests
 
             _sut.ExportFile("combat when player nearby player then attack combat");
 
-            var fileLocation = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\agentFile.cfg";
+            var fileLocation = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\agentFile.cfg";
 
             var actual = File.ReadAllText(fileLocation);
 

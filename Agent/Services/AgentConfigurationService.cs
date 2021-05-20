@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Agent.exceptions;
-using Agent.Mapper;
-using Agent.Models;
+using Agent.Exceptions;
+using Serilog;
 
 namespace Agent.Services
 {
@@ -10,39 +9,51 @@ namespace Agent.Services
     {
         private Pipeline _pipeline;
         private FileHandler _fileHandler;
-        private FileToDictionaryMapper _fileToDictionaryMapper;
-        private List<AgentConfiguration> _agentConfigurations;
-        private const string CancelCommand = "cancel"; 
+        private const string CANCELCOMMAND = "cancel";
+        private const string LOADCOMMAND = "load";
+
+        public ConsoleRetriever ConsoleRetriever;
+
+        //This is needed for tests, dont delete!
+        public string testVar = "";
+        private InlineConfig _inlineConfig;
 
         public AgentConfigurationService()
         {
             _pipeline = new Pipeline();
             _fileHandler = new FileHandler();
-            _fileToDictionaryMapper = new FileToDictionaryMapper();
-            _agentConfigurations = new List<AgentConfiguration>();
+            ConsoleRetriever = new ConsoleRetriever();
+            _inlineConfig = new InlineConfig();
         }
-        
+
         public void StartConfiguration()
         {
             Console.WriteLine("Please provide a path to your code file");
-            var input = Console.ReadLine();
+            var input = ConsoleRetriever.GetConsoleLine();
 
-            if (input.Equals(CancelCommand))
+            if (input.Equals(CANCELCOMMAND))
             {
                 return;
             }
 
-            var content = String.Empty;;
+            if (input.Equals(LOADCOMMAND))
+            {
+                _inlineConfig.setup();
+                return;
+            }
+
+            var content = string.Empty;
+            ;
             try
             {
                 content = _fileHandler.ImportFile(input);
             }
             catch (FileException e)
             {
-                Console.WriteLine("Something went wrong: " + e);    
+                Log.Logger.Information(e.Message);
                 StartConfiguration();
             }
-            
+
 
             try
             {
@@ -53,29 +64,16 @@ namespace Agent.Services
             }
             catch (SyntaxErrorException e)
             {
-                Console.WriteLine("Syntax error: " + e.Message);
+                testVar = e.Message;
+                Log.Logger.Information("Syntax error: " + e.Message);
                 StartConfiguration();
-            } 
+            }
             catch (SemanticErrorException e)
             {
-                Console.WriteLine("Semantic error: " + e.Message);
+                Log.Logger.Information("Semantic error: " + e.Message);
                 StartConfiguration();
             }
         }
 
-        public void CreateAgentConfiguration(string agentName, string filepath)
-        {
-            var agentConfiguration = new AgentConfiguration();
-            agentConfiguration.AgentName = agentName;
-
-           agentConfiguration.Settings = _fileToDictionaryMapper.MapFileToConfiguration(filepath);
-
-           _agentConfigurations.Add(agentConfiguration);
-        }
-        
-        public List<AgentConfiguration> GetConfigurations()
-        {
-            return _agentConfigurations;
-        }
     }
 }

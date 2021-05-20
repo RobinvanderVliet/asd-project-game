@@ -8,7 +8,7 @@ namespace Agent.Mapper
 {
     public class FileToDictionaryMapper
     {
-        public Dictionary<String, String> MapFileToConfiguration(string filepath)
+        public Dictionary<string, string> MapFileToConfiguration(string filepath)
         {
             FileHandler fileHandler = new FileHandler();
             Dictionary<string, string> configuration = new  Dictionary<string, string>();
