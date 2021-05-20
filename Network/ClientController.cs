@@ -22,8 +22,6 @@ namespace Network
         {
             if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session || packet.Header.PacketType == PacketType.GameSession)
             {
-                var A = _subscribers;
-                var B = _subscribers.GetValueOrDefault(packet.Header.PacketType);
                 return _subscribers.GetValueOrDefault(packet.Header.PacketType).HandlePacket(packet);
             }
             else

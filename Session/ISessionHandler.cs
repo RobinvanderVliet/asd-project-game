@@ -10,5 +10,6 @@ namespace Session
         public void RequestSessions();
         public void StartSession(string messageValue);
         public StartGameDto SetupGameHost();
+        public int GetSessionSeed();
     }
 }

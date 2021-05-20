@@ -4,6 +4,7 @@ using Session.DTO;
 using System;
 using System.Collections.Generic;
 using Network.DTO;
+using WorldGeneration;
 using DatabaseHandler;
 using DatabaseHandler.Poco;
 using DatabaseHandler.Services;
@@ -24,12 +25,12 @@ namespace Session
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Session);
         }
-        
+
         public void StartSession(string sessionID)
         {
-            var dto =  SetupGameHost();
-               sendGameSessionDTO(dto);
-            
+            var dto = SetupGameHost();
+            sendGameSessionDTO(dto);
+
 // bericht naar alle clients dat sessie is gestart
         }
 
@@ -51,6 +52,7 @@ namespace Session
                 SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
                 sessionDTO.ClientIds = new List<string>();
                 sessionDTO.ClientIds.Add(_clientController.GetOriginId());
+                sessionDTO.SessionSeed = sessionDto.SessionSeed;
                 sendSessionDTO(sessionDTO);
                 _session.InSession = true;
             }
@@ -62,6 +64,7 @@ namespace Session
             _session = new Session(sessionName);
             _session.GenerateSessionId();
             _session.AddClient(_clientController.GetOriginId());
+            _session.SessionSeed = MapFactory.GenerateSeed();
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
@@ -81,7 +84,7 @@ namespace Session
         {
             var tmp = new DbConnection();
             tmp.SetForeignKeys();
-         
+
             var playerRepository = new Repository<PlayerPoco>(tmp);
             var tmpServicePlayer = new ServicesDb<PlayerPoco>(playerRepository);
             var tmpGameRepostory = new Repository<GamePoco>(tmp);
@@ -94,9 +97,8 @@ namespace Session
            List<string> allClients = _session.GetAllClients();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
 
-            int playerX = 26;
-            int playerY = 11;
-            
+            int playerX = 26; // spawn position
+            int playerY = 11; // spawn position
             foreach (string element in allClients)
             {
                 int[] playerPosition = new int[2];
@@ -105,18 +107,15 @@ namespace Session
                 players.Add(element, playerPosition);
                 var tmpPlayer = new PlayerPoco {PlayerGUID = element, GameGUID =  tmpObject, XPosition = playerX, YPosition = playerY};
                 tmpServicePlayer.CreateAsync(tmpPlayer);
-               
-                playerX++; 
-                playerY++;
+
+                playerX+=2; // spawn position + 2 each client
+                playerY+=2; // spawn position + 2 each client
             }
 
             StartGameDto startGameDto = new StartGameDto();
-            startGameDto.GameName = gameGuid.ToString();
+            startGameDto.GameGuid = gameGuid.ToString();
             startGameDto.PlayerLocations = players;
 
-           
-            
-            
             return startGameDto;
         }
 
@@ -174,6 +173,7 @@ namespace Session
         {
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessionsResponse);
             sessionDTO.Name = _session.Name;
+            sessionDTO.SessionSeed = _session.SessionSeed;
             var jsonObject = JsonConvert.SerializeObject(sessionDTO);
             return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
         }
@@ -221,20 +221,25 @@ namespace Session
 
                 return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
             }
-            else
+
+            SessionDTO sessionDTOClients =
+                JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
+            _session.EmptyClients();
+            _session.SessionSeed = sessionDTO.SessionSeed;
+            Console.Out.WriteLine(_session.SessionSeed);
+            Console.Out.WriteLine("Players in your session:");
+            foreach (string client in sessionDTOClients.ClientIds)
             {
-                SessionDTO sessionDTOClients = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
-                _session.EmptyClients();
-
-                Console.Out.WriteLine("Players in your session:");
-                foreach (string client in sessionDTOClients.ClientIds)
-                {
-                    _session.AddClient(client);
-                    Console.Out.WriteLine(client);
-                }
-
-                return new HandlerResponseDTO(SendAction.Ignore, null);
+                _session.AddClient(client);
+                Console.Out.WriteLine(client);
             }
+
+            return new HandlerResponseDTO(SendAction.Ignore, null);
+        }
+
+        public int GetSessionSeed()
+        {
+            return _session.SessionSeed;
         }
     }
 }

@@ -37,10 +37,9 @@ namespace Session
             _sessionHandler.RequestSessions();
         }
 
-        public void StartSession(string messageValue)
+        public void StartSession()
         {
-            _gameSessionHandler.SendGameSession(messageValue, _sessionHandler);
-            // inGame = true; 
+            _gameSessionHandler.SendGameSession(_sessionHandler);
         }
 
     }

@@ -1,19 +1,14 @@
 using System;
-using LiteDB;
 
 namespace DataTransfer.DTO.Character
 {
     public class MapCharacterDTO
     {
-        public int XPosition { get; set; }
-        public int YPosition { get; set; }
-        public string PlayerGUID { get; set; }
-
-        public string Symbol { get; set; }
-
-        public string GameGuid { get; set; }
-
-        [BsonIgnore]
+        public int XPosition;
+        public int YPosition;
+        public string PlayerGuid;
+        public string GameGuid;
+        public string Symbol;
         public ConsoleColor Color;
         public ConsoleColor BackgroundColor;
         public int Team;
@@ -21,6 +16,7 @@ namespace DataTransfer.DTO.Character
         public MapCharacterDTO(int xPosition
             , int yPosition
             , string playerGuid
+            , string gameGuid
             , string symbol = null
             , ConsoleColor color = ConsoleColor.White
             , ConsoleColor backgroundColor = ConsoleColor.Black
@@ -28,16 +24,12 @@ namespace DataTransfer.DTO.Character
         {
             XPosition = xPosition;
             YPosition = yPosition;
-            PlayerGUID = playerGuid;
+            PlayerGuid = playerGuid;
+            GameGuid = gameGuid;
             Symbol = symbol;
             Color = color;
             BackgroundColor = backgroundColor;
             Team = team;
-        }
-
-        public MapCharacterDTO()
-        {
-            
         }
     }
 }

@@ -15,18 +15,11 @@ namespace InputCommandHandler.Antlr.Transformer
         private const int MAXIMUM_STEPS = 10;
         private String _commando;
 
-        public Evaluator(IPlayerService playerService)
+        public Evaluator(IPlayerService playerService, ISessionService sessionService)
         {
             _playerService = playerService;
-        }
-
-        public Evaluator(ISessionService sessionService)
-        {
             _sessionService = sessionService;
         }
-        
-        //Extra constructor evaluator voor ISession
-
         public void Apply(AST ast)
         {
             TransformNode(ast.Root);
@@ -160,7 +153,7 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformStartSession(StartSession startSession)
         {
-            _sessionService.StartSession(startSession.Message.MessageValue);
+            _sessionService.StartSession();
         }
         
     }

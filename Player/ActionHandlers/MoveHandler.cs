@@ -2,7 +2,7 @@
 using DataTransfer.DTO.Character;
 using DataTransfer.DTO.Player;
 using Network;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
@@ -39,13 +39,9 @@ namespace Player.ActionHandlers
             _mapper = mapper;
         }
 
-        public MoveHandler(IMapper mapper)
-        {
-            
-        }
-
         public void SendMove(MapCharacterDTO player)
         {
+  
             // _currentPlayer = player;
             // var playerPostionDTO = new PlayerPositionDTO(player.XPosition, player.YPosition, player.Name, player.Team);
             var moveDTO = new MoveDTO(player);
@@ -98,7 +94,6 @@ namespace Player.ActionHandlers
             return new HandlerResponseDTO(SendAction.Ignore, "Error in moveHandler");
         }
 
-
         private void InsertToDatabase(MoveDTO moveDto)
         {
             var tmp = new DbConnection();
@@ -121,18 +116,17 @@ namespace Player.ActionHandlers
                 SendMove(moveDto.PlayerPosition);
             }
         }
-
-        private void HandleMove(MapCharacterDTO playerPosition) // hiervan move DTO maken
-        {
-            Console.WriteLine("in de move actie");
-            _worldService.UpdateCharacterPosition(playerPosition);
-            _worldService.DisplayWorld();
-
-            // worldService.updateArraylistposition(player, x, y);
-
-            // aanroepen daadwerkelijke functie voor aanpassen x en y in wereld (dus in arraylist)
-            //_player.ChangePositionOfAPlayer(player);
-            // als host dan in globale db aanpassen voor die speler (hostcontoller (HandlePacket))
-        }
+                
+       private void HandleMove(MapCharacterDTO playerPosition) // hiervan move DTO maken
+       {
+           _worldService.UpdateCharacterPosition(playerPosition);
+           _worldService.DisplayWorld();
+           
+           //_player.ChangePositionOfAPlayer(player);
+           // als host dan in globale db aanpassen voor die speler (hostcontoller (HandlePacket))
+           
+         
+       }
+        
     }
 }

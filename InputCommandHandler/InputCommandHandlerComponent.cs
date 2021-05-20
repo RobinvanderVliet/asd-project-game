@@ -8,37 +8,17 @@ namespace InputCommandHandler
 {
     public class InputCommandHandlerComponent
     {
-        public void HandleCommands(IPlayerService playerService)
+        public void HandleCommands(IPlayerService playerService, ISessionService sessionService)
         {
-            SendCommand(GetCommand(), playerService);
+            SendCommand(GetCommand(), playerService, sessionService);
         }
-
-        public void HandleSession(ISessionService sessionService)
-        {
-            SendCommand(GetCommand(), sessionService);
-        }
-
-        private static void SendCommand(string commando, ISessionService sessionService)
+        private static void SendCommand(string commando, IPlayerService playerService, ISessionService sessionService)
         {
             try
             {
                 var pipeline = new Pipeline();
                 pipeline.ParseCommand(commando);
-                pipeline.Transform(sessionService); // Transform commando to join/create session;
-            }
-            catch (CommandSyntaxException e)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
-
-        private static void SendCommand(string commando, IPlayerService playerService)
-        {
-            try
-            {
-                var pipeline = new Pipeline();
-                pipeline.ParseCommand(commando);
-                pipeline.Transform(playerService);
+                pipeline.Transform(playerService, sessionService);
             }
             catch (CommandSyntaxException e)
             {
