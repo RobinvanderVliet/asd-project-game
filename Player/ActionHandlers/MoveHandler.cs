@@ -5,12 +5,14 @@ using DatabaseHandler;
 using DatabaseHandler.Poco;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
+using DataTransfer.DTO.Character;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Player.DTO;
 using Player.Services;
 using Session.DTO;
+using WorldGeneration;
 
 namespace Player.ActionHandlers
 {
@@ -35,10 +37,10 @@ namespace Player.ActionHandlers
             _worldService = worldService;
             //_currentPlayer = player;
             //var playerPostionDTO = new PlayerPositionDTO(player.XPosition, player.YPosition, player.Name, player.Team);
-            // var moveDTO = new MoveDTO(player);
-            _currentPlayer = player;
+            var moveDTO = new MoveDTO(player);
+            // _currentPlayer = player;
             // var playerDTO = new PlayerDTO(player.Name, player.XPosition, player.YPosition, _clientController.GetOriginId());
-            var moveDTO = new MoveDTO(playerDTO);
+            // var moveDTO = new MoveDTO(playerDTO);
             SendMoveDTO(moveDTO);
         }
         
