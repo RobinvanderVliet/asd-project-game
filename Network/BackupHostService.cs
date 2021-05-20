@@ -8,17 +8,10 @@ using System.Runtime.Serialization;
 
 namespace Network
 {
-    public interface IBackupHostService {
-
-        public void UpdateBackupDatabase(PacketDTO data);
-        public void EnableBackupHost();
-        public Boolean IsBackupHost();
-    }
-
     public class BackupHostService : IBackupHostService
     {
-        private Boolean _isBackupHost;
-        private DbConnection _db;
+        private bool _isBackupHost;
+        private DbConnection _db { get; set; }
 
         public BackupHostService() 
         {
@@ -26,7 +19,7 @@ namespace Network
             _db = new();
         }
 
-        public void UpdateBackupDatabase(PacketDTO data)
+        public virtual void UpdateBackupDatabase(PacketDTO data)
         {
             try
             {
@@ -44,8 +37,6 @@ namespace Network
                     AddToBackupDatabase(poco, connection);
                     connection.Close();
                 }
-
-                //save in database
             }
             catch (Exception)
             {
@@ -54,32 +45,33 @@ namespace Network
 
         }
 
-        private Object ConvertDataToPoco(PacketDTO packet)
+        public virtual Object ConvertDataToPoco(PacketDTO packet)
         {
             //convert the payload to poco for inserting
             switch (packet.Header.PacketType)
             {
                 //todo change to proper enums
                 case PacketType.Move:
-                    var definition = new { PocoType="PlayerPoco",PlayerGUID = "", GameGUID="" , X = "", Y="" };
-                    return JsonConvert.DeserializeAnonymousType(packet.Payload, definition);
+                    return JsonConvert.DeserializeAnonymousType(packet.Payload, new { PocoType = "PlayerPoco", PlayerGUID = "", GameGUID = "", X = "", Y = "" });
+                case PacketType.Session:
+                    return JsonConvert.DeserializeAnonymousType(packet.Payload, new { PocoType = "GamePoco", PlayerHostGUID = "", Seed = ""});
                 default:
                     throw new UnknownEnumException("an unhandled action type is recieved");
             }
         }
 
-        private void AlterBackupDatabase(Object data, ILiteDatabaseAsync conn)
+        public virtual void AlterBackupDatabase(Object data, ILiteDatabaseAsync conn)
         {
             var collection = conn.GetCollection < Type.GetType(data.PocoType) >("");
             collection.Update(data);
         }
 
-        private void AddToBackupDatabase(Object data, ILiteDatabaseAsync conn) {
+        public virtual void AddToBackupDatabase(Object data, ILiteDatabaseAsync conn) {
             var collection = conn.GetCollection < Type.GetType(data.PocoType) > ("");
             collection.Insert(data);
         }
 
-        private Boolean CheckExists(Object data)
+        public virtual bool CheckExists(Object data)
         {
             var connection = _db.GetConnectionAsync();
             var collection = connection.GetCollection<Type.GetType(data.PocoType)>("");
@@ -88,14 +80,19 @@ namespace Network
             return exists;
         }
 
-        public void EnableBackupHost()
+        public virtual void EnableBackupHost()
         {
             _isBackupHost = true;
         }
 
-        public bool IsBackupHost()
+        public virtual bool IsBackupHost()
         {
             return _isBackupHost;
+        }
+
+        public virtual void DisableBackupHost()
+        {
+            _isBackupHost = false;
         }
     }
 
