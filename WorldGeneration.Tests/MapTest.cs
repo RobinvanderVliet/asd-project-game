@@ -71,11 +71,11 @@ namespace WorldGeneration.Tests
         }
         
         [Test]
-        public void Test_Map_DoesntThrowException() 
+        public void Test_MapConstructor_DoesntThrowException() 
         {
             //Arrange ---------
             //Act ---------
-            var map = new Map(new NoiseMapGenerator(), new DatabaseFunctions.Database("c:\\temp\\db.db", "test"),2,51, new ConsolePrinter());
+            var map = new Map(new NoiseMapGenerator(), new Database("c:\\temp\\db.db", "test"),2,51, new ConsolePrinter());
             //Assert ---------
         }
         
