@@ -45,7 +45,7 @@ namespace Player.ActionHandlers
         {
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
 
-            if (_clientController.IsHost())
+            if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
             {
                 var tmp = new DbConnection();
 
@@ -66,8 +66,9 @@ namespace Player.ActionHandlers
 
                 if (result.Any())
                 {
-                    return new HandlerResponseDTO(SendAction.Ignore,
+                    return new HandlerResponseDTO(SendAction.ReturnToSender,
                         "Can't move to new position something is in the way");
+                    
                 }
                 else
                 {
@@ -76,9 +77,16 @@ namespace Player.ActionHandlers
                 }
             }
 
-            HandleMove(moveDTO.PlayerPosition);
-
-            return new HandlerResponseDTO(SendAction.SendToClients, null);
+            if (packet.Header.Target.Equals(_clientController.GetOriginId()))
+            {
+                Console.WriteLine(packet.HandlerResponse.ResultMessage);
+            }
+            else
+            {
+                HandleMove(moveDTO.PlayerPosition);
+            }
+            
+           return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
         private void InsertToDatabase(MoveDTO moveDto)
