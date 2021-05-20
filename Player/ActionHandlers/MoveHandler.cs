@@ -57,7 +57,6 @@ namespace Player.ActionHandlers
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
-            HandleMove(moveDTO.PlayerPosition);
           
             if (_clientController.IsHost())
             {
@@ -88,9 +87,13 @@ namespace Player.ActionHandlers
                 else
                 {
                     InsertToDatabase(moveDTO);
+                    HandleMove(moveDTO.PlayerPosition);
                 }
 
             }
+            
+            HandleMove(moveDTO.PlayerPosition);
+
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
