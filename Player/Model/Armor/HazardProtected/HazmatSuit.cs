@@ -6,11 +6,11 @@ namespace Player.Model.Armor.HazardProtected
     {
         public HazmatSuit()
         {
-            Name = "FlakVest";
+            Name = "Hazmat suit";
             ArmorType = ArmorType.Body;
-            Rarity = Rarity.Uncommon;
+            Rarity = Rarity.Rare;
             ArmorProtectionPoints = 20;
-            RPP = 40;
+            RPP = 80;
             SP = -20;
         }
     }

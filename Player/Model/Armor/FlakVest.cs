@@ -6,7 +6,7 @@ namespace Player.Model.Armor
     {
         public FlakVest()
         {
-            Name = "FlakVest";
+            Name = "Flak vest";
             ArmorType = ArmorType.Body;
             Rarity = Rarity.Uncommon;
             ArmorProtectionPoints = 20;

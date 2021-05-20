@@ -1,4 +1,6 @@
-﻿using Weapon.Enum;
+﻿using Player.Model.Consumable.ConsumableStats;
+using Weapon.Enum;
+
 
 namespace Player.Model.Consumable.HealthConsumable
 {
@@ -7,7 +9,7 @@ namespace Player.Model.Consumable.HealthConsumable
         public Bandage()
         {
             Name = "Bandage";
-            Health = 25;
+            Health = Health.Low;
             Rarity = Rarity.Common;
         }
     }

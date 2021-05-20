@@ -1,8 +1,15 @@
-﻿namespace Player.Model.Consumable.HealthConsumable
+﻿using Player.Model.Consumable.ConsumableStats;
+
+namespace Player.Model.Consumable.HealthConsumable
 {
     public class HealthConsumable : Consumable
     {
-        protected int Health { get; set; }
+        protected Health Health { get; set; }
+
+        public int getHealth()
+        {
+            return (int) Health;
+        }
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using Weapon.Enum;
+﻿using Player.Model.Consumable.ConsumableStats;
+using Weapon.Enum;
 
 namespace Player.Model.Consumable.StaminaConsumable
 {
@@ -6,8 +7,8 @@ namespace Player.Model.Consumable.StaminaConsumable
     {
         public SuspiciousWhitePowder()
         {
-            Name = "MonsterEnergy";
-            Stamina = 100;
+            Name = "Suspicious white powder";
+            Stamina = Stamina.High;
             Rarity = Rarity.Rare;
         }
     }

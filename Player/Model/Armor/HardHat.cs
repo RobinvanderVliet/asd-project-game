@@ -6,7 +6,7 @@ namespace Player.Model.Armor
     {
         public HardHat()
         {
-            Name = "HardHat";
+            Name = "Hard hat";
             ArmorType = ArmorType.Helmet;
             Rarity = Rarity.Uncommon;
             ArmorProtectionPoints = 10;

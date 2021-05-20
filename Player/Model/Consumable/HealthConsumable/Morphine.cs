@@ -1,4 +1,5 @@
-﻿using Weapon.Enum;
+﻿using Player.Model.Consumable.ConsumableStats;
+using Weapon.Enum;
 
 namespace Player.Model.Consumable.HealthConsumable
 {
@@ -7,7 +8,7 @@ namespace Player.Model.Consumable.HealthConsumable
         public Morphine()
         {
             Name = "Morphine";
-            Health = 50;
+            Health = Health.Medium;
             Rarity = Rarity.Uncommon;
         }
     }

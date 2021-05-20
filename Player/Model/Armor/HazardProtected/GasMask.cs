@@ -6,7 +6,7 @@ namespace Player.Model.Armor.HazardProtected
     {
         public GasMask()
         {
-            Name = "FlakVest";
+            Name = "Gas mask";
             ArmorType = ArmorType.Helmet;
             Rarity = Rarity.Uncommon;
             ArmorProtectionPoints = 20;

@@ -1,7 +1,14 @@
-﻿namespace Player.Model.Consumable.StaminaConsumable
+﻿using Player.Model.Consumable.ConsumableStats;
+
+namespace Player.Model.Consumable.StaminaConsumable
 {
     public class StaminaConsumable : Consumable
     {
-        protected int Stamina { get; set; }
+        protected Stamina Stamina { get; set; }
+
+        public int getStamina()
+        {
+            return (int) Stamina;
+        }
     }
 }

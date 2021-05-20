@@ -6,8 +6,8 @@ namespace Player.Model.Armor
     {
         public TacticalVest()
         {
-            Name = "TacticalVest";
-            ArmorType = ArmorType.Helmet;
+            Name = "Tactical vest";
+            ArmorType = ArmorType.Body;
             Rarity = Rarity.Rare;
             ArmorProtectionPoints = 40;
         }

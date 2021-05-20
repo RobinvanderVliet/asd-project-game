@@ -1,4 +1,5 @@
-﻿using Weapon.Enum;
+﻿using Player.Model.Consumable.ConsumableStats;
+using Weapon.Enum;
 
 namespace Player.Model.Consumable.StaminaConsumable
 {
@@ -6,8 +7,8 @@ namespace Player.Model.Consumable.StaminaConsumable
     {
         public BigMac()
         {
-            Name = "Bandage";
-            Stamina = 25;
+            Name = "Big Mac";
+            Stamina = Stamina.Low;
             Rarity = Rarity.Common;
         }
     }

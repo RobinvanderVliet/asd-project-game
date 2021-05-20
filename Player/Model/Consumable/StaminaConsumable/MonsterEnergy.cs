@@ -1,4 +1,5 @@
-﻿using Weapon.Enum;
+﻿using Player.Model.Consumable.ConsumableStats;
+using Weapon.Enum;
 
 namespace Player.Model.Consumable.StaminaConsumable
 {
@@ -6,8 +7,8 @@ namespace Player.Model.Consumable.StaminaConsumable
     {
         public MonsterEnergy()
         {
-            Name = "MonsterEnergy";
-            Stamina = 50;
+            Name = "Monster energy";
+            Stamina = Stamina.Medium;
             Rarity = Rarity.Uncommon;
         }
     }
