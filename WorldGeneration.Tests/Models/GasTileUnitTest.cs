@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+using DataTransfer.POCO.World.HazardousTiles;
+using DataTransfer.POCO.World.Interfaces;
 using NUnit.Framework;
-using WorldGeneration.Models.HazardousTiles;
-using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Tests
 {

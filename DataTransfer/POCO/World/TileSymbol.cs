@@ -1,4 +1,4 @@
-namespace WorldGeneration.Models
+namespace DataTransfer.POCO.World
 {
     public static class TileSymbol 
     {

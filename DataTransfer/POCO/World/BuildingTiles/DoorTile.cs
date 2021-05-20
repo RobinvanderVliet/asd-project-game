@@ -1,7 +1,7 @@
 ﻿using System;
-using WorldGeneration.Models.Interfaces;
+using DataTransfer.POCO.World.Interfaces;
 
-namespace WorldGeneration.Models.BuildingTiles
+namespace DataTransfer.POCO.World.BuildingTiles
 {
     public class DoorTile : IBuildingTile
     {

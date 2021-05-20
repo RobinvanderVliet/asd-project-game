@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using WorldGeneration.Models.Interfaces;
+using DataTransfer.POCO.World.Interfaces;
 
 namespace DatabaseHandler.Poco
 {

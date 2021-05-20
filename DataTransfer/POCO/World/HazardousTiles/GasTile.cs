@@ -1,6 +1,6 @@
-﻿using WorldGeneration.Models.Interfaces;
+﻿using DataTransfer.POCO.World.Interfaces;
 
-namespace WorldGeneration.Models.HazardousTiles
+namespace DataTransfer.POCO.World.HazardousTiles
 {
     public class GasTile : IHazardousTile
     {

@@ -1,11 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
+using DataTransfer.POCO.World;
+using DataTransfer.POCO.World.Interfaces;
+using DataTransfer.POCO.World.LootableTiles;
+using DataTransfer.POCO.World.TerrainTiles;
 using NUnit.Framework;
 using Moq;
 using WorldGeneration.DatabaseFunctions;
-using WorldGeneration.Models;
-using WorldGeneration.Models.Interfaces;
-using WorldGeneration.Models.LootableTiles;
-using WorldGeneration.Models.TerrainTiles;
 
 namespace WorldGeneration.Tests
 {

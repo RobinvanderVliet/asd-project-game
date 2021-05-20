@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DataTransfer.POCO.World;
 using LiteDB;
-using WorldGeneration.Models;
 
 namespace WorldGeneration.DatabaseFunctions
 {
