@@ -18,28 +18,31 @@ namespace Network
     public class BackupHostService : IBackupHostService
     {
         private Boolean _isBackupHost;
-
-        //database shit
+        private DbConnection _db;
 
         public BackupHostService() 
         {
             _isBackupHost = false;
+            _db = new();
         }
 
         public void UpdateBackupDatabase(PacketDTO data)
         {
             try
             {
-                //convert packet to poco
                 var poco = ConvertDataToPoco(data);
-
+                
                 if (CheckExists(poco))
                 {
-                    AlterBackupDatabase(poco);
+                    var connection = _db.GetConnectionAsync();
+                    AlterBackupDatabase(poco, connection);
+                    connection.Close();
                 }
                 else
                 {
-                    AddToBackupDatabase(poco);
+                    var connection = _db.GetConnectionAsync();
+                    AddToBackupDatabase(poco, connection);
+                    connection.Close();
                 }
 
                 //save in database
@@ -58,25 +61,31 @@ namespace Network
             {
                 //todo change to proper enums
                 case PacketType.Move:
-                    var definition = new { PlayerGUID = "", GameGUID="" , X = "", Y="" };
+                    var definition = new { PocoType="PlayerPoco",PlayerGUID = "", GameGUID="" , X = "", Y="" };
                     return JsonConvert.DeserializeAnonymousType(packet.Payload, definition);
                 default:
                     throw new UnknownEnumException("an unhandled action type is recieved");
             }
         }
 
-        private void AlterBackupDatabase(Object data)
+        private void AlterBackupDatabase(Object data, ILiteDatabaseAsync conn)
         {
-            //todo call update function
+            var collection = conn.GetCollection < Type.GetType(data.PocoType) >("");
+            collection.Update(data);
         }
 
-        private void AddToBackupDatabase(Object data) {
-        //todo call add function
+        private void AddToBackupDatabase(Object data, ILiteDatabaseAsync conn) {
+            var collection = conn.GetCollection < Type.GetType(data.PocoType) > ("");
+            collection.Insert(data);
         }
 
         private Boolean CheckExists(Object data)
         {
-            return false; //todo
+            var connection = _db.GetConnectionAsync();
+            var collection = connection.GetCollection<Type.GetType(data.PocoType)>("");
+            var exists = collection.Where().FirstOrDefault() != null;
+            _db.Close();
+            return exists;
         }
 
         public void EnableBackupHost()
