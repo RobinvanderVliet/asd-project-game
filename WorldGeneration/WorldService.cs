@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DataTransfer.DTO.Character;
 
 namespace WorldGeneration
@@ -30,6 +31,11 @@ namespace WorldGeneration
         public void GenerateWorld(int seed)
         {
             _world = new World(seed, 6);
+        }
+
+        public MapCharacterDTO getCurrentCharacterPositions()
+        {
+            return _world.CurrentPlayer;
         }
     }
 }

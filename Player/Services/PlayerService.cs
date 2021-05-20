@@ -5,6 +5,7 @@ using Player.DTO;
 using Chat;
 using DataTransfer.DTO.Character;
 using DataTransfer.DTO.Player;
+using Network;
 using Player.Model;
 using Session;
 using WorldGeneration;
@@ -15,26 +16,28 @@ namespace Player.Services
     public class PlayerService : IPlayerService
     {
         private readonly IPlayerModel _currentPlayer;
-        private List<MapCharacterDTO> _playerPositions;
         private readonly IMoveHandler _moveHandler;
         private readonly IChatHandler _chatHandler;
         //session handler in aparte classe gebruiken, kan maybe blijven staan? Weet niet of die nog gebrukt gaat worden. :(
         private readonly ISessionHandler _sessionHandler;
-        private readonly WorldService _worldService;
+        private readonly IWorldService _worldService;
+        private readonly IClientController _clientController;
 
         public PlayerService(IPlayerModel currentPlayer
             , IChatHandler chatHandler
             , ISessionHandler sessionHandler
-            , List<MapCharacterDTO> playerPositions
-            , IMoveHandler moveHandler)
+            , IMoveHandler moveHandler
+            , IClientController clientController
+            , IWorldService worldService)
         {
             _chatHandler = chatHandler;
             _sessionHandler = sessionHandler;
             _currentPlayer = currentPlayer;
-            _playerPositions = playerPositions;
             _moveHandler = moveHandler;
+            _clientController = clientController;
+            currentPlayer.PlayerGuid = _clientController.GetOriginId();
+            _worldService = worldService;
         }
-        
 
         public void Attack(string direction)
         {
@@ -181,37 +184,17 @@ namespace Player.Services
             }
 
             
-            _currentPlayer.SetNewPlayerPosition(x, y);
-            //MapCharacterDTO dto = new CharacterDTO(0, 0, _currentPlayer.);
-            // foreach (var player in _playerPositions)
-            // {
-            //     if (player.Name.Equals(_currentPlayer.Name))
-            //     {
-            //         dto = player;
-            //     }
-            // }
-            var mapCharacterDto = new MapCharacterDTO(_currentPlayer.XPosition, _currentPlayer.YPosition, _currentPlayer.Name, _currentPlayer.Symbol);
-
+            var mapCharacterDto = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
+                (_worldService.getCurrentCharacterPositions().YPosition) + y, 
+                _currentPlayer.PlayerGuid, 
+                _worldService.getCurrentCharacterPositions().GameGuid, 
+                _currentPlayer.Symbol);
+            
             _moveHandler.SendMove(mapCharacterDto);
             
-
-            // the next line of code should be changed by sending newPosition to a relevant method
-            Console.WriteLine("X: " + _currentPlayer.XPosition + ". Y: " + _currentPlayer.YPosition);
+            MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions();
+           _currentPlayer.XPosition = currentCharacter.XPosition;
+           _currentPlayer.YPosition = currentCharacter.YPosition;
         }
-        
-        public void ChangePositionOfAPlayer(PlayerPositionDTO playerPosition)
-        {
-            foreach (var player in _playerPositions)
-            {
-                if (player.PlayerGUID == playerPosition.PlayerName)
-                {
-                    playerPosition.X = player.XPosition;
-                    playerPosition.Y = player.YPosition;
-                    
-                }
-            }
-        }
-        
-     
     }
 }

@@ -15,6 +15,7 @@ using WorldGeneration.Models.Interfaces;
 using Chat;
 using DataTransfer.DTO.Character;
 using DataTransfer.DTO.Player;
+using Network;
 using Session;
 using Player.ActionHandlers;
 
@@ -34,11 +35,12 @@ namespace ASD_project
         //    private readonly IRepository<MainGamePoco> _mainGameRepository;
             private Boolean GameStarted = true;
             private List<MapCharacterDTO> playerPositions;
-
+            private readonly IClientController _clientController;
+            private readonly IWorldService _worldService;
 
 
             public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler,
-                ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IRepository<PlayerPoco> playerRepository)
+                ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IRepository<PlayerPoco> playerRepository, IClientController clientController, IWorldService worldService)
             {
                 this._log = log;
                 _inventory = inventory;
@@ -47,6 +49,8 @@ namespace ASD_project
                 _moveHandler = moveHandler;
                 _playerRepository = playerRepository;
                 _gameSessionHandler = gameSessionHandler;
+                _clientController = clientController;
+                _worldService = worldService;
                 //  _mainGameRepository = mainGameRepository;
             }
 
@@ -80,25 +84,8 @@ namespace ASD_project
 
                 //moet later vervangen worden
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
-                List<MapCharacterDTO> players = new List<MapCharacterDTO>();
-                players.Add(new MapCharacterDTO(3, 0, "henk"));
-                players.Add(new MapCharacterDTO(5, 4, "pietje"));
-                IList<ICharacter> characters = new List<ICharacter>();
-
-                
-                
-                
-                
-                
                 IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
-                MapCharacterDTO playerDTO = new MapCharacterDTO(playerModel.XPosition, playerModel.YPosition,
-                    playerModel.Name, playerModel.Symbol);
-                // var worldService = new WorldService(new World(6686, 5, playerDTO));
-                // worldService.DisplayWorld();
-                //lobby start
-                //networkcomponent heeft lijst van players
-                //die players moeten toegevoegd worden aan playerPositions
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, players, _moveHandler);
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, _moveHandler, _clientController, _worldService);
                 Console.WriteLine("Type input messages below");
 
                 ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
@@ -122,24 +109,16 @@ namespace ASD_project
                 
                
                 while (true) 
-                {   
-                    if (_gameSessionHandler.InGame)
-                    {
-                        // Console.WriteLine("create player");
+                {
+                    // Console.WriteLine("create player");
                         // String playername = Console.ReadLine();
                         // if (playername.Length != 0)
                         // {
                         // IPlayerService player = createPlayer(playername);
                         Console.WriteLine("Type input messages below");
-                        inputHandler.HandleCommands(playerService);
-                        // }
-                    }
-                    else
-                    {
-                        inputHandler.HandleSession(sessionService);
-                    }
+                        inputHandler.HandleCommands(playerService, sessionService);
+                  
                 }
-
             }
 
             // private IPlayerService createPlayer(String name, WorldService world)

@@ -7,7 +7,7 @@ namespace Player.Model
     {
         public string Name { get; set; }
         
-        public string Id { get; set; }
+        public string PlayerGuid { get; set; }
         public int Health { get; set; }
         public int Stamina { get; set; }
 
@@ -46,8 +46,6 @@ namespace Player.Model
         public void PickupItem();
 
         public void DropItem(string itemName);
-        
-        public void SetNewPlayerPosition(int x, int y);
-        
+
     }
 }

@@ -15,20 +15,17 @@ namespace Session
         private IClientController _clientController;
         private ISessionHandler _sessionHandler;
         private IWorldService _worldService;
-        public Boolean _inGame;
-        public Boolean InGame { get => _inGame; set => _inGame = value; }
-        public GameSessionHandler(IClientController clientController, IWorldService worldService)
+        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
             _worldService = worldService;
-            InGame = false;
+            _sessionHandler = sessionHandler;
         }
         
-        public void SendGameSession(string messageValue, ISessionHandler sessionHandler)
+        public void SendGameSession(ISessionHandler sessionHandler)
         {
             _sessionHandler = sessionHandler;
-            Console.WriteLine(messageValue);
             var dto =  _sessionHandler.SetupGameHost();
             SendGameSessionDTO(dto);
             
@@ -48,24 +45,23 @@ namespace Session
 
         private void HandleStartGameSession(StartGameDto startGameDto)
         {
-            InGame = true;
             if (_clientController.IsHost())
             {
                 Console.WriteLine("Ik ben de host, moet iets doen met de database");
                 
             }
             
-            _worldService.GenerateWorld(6969);
+            _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
 
             foreach (var player in startGameDto.PlayerLocations)
             {
                 if (_clientController.GetOriginId() == player.Key) 
                 {
-                    _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, CharacterSymbol.CURRENT_PLAYER), true);
+                    _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, startGameDto.GameGuid, CharacterSymbol.CURRENT_PLAYER), true);
                 } 
                 else 
                 {
-                    _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, CharacterSymbol.ENEMY_PLAYER), false);
+                    _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, startGameDto.GameGuid,CharacterSymbol.ENEMY_PLAYER), false);
                 }
             }
             
