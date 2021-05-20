@@ -11,7 +11,6 @@ using DatabaseHandler.Services;
 using DatabaseHandler.Repository;
 
 
-
 namespace Session
 {
     public class SessionHandler : IPacketHandler, ISessionHandler
@@ -30,8 +29,6 @@ namespace Session
         {
             var dto = SetupGameHost();
             sendGameSessionDTO(dto);
-
-// bericht naar alle clients dat sessie is gestart
         }
 
 
@@ -43,7 +40,8 @@ namespace Session
             }
             else
             {
-                SessionDTO sessionDto = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
+                SessionDTO sessionDto =
+                    JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
                 _session = new Session(sessionDto.Name);
                 _session.SessionId = sessionId;
                 _clientController.SetSessionId(sessionId);
@@ -56,6 +54,7 @@ namespace Session
                 sendSessionDTO(sessionDTO);
                 _session.InSession = true;
             }
+
             return _session.InSession;
         }
 
@@ -68,7 +67,7 @@ namespace Session
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
-            
+
             Console.Out.WriteLine("Created session with the name: " + _session.Name);
 
             return _session.InSession;
@@ -96,8 +95,8 @@ namespace Session
 
             var resultGame = tmpServiceGame.GetAllAsync();
             resultGame.Wait();
-      
-           List<string> allClients = _session.GetAllClients();
+
+            List<string> allClients = _session.GetAllClients();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
 
             int playerX = 26; // spawn position
@@ -108,11 +107,12 @@ namespace Session
                 playerPosition[0] = playerX;
                 playerPosition[1] = playerY;
                 players.Add(element, playerPosition);
-                var tmpPlayer = new PlayerPoco {PlayerGuid = element, GameGuid =  tmpObject.GameGuid, XPosition = playerX, YPosition = playerY};
+                var tmpPlayer = new PlayerPoco
+                    {PlayerGuid = element, GameGuid = tmpObject.GameGuid, XPosition = playerX, YPosition = playerY};
                 tmpServicePlayer.CreateAsync(tmpPlayer);
 
-                playerX+=2; // spawn position + 2 each client
-                playerY+=2; // spawn position + 2 each client
+                playerX += 2; // spawn position + 2 each client
+                playerY += 2; // spawn position + 2 each client
             }
 
             StartGameDto startGameDto = new StartGameDto();
@@ -125,7 +125,6 @@ namespace Session
             return startGameDto;
         }
 
-       
 
         private void sendGameSessionDTO(StartGameDto startGameDto)
         {
@@ -141,10 +140,9 @@ namespace Session
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-            
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
 
-  
+
             if (packet.Header.Target == "client" || packet.Header.Target == "host")
             {
                 switch (sessionDTO.SessionType)
@@ -171,7 +169,7 @@ namespace Session
 
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
-            
+
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 

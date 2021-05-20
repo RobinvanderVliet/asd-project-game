@@ -19,20 +19,16 @@ namespace Player.Services
         private List<MapCharacterDTO> _playerPositions;
         private readonly IMoveHandler _moveHandler;
         private readonly IChatHandler _chatHandler;
-        //session handler in aparte classe gebruiken, kan maybe blijven staan? Weet niet of die nog gebrukt gaat worden. :(
-        private readonly ISessionHandler _sessionHandler;
         private readonly IWorldService _worldService;
         private readonly IClientController _clientController;
 
         public PlayerService(IPlayerModel currentPlayer
             , IChatHandler chatHandler
-            , ISessionHandler sessionHandler
             , IMoveHandler moveHandler
             , IClientController clientController
             , IWorldService worldService)
         {
             _chatHandler = chatHandler;
-            _sessionHandler = sessionHandler;
             _currentPlayer = currentPlayer;
             _moveHandler = moveHandler;
             _clientController = clientController;
@@ -42,18 +38,7 @@ namespace Player.Services
 
         public void Attack(string direction)
         {
-            //player1.getTile();
-            //check with the gameboard whether or not there's a player in the given direction from this tile
-            //player2 = tile(x,y).getPlayer
-            //if yes {
-            //int dmg = player1.GetAttackDamage();
-            //player1.RemoveStamina(1);
-            // player2.RemoveHealth(dmg);
-            //} else {  
-            //  Console.WriteLine("You swung at nothing!");
-            // player1.RemoveStamina(1);
-            //}
-            Console.WriteLine("Attacked in " + direction + " direction.");
+          Console.WriteLine("Attacked in " + direction + " direction.");
         }
 
         public void ExitCurrentGame()
