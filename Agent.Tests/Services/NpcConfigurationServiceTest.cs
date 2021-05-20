@@ -23,9 +23,9 @@ namespace Agent.Tests.Services
         {
             _sut = new NpcConfigurationService(new List<Configuration>(), new FileToDictionaryMapper());
             _fileHandlerMock = new Mock<FileHandler>();
-            _sut._fileHandler = _fileHandlerMock.Object;
+            _sut.FileHandler = _fileHandlerMock.Object;
             _pipelineMock = new Mock<Pipeline>();
-            _sut._pipeline = _pipelineMock.Object;
+            _sut.Pipeline = _pipelineMock.Object;
         }
         
         [Test]
@@ -49,13 +49,13 @@ namespace Agent.Tests.Services
             Mock<ConsoleRetriever> mockedRetriever = new();
             mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns("zombie").Returns("incorrect:code").Returns("cancel");
 
-            _sut._consoleRetriever = mockedRetriever.Object;
+            _sut.ConsoleRetriever = mockedRetriever.Object;
 
             //Act
             _sut.Configure();
 
             //Assert
-            Assert.AreEqual("missing '=' at 'code'", _sut.lastError);
+            Assert.AreEqual("missing '=' at 'code'", _sut.LastError);
         }
         
         [Test]
@@ -67,7 +67,7 @@ namespace Agent.Tests.Services
             
             Mock<ConsoleRetriever> mockedRetriever = new();
             mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns("zombie").Returns(code).Returns("cancel");
-            _sut._consoleRetriever = mockedRetriever.Object;
+            _sut.ConsoleRetriever = mockedRetriever.Object;
             
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns(code);
             _pipelineMock.Setup(x => x.CheckAst()).Throws(new SemanticErrorException(error));
@@ -76,7 +76,7 @@ namespace Agent.Tests.Services
             _sut.Configure();
 
             //Assert
-            Assert.AreEqual(error, _sut.lastError);
+            Assert.AreEqual(error, _sut.LastError);
         }
         
         [Test]
@@ -85,7 +85,7 @@ namespace Agent.Tests.Services
             Mock<ConsoleRetriever> mockedRetriever = new();
             mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns("zombie").Returns("aggressiveness=high");
             
-            _sut._consoleRetriever = mockedRetriever.Object;
+            _sut.ConsoleRetriever = mockedRetriever.Object;
             
             //Act
             _sut.Configure();

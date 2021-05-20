@@ -11,7 +11,7 @@ namespace Agent
 {
     public class FileHandler
     {
-        private String[] allowedTypes = new[] {".txt", ".cfg"};
+        private string[] _allowedTypes = new[] {".txt", ".cfg"};
 
         public virtual string ImportFile(string filepath)
         {
@@ -20,7 +20,7 @@ namespace Agent
                 throw new FileException("File not found!");
             }
 
-            if (!allowedTypes.Contains(Path.GetExtension(filepath)))
+            if (!_allowedTypes.Contains(Path.GetExtension(filepath)))
             {
                 throw new FileException("The provided file is of an incorrect extension");
             }

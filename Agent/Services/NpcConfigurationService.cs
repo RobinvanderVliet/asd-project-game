@@ -15,17 +15,17 @@ namespace Agent.Services
         public NpcConfigurationService(List<Configuration> npcConfigurations, FileToDictionaryMapper fileToDictionaryMapper)
         {
             _npcConfigurations = npcConfigurations;
-            _fileToDictionaryMapper = fileToDictionaryMapper;
-            _consoleRetriever = new ConsoleRetriever();
-            _fileHandler = new FileHandler();
-            _pipeline = new Pipeline();
+            base.FileToDictionaryMapper = fileToDictionaryMapper;
+            ConsoleRetriever = new ConsoleRetriever();
+            FileHandler = new FileHandler();
+            Pipeline = new Pipeline();
         }
 
         public override void CreateConfiguration(string npcName, string filepath)
         {
             var npcConfiguration = new NpcConfiguration();
             npcConfiguration.NpcName = npcName;
-            npcConfiguration.Settings = _fileToDictionaryMapper.MapFileToConfiguration(filepath);
+            npcConfiguration.Settings = FileToDictionaryMapper.MapFileToConfiguration(filepath);
             _npcConfigurations.Add(npcConfiguration);
         }
 
@@ -38,30 +38,30 @@ namespace Agent.Services
         {
             //TODO: Seems like duplicate code for now, but must be refactored later to match anticipated feature 'Configure NPC during a game'
             Console.WriteLine("What NPC do you wish to configure?");
-            var npc = _consoleRetriever.GetConsoleLine();
+            var npc = ConsoleRetriever.GetConsoleLine();
             if (npc.Equals(CANCEL_COMMAND))
             {
                 return;
             }
             Console.WriteLine("Please provide code for the NPC");
-            var code = _consoleRetriever.GetConsoleLine();
+            var code = ConsoleRetriever.GetConsoleLine();
             try
             {
-                _pipeline.ParseString(code);
-                _pipeline.CheckAst();
-                var output = _pipeline.GenerateAst();
+                Pipeline.ParseString(code);
+                Pipeline.CheckAst();
+                var output = Pipeline.GenerateAst();
                 string fileName = "npc\\" + npc + "-config.cfg";
-                _fileHandler.ExportFile(output, fileName);
+                FileHandler.ExportFile(output, fileName);
             }
             catch (SyntaxErrorException e)
             {
-                lastError = e.Message;
+                LastError = e.Message;
                 Log.Logger.Information("Syntax error: " + e.Message);
                 Configure();
             }
             catch (SemanticErrorException e)
             {
-                lastError = e.Message;
+                LastError = e.Message;
                 Log.Logger.Information("Semantic error: " + e.Message);
                 Configure();
             }

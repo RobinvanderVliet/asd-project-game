@@ -8,7 +8,7 @@ namespace Agent
 {
     public class ConsoleRetriever
     {
-        public virtual String GetConsoleLine()
+        public virtual string GetConsoleLine()
         {
             return Console.ReadLine();
         }

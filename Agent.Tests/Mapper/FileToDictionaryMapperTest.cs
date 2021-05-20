@@ -5,19 +5,18 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Agent.Mapper;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace Agent.Tests.Mapper
 {
     [ExcludeFromCodeCoverage]
     public class FileToDictionaryMapperTest
     {
-        private FileToDictionaryMapper _mapper;
+        private FileToDictionaryMapper _sut;
 
         [SetUp]
         public void Setup()
         {
-            _mapper = new FileToDictionaryMapper();
+            _sut = new FileToDictionaryMapper();
 
         }
 
@@ -32,7 +31,7 @@ namespace Agent.Tests.Mapper
             var filepath = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest.txt";
             
             //Act
-            var actualDictionary = _mapper.MapFileToConfiguration(filepath);
+            var actualDictionary = _sut.MapFileToConfiguration(filepath);
 
             //Assert
             Assert.AreEqual(expectedDictionary, actualDictionary);
@@ -47,9 +46,8 @@ namespace Agent.Tests.Mapper
             //Arrange
             var filepath = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest_2.txt";
             
-            //Act
-            //Assert
-            Assert.Throws<SyntaxErrorException>(() => _mapper.MapFileToConfiguration(filepath));
+            //Act & Assert
+            Assert.Throws<SyntaxErrorException>(() => _sut.MapFileToConfiguration(filepath));
 
         }
     }

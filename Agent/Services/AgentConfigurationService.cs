@@ -10,23 +10,23 @@ namespace Agent.Services
 {
     public class AgentConfigurationService : BaseConfigurationService
     {
-        private InlineConfig inlineConfig;
+        private InlineConfig _inlineConfig;
         private List<Configuration> _agentConfigurations;
 
         public AgentConfigurationService(List<Configuration> agentConfigurations, FileToDictionaryMapper fileToDictionaryMapper)
         {
-            _fileToDictionaryMapper = fileToDictionaryMapper;
+            base.FileToDictionaryMapper = fileToDictionaryMapper;
             _agentConfigurations = agentConfigurations; 
-            _consoleRetriever = new ConsoleRetriever();
-            inlineConfig = new InlineConfig();
-            _fileHandler = new FileHandler();
-            _pipeline = new Pipeline();
+            ConsoleRetriever = new ConsoleRetriever();
+            _inlineConfig = new InlineConfig();
+            FileHandler = new FileHandler();
+            Pipeline = new Pipeline();
         }
         
         public override void Configure()
         {
             Console.WriteLine("Please provide a path to your code file");
-            var input = _consoleRetriever.GetConsoleLine();
+            var input = ConsoleRetriever.GetConsoleLine();
 
             if (input.Equals(CANCEL_COMMAND))
             {
@@ -35,35 +35,35 @@ namespace Agent.Services
             
             if (input.Equals(LOAD_COMMAND)) 
             {
-                inlineConfig.setup();
+                _inlineConfig.setup();
                 return;
             }
             
             try
             {
-                var content = _fileHandler.ImportFile(input);
-                _pipeline.ParseString(content);
-                _pipeline.CheckAst();
-                var output = _pipeline.GenerateAst();
+                var content = FileHandler.ImportFile(input);
+                Pipeline.ParseString(content);
+                Pipeline.CheckAst();
+                var output = Pipeline.GenerateAst();
 
                 string fileName = "agent\\agent-config.cfg";
-                _fileHandler.ExportFile(output, fileName);
+                FileHandler.ExportFile(output, fileName);
             }
             catch (SyntaxErrorException e)
             {
-                lastError = e.Message;
+                LastError = e.Message;
                 Log.Logger.Information("Syntax error: " + e.Message);
                 Configure();
             }
             catch (SemanticErrorException e)
             {
-                lastError = e.Message;
+                LastError = e.Message;
                 Log.Logger.Information("Semantic error: " + e.Message);
                 Configure();
             }
             catch (FileException e)
             {
-                lastError = e.Message;
+                LastError = e.Message;
                 Log.Logger.Information("File error: " + e.Message);
                 Configure();
             }
@@ -73,7 +73,7 @@ namespace Agent.Services
         {
             var agentConfiguration = new AgentConfiguration();
             agentConfiguration.AgentName = agentName;
-            agentConfiguration.Settings = _fileToDictionaryMapper.MapFileToConfiguration(filepath);
+            agentConfiguration.Settings = FileToDictionaryMapper.MapFileToConfiguration(filepath);
             _agentConfigurations.Add(agentConfiguration);
         }
         

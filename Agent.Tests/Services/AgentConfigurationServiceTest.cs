@@ -4,19 +4,18 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Agent.Exceptions;
 using Agent.Mapper;
 using Agent.Models;
 
 namespace Agent.Tests
 {
-    class AgentConfigurationServiceTests
+    [ExcludeFromCodeCoverage]
+    public class AgentConfigurationServiceTests
     {
-        AgentConfigurationService _sut;
+        private AgentConfigurationService _sut;
         private Mock<FileHandler> _fileHandlerMock;
         private Mock<Pipeline> _pipelineMock;
 
@@ -25,9 +24,9 @@ namespace Agent.Tests
         {
             _sut = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper());
             _fileHandlerMock = new Mock<FileHandler>();
-            _sut._fileHandler = _fileHandlerMock.Object;
+            _sut.FileHandler = _fileHandlerMock.Object;
             _pipelineMock = new Mock<Pipeline>();
-            _sut._pipeline = _pipelineMock.Object;
+            _sut.Pipeline = _pipelineMock.Object;
         }
 
         [Test]
@@ -40,7 +39,7 @@ namespace Agent.Tests
             Mock<ConsoleRetriever> mockedRetriever = new();
             mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns(input).Returns("cancel");
 
-            _sut._consoleRetriever = mockedRetriever.Object;
+            _sut.ConsoleRetriever = mockedRetriever.Object;
 
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("wrong:wrong");
 
@@ -48,7 +47,7 @@ namespace Agent.Tests
             _sut.Configure();
 
             //Assert
-            Assert.AreEqual("missing '=' at 'wrong'", _sut.lastError);
+            Assert.AreEqual("missing '=' at 'wrong'", _sut.LastError);
         }
         
         [Test]
@@ -61,7 +60,7 @@ namespace Agent.Tests
             
             Mock<ConsoleRetriever> mockedRetriever = new();
             mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns(input).Returns("cancel");
-            _sut._consoleRetriever = mockedRetriever.Object;
+            _sut.ConsoleRetriever = mockedRetriever.Object;
             
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("explore=high");
             _pipelineMock.Setup(x => x.CheckAst()).Throws(new SemanticErrorException(error));
@@ -70,7 +69,7 @@ namespace Agent.Tests
             _sut.Configure();
 
             //Assert
-            Assert.AreEqual(error, _sut.lastError);
+            Assert.AreEqual(error, _sut.LastError);
         }
         
         [Test]
@@ -83,14 +82,14 @@ namespace Agent.Tests
             
             Mock<ConsoleRetriever> mockedRetriever = new();
             mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns(input).Returns("cancel");
-            _sut._consoleRetriever = mockedRetriever.Object;
+            _sut.ConsoleRetriever = mockedRetriever.Object;
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Throws(new FileException(error));
 
             //Act
             _sut.Configure();
 
             //Assert
-            Assert.AreEqual(error, _sut.lastError);
+            Assert.AreEqual(error, _sut.LastError);
         }
 
         [Test]
@@ -103,7 +102,7 @@ namespace Agent.Tests
             Mock<ConsoleRetriever> mockedRetriever = new();
             mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns(input);
             
-            _sut._consoleRetriever = mockedRetriever.Object;
+            _sut.ConsoleRetriever = mockedRetriever.Object;
 
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("aggressiveness=high");
 

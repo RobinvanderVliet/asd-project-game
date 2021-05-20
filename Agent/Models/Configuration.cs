@@ -6,7 +6,7 @@ namespace Agent.Models
 {
     public abstract class Configuration
     {
-        protected Dictionary<string, string> _settings;
+        private Dictionary<string, string> _settings;
 
         public Dictionary<string, string> Settings
         {
