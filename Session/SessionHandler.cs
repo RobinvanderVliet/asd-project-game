@@ -27,8 +27,8 @@ namespace Session
             }
             else
             {
-                SessionDTO sessionDto = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
-                _session = new Session(sessionDto.Name);
+                SessionDTO receivedSessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
+                _session = new Session(receivedSessionDTO.Name);
                 _session.SessionId = sessionId;
                 _clientController.SetSessionId(sessionId);
                 Console.WriteLine("Trying to join game with name: " + _session.Name);
