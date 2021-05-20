@@ -1,15 +1,12 @@
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
 
 namespace InputCommandHandler.Antlr.Ast.Actions
 {
     public class CreateSession: Command
     {
         private Message _message;
-        [ExcludeFromCodeCoverage]
         public Message Message { get => _message; private set => _message = value; }
 
-        [ExcludeFromCodeCoverage]
         public ArrayList GetChildren()
         {
             var children = new ArrayList();
@@ -27,7 +24,6 @@ namespace InputCommandHandler.Antlr.Ast.Actions
             return this;
         }
 
-        [ExcludeFromCodeCoverage]
         public ASTNode RemoveChild(ASTNode child)
         {
             if (child is Message && child == _message)
@@ -36,18 +32,6 @@ namespace InputCommandHandler.Antlr.Ast.Actions
             }
 
             return this;
-        }
-        
-        [ExcludeFromCodeCoverage]
-        public override bool Equals(object obj)
-        {
-            return this.Equals(obj as Drop);
-        }
-
-        [ExcludeFromCodeCoverage]
-        public bool Equals(Drop other)
-        {
-            return true;
         }
     }
 }

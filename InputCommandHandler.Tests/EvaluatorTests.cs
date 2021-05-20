@@ -1,10 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using InputCommandHandler.Antlr.Ast;
+﻿using InputCommandHandler.Antlr.Ast;
 using InputCommandHandler.Antlr.Ast.Actions;
 using InputCommandHandler.Antlr.Transformer;
-using InputCommandHandler.Exceptions;
 using Moq;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
+using InputCommandHandler.Exceptions;
 using Player.Services;
 
 namespace InputCommandHandler.Tests
@@ -222,70 +222,6 @@ namespace InputCommandHandler.Tests
             Input replace = new Input();
             replace.AddChild(new Replace());
             return new AST(replace);
-        }
-
-        [Test]
-        public void Test_Apply_HandleRequestSessionsActionIsCalled()
-        {
-            // Arrange
-            var ast = RequestSessionsAst();
-
-            // Act
-            _sut.Apply(ast);
-
-            // Assert
-            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.RequestSessions(), Times.Once);
-        }
-
-        private static AST RequestSessionsAst()
-        {
-            Input requestSessions = new Input();
-            requestSessions.AddChild(new RequestSessions());
-            return new AST(requestSessions);
-        }
-
-        [Test]
-        public void Test_Apply_HandleCreateSessionActionIsCalled()
-        {
-            // Arrange
-            const string sessionName = "cool world";
-            var ast = CreateSessionAst(sessionName);
-            
-            // Act
-            _sut.Apply(ast);
-            
-            // Assert
-            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.CreateSession(sessionName), Times.Once);
-        }
-
-        private static AST CreateSessionAst(string sessionName)
-        {
-            Input createSession = new Input();
-            createSession.AddChild(new CreateSession()
-                .AddChild(new Message(sessionName)));
-            return new AST(createSession);
-        }
-
-        [Test]
-        public void Test_Apply_HandleJoinSessionActionIsCalled()
-        {
-            // Arrange
-            const string sessionId = "1234-1234";
-            var ast = JoinSessionAst(sessionId);
-
-            // Act
-            _sut.Apply(ast);
-            
-            // Assert
-            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.JoinSession(sessionId), Times.Once);
-        }
-
-        private static AST JoinSessionAst(string sessionId)
-        {
-            Input joinSession = new Input();
-            joinSession.AddChild(new JoinSession()
-                .AddChild(new Message(sessionId)));
-            return new AST(joinSession);
         }
     }
 }

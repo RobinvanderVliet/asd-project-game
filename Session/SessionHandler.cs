@@ -65,7 +65,11 @@ namespace Session
         
         public void SendHeartbeat()
         {
+
             SessionDTO sessionDTO = new SessionDTO(SessionType.SendHeartbeat);
+            sessionDTO.ClientIds = new List<string>();
+            sessionDTO.ClientIds.Add(_clientController.GetOriginId());
+
             sendSessionDTO(sessionDTO);
         }
 

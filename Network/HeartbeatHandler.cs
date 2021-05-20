@@ -1,23 +1,34 @@
 ﻿using Network.DTO;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Network
 {
     public class HeartbeatHandler : IHeartbeatHandler
     {
-        private List<HeartbeatDTO> _players = new List<HeartbeatDTO>();
+        private List<HeartbeatDTO> _players;
         TimeSpan waitTime = TimeSpan.FromMilliseconds(1000);
+
+        public HeartbeatHandler()
+        {
+            _players = new List<HeartbeatDTO>();
+            Timer timer = new Timer((e) =>
+            {
+                UpdateStatus();
+            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(2000));
+        }
 
         public void ReceiveHeartbeat(PacketDTO packet)
         {
-            if(!PlayerKnown(packet.Header.SessionID))
+            if (!PlayerKnown(GetClientId(packet)))
             { 
-               _players.Add(new HeartbeatDTO(packet.Header.SessionID));
+               _players.Add(new HeartbeatDTO(GetClientId(packet)));
             }
             else
             {
-                UpdatePlayer(packet.Header.SessionID);
+                UpdatePlayer(GetClientId(packet));
                 UpdateStatus();
             }
             
@@ -25,18 +36,27 @@ namespace Network
 
         private void CheckStatus()
         {
+            List<HeartbeatDTO> leavers = new List<HeartbeatDTO>();
             foreach(HeartbeatDTO player in _players)
             {
                 if(player.status == 0)
                 {
-                    EnablePlayerAgent();
+                    leavers.Add(player);
                 }
+            }
+            if (leavers.Count != 0)
+            {
+                EnablePlayerAgent(leavers);
             }
         }
 
-        private void EnablePlayerAgent()
+        private void EnablePlayerAgent(List<HeartbeatDTO> leavers)
         {
-            Console.WriteLine("Agent is enabled");
+            Console.WriteLine("Agents are enabled");
+            foreach(HeartbeatDTO player in leavers)
+            {
+                _players.Remove(player);
+            }
         }
 
         private bool PlayerKnown(string sessionID) 
@@ -80,6 +100,14 @@ namespace Network
                     player.time = DateTime.Now;
                 }
             }
+        }
+
+        private string GetClientId(PacketDTO packetDTO)
+        {
+            JObject payload = JObject.Parse(packetDTO.Payload);
+            JArray idArray = payload.Value<JArray>("ClientIds");
+            string id = idArray[0].ToString();
+            return id;
         }
 
     }
