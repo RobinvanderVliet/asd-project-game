@@ -153,7 +153,7 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformStartSession(StartSession startSession)
         {
-            _sessionService.StartSession(startSession.Message.MessageValue);
+            _sessionService.StartSession();
         }
         
     }

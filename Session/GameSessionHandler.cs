@@ -16,20 +16,17 @@ namespace Session
         private ISessionHandler _sessionHandler;
         private IWorldService _worldService;
         public Boolean _inGame;
-        public Boolean InGame { get => _inGame; set => _inGame = value; }
         public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
             _worldService = worldService;
             _sessionHandler = sessionHandler;
-            InGame = false;
         }
         
-        public void SendGameSession(string messageValue, ISessionHandler sessionHandler)
+        public void SendGameSession(ISessionHandler sessionHandler)
         {
             _sessionHandler = sessionHandler;
-            Console.WriteLine(messageValue);
             var dto =  _sessionHandler.SetupGameHost();
             SendGameSessionDTO(dto);
             
@@ -49,7 +46,6 @@ namespace Session
 
         private void HandleStartGameSession(StartGameDto startGameDto)
         {
-            InGame = true;
             if (_clientController.IsHost())
             {
                 Console.WriteLine("Ik ben de host, moet iets doen met de database");

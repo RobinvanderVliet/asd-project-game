@@ -13,7 +13,7 @@ namespace Session
         
         public void RequestSessions();
 
-        public void StartSession(string messageValue);
+        public void StartSession();
 
     }
 }
