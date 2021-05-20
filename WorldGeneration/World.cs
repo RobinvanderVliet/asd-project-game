@@ -22,13 +22,13 @@ namespace WorldGeneration
 
         public void UpdateCharacterPosition(MapCharacterDTO characterPositionDTO)
         {
-            // if (CurrentPlayer.Name == characterPositionDTO.Name)
-            // {
-            //     CurrentPlayer.XPosition = characterPositionDTO.XPosition;
-            //     CurrentPlayer.YPosition = characterPositionDTO.YPosition;
-            // }
-            //
-            // var charactersWithTheSameName = Characters.Where(character => characterPositionDTO.Name == character.Name);
+            if (CurrentPlayer.Id == characterPositionDTO.Id)
+            {
+                CurrentPlayer.XPosition = characterPositionDTO.XPosition;
+                CurrentPlayer.YPosition = characterPositionDTO.YPosition;
+            }
+            
+            // var charactersWithTheSameName = Characters.Where(character => characterPositionDTO.Id == character.Id);
             // if (charactersWithTheSameName.Count() > 1)
             // {
             //     throw new Exception("Duplicate characters found in world");
@@ -42,10 +42,7 @@ namespace WorldGeneration
             // {
             //     throw new Exception("Could not find referenced character, it has not been initialized in the world");
             // }
-            
-            CurrentPlayer.XPosition = characterPositionDTO.XPosition;
-            CurrentPlayer.YPosition = characterPositionDTO.YPosition;
-            
+
             DisplayWorld();
         }
 

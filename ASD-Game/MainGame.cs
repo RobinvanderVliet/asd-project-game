@@ -14,6 +14,7 @@ using WorldGeneration.Models.Interfaces;
 using Chat;
 using DataTransfer.DTO.Character;
 using DataTransfer.DTO.Player;
+using Network;
 using Session;
 using Player.ActionHandlers;
 
@@ -33,11 +34,11 @@ namespace ASD_project
         //    private readonly IRepository<MainGamePoco> _mainGameRepository;
             private Boolean GameStarted = true;
             private List<MapCharacterDTO> playerPositions;
-
+            private readonly IClientController _clientController;
 
 
             public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler,
-                ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IRepository<PlayerPoco> playerRepository)
+                ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IRepository<PlayerPoco> playerRepository, IClientController clientController)
             {
                 this._log = log;
                 _inventory = inventory;
@@ -46,6 +47,7 @@ namespace ASD_project
                 _moveHandler = moveHandler;
                 _playerRepository = playerRepository;
                 _gameSessionHandler = gameSessionHandler;
+                _clientController = clientController;
                 //  _mainGameRepository = mainGameRepository;
             }
 
@@ -79,7 +81,7 @@ namespace ASD_project
                 //moet later vervangen worden
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
                 IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, _moveHandler);
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, _moveHandler, _clientController);
                 Console.WriteLine("Type input messages below");
 
                 ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);

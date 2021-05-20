@@ -5,6 +5,7 @@ using Player.DTO;
 using Chat;
 using DataTransfer.DTO.Character;
 using DataTransfer.DTO.Player;
+using Network;
 using Player.Model;
 using Session;
 using WorldGeneration;
@@ -20,16 +21,20 @@ namespace Player.Services
         //session handler in aparte classe gebruiken, kan maybe blijven staan? Weet niet of die nog gebrukt gaat worden. :(
         private readonly ISessionHandler _sessionHandler;
         private readonly WorldService _worldService;
+        private readonly IClientController _clientController;
 
         public PlayerService(IPlayerModel currentPlayer
             , IChatHandler chatHandler
             , ISessionHandler sessionHandler
-            , IMoveHandler moveHandler)
+            , IMoveHandler moveHandler
+            , IClientController clientController)
         {
             _chatHandler = chatHandler;
             _sessionHandler = sessionHandler;
             _currentPlayer = currentPlayer;
             _moveHandler = moveHandler;
+            _clientController = clientController;
+            currentPlayer.Id = _clientController.GetOriginId();
         }
 
         public void Attack(string direction)
@@ -178,7 +183,7 @@ namespace Player.Services
 
             
             _currentPlayer.SetNewPlayerPosition(x, y);
-            var mapCharacterDto = new MapCharacterDTO(_currentPlayer.XPosition, _currentPlayer.YPosition, _currentPlayer.Name, _currentPlayer.Symbol);
+            var mapCharacterDto = new MapCharacterDTO(_currentPlayer.XPosition, _currentPlayer.YPosition, _currentPlayer.Id, _currentPlayer.Symbol);
 
             _moveHandler.SendMove(mapCharacterDto);
             
