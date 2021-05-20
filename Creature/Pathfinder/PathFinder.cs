@@ -34,15 +34,10 @@ namespace Creature
 
             openList.Enqueue(currentNode);
 
-            while (openList.Count > 0)
+            while (openList.Count > 0 && !AreNodesAtSamePosition(openList.Peek(), endNode))
             {
-                currentNode = openList.Dequeue();
+                openList.Dequeue();
                 closedList.Add(currentNode);
-
-                if (currentNode.Position.X.Equals(endNode.Position.X) && currentNode.Position.Y.Equals(endNode.Position.Y))
-                {
-                    break;
-                }
 
                 adjacencies = GetAdjacentNodes(currentNode);
 
@@ -50,44 +45,39 @@ namespace Creature
                 {
                     if (adjNode.IsWalkable)
                     {
-                        if (openList.Contains(adjNode))
+                        if (!(openList.Contains(adjNode) && currentNode.FScore <= adjNode.FScore))
                         {
-                            if (currentNode.FScore <= adjNode.FScore)
+                            if (closedList.Contains(adjNode))
                             {
-                                continue;
+                                if (currentNode.FScore > adjNode.FScore)
+                                {
+                                    closedList.Remove(adjNode);
+                                }
+                            }
+                            else
+                            {
+                                adjNode.Parent = currentNode;
+                                adjNode.DistanceToTarget = Math.Abs(adjNode.Position.X - endNode.Position.X) + Math.Abs(adjNode.Position.Y - endNode.Position.Y);
+                                adjNode.Cost = adjNode.Weight + adjNode.Parent.Cost;
+                                openList.Enqueue(adjNode);
                             }
                         }
-
-                        if (closedList.Contains(adjNode))
-                        {
-                            if (!(currentNode.FScore <= adjNode.FScore))
-                            {
-                                closedList.Remove(adjNode);
-                            }
-                        }
-                        else
-                        {
-                            adjNode.Parent = currentNode;
-                            adjNode.DistanceToTarget = Math.Abs(adjNode.Position.X - endNode.Position.X) + Math.Abs(adjNode.Position.Y - endNode.Position.Y);
-                            adjNode.Cost = adjNode.Weight + adjNode.Parent.Cost;
-                            openList.Enqueue(adjNode);
-                        }
-                            
                     }
                 }
+                currentNode = openList.Peek();
             }
 
-            if (currentNode.Position.X != endNode.Position.X && currentNode.Position.Y != endNode.Position.Y)
+            if (!AreNodesAtSamePosition(currentNode, endNode))
             {
                 throw new PathHasNoDestinationException();
             }
 
-            else if (currentNode == startNode)
+            else if (AreNodesAtSamePosition(currentNode, startNode))
             {
                 pathStack.Push(currentNode);
             }
 
-            while (currentNode != startNode && currentNode != null)
+            while (!AreNodesAtSamePosition(currentNode, startNode) && currentNode != null)
             {
                 pathStack.Push(currentNode);
                 currentNode = currentNode.Parent;
@@ -96,31 +86,36 @@ namespace Creature
             return pathStack;
         }
 
+        private bool AreNodesAtSamePosition(Node a, Node b)
+        {
+            return a.Position.X.Equals(b.Position.X) && a.Position.Y.Equals(b.Position.Y);
+        }
+
         private List<Node> GetAdjacentNodes(Node node)
         {
-            List<Node> temp = new List<Node>();
+            List<Node> adjNodes = new List<Node>();
 
             int row = (int)node.Position.Y;
             int col = (int)node.Position.X;
 
             if (row + 1 < _gridRows)
             {
-                temp.Add(_grid[col][row + 1]);
+                adjNodes.Add(_grid[col][row + 1]);
             }
             if (row - 1 >= 0)
             {
-                temp.Add(_grid[col][row - 1]);
+                adjNodes.Add(_grid[col][row - 1]);
             }
             if (col - 1 >= 0)
             {
-                temp.Add(_grid[col - 1][row]);
+                adjNodes.Add(_grid[col - 1][row]);
             }
             if (col + 1 < _gridCols)
             {
-                temp.Add(_grid[col + 1][row]);
+                adjNodes.Add(_grid[col + 1][row]);
             }
 
-            return temp;
+            return adjNodes;
         }
     }
 }

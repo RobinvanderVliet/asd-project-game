@@ -35,7 +35,6 @@ namespace Creature.Pathfinder
             return false;
         }
 
-        [ExcludeFromCodeCoverage]
         public T Peek()
         {
             T frontItem = _elements[0];
@@ -54,9 +53,8 @@ namespace Creature.Pathfinder
             _elements[i] = item;
         }
 
-        public T Dequeue()
+        public void Dequeue()
         {
-            T firstItem = _elements[0];
             T tempItem = _elements[_elements.Count - 1];
             _elements.RemoveAt(_elements.Count - 1);
             if (_elements.Count > 0)
@@ -78,7 +76,6 @@ namespace Creature.Pathfinder
                 }
                 _elements[i] = tempItem;
             }
-            return firstItem;
         }
     }
 }

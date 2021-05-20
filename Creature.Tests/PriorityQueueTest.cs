@@ -11,18 +11,17 @@ namespace Creature.Tests
     [TestFixture]
     class PriorityQueueTest
     {
+        private PriorityQueue<Node> _sut;
         private Node _node1;
         private Node _node2;
         private Node _node3;
 
-        private Mock<PriorityQueue<Node>> _priorityQueue;
-
         [SetUp]
         public void Setup()
         {
-            _node1 = new Node(new Vector2(0, 0), false);
-            _node2 = new Node(new Vector2(7, 0), false);
-            _node3 = new Node(new Vector2(16, 0), false);
+            _node1 = new Node(new Vector2(0, 6), false);
+            _node2 = new Node(new Vector2(7, 2), false);
+            _node3 = new Node(new Vector2(16, 9), false);
             _node1.DistanceToTarget = 1;
             _node1.Cost = 3;
             _node2.DistanceToTarget = 1;
@@ -30,36 +29,51 @@ namespace Creature.Tests
             _node3.DistanceToTarget = 1;
             _node3.Cost = 2;
 
-            _priorityQueue = new Mock<PriorityQueue<Node>> { CallBase = true };
+            _sut = new PriorityQueue<Node>();
         }
 
         [Test]
-        public void Test_Dequeue_ReturnsNodeWithLowestFScore()
+        public void Test_Peek_ReturnsNodeWithLowestFScore()
         {
             // Arrange ---------
-            Node actualNode;
-            _priorityQueue.Object.Enqueue(_node1);
-            _priorityQueue.Object.Enqueue(_node2);
-            _priorityQueue.Object.Enqueue(_node3);
-            actualNode = _priorityQueue.Object.Dequeue();
+            _sut.Enqueue(_node1);
+            _sut.Enqueue(_node2);
+            _sut.Enqueue(_node3);
 
             // Act -------------
-            float actual = actualNode.Position.X;
-            int expected = 7;
+            Vector2 actualNodePosition = _sut.Peek().Position;
+            Vector2 expectedNodePosition = new Vector2(7, 2);
 
             // Assert ----------
-            Assert.That(actual, Is.EqualTo(expected));
+            Assert.That(actualNodePosition, Is.EqualTo(expectedNodePosition));
         }
 
         [Test]
         public void Test_Contains_ReturnsFalseIfItemNotInPriorityQueue()
         {
             // Arrange ---------
-            _priorityQueue.Object.Enqueue(_node1);
-            _priorityQueue.Object.Enqueue(_node2);
+            _sut.Enqueue(_node1);
+            _sut.Enqueue(_node2);
 
             // Act -------------
-            bool actual = _priorityQueue.Object.Contains(_node3);
+            bool actual = _sut.Contains(_node3);
+            bool expected = false;
+
+            // Assert ----------
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void Test_Dequeue_RemovesNodeWithLowestFScore()
+        {
+            // Arrange ---------
+            _sut.Enqueue(_node1);
+            _sut.Enqueue(_node2);
+            _sut.Enqueue(_node3);
+
+            // Act -------------
+            _sut.Dequeue();
+            bool actual = _sut.Contains(_node2);
             bool expected = false;
 
             // Assert ----------
