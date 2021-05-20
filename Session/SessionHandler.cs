@@ -32,9 +32,10 @@ namespace Session
                 {
                     SendHeartbeat();
                 }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
-                
-                SessionDTO sessionDto = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
-                _session = new Session(sessionDto.Name);
+       
+                SessionDTO receivedSessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
+                _session = new Session(receivedSessionDTO.Name);
+
                 _session.SessionId = sessionId;
                 _clientController.SetSessionId(sessionId);
                 Console.WriteLine("Trying to join game with name: " + _session.Name);
@@ -64,9 +65,7 @@ namespace Session
         
         public void SendHeartbeat()
         {
-            SessionDTO sessionDTO = new SessionDTO(SessionType.RequestHeartbeat);
-            sessionDTO.ClientIds = new List<string>();
-            sessionDTO.ClientIds.Add(_clientController.GetOriginId());
+            SessionDTO sessionDTO = new SessionDTO(SessionType.SendHeartbeat);
             sendSessionDTO(sessionDTO);
         }
 
@@ -83,7 +82,7 @@ namespace Session
             {
                 switch (sessionDTO.SessionType)
                 {
-                    case SessionType.RequestHeartbeat:
+                    case SessionType.SendHeartbeat:
                         return handleHeartbeat();
                     case SessionType.RequestSessions:
                         return handleRequestSessions();
@@ -113,7 +112,7 @@ namespace Session
 
         private HandlerResponseDTO handleHeartbeat()
         {
-            SessionDTO sessionDto = new SessionDTO(SessionType.RequestHeartbeat);
+            SessionDTO sessionDto = new SessionDTO(SessionType.SendHeartbeat);
             var jsonObject = JsonConvert.SerializeObject(sessionDto);
             return new HandlerResponseDTO(SendAction.Catch, jsonObject);
         }
