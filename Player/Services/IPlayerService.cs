@@ -47,9 +47,6 @@ namespace Player.Services
         public void DropItem(string itemNameValue);
 
         public void HandleDirection(string directionValue, int stepsValue);
-        
-        public void ChangePositionOfAPlayer(PlayerPositionDTO playerPosition);
-        
-       
+
     }
 }

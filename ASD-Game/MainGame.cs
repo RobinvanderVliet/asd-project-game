@@ -78,25 +78,8 @@ namespace ASD_project
 
                 //moet later vervangen worden
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
-                List<MapCharacterDTO> players = new List<MapCharacterDTO>();
-                players.Add(new MapCharacterDTO(3, 0, "henk"));
-                players.Add(new MapCharacterDTO(5, 4, "pietje"));
-                IList<ICharacter> characters = new List<ICharacter>();
-
-                
-                
-                
-                
-                
                 IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
-                MapCharacterDTO playerDTO = new MapCharacterDTO(playerModel.XPosition, playerModel.YPosition,
-                    playerModel.Name, playerModel.Symbol);
-                // var worldService = new WorldService(new World(6686, 5, playerDTO));
-                // worldService.DisplayWorld();
-                //lobby start
-                //networkcomponent heeft lijst van players
-                //die players moeten toegevoegd worden aan playerPositions
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, players, _moveHandler);
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, _moveHandler);
                 Console.WriteLine("Type input messages below");
 
                 ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
@@ -120,24 +103,16 @@ namespace ASD_project
                 
                
                 while (true) 
-                {   
-                    if (_gameSessionHandler.InGame)
-                    {
-                        // Console.WriteLine("create player");
+                {
+                    // Console.WriteLine("create player");
                         // String playername = Console.ReadLine();
                         // if (playername.Length != 0)
                         // {
                         // IPlayerService player = createPlayer(playername);
                         Console.WriteLine("Type input messages below");
-                        inputHandler.HandleCommands(playerService);
-                        // }
-                    }
-                    else
-                    {
-                        inputHandler.HandleSession(sessionService);
-                    }
+                        inputHandler.HandleCommands(playerService, sessionService);
+                  
                 }
-
             }
 
             // private IPlayerService createPlayer(String name, WorldService world)
