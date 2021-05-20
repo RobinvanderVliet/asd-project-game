@@ -9,11 +9,11 @@ namespace Network
     {
         private INetworkComponent _networkComponent;
         private IHostController _hostController;
-        private BackupHostService _backupService;
+        private IBackupHostService _backupHostService;
         private string _sessionId;
         private Dictionary<PacketType, IPacketHandler> _subscribers = new();
 
-        public ClientController(INetworkComponent networkComponent)
+        public ClientController(INetworkComponent networkComponent, IBackupHostService backupHostService)
         {
             _networkComponent = networkComponent;
             _networkComponent.SetClientController(this);
@@ -91,5 +91,19 @@ namespace Network
             _hostController = hostController;
         }
 
+        public void MarkBackupHost()
+        {
+            _backupHostService.EnableBackupHost();
+        }
+
+        public void UnmarkBackupHost()
+        {
+            _backupHostService.DisableBackupHost();
+        }
+
+        public Boolean IsBackupHost()
+        {
+            return _backupHostService.IsBackupHost();
+        }
     }
 }

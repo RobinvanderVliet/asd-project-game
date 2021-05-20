@@ -91,7 +91,7 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformDrop(Drop drop)
         {
-            _playerService.DropItem(drop.ItemName.MessageValue);
+            _playerService.DropItem(drop.ItemName.Value);
         }
 
         private void TransformAttack(Attack attack)
@@ -121,22 +121,22 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformSay(Say say)
         {
-            _playerService.Say(say.Message.MessageValue);
+            _playerService.Say(say.Message.Value);
         }
 
         private void TransformShout(Shout shout)
         {
-            _playerService.Shout(shout.Message.MessageValue);
+            _playerService.Shout(shout.Message.Value);
         }
 
         private void TransformCreateSession(CreateSession createSession)
         {
-            _playerService.CreateSession(createSession.Message.MessageValue);
+            _playerService.CreateSession(createSession.Message.Value);
         }
 
         private void TransformJoinSession(JoinSession joinSession)
         {
-            _playerService.JoinSession(joinSession.Message.MessageValue);
+            _playerService.JoinSession(joinSession.Message.Value);
         }
 
         private void TransformRequestSessions(RequestSessions requestSessions)
