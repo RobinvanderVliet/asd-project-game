@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Player.Model;
 using Player.Services;
 using System.Collections.Generic;
+using AutoMapper;
 using WorldGeneration;
 using WorldGeneration.Models.Interfaces;
 using Chat;
@@ -70,6 +71,7 @@ namespace ASD_project
 
             public void Run()
             {
+             
                 Console.WriteLine("Game is gestart");
 
                 // TODO: Remove from this method, team 2 will provide a command for it

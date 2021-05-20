@@ -10,11 +10,12 @@ namespace DataTransfer.DTO.Character
 
         public InventoryDTO Inventory;
         public BitcoinDTO Bitcoins;
+
         
         public CharacterDTO(int xPosition
             , int yPosition
             , string symbol
-            , string name
+            , string playerGuid
             , ConsoleColor color = ConsoleColor.White
             , ConsoleColor backgroundColor = ConsoleColor.Black
             , int team = 0
@@ -25,12 +26,12 @@ namespace DataTransfer.DTO.Character
             , BitcoinDTO bitcoins = null) : base(xPosition
             , yPosition
             , symbol
-            , name
+            , playerGuid
             , color
             , backgroundColor
             , team)
         {
-            Name = name;
+            PlayerGUID = playerGuid;
             Health = health;
             Stamina = stamina;
             RadiationLevel = radiationLevel;

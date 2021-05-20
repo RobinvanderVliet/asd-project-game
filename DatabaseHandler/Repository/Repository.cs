@@ -59,9 +59,10 @@ namespace DatabaseHandler.Repository
         [ExcludeFromCodeCoverage]
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            var chunks = await _db.GetCollection<T>(_collection).Query().ToListAsync();
-            return chunks;
+            var result = await _db.GetCollection<T>(_collection).Query().ToListAsync();
+            return result;
         }
+        
 
         [ExcludeFromCodeCoverage]
         public async Task<int> DeleteAllAsync()
@@ -75,6 +76,20 @@ namespace DatabaseHandler.Repository
             var result = await _db.GetCollection<PlayerPoco>(_collection).Query().ToListAsync();
             return result; 
         }
+        
+        
+        public async Task<Boolean> UpdateAsyncPlayer(string playerGUID, int newPosX, int newPosY)
+        {
+            var results =  _db.GetCollection<PlayerPoco>(_collection);
+
+            var col = results.FindOneAsync(x => x.PlayerGUID.Equals(playerGUID));
+            col.Result.XPosition = newPosX;
+            col.Result.YPosition = newPosY;
+
+           return await results.UpdateAsync(col.Result);
+            
+        }
+   
 
      
     }

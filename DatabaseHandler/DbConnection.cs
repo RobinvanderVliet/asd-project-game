@@ -19,32 +19,32 @@ namespace DatabaseHandler
                 .DbRef(x => x.GameGUID, nameof(GamePoco));
 
             //FK Game -> Player
-            BsonMapper.Global.Entity<GamePoco>()
-                .DbRef(x => x.PlayerGUIDHost, nameof(PlayerPoco));
+            // BsonMapper.Global.Entity<GamePoco>()
+            //     .DbRef(x => x., nameof(PlayerPoco));
 
-            //FK Agent -> Game
-            BsonMapper.Global.Entity<AgentPoco>()
-                .DbRef(x => x.GameGUID, nameof(GamePoco));
-
-            //FK Agent -> Player
-            BsonMapper.Global.Entity<AgentPoco>()
-                .DbRef(x => x.PlayerGUID, nameof(PlayerPoco));
-
-            //FK PlayerItem -> Player
-            BsonMapper.Global.Entity<PlayerItemPoco>()
-                .DbRef(x => x.PlayerGUID, nameof(PlayerPoco));
-
-            //FK PlayerItem -> Item
-            BsonMapper.Global.Entity<PlayerItemPoco>()
-                 .DbRef(x => x.ItemName, nameof(ItemPoco));
-
-            //FK Game -> WorldItem
-            BsonMapper.Global.Entity<GamePoco>()
-                .DbRef(x => x.GameGUID, nameof(WorldItemPoco));
-
-            //FK WorldItem -> Item
-            BsonMapper.Global.Entity<WorldItemPoco>()
-                .DbRef(x => x.ItemName, nameof(ItemPoco));
+            // //FK Agent -> Game
+            // BsonMapper.Global.Entity<AgentPoco>()
+            //     .DbRef(x => x.GameGUID, nameof(GamePoco));
+            //
+            // //FK Agent -> Player
+            // BsonMapper.Global.Entity<AgentPoco>()
+            //     .DbRef(x => x.PlayerGUID, nameof(PlayerPoco));
+            //
+            // //FK PlayerItem -> Player
+            // BsonMapper.Global.Entity<PlayerItemPoco>()
+            //     .DbRef(x => x.PlayerGUID, nameof(PlayerPoco));
+            //
+            // //FK PlayerItem -> Item
+            // BsonMapper.Global.Entity<PlayerItemPoco>()
+            //      .DbRef(x => x.ItemName, nameof(ItemPoco));
+            //
+            // //FK Game -> WorldItem
+            // BsonMapper.Global.Entity<GamePoco>()
+            //     .DbRef(x => x.GameGUID, nameof(WorldItemPoco));
+            //
+            // //FK WorldItem -> Item
+            // BsonMapper.Global.Entity<WorldItemPoco>()
+            //     .DbRef(x => x.ItemName, nameof(ItemPoco));
         }
 
         [ExcludeFromCodeCoverage]

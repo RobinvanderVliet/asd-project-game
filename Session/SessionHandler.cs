@@ -90,20 +90,20 @@ namespace Session
             Guid gameGuid = Guid.NewGuid();
             var tmpObject = new GamePoco {GameGUID = gameGuid};
             tmpServiceGame.CreateAsync(tmpObject);
-            
-            
-            List<string> allClients = _session.GetAllClients();
+      
+           List<string> allClients = _session.GetAllClients();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
 
             int playerX = 26;
             int playerY = 11;
+            
             foreach (string element in allClients)
             {
                 int[] playerPosition = new int[2];
                 playerPosition[0] = playerX;
                 playerPosition[1] = playerY;
                 players.Add(element, playerPosition);
-                var tmpPlayer = new PlayerPoco {PlayerGUID = element, GameGUID =  gameGuid, PositionX = playerX, PositionY = playerY};
+                var tmpPlayer = new PlayerPoco {PlayerGUID = element, GameGUID =  tmpObject, XPosition = playerX, YPosition = playerY};
                 tmpServicePlayer.CreateAsync(tmpPlayer);
                
                 playerX++; 
@@ -114,6 +114,9 @@ namespace Session
             startGameDto.GameName = gameGuid.ToString();
             startGameDto.PlayerLocations = players;
 
+           
+            
+            
             return startGameDto;
         }
 

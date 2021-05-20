@@ -9,11 +9,9 @@ namespace DatabaseHandler.Poco
 {
     public class PlayerItemPoco
     {
+        public PlayerPoco PlayerGUID { get; set; }
 
         [BsonId]
-        public Guid PlayerGUID { get; set; }
-
-        [BsonId]
-        public String ItemName { get; set; }
+        public string ItemName { get; set; }
     }
 }

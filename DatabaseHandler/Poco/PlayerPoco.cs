@@ -8,20 +8,20 @@ namespace DatabaseHandler.Poco
     public class PlayerPoco
     {
 
-        public Guid GameGUID { get; set; }
+        public GamePoco GameGUID { get; set; }
         [BsonId]
         public string PlayerGUID { get; set; }
 
         //player info
-        public String PlayerName { get; set; }
+        public string PlayerName { get; set; }
         public int TypePlayer { get; set; }
 
         //Statistieken
         public int Health { get; set; }
 
         //location
-        public int PositionX { get; set; }
-        public int PositionY { get; set; }
+        public int XPosition { get; set; }
+        public int YPosition { get; set; }
     }
 
 }

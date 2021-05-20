@@ -11,9 +11,8 @@ namespace DatabaseHandler.Poco
     {
         [BsonId]
         public Guid GameGUID { get; set; }
-        [BsonId]
-        public Guid PlayerGUIDHost { get; set; }
-        public int Seed { get; set; }
+    //    public Guid PlayerGUIDHost { get; set; }
+       // public int Seed { get; set; }
 
     }
 }

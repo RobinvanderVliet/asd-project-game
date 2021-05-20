@@ -11,7 +11,7 @@ namespace DatabaseHandler.Poco
     {
 
         [BsonId]
-        public String ItemName { get; set; }
+        public string ItemName { get; set; }
         public int ItemType { get; set; }
 
     }

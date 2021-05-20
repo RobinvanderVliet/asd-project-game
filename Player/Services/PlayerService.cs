@@ -34,6 +34,7 @@ namespace Player.Services
             _playerPositions = playerPositions;
             _moveHandler = moveHandler;
         }
+        
 
         public void Attack(string direction)
         {
@@ -202,7 +203,7 @@ namespace Player.Services
         {
             foreach (var player in _playerPositions)
             {
-                if (player.Name == playerPosition.PlayerName)
+                if (player.PlayerGUID == playerPosition.PlayerName)
                 {
                     playerPosition.X = player.XPosition;
                     playerPosition.Y = player.YPosition;

@@ -52,6 +52,7 @@ namespace Session
             if (_clientController.IsHost())
             {
                 Console.WriteLine("Ik ben de host, moet iets doen met de database");
+                
             }
             
             _worldService.GenerateWorld(6969);
