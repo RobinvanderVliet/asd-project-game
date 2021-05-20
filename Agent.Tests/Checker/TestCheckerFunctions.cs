@@ -18,7 +18,7 @@ namespace Agent.Tests.checker
         public void Setup()
         {
             Mock<AST> ast = new Mock<AST>();
-            this._sut = new Checker(ast.Object);
+            _sut = new Checker(ast.Object);
         }
 
 
@@ -31,7 +31,7 @@ namespace Agent.Tests.checker
             item.AddChild(stat);
 
             //Act
-            bool result = this._sut.CheckItemAndAllowedStat(item);
+            bool result = _sut.CheckItemAndAllowedStat(item);
             
             //Assert
             Assert.False(result);
@@ -53,7 +53,7 @@ namespace Agent.Tests.checker
             testNodes.Add(whenNode);
 
             //Act
-            this._sut.CheckStatCombination(testNodes);
+            _sut.CheckStatCombination(testNodes);
             
             //Assert
             Assert.AreNotEqual(String.Empty, item.GetError().ToString());

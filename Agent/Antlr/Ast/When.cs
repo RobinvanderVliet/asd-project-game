@@ -18,16 +18,16 @@ namespace Agent.Antlr.Ast
         {
             var children = new List<Node>();
 
-            if (this._comparableL != null)
-                children.Add(this._comparableL);
-            if (this._comparison != null)
-                children.Add(this._comparison);
-            if (this._comparableR != null)
-                children.Add(this._comparableR);
-            if (this._then != null)
-                children.Add(this._then);
+            if (_comparableL != null)
+                children.Add(_comparableL);
+            if (_comparison != null)
+                children.Add(_comparison);
+            if (_comparableR != null)
+                children.Add(_comparableR);
+            if (_then != null)
+                children.Add(_then);
 
-            children.AddRange(this.body);
+            children.AddRange(body);
             return children;
         }
 
@@ -36,27 +36,27 @@ namespace Agent.Antlr.Ast
             switch (node)
             {
                 case Comparable comparable:
-                    if (this._comparableL == null) 
+                    if (_comparableL == null) 
                     {
-                        this._comparableL = comparable;
+                        _comparableL = comparable;
                     }
-                    else if (this._comparableR == null) 
+                    else if (_comparableR == null) 
                     {
-                        this._comparableR = comparable;
+                        _comparableR = comparable;
                     }
                     else
                     {
-                        this.body.Add(comparable);
+                        body.Add(comparable);
                     }
                     break;
                 case ActionReference action:
-                    this._then = action;
+                    _then = action;
                     break;
                 case Comparison comparison:
-                    this._comparison = comparison;
+                    _comparison = comparison;
                     break;
                 default:
-                    this.body.Add(node);
+                    body.Add(node);
                     break;
             }
 
@@ -66,43 +66,43 @@ namespace Agent.Antlr.Ast
 
         public Comparable GetComparableL()
         {
-            return this._comparableL;
+            return _comparableL;
         }
 
         public void SetComparableL(Comparable comparable)
         {
-            this._comparableL = comparable;
+            _comparableL = comparable;
         }
         
         
         public Comparable GetComparableR()
         {
-            return this._comparableR;
+            return _comparableR;
         }
 
         public void SetComparableR(Comparable comparable)
         {
-            this._comparableR = comparable;
+            _comparableR = comparable;
         }
 
         public Comparison GetComparison()
         {
-            return this._comparison;
+            return _comparison;
         }
 
         public void SetComparison(Comparison comparison)
         {
-            comparison = comparison;
+            _comparison = comparison;
         }
         
         public ActionReference GetThen()
         {
-            return this._then;
+            return _then;
         }
 
         public void SetThen(ActionReference then)
         {
-            then = then;
+            _then = then;
         }
 
     }

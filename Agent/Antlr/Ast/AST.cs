@@ -7,7 +7,7 @@
 
         public AST( )
         {
-            this.root = new Configuration();
+            root = new Configuration();
         }
         public AST(Configuration root)
         {
@@ -16,7 +16,7 @@
 
         public void SetRoot(Configuration configuration)
         {
-            this.root = configuration;
+            root = configuration;
         }
     }
 }

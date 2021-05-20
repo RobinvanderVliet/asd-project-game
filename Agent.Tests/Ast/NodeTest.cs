@@ -16,7 +16,7 @@ namespace Agent.Tests.ast
         [SetUp]
         public void Setup()
         {
-            this._sut = new Node();
+            _sut = new Node();
         }
 
 
@@ -26,7 +26,7 @@ namespace Agent.Tests.ast
             //Arrange
 
             //Act
-            var result = this._sut.GetNodeType();
+            var result = _sut.GetNodeType();
             //Assert
             Assert.AreEqual(result, TYPE);
         }
@@ -38,7 +38,7 @@ namespace Agent.Tests.ast
             //Arrange
 
             //Act
-            var result = this._sut.GetChildren();
+            var result = _sut.GetChildren();
             //Assert
             Assert.IsInstanceOf(typeof(List<Node>), result);
         }
@@ -48,13 +48,13 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var node = new Node();
-            this._sut.AddChild(node);
+            _sut.AddChild(node);
             //Act
-            var result = (this._sut.GetChildren()[0])?.GetNodeType();
+            var result = (_sut.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Node", result);
-            Assert.AreEqual(1, this._sut.GetChildren().Count);
+            Assert.AreEqual(1, _sut.GetChildren().Count);
         }
         
         [Test]
@@ -62,12 +62,12 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var node = new Node();
-            this._sut.AddChild(node);
+            _sut.AddChild(node);
             //Act
-            this._sut.RemoveChild(node);
+            _sut.RemoveChild(node);
 
             //Assert
-            Assert.AreEqual(0, this._sut.GetChildren().Count);
+            Assert.AreEqual(0, _sut.GetChildren().Count);
         }
 
 
@@ -76,9 +76,9 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var message = "testtt";
-            this._sut.SetError(message);
+            _sut.SetError(message);
             //Act
-            var result = this._sut.GetError();
+            var result = _sut.GetError();
 
             //Assert
             Assert.IsInstanceOf(typeof(ASTError), result);
@@ -91,10 +91,10 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var expected = "[Node][Node][Node]";
-            this._sut.AddChild(new Node());
-            this._sut.AddChild(new Node());
+            _sut.AddChild(new Node());
+            _sut.AddChild(new Node());
             //Act
-            var result = this._sut.ToString();
+            var result = _sut.ToString();
 
             //Assert
             Assert.AreEqual(expected, result);

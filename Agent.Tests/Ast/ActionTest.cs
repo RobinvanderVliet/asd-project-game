@@ -16,7 +16,7 @@ namespace Agent.Tests.ast
         [SetUp]
         public void Setup()
         {
-            this._action = new Action("");
+            _action = new Action("");
         }
 
 
@@ -25,7 +25,7 @@ namespace Agent.Tests.ast
         {
             //Arrange
             //Act
-            var result = this._action.GetNodeType();
+            var result = _action.GetNodeType();
             //Assert
             Assert.AreEqual(TYPE, result);
         }
@@ -36,10 +36,10 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var condition = new Condition();
-            this._action.AddChild(condition);
+            _action.AddChild(condition);
 
             //Act
-            var result = (this._action.GetChildren()[0])?.GetNodeType();
+            var result = (_action.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Condition", result);
@@ -51,10 +51,10 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var node = new Node();
-            this._action.AddChild(node);
+            _action.AddChild(node);
 
             //Act
-            var result = (this._action.GetChildren()[0])?.GetNodeType();
+            var result = (_action.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Node", result);
@@ -66,11 +66,11 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var condition = new Condition();
-            this._action.AddChild(condition);
-            this._action.RemoveChild(condition);
+            _action.AddChild(condition);
+            _action.RemoveChild(condition);
 
             //Act
-            var result = this._action.GetChildren().Count == 0;
+            var result = _action.GetChildren().Count == 0;
 
             //Assert
             Assert.True(result);
@@ -82,11 +82,11 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var node = new Node();
-            this._action.AddChild(node);
-            this._action.RemoveChild(node);
+            _action.AddChild(node);
+            _action.RemoveChild(node);
 
             //Act
-            var result = this._action.GetChildren().Count == 0;
+            var result = _action.GetChildren().Count == 0;
 
             //Assert
             Assert.True(result);

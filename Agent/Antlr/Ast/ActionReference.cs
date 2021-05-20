@@ -24,11 +24,11 @@ namespace Agent.Antlr.Ast
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            if (this._item != null)
-                children.Add(this._item);
-            if (this._subject != null)
-                children.Add(this._subject);
-            children.AddRange(this.body);
+            if (_item != null)
+                children.Add(_item);
+            if (_subject != null)
+                children.Add(_subject);
+            children.AddRange(body);
             
             return children;
         }
@@ -37,13 +37,13 @@ namespace Agent.Antlr.Ast
         {
             switch (node) {
                 case Subject subject:
-                    this._subject = subject;
+                    _subject = subject;
                     break;
                 case Item item:
-                    this._item = item;
+                    _item = item;
                     break;
                 default:
-                    this.body.Add(node);
+                    body.Add(node);
                     break;
             }
             return this;

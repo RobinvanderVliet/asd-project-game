@@ -15,11 +15,11 @@ namespace Agent.Antlr.Ast
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            if (this._whenClause != null)
-                children.Add(this._whenClause);
-            if (this._otherwiseClause != null)
-                children.Add(this._otherwiseClause);
-            children.AddRange(this.body);
+            if (_whenClause != null)
+                children.Add(_whenClause);
+            if (_otherwiseClause != null)
+                children.Add(_otherwiseClause);
+            children.AddRange(body);
 
             return children;
         }
@@ -29,13 +29,13 @@ namespace Agent.Antlr.Ast
             switch (node)
             {
                 case When whenClause:
-                    this._whenClause = whenClause;
+                    _whenClause = whenClause;
                     break;
                 case Otherwise otherwiseClause:
-                    this._otherwiseClause = otherwiseClause;
+                    _otherwiseClause = otherwiseClause;
                     break;
                 default:
-                    this.body.Add(node);
+                    body.Add(node);
                     break;
             }
 
@@ -47,13 +47,13 @@ namespace Agent.Antlr.Ast
             switch (node)
             {
                 case When:
-                    this._whenClause = null;
+                    _whenClause = null;
                     break;
                 case Otherwise:
-                    this._otherwiseClause = null;
+                    _otherwiseClause = null;
                     break;
                 default:
-                    this.body.Remove(node);
+                    body.Remove(node);
                     break;
             }
 
@@ -62,12 +62,12 @@ namespace Agent.Antlr.Ast
 
         public When GetWhenClause()
         {
-            return this._whenClause;
+            return _whenClause;
         }
 
         public Otherwise GetOtherWiseClause()
         {
-            return this._otherwiseClause;
+            return _otherwiseClause;
         }
     }
 }

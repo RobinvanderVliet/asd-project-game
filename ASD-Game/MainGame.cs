@@ -24,7 +24,7 @@ namespace ASD_project
 
             public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler, ISessionHandler sessionHandler)
             {
-                this._log = log;
+                _log = log;
                 _inventory = inventory;
                 _chatHandler = chatHandler;
                 _sessionHandler = sessionHandler;

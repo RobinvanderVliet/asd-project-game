@@ -23,20 +23,20 @@ namespace Agent.Antlr.Ast.Comparables
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            if (this._stat != null) {
-                children.Add(this._stat);
+            if (_stat != null) {
+                children.Add(_stat);
             }
-            children.AddRange(this.body);
+            children.AddRange(body);
             return children;
         }
 
         public override Node AddChild(Node node)
         {
             if (node is Stat stat) {
-                this._stat = stat;
+                _stat = stat;
             }
             else {
-                this.body.Add(node);
+                body.Add(node);
             }
             return this;
         }

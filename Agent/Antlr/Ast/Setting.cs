@@ -25,9 +25,9 @@ namespace Agent.Antlr.Ast
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            children.AddRange(this._conditions);
-            children.AddRange(this._actions);
-            children.AddRange(this.body);
+            children.AddRange(_conditions);
+            children.AddRange(_actions);
+            children.AddRange(body);
             return children;
         }
 
@@ -36,13 +36,13 @@ namespace Agent.Antlr.Ast
             switch (node) 
             {
                 case Condition:
-                    this._conditions.Add(node);
+                    _conditions.Add(node);
                     break;
                 case Action:
-                    this._actions.Add(node);
+                    _actions.Add(node);
                     break;
                 default:
-                    this.body.Add(node);
+                    body.Add(node);
                     break;
                 
             }

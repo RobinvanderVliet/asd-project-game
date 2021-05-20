@@ -16,20 +16,20 @@ namespace Agent.Antlr.Ast
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            if(this._action!= null){
-                children.Add(this._action);
+            if(_action!= null){
+                children.Add(_action);
             };
-            children.AddRange(this.body);
+            children.AddRange(body);
             return children;
         }
 
         public override Node AddChild(Node node)
         {
             if (node is ActionReference actionReference) {
-                this._action = actionReference;
+                _action = actionReference;
             }
             else {
-                this.body.Add(node);
+                body.Add(node);
             }
 
             return this;

@@ -25,17 +25,17 @@ namespace Agent.Antlr.Ast
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            children.AddRange(this._settings);
-            children.AddRange(this.body);
+            children.AddRange(_settings);
+            children.AddRange(body);
             return children;
         }
 
         public override Node AddChild(Node node)
         {
             if (node is Setting setting)
-                this._settings.Add(setting);
+                _settings.Add(setting);
             else
-                this.body.Add(node);
+                body.Add(node);
 
             return this;
         }
@@ -43,9 +43,9 @@ namespace Agent.Antlr.Ast
         public override Node RemoveChild(Node node)
         {
             if (node is Setting setting)
-                this._settings.Remove(setting);
+                _settings.Remove(setting);
             else 
-                this.body.Remove(node);
+                body.Remove(node);
             return this;
         }
     }

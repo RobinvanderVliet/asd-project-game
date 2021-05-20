@@ -14,7 +14,7 @@ namespace Agent.Tests.ast
         [SetUp]
         public void Setup()
         {
-            this._comparison = new Comparison("");
+            _comparison = new Comparison("");
         }
 
         [Test]
@@ -22,7 +22,7 @@ namespace Agent.Tests.ast
         {
             //Arrange
             //Act
-            var result = this._comparison.GetNodeType();
+            var result = _comparison.GetNodeType();
             //Assert
             Assert.AreEqual(TYPE, result);
         }

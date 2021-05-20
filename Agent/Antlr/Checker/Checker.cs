@@ -14,7 +14,7 @@ namespace Agent.Antlr.Checker
         {
             foreach (Node node in ast.root.GetChildren())
             {
-                this._symboltable.Add(node);
+                _symboltable.Add(node);
             }
             //Entry of checkStatCombination in Pipeline
         }

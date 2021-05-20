@@ -15,7 +15,7 @@ namespace Agent.Tests.ast
         [SetUp]
         public void Setup()
         {
-            this._sut = new Item(TYPE);
+            _sut = new Item(TYPE);
         }
         
     
@@ -25,7 +25,7 @@ namespace Agent.Tests.ast
             //Arrange
             
             //Act
-            var result = this._sut.GetNodeType();
+            var result = _sut.GetNodeType();
             //Assert
             Assert.AreEqual(TYPE, result);
         }
@@ -35,10 +35,10 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var stat = new Stat("");
-            this._sut.AddChild(stat);
+            _sut.AddChild(stat);
 
             //Act
-            var result = ( this._sut.GetChildren()[0]).GetNodeType();
+            var result = ( _sut.GetChildren()[0]).GetNodeType();
 
             //Assert
             Assert.AreEqual("Stat", result);
@@ -50,10 +50,10 @@ namespace Agent.Tests.ast
         {
             //Arrange
             var node = new Node();
-            this._sut.AddChild(node);
+            _sut.AddChild(node);
 
             //Act
-            var result = ( this._sut.GetChildren()[0])?.GetNodeType();
+            var result = ( _sut.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Node", result);

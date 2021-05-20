@@ -22,17 +22,17 @@ namespace Agent.Antlr.Ast
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            children.AddRange(this._conditions);
-            children.AddRange(this.body);
+            children.AddRange(_conditions);
+            children.AddRange(body);
             return children;
         }
 
         public override Node AddChild(Node node)
         {
             if (node is Condition condition)
-                this._conditions.Add(condition);
+                _conditions.Add(condition);
             else
-                this.body.Add(node);
+                body.Add(node);
 
             return this;
         }
@@ -40,9 +40,9 @@ namespace Agent.Antlr.Ast
         public override Node RemoveChild(Node node)
         {
             if (node is Condition condition)
-                this._conditions.Remove(condition);
+                _conditions.Remove(condition);
             else
-                this.body.Remove(node);
+                body.Remove(node);
 
             return this;
         }

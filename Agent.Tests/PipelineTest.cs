@@ -19,7 +19,7 @@ namespace Agent.Tests
         [SetUp]
         public void Setup()
         {
-            this._sut = new Pipeline();
+            _sut = new Pipeline();
         }
         
         [Test]
@@ -27,12 +27,12 @@ namespace Agent.Tests
         {
             //Arrange
             //Act
-            this._sut.ParseString(SCRIPT);
-            var result = this._sut.Ast;
+            _sut.ParseString(SCRIPT);
+            var result = _sut.Ast;
 
             //Assert
             Assert.NotNull(result);
-            Assert.IsEmpty(this._sut.Errors);
+            Assert.IsEmpty(_sut.Errors);
         }
 
         [Test]

@@ -30,10 +30,10 @@ namespace Creature.Pathfinder
         public bool isWalkable;
         public Node(Vector2 pos, bool isWalkable, float weight = 1)
         {
-            this.parent = null;
-            this.position = pos;
-            this.distanceToTarget = -1;
-            this.cost = 1;
+            parent = null;
+            position = pos;
+            distanceToTarget = -1;
+            cost = 1;
             this.weight = weight;
             this.isWalkable = isWalkable;
         }
