@@ -10,7 +10,7 @@ namespace WorldGeneration.Services
 {
     public class ChunkService
     {
-        private Chunk _chunk;
+        private readonly Chunk _chunk;
         public ChunkService(Chunk chunk)
         {
             _chunk = chunk;
@@ -21,14 +21,6 @@ namespace WorldGeneration.Services
             var y = (int)Math.Floor((double)indexInArray / _chunk.RowSize);
             return new[] { x, y };
         }
-
-      /*  // returns the coordinates relative to the center of the world. First value is x, second is y.
-        private int[] GetTileCoordinatesInWorld(int indexInArray)
-        {
-            var internalCoordinates = GetTileCoordinatesInChunk(indexInArray);
-            return new[] { internalCoordinates[0] + _chunk.RowSize * _chunk.X, internalCoordinates[1] + _chunk.RowSize * _chunk.Y };
-        }*/
-
 
         public int GetPositionInTileArrayByWorldCoordinates(int x, int y)
         {

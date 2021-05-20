@@ -65,7 +65,7 @@ namespace DataTransfer.POCO.World
             if (ReferenceEquals(this, other)) 
                 return true;
             
-            return X == other.X && Y == other.Y && RowSize == other.RowSize;
+            return X == other.X && Y == other.Y;
         }
 
         public override bool Equals(object obj)

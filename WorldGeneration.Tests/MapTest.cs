@@ -54,7 +54,7 @@ namespace WorldGeneration.Tests
 
             _databaseMock = new Mock<Database>().Object;
             
-            _sut = new Map(_noiseMapGeneratorMock, _databaseMock, chunkSize, seed);
+            //_sut = new Map(_noiseMapGeneratorMock, _databaseMock, chunkSize, seed);
 
         }
         
@@ -63,7 +63,7 @@ namespace WorldGeneration.Tests
         {
             //Arrange ---------
             //Act ---------
-            var map = new Map(new NoiseMapGenerator(), new DatabaseFunctions.Database("c:\\temp\\db.db", "test"),2,51);
+            //var map = new Map(new NoiseMapGenerator(), new DatabaseFunctions.Database("c:\\temp\\db.db", "test"),2,51);
             //Assert ---------
         }
         

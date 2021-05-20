@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DatabaseHandler;
+using DatabaseHandler.Repository;
+using DatabaseHandler.Services;
 using DataTransfer.DTO.Character;
 using DataTransfer.POCO.World;
 using DataTransfer.POCO.World.Interfaces;
@@ -13,8 +16,10 @@ namespace WorldGeneration
         private readonly int _chunkSize;
         private readonly int _seed;
         private List<Chunk> _chunks; // NOT readonly, don't listen to the compiler
-        private readonly DatabaseFunctions.Database _db;
-
+        //private readonly DatabaseFunctions.Database _db;
+        private ServicesDb<Chunk> _dbService;
+        private Repository<Chunk> _repository;
+        private DbConnection _dbConnection;
         private ChunkService _chunkService;
         private List<int[]> _chunksWithinLoadingRange;
 
@@ -22,31 +27,35 @@ namespace WorldGeneration
 
         public Map(
             INoiseMapGenerator noiseMapGenerator
-            , DatabaseFunctions.Database db
             , int chunkSize
             , int seed
         )
         {
             _chunkSize = chunkSize;
-            _db = db;
             _chunks = new List<Chunk>();
             _seed = seed;
             _noiseMapGenerator = noiseMapGenerator;            
         }
 
         // checks if there are new chunks that have to be loaded
-        private void LoadArea(int playerX, int playerY, int viewDistance)
-        {
+        private void LoadArea(int playerX, int playerY, int viewDistance) {
+            _dbConnection = new DbConnection();
+            _repository = new Repository<Chunk>(_dbConnection);
+            _dbService = new ServicesDb<Chunk>(_repository);
             _chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
             ForgetUnloadedChunks();
             foreach (var chunkXY in _chunksWithinLoadingRange)
             {
                 if (!_chunks.Exists(chunk => chunk.X == chunkXY[0] && chunk.Y == chunkXY[1]))
                 { // chunk isn't loaded in local memory yet
-                    var chunk = _db.GetChunk(chunkXY[0], chunkXY[1]);
-                    _chunks.Add(chunk == null
+                    var chunk = new Chunk { 
+                        X = chunkXY[0], 
+                        Y = chunkXY[1] 
+                    };
+                    var results = _dbService.ReadAsync(chunk).Result;
+                    _chunks.Add(results == null
                         ? GenerateNewChunk(chunkXY[0], chunkXY[1])
-                        : _db.GetChunk(chunkXY[0], chunkXY[1]));
+                        : results);
                 }
             }
         }
@@ -140,7 +149,8 @@ namespace WorldGeneration
         private Chunk GenerateNewChunk(int chunkX, int chunkY)
         {
             var chunk = _noiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize, _seed);
-            _db.InsertChunkIntoDatabase(chunk);
+            //_db.InsertChunkIntoDatabase(chunk);
+            _dbService.CreateAsync(chunk);
             return chunk;
         }
 
@@ -161,7 +171,7 @@ namespace WorldGeneration
         
         public void DeleteMap()
         {
-            _db.DeleteTileMap();
+            _dbService.DeleteAllAsync();
         }
         
         // find a LOADED tile by the coordinates
