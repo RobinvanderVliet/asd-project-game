@@ -11,11 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="antlr\transformer" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="antlr\grammar\AgentConfiguration.g4" />
+    <Content Include="Antlr\Grammar\AgentConfiguration.g4" />
   </ItemGroup>
 
   <ItemGroup>
