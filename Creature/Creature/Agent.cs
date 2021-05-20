@@ -13,11 +13,13 @@ namespace Creature
             get => _agentStateMachine;
         }
 
-        public Agent(AgentData agentData, RuleSet ruleSet)
+        public Agent(AgentData agentData)
         {
-            _agentStateMachine = new(agentData, ruleSet);
+            _agentStateMachine = new(agentData);
             _agentStateMachine.StartStateMachine();
         }
+
+  
 
         public void ApplyDamage(double amount)
         {

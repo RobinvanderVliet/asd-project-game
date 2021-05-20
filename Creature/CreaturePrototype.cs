@@ -5,6 +5,7 @@ using Creature.Creature.StateMachine.Data;
 using Creature.World;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Creature.Creature.StateMachine.CustomRuleSet;
@@ -21,22 +22,21 @@ namespace Creature
             NpcConfigurationService npcConfigurationService = new NpcConfigurationService(new List<NpcConfiguration>(), new FileToDictionaryMapper());
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
-
+            
+            RuleSet agentRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[0].Settings);
             RuleSet playerRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[1].Settings);
-            RuleSet monsterRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[0].Settings);
+            
+            PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, null);
+            AgentData agentData = new AgentData(new Vector2(10, 10), 20, 5, 50, world, false, agentRuleSet);
 
-            PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, playerRuleSet);
-            MonsterData monsterData = new MonsterData(new Vector2(10, 10), 20, 5, 50, world, monsterRuleSet, false);
-            MonsterData monsterData2 = new MonsterData(new Vector2(20, 20), 20, 5, 50, world, monsterRuleSet, false);
-
+            
             ICreature player = new Player(playerData);
-            ICreature creature = new Monster(monsterData);
-            ICreature creature2 = new Monster(monsterData2);
+            ICreature agent = new Agent(agentData);
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);
-            world.SpawnCreature(creature);
-            world.SpawnCreature(creature2);
+            world.SpawnAgent(agent);
+            
 
             world.Render();
 

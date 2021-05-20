@@ -19,7 +19,7 @@ namespace Creature.Creature.StateMachine.State
         public override void Do(ICreatureData creatureData)
         {
             ICreatureData playerData = creatureData;
-            playerData.Health -= playerData.
+            playerData.Health -= playerData.Damage;
 
             throw new NotImplementedException();
         }

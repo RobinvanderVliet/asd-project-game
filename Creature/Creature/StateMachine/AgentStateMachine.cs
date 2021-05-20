@@ -9,14 +9,12 @@ namespace Creature.Creature.StateMachine
 {
     public class AgentStateMachine : ICreatureStateMachine
     {
-        private RuleSet _ruleset;
         private PassiveStateMachine<CreatureState, CreatureEvent.Event> _passiveStateMachine;
         private AgentData _agentData;
 
-        public AgentStateMachine(AgentData agentData, RuleSet ruleSet)
+        public AgentStateMachine(AgentData agentData)
         {
             _agentData = agentData;
-            _ruleset = ruleSet;
         }
 
         public ICreatureData CreatureData
