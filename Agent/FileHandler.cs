@@ -13,33 +13,24 @@ namespace Agent
     {
         public string ImportFile(string filepath)
         {
-            try
+            if (Path.GetExtension(filepath).Equals(".txt") || Path.GetExtension(filepath).Equals(".cfg"))
             {
-                if (Path.GetExtension(filepath).Equals(".txt") || Path.GetExtension(filepath).Equals(".cfg"))
+                using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
                 {
-                    using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
+                    using (StreamReader reader = new StreamReader(fileStream))
                     {
-                        using (StreamReader reader = new StreamReader(fileStream))
-                        {
-                            string fileData = reader.ReadToEnd();
+                        string fileData = reader.ReadToEnd();
 
-                            reader.Close();
+                        reader.Close();
 
-                            return fileData;
-                        };
+                        return fileData;
                     }
-                }
-                else 
-                {
-                    throw new FileException("File given is not of the correct file type");
+
+                    ;
                 }
             }
-            catch (FileException e)
-            {
-                Log.Logger.Information(e.Message);
-                return null;
-            }
-            
+
+            throw new FileException("File given is not of the correct file type");
         }
 
         public void ExportFile(string content)
@@ -47,7 +38,7 @@ namespace Agent
             //TODO change file name to selected by user
             string tmpFileName = "agentFile.cfg";
             string safeFileLocation = String.Format(Path.GetFullPath(Path.Combine
-                        (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\" + tmpFileName;
+                (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\" + tmpFileName;
 
             try
             {
@@ -58,14 +49,19 @@ namespace Agent
                     using (StreamWriter streamWriter = new StreamWriter(fileStream))
                     {
                         streamWriter.Write(content);
-                    };   
-                };
+                    }
+
+                    ;
+                }
+
+                ;
             }
             catch (FileException)
             {
                 throw;
             }
         }
+
         public void CreateDirectory(string filepath)
         {
             string directoryName = Path.GetDirectoryName(filepath);
@@ -82,5 +78,3 @@ namespace Agent
         }
     }
 }
-
-
