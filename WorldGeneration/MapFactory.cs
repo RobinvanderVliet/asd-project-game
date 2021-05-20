@@ -1,10 +1,18 @@
 using System;
+using ConsolePrinter;
 
 namespace WorldGeneration
 {
-    public abstract class MapFactory
+    public class MapFactory
     {
-        public static Map GenerateMap(string dbLocation = "C:\\Temp\\ChunkDatabase.db", String collectionName = "ChunkMap", int chunkSize = 8, int seed = -1123581321)
+        private IConsolePrinter _consolePrinter;
+
+        public MapFactory(IConsolePrinter consolePrinter)
+        {
+            _consolePrinter = consolePrinter;
+        }
+
+        public Map GenerateMap(string dbLocation = "C:\\Temp\\ChunkDatabase.db", String collectionName = "ChunkMap", int chunkSize = 8, int seed = -1123581321)
         {
             // default chunksize is 8. Can be adjusted in the line above
             
@@ -14,7 +22,7 @@ namespace WorldGeneration
                 seed = new Random().Next(1, 999999);
             }
             
-            return new Map(new NoiseMapGenerator(), new DatabaseFunctions.Database(dbLocation, collectionName), chunkSize, seed);
+            return new Map(new NoiseMapGenerator(), new DatabaseFunctions.Database(dbLocation, collectionName), chunkSize, seed, _consolePrinter);
         }
 
         public static int GenerateSeed()

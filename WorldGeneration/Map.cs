@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ConsolePrinter;
 using DataTransfer.DTO.Character;
 using WorldGeneration.Models;
 using WorldGeneration.Models.Interfaces;
@@ -16,12 +17,14 @@ namespace WorldGeneration
         private List<int[]> _chunksWithinLoadingRange;
 
         private INoiseMapGenerator _noiseMapGenerator;
+        private IConsolePrinter _consolePrinter;
 
         public Map(
             INoiseMapGenerator noiseMapGenerator
             , DatabaseFunctions.Database db
             , int chunkSize
             , int seed
+            , IConsolePrinter consolePrinter 
         )
         {
             _chunkSize = chunkSize;
@@ -29,6 +32,7 @@ namespace WorldGeneration
             _chunks = new List<Chunk>();
             _seed = seed;
             _noiseMapGenerator = noiseMapGenerator;
+            _consolePrinter = consolePrinter;
         }
 
         // checks if there are new chunks that have to be loaded
