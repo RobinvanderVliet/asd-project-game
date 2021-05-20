@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Network.DTO
 {
     [ExcludeFromCodeCoverage]
-    class HeartbeatDTO
+    public class HeartbeatDTO
     {
         public string sessionID {get; set;}
         public int status {get; set;}
