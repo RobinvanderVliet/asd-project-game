@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Agent.antlr.checker;
 using Agent.antlr.exception;
-using Agent.Antlr.grammar;
+using Agent.antlr.grammar;
 using Agent.antlr.parser;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;

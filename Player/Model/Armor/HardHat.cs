@@ -1,4 +1,5 @@
-﻿using Weapon.Enum;
+﻿using Player.Model.Armor.ArmorStats;
+using Player.Model.ItemStats;
 
 namespace Player.Model.Armor
 {

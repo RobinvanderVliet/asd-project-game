@@ -1,4 +1,5 @@
 ﻿using Player.Model.ItemStats;
+using Player.Model.Weapon.WeaponStats;
 
 namespace Weapon
 {

@@ -1,5 +1,5 @@
 ﻿using Player.Model.Consumable.ConsumableStats;
-using Weapon.Enum;
+using Player.Model.ItemStats;
 
 namespace Player.Model.Consumable.StaminaConsumable
 {
