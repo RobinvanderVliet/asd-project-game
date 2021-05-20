@@ -19,13 +19,11 @@ namespace Session
         private Timer _hostPingTimer;
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
-        // private IBackupHostService _backupHostService;
         
         public SessionHandler(IClientController clientController)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Session);
-            // _backupHostService = backupHostService;
         }
 
         public void JoinSession(string sessionId)

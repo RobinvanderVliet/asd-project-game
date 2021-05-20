@@ -14,7 +14,7 @@ namespace Agent.Services
 
         public AgentConfigurationService(List<Configuration> agentConfigurations, FileToDictionaryMapper fileToDictionaryMapper)
         {
-            base.FileToDictionaryMapper = fileToDictionaryMapper;
+            FileToDictionaryMapper = fileToDictionaryMapper;
             _agentConfigurations = agentConfigurations; 
             ConsoleRetriever = new ConsoleRetriever();
             _inlineConfig = new InlineConfig();
