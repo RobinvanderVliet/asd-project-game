@@ -63,7 +63,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseHandler", "Database
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseHandler.Tests", "DatabaseHandler.Tests\DatabaseHandler.Tests.csproj", "{811B30C5-AFDC-4C65-9971-4BCFFA039F54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsolePrinter", "ConsolePrinter\ConsolePrinter.csproj", "{67D1D0A9-F68D-4093-BE24-4B0215D8D810}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Display", "Display\Display.csproj", "{67D1D0A9-F68D-4093-BE24-4B0215D8D810}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

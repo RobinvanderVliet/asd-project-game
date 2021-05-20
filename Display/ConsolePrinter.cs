@@ -1,6 +1,6 @@
 using System;
 
-namespace ConsolePrinter
+namespace Display
 {
     public class ConsolePrinter : IConsolePrinter
     {

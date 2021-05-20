@@ -1,4 +1,4 @@
-namespace ConsolePrinter
+namespace Display
 {
     public interface IConsolePrinter
     {

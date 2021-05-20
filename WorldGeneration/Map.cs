@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ConsolePrinter;
+using Display;
 using DataTransfer.DTO.Character;
 using WorldGeneration.Models;
 using WorldGeneration.Models.Interfaces;

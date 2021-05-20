@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using DataTransfer.DTO.Character;
+using Display;
 using NUnit.Framework;
 using Moq;
 using WorldGeneration.DatabaseFunctions;
@@ -26,6 +27,7 @@ namespace WorldGeneration.Tests
         private DatabaseFunctions.Database _databaseMock;
         private MapCharacterDTO _mapCharacterDTO;
         private List<MapCharacterDTO> _mapCharacterDTOList;
+        private ConsolePrinter _consolePrinterMock;
  
         [SetUp]
         public void Setup()
@@ -57,8 +59,10 @@ namespace WorldGeneration.Tests
             _noiseMapGeneratorMock = noiseMapGeneratorMock.Object;
 
             _databaseMock = new Mock<Database>().Object;
+
+            _consolePrinterMock = new Mock<ConsolePrinter>().Object;
             
-            _sut = new Map(_noiseMapGeneratorMock, _databaseMock, chunkSize, seed);
+            _sut = new Map(_noiseMapGeneratorMock, _databaseMock, chunkSize, seed, _consolePrinterMock);
 
             _mapCharacterDTO = new MapCharacterDTO(0, 0, "naam", "d");
             
@@ -71,7 +75,7 @@ namespace WorldGeneration.Tests
         {
             //Arrange ---------
             //Act ---------
-            var map = new Map(new NoiseMapGenerator(), new DatabaseFunctions.Database("c:\\temp\\db.db", "test"),2,51);
+            var map = new Map(new NoiseMapGenerator(), new DatabaseFunctions.Database("c:\\temp\\db.db", "test"),2,51, new ConsolePrinter());
             //Assert ---------
         }
         

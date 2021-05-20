@@ -9,6 +9,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\Display\Display.csproj" />
     <ProjectReference Include="..\DataTransfer\DataTransfer.csproj" />
   </ItemGroup>
 
