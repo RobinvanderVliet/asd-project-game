@@ -4,7 +4,6 @@ using Agent.exceptions;
 using Agent.Mapper;
 using Agent.Models;
 using Serilog;
-using Configuration = Agent.Models.Configuration;
 
 namespace Agent.Services
 {
@@ -15,7 +14,7 @@ namespace Agent.Services
         public NpcConfigurationService(List<Configuration> npcConfigurations, FileToDictionaryMapper fileToDictionaryMapper)
         {
             _npcConfigurations = npcConfigurations;
-            base.FileToDictionaryMapper = fileToDictionaryMapper;
+            FileToDictionaryMapper = fileToDictionaryMapper;
             ConsoleRetriever = new ConsoleRetriever();
             FileHandler = new FileHandler();
             Pipeline = new Pipeline();

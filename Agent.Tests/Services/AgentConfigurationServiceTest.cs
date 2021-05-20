@@ -33,7 +33,7 @@ namespace Agent.Tests
         public void Test_Configure_SyntaxError()
         {
             //Arrange
-            var input = String.Format(Path.GetFullPath(Path.Combine
+            var input = string.Format(Path.GetFullPath(Path.Combine
                         (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\AgentConfigurationTestFileParseException.txt";
 
             Mock<ConsoleRetriever> mockedRetriever = new();
@@ -54,7 +54,7 @@ namespace Agent.Tests
         public void Test_Configure_CatchesSemanticError()
         {
             //Arrange
-            var input = String.Format(Path.GetFullPath(Path.Combine
+            var input = string.Format(Path.GetFullPath(Path.Combine
                 (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resources\\AgentTestFileWrongExtension.txt";
             var error = "Semantic error";
             
@@ -76,7 +76,7 @@ namespace Agent.Tests
         public void Test_Configure_FileError()
         {
             //Arrange
-            var input = String.Format(Path.GetFullPath(Path.Combine
+            var input = string.Format(Path.GetFullPath(Path.Combine
                 (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resources\\AgentTestFileWrongExtension.txt";
             var error = "File not found";
             
@@ -96,7 +96,7 @@ namespace Agent.Tests
         public void Test_Configure_SavesFileInAgentFolder()
         {
             //Arrange
-            var input = String.Format(Path.GetFullPath(Path.Combine
+            var input = string.Format(Path.GetFullPath(Path.Combine
                 (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resources\\AgentConfigurationTestFile.txt";
 
             Mock<ConsoleRetriever> mockedRetriever = new();
@@ -118,7 +118,7 @@ namespace Agent.Tests
         {
             //Arrange
             var filepath =
-                String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) +
+                string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) +
                 "resource\\agent_test.cfg";
 
             //Act
