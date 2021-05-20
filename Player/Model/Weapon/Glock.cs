@@ -1,4 +1,4 @@
-﻿using Weapon.Enum;
+﻿using Player.Model.ItemStats;
 
 namespace Weapon
 {
@@ -7,11 +7,11 @@ namespace Weapon
         public Glock()
         {
             Name = "Glock";
-            WeaponType = WeaponType.Range;
+            Type = WeaponType.Range;
             Rarity = Rarity.Uncommon;
-            WeaponSpeed = WeaponSpeed.Slow;
-            Distance = 3;
-            Damage = 20;
+            Speed = WeaponSpeed.Slow;
+            Distance = WeaponDistance.Medium;
+            Damage = WeaponDamage.Low;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Weapon.Enum;
+﻿using Player.Model.ItemStats;
 
 namespace Weapon
 {
@@ -6,12 +6,12 @@ namespace Weapon
     {
         public AK_47()
         {
-            Name = "AK_47";
-            WeaponType = WeaponType.Range;
+            Name = "AK-47";
+            Type = WeaponType.Range;
             Rarity = Rarity.Rare;
-            WeaponSpeed = WeaponSpeed.Average;
-            Distance = 5;
-            Damage = 20;
+            Speed = WeaponSpeed.Average;
+            Distance = WeaponDistance.Far;
+            Damage = WeaponDamage.Low;
         }
     }
 }

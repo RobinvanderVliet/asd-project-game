@@ -1,4 +1,4 @@
-﻿using Weapon.Enum;
+﻿using Player.Model.ItemStats;
 
 namespace Weapon
 {
@@ -7,11 +7,11 @@ namespace Weapon
         public Katana()
         {
             Name = "Katana";
-            WeaponType = WeaponType.Melee;
+            Type = WeaponType.Melee;
             Rarity = Rarity.Rare;
-            WeaponSpeed = WeaponSpeed.Fast;
-            Distance = 1;
-            Damage = 40;
+            Speed = WeaponSpeed.Fast;
+            Distance = WeaponDistance.Close;
+            Damage = WeaponDamage.Medium;
         }
     }
 }

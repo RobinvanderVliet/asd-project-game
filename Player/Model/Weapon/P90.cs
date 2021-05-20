@@ -1,4 +1,4 @@
-﻿using Weapon.Enum;
+﻿using Player.Model.ItemStats;
 
 namespace Weapon
 {
@@ -7,11 +7,11 @@ namespace Weapon
         public P90()
         {
             Name = "P90";
-            WeaponType = WeaponType.Range;
+            Type = WeaponType.Range;
             Rarity = Rarity.Rare;
-            WeaponSpeed = WeaponSpeed.Fast;
-            Distance = 5;
-            Damage = 20;
+            Speed = WeaponSpeed.Fast;
+            Distance = WeaponDistance.Far;
+            Damage = WeaponDamage.Low;
         }
     }
 }

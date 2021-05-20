@@ -1,4 +1,4 @@
-﻿namespace Weapon.Enum
+﻿namespace Player.Model.ItemStats
 {
     public enum Rarity
     {

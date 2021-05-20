@@ -1,24 +1,29 @@
-﻿using Weapon.Enum;
+﻿using Player.Model.ItemStats;
 
 namespace Weapon
 {
     public class Weapon
     {
         protected string Name { get; set; }
-        protected WeaponType WeaponType { get; set; }
+        protected WeaponType Type { get; set; }
         protected Rarity Rarity { get; set; }
-        protected WeaponSpeed WeaponSpeed { get; set; }
-        protected int Damage { get; set; }
-        protected int Distance { get; set; }
+        protected WeaponSpeed Speed { get; set; }
+        protected WeaponDamage Damage { get; set; }
+        protected WeaponDistance Distance { get; set; }
 
         public int GetWeaponSpeed()
         {
-            return WeaponSpeed switch
-            {
-                WeaponSpeed.Fast => 2,
-                WeaponSpeed.Average => 3,
-                _ => 4
-            };
+            return (int) Speed;
+        }
+
+        public int GetWeaponDamage()
+        {
+            return (int) Damage;
+        }
+        
+        public int GetWeaponDistance()
+        {
+            return (int) Distance;
         }
     }
 }

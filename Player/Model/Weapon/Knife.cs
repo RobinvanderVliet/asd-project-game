@@ -1,4 +1,4 @@
-﻿using Weapon.Enum;
+﻿using Player.Model.ItemStats;
 
 namespace Weapon
 {
@@ -8,11 +8,11 @@ namespace Weapon
         public Knife()
         {
             Name = "Knife";
-            WeaponType = WeaponType.Melee;
+            Type = WeaponType.Melee;
             Rarity = Rarity.Common;
-            WeaponSpeed = WeaponSpeed.Slow;
-            Distance = 1;
-            Damage = 20;
+            Speed = WeaponSpeed.Slow;
+            Distance = WeaponDistance.Close;
+            Damage = WeaponDamage.Low;
         }
     }
 }
