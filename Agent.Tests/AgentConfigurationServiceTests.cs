@@ -31,7 +31,7 @@ namespace Agent.Tests
             Mock<ConsoleRetriever> mockedRetriever = new();
             mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns(input).Returns("cancel");
 
-            sut.consoleRetriever = mockedRetriever.Object;
+            sut.ConsoleRetriever = mockedRetriever.Object;
 
             //Act
             sut.StartConfiguration();

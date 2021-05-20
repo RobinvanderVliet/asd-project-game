@@ -9,9 +9,9 @@ namespace Agent
 {
     public class Generator
     {
-        private String _stringBuilder = "";
+        private string _stringBuilder = "";
 
-        public String Execute(AST ast)
+        public string Execute(AST ast)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace Agent
 
         private void GenerateConfiguration(Node parent) 
         {
-            String text = "";
+            string text = "";
             if (parent is Rule)
             {
                 text += GenerateRule((Rule)parent);
@@ -50,23 +50,23 @@ namespace Agent
             _stringBuilder += text;
         }
 
-        private String GenerateRule(Rule parent)
+        private string GenerateRule(Rule parent)
         {
             return parent.SettingName + "=" + parent.Value + Environment.NewLine;
         }
 
-        private String GenerateCondition(Node parent, String setting, String action)
+        private string GenerateCondition(Node parent, string setting, string action)
         {
-            String text = ""; 
+            string text = ""; 
             foreach (Node child in parent.GetChildren())
             {
-                String subject = GenerateCompareble(((Condition)parent).GetWhenClause().GetComparableL());
+                string subject = GenerateCompareble(((Condition)parent).GetWhenClause().GetComparableL());
                 text += GenerateClause(child, setting, action, subject);
             }
             return text;
         }
 
-        private String GenerateAction(Action parent, String settingName)
+        private string GenerateAction(Action parent, string settingName)
         {
             String text = settingName + "_" + parent.Name + "=" + parent.Name + Environment.NewLine;
             foreach(Node child in parent.GetChildren())
@@ -76,9 +76,9 @@ namespace Agent
             return text;
         }
 
-        private String GenerateClause(Node parent, String settingName, String action ,String subject)
+        private string GenerateClause(Node parent, String settingName, String action ,String subject)
         {
-            String text = "";
+            string text = "";
             if (parent is When)
             {
                 text += generateWhen(parent, settingName, action, subject ,"true");
@@ -90,9 +90,9 @@ namespace Agent
             return text;
         }
 
-        private String generateWhen(Node parent, String settingName, String action ,String subject ,String status)
+        private string generateWhen(Node parent, String settingName, String action ,String subject ,String status)
         {
-            String text = "";
+            string text = "";
             Parallel.For(0, parent.GetChildren().Count, i =>
             {
                 switch (i)
@@ -114,30 +114,34 @@ namespace Agent
             return text;
         }
 
-        private String generateOther(Node parent, String settingName, String action ,String subject ,String status)
+        private string generateOther(Node parent, string settingName, string action ,string subject ,string status)
         {
             return settingName + "_" + action + "_" + subject + "_" + "comparision" + "_" + status + "=" + ((ActionReference)((Otherwise)parent).GetChildren().FirstOrDefault()).Name + Environment.NewLine;
         }
 
-        private String GenerateCompareble(Comparable node)
+        private string GenerateCompareble(Comparable node)
         {
             var nodeBase = node.GetType().FullName;
             if (nodeBase.Contains("Item"))
             {
                 return (((Item)node).Name);
             }
+            
             else if (nodeBase.Contains("Int"))
             {
                 return ((Int)node).Value.ToString();
             }
+            
             else if (nodeBase.Contains("Stat"))
             {
                 return (((Stat)node).Name);
             }
+            
             else if (nodeBase.Contains("subjects"))
             {
                 return (((Subject)node).Name);
             }
+            
             else { return "";}
         }
     }
