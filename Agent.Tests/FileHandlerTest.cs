@@ -23,7 +23,7 @@ namespace Agent.Tests
         public void Test_Import_CorrectFile()
         {
             var expected = "combat when player nearby player then attack";
-            var fileLocation = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\import_test_file_1.txt";
+            var fileLocation = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\import_test_file_1.txt";
             var result = _sut.ImportFile(fileLocation);
 
             Assert.AreEqual(expected, result);
@@ -49,7 +49,7 @@ namespace Agent.Tests
 
             _sut.ExportFile("combat when player nearby player then attack combat");
 
-            var fileLocation = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\agentFile.cfg";
+            var fileLocation = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\agentFile.cfg";
 
             var actual = File.ReadAllText(fileLocation);
 
