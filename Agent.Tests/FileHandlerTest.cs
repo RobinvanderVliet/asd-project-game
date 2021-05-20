@@ -24,7 +24,6 @@ namespace Agent.Tests
         {
             var expected = "combat when player nearby player then attack";
             var fileLocation = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\import_test_file_1.txt";
-
             var result = _sut.ImportFile(fileLocation);
 
             Assert.AreEqual(expected, result);

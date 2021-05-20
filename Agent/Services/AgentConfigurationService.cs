@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Agent.exceptions;
 using Agent.Exceptions;
 using Serilog;
+using Agent.Mapper;
+using Agent.Models;
 
 namespace Agent.Services
 {
@@ -11,7 +14,9 @@ namespace Agent.Services
         private FileHandler _fileHandler;
         private const string CancelCommand = "cancel";
         private const string LOADCOMMAND = "load";
+
         public ConsoleRetriever consoleRetriever;
+
         //This is needed for tests, dont delete!
         public String testVar = "";
         private InlineConfig inlineConfig;
@@ -23,7 +28,7 @@ namespace Agent.Services
             consoleRetriever = new ConsoleRetriever();
             inlineConfig = new InlineConfig();
         }
-        
+
         public void StartConfiguration()
         {
             Console.WriteLine("Please provide a path to your code file");
@@ -33,24 +38,25 @@ namespace Agent.Services
             {
                 return;
             }
-            
-            if (input.Equals(LOADCOMMAND)) 
+
+            if (input.Equals(LOADCOMMAND))
             {
                 inlineConfig.setup();
                 return;
             }
 
-            var content = String.Empty;;
+            var content = String.Empty;
+            ;
             try
             {
                 content = _fileHandler.ImportFile(input);
             }
             catch (FileException e)
             {
-                Log.Logger.Information(e.Message);    
+                Log.Logger.Information(e.Message);
                 StartConfiguration();
             }
-            
+
 
             try
             {
@@ -64,14 +70,13 @@ namespace Agent.Services
                 testVar = e.Message;
                 Log.Logger.Information("Syntax error: " + e.Message);
                 StartConfiguration();
-            } 
+            }
             catch (SemanticErrorException e)
             {
                 Log.Logger.Information("Semantic error: " + e.Message);
                 StartConfiguration();
             }
         }
-    }
 
-    
+    }
 }
