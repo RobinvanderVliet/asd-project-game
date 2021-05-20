@@ -1,13 +1,23 @@
 ﻿using Network.DTO;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Network
 {
     public class HeartbeatHandler : IHeartbeatHandler
     {
-        private List<HeartbeatDTO> _players = new List<HeartbeatDTO>();
+        private List<HeartbeatDTO> _players;
         TimeSpan waitTime = TimeSpan.FromMilliseconds(1000);
+
+        public HeartbeatHandler()
+        {
+            _players = new List<HeartbeatDTO>();
+            Timer timer = new Timer((e) =>
+            {
+                UpdateStatus();
+            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(2000));
+        }
 
         public void ReceiveHeartbeat(PacketDTO packet)
         {
