@@ -26,7 +26,7 @@ namespace InputCommandHandler.Antlr.Ast
             if (other == null)
                 return false;
 
-            return _message == other._message;
+            return _message == other.MessageValue;
         }
     }
 }
