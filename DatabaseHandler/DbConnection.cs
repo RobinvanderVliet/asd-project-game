@@ -15,8 +15,8 @@ namespace DatabaseHandler
         public void SetForeignKeys()
         {
             //FK Player -> Game
-            BsonMapper.Global.Entity<PlayerPoco>()
-                .DbRef(x => x.GameGUID, nameof(GamePoco));
+            // BsonMapper.Global.Entity<PlayerPoco>()
+            //     .DbRef(x => x.GameGuid, nameof(GamePoco));
 
             //FK Game -> Player
             // BsonMapper.Global.Entity<GamePoco>()

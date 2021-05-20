@@ -90,9 +90,12 @@ namespace Session
             var tmpGameRepostory = new Repository<GamePoco>(tmp);
             var tmpServiceGame = new ServicesDb<GamePoco>(tmpGameRepostory);
 
-            Guid gameGuid = Guid.NewGuid();
-            var tmpObject = new GamePoco {GameGUID = gameGuid};
+            string gameGuid = Guid.NewGuid().ToString();
+            var tmpObject = new GamePoco {GameGuid = gameGuid};
             tmpServiceGame.CreateAsync(tmpObject);
+
+            var resultGame = tmpServiceGame.GetAllAsync();
+            resultGame.Wait();
       
            List<string> allClients = _session.GetAllClients();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
@@ -105,7 +108,7 @@ namespace Session
                 playerPosition[0] = playerX;
                 playerPosition[1] = playerY;
                 players.Add(element, playerPosition);
-                var tmpPlayer = new PlayerPoco {PlayerGUID = element, GameGUID =  tmpObject, XPosition = playerX, YPosition = playerY};
+                var tmpPlayer = new PlayerPoco {PlayerGuid = element, GameGuid =  tmpObject.GameGuid, XPosition = playerX, YPosition = playerY};
                 tmpServicePlayer.CreateAsync(tmpPlayer);
 
                 playerX+=2; // spawn position + 2 each client
@@ -113,8 +116,11 @@ namespace Session
             }
 
             StartGameDto startGameDto = new StartGameDto();
-            startGameDto.GameGuid = gameGuid.ToString();
+            startGameDto.GameGuid = gameGuid;
             startGameDto.PlayerLocations = players;
+
+            var resultPlayer = tmpServicePlayer.GetAllAsync();
+            resultPlayer.Wait();
 
             return startGameDto;
         }

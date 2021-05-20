@@ -59,7 +59,7 @@ namespace Player.ActionHandlers
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
             HandleMove(moveDTO.PlayerPosition);
           
-            if (packet.Header.Target.Equals("host"))
+            if (_clientController.IsHost())
             {
                 var tmp = new DbConnection();
 
@@ -68,17 +68,18 @@ namespace Player.ActionHandlers
                 var tmpGameRepostory = new Repository<GamePoco>(tmp);
                 var tmpServiceGame = new ServicesDb<GamePoco>(tmpGameRepostory);
 
-                var allLocations = playerRepository.GetAllAsync();
+                var allLocations = tmpServicePlayer.GetAllAsync();
 
                 allLocations.Wait();
                 
-
                 int newPosPlayerX = moveDTO.PlayerPosition.XPosition;
                 int newPosPlayerY = moveDTO.PlayerPosition.YPosition;
 
                 var result =
-                    allLocations.Result.Where(x => x.XPosition == newPosPlayerX && x.YPosition == newPosPlayerY && x.GameGUID.GameGUID == moveDTO.PlayerPosition. );
+                    allLocations.Result.Where(x => x.XPosition == newPosPlayerX && x.YPosition == newPosPlayerY && x.GameGuid == moveDTO.PlayerPosition.GameGuid);
 
+                
+                
                 if (result.Any())
                 {
                     return new HandlerResponseDTO(SendAction.Ignore,
@@ -90,8 +91,7 @@ namespace Player.ActionHandlers
                 }
 
             }
-
-            return new HandlerResponseDTO(SendAction.Ignore, "Error in moveHandler");
+            return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
         private void InsertToDatabase(MoveDTO moveDto)
@@ -113,7 +113,7 @@ namespace Player.ActionHandlers
                 var allPlayers = tmpServicePlayer.GetAllAsync();
                 allPlayers.Wait();
                 Console.WriteLine("Updated :)");
-                SendMove(moveDto.PlayerPosition);
+             //   SendMove(moveDto.PlayerPosition);
             }
         }
                 

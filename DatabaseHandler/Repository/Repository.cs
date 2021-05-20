@@ -82,7 +82,7 @@ namespace DatabaseHandler.Repository
         {
             var results =  _db.GetCollection<PlayerPoco>(_collection);
 
-            var col = results.FindOneAsync(x => x.PlayerGUID.Equals(playerGUID));
+            var col = results.FindOneAsync(x => x.PlayerGuid.Equals(playerGUID));
             col.Result.XPosition = newPosX;
             col.Result.YPosition = newPosY;
 

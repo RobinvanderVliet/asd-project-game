@@ -34,7 +34,6 @@ namespace Player.Services
             _chatHandler = chatHandler;
             _sessionHandler = sessionHandler;
             _currentPlayer = currentPlayer;
-            _playerPositions = playerPositions;
             _moveHandler = moveHandler;
             _clientController = clientController;
             currentPlayer.PlayerGuid = _clientController.GetOriginId();
