@@ -21,17 +21,17 @@ namespace Creature
             NpcConfigurationService npcConfigurationService = new NpcConfigurationService(new List<NpcConfiguration>(), new FileToDictionaryMapper());
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
-            
-            PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world);
-            MonsterData monsterData = new MonsterData(new Vector2(10, 10), 20, 5, 50, world, false);
-            MonsterData monsterData2 = new MonsterData(new Vector2(20, 20), 20, 5, 50, world, false);
 
-            RuleSet monsterRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[0].Settings);
             RuleSet playerRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[1].Settings);
+            RuleSet monsterRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[0].Settings);
 
-            ICreature player = new Player(playerData, playerRuleSet);
-            ICreature creature = new Monster(monsterData, monsterRuleSet);
-            ICreature creature2 = new Monster(monsterData2, monsterRuleSet);
+            PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, playerRuleSet);
+            MonsterData monsterData = new MonsterData(new Vector2(10, 10), 20, 5, 50, world, monsterRuleSet, false);
+            MonsterData monsterData2 = new MonsterData(new Vector2(20, 20), 20, 5, 50, world, monsterRuleSet, false);
+
+            ICreature player = new Player(playerData);
+            ICreature creature = new Monster(monsterData);
+            ICreature creature2 = new Monster(monsterData2);
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);

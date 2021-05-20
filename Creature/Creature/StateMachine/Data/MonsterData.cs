@@ -1,4 +1,5 @@
-﻿using Creature.World;
+﻿using Creature.Creature.StateMachine.CustomRuleSet;
+using Creature.World;
 using System.Numerics;
 
 namespace Creature.Creature.StateMachine.Data
@@ -10,6 +11,7 @@ namespace Creature.Creature.StateMachine.Data
         private int _damage;
         private int _visionRange;
         private IWorld _world;
+        private RuleSet _ruleSet;
         private bool _following;
 
         public bool IsAlive { get => _health > 0; }
@@ -44,19 +46,26 @@ namespace Creature.Creature.StateMachine.Data
             set => _world = value;
         }
 
+        public RuleSet RuleSet
+        {
+            get => _ruleSet;
+            set => _ruleSet = value;
+        }
+
         public bool IsFollowing
         {
             get => _following;
             set => _following = value;
         }
 
-        public MonsterData(Vector2 position, double health, int damage, int visionRange, IWorld world, bool following)
+        public MonsterData(Vector2 position, double health, int damage, int visionRange, IWorld world, RuleSet ruleSet, bool following)
         {
             _position = position;
             _health = health;
             _damage = damage;
             _visionRange = visionRange;
             _world = world;
+            _ruleSet = ruleSet;
             _following = following;
         }
     }

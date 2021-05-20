@@ -13,9 +13,9 @@ namespace Creature
             get => _playerStateMachine;
         }
 
-        public Player(PlayerData playerData, RuleSet ruleSet)
+        public Player(PlayerData playerData)
         {
-            _playerStateMachine = new(playerData, ruleSet);
+            _playerStateMachine = new(playerData);
             _playerStateMachine.StartStateMachine();
         }
 

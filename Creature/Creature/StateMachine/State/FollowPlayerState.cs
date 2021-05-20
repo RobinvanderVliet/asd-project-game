@@ -3,6 +3,7 @@ using Creature.Creature.StateMachine.Data;
 using Creature.Pathfinder;
 using System.Collections.Generic;
 using System.Numerics;
+using Creature.Creature.StateMachine.CustomRuleSet;
 
 namespace Creature.Creature.StateMachine.State
 {
