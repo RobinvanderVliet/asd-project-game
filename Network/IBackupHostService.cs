@@ -8,6 +8,6 @@ namespace Network
         
         public void DisableBackupHost();
         
-        public Boolean IsBackupHost();
+        public bool IsBackupHost();
     }
 }

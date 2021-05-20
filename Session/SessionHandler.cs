@@ -252,7 +252,7 @@ namespace Session
 
         public void setHostPingTimer(Timer timer)
         {
-            this._hostPingTimer = timer;
+            _hostPingTimer = timer;
         }
     }
 }

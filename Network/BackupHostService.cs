@@ -5,7 +5,7 @@ namespace Network
 
     public class BackupHostService : IBackupHostService
     {
-        private Boolean _isBackupHost;
+        private bool _isBackupHost;
         
         public BackupHostService() 
         {
@@ -22,7 +22,7 @@ namespace Network
             _isBackupHost = false;
         }
 
-        public Boolean IsBackupHost()
+        public bool IsBackupHost()
         {
             return _isBackupHost;
         }

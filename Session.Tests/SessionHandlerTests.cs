@@ -142,11 +142,11 @@ namespace Session.Tests
 
             _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Session));
 
-            this._sut.setHostPingTimer(new Timer());
+            _sut.setHostPingTimer(new Timer());
             
             // Act ---------
             Thread threadSut = new Thread(() => _sut.HostPingEvent(null,null));
-            Thread threadHost = new Thread(() =>  this._sut.setHostActive(true));
+            Thread threadHost = new Thread(() => _sut.setHostActive(true));
             
             threadSut.Start();
             
@@ -164,9 +164,9 @@ namespace Session.Tests
 
             // Assert ---------
             _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
-            this._mockedClientController.Verify(mock => mock.CreateHostController(), Times.Never);
-            this._mockedClientController.Verify(mock => mock.UnmarkBackupHost(), Times.Never);
-            Assert.IsTrue(this._sut.getHostActive());
+            _mockedClientController.Verify(mock => mock.CreateHostController(), Times.Never);
+            _mockedClientController.Verify(mock => mock.UnmarkBackupHost(), Times.Never);
+            Assert.IsTrue(_sut.getHostActive());
         }
         
         [Test]
@@ -179,16 +179,16 @@ namespace Session.Tests
 
             _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Session));
             
-            this._sut.setHostPingTimer(new Timer());
+            _sut.setHostPingTimer(new Timer());
             
             // Act ---------
             _sut.HostPingEvent(null,null);
 
             // Assert ---------
             _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
-            this._mockedClientController.Verify(mock => mock.CreateHostController(), Times.Once);
-            this._mockedClientController.Verify(mock => mock.UnmarkBackupHost(), Times.Once);
-            Assert.IsTrue(this._sut.getHostActive());
+            _mockedClientController.Verify(mock => mock.CreateHostController(), Times.Once);
+            _mockedClientController.Verify(mock => mock.UnmarkBackupHost(), Times.Once);
+            Assert.IsTrue(_sut.getHostActive());
         }
 
         [Test]
