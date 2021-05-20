@@ -11,7 +11,7 @@ namespace Agent.Mapper
         public Dictionary<String, String> MapFileToConfiguration(string filepath)
         {
             FileHandler fileHandler = new FileHandler();
-            Dictionary<String, String> configuration = new  Dictionary<String, String>();
+            Dictionary<string, string> configuration = new  Dictionary<string, string>();
             
             string content = fileHandler.ImportFile(filepath);
             
