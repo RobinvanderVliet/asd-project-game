@@ -4,133 +4,146 @@ using System;
 using System.Linq;
 using System.Text;
 using Action = Agent.Antlr.Ast.Action;
-
+using System.Threading.Tasks;
 
 namespace Agent
 {
     public class Generator
     {
-        StringBuilder stringBuilder = new();
-        String player;
+        private string _stringBuilder = "";
 
-        public string Execute(AST ast) 
+        public string Execute(AST ast)
         {
-            foreach (Node node in ast.root.GetChildren())
+            try
             {
-                GenerateConfiguration(node);
+               Parallel.ForEach(ast.root.GetChildren(), node =>
+               {
+                   GenerateConfiguration(node);
+               });
+            }
+            catch (Exception e)
+            {
+                _stringBuilder += e.Message;
             }
 
-            return stringBuilder.ToString();
+            return _stringBuilder;
         }
 
-        public void GenerateConfiguration(Node parent) 
+        private void GenerateConfiguration(Node parent) 
         {
+            string text = "";
             if (parent is Rule)
             {
-                GenerateRule((Rule)parent);
+                text += GenerateRule((Rule)parent);
             }
+
             foreach (Node child in parent.GetChildren())
             {
-
                 if (child is Action)
                 {
-                    GenerateAction((Action)child, ((Setting)parent).SettingName);
+                    text += GenerateAction((Action)child, ((Setting)parent).SettingName);
                 } 
                 else 
                 {
-                    GenerateCondition(child, ((Setting)parent).SettingName);
+                    text += GenerateCondition(child, ((Setting)parent).SettingName, "default");
                 }
             }
+            _stringBuilder += text;
         }
 
-        private void GenerateRule(Rule parent)
+        private string GenerateRule(Rule parent)
         {
-            stringBuilder.Append(parent.SettingName).Append("=").Append(parent.Value);
-            stringBuilder.Append(Environment.NewLine);
+            return parent.SettingName + "=" + parent.Value + Environment.NewLine;
         }
 
-        private void GenerateCondition(Node parent, String setting)
+        private string GenerateCondition(Node parent, string setting, string action)
         {
+            string text = ""; 
             foreach (Node child in parent.GetChildren())
             {
-                GenerateClause(child, setting);
+                string subject = GenerateCompareble(((Condition)parent).GetWhenClause().GetComparableL());
+                text += GenerateClause(child, setting, action, subject);
             }
+            return text;
         }
 
-        private void GenerateAction(Action parent, string settingName)
+        private string GenerateAction(Action parent, string settingName)
         {
-            stringBuilder.Append(settingName).Append("_").Append("????").Append("=").Append(parent.Name);
-            stringBuilder.Append(Environment.NewLine);
+            String text = settingName + "_" + parent.Name + "=" + parent.Name + Environment.NewLine;
             foreach(Node child in parent.GetChildren())
             {
-                GenerateCondition(child, settingName);
+                text += GenerateCondition(child, settingName, parent.Name);
             }
+            return text;
         }
 
-        private void GenerateClause(Node parent, string settingName)
+        private string GenerateClause(Node parent, String settingName, String action ,String subject)
         {
+            string text = "";
             if (parent is When)
             {
-                generateWhen(parent, settingName, "true");
+                text += generateWhen(parent, settingName, action, subject ,"true");
+                if(parent.GetChildren().Where(c => c.GetNodeType() == "Otherwise").FirstOrDefault() != null)
+                {
+                    text += generateOther(parent.GetChildren().Where(c => c.GetNodeType() == "Otherwise").FirstOrDefault(), settingName, action, subject ,"false");
+                }
             }
-            else 
-            {
-                generateOther(parent, settingName, "false");
-            }
+            return text;
         }
 
-        private void generateWhen(Node parent, string settingName, string v)
+        private string generateWhen(Node parent, String settingName, String action ,String subject ,String status)
         {
-            for (int i = 0; i < parent.GetChildren().Count; i++)
+            string text = "";
+            Parallel.For(0, parent.GetChildren().Count, i =>
             {
                 switch (i)
                 {
                     case 0:
-                        stringBuilder.Append(settingName).Append("_").Append("????").Append("_").Append("????").Append("_")
-                            .Append("comparable").Append("=");
-                        GenerateCompareble(((When)parent).GetComparableL());
-                        stringBuilder.Append(Environment.NewLine);
+                        text += settingName + "_" + action + "_" + subject + "_" + "comparable" + "=" + GenerateCompareble(((When)parent).GetComparableL()) + Environment.NewLine;
                         break;
                     case 1:
-                        stringBuilder.Append(settingName).Append("_").Append("????").Append("_").Append("????").Append("_")
-                            .Append("threshold").Append("=");
-                        GenerateCompareble(((When)parent).GetComparableR());
-                        stringBuilder.Append(Environment.NewLine);
+                        text += settingName + "_" + action + "_" + subject + "_" + "treshold" + "=" + GenerateCompareble(((When)parent).GetComparableR()) + Environment.NewLine; 
                         break;
                     case 2:
-                        stringBuilder.Append(settingName).Append("_").Append("????").Append("_").Append("????").Append("_")
-                            .Append("comparision").Append("=").Append(((When)parent).GetComparison().ComparisonType);
-                        stringBuilder.Append(Environment.NewLine);
+                        text += settingName + "_" + action + "_" + subject + "_" + "comparision" + "=" + ((When)parent).GetComparison().ComparisonType + Environment.NewLine;
                         break;
                     case 3:
-                        stringBuilder.Append(settingName).Append("_").Append("????").Append("_").Append("????").Append("_")
-                            .Append("comparision").Append("_").Append(v).Append("=").Append(((When)parent).GetThen().Name);
-                        stringBuilder.Append(Environment.NewLine);
+                        text += settingName + "_" + action + "_" + subject + "_" + "comparision" + "_"+ status + "=" + ((When)parent).GetThen().Name + Environment.NewLine;
                         break;
                 }
-            }
+            });
+            return text;
         }
 
-        private void generateOther(Node parent, string settingName, string v)
+        private string generateOther(Node parent, string settingName, string action ,string subject ,string status)
         {
-            stringBuilder.Append(settingName).Append("_").Append("????").Append("_").Append("????").Append("_")
-                .Append("Comparision").Append("_").Append(v).Append("=")
-                .Append(((ActionReference)((Otherwise)parent).GetChildren().FirstOrDefault()).Name);
-            stringBuilder.Append(Environment.NewLine);
+            return settingName + "_" + action + "_" + subject + "_" + "comparision" + "_" + status + "=" + ((ActionReference)((Otherwise)parent).GetChildren().FirstOrDefault()).Name + Environment.NewLine;
         }
 
-        private void GenerateCompareble(Comparable node)
+        private string GenerateCompareble(Comparable node)
         {
             var nodeBase = node.GetType().FullName;
-            if (nodeBase.Contains("Item")) {
-                stringBuilder.Append(((Item)node).Name);
-            } else if (nodeBase.Contains("Int")) {
-                stringBuilder.Append(((Int)node).Value);
-            } else if (nodeBase.Contains("Stat")) {
-                stringBuilder.Append(((Stat)node).Name);
-            } else if (nodeBase.Contains("subjects")) {
-                stringBuilder.Append(((Subject)node).Name);
+            if (nodeBase.Contains("Item"))
+            {
+                return (((Item)node).Name);
             }
+            
+            else if (nodeBase.Contains("Int"))
+            {
+                return ((Int)node).Value.ToString();
+            }
+            
+            else if (nodeBase.Contains("Stat"))
+            {
+                return (((Stat)node).Name);
+            }
+            
+            else if (nodeBase.Contains("subjects"))
+            {
+                return (((Subject)node).Name);
+            }
+            
+            else { return "";}
         }
     }
 }

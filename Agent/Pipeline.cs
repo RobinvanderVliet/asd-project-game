@@ -17,7 +17,6 @@ namespace Agent
 
         private List<string> _errors;
         private Checker _checker;
-        // private Transformer transformer;
         private Generator generator;
 
         public Pipeline()
@@ -44,28 +43,21 @@ namespace Agent
             ASTAgentListener astAgentListener = new ASTAgentListener();
             walker.Walk(astAgentListener, parseTree);
             _ast = astAgentListener.GetAST();
+
         }
 
         public virtual void CheckAst()
         {
-            // checker = new Checker(ast);
-            // TODO: Implement checker calls
-        }
-        
-        public void TransformAst()
-        {
-            ThrowExceptionIfAstIsNull();
+            if(_checker == null)
+            {
+                _checker = new Checker(_ast);
+            }
+            _checker.Check(_ast);
         }
 
         public string GenerateAst()
         {
             return generator.Execute(_ast);
-        }
-
-        private void ThrowExceptionIfAstIsNull()
-        {
-            if (_ast == null)
-                throw new UndefinedAstException();
         }
 
         public AST Ast

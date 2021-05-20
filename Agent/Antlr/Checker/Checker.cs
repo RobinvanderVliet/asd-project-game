@@ -73,6 +73,11 @@ namespace Agent.Antlr.Checker
             }
             return itemAllowed;
         }
+
+        public virtual void Check(AST ast)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

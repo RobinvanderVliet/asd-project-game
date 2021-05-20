@@ -24,7 +24,7 @@ namespace Agent.Tests.Mapper
         public void Test_MapFileToConfiguration_Successful()
         {
             //Arrange
-            Dictionary<String, String> expectedDictionary = new Dictionary<string, string>();
+            Dictionary<string, string> expectedDictionary = new Dictionary<string, string>();
             expectedDictionary.Add("aggressiveness", "high");
             expectedDictionary.Add("explore", "random");
             expectedDictionary.Add("combat", "offensive");
