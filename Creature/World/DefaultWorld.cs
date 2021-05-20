@@ -43,6 +43,11 @@ namespace Creature.World
             }
         }
 
+        public void SpawnAgent(ICreature agent)
+        {
+            _creatures.Add(agent);
+        }
+
         public void SpawnCreature(ICreature creature)
         {
             _creatures.Add(creature);

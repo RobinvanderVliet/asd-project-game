@@ -13,6 +13,7 @@ namespace Creature.World
 
         public void GenerateWorldNodes();
         public void SpawnPlayer(ICreature player);
+        public void SpawnAgent(ICreature agent);
         public void SpawnCreature(ICreature creature);
         public void Render();
     }
