@@ -26,7 +26,7 @@ namespace Player.ActionHandlers
         private IPlayerModel _currentPlayer;
         private string Game;
         private string playerGuid; 
-        private Dictionary<string, int[]> _PlayerLocations  {get; set;}
+        // private Dictionary<string, int[]> _PlayerLocations  {get; set;}
         private IWorldService _worldService;
 
         public MoveHandler(IClientController clientController, IWorldService worldService)
@@ -161,9 +161,6 @@ namespace Player.ActionHandlers
            _worldService.UpdateCharacterPosition(playerPosition);
            _worldService.DisplayWorld();
            
-           // worldService.updateArraylistposition(player, x, y);
-           
-           // aanroepen daadwerkelijke functie voor aanpassen x en y in wereld (dus in arraylist)
            //_player.ChangePositionOfAPlayer(player);
            // als host dan in globale db aanpassen voor die speler (hostcontoller (HandlePacket))
            

@@ -17,11 +17,12 @@ namespace Session
         private IWorldService _worldService;
         public Boolean _inGame;
         public Boolean InGame { get => _inGame; set => _inGame = value; }
-        public GameSessionHandler(IClientController clientController, IWorldService worldService)
+        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
             _worldService = worldService;
+            _sessionHandler = sessionHandler;
             InGame = false;
         }
         
