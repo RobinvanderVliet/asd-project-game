@@ -34,7 +34,7 @@ namespace Creature
             _playerStateMachine.StartStateMachine();
         }
         
-        private void SendChatMessenge(string message)
+        private void SendChatMessage(string message)
         {
             _clientController.SendPayload(message, PacketType.Chat);
         }
