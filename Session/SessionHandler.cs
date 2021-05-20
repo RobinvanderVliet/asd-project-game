@@ -95,8 +95,8 @@ namespace Session
             List<string> allClients = _session.GetAllClients();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
 
-            int playerX = 14;
-            int playerY = 33;
+            int playerX = 26;
+            int playerY = 11;
             foreach (string element in allClients)
             {
                 int[] playerPosition = new int[2];

@@ -48,9 +48,7 @@ namespace Player.Model
             _name = name;
             _health = HEALTHCAP;
             _stamina = STAMINACAP;
-            //_currentTile = tile;
             _inventory = inventory;
-            //random default value for now
             _bitcoins = bitcoins;
             _radiationLevel = radiationLevel;
             _xPosition = 26; 

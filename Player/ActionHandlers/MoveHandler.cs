@@ -56,17 +56,17 @@ namespace Player.ActionHandlers
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
             HandleMove(moveDTO.PlayerPosition);
             
-            if (packet.Header.PacketType == PacketType.Move)
-            {
-                
-                Console.WriteLine("Game started in MoveHandler :)");
-                
-            } else if (packet.Header.PacketType == PacketType.Move)
-            {
-                
-                Console.WriteLine("Moved in moveHandler :)");   
-             
-            }
+            // if (packet.Header.PacketType == PacketType.Move)
+            // {
+            //     
+            //     Console.WriteLine("Game started in MoveHandler :)");
+            //     
+            // } else if (packet.Header.PacketType == PacketType.Move)
+            // {
+            //     
+            //     Console.WriteLine("Moved in moveHandler :)");   
+            //  
+            // }
             
             
             //
@@ -141,7 +141,7 @@ namespace Player.ActionHandlers
             //
             // //check if pakketje is client: Zo ja voer het uit. 
             // HandleMove(moveDTO.Player);
-            return new HandlerResponseDTO(SendAction.Ignore, null);
+            return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
         private void InsertToDatabase(MoveDTO moveDto)
@@ -155,10 +155,11 @@ namespace Player.ActionHandlers
             
         }
                 
-       private void HandleMove(MapCharacterDTO playerPosition)
+       private void HandleMove(MapCharacterDTO playerPosition) // hiervan move DTO maken
        {
+           Console.WriteLine("in de move actie");
            _worldService.UpdateCharacterPosition(playerPosition);
-           
+           _worldService.DisplayWorld();
            
            // worldService.updateArraylistposition(player, x, y);
            

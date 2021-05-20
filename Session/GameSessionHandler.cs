@@ -51,17 +51,9 @@ namespace Session
             InGame = true;
             if (_clientController.IsHost())
             {
-                Console.WriteLine("Ik ben de host, ga iets doen met de database");
+                Console.WriteLine("Ik ben de host, moet iets doen met de database");
             }
-
-            foreach (var player in startGameDto.PlayerLocations)
-            {
-                if (_clientController.GetOriginId() == player.Key)
-                {
-                    MapCharacterDTO currentPlayer = new MapCharacterDTO(player.Value[0], player.Value[1], player.Key);
-                    
-                }
-            }
+            
             _worldService.GenerateWorld(6969);
 
             foreach (var player in startGameDto.PlayerLocations)
