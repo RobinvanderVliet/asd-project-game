@@ -1,5 +1,5 @@
 ﻿
-namespace Agent.antlr.ast.comparables
+namespace Agent.Antlr.Ast.Comparables
 {
    
     public class Stat : Comparable

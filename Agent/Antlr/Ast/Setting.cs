@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Agent.antlr.ast
+namespace Agent.Antlr.Ast
 {
     
     public class Setting : Node
@@ -25,9 +25,9 @@ namespace Agent.antlr.ast
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            children.AddRange(_conditions);
-            children.AddRange(_actions);
-            children.AddRange(body);
+            children.AddRange(this._conditions);
+            children.AddRange(this._actions);
+            children.AddRange(this.body);
             return children;
         }
 
@@ -36,13 +36,13 @@ namespace Agent.antlr.ast
             switch (node) 
             {
                 case Condition:
-                    _conditions.Add(node);
+                    this._conditions.Add(node);
                     break;
                 case Action:
-                    _actions.Add(node);
+                    this._actions.Add(node);
                     break;
                 default:
-                    body.Add(node);
+                    this.body.Add(node);
                     break;
                 
             }

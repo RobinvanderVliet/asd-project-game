@@ -1,7 +1,7 @@
-﻿using Agent.antlr.ast.comparables;
+﻿using Agent.Antlr.Ast.Comparables;
 using System.Collections.Generic;
 
-namespace Agent.antlr.ast
+namespace Agent.Antlr.Ast
 {
     public class ActionReference : Node
     {
@@ -24,11 +24,11 @@ namespace Agent.antlr.ast
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            if (_item != null)
-                children.Add(_item);
-            if (_subject != null)
-                children.Add(_subject);
-            children.AddRange(body);
+            if (this._item != null)
+                children.Add(this._item);
+            if (this._subject != null)
+                children.Add(this._subject);
+            children.AddRange(this.body);
             
             return children;
         }

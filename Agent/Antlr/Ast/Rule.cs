@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Agent.antlr.ast
+namespace Agent.Antlr.Ast
 {
     
     public class Rule : Node
@@ -25,17 +25,17 @@ namespace Agent.antlr.ast
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            children.AddRange(_settings);
-            children.AddRange(body);
+            children.AddRange(this._settings);
+            children.AddRange(this.body);
             return children;
         }
 
         public override Node AddChild(Node node)
         {
             if (node is Setting setting)
-                _settings.Add(setting);
+                this._settings.Add(setting);
             else
-                body.Add(node);
+                this.body.Add(node);
 
             return this;
         }
@@ -43,9 +43,9 @@ namespace Agent.antlr.ast
         public override Node RemoveChild(Node node)
         {
             if (node is Setting setting)
-                _settings.Remove(setting);
+                this._settings.Remove(setting);
             else 
-                body.Remove(node);
+                this.body.Remove(node);
             return this;
         }
     }

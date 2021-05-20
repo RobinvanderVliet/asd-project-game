@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Agent.antlr.ast
+﻿namespace Agent.Antlr.Ast
 {
 
     public class AST
@@ -18,7 +16,7 @@ namespace Agent.antlr.ast
 
         public void SetRoot(Configuration configuration)
         {
-            root = configuration;
+            this.root = configuration;
         }
     }
 }

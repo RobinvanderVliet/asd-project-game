@@ -1,6 +1,6 @@
-﻿using Agent.antlr.ast;
-using Agent.antlr.ast.comparables;
-using Agent.antlr.ast.comparables.subjects;
+﻿using Agent.Antlr.Ast;
+using Agent.Antlr.Ast.Comparables;
+using Agent.Antlr.Ast.Comparables.Subjects;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.parser

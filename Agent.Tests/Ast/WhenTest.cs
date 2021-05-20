@@ -1,10 +1,10 @@
-﻿using Agent.antlr.ast;
-using Agent.antlr.ast.comparables;
-using Agent.antlr.ast.comparables.subjects;
+﻿using Agent.Antlr.Ast;
+using Agent.Antlr.Ast.Comparables;
+using Agent.Antlr.Ast.Comparables.Subjects;
 using NUnit.Framework;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Comparable = Agent.antlr.ast.Comparable;
+using Comparable = Agent.Antlr.Ast.Comparable;
 
 namespace Agent.Tests.ast
 {

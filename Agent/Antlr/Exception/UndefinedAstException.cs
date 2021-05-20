@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Agent.antlr.exception
+﻿namespace Agent.Antlr.Exception
 {
-    public class UndefinedAstException : Exception
+    public class UndefinedAstException : System.Exception
     {
         
     }

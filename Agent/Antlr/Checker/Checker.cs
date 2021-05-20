@@ -1,11 +1,10 @@
+using Agent.Antlr.Ast;
+using Agent.Antlr.Ast.Comparables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Agent.antlr.ast;
-using Agent.antlr.ast.comparables;
 
-
-namespace Agent.antlr.checker
+namespace Agent.Antlr.Checker
 {
     public class Checker
     {
@@ -15,7 +14,7 @@ namespace Agent.antlr.checker
         {
             foreach (Node node in ast.root.GetChildren())
             {
-                _symboltable.Add(node);
+                this._symboltable.Add(node);
             }
             //Entry of checkStatCombination in Pipeline
         }

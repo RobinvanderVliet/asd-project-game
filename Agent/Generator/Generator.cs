@@ -1,9 +1,9 @@
-﻿using Agent.antlr.ast;
-using Agent.antlr.ast.comparables;
+﻿using Agent.Antlr.Ast;
+using Agent.Antlr.Ast.Comparables;
 using System;
 using System.Linq;
 using System.Text;
-using Action = Agent.antlr.ast.Action;
+using Action = Agent.Antlr.Ast.Action;
 
 
 namespace Agent

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Agent.antlr.ast
+namespace Agent.Antlr.Ast
 {
     public class Action : Node
     {
@@ -40,9 +40,9 @@ namespace Agent.antlr.ast
         public override Node RemoveChild(Node node)
         {
             if (node is Condition condition)
-                _conditions.Remove(condition);
+                this._conditions.Remove(condition);
             else
-                body.Remove(node);
+                this.body.Remove(node);
 
             return this;
         }

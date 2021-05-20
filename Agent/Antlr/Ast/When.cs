@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Agent.antlr.ast
+namespace Agent.Antlr.Ast
 {
     public class When : Node
     {
@@ -18,16 +18,16 @@ namespace Agent.antlr.ast
         {
             var children = new List<Node>();
 
-            if (_comparableL != null)
-                children.Add(_comparableL);
-            if (_comparison != null)
-                children.Add(_comparison);
-            if (_comparableR != null)
-                children.Add(_comparableR);
+            if (this._comparableL != null)
+                children.Add(this._comparableL);
+            if (this._comparison != null)
+                children.Add(this._comparison);
+            if (this._comparableR != null)
+                children.Add(this._comparableR);
             if (this._then != null)
                 children.Add(this._then);
 
-            children.AddRange(body);
+            children.AddRange(this.body);
             return children;
         }
 
@@ -66,28 +66,28 @@ namespace Agent.antlr.ast
 
         public Comparable GetComparableL()
         {
-            return _comparableL;
+            return this._comparableL;
         }
 
         public void SetComparableL(Comparable comparable)
         {
-            _comparableL = comparable;
+            this._comparableL = comparable;
         }
         
         
         public Comparable GetComparableR()
         {
-            return _comparableR;
+            return this._comparableR;
         }
 
         public void SetComparableR(Comparable comparable)
         {
-            _comparableR = comparable;
+            this._comparableR = comparable;
         }
 
         public Comparison GetComparison()
         {
-            return _comparison;
+            return this._comparison;
         }
 
         public void SetComparison(Comparison comparison)
@@ -97,7 +97,7 @@ namespace Agent.antlr.ast
         
         public ActionReference GetThen()
         {
-            return _then;
+            return this._then;
         }
 
         public void SetThen(ActionReference then)

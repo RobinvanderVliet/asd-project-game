@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Agent.antlr.ast
+namespace Agent.Antlr.Ast
 {
     public class Condition : Node
     {
@@ -15,11 +15,11 @@ namespace Agent.antlr.ast
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            if (_whenClause != null)
-                children.Add(_whenClause);
-            if (_otherwiseClause != null)
-                children.Add(_otherwiseClause);
-            children.AddRange(body);
+            if (this._whenClause != null)
+                children.Add(this._whenClause);
+            if (this._otherwiseClause != null)
+                children.Add(this._otherwiseClause);
+            children.AddRange(this.body);
 
             return children;
         }
@@ -29,13 +29,13 @@ namespace Agent.antlr.ast
             switch (node)
             {
                 case When whenClause:
-                    _whenClause = whenClause;
+                    this._whenClause = whenClause;
                     break;
                 case Otherwise otherwiseClause:
-                    _otherwiseClause = otherwiseClause;
+                    this._otherwiseClause = otherwiseClause;
                     break;
                 default:
-                    body.Add(node);
+                    this.body.Add(node);
                     break;
             }
 
@@ -47,13 +47,13 @@ namespace Agent.antlr.ast
             switch (node)
             {
                 case When:
-                    _whenClause = null;
+                    this._whenClause = null;
                     break;
                 case Otherwise:
-                    _otherwiseClause = null;
+                    this._otherwiseClause = null;
                     break;
                 default:
-                    body.Remove(node);
+                    this.body.Remove(node);
                     break;
             }
 
@@ -62,12 +62,12 @@ namespace Agent.antlr.ast
 
         public When GetWhenClause()
         {
-            return _whenClause;
+            return this._whenClause;
         }
 
         public Otherwise GetOtherWiseClause()
         {
-            return _otherwiseClause;
+            return this._otherwiseClause;
         }
     }
 }

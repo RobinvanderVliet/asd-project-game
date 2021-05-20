@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace Agent.antlr.ast
+namespace Agent.Antlr.Ast
 {
    
     public class Node 
@@ -22,13 +22,13 @@ namespace Agent.antlr.ast
 
         public virtual Node AddChild(Node node)
         {
-            body.Add(node);
+            this.body.Add(node);
             return this;
         }
 
         public virtual Node RemoveChild(Node node)
         {
-            body.Remove(node);
+            this.body.Remove(node);
             return this;
         }
 

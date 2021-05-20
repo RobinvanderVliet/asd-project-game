@@ -1,13 +1,13 @@
-﻿using Agent.antlr.ast;
+﻿using Agent.Antlr.Ast;
+using Agent.Antlr.Checker;
+using Agent.Antlr.Exception;
 using System;
 using System.Collections.Generic;
-using Agent.antlr.checker;
-using Agent.antlr.exception;
-using Agent.antlr.grammar;
-using Agent.parser;
+using Agent.Antlr.Grammar;
+using Agent.Antlr.Parser;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using SyntaxErrorException = Agent.exceptions.SyntaxErrorException;
+using SyntaxErrorException = Agent.Exceptions.SyntaxErrorException;
 
 namespace Agent
 {

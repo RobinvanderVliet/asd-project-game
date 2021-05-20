@@ -1,5 +1,4 @@
-﻿using Agent.exceptions;
-using Agent.Services;
+﻿using Agent.Services;
 using Moq;
 using NUnit.Framework;
 using System;

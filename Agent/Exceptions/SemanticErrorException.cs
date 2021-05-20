@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Agent.exceptions
+namespace Agent.Exceptions
 {
     [Serializable]
     [ExcludeFromCodeCoverage]

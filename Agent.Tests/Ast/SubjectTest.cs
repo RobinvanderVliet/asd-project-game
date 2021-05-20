@@ -1,5 +1,5 @@
-﻿using Agent.antlr.ast.comparables;
-using Agent.antlr.ast.comparables.subjects;
+﻿using Agent.Antlr.Ast.Comparables;
+using Agent.Antlr.Ast.Comparables.Subjects;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 

@@ -1,8 +1,8 @@
+using Agent.Antlr.Ast;
 using System;
-using Agent.antlr.ast;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
-using Action = Agent.antlr.ast.Action;
+using Action = Agent.Antlr.Ast.Action;
 
 namespace Agent.Tests.ast
 {

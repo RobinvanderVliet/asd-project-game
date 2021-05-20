@@ -1,4 +1,4 @@
-﻿namespace Agent.antlr.ast
+﻿namespace Agent.Antlr.Ast
 {
     public class ASTError
     {

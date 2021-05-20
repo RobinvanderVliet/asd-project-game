@@ -1,8 +1,8 @@
+using Agent.Antlr.Ast;
+using Agent.Antlr.Ast.Comparables;
+using Agent.Antlr.Checker;
 using System;
 using System.Collections.Generic;
-using Agent.antlr.ast;
-using Agent.antlr.ast.comparables;
-using Agent.antlr.checker;
 using Moq;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;

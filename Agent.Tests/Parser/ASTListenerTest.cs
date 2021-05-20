@@ -1,7 +1,7 @@
-using Agent.antlr.ast;
+using Agent.Antlr.Ast;
+using Agent.Antlr.Grammar;
 using NUnit.Framework;
-using Agent.parser;
-using Agent.antlr.grammar;
+using Agent.Antlr.Parser;
 using System;
 using System.IO;
 using Antlr4.Runtime;
