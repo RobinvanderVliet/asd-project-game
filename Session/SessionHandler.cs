@@ -13,7 +13,7 @@ namespace Session
         private IClientController _clientController;
         private Session _session;
         private Dictionary<string, PacketDTO> _availableSessions = new();
-
+        private IHeartbeatHandler _heartbeat;
         public SessionHandler(IClientController clientController)
         {
             _clientController = clientController;
@@ -54,6 +54,7 @@ namespace Session
             _session.AddClient(_clientController.GetOriginId());
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
+            _heartbeat = new HeartbeatHandler();
             Console.Out.WriteLine("Created session with the name: " + _session.Name);
         }
 
@@ -65,7 +66,6 @@ namespace Session
         
         public void SendHeartbeat()
         {
-
             SessionDTO sessionDTO = new SessionDTO(SessionType.SendHeartbeat);
             sessionDTO.ClientIds = new List<string>();
             sessionDTO.ClientIds.Add(_clientController.GetOriginId());
@@ -78,7 +78,7 @@ namespace Session
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _clientController.SendPayload(payload, PacketType.Session);
         }
-
+         
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
@@ -87,7 +87,7 @@ namespace Session
                 switch (sessionDTO.SessionType)
                 {
                     case SessionType.SendHeartbeat:
-                        return handleHeartbeat();
+                        return HandleHeartbeat();
                     case SessionType.RequestSessions:
                         return handleRequestSessions();
                     case SessionType.RequestToJoinSession:
@@ -114,13 +114,16 @@ namespace Session
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
-        private HandlerResponseDTO handleHeartbeat()
+        private HandlerResponseDTO HandleHeartbeat()
         {
-            SessionDTO sessionDto = new SessionDTO(SessionType.SendHeartbeat);
-            var jsonObject = JsonConvert.SerializeObject(sessionDto);
-            return new HandlerResponseDTO(SendAction.Catch, jsonObject);
+            if(_heartbeat != null)
+            {
+                _heartbeat.ReceiveHeartbeat(_clientController.GetOriginId());
+            }
+
+            return new HandlerResponseDTO(SendAction.Ignore, null);
         }
-        
+
         private HandlerResponseDTO handleRequestSessions()
         {
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessionsResponse);

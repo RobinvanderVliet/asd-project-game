@@ -8,6 +8,6 @@ namespace Network
 {
     public interface IHeartbeatHandler
     {
-        public void ReceiveHeartbeat(PacketDTO packet);
+        public void ReceiveHeartbeat(string clientId);
     }
 }

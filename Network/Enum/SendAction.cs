@@ -4,7 +4,6 @@ namespace Network
     {
         ReturnToSender,
         SendToClients,
-        Ignore,
-        Catch
+        Ignore
     }
 }

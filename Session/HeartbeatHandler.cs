@@ -1,5 +1,4 @@
 ﻿using Network.DTO;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -20,15 +19,15 @@ namespace Network
             }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(2000));
         }
 
-        public void ReceiveHeartbeat(PacketDTO packet)
+        public void ReceiveHeartbeat(string clientId)
         {
-            if (!PlayerKnown(GetClientId(packet)))
+            if (!PlayerKnown(clientId))
             { 
-               _players.Add(new HeartbeatDTO(GetClientId(packet)));
+               _players.Add(new HeartbeatDTO(clientId));
             }
             else
             {
-                UpdatePlayer(GetClientId(packet));
+                UpdatePlayer(clientId);
                 UpdateStatus();
             }
             
@@ -101,14 +100,5 @@ namespace Network
                 }
             }
         }
-
-        private string GetClientId(PacketDTO packetDTO)
-        {
-            JObject payload = JObject.Parse(packetDTO.Payload);
-            JArray idArray = payload.Value<JArray>("ClientIds");
-            string id = idArray[0].ToString();
-            return id;
-        }
-
     }
 }
