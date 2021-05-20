@@ -54,7 +54,7 @@ namespace Session
                 Console.WriteLine("Ik ben de host, moet iets doen met de database");
             }
             
-            _worldService.GenerateWorld(6969);
+            _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
 
             foreach (var player in startGameDto.PlayerLocations)
             {

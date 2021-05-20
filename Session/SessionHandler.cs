@@ -238,5 +238,10 @@ namespace Session
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
         }
+
+        public int GetSessionSeed()
+        {
+            return _session.SessionSeed;
+        }
     }
 }
