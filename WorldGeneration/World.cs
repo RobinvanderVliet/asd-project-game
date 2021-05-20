@@ -27,21 +27,12 @@ namespace WorldGeneration
                 CurrentPlayer.XPosition = characterPositionDTO.XPosition;
                 CurrentPlayer.YPosition = characterPositionDTO.YPosition;
             }
-            
-            // var charactersWithTheSameName = Characters.Where(character => characterPositionDTO.Id == character.Id);
-            // if (charactersWithTheSameName.Count() > 1)
-            // {
-            //     throw new Exception("Duplicate characters found in world");
-            // }
-            // if (charactersWithTheSameName.Count() > 0)
-            // {
-            //     var character = charactersWithTheSameName.First();
-            //     character.XPosition = characterPositionDTO.XPosition;
-            //     character.YPosition = characterPositionDTO.YPosition;
-            // } else
-            // {
-            //     throw new Exception("Could not find referenced character, it has not been initialized in the world");
-            // }
+
+            if (Characters.Any(x => x.Id.Equals(characterPositionDTO.Id)))
+            {
+                Characters.Where(x => x.Id.Equals(characterPositionDTO.Id)).FirstOrDefault().XPosition = characterPositionDTO.XPosition;
+                Characters.Where(x => x.Id.Equals(characterPositionDTO.Id)).FirstOrDefault().YPosition = characterPositionDTO.YPosition;                
+            }
 
             DisplayWorld();
         }
