@@ -5,7 +5,7 @@ namespace InputCommandHandler.Antlr.Ast
     public class Message : ASTNode, IEquatable<Message>
     {
         private string _message;
-        public string MessageValue { get => this._message; private set => this._message = value; }
+        public string MessageValue { get => _message; private set => _message = value; }
 
         public Message()
         {
