@@ -372,5 +372,75 @@ namespace InputCommandHandler.Tests
 
             return new AST(moveForward);
         }
+        
+        [Test]
+        public void Test_AstListener_CreatesRequestSessions()
+        {
+            // Arrange
+            AST exp = RequestSessionsCommand();
+            
+            // Act
+            AST sut = SetupParser("request_sessions");
+
+            // Assert
+            Assert.AreEqual(exp, sut);
+        }
+
+        private static AST RequestSessionsCommand()
+        {
+            Input requestSessions = new Input();
+
+            requestSessions.AddChild(new RequestSessions());
+
+            return new AST(requestSessions);
+        }
+
+        [Test]
+        public void Test_AstListener_CreatesCreateSession()
+        {
+            // Arrange
+            const string sessionName = "cool world";
+            AST exp = CreateSessionCommand(sessionName);
+            
+            // Act
+            AST sut = SetupParser($"create_session \"{sessionName}\"");
+
+            // Assert
+            Assert.AreEqual(exp, sut);
+        }
+
+        private static AST CreateSessionCommand(string sessionName)
+        {
+            Input createSession = new Input();
+
+            createSession.AddChild(new CreateSession()
+                .AddChild(new Message(sessionName)));
+
+            return new AST(createSession);
+        }
+
+        [Test]
+        public void Test_AstListener_CreatesJoinSession()
+        {
+            // Arrange
+            const string sessionId = "1234-1234";
+            AST exp = JoinSessionCommand(sessionId);
+            
+            // Act
+            AST sut = SetupParser($"join_session \"{sessionId}\"");
+
+            // Assert
+            Assert.AreEqual(exp, sut);
+        }
+
+        private static AST JoinSessionCommand(string sessionId)
+        {
+            Input joinSession = new Input();
+
+            joinSession.AddChild(new JoinSession()
+                .AddChild(new Message(sessionId)));
+
+            return new AST(joinSession);
+        }
     }
 }
