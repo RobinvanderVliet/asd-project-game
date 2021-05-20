@@ -165,7 +165,7 @@ namespace Session.Tests
             // Assert ---------
             _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
             _mockedClientController.Verify(mock => mock.CreateHostController(), Times.Never);
-            _mockedClientController.Verify(mock => mock.UnmarkBackupHost(), Times.Never);
+            _mockedClientController.Verify(mock => mock.IsBackupHost, Times.Never);
             Assert.IsTrue(_sut.getHostActive());
         }
         
@@ -187,7 +187,6 @@ namespace Session.Tests
             // Assert ---------
             _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
             _mockedClientController.Verify(mock => mock.CreateHostController(), Times.Once);
-            _mockedClientController.Verify(mock => mock.UnmarkBackupHost(), Times.Once);
             Assert.IsTrue(_sut.getHostActive());
         }
 
@@ -457,7 +456,7 @@ namespace Session.Tests
             _sut.HandlePacket(_packetDTO);
 
             // Assert ----------
-            _mockedClientController.Verify(mock => mock.MarkBackupHost(), Times.Once);
+            _mockedClientController.Verify(mock => mock.IsBackupHost, Times.Once);
             Assert.IsTrue(_sut.getHostPingTimer().Enabled);
             Assert.IsTrue(_sut.getHostPingTimer().AutoReset);
             Assert.AreEqual(1000, _sut.getHostPingTimer().Interval);

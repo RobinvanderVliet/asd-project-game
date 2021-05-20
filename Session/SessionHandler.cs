@@ -19,11 +19,13 @@ namespace Session
         private Timer _hostPingTimer;
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
-
+        // private IBackupHostService _backupHostService;
+        
         public SessionHandler(IClientController clientController)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Session);
+            // _backupHostService = backupHostService;
         }
 
         public void JoinSession(string sessionId)
@@ -184,10 +186,10 @@ namespace Session
                     Console.Out.WriteLine(client);
                 }
                 
-                if (sessionDTOClients.ClientIds.Count > 0 && !_clientController.IsBackupHost()) {
+                if (sessionDTOClients.ClientIds.Count > 0 && !_clientController.IsBackupHost) {
                     if (sessionDTOClients.ClientIds[1].Equals(_clientController.GetOriginId()))
                     {
-                        _clientController.MarkBackupHost();
+                        _clientController.IsBackupHost = true;
                         PingHostTimer();
                         Console.WriteLine("You have been marked as the backup host");
                     }
@@ -228,7 +230,7 @@ namespace Session
         public void SwapToHost()
         {
             _clientController.CreateHostController();
-            _clientController.UnmarkBackupHost();
+            _clientController.IsBackupHost = false;
             // TODO: Enable Heartbeat check and enable agents, maybe this will be done when hostcontroller is activated?
             // TODO: Make new client backup host
             
