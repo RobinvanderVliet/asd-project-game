@@ -16,6 +16,7 @@ namespace Player.Services
     public class PlayerService : IPlayerService
     {
         private readonly IPlayerModel _currentPlayer;
+        private List<MapCharacterDTO> _playerPositions;
         private readonly IMoveHandler _moveHandler;
         private readonly IChatHandler _chatHandler;
         //session handler in aparte classe gebruiken, kan maybe blijven staan? Weet niet of die nog gebrukt gaat worden. :(
@@ -33,6 +34,7 @@ namespace Player.Services
             _chatHandler = chatHandler;
             _sessionHandler = sessionHandler;
             _currentPlayer = currentPlayer;
+            _playerPositions = playerPositions;
             _moveHandler = moveHandler;
             _clientController = clientController;
             currentPlayer.PlayerGuid = _clientController.GetOriginId();
