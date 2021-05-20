@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using Agent.Exceptions;
 
 namespace Agent.Tests
 {
@@ -22,7 +23,7 @@ namespace Agent.Tests
         public void Test_Import_CorrectFile()
         {
             var expected = "combat when player nearby player then attack";
-            var fileLocation = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\import_test_file_1.txt";
+            var fileLocation = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\import_test_file_1.txt";
             var result = _sut.ImportFile(fileLocation);
 
             Assert.AreEqual(expected, result);
@@ -31,7 +32,7 @@ namespace Agent.Tests
         public void Test_Import_WrongFile()
         { 
             //Method to 
-            var fileLocation = String.Format(Path.GetFullPath(Path.Combine
+            var fileLocation = string.Format(Path.GetFullPath(Path.Combine
                         (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\import_test_file_1.php";
 
             var exception = Assert.Throws<FileException>(() =>
