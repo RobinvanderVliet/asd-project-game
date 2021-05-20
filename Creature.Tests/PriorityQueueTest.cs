@@ -23,12 +23,12 @@ namespace Creature.Tests
             _node1 = new Node(new Vector2(0, 0), false);
             _node2 = new Node(new Vector2(7, 0), false);
             _node3 = new Node(new Vector2(16, 0), false);
-            _node1.distanceToTarget = 1;
-            _node1.cost = 3;
-            _node2.distanceToTarget = 1;
-            _node2.cost = 1;
-            _node3.distanceToTarget = 1;
-            _node3.cost = 2;
+            _node1.DistanceToTarget = 1;
+            _node1.Cost = 3;
+            _node2.DistanceToTarget = 1;
+            _node2.Cost = 1;
+            _node3.DistanceToTarget = 1;
+            _node3.Cost = 2;
 
             _priorityQueue = new Mock<PriorityQueue<Node>> { CallBase = true };
         }
@@ -44,7 +44,7 @@ namespace Creature.Tests
             actualNode = _priorityQueue.Object.Dequeue();
 
             // Act -------------
-            float actual = actualNode.position.X;
+            float actual = actualNode.Position.X;
             int expected = 7;
 
             // Assert ----------

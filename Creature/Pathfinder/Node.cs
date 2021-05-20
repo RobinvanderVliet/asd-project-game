@@ -5,31 +5,32 @@ namespace Creature.Pathfinder
 {
     public class Node : IComparable<Node>
     {
-        public const int nodeSize = 1;
-        public Node parent;
-        public Vector2 position;
-        public float distanceToTarget;
-        public float cost;
-        public float weight;
+        public const int NodeSize = 1;
+        public Node Parent;
+        public Vector2 Position;
+        public float DistanceToTarget;
+        public float Cost;
+        public float Weight;
         public float FScore
         {
             get
             {
-                if (distanceToTarget != -1 && cost != -1)
-                    return distanceToTarget + cost;
+                if (DistanceToTarget != -1 && Cost != -1)
+                    return DistanceToTarget + Cost;
                 else
                     return -1;
             }
         }
-        public bool isWalkable;
+        public bool IsWalkable;
+        
         public Node(Vector2 pos, bool isWalkable, float weight = 1)
         {
-            this.parent = null;
-            this.position = pos;
-            this.distanceToTarget = -1;
-            this.cost = 1;
-            this.isWalkable = isWalkable;
-            this.weight = weight;
+            this.Parent = null;
+            this.Position = pos;
+            this.DistanceToTarget = -1;
+            this.Cost = 1;
+            this.IsWalkable = isWalkable;
+            this.Weight = weight;
         }
 
         public int CompareTo(Node rhs)

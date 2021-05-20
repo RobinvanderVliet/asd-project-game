@@ -2,7 +2,6 @@
 using Creature.Pathfinder;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 
 namespace Creature
@@ -31,8 +30,8 @@ namespace Creature
 
         public Stack<Node> FindPath(Vector2 startPosition, Vector2 endPosition)
         {
-            Node startNode = new Node(new Vector2((int)(startPosition.X / Node.nodeSize), (int)(startPosition.Y / Node.nodeSize)), true);
-            Node endNode = new Node(new Vector2((int)(endPosition.X / Node.nodeSize), (int)(endPosition.Y / Node.nodeSize)), true);
+            Node startNode = new Node(new Vector2((int)(startPosition.X / Node.NodeSize), (int)(startPosition.Y / Node.NodeSize)), true);
+            Node endNode = new Node(new Vector2((int)(endPosition.X / Node.NodeSize), (int)(endPosition.Y / Node.NodeSize)), true);
 
             Stack<Node> pathStack = new Stack<Node>();
 
@@ -49,7 +48,7 @@ namespace Creature
                 currentNode = openList.Dequeue();
                 closedList.Add(currentNode);
 
-                if (currentNode.position.X.Equals(endNode.position.X) && currentNode.position.Y.Equals(endNode.position.Y))
+                if (currentNode.Position.X.Equals(endNode.Position.X) && currentNode.Position.Y.Equals(endNode.Position.Y))
                 {
                     break;
                 }
@@ -58,25 +57,29 @@ namespace Creature
 
                 foreach (Node adjNode in adjacencies)
                 {
-                    if (adjNode.isWalkable)
+                    if (adjNode.IsWalkable)
                     {
 
                         if (openList.Contains(adjNode))
                         {
                             if (currentNode.FScore <= adjNode.FScore)
+                            {
                                 continue;
+                            }
                         }
 
                         if (closedList.Contains(adjNode))
                         {
                             if (!(currentNode.FScore <= adjNode.FScore))
+                            {
                                 closedList.Remove(adjNode);
+                            }
                         }
                         else
                         {
-                            adjNode.parent = currentNode;
-                            adjNode.distanceToTarget = Math.Abs(adjNode.position.X - endNode.position.X) + Math.Abs(adjNode.position.Y - endNode.position.Y);
-                            adjNode.cost = adjNode.weight + adjNode.parent.cost;
+                            adjNode.Parent = currentNode;
+                            adjNode.DistanceToTarget = Math.Abs(adjNode.Position.X - endNode.Position.X) + Math.Abs(adjNode.Position.Y - endNode.Position.Y);
+                            adjNode.Cost = adjNode.Weight + adjNode.Parent.Cost;
                             openList.Enqueue(adjNode);
                         }
                             
@@ -85,18 +88,24 @@ namespace Creature
             }
 
             if (currentNode == null)
+            {
                 return null;
+            }
 
-            if (currentNode.position.X != endNode.position.X && currentNode.position.Y != endNode.position.Y)
+            if (currentNode.Position.X != endNode.Position.X && currentNode.Position.Y != endNode.Position.Y)
+            {
                 throw new PathHasNoDestinationException();
+            }
 
             if (currentNode == startNode)
+            {
                 pathStack.Push(currentNode);
+            }
 
             while (currentNode != startNode && currentNode != null)
             {
                 pathStack.Push(currentNode);
-                currentNode = currentNode.parent;
+                currentNode = currentNode.Parent;
             }
 
             return pathStack;
@@ -106,8 +115,8 @@ namespace Creature
         {
             List<Node> temp = new List<Node>();
 
-            int row = (int)node.position.Y;
-            int col = (int)node.position.X;
+            int row = (int)node.Position.Y;
+            int col = (int)node.Position.X;
 
             if (row + 1 < _gridRows)
             {
