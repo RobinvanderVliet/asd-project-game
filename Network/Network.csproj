@@ -17,4 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\WorldGeneration\WorldGeneration.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataTransfer\DataTransfer.csproj" />
+  </ItemGroup>
 </Project>

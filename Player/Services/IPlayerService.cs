@@ -1,4 +1,6 @@
-﻿using Player.Model;
+﻿using DataTransfer.DTO.Player;
+using Player.DTO;
+using Player.Model;
 
 namespace Player.Services
 {
@@ -45,9 +47,9 @@ namespace Player.Services
         public void DropItem(string itemNameValue);
 
         public void HandleDirection(string directionValue, int stepsValue);
-
-        public void CreateSession(string messageValue);
-        public void JoinSession(string messageValue);
-        public void RequestSessions();
+        
+        public void ChangePositionOfAPlayer(PlayerPositionDTO playerPosition);
+        
+       
     }
 }

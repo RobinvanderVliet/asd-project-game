@@ -4,7 +4,7 @@ using System.Linq;
 using LiteDB;
 using WorldGeneration.Models;
 
-namespace WorldGeneration.Database
+namespace WorldGeneration.DatabaseFunctions
 {
     public class Database
     {

@@ -14,8 +14,8 @@ namespace WorldGeneration.Tests
         [SetUp]
         public void Setup()
         {
-            _tile = new StreetTile();
-            _tileSymbol = "_";
+            _tile = new StreetTile(1,1);
+            _tileSymbol = "\u2591";
         }
         
         [Test]
@@ -39,15 +39,15 @@ namespace WorldGeneration.Tests
         [Test]
         public void Test_SetX_EqualsTo_5()
         {
-            _tile.X = 5;
-            Assert.That(_tile.X, Is.EqualTo(5));
+            _tile.XPosition = 5;
+            Assert.That(_tile.XPosition, Is.EqualTo(5));
         }
         
         [Test]
         public void Test_SetY_EqualsTo_5()
         {
-            _tile.Y = 5;
-            Assert.That(_tile.Y, Is.EqualTo(5));
+            _tile.YPosition = 5;
+            Assert.That(_tile.YPosition, Is.EqualTo(5));
         }
         
         [Test]

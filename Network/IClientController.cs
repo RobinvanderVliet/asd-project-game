@@ -1,4 +1,6 @@
-﻿namespace Network
+﻿using System;
+
+namespace Network
 {
     public interface IClientController
     {
@@ -7,5 +9,7 @@
         public void SetSessionId(string sessionId);
         public void CreateHostController();
         public string GetOriginId();
+
+        public Boolean IsHost();
     }
 }

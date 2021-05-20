@@ -13,6 +13,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\DataTransfer\DataTransfer.csproj" />
     <ProjectReference Include="..\Network\Network.csproj" />
   </ItemGroup>
 

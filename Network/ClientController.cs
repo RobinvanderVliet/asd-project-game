@@ -8,7 +8,7 @@ namespace Network
     public class ClientController : IPacketHandler, IClientController
     {
         private INetworkComponent _networkComponent;
-        private IHostController _hostController;
+        private IHostController _hostController { get; set; }
         private string _sessionId;
         private Dictionary<PacketType, IPacketHandler> _subscribers = new();
 
@@ -20,8 +20,10 @@ namespace Network
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-            if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session)
+            if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session || packet.Header.PacketType == PacketType.GameSession)
             {
+                var A = _subscribers;
+                var B = _subscribers.GetValueOrDefault(packet.Header.PacketType);
                 return _subscribers.GetValueOrDefault(packet.Header.PacketType).HandlePacket(packet);
             }
             else
@@ -83,6 +85,11 @@ namespace Network
         public void SetHostController(IHostController hostController)
         {
             _hostController = hostController;
+        }
+
+        public Boolean IsHost()
+        {
+            return _hostController != null;
         }
     }
 }
