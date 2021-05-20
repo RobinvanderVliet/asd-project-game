@@ -2,10 +2,10 @@
 using Moq;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
-using Agent.antlr.ast;
-using Agent.antlr.checker;
+using Agent.Antlr.Ast;
+using Agent.Antlr.Checker;
+using Agent.Exceptions;
 using Antlr4.Runtime;
-using Agent.exceptions;
 
 namespace Agent.Tests
 {

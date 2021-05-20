@@ -1,8 +1,8 @@
 using Agent.Antlr.Ast;
+using Moq;
 using NUnit.Framework;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Moq;
 
 namespace Agent.Tests.generator
 {
@@ -24,7 +24,7 @@ namespace Agent.Tests.generator
         [TestCase("test1.txt")]
         [TestCase("test2.txt")]
         [TestCase("test3.txt")]
-        public void Test_Generator_Level1(String input)
+        public void Test_Generator_Level1(string input)
         {
             //Arrange
             AST ast = _fix.GetFixture(input);
@@ -41,7 +41,7 @@ namespace Agent.Tests.generator
 
         [Test]
         [TestCase("test3.txt")]
-        public void Test_Generator_Exception(String input)
+        public void Test_Generator_Exception(string input)
         {
             //Arrange
             AST ast = _fix.GetFixture(input);

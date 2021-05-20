@@ -13,6 +13,6 @@ namespace Agent.Exceptions
     public class FileException : IOException
     {
         public FileException() { }
-        public FileException(String message) : base(String.Format(message)) { }
+        public FileException(string message) : base(string.Format(message)) { }
     }
 }

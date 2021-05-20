@@ -2,7 +2,6 @@
 using Agent.Antlr.Ast.Comparables;
 using System;
 using System.Linq;
-using System.Text;
 using Action = Agent.Antlr.Ast.Action;
 using System.Threading.Tasks;
 
@@ -29,7 +28,7 @@ namespace Agent
             return _stringBuilder;
         }
 
-        private void GenerateConfiguration(Node parent) 
+        public void GenerateConfiguration(Node parent) 
         {
             string text = "";
             if (parent is Rule)
@@ -69,7 +68,7 @@ namespace Agent
 
         private string GenerateAction(Action parent, string settingName)
         {
-            String text = settingName + "_" + parent.Name + "=" + parent.Name + Environment.NewLine;
+            string text = settingName + "_" + parent.Name + "=" + parent.Name + Environment.NewLine;
             foreach(Node child in parent.GetChildren())
             {
                 text += GenerateCondition(child, settingName, parent.Name);
@@ -77,7 +76,7 @@ namespace Agent
             return text;
         }
 
-        private string GenerateClause(Node parent, String settingName, String action ,String subject)
+        private string GenerateClause(Node parent, string settingName, string action ,string subject)
         {
             string text = "";
             if (parent is When)
@@ -91,7 +90,7 @@ namespace Agent
             return text;
         }
 
-        private string generateWhen(Node parent, String settingName, String action ,String subject ,String status)
+        private string generateWhen(Node parent, string settingName, string action ,string subject ,string status)
         {
             string text = "";
             Parallel.For(0, parent.GetChildren().Count, i =>
@@ -127,22 +126,18 @@ namespace Agent
             {
                 return (((Item)node).Name);
             }
-            
             else if (nodeBase.Contains("Int"))
             {
                 return ((Int)node).Value.ToString();
             }
-            
             else if (nodeBase.Contains("Stat"))
             {
                 return (((Stat)node).Name);
             }
-            
-            else if (nodeBase.Contains("subjects"))
+            else if (nodeBase.Contains("Subjects"))
             {
                 return (((Subject)node).Name);
             }
-            
             else { return "";}
         }
     }

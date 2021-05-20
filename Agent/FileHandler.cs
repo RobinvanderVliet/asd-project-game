@@ -40,7 +40,7 @@ namespace Agent
 
         public virtual void ExportFile(string content, string fileName)
         {
-            string safeFileLocation = String.Format(Path.GetFullPath(Path.Combine
+            string safeFileLocation = string.Format(Path.GetFullPath(Path.Combine
                 (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\" + fileName;
 
             CreateDirectory(safeFileLocation);
