@@ -1,18 +1,18 @@
 ﻿using System;
-using WorldGeneration.Models.Interfaces;
+using DataTransfer.POCO.World.Interfaces;
 
-namespace WorldGeneration.Models.BuildingTiles
+namespace DataTransfer.POCO.World.BuildingTiles
 {
-    public class DoorTile : IBuildingTile
+    public class WallTile : IBuildingTile
     {
         public bool IsAccessible { get; set; }
         public string Symbol { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
-        public DoorTile()
+        public WallTile()
         {
-            Symbol = TileSymbol.DOOR;
-            IsAccessible = true;
+            Symbol = TileSymbol.WALL;
+            IsAccessible = false;
         }
 
         public void DrawBuilding()

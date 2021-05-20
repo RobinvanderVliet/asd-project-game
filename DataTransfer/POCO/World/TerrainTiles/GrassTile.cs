@@ -1,17 +1,17 @@
-﻿using WorldGeneration.Models.Interfaces;
+﻿using DataTransfer.POCO.World.Interfaces;
 
-namespace WorldGeneration.Models.TerrainTiles
+namespace DataTransfer.POCO.World.TerrainTiles
 {
-    public class StreetTile : ITerrainTile
+    public class GrassTile : ITerrainTile
     {
         
         public bool IsAccessible { get; set; }
         public string Symbol { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
-        public StreetTile(int x, int y)
+        public GrassTile(int x, int y)
         {
-            Symbol = TileSymbol.STREET;
+            Symbol = TileSymbol.GRASS;
             IsAccessible = true;
             XPosition = x;
             YPosition = y;

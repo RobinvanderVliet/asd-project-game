@@ -1,11 +1,11 @@
 using System;
 using DataTransfer.DTO.Character;
+using DataTransfer.POCO.World;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
 using WorldGeneration;
-using WorldGeneration.Models;
 
 namespace Session
 {

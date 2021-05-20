@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WorldGeneration.Models;
-using WorldGeneration.Models.Interfaces;
+using DataTransfer.POCO.World;
+using DataTransfer.POCO.World.Interfaces;
 
 namespace WorldGeneration.Services
 {

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using DataTransfer.DTO.Character;
-using WorldGeneration.Models;
-using WorldGeneration.Models.Interfaces;
+using DataTransfer.POCO.World;
+using DataTransfer.POCO.World.Interfaces;
 using WorldGeneration.Services;
 
 namespace WorldGeneration

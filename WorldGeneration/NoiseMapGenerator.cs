@@ -1,7 +1,7 @@
-﻿using WorldGeneration.Models;
-using WorldGeneration.Models.HazardousTiles;
-using WorldGeneration.Models.Interfaces;
-using WorldGeneration.Models.TerrainTiles;
+﻿using DataTransfer.POCO.World;
+using DataTransfer.POCO.World.HazardousTiles;
+using DataTransfer.POCO.World.Interfaces;
+using DataTransfer.POCO.World.TerrainTiles;
 
 namespace WorldGeneration
 {
