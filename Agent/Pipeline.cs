@@ -1,13 +1,12 @@
-﻿using Agent.antlr.ast;
+﻿using Agent.Antlr.Ast;
+using Agent.Antlr.Checker;
 using System;
 using System.Collections.Generic;
-using Agent.antlr.checker;
-using Agent.antlr.exception;
-using Agent.antlr.grammar;
-using Agent.parser;
+using Agent.Antlr.Grammar;
+using Agent.Antlr.Parser;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using SyntaxErrorException = Agent.exceptions.SyntaxErrorException;
+using SyntaxErrorException = Agent.Exceptions.SyntaxErrorException;
 
 namespace Agent
 {
@@ -17,7 +16,6 @@ namespace Agent
 
         private List<string> _errors;
         private Checker _checker;
-        // private Transformer transformer;
         private Generator generator;
 
         public Pipeline()
@@ -44,28 +42,21 @@ namespace Agent
             ASTAgentListener astAgentListener = new ASTAgentListener();
             walker.Walk(astAgentListener, parseTree);
             _ast = astAgentListener.GetAST();
+
         }
 
-        public void CheckAst()
+        public virtual void CheckAst()
         {
-            // checker = new Checker(ast);
-            // TODO: Implement checker calls
-        }
-        
-        public void TransformAst()
-        {
-            ThrowExceptionIfAstIsNull();
+            if(_checker == null)
+            {
+                _checker = new Checker(_ast);
+            }
+            // _checker.Check(_ast);
         }
 
         public string GenerateAst()
         {
             return generator.Execute(_ast);
-        }
-
-        private void ThrowExceptionIfAstIsNull()
-        {
-            if (_ast == null)
-                throw new UndefinedAstException();
         }
 
         public AST Ast
