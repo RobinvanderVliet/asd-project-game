@@ -7,8 +7,8 @@ namespace DatabaseHandler.Poco
     public class GamePoco
     {
         [BsonId]
-        public string GameGuid { get; set; } 
-       public string PlayerGUIDHost { get; set; }
-       public int Seed { get; set; }
+        public string GameGuid { get; set; }
+        public string PlayerGUIDHost { get; set; }
+        public int Seed { get; set; }
     }
 }
