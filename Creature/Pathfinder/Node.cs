@@ -43,8 +43,7 @@ namespace Creature.Pathfinder
             {
                 if (DistanceToTarget != -1 && Cost != -1)
                     return DistanceToTarget + Cost;
-                else
-                    return -1;
+                return -1;
             }
         }
         public bool IsWalkable
