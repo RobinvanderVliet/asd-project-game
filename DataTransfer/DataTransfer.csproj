@@ -13,6 +13,7 @@
       <Folder Include="DTO\Chat" />
       <Folder Include="DTO\Lobby" />
       <Folder Include="DTO\Network" />
+      <Folder Include="DTO\Player" />
       <Folder Include="DTO\Session" />
       <Folder Include="DTO\UserInterface" />
       <Folder Include="DTO\World" />

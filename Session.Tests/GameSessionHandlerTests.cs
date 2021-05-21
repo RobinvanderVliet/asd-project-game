@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using DataTransfer.DTO.Character;
 using Moq;
 using Network;
 using Newtonsoft.Json;

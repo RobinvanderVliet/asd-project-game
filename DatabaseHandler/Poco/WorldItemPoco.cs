@@ -1,5 +1,4 @@
-﻿using System;
-using LiteDB;
+﻿using LiteDB;
 
 namespace DatabaseHandler.Poco
 {

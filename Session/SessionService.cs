@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Session
+﻿namespace Session
 {
     public class SessionService : ISessionService
     {

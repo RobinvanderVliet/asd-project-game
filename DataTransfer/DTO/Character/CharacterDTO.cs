@@ -11,7 +11,8 @@ namespace DataTransfer.DTO.Character
         public InventoryDTO Inventory;
         public BitcoinDTO Bitcoins;
 
-        public CharacterDTO(int xPosition
+        public CharacterDTO(
+            int xPosition
             , int yPosition
             , string playerGuid
             , string gameGuid
