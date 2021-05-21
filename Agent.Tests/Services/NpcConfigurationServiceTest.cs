@@ -6,6 +6,7 @@ using System.IO;
 using Agent.Mapper;
 using Agent.Models;
 using Agent.Services;
+using InputCommandHandler;
 using Moq;
 using NUnit.Framework;
 
@@ -17,11 +18,13 @@ namespace Agent.Tests.Services
         private NpcConfigurationService _sut;
         private Mock<FileHandler> _fileHandlerMock;
         private Mock<Pipeline> _pipelineMock;
+        private Mock<InputCommandHandlerComponent> _mockedRetriever;
         
         [SetUp]
         public void Setup()
         {
-            _sut = new NpcConfigurationService(new List<Configuration>(), new FileToDictionaryMapper());
+            _mockedRetriever = new();
+            _sut = new NpcConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), _mockedRetriever.Object);
             _fileHandlerMock = new Mock<FileHandler>();
             _sut.FileHandler = _fileHandlerMock.Object;
             _pipelineMock = new Mock<Pipeline>();
@@ -46,10 +49,7 @@ namespace Agent.Tests.Services
         public void Test_Configure_CatchesSyntaxError()
         {
             //Arrange
-            Mock<ConsoleRetriever> mockedRetriever = new();
-            mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns("zombie").Returns("incorrect:code").Returns("cancel");
-
-            _sut.ConsoleRetriever = mockedRetriever.Object;
+            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns("incorrect:code").Returns("cancel");
 
             //Act
             _sut.Configure();
@@ -65,10 +65,7 @@ namespace Agent.Tests.Services
             var code = "explore=high";
             var error = "Semantic error";
             
-            Mock<ConsoleRetriever> mockedRetriever = new();
-            mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns("zombie").Returns(code).Returns("cancel");
-            _sut.ConsoleRetriever = mockedRetriever.Object;
-            
+            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns(code).Returns("cancel");
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns(code);
             _pipelineMock.Setup(x => x.CheckAst()).Throws(new SemanticErrorException(error));
 
@@ -82,11 +79,9 @@ namespace Agent.Tests.Services
         [Test]
         public void Test_Configure_SavesFileInNpcFolder()
         {
-            Mock<ConsoleRetriever> mockedRetriever = new();
-            mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns("zombie").Returns("aggressiveness=high");
-            
-            _sut.ConsoleRetriever = mockedRetriever.Object;
-            
+            //Arrange
+            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns("aggressiveness=high");
+
             //Act
             _sut.Configure();
             

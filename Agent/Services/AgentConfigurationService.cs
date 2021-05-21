@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Agent.Mapper;
 using Agent.Models;
 using Agent.Exceptions;
+using InputCommandHandler;
 using Serilog;
 
 namespace Agent.Services
@@ -11,12 +12,13 @@ namespace Agent.Services
     {
         private InlineConfig _inlineConfig;
         private List<Configuration> _agentConfigurations;
+        private InputCommandHandlerComponent _inputCommandHandlerComponent;
 
-        public AgentConfigurationService(List<Configuration> agentConfigurations, FileToDictionaryMapper fileToDictionaryMapper)
+        public AgentConfigurationService(List<Configuration> agentConfigurations, FileToDictionaryMapper fileToDictionaryMapper, InputCommandHandlerComponent inputCommandHandlerComponent)
         {
             FileToDictionaryMapper = fileToDictionaryMapper;
-            _agentConfigurations = agentConfigurations; 
-            ConsoleRetriever = new ConsoleRetriever();
+            _agentConfigurations = agentConfigurations;
+            _inputCommandHandlerComponent = inputCommandHandlerComponent;
             _inlineConfig = new InlineConfig();
             FileHandler = new FileHandler();
             Pipeline = new Pipeline();
@@ -25,7 +27,7 @@ namespace Agent.Services
         public override void Configure()
         {
             Console.WriteLine("Please provide a path to your code file");
-            var input = ConsoleRetriever.GetConsoleLine();
+            var input = _inputCommandHandlerComponent.GetCommand();
 
             if (input.Equals(CANCEL_COMMAND))
             {

@@ -8,6 +8,7 @@ using System.IO;
 using Agent.Exceptions;
 using Agent.Mapper;
 using Agent.Models;
+using InputCommandHandler;
 
 namespace Agent.Tests
 {
@@ -17,11 +18,13 @@ namespace Agent.Tests
         private AgentConfigurationService _sut;
         private Mock<FileHandler> _fileHandlerMock;
         private Mock<Pipeline> _pipelineMock;
+        private Mock<InputCommandHandlerComponent> _mockedRetriever;
 
         [SetUp]
         public void Setup()
         {
-            _sut = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper());
+            _mockedRetriever = new();
+            _sut = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), _mockedRetriever.Object);
             _fileHandlerMock = new Mock<FileHandler>();
             _sut.FileHandler = _fileHandlerMock.Object;
             _pipelineMock = new Mock<Pipeline>();
@@ -35,11 +38,8 @@ namespace Agent.Tests
             var input = string.Format(Path.GetFullPath(Path.Combine
                         (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\AgentConfigurationTestFileParseException.txt";
 
-            Mock<ConsoleRetriever> mockedRetriever = new();
-            mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns(input).Returns("cancel");
-
-            _sut.ConsoleRetriever = mockedRetriever.Object;
-
+            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
+            
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("wrong:wrong");
 
             //Act
@@ -57,10 +57,7 @@ namespace Agent.Tests
                 (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resources\\AgentTestFileWrongExtension.txt";
             var error = "Semantic error";
             
-            Mock<ConsoleRetriever> mockedRetriever = new();
-            mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns(input).Returns("cancel");
-            _sut.ConsoleRetriever = mockedRetriever.Object;
-            
+            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("explore=high");
             _pipelineMock.Setup(x => x.CheckAst()).Throws(new SemanticErrorException(error));
 
@@ -78,12 +75,9 @@ namespace Agent.Tests
             var input = string.Format(Path.GetFullPath(Path.Combine
                 (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resources\\AgentTestFileWrongExtension.txt";
             var error = "File not found";
-            
-            Mock<ConsoleRetriever> mockedRetriever = new();
-            mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns(input).Returns("cancel");
-            _sut.ConsoleRetriever = mockedRetriever.Object;
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Throws(new FileException(error));
-
+            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
+            
             //Act
             _sut.Configure();
 
@@ -97,12 +91,8 @@ namespace Agent.Tests
             //Arrange
             var input = string.Format(Path.GetFullPath(Path.Combine
                 (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resources\\AgentConfigurationTestFile.txt";
-
-            Mock<ConsoleRetriever> mockedRetriever = new();
-            mockedRetriever.SetupSequence(x => x.GetConsoleLine()).Returns(input);
+            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input);
             
-            _sut.ConsoleRetriever = mockedRetriever.Object;
-
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("aggressiveness=high");
 
             //Act

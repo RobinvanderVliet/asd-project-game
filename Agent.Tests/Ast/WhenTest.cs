@@ -1,9 +1,9 @@
-﻿using Agent.Antlr.Ast;
-using Agent.Antlr.Ast.Comparables;
-using Agent.Antlr.Ast.Comparables.Subjects;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Agent.Antlr.Ast;
+using Agent.Antlr.Ast.Comparables;
+using Agent.Antlr.Ast.Comparables.Subjects;
 using Comparable = Agent.Antlr.Ast.Comparable;
 
 namespace Agent.Tests.ast
@@ -38,7 +38,7 @@ namespace Agent.Tests.ast
         [TestCase(typeof(Inventory))]
         [TestCase(typeof(NPC))]
         [TestCase(typeof(Opponent))]
-        [TestCase(typeof(Player))]
+        [TestCase(typeof(Antlr.Ast.Comparables.Subjects.Player))]
         [TestCase(typeof(Tile))]
         [TestCase(typeof(Int))]
         [TestCase(typeof(Item))]
@@ -67,7 +67,7 @@ namespace Agent.Tests.ast
         [TestCase(typeof(Inventory))]
         [TestCase(typeof(NPC))]
         [TestCase(typeof(Opponent))]
-        [TestCase(typeof(Player))]
+        [TestCase(typeof(Antlr.Ast.Comparables.Subjects.Player))]
         [TestCase(typeof(Tile))]
         [TestCase(typeof(Int))]
         [TestCase(typeof(Item))]
@@ -96,7 +96,7 @@ namespace Agent.Tests.ast
         [TestCase(typeof(Inventory))]
         [TestCase(typeof(NPC))]
         [TestCase(typeof(Opponent))]
-        [TestCase(typeof(Player))]
+        [TestCase(typeof(Antlr.Ast.Comparables.Subjects.Player))]
         [TestCase(typeof(Tile))]
         [TestCase(typeof(Int))]
         [TestCase(typeof(Item))]

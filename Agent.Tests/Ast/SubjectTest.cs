@@ -71,7 +71,7 @@ namespace Agent.Tests.ast
         public void Test_GetNodePlayer_CorrectOutput()
         {
             //Arrange
-            var node = new Player(TESTNAME);
+            var node = new Antlr.Ast.Comparables.Subjects.Player(TESTNAME);
             //Act
             var result = node.GetNodeType();
             //Assert

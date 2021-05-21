@@ -1,4 +1,4 @@
-﻿namespace Agent.Antlr.Ast.Comparables.Subjects
+namespace Agent.Antlr.Ast.Comparables.Subjects
 {
 
     public class Player : Subject
