@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <None Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
@@ -37,6 +37,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Agent\Agent.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="resource\agent\" />
   </ItemGroup>
 
 </Project>

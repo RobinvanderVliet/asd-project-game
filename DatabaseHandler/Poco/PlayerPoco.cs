@@ -7,9 +7,21 @@ namespace DatabaseHandler.Poco
     [ExcludeFromCodeCoverage]
     public class PlayerPoco
     {
-        public MainGamePoco GameGuid { get; set; }
-        
+
+        public Guid GameGUID { get; set; }
         [BsonId]
-        public Guid PlayerGuid { get; set; }
+        public string PlayerGUID { get; set; }
+
+        //player info
+        public String PlayerName { get; set; }
+        public int TypePlayer { get; set; }
+
+        //Statistieken
+        public int Health { get; set; }
+
+        //location
+        public int PositionX { get; set; }
+        public int PositionY { get; set; }
     }
+
 }

@@ -10,6 +10,11 @@ using DatabaseHandler.Services;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using WorldGeneration;
 using Player;
+using Chat;
+using Player.Services;
+using Network;
+using Player.ActionHandlers;
+using Session;
 using Player.Model;
 
 namespace ASD_project
@@ -35,11 +40,22 @@ namespace ASD_project
                 .ConfigureServices((context, services) =>
                 {
                     services.AddTransient<IMainGame, MainGame>();
+                    services.AddScoped<IPlayerService, PlayerService>();
                     services.AddScoped<IPlayerModel, PlayerModel>();
+                    services.AddScoped<IInventory, Inventory>();
+                    services.AddScoped<IItem, Item>();
+                    services.AddScoped<IBitcoin, Bitcoin>();
+                    services.AddScoped<IRadiationLevel, RadiationLevel>();
+                    services.AddScoped<INetworkComponent, NetworkComponent>();
+                    services.AddScoped<IClientController, ClientController>();
+                    services.AddScoped<IChatHandler, ChatHandler>();
+                    services.AddScoped<ISessionHandler, SessionHandler>();
+                    services.AddScoped<IMoveHandler, MoveHandler>();
+                    services.AddScoped<IWorldService, WorldService>();
+                    services.AddScoped<IGameSessionHandler, GameSessionHandler>();
                     services.AddSingleton<IDbConnection, DbConnection>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-                    services.AddScoped(typeof(IServices<>), typeof(Services<>));
-
+                    services.AddScoped(typeof(IServicesDb<>), typeof(ServicesDb<>));
                 })
                 .UseSerilog()
                 .Build();

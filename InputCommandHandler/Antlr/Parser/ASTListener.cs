@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Antlr4.Runtime.Misc;
 using InputCommandHandler.Antlr.Ast;
 using InputCommandHandler.Antlr.Ast.Actions;
 using InputCommandHandler.Antlr.Grammar;
@@ -82,6 +83,46 @@ namespace InputCommandHandler.Antlr.Parser
             _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
+        public override void EnterCreateSession(PlayerCommandsParser.CreateSessionContext context)
+        {
+            _currentContainer.Push(new CreateSession());
+        }
+
+        public override void ExitCreateSession(PlayerCommandsParser.CreateSessionContext context)
+        {
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+        }
+
+        public override void EnterJoinSession(PlayerCommandsParser.JoinSessionContext context)
+        {
+            _currentContainer.Push(new JoinSession());
+        }
+
+        public override void ExitJoinSession(PlayerCommandsParser.JoinSessionContext context)
+        {
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+        }
+
+        public override void EnterRequestSessions(PlayerCommandsParser.RequestSessionsContext context)
+        {
+            _currentContainer.Push(new RequestSessions());
+        }
+
+        public override void ExitRequestSessions(PlayerCommandsParser.RequestSessionsContext context)
+        {
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+        }
+
+        public override void EnterStartSession(PlayerCommandsParser.StartSessionContext context)
+        {
+            _currentContainer.Push(new StartSession());
+        }
+
+        public override void ExitStartSession(PlayerCommandsParser.StartSessionContext context)
+        {
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
+        }
+
         public override void EnterShout(PlayerCommandsParser.ShoutContext context)
         {
             _currentContainer.Push(new Shout());
@@ -111,7 +152,7 @@ namespace InputCommandHandler.Antlr.Parser
         {
             _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
-        
+
         public override void EnterResume(PlayerCommandsParser.ResumeContext context)
         {
             _currentContainer.Push(new Resume());
@@ -143,7 +184,7 @@ namespace InputCommandHandler.Antlr.Parser
             Move move = (Move) _currentContainer.Peek();
             move.AddChild(new Step(Convert.ToInt32(context.GetText())));
         }
-        
+
         public override void EnterMessage(PlayerCommandsParser.MessageContext context)
         {
             var action = _currentContainer.Peek();
@@ -157,6 +198,18 @@ namespace InputCommandHandler.Antlr.Parser
             {
                 Shout shout = (Shout) action;
                 shout.AddChild(new Message(context.GetText()));
+            }
+            else if (action is CreateSession createSession)
+            {
+                createSession.AddChild(new Message(context.GetText()));
+            }
+            else if (action is JoinSession joinSession)
+            {
+                joinSession.AddChild(new Message(context.GetText()));
+            }
+            else if (action is StartSession startSession)
+            {
+                startSession.AddChild(new Message(context.GetText()));
             }
         }
     }

@@ -4,8 +4,8 @@ namespace WorldGeneration.Models
 {
     public abstract class Tile : ITile
     {
-        public int X { get; set; }
-        public int Y { get; set; }
+        public int XPosition { get; set; }
+        public int YPosition { get; set; }
 
         public string Symbol { get; set; }
         public bool IsAccessible { get; set; }
