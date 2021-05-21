@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="resource\npcFileTest_2.txt" />
+    <Content Include="Resource\npcFileTest_2.txt" />
   </ItemGroup>
 
 </Project>
