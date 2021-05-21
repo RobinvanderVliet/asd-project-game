@@ -45,22 +45,16 @@ namespace Creature
                 {
                     if (adjNode.IsWalkable)
                     {
-                        if (!(openList.Contains(adjNode)))
+                        if (!(openList.Contains(adjNode)) && (!closedList.Contains(adjNode) || currentNode.FScore > adjNode.FScore) )
                         {
-                            if (closedList.Contains(adjNode))
+                            if (closedList.Contains(adjNode) && currentNode.FScore > adjNode.FScore)
                             {
-                                if (currentNode.FScore > adjNode.FScore)
-                                {
-                                    closedList.Remove(adjNode);
-                                }
+                                closedList.Remove(adjNode);
                             }
-                            else
-                            {
-                                adjNode.Parent = currentNode;
-                                adjNode.DistanceToTarget = Math.Abs(adjNode.Position.X - endNode.Position.X) + Math.Abs(adjNode.Position.Y - endNode.Position.Y);
-                                adjNode.Cost = adjNode.Weight + adjNode.Parent.Cost;
-                                openList.Enqueue(adjNode);
-                            }
+                            adjNode.Parent = currentNode;
+                            adjNode.DistanceToTarget = Math.Abs(adjNode.Position.X - endNode.Position.X) + Math.Abs(adjNode.Position.Y - endNode.Position.Y);
+                            adjNode.Cost = adjNode.Weight + adjNode.Parent.Cost;
+                            openList.Enqueue(adjNode);
                         }
                     }
                 }
