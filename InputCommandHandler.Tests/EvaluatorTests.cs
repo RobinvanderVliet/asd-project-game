@@ -1,11 +1,12 @@
-﻿using InputCommandHandler.Antlr.Ast;
+﻿using System.Diagnostics.CodeAnalysis;
+using InputCommandHandler.Antlr.Ast;
 using InputCommandHandler.Antlr.Ast.Actions;
 using InputCommandHandler.Antlr.Transformer;
+using InputCommandHandler.Exceptions;
 using Moq;
 using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
-using InputCommandHandler.Exceptions;
 using Player.Services;
+using Session;
 
 namespace InputCommandHandler.Tests
 {
@@ -14,12 +15,14 @@ namespace InputCommandHandler.Tests
     {
         private Evaluator _sut;
         private Mock<IPlayerService> _mockedPlayerService;
-        
+        private Mock<ISessionService> _mockedSessionService;
+
         [SetUp]
         public void Setup()
         {
             _mockedPlayerService = new Mock<IPlayerService>();
-            _sut = new Evaluator(_mockedPlayerService.Object);
+            _mockedSessionService = new Mock<ISessionService>();
+            _sut = new Evaluator(_mockedPlayerService.Object, _mockedSessionService.Object);
         }
 
         [Test]
@@ -31,20 +34,20 @@ namespace InputCommandHandler.Tests
             _sut.Apply(ast);
             _mockedPlayerService.VerifyAll();
         }
-        
+
         [Test]
         public void Test_HandleDirection_ThrowsExceptionWithStepsLessThan1()
         {
             var ast = MoveAST(0, "up");
-            
+
             Assert.Throws<MoveException>(() => _sut.Apply(ast));
         }
-        
+
         [Test]
         public void Test_HandleDirection_ThrowsExceptionWithStepsMoreThan10()
         {
             var ast = MoveAST(11, "up");
-            
+
             Assert.Throws<MoveException>(() => _sut.Apply(ast));
         }
 
@@ -74,7 +77,7 @@ namespace InputCommandHandler.Tests
             pickup.AddChild(new Pickup());
             return new AST(pickup);
         }
-        
+
         [Test]
         public void Test_Apply_HandleDropActionIsCalled()
         {
@@ -93,17 +96,17 @@ namespace InputCommandHandler.Tests
                 .AddChild(new Message(itemName)));
             return new AST(drop);
         }
-        
+
         [Test]
         public void Test_Apply_HandleAttackActionIsCalled()
         {
             string direction = "right";
             var ast = AttackAST(direction);
-            _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Attack(direction) );
+            _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Attack(direction));
 
             _sut.Apply(ast);
 
-            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Attack(direction) , Times.Once);
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Attack(direction), Times.Once);
         }
 
         public static AST AttackAST(string direction)
@@ -113,7 +116,7 @@ namespace InputCommandHandler.Tests
                 .AddChild(new Direction(direction)));
             return new AST(Attack);
         }
-        
+
         [Test]
         public void Test_Apply_HandleSayActionIsCalled()
         {
@@ -132,7 +135,7 @@ namespace InputCommandHandler.Tests
                 .AddChild(new Message(message)));
             return new AST(say);
         }
-        
+
         [Test]
         public void Test_Apply_HandleShoutActionIsCalled()
         {
@@ -151,7 +154,7 @@ namespace InputCommandHandler.Tests
                 .AddChild(new Message(message)));
             return new AST(say);
         }
-        
+
         [Test]
         public void Test_Apply_HandleExitActionIsCalled()
         {
@@ -169,7 +172,7 @@ namespace InputCommandHandler.Tests
             exit.AddChild(new Exit());
             return new AST(exit);
         }
-        
+
         [Test]
         public void Test_Apply_HandlePauseActionIsCalled()
         {
@@ -187,7 +190,7 @@ namespace InputCommandHandler.Tests
             pause.AddChild(new Pause());
             return new AST(pause);
         }
-        
+
         [Test]
         public void Test_Apply_HandleResumeActionIsCalled()
         {
@@ -205,7 +208,7 @@ namespace InputCommandHandler.Tests
             resume.AddChild(new Resume());
             return new AST(resume);
         }
-        
+
         [Test]
         public void Test_Apply_HandleReplaceActionIsCalled()
         {
@@ -222,6 +225,70 @@ namespace InputCommandHandler.Tests
             Input replace = new Input();
             replace.AddChild(new Replace());
             return new AST(replace);
+        }
+
+        [Test]
+        public void Test_Apply_HandleRequestSessionsActionIsCalled()
+        {
+            // Arrange
+            var ast = RequestSessionsAst();
+
+            // Act
+            _sut.Apply(ast);
+
+            // Assert
+            _mockedSessionService.Verify(mockedSession => mockedSession.RequestSessions(), Times.Once);
+        }
+
+        private static AST RequestSessionsAst()
+        {
+            Input requestSessions = new Input();
+            requestSessions.AddChild(new RequestSessions());
+            return new AST(requestSessions);
+        }
+
+        [Test]
+        public void Test_Apply_HandleCreateSessionActionIsCalled()
+        {
+            // Arrange
+            const string sessionName = "cool world";
+            var ast = CreateSessionAst(sessionName);
+
+            // Act
+            _sut.Apply(ast);
+
+            // Assert
+            _mockedSessionService.Verify(mockedSession => mockedSession.CreateSession(sessionName), Times.Once);
+        }
+
+        private static AST CreateSessionAst(string sessionName)
+        {
+            Input createSession = new Input();
+            createSession.AddChild(new CreateSession()
+                .AddChild(new Message(sessionName)));
+            return new AST(createSession);
+        }
+
+        [Test]
+        public void Test_Apply_HandleJoinSessionActionIsCalled()
+        {
+            // Arrange
+            const string sessionId = "1234-1234";
+            var ast = JoinSessionAst(sessionId);
+
+            // Act
+            _sut.Apply(ast);
+
+            // Assert
+            _mockedSessionService.Verify(mockedSession => mockedSession.JoinSession(sessionId), Times.Once);
+        }
+
+        private static AST JoinSessionAst(string sessionId)
+        {
+            Input joinSession = new Input();
+            joinSession.AddChild(new JoinSession()
+                .AddChild(new Message(sessionId)));
+            return new AST(joinSession);
         }
     }
 }

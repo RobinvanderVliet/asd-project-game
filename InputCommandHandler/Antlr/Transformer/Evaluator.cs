@@ -1,21 +1,25 @@
+using System;
 using InputCommandHandler.Antlr.Ast;
 using InputCommandHandler.Antlr.Ast.Actions;
 using InputCommandHandler.Exceptions;
 using Player.Services;
+using Session;
 
 namespace InputCommandHandler.Antlr.Transformer
 {
     public class Evaluator : ITransform
     {
         private readonly IPlayerService _playerService;
+        private readonly ISessionService _sessionService;
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
+        private String _commando;
 
-        public Evaluator(IPlayerService playerService)
+        public Evaluator(IPlayerService playerService, ISessionService sessionService)
         {
             _playerService = playerService;
+            _sessionService = sessionService;
         }
-
         public void Apply(AST ast)
         {
             TransformNode(ast.Root);
@@ -57,6 +61,18 @@ namespace InputCommandHandler.Antlr.Transformer
                         break;
                     case Shout:
                         TransformShout((Shout)nodeBody[i]);
+                        break;
+                    case CreateSession:
+                        TransformCreateSession((CreateSession)nodeBody[i]);
+                        break;
+                    case JoinSession:
+                        TransformJoinSession((JoinSession)nodeBody[i]);
+                        break;
+                    case RequestSessions:
+                        TransformRequestSessions((RequestSessions)nodeBody[i]);
+                        break;
+                    case StartSession:
+                        TransformStartSession((StartSession)nodeBody[i]);
                         break;
                 }
         }
@@ -119,5 +135,26 @@ namespace InputCommandHandler.Antlr.Transformer
         {
             _playerService.Shout(shout.Message.MessageValue);
         }
+
+        private void TransformCreateSession(CreateSession createSession)
+        {
+            _sessionService.CreateSession(createSession.Message.MessageValue);
+        }
+
+        private void TransformJoinSession(JoinSession joinSession)
+        {
+            _sessionService.JoinSession(joinSession.Message.MessageValue);
+        }
+
+        private void TransformRequestSessions(RequestSessions requestSessions)
+        {
+            _sessionService.RequestSessions();
+        }
+
+        private void TransformStartSession(StartSession startSession)
+        {
+            _sessionService.StartSession();
+        }
+        
     }
 }

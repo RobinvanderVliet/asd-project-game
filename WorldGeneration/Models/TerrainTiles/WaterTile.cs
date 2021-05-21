@@ -1,4 +1,4 @@
-﻿using WorldGeneration.Models.Interfaces;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Models.TerrainTiles
 {
@@ -6,12 +6,14 @@ namespace WorldGeneration.Models.TerrainTiles
     {
         public bool IsAccessible { get; set; }
         public string Symbol { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-        public WaterTile()
+        public int XPosition { get; set; }
+        public int YPosition { get; set; }
+        public WaterTile(int x, int y)
         {
             Symbol = TileSymbol.WATER;
             IsAccessible = false;
+            XPosition = x;
+            YPosition = y;
         }
     }
 }

@@ -3,11 +3,11 @@ using System;
 using InputCommandHandler;
 using Player.Model;
 using Player.Services;
-using Microsoft.Extensions.Logging;
-using System;
 using WorldGeneration;
-using Player;
-using Agent.Services;
+using Chat;
+using Network;
+using Session;
+using Player.ActionHandlers;
 
 namespace ASD_project
 {
@@ -16,11 +16,29 @@ namespace ASD_project
         public class MainGame : IMainGame
         {
             private readonly ILogger<MainGame> _log;
+            private readonly IInventory _inventory;
+            private readonly IChatHandler _chatHandler;
+            private readonly ISessionHandler _sessionHandler;
+            private readonly IMoveHandler _moveHandler;
+            private readonly IGameSessionHandler _gameSessionHandler;
+            private readonly IClientController _clientController;
+            private readonly IWorldService _worldService;
 
-            public MainGame(ILogger<MainGame> log)
+            public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler,
+                ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler,
+                IClientController clientController,
+                IWorldService worldService)
             {
-                this._log = log;
+                _log = log;
+                _inventory = inventory;
+                _chatHandler = chatHandler;
+                _sessionHandler = sessionHandler;
+                _moveHandler = moveHandler;
+                _gameSessionHandler = gameSessionHandler;
+                _clientController = clientController;
+                _worldService = worldService;
             }
+
 
             public void Run()
             {
@@ -29,17 +47,20 @@ namespace ASD_project
                 // TODO: Remove from this method, team 2 will provide a command for it
                 // AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
                 // agentConfigurationService.StartConfiguration();
-                
-                new WorldGeneration.Program();
-                
+
                 //moet later vervangen worden
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
-                PlayerModel playerModel = new PlayerModel("Name", new Inventory(), new Bitcoin(20), new RadiationLevel(1));
-                IPlayerService playerService = new PlayerService(playerModel); 
-                Console.WriteLine("Type input messages below");
-                while (true) // moet vervangen worden met variabele: isQuit 
+                IPlayerModel playerModel =
+                    new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler,
+                    _moveHandler, _clientController, _worldService);
+
+                ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
+
+                while (true)
                 {
-                    inputHandler.HandleCommands(playerService);
+                    Console.WriteLine("Type input messages below");
+                    inputHandler.HandleCommands(playerService, sessionService);
                 }
             }
         }
