@@ -44,7 +44,12 @@ namespace DatabaseHandler.Repository
         public async Task<int> UpdateAsync(T obj)
         {
             var results = await _db.GetCollection<T>(_collection).UpdateAsync(obj);
-            return results ? 1 : throw new InvalidOperationException($"Object op type {typeof(T)} does not exist in database.");
+            
+            if (results)
+            {
+                return 1;
+            }
+            throw new InvalidOperationException($"Object op type {typeof(T)} does not exist in database.");
         }
 
         [ExcludeFromCodeCoverage]

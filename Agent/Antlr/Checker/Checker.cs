@@ -48,7 +48,7 @@ namespace Agent.Antlr.Checker
             }
         }
 
-        public Boolean CheckItemAndAllowedStat(Item comparable)
+        public bool CheckItemAndAllowedStat(Item comparable)
         {
             bool itemAllowed = false;
             

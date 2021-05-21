@@ -4,9 +4,14 @@ using Session.DTO;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Timers;
 using Network.DTO;
 using WorldGeneration;
 using System.Timers;
+using DatabaseHandler;
+using DatabaseHandler.Poco;
+using DatabaseHandler.Services;
+using DatabaseHandler.Repository;
 using Timer = System.Timers.Timer;
 
 namespace Session
@@ -51,7 +56,7 @@ namespace Session
                 SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
                 sessionDTO.ClientIds = new List<string>();
                 sessionDTO.ClientIds.Add(_clientController.GetOriginId());
-                sessionDTO.SessionSeed = sessionDTO.SessionSeed;
+                sessionDTO.SessionSeed = receivedSessionDTO.SessionSeed;
                 sendSessionDTO(sessionDTO);
                 joinSession = true;
             }
@@ -176,7 +181,7 @@ namespace Session
         private HandlerResponseDTO addPlayerToSession(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
-
+            
             if (packet.Header.Target == "host")
             {
                 Console.WriteLine(sessionDTO.ClientIds[0] + " Has joined your session: ");
@@ -190,6 +195,7 @@ namespace Session
                 {
                     sessionDTO.ClientIds.Add(client);
                 }
+
 
                 return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
             }
@@ -207,7 +213,7 @@ namespace Session
                     _session.AddClient(client);
                     Console.Out.WriteLine(client);
                 }
-                
+
                 if (sessionDTOClients.ClientIds.Count > 0 && !_clientController.IsBackupHost) {
                     if (sessionDTOClients.ClientIds[1].Equals(_clientController.GetOriginId()))
                     {
@@ -218,6 +224,11 @@ namespace Session
                 }
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
+        }
+        
+        public int GetSessionSeed()
+        {
+            return _session.SessionSeed;
         }
 
         public int GetSessionSeed()
@@ -274,7 +285,7 @@ namespace Session
             return _hostActive;
         }
         
-        public void setHostActive(Boolean boolean)
+        public void setHostActive(bool boolean)
         {
             _hostActive = boolean;
         }

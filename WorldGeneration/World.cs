@@ -38,7 +38,7 @@ namespace WorldGeneration
             DisplayWorld();
         }
 
-        public void AddCharacterToWorld(MapCharacterDTO mapCharacterDto, Boolean isCurrentPlayer)
+        public void AddCharacterToWorld(MapCharacterDTO mapCharacterDto, bool isCurrentPlayer)
         {
             if (isCurrentPlayer)
             {

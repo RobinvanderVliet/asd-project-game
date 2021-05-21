@@ -1,16 +1,18 @@
 ﻿using DataTransfer.DTO.Character;
 using Network;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using DatabaseHandler;
 using DatabaseHandler.Poco;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
+using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Player.DTO;
 using WorldGeneration;
+using Player.Model;
 
 
 namespace Player.ActionHandlers
@@ -18,6 +20,10 @@ namespace Player.ActionHandlers
     public class MoveHandler : IMoveHandler, IPacketHandler
     {
         private IClientController _clientController;
+        private IPlayerModel _currentPlayer;
+        private string _game;
+        private string _playerGuid; 
+        // private Dictionary<string, int[]> _PlayerLocations  {get; set;}
         private IWorldService _worldService;
         private IMapper _mapper;
 
