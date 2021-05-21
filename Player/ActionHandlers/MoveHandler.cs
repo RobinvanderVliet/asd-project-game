@@ -47,12 +47,12 @@ namespace Player.ActionHandlers
 
             if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
             {
-                var tmp = new DbConnection();
+                var dbConnection = new DbConnection();
 
-                var playerRepository = new Repository<PlayerPoco>(tmp);
-                var tmpServicePlayer = new ServicesDb<PlayerPoco>(playerRepository);
+                var playerRepository = new Repository<PlayerPoco>(dbConnection);
+                var servicePlayer = new ServicesDb<PlayerPoco>(playerRepository);
 
-                var allLocations = tmpServicePlayer.GetAllAsync();
+                var allLocations = servicePlayer.GetAllAsync();
 
                 allLocations.Wait();
 
@@ -91,18 +91,16 @@ namespace Player.ActionHandlers
 
         private void InsertToDatabase(MoveDTO moveDto)
         {
-            var tmp = new DbConnection();
+            var dbConnection = new DbConnection();
 
-            var playerRepository = new Repository<PlayerPoco>(tmp);
-            var tmpServicePlayer = new ServicesDb<PlayerPoco>(playerRepository);
-            var tmpGameRepostory = new Repository<GamePoco>(tmp);
-            var tmpServiceGame = new ServicesDb<GamePoco>(tmpGameRepostory);
+            var playerRepository = new Repository<PlayerPoco>(dbConnection);
+            var servicePlayer = new ServicesDb<PlayerPoco>(playerRepository);
 
             var destination = _mapper.Map<PlayerPoco>(moveDto.PlayerPosition);
 
             if (playerRepository.UpdateAsync(destination).Result == 1)
             {
-                var allPlayers = tmpServicePlayer.GetAllAsync();
+                var allPlayers = servicePlayer.GetAllAsync();
                 allPlayers.Wait();
                 Console.WriteLine("Updated :)");
             }
