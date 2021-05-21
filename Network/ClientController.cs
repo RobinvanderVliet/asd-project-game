@@ -11,11 +11,14 @@ namespace Network
         private IHostController _hostController;
         private string _sessionId;
         private Dictionary<PacketType, IPacketHandler> _subscribers = new();
+        private bool _isBackupHost;
+        public bool IsBackupHost { get => _isBackupHost; set => _isBackupHost = value; }
 
         public ClientController(INetworkComponent networkComponent)
         {
             _networkComponent = networkComponent;
             _networkComponent.SetClientController(this);
+            _isBackupHost = false;
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
@@ -84,5 +87,7 @@ namespace Network
         {
             _hostController = hostController;
         }
+
+        
     }
 }

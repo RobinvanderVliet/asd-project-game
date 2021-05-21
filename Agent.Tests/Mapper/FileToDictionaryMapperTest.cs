@@ -25,11 +25,11 @@ namespace Agent.Tests.Mapper
         public void Test_MapFileToConfiguration_Successful()
         {
             //Arrange
-            Dictionary<String, String> expectedDictionary = new Dictionary<string, string>();
+            Dictionary<string, string> expectedDictionary = new Dictionary<string, string>();
             expectedDictionary.Add("aggressiveness", "high");
             expectedDictionary.Add("explore", "random");
             expectedDictionary.Add("combat", "offensive");
-            var filepath = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest.txt";
+            var filepath = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest.txt";
             
             //Act
             var actualDictionary = _mapper.MapFileToConfiguration(filepath);
@@ -45,7 +45,7 @@ namespace Agent.Tests.Mapper
         public void Test_MapFileToConfiguration_Unsuccessful()
         {
             //Arrange
-            var filepath = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest_2.txt";
+            var filepath = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest_2.txt";
             
             //Act
             //Assert

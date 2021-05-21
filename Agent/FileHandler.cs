@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Agent.Exceptions;
+using Serilog;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,13 +13,8 @@ namespace Agent
     {
         public string ImportFile(string filepath)
         {
-            if (Path.GetExtension(filepath) == ".txt" || Path.GetExtension(filepath) == ".cfg")
+            if (Path.GetExtension(filepath).Equals(".txt") || Path.GetExtension(filepath).Equals(".cfg"))
             {
-                if (!File.Exists(filepath))
-                {
-                    throw new FileException("File does not exists");
-                }
-                    
                 using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
                 {
                     using (StreamReader reader = new StreamReader(fileStream))
@@ -27,11 +24,13 @@ namespace Agent
                         reader.Close();
 
                         return fileData;
-                    };
+                    }
+
+                    ;
                 }
             }
+
             throw new FileException("File given is not of the correct file type");
-            
         }
 
         public void ExportFile(string content)
@@ -39,7 +38,7 @@ namespace Agent
             //TODO change file name to selected by user
             string tmpFileName = "agentFile.cfg";
             string safeFileLocation = String.Format(Path.GetFullPath(Path.Combine
-                        (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\" + tmpFileName;
+                (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\" + tmpFileName;
 
             try
             {
@@ -50,14 +49,19 @@ namespace Agent
                     using (StreamWriter streamWriter = new StreamWriter(fileStream))
                     {
                         streamWriter.Write(content);
-                    };   
-                };
+                    }
+
+                    ;
+                }
+
+                ;
             }
             catch (FileException)
             {
                 throw;
             }
         }
+
         public void CreateDirectory(string filepath)
         {
             string directoryName = Path.GetDirectoryName(filepath);
@@ -73,11 +77,4 @@ namespace Agent
             }
         }
     }
-}
-
-[Serializable]
-public class FileException : IOException
-{
-    public FileException() { }
-    public FileException(String massage) : base(String.Format(massage)) { }
 }
