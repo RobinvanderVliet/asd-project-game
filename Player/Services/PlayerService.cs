@@ -163,7 +163,6 @@ namespace Player.Services
                     break;
             }
 
-            
             var mapCharacterDto = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
                 (_worldService.getCurrentCharacterPositions().YPosition) + y, 
                 _currentPlayer.PlayerGuid, 
