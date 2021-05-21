@@ -51,7 +51,7 @@ namespace Agent
             {
                 _checker = new Checker(_ast);
             }
-            _checker.Check(_ast);
+            // _checker.Check(_ast);
         }
 
         public string GenerateAst()

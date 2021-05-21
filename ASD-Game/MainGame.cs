@@ -5,6 +5,9 @@ using Player.Model;
 using Player.Services;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using Agent.Mapper;
+using Agent.Models;
 using WorldGeneration;
 using Player;
 using Agent.Services;
@@ -33,15 +36,15 @@ namespace ASD_project
             public void Run()
             {
                 Console.WriteLine("Game is gestart");
+                InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
 
-                // TODO: Remove from this method, team 2 will provide a command for it
-                // AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
-                // agentConfigurationService.StartConfiguration();
+                // TODO: Remove from this method, a command needs to be made
+                // AgentConfigurationService agentConfigurationService = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), inputHandler);
+                // agentConfigurationService.Configure();
                 
                 // new WorldGeneration.Program();
                 
                 //moet later vervangen worden
-                InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
                 PlayerModel playerModel = new PlayerModel("Name", _inventory, new Bitcoin(20), new RadiationLevel(1));
                 IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler); 
                 Console.WriteLine("Type input messages below");
