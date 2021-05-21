@@ -45,7 +45,7 @@ namespace Creature
                 {
                     if (adjNode.IsWalkable)
                     {
-                        if (!(openList.Contains(adjNode) && currentNode.FScore <= adjNode.FScore))
+                        if (!(openList.Contains(adjNode)))
                         {
                             if (closedList.Contains(adjNode))
                             {
@@ -71,7 +71,6 @@ namespace Creature
             {
                 throw new PathHasNoDestinationException();
             }
-
             else if (AreNodesAtSamePosition(currentNode, startNode))
             {
                 pathStack.Push(currentNode);
