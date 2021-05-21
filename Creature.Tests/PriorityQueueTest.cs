@@ -49,15 +49,14 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_Contains_ReturnsFalseIfItemNotInPriorityQueue()
+        public void Test_Contains_ReturnsTrueIfItemIsInPriorityQueue()
         {
             // Arrange ---------
             _sut.Enqueue(_node1);
-            _sut.Enqueue(_node2);
 
             // Act -------------
-            bool actual = _sut.Contains(_node3);
-            bool expected = false;
+            bool actual = _sut.Contains(_node1);
+            bool expected = true;
 
             // Assert ----------
             Assert.That(actual, Is.EqualTo(expected));
