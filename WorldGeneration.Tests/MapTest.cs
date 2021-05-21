@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using DataTransfer.DTO.Character;
@@ -58,9 +59,12 @@ namespace WorldGeneration.Tests
             
             _noiseMapGeneratorMock = noiseMapGeneratorMock.Object;
 
-            _databaseMock = new Mock<Database>().Object;
+            var databaseMock = new Mock<Database>("DatabaseAddress", "mapCollection");
+            databaseMock.Setup(p => p.InsertChunkIntoDatabase(It.IsAny<Chunk>())).Verifiable();
+            _databaseMock = databaseMock.Object;
 
-            _consolePrinterMock = new Mock<ConsolePrinter>().Object;
+            var consolePrinterMock = new Mock<ConsolePrinter>(ConsoleColor.White, ConsoleColor.Black);
+            _consolePrinterMock = consolePrinterMock.Object;
             
             _sut = new Map(_noiseMapGeneratorMock, _databaseMock, chunkSize, seed, _consolePrinterMock);
 

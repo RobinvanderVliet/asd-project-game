@@ -4,18 +4,18 @@ namespace Display
 {
     public class ConsolePrinter : IConsolePrinter
     {
-        private ConsoleColor TextColor { get; set; }
-        private ConsoleColor BackgroundColor { get; set; }
-
+        private ConsoleColor _textColor { get; set; }
+        private ConsoleColor _backgroundColor { get; set; }
+        
         public ConsolePrinter(ConsoleColor textColor = ConsoleColor.White, ConsoleColor backgroundColor = ConsoleColor.Black)
         {
-            TextColor = textColor;
-            BackgroundColor = backgroundColor;
+            _textColor = textColor;
+            _backgroundColor = backgroundColor;
         }
         
         public void PrintText(string text)
         {
-            PrintText(text, TextColor, BackgroundColor);
+            PrintText(text, _textColor, _backgroundColor);
         }
 
         public void PrintText(string text, ConsoleColor textColor, ConsoleColor backgroundColor)
