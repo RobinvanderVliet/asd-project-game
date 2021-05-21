@@ -22,8 +22,8 @@ namespace Creature.Tests
             int health = 20;
             int visionRange = 10;
 
-            MonsterData monsterData = new MonsterData(position, health, _damage, visionRange, worldMock.Object, false);
-            _sut = new Monster(monsterData, null);
+            MonsterData monsterData = new MonsterData(position, health, _damage, visionRange, worldMock.Object, null, false);
+            _sut = new Monster(monsterData);
         }
 
         [Test]

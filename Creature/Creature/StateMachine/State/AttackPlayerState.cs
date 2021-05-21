@@ -21,7 +21,7 @@ namespace Creature.Creature.StateMachine.State
             ICreatureData playerData = creatureData;
             playerData.Health -= playerData.Damage;
 
-            throw new NotImplementedException();
+           // throw new NotImplementedException();
         }
     }
 }

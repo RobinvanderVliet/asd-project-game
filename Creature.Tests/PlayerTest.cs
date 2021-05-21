@@ -22,8 +22,8 @@ namespace Creature.Tests
             int damage = 5;
             int visionRange = 10;
 
-            PlayerData playerData = new PlayerData(position, health, damage, visionRange, worldMock.Object);
-            _sut = new Player(playerData, null);
+            PlayerData playerData = new PlayerData(position, health, damage, visionRange, worldMock.Object, null);
+            _sut = new Player(playerData);
         }
 
         [Test]

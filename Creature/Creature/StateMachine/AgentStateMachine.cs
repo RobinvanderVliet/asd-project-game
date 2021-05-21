@@ -41,6 +41,7 @@ namespace Creature.Creature.StateMachine
             CreatureState wanderState = new WanderState(CreatureData);
             CreatureState useConsumableState = new UseConsumableState(CreatureData);
             CreatureState attackPlayerState = new AttackPlayerState(CreatureData);
+            CreatureState fleeFromPlayerState = new FleeFromPlayer(CreatureData);
 
             // Wandering
             builder.In(followPlayerState).On(CreatureEvent.Event.LOST_PLAYER).Goto(wanderState);

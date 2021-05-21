@@ -1,5 +1,4 @@
 ﻿using Creature.Creature.StateMachine;
-using Creature.Creature.StateMachine.CustomRuleSet;
 using Creature.Creature.StateMachine.Data;
 
 namespace Creature
@@ -18,9 +17,7 @@ namespace Creature
             _agentStateMachine = new(agentData);
             _agentStateMachine.StartStateMachine();
         }
-
-  
-
+        
         public void ApplyDamage(double amount)
         {
             _agentStateMachine.CreatureData.Health -= amount;
