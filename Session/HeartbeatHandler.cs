@@ -47,7 +47,7 @@ namespace Session
             List<HeartbeatDTO> leavers = new List<HeartbeatDTO>();
             foreach (HeartbeatDTO player in _players)
             {
-                if (player.status)
+                if (!player.status)
                 {
                     leavers.Add(player);
                 }

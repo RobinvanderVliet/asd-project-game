@@ -22,7 +22,7 @@ namespace Network
         {
             if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session)
             {
-                Console.WriteLine(packet.Payload);
+                //Console.WriteLine(packet.Payload);
                 HandlePacket(packet);
             }
         }
