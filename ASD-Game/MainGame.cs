@@ -3,6 +3,9 @@ using System;
 using InputCommandHandler;
 using Player.Model;
 using Player.Services;
+using System.Collections.Generic;
+using Agent.Mapper;
+using Agent.Models;
 using WorldGeneration;
 using Chat;
 using Network;
@@ -43,21 +46,20 @@ namespace ASD_project
             public void Run()
             {
                 Console.WriteLine("Game is gestart");
-
-                // TODO: Remove from this method, team 2 will provide a command for it
-                // AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
-                // agentConfigurationService.StartConfiguration();
-
-                //moet later vervangen worden
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
+
+                // TODO: Remove from this method, a command needs to be made
+                // AgentConfigurationService agentConfigurationService = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), inputHandler);
+                // agentConfigurationService.Configure();
+                
+                //moet later vervangen worden
                 IPlayerModel playerModel =
                     new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
                 IPlayerService playerService = new PlayerService(playerModel, _chatHandler,
                     _moveHandler, _clientController, _worldService);
 
                 ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
-
-                while (true)
+                while (true) // moet vervangen worden met variabele: isQuit 
                 {
                     Console.WriteLine("Type input messages below");
                     inputHandler.HandleCommands(playerService, sessionService);

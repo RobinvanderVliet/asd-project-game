@@ -30,7 +30,7 @@ namespace InputCommandHandler
             }
         }
 
-        public string GetCommand()
+        public virtual string GetCommand()
         {
             return Console.ReadLine();
         }

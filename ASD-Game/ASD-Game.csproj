@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
@@ -43,6 +43,11 @@
 
   <ItemGroup>
     <Folder Include="resource\agent\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="resource\config\agent" />
+    <Folder Include="resource\config\npc" />
   </ItemGroup>
 
 </Project>
