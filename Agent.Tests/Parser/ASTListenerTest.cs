@@ -1,16 +1,16 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using Agent.Antlr.Ast;
-using Agent.antlr.grammar;
+using Agent.Antlr.Grammar;
+using NUnit.Framework;
 using Agent.Antlr.Parser;
+using System;
+using System.IO;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using System.Linq;
 
-namespace Agent.Tests.Parser
+namespace Agent.Tests.parser
 {
     [ExcludeFromCodeCoverage]
     public class ASTListenerTest

@@ -7,13 +7,13 @@
 
         public ASTError(string message)
         {
-            this._message = message;
+            _message = message;
         }
 
 
         override public string ToString()
         {
-            return "ERROR: " + this._message;
+            return "ERROR: " + _message;
         }
     }
 }

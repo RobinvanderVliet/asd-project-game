@@ -24,8 +24,8 @@ namespace Agent.Antlr.Ast
                 children.Add(_comparison);
             if (_comparableR != null)
                 children.Add(_comparableR);
-            if (this._then != null)
-                children.Add(this._then);
+            if (_then != null)
+                children.Add(_then);
 
             children.AddRange(body);
             return children;
@@ -36,27 +36,27 @@ namespace Agent.Antlr.Ast
             switch (node)
             {
                 case Comparable comparable:
-                    if (this._comparableL == null) 
+                    if (_comparableL == null) 
                     {
-                        this._comparableL = comparable;
+                        _comparableL = comparable;
                     }
-                    else if (this._comparableR == null) 
+                    else if (_comparableR == null) 
                     {
-                        this._comparableR = comparable;
+                        _comparableR = comparable;
                     }
                     else
                     {
-                        this.body.Add(comparable);
+                        body.Add(comparable);
                     }
                     break;
                 case ActionReference action:
-                    this._then = action;
+                    _then = action;
                     break;
                 case Comparison comparison:
-                    this._comparison = comparison;
+                    _comparison = comparison;
                     break;
                 default:
-                    this.body.Add(node);
+                    body.Add(node);
                     break;
             }
 
@@ -92,7 +92,7 @@ namespace Agent.Antlr.Ast
 
         public void SetComparison(Comparison comparison)
         {
-            comparison = comparison;
+            _comparison = comparison;
         }
         
         public ActionReference GetThen()
@@ -102,7 +102,7 @@ namespace Agent.Antlr.Ast
 
         public void SetThen(ActionReference then)
         {
-            then = then;
+            _then = then;
         }
 
     }

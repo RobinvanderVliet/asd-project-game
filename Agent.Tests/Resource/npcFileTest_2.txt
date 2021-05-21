@@ -3,5 +3,4 @@ explore = random
 combat = offensive
 
 
-
 combat = weeop

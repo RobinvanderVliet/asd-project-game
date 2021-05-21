@@ -1,9 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast.Comparables;
+﻿using Agent.Antlr.Ast.Comparables;
 using Agent.Antlr.Ast.Comparables.Subjects;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Agent.Tests.Ast
+namespace Agent.Tests.ast
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
@@ -71,7 +71,7 @@ namespace Agent.Tests.Ast
         public void Test_GetNodePlayer_CorrectOutput()
         {
             //Arrange
-            var node = new Player(TESTNAME);
+            var node = new Antlr.Ast.Comparables.Subjects.Player(TESTNAME);
             //Act
             var result = node.GetNodeType();
             //Assert

@@ -1,9 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast;
+﻿using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
+using System;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Agent.Tests.Ast
+namespace Agent.Tests.ast
 {
     [ExcludeFromCodeCoverage]
     
@@ -18,9 +19,9 @@ namespace Agent.Tests.Ast
         public void Test_GetNodeTypeComparable_CorrectOutput()
         {
             //Arrange
-            this._comparable = new Comparable();
+            _comparable = new Comparable();
             //Act
-            var result = this._comparable.GetNodeType();
+            var result = _comparable.GetNodeType();
             //Assert
             Assert.AreEqual("Comparable", result);
         }
@@ -31,9 +32,9 @@ namespace Agent.Tests.Ast
         public void Test_GetNodeTypeItem_CorrectOutput()
         {
             //Arrange
-            this._comparable = new Item("");
+            _comparable = new Item("");
             //Act
-            var result = this._comparable.GetNodeType();
+            var result = _comparable.GetNodeType();
             //Assert
             Assert.AreEqual("Item", result);
         }
@@ -43,9 +44,9 @@ namespace Agent.Tests.Ast
         public void Test_GetNodeTypeInt_CorrectOutput()
         {
             //Arrange
-            this._comparable = new Int(1);
+            _comparable = new Int(1);
             //Act
-            var result = this._comparable.GetNodeType();
+            var result = _comparable.GetNodeType();
             //Assert
             Assert.AreEqual("Int", result);
         }
@@ -55,9 +56,9 @@ namespace Agent.Tests.Ast
         public void Test_GetNodeTypeStat_CorrectOutput()
         {
             //Arrange
-            this._comparable = new Stat("");
+            _comparable = new Stat("");
             //Act
-            var result = this._comparable.GetNodeType();
+            var result = _comparable.GetNodeType();
             //Assert
             Assert.AreEqual("Stat", result);
         }
@@ -67,9 +68,9 @@ namespace Agent.Tests.Ast
         public void Test_GetNodeTypeSubject_CorrectOutput()
         {
             //Arrange
-            this._comparable = new Subject("");
+            _comparable = new Subject("");
             //Act
-            var result = this._comparable.GetNodeType();
+            var result = _comparable.GetNodeType();
             //Assert
             Assert.AreEqual("Subject", result);
         }

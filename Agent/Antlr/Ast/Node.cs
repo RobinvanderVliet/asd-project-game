@@ -17,7 +17,7 @@ namespace Agent.Antlr.Ast
 
         public virtual List<Node> GetChildren()
         {
-            return this.body;
+            return body;
         }
 
         public virtual Node AddChild(Node node)
@@ -34,18 +34,18 @@ namespace Agent.Antlr.Ast
 
         public ASTError GetError()
         {
-            return this.error;
+            return error;
         }
 
         public void SetError(string message)
         {
-            this.error = new ASTError(message);
+            error = new ASTError(message);
         }
 
         private string BuildString(StringBuilder builder)
         {
-            builder.Append("[" + this.GetNodeType() + "]");
-            foreach (var child in this.GetChildren()) {
+            builder.Append("[" + GetNodeType() + "]");
+            foreach (var child in GetChildren()) {
                 child.BuildString(builder);
             }
 

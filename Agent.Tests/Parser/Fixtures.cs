@@ -1,9 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast;
+﻿using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
 using Agent.Antlr.Ast.Comparables.Subjects;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Agent.Tests.Parser
+namespace Agent.Tests.parser
 {
    
     [ExcludeFromCodeCoverage]
@@ -32,9 +32,9 @@ namespace Agent.Tests.Parser
             configuration.AddChild((new Setting("combat"))
                     .AddChild((new Condition())
                         .AddChild((new When())
-                            .AddChild(new Player("player"))
+                            .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
                             .AddChild(new Comparison("nearby"))
-                            .AddChild(new Player("player"))
+                            .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
                             .AddChild(new ActionReference("attack"))
                         )
                 )
@@ -42,9 +42,9 @@ namespace Agent.Tests.Parser
             configuration.AddChild((new Setting("combat"))
                 .AddChild((new Condition())
                     .AddChild((new When())
-                        .AddChild(new Player("player"))
+                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
                         .AddChild(new Comparison("nearby"))
-                        .AddChild(new Player("player"))
+                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
                         .AddChild(new ActionReference("attack"))
                     )
                 )
@@ -52,9 +52,9 @@ namespace Agent.Tests.Parser
             configuration.AddChild((new Setting("combat"))
                 .AddChild((new Condition())
                     .AddChild((new When())
-                        .AddChild(new Player("player"))
+                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
                         .AddChild(new Comparison("nearby"))
-                        .AddChild(new Player("player"))
+                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
                         .AddChild(new ActionReference("attack"))
                     )
                 )
@@ -71,9 +71,9 @@ namespace Agent.Tests.Parser
             configuration.AddChild((new Setting("combat"))
                 .AddChild((new Condition())
                     .AddChild((new When())
-                        .AddChild(new Player("player"))
+                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
                         .AddChild(new Comparison("nearby"))
-                        .AddChild(new Player("player"))
+                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
                         .AddChild(new ActionReference("attack"))
                     )
                 )
@@ -111,9 +111,9 @@ namespace Agent.Tests.Parser
             configuration.AddChild((new Setting("combat"))
                 .AddChild((new Condition())
                     .AddChild((new When())
-                        .AddChild(new Player("player"))
+                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
                         .AddChild(new Comparison("nearby"))
-                        .AddChild(new Player("player"))
+                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
                         .AddChild(new ActionReference("attack"))
                     )
                 )
@@ -144,7 +144,7 @@ namespace Agent.Tests.Parser
             configuration.AddChild((new Setting("explore"))
                 .AddChild((new Condition())
                     .AddChild((new When())
-                        .AddChild(new Player("player"))
+                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
                         .AddChild(new Comparison("finds"))
                         .AddChild(new Item("item"))
                         .AddChild(new ActionReference("collect"))

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Agent.Antlr.Ast.Comparables;
+﻿using Agent.Antlr.Ast.Comparables;
+using System.Collections.Generic;
 
 namespace Agent.Antlr.Ast
 {
@@ -37,13 +37,13 @@ namespace Agent.Antlr.Ast
         {
             switch (node) {
                 case Subject subject:
-                    this._subject = subject;
+                    _subject = subject;
                     break;
                 case Item item:
-                    this._item = item;
+                    _item = item;
                     break;
                 default:
-                    this.body.Add(node);
+                    body.Add(node);
                     break;
             }
             return this;

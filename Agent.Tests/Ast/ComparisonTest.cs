@@ -1,8 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast;
+﻿using Agent.Antlr.Ast;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Agent.Tests.Ast
+namespace Agent.Tests.ast
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
@@ -14,7 +14,7 @@ namespace Agent.Tests.Ast
         [SetUp]
         public void Setup()
         {
-            this._comparison = new Comparison("");
+            _comparison = new Comparison("");
         }
 
         [Test]
@@ -22,7 +22,7 @@ namespace Agent.Tests.Ast
         {
             //Arrange
             //Act
-            var result = this._comparison.GetNodeType();
+            var result = _comparison.GetNodeType();
             //Assert
             Assert.AreEqual(TYPE, result);
         }

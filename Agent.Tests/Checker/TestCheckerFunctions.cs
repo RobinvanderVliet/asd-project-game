@@ -1,23 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
+using Agent.Antlr.Checker;
+using System;
+using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Agent.Tests.Checker
+namespace Agent.Tests.checker
 {
     [ExcludeFromCodeCoverage]
     public class TestCheckerFunctions
     {
-        private Antlr.Checker.Checker _sut;
+        private Checker _sut;
 
         [SetUp]
         public void Setup()
         {
             Mock<AST> ast = new Mock<AST>();
-            this._sut = new Antlr.Checker.Checker(ast.Object);
+            _sut = new Checker(ast.Object);
         }
 
 
@@ -30,7 +31,7 @@ namespace Agent.Tests.Checker
             item.AddChild(stat);
 
             //Act
-            bool result = this._sut.CheckItemAndAllowedStat(item);
+            bool result = _sut.CheckItemAndAllowedStat(item);
             
             //Assert
             Assert.False(result);
@@ -52,7 +53,7 @@ namespace Agent.Tests.Checker
             testNodes.Add(whenNode);
 
             //Act
-            this._sut.CheckStatCombination(testNodes);
+            _sut.CheckStatCombination(testNodes);
             
             //Assert
             Assert.AreNotEqual(String.Empty, item.GetError().ToString());

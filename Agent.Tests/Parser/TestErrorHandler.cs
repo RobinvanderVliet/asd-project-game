@@ -12,7 +12,7 @@ namespace Agent.Tests.Parser
         override public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine, string msg,
             RecognitionException e)
         {
-            this.message = msg;
+            message = msg;
         }
 
         override public string ToString()

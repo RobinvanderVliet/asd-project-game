@@ -7,7 +7,7 @@
 
         public AST( )
         {
-            this.root = new Configuration();
+            root = new Configuration();
         }
         public AST(Configuration root)
         {

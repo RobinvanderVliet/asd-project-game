@@ -1,9 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast;
+﻿using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Agent.Tests.Ast
+namespace Agent.Tests.ast
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
@@ -15,7 +15,7 @@ namespace Agent.Tests.Ast
         [SetUp]
         public void Setup()
         {
-            this._sut = new Item(TYPE);
+            _sut = new Item(TYPE);
         }
         
     
@@ -25,7 +25,7 @@ namespace Agent.Tests.Ast
             //Arrange
             
             //Act
-            var result = this._sut.GetNodeType();
+            var result = _sut.GetNodeType();
             //Assert
             Assert.AreEqual(TYPE, result);
         }
@@ -35,10 +35,10 @@ namespace Agent.Tests.Ast
         {
             //Arrange
             var stat = new Stat("");
-            this._sut.AddChild(stat);
+            _sut.AddChild(stat);
 
             //Act
-            var result = ( this._sut.GetChildren()[0]).GetNodeType();
+            var result = ( _sut.GetChildren()[0]).GetNodeType();
 
             //Assert
             Assert.AreEqual("Stat", result);
@@ -50,10 +50,10 @@ namespace Agent.Tests.Ast
         {
             //Arrange
             var node = new Node();
-            this._sut.AddChild(node);
+            _sut.AddChild(node);
 
             //Act
-            var result = ( this._sut.GetChildren()[0])?.GetNodeType();
+            var result = ( _sut.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Node", result);

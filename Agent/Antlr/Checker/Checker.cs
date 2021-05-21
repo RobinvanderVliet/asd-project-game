@@ -1,8 +1,8 @@
+using Agent.Antlr.Ast;
+using Agent.Antlr.Ast.Comparables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Agent.Antlr.Ast;
-using Agent.Antlr.Ast.Comparables;
 
 namespace Agent.Antlr.Checker
 {
@@ -72,6 +72,11 @@ namespace Agent.Antlr.Checker
 
             }
             return itemAllowed;
+        }
+
+        public virtual void Check(AST ast)
+        {
+            throw new NotImplementedException();
         }
     }
 }

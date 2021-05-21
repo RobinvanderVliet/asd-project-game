@@ -1,9 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast;
+﻿using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Agent.Tests.Ast
+namespace Agent.Tests.ast
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
@@ -15,7 +15,7 @@ namespace Agent.Tests.Ast
         [SetUp]
         public void Setup()
         {
-            this._actionReference = new ActionReference("");
+            _actionReference = new ActionReference("");
         }
 
     
@@ -24,7 +24,7 @@ namespace Agent.Tests.Ast
         {
             //Arrange
             //Act
-            var result = this._actionReference.GetNodeType();
+            var result = _actionReference.GetNodeType();
             //Assert
             Assert.AreEqual(TYPE, result);
         }
@@ -35,10 +35,10 @@ namespace Agent.Tests.Ast
         {
             //Arrange
             Subject subject = new Subject("");
-            this._actionReference.AddChild(subject);
+            _actionReference.AddChild(subject);
 
             //Act
-            var result = ((Subject) this._actionReference.GetChildren()[0])?.GetNodeType();
+            var result = ((Subject) _actionReference.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Subject", result);
@@ -50,10 +50,10 @@ namespace Agent.Tests.Ast
         {
             //Arrange
             var item = new Item("");
-            this._actionReference.AddChild(item);
+            _actionReference.AddChild(item);
 
             //Act
-            var result = ((Item) this._actionReference.GetChildren()[0])?.GetNodeType();
+            var result = ((Item) _actionReference.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Item", result);
@@ -65,10 +65,10 @@ namespace Agent.Tests.Ast
         {
             //Arrange
             var node = new Node();
-            this._actionReference.AddChild(node);
+            _actionReference.AddChild(node);
 
             //Act
-            var result = (this._actionReference.GetChildren()[0])?.GetNodeType();
+            var result = (_actionReference.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Node", result);
