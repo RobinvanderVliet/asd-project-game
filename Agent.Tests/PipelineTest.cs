@@ -3,7 +3,6 @@ using Moq;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 using Agent.Antlr.Ast;
-using Agent.Antlr.Checker;
 using Agent.Exceptions;
 using Antlr4.Runtime;
 
@@ -61,10 +60,10 @@ namespace Agent.Tests
             AST ast = new AST();
             _sut.Ast = ast;
 
-            Mock<Checker> mockedChecker = new Mock<Checker>(ast);
+            Mock<Antlr.Checker.Checking> mockedChecker = new Mock<Antlr.Checker.Checking>(ast);
             mockedChecker.Setup(x => x.Check(ast)).Verifiable();
 
-            _sut.Checker = mockedChecker.Object;
+            _sut.Checking = mockedChecker.Object;
 
             //Act
             _sut.CheckAst();

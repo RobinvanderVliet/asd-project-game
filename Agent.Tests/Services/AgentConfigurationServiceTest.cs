@@ -1,16 +1,16 @@
-﻿using Agent.Services;
-using Moq;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Agent.Exceptions;
 using Agent.Mapper;
 using Agent.Models;
+using Agent.Services;
 using InputCommandHandler;
+using Moq;
+using NUnit.Framework;
 
-namespace Agent.Tests
+namespace Agent.Tests.Services
 {
     [ExcludeFromCodeCoverage]
     public class AgentConfigurationServiceTests
