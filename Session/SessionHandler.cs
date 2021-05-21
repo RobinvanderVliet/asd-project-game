@@ -17,6 +17,7 @@ namespace Session
         private Session _session;
         private Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;
+        private int _hostInactiveCounter = 0;
         private Timer _hostPingTimer;
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
@@ -128,11 +129,23 @@ namespace Session
 
         private void CheckIfHostActive() 
         {
-            if (!_hostActive) 
+            
+            if (!_hostActive)
             {
-                _hostPingTimer.Dispose();
-                _hostActive = true;
-                SwapToHost();
+                _hostInactiveCounter++;
+
+                if (_hostInactiveCounter > 5)
+                {
+                    Console.WriteLine("ik kom hier dfdsfgsdgsdfgdfughdfughadfuikghadfugyifhgo");
+                    _hostPingTimer.Dispose();
+                    _hostActive = true;
+                    _hostInactiveCounter = 0;
+                    SwapToHost();   
+                }
+            }
+            else
+            {
+                _hostInactiveCounter = 0;
             }
         }
         
