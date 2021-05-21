@@ -33,8 +33,8 @@ namespace Session
 
         public void StartSession(string sessionID)
         {
-            var dto = SetupGameHost();
-            sendGameSessionDTO(dto);
+            var DTO = SetupGameHost();
+            sendGameSessionDTO(DTO);
 
 // bericht naar alle clients dat sessie is gestart
         }
@@ -48,9 +48,6 @@ namespace Session
             }
             else
             {
-                SessionDTO sessionDto =
-                    JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
-                _session = new Session(sessionDto.Name);
                 SessionDTO receivedSessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
                 _session = new Session(receivedSessionDTO.Name);
                 _session.SessionId = sessionId;
@@ -60,7 +57,7 @@ namespace Session
                 SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
                 sessionDTO.ClientIds = new List<string>();
                 sessionDTO.ClientIds.Add(_clientController.GetOriginId());
-                sessionDTO.SessionSeed = sessionDto.SessionSeed;
+                sessionDTO.SessionSeed = receivedSessionDTO.SessionSeed;
                 sendSessionDTO(sessionDTO);
                 _session.InSession = true;
             }

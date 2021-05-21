@@ -44,7 +44,6 @@ namespace WorldGeneration
             {
                 CurrentPlayer = mapCharacterDto;
             }
-            
             Characters.Add(mapCharacterDto);
         }
 
