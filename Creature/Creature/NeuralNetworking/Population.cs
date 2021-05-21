@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Creature.Creature.StateMachine.Data;
+
 namespace Creature.Creature.NeuralNetworking
 {
     public class Population
@@ -19,12 +21,12 @@ namespace Creature.Creature.NeuralNetworking
         public Boolean showNothing = false;
 
         //constructor
-        public Population(int size)
+        public Population(int size, ICreatureData creatureData)
         {
 
             for (int i = 0; i < size; i++)
             {
-                pop.Add(new SmartMonster());
+                pop.Add(new SmartMonster(creatureData));
                 pop[i].brain.GenerateNetwork();
                 pop[i].brain.Mutate(innovationHistory);
             }
