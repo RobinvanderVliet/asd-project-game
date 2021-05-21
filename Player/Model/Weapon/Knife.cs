@@ -5,10 +5,11 @@ namespace Weapon
 {
     public class Knife : Weapon
     {
-        
+        private const string WeaponDescription = "That ain't a knoife, this is a knoife";
         public Knife()
         {
             ItemName = "Knife";
+            Description = WeaponDescription;
             Type = WeaponType.Melee;
             Rarity = Rarity.Common;
             Speed = WeaponSpeed.Slow;
