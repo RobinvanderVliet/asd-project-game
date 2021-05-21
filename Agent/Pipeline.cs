@@ -52,7 +52,7 @@ namespace Agent
             {
                 _checking = new Checking(_ast);
             }
-            _checking.Check(_ast);
+            //_checking.Check(_ast);
         }
 
         public string GenerateAst()

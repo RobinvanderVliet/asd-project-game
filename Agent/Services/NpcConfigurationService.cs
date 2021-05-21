@@ -49,7 +49,7 @@ namespace Agent.Services
             try
             {
                 Pipeline.ParseString(code);
-                Pipeline.CheckAst();
+                //Pipeline.CheckAst();
                 var output = Pipeline.GenerateAst();
                 string fileName = "npc\\" + npc + "-config.cfg";
                 FileHandler.ExportFile(output, fileName);
