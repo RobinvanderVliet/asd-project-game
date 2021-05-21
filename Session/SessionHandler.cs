@@ -158,7 +158,7 @@ namespace Session
             {
                 if (packet.HandlerResponse != null)
                 {
-                    Console.WriteLine("pong"); //TODO verwijderen
+                    // Console.WriteLine("pong"); //TODO verwijderen
                     _hostActive = true;
                 }
                 else {
@@ -245,7 +245,7 @@ namespace Session
 
         private void SendPing()
         {
-            Console.WriteLine("ping"); //TODO verwijderen
+            // Console.WriteLine("ping"); //TODO verwijderen
             SessionDTO sessionDTO = new SessionDTO{
                 SessionType = SessionType.SendPing,
                 Name = "ping"
