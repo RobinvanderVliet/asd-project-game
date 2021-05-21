@@ -1,9 +1,10 @@
 ﻿using Agent.Antlr.Ast;
-using Agent.Antlr.Checker;
 using System;
 using System.Collections.Generic;
+using Agent.Antlr.Checker;
 using Agent.Antlr.Grammar;
 using Agent.Antlr.Parser;
+using Agent.Generator;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using SyntaxErrorException = Agent.Exceptions.SyntaxErrorException;
@@ -15,14 +16,14 @@ namespace Agent
         private AST _ast;
 
         private List<string> _errors;
-        private Checker _checker;
-        private Generator generator;
+        private Checking _checking;
+        private Generating _generating;
 
         public Pipeline()
         {
             _errors = new List<string>();
             // transformer = new Transformer();
-            generator = new Generator();
+            _generating = new Generating();
         }
 
         public void ParseString(String input)
@@ -47,16 +48,16 @@ namespace Agent
 
         public virtual void CheckAst()
         {
-            if(_checker == null)
+            if(_checking == null)
             {
-                _checker = new Checker(_ast);
+                _checking = new Checking(_ast);
             }
-            // _checker.Check(_ast);
+            //_checking.Check(_ast);
         }
 
         public string GenerateAst()
         {
-            return generator.Execute(_ast);
+            return _generating.Execute(_ast);
         }
 
         public AST Ast
@@ -72,9 +73,9 @@ namespace Agent
             _errors.Clear();
         }
         
-        public Checker Checker
+        public Checking Checking
         {
-            set => _checker = value;
+            set => _checking = value;
         }
         
         public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine,

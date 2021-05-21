@@ -1,16 +1,15 @@
-﻿using Agent.Antlr.Ast;
-using Agent.Antlr.Ast.Comparables;
-using System;
+﻿using System;
 using System.Linq;
-using Action = Agent.Antlr.Ast.Action;
 using System.Threading.Tasks;
+using Agent.Antlr.Ast;
+using Agent.Antlr.Ast.Comparables;
+using Action = Agent.Antlr.Ast.Action;
 
-namespace Agent
+namespace Agent.Generator
 {
-    public class Generator
+    public class Generating
     {
         private string _stringBuilder = "";
-
         public string Execute(AST ast)
         {
             try
@@ -24,10 +23,8 @@ namespace Agent
             {
                 _stringBuilder += e.Message;
             }
-
             return _stringBuilder;
         }
-
         public void GenerateConfiguration(Node parent) 
         {
             string text = "";
@@ -35,7 +32,6 @@ namespace Agent
             {
                 text += GenerateRule((Rule)parent);
             }
-
             foreach (Node child in parent.GetChildren())
             {
                 if (child is Action)
@@ -49,12 +45,10 @@ namespace Agent
             }
             _stringBuilder += text;
         }
-
         private string GenerateRule(Rule parent)
         {
             return parent.SettingName + "=" + parent.Value + Environment.NewLine;
         }
-
         private string GenerateCondition(Node parent, string setting, string action)
         {
             string text = ""; 
@@ -65,7 +59,6 @@ namespace Agent
             }
             return text;
         }
-
         private string GenerateAction(Action parent, string settingName)
         {
             string text = settingName + "_" + parent.Name + "=" + parent.Name + Environment.NewLine;
@@ -75,7 +68,6 @@ namespace Agent
             }
             return text;
         }
-
         private string GenerateClause(Node parent, string settingName, string action ,string subject)
         {
             string text = "";
@@ -89,7 +81,6 @@ namespace Agent
             }
             return text;
         }
-
         private string generateWhen(Node parent, string settingName, string action ,string subject ,string status)
         {
             string text = "";
@@ -113,12 +104,10 @@ namespace Agent
             });
             return text;
         }
-
         private string generateOther(Node parent, string settingName, string action ,string subject ,string status)
         {
             return settingName + "_" + action + "_" + subject + "_" + "comparision" + "_" + status + "=" + ((ActionReference)((Otherwise)parent).GetChildren().FirstOrDefault()).Name + Environment.NewLine;
         }
-
         private string GenerateCompareble(Comparable node)
         {
             var nodeBase = node.GetType().FullName;

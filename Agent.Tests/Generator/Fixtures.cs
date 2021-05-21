@@ -3,7 +3,7 @@ using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
 using Agent.Antlr.Ast.Comparables.Subjects;
 
-namespace Agent.Tests.generator
+namespace Agent.Tests.Generator
 {
     /*
       Maakt AST trees voor de verschillende test bestanden om te vergelijken in de tests  
@@ -69,7 +69,7 @@ namespace Agent.Tests.generator
 
             configuration.AddChild(new Rule("explore", "random"))
                 .AddChild(new Rule("aggressive", "high"))
-                .AddChild(new Rule("chicken", "egg"));
+                .AddChild(new Rule("combat", "offensive"));
             configuration.AddChild((new Setting("combat"))
                 .AddChild((new Condition())
                     .AddChild((new When())

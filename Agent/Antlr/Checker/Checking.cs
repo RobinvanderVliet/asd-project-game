@@ -1,16 +1,16 @@
-using Agent.Antlr.Ast;
-using Agent.Antlr.Ast.Comparables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Agent.Antlr.Ast;
+using Agent.Antlr.Ast.Comparables;
 
 namespace Agent.Antlr.Checker
 {
-    public class Checker
+    public class Checking
     {
         private List<Node> _symboltable;
 
-        public Checker(AST ast)
+        public Checking(AST ast)
         {
             foreach (Node node in ast.root.GetChildren())
             {
@@ -76,7 +76,6 @@ namespace Agent.Antlr.Checker
 
         public virtual void Check(AST ast)
         {
-            throw new NotImplementedException();
         }
     }
 }
