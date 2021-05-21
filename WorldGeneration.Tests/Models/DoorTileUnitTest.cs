@@ -7,7 +7,7 @@ using WorldGeneration.Models.Interfaces;
 namespace WorldGeneration.Tests
 {
     [ExcludeFromCodeCoverage]
-    public class WallTileUnitTest
+    public class DoorTileUnitTest
     {
         private IBuildingTile _tile;
         private string _tileSymbol;
@@ -15,14 +15,14 @@ namespace WorldGeneration.Tests
         [SetUp]
         public void Setup()
         {
-            _tile = new WallTile();
-            _tileSymbol = "\u25A0";
+            _tile = new DoorTile();
+            _tileSymbol = "/";
         }
         
         [Test]
-        public void Test_InstanceOf_WallTile()
+        public void Test_InstanceOf_DoorTile()
         {
-            Assert.That(_tile, Is.InstanceOf<WallTile>());
+            Assert.That(_tile, Is.InstanceOf<DoorTile>());
         }
         
         [Test]
@@ -40,19 +40,19 @@ namespace WorldGeneration.Tests
         [Test]
         public void Test_SetX_EqualsTo_5()
         {
-            _tile.X = 5;
-            Assert.That(_tile.X, Is.EqualTo(5));
+            _tile.XPosition = 5;
+            Assert.That(_tile.XPosition, Is.EqualTo(5));
         }
         
         [Test]
         public void Test_SetY_EqualsTo_5()
         {
-            _tile.Y = 5;
-            Assert.That(_tile.Y, Is.EqualTo(5));
+            _tile.YPosition = 5;
+            Assert.That(_tile.YPosition, Is.EqualTo(5));
         }
         
         [Test]
-        public void Test_TileSymbol_EqualsTo_WallTileSymbol()
+        public void Test_TileSymbol_EqualsTo_DoorTileSymbol()
         {
             Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
         }
@@ -67,9 +67,9 @@ namespace WorldGeneration.Tests
         }
         
         [Test]
-        public void Test_IsAccessible_EqualsTo_False()
+        public void Test_IsAccessible_EqualsTo_True()
         {
-            Assert.That(_tile.IsAccessible, Is.EqualTo(false));
+            Assert.That(_tile.IsAccessible, Is.EqualTo(true));
         }
     }
 }

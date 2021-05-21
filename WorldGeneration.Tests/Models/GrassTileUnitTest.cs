@@ -1,34 +1,33 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
-using WorldGeneration.Models.BuildingTiles;
 using WorldGeneration.Models.Interfaces;
+using WorldGeneration.Models.TerrainTiles;
 
 namespace WorldGeneration.Tests
 {
     [ExcludeFromCodeCoverage]
-    public class HouseTileUnitTest
+    public class GrassTileUnitTest
     {
-        private IBuildingTile _tile;
+        private ITerrainTile _tile;
         private string _tileSymbol;
         
         [SetUp]
         public void Setup()
         {
-            _tile = new HouseTile();
-            _tileSymbol = "+";
-        }
-
-        [Test]
-        public void Test_InstanceOf_HouseTile()
-        {
-            Assert.That(_tile, Is.InstanceOf<HouseTile>());
+            _tile = new GrassTile(1,1);
+            _tileSymbol = ",";
         }
         
         [Test]
-        public void Test_InstanceOf_BuildingTile()
+        public void Test_InstanceOf_GrassTile()
         {
-            Assert.That(_tile, Is.InstanceOf<IBuildingTile>());
+            Assert.That(_tile, Is.InstanceOf<GrassTile>());
+        }
+        
+        [Test]
+        public void Test_InstanceOf_TerrainTile()
+        {
+            Assert.That(_tile, Is.InstanceOf<ITerrainTile>());
         }
         
         [Test]
@@ -40,30 +39,21 @@ namespace WorldGeneration.Tests
         [Test]
         public void Test_SetX_EqualsTo_5()
         {
-            _tile.X = 5;
-            Assert.That(_tile.X, Is.EqualTo(5));
+            _tile.XPosition = 5;
+            Assert.That(_tile.XPosition, Is.EqualTo(5));
         }
         
         [Test]
         public void Test_SetY_EqualsTo_5()
         {
-            _tile.Y = 5;
-            Assert.That(_tile.Y, Is.EqualTo(5));
+            _tile.YPosition = 5;
+            Assert.That(_tile.YPosition, Is.EqualTo(5));
         }
         
         [Test]
-        public void Test_TileSymbol_EqualsTo_HouseTileSymbol()
+        public void Test_TileSymbol_EqualsTo_GrassTileSymbol()
         {
             Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
-        }
-        
-        [Test]
-        public void Test_DrawBuilding_CanDrawBuilding()
-        {
-            Assert.Throws<NotImplementedException>(() =>
-            {
-                _tile.DrawBuilding();
-            });
         }
         
         [Test]

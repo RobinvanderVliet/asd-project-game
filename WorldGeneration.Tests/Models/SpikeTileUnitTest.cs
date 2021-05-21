@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using WorldGeneration.Models.HazardousTiles;
@@ -6,7 +7,7 @@ using WorldGeneration.Models.Interfaces;
 namespace WorldGeneration.Tests
 {
     [ExcludeFromCodeCoverage]
-    public class GasTileUnitTest
+    public class SpikeTileUnitTest
     {
         private IHazardousTile _tile;
         private string _tileSymbol;
@@ -14,14 +15,14 @@ namespace WorldGeneration.Tests
         [SetUp]
         public void Setup()
         {
-            _tile = new GasTile(3);
-            _tileSymbol = "%";
+            _tile = new SpikeTile(1,1);
+            _tileSymbol = "\u25B2";
         }
         
         [Test]
-        public void Test_InstanceOf_GasTile()
+        public void Test_InstanceOf_SpikeTile()
         {
-            Assert.That(_tile, Is.InstanceOf<GasTile>());
+            Assert.That(_tile, Is.InstanceOf<SpikeTile>());
         }
         
         [Test]
@@ -39,45 +40,35 @@ namespace WorldGeneration.Tests
         [Test]
         public void Test_SetX_EqualsTo_5()
         {
-            _tile.X = 5;
-            Assert.That(_tile.X, Is.EqualTo(5));
+            _tile.XPosition = 5;
+            Assert.That(_tile.XPosition, Is.EqualTo(5));
         }
         
         [Test]
         public void Test_SetY_EqualsTo_5()
         {
-            _tile.Y = 5;
-            Assert.That(_tile.Y, Is.EqualTo(5));
+            _tile.YPosition = 5;
+            Assert.That(_tile.YPosition, Is.EqualTo(5));
         }
         
         [Test]
-        public void Test_TileSymbol_EqualsTo_GasTileSymbol()
+        public void Test_TileSymbol_EqualsTo_SpikeTileSymbol()
         {
             Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
         }
         
         [Test]
-        public void Test_GetDamage_WithRadius1And5SecondsEqualsTo_5Damage()
+        public void Test_GetDamage_GreaterThan_1()
         {
-            _tile = new GasTile(1);
-            const int time = 5; // 5 seconds
-            Assert.That(_tile.GetDamage(time), Is.EqualTo(5));
+            const int time = 0;
+            Assert.That(_tile.GetDamage(time), Is.GreaterThan(1));
         }
         
         [Test]
-        public void Test_GetDamage_WithRadius2And5SecondsEqualsTo_10Damage()
+        public void Test_GetDamage_LessThan_11()
         {
-            _tile = new GasTile(2);
-            const int time = 5; // 5 seconds
-            Assert.That(_tile.GetDamage(time), Is.EqualTo(10));
-        }
-        
-        [Test]
-        public void Test_GetDamage_WithRadius3And5SecondsEqualsTo_15Damage()
-        {
-            _tile = new GasTile(3);
-            const int time = 5; // 5 seconds
-            Assert.That(_tile.GetDamage(time), Is.EqualTo(15));
+            const int time = 0;
+            Assert.That(_tile.GetDamage(time), Is.LessThan(11));
         }
         
         [Test]

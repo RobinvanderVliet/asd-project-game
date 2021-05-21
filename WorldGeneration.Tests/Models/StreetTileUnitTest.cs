@@ -6,7 +6,7 @@ using WorldGeneration.Models.TerrainTiles;
 namespace WorldGeneration.Tests
 {
     [ExcludeFromCodeCoverage]
-    public class GrassTileUnitTest
+    public class StreetTileUnitTest
     {
         private ITerrainTile _tile;
         private string _tileSymbol;
@@ -14,14 +14,14 @@ namespace WorldGeneration.Tests
         [SetUp]
         public void Setup()
         {
-            _tile = new GrassTile();
-            _tileSymbol = ",";
+            _tile = new StreetTile(1,1);
+            _tileSymbol = "\u2591";
         }
         
         [Test]
-        public void Test_InstanceOf_GrassTile()
+        public void Test_InstanceOf_StreetTile()
         {
-            Assert.That(_tile, Is.InstanceOf<GrassTile>());
+            Assert.That(_tile, Is.InstanceOf<StreetTile>());
         }
         
         [Test]
@@ -39,19 +39,19 @@ namespace WorldGeneration.Tests
         [Test]
         public void Test_SetX_EqualsTo_5()
         {
-            _tile.X = 5;
-            Assert.That(_tile.X, Is.EqualTo(5));
+            _tile.XPosition = 5;
+            Assert.That(_tile.XPosition, Is.EqualTo(5));
         }
         
         [Test]
         public void Test_SetY_EqualsTo_5()
         {
-            _tile.Y = 5;
-            Assert.That(_tile.Y, Is.EqualTo(5));
+            _tile.YPosition = 5;
+            Assert.That(_tile.YPosition, Is.EqualTo(5));
         }
         
         [Test]
-        public void Test_TileSymbol_EqualsTo_GrassTileSymbol()
+        public void Test_TileSymbol_EqualsTo_StreetTileSymbol()
         {
             Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
         }

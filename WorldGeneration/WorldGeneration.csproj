@@ -7,7 +7,7 @@
   <ItemGroup>
     <PackageReference Include="LiteDB" Version="5.0.10" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\DataTransfer\DataTransfer.csproj" />
   </ItemGroup>
