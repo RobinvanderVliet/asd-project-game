@@ -30,14 +30,14 @@ namespace Session
 
         public void ReceiveHeartbeat(string clientId)
         {
-            if (!PlayerKnown(clientId))
-            {
-                _players.Add(new HeartbeatDTO(clientId));
-            }
-            else
+            if (PlayerKnown(clientId))
             {
                 UpdatePlayer(clientId);
                 UpdateStatus();
+            }
+            else
+            {
+                _players.Add(new HeartbeatDTO(clientId));
             }
 
         }
@@ -47,7 +47,7 @@ namespace Session
             List<HeartbeatDTO> leavers = new List<HeartbeatDTO>();
             foreach (HeartbeatDTO player in _players)
             {
-                if (!player.status)
+                if (player.status)
                 {
                     leavers.Add(player);
                 }
@@ -69,18 +69,7 @@ namespace Session
 
         private bool PlayerKnown(string sessionID)
         {
-            if (_players == null)
-            {
-                return false;
-            }
-            foreach (HeartbeatDTO player in _players)
-            {
-                if (sessionID == player.sessionID)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return _players.Exists(player => player.sessionID == sessionID);
         }
 
         private void UpdateStatus()

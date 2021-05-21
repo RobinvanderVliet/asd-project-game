@@ -14,13 +14,13 @@ namespace Session
     {
         private IClientController _clientController;
         private Session _session;
+        private IHeartbeatHandler _heartbeatHandler;
         private Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;
         private Timer _hostPingTimer;
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
-        
-        private IHeartbeatHandler _heartbeat;
+
         public SessionHandler(IClientController clientController)
         {
             _clientController = clientController;
@@ -61,7 +61,7 @@ namespace Session
             _session.AddClient(_clientController.GetOriginId());
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
-            _heartbeat = new HeartbeatHandler();
+            _heartbeatHandler = new HeartbeatHandler();
             Console.Out.WriteLine("Created session with the name: " + _session.Name);
         }
 
@@ -128,9 +128,9 @@ namespace Session
 
         private HandlerResponseDTO HandleHeartbeat()
         {
-            if(_heartbeat != null)
+            if(_heartbeatHandler != null)
             {
-                _heartbeat.ReceiveHeartbeat(_clientController.GetOriginId());
+                _heartbeatHandler.ReceiveHeartbeat(_clientController.GetOriginId());
             }
 
             return new HandlerResponseDTO(SendAction.Ignore, null);
@@ -259,11 +259,11 @@ namespace Session
             _clientController.CreateHostController();
             _clientController.IsBackupHost = false;
 
-            _heartbeat = new HeartbeatHandler();
+            _heartbeatHandler = new HeartbeatHandler();
 
             foreach(string player in _session.GetAllClients())
             {
-                _heartbeat.ReceiveHeartbeat(player);
+                _heartbeatHandler.ReceiveHeartbeat(player);
             }
 
             // TODO: Enable Heartbeat check and enable agents, maybe this will be done when hostcontroller is activated?
