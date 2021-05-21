@@ -7,11 +7,6 @@ using System.Threading;
 using System.Timers;
 using Network.DTO;
 using WorldGeneration;
-using System.Timers;
-using DatabaseHandler;
-using DatabaseHandler.Poco;
-using DatabaseHandler.Services;
-using DatabaseHandler.Repository;
 using Timer = System.Timers.Timer;
 
 namespace Session
@@ -226,11 +221,6 @@ namespace Session
             }
         }
         
-        public int GetSessionSeed()
-        {
-            return _session.SessionSeed;
-        }
-
         public int GetSessionSeed()
         {
             return _session.SessionSeed;

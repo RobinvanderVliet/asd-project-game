@@ -3,6 +3,7 @@ using Network;
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using DatabaseHandler;
 using DatabaseHandler.Poco;
 using DatabaseHandler.Repository;
