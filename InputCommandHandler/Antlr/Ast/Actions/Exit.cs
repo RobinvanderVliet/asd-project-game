@@ -8,7 +8,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
-            return this.Equals(obj as Exit);
+            return Equals(obj as Exit);
         }
 
         [ExcludeFromCodeCoverage]

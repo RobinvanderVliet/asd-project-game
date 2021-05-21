@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Antlr4.Runtime.Atn;
-
-namespace Agent.Models
+﻿namespace Agent.Models
 {
     public class NpcConfiguration : Configuration
     {

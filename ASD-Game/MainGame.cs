@@ -1,19 +1,14 @@
 using Microsoft.Extensions.Logging;
 using System;
-using DatabaseHandler;
 using DatabaseHandler.Poco;
 using DatabaseHandler.Repository;
-using DatabaseHandler.Services;
 using InputCommandHandler;
-using Microsoft.Extensions.Logging.Abstractions;
 using Player.Model;
 using Player.Services;
 using System.Collections.Generic;
 using WorldGeneration;
-using WorldGeneration.Models.Interfaces;
 using Chat;
 using DataTransfer.DTO.Character;
-using DataTransfer.DTO.Player;
 using Network;
 using Session;
 using Player.ActionHandlers;
@@ -41,7 +36,7 @@ namespace ASD_project
             public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler,
                 ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IRepository<PlayerPoco> playerRepository, IClientController clientController, IWorldService worldService)
             {
-                this._log = log;
+                _log = log;
                 _inventory = inventory;
                 _chatHandler = chatHandler;
                 _sessionHandler = sessionHandler;
@@ -75,13 +70,12 @@ namespace ASD_project
             public void Run()
             {
                 Console.WriteLine("Game is gestart");
+                InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
 
-                // TODO: Remove from this method, team 2 will provide a command for it
-                // AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
-                // agentConfigurationService.StartConfiguration();
+                // AgentConfigurationService agentConfigurationService = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), inputHandler);
+                // agentConfigurationService.Configure();
 
                 //moet later vervangen worden
-                InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
                 IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
                 IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, _moveHandler, _clientController, _worldService);
                 Console.WriteLine("Type input messages below");
