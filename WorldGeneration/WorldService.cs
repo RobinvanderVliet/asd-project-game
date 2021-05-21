@@ -13,7 +13,7 @@ namespace WorldGeneration
             _world.UpdateCharacterPosition(mapCharacterDto);
         }
 
-        public void AddCharacterToWorld(MapCharacterDTO mapCharacterDto, Boolean isCurrentPlayer)
+        public void AddCharacterToWorld(MapCharacterDTO mapCharacterDto, bool isCurrentPlayer)
         {
             _world.AddCharacterToWorld(mapCharacterDto, isCurrentPlayer);
         }

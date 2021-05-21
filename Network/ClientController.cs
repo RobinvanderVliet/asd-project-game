@@ -88,7 +88,7 @@ namespace Network
             _hostController = hostController;
         }
 
-        public Boolean IsHost()
+        public bool IsHost()
         {
             return _hostController != null;
         }

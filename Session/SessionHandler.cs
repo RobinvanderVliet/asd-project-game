@@ -40,7 +40,7 @@ namespace Session
         }
 
 
-        public Boolean JoinSession(string sessionId)
+        public bool JoinSession(string sessionId)
         {
             if (!_availableSessions.TryGetValue(sessionId, out PacketDTO packetDTO))
             {
@@ -68,7 +68,7 @@ namespace Session
             return _session.InSession;
         }
 
-        public Boolean CreateSession(string sessionName)
+        public bool CreateSession(string sessionName)
         {
             _session = new Session(sessionName);
             _session.GenerateSessionId();
@@ -351,7 +351,7 @@ namespace Session
             return _hostActive;
         }
         
-        public void setHostActive(Boolean boolean)
+        public void setHostActive(bool boolean)
         {
             _hostActive = boolean;
         }

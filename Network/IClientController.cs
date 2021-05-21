@@ -11,6 +11,6 @@ namespace Network
         public void CreateHostController();
         public string GetOriginId();
 
-        public Boolean IsHost();
+        public bool IsHost();
     }
 }

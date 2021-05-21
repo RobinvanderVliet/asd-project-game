@@ -27,7 +27,7 @@ namespace ASD_project
             private readonly IGameSessionHandler _gameSessionHandler;
             private readonly IRepository<PlayerPoco> _playerRepository;
         //    private readonly IRepository<MainGamePoco> _mainGameRepository;
-            private Boolean GameStarted = true;
+            private bool GameStarted = true;
             private List<MapCharacterDTO> playerPositions;
             private readonly IClientController _clientController;
             private readonly IWorldService _worldService;

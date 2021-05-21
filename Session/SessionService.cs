@@ -6,9 +6,9 @@ namespace Session
     {
         private ISessionHandler _sessionHandler;
         private readonly IGameSessionHandler _gameSessionHandler; 
-        public Boolean inSession { get; set; }
+        public bool inSession { get; set; }
 
-        public Boolean inGame { get; set; }
+        public bool inGame { get; set; }
 
         public SessionService(ISessionHandler sessionHandler, IGameSessionHandler gameSessionHandler)
         {
