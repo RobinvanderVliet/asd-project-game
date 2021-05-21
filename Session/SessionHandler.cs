@@ -24,14 +24,12 @@ namespace Session
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Session);
         }
-
-        public void StartSession(string sessionID)
+        
+        public List<string> GetAllClients()
         {
-            var dto = SetupGameHost();
-            sendGameSessionDTO(dto);
+           return _session.GetAllClients();
         }
-
-
+     
         public Boolean JoinSession(string sessionId)
         {
             if (!_availableSessions.TryGetValue(sessionId, out PacketDTO packetDTO))
@@ -79,52 +77,7 @@ namespace Session
             sendSessionDTO(sessionDTO);
         }
 
-        public StartGameDto SetupGameHost()
-        {
-            var tmp = new DbConnection();
-            tmp.SetForeignKeys();
-
-            var playerRepository = new Repository<PlayerPoco>(tmp);
-            var tmpServicePlayer = new ServicesDb<PlayerPoco>(playerRepository);
-            var tmpGameRepostory = new Repository<GamePoco>(tmp);
-            var tmpServiceGame = new ServicesDb<GamePoco>(tmpGameRepostory);
-
-            string gameGuid = Guid.NewGuid().ToString();
-            var tmpObject = new GamePoco {GameGuid = gameGuid};
-            tmpServiceGame.CreateAsync(tmpObject);
-
-            var resultGame = tmpServiceGame.GetAllAsync();
-            resultGame.Wait();
-
-            List<string> allClients = _session.GetAllClients();
-            Dictionary<string, int[]> players = new Dictionary<string, int[]>();
-
-            int playerX = 26; // spawn position
-            int playerY = 11; // spawn position
-            foreach (string element in allClients)
-            {
-                int[] playerPosition = new int[2];
-                playerPosition[0] = playerX;
-                playerPosition[1] = playerY;
-                players.Add(element, playerPosition);
-                var tmpPlayer = new PlayerPoco
-                    {PlayerGuid = element, GameGuid = tmpObject.GameGuid, XPosition = playerX, YPosition = playerY};
-                tmpServicePlayer.CreateAsync(tmpPlayer);
-
-                playerX += 2; // spawn position + 2 each client
-                playerY += 2; // spawn position + 2 each client
-            }
-
-            StartGameDto startGameDto = new StartGameDto();
-            startGameDto.GameGuid = gameGuid;
-            startGameDto.PlayerLocations = players;
-
-            var resultPlayer = tmpServicePlayer.GetAllAsync();
-            resultPlayer.Wait();
-
-            return startGameDto;
-        }
-
+       
 
         private void sendGameSessionDTO(StartGameDto startGameDto)
         {

@@ -1,4 +1,9 @@
 using System;
+using System.Collections.Generic;
+using DatabaseHandler;
+using DatabaseHandler.Poco;
+using DatabaseHandler.Repository;
+using DatabaseHandler.Services;
 using DataTransfer.DTO.Character;
 using Network;
 using Network.DTO;
@@ -15,6 +20,7 @@ namespace Session
         private IClientController _clientController;
         private ISessionHandler _sessionHandler;
         private IWorldService _worldService;
+        
         public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler)
         {
             _clientController = clientController;
@@ -26,9 +32,54 @@ namespace Session
         public void SendGameSession(ISessionHandler sessionHandler)
         {
             _sessionHandler = sessionHandler;
-            var dto =  _sessionHandler.SetupGameHost();
+            var dto = SetupGameHost();
             SendGameSessionDTO(dto);
+        }
+    
+        
+        public StartGameDto SetupGameHost()
+        {
+            var dbConnection = new DbConnection();
+
+            var playerRepository = new Repository<PlayerPoco>(dbConnection);
+            var servicePlayer = new ServicesDb<PlayerPoco>(playerRepository);
+            var gameRepository = new Repository<GamePoco>(dbConnection);
+            var gameService = new ServicesDb<GamePoco>(gameRepository);
+
+            string gameGuid = Guid.NewGuid().ToString();
+            var gamePoco = new GamePoco {GameGuid = gameGuid, PlayerGUIDHost = _clientController.GetOriginId()};
+            gameService.CreateAsync(gamePoco);
+
+            var tmpresult = gameService.GetAllAsync();
+
+            tmpresult.Wait();
+
+  
+            List<string> allClients = _sessionHandler.GetAllClients();
+            Dictionary<string, int[]> players = new Dictionary<string, int[]>();
             
+            // Needs to be refactored to something random in construction; this was for testing
+            int playerX = 26; // spawn position
+            int playerY = 11; // spawn position
+            foreach (string element in allClients)
+            {
+                int[] playerPosition = new int[2];
+                playerPosition[0] = playerX;
+                playerPosition[1] = playerY;
+                players.Add(element, playerPosition);
+                var tmpPlayer = new PlayerPoco
+                    {PlayerGuid = element, GameGuid = gamePoco.GameGuid, XPosition = playerX, YPosition = playerY};
+                servicePlayer.CreateAsync(tmpPlayer);
+
+                playerX += 2; // spawn position + 2 each client
+                playerY += 2; // spawn position + 2 each client
+            }
+
+            StartGameDto startGameDto = new StartGameDto();
+            startGameDto.GameGuid = gameGuid;
+            startGameDto.PlayerLocations = players;
+
+            return startGameDto;
         }
         
         private void SendGameSessionDTO(StartGameDto startGameDto)
