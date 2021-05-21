@@ -47,7 +47,7 @@ namespace Session.Tests
                 _sut.JoinSession(invalidSessionId);
 
                 //Assert ---------
-                string expected = string.Format("Could not find game!\r\n", Environment.NewLine);
+                string expected = string.Format("Could not find game!\r\n", Environment.NewLine); //TODO not working on Linux
                 Assert.AreEqual(expected, sw.ToString());
             }
         }

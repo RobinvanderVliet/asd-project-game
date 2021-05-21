@@ -29,6 +29,8 @@ namespace Session
      
         public bool JoinSession(string sessionId)
         {
+            var joinSession = false;
+
             if (!_availableSessions.TryGetValue(sessionId, out PacketDTO packetDTO))
             {
                 Console.WriteLine("Could not find game!");
@@ -47,10 +49,10 @@ namespace Session
                 sessionDTO.ClientIds.Add(_clientController.GetOriginId());
                 sessionDTO.SessionSeed = sessionDto.SessionSeed;
                 sendSessionDTO(sessionDTO);
-                _session.InSession = true;
+                joinSession = true;
             }
 
-            return _session.InSession;
+            return joinSession;
         }
 
         public bool CreateSession(string sessionName)
