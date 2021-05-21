@@ -53,7 +53,7 @@ namespace Network
 
         public void SendPayload(string payload, PacketType packetType)
         {
-            if (String.IsNullOrEmpty(payload))
+            if (string.IsNullOrEmpty(payload))
             {
                 throw new Exception("Payload is empty.");
             }
@@ -85,7 +85,7 @@ namespace Network
             _hostController = hostController;
         }
 
-        public Boolean IsHost()
+        public bool IsHost()
         {
             return _hostController != null;
         }

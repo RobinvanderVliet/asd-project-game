@@ -1,6 +1,4 @@
 ﻿using DataTransfer.DTO.Character;
-using DataTransfer.DTO.Player;
-using Player.Services;
 
 namespace Player.DTO
 {

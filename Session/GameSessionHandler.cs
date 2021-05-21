@@ -49,11 +49,6 @@ namespace Session
             string gameGuid = Guid.NewGuid().ToString();
             var gamePoco = new GamePoco {GameGuid = gameGuid, PlayerGUIDHost = _clientController.GetOriginId()};
             gameService.CreateAsync(gamePoco);
-
-            var tmpresult = gameService.GetAllAsync();
-
-            tmpresult.Wait();
-
   
             List<string> allClients = _sessionHandler.GetAllClients();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
@@ -96,12 +91,6 @@ namespace Session
 
         private void HandleStartGameSession(StartGameDto startGameDto)
         {
-            if (_clientController.IsHost())
-            {
-                Console.WriteLine("Ik ben de host, moet iets doen met de database");
-                
-            }
-            
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
 
             foreach (var player in startGameDto.PlayerLocations)

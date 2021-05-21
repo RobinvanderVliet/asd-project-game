@@ -9,7 +9,6 @@ namespace Network
         public void SetSessionId(string sessionId);
         public void CreateHostController();
         public string GetOriginId();
-
-        public Boolean IsHost();
+        public bool IsHost();
     }
 }

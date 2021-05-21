@@ -5,10 +5,7 @@ using System;
 using System.Collections.Generic;
 using Network.DTO;
 using WorldGeneration;
-using DatabaseHandler;
-using DatabaseHandler.Poco;
-using DatabaseHandler.Services;
-using DatabaseHandler.Repository;
+
 
 
 namespace Session
@@ -30,7 +27,7 @@ namespace Session
            return _session.GetAllClients();
         }
      
-        public Boolean JoinSession(string sessionId)
+        public bool JoinSession(string sessionId)
         {
             if (!_availableSessions.TryGetValue(sessionId, out PacketDTO packetDTO))
             {
@@ -56,7 +53,7 @@ namespace Session
             return _session.InSession;
         }
 
-        public Boolean CreateSession(string sessionName)
+        public bool CreateSession(string sessionName)
         {
             _session = new Session(sessionName);
             _session.GenerateSessionId();
@@ -75,14 +72,6 @@ namespace Session
         {
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             sendSessionDTO(sessionDTO);
-        }
-
-       
-
-        private void sendGameSessionDTO(StartGameDto startGameDto)
-        {
-            var payload = JsonConvert.SerializeObject(startGameDto);
-            _clientController.SendPayload(payload, PacketType.GameSession);
         }
 
         private void sendSessionDTO(SessionDTO sessionDTO)
@@ -142,25 +131,6 @@ namespace Session
             Console.WriteLine(packet.Header.SessionID + " Name: " + sessionDTO.Name);
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
-
-        // private HandlerResponseDTO StartSession(PacketDTO packet)
-        // {
-        //     if (packet.Header.Target == "host")
-        //     {
-        //         Console.WriteLine("starting Game");
-        //      StartGameDto startGameDto = SetupGameHost();
-        //      var jsonObject = JsonConvert.SerializeObject(startGameDto);
-        //      sendGameSessionDTO(startGameDto);
-        //      
-        //      return new HandlerResponseDTO(SendAction.SendToClients, jsonObject);
-        //      
-        //     }
-        //     else
-        //     {
-        //         return new HandlerResponseDTO(SendAction.Ignore, "You're not the host");
-        //     }
-        // }
-
         private HandlerResponseDTO addPlayerToSession(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);

@@ -1,5 +1,4 @@
 ﻿using DataTransfer.DTO.Character;
-using WorldGeneration;
 
 namespace Player.ActionHandlers
 {
