@@ -1,13 +1,12 @@
-﻿using Agent.antlr.ast;
+﻿using Agent.Antlr.Ast;
+using Agent.Antlr.Checker;
 using System;
 using System.Collections.Generic;
-using Agent.antlr.checker;
-using Agent.antlr.exception;
-using Agent.antlr.grammar;
-using Agent.parser;
+using Agent.Antlr.Grammar;
+using Agent.Antlr.Parser;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using SyntaxErrorException = Agent.exceptions.SyntaxErrorException;
+using SyntaxErrorException = Agent.Exceptions.SyntaxErrorException;
 
 namespace Agent
 {
@@ -46,13 +45,13 @@ namespace Agent
 
         }
 
-        public void CheckAst()
+        public virtual void CheckAst()
         {
             if(_checker == null)
             {
                 _checker = new Checker(_ast);
             }
-            _checker.Check(_ast);
+            // _checker.Check(_ast);
         }
 
         public string GenerateAst()
