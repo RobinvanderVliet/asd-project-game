@@ -19,6 +19,15 @@ namespace Network
             }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(2000));
         }
 
+        public HeartbeatHandler(List<HeartbeatDTO> _playerlist)
+        {
+            _players = _playerlist;
+            Timer timer = new Timer((e) =>
+            {
+                UpdateStatus();
+            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(2000));
+        }
+
         public void ReceiveHeartbeat(string clientId)
         {
             if (!PlayerKnown(clientId))

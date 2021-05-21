@@ -260,6 +260,14 @@ namespace Session
         {
             _clientController.CreateHostController();
             _clientController.IsBackupHost = false;
+
+            _heartbeat = new HeartbeatHandler();
+
+            foreach(string player in _session.GetAllClients())
+            {
+                _heartbeat.ReceiveHeartbeat(player);
+            }
+
             // TODO: Enable Heartbeat check and enable agents, maybe this will be done when hostcontroller is activated?
             // TODO: Make new client backup host
             
