@@ -16,7 +16,7 @@ namespace Creature
         public Player(ICreatureStateMachine playerStateMachine)
         {
             _clientController = new ClientController(new NetworkComponent());
-            SendChatMessenge("Starting Agent to replace player");
+            SendChatMessage("Starting Agent to replace player");
             _playerStateMachine = playerStateMachine;
         }
 

@@ -21,15 +21,13 @@ namespace Network.Tests
         //Declaration of mocks
         private Mock<INetworkComponent> _mockedNetworkComponent;
         private Mock<IPacketHandler> _mockedClientController;
-        private Mock<IHeartbeatHandler> _mockedHeartbeatHandler;
 
         [SetUp]
         public void Setup()
         {
             _mockedNetworkComponent = new Mock<INetworkComponent>();
             _mockedClientController = new Mock<IPacketHandler>();
-            _mockedHeartbeatHandler = new Mock<IHeartbeatHandler>();
-            _sut = new HostController(_mockedNetworkComponent.Object, _mockedClientController.Object, _sessionId, _mockedHeartbeatHandler.Object);
+            _sut = new HostController(_mockedNetworkComponent.Object, _mockedClientController.Object, _sessionId);
             _packetHeaderDTO = new PacketHeaderDTO();
             _packetDTO = new PacketDTO();
         }
@@ -87,23 +85,6 @@ namespace Network.Tests
             //Assert ---------
             _mockedClientController.Verify(mock => mock.HandlePacket(_packetDTO), Times.Never);
             _mockedNetworkComponent.Verify(mock => mock.SendPacket(_packetDTO), Times.Never);
-        }
-
-        [Test]
-        public void Test_ReceivePacket_ReceiveHeartbeat()
-        {
-            //Arrange ---------
-            _packetHeaderDTO.SessionID = "TestSession";
-            _handlerResponseDTO = new HandlerResponseDTO(SendAction.Catch, null);
-            _packetDTO.Header = _packetHeaderDTO;
-            _mockedClientController.Setup(mock => mock.HandlePacket(_packetDTO)).Returns(_handlerResponseDTO);
-            _mockedHeartbeatHandler.Setup(mock => mock.ReceiveHeartbeat(_packetDTO));
-
-            //Act ---------
-            _sut.ReceivePacket(_packetDTO);
-
-            //Assert ---------
-            _mockedHeartbeatHandler.Verify(mock => mock.ReceiveHeartbeat(_packetDTO));
         }
     }
 }
