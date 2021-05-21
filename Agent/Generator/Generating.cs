@@ -1,12 +1,13 @@
-﻿using Agent.Antlr.Ast;
-using Agent.Antlr.Ast.Comparables;
-using System;
+﻿using System;
 using System.Linq;
-using Action = Agent.Antlr.Ast.Action;
 using System.Threading.Tasks;
-namespace Agent
+using Agent.Antlr.Ast;
+using Agent.Antlr.Ast.Comparables;
+using Action = Agent.Antlr.Ast.Action;
+
+namespace Agent.Generator
 {
-    public class Generator
+    public class Generating
     {
         private string _stringBuilder = "";
         public string Execute(AST ast)

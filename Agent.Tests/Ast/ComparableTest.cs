@@ -1,10 +1,9 @@
-﻿using Agent.Antlr.Ast;
+﻿using System.Diagnostics.CodeAnalysis;
+using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
-using System;
 using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
 
-namespace Agent.Tests.ast
+namespace Agent.Tests.Ast
 {
     [ExcludeFromCodeCoverage]
     

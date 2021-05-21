@@ -69,7 +69,7 @@ namespace Agent.Tests.Generator
 
             configuration.AddChild(new Rule("explore", "random"))
                 .AddChild(new Rule("aggressive", "high"))
-                .AddChild(new Rule("chicken", "egg"));
+                .AddChild(new Rule("combat", "offensive"));
             configuration.AddChild((new Setting("combat"))
                 .AddChild((new Condition())
                     .AddChild((new When())

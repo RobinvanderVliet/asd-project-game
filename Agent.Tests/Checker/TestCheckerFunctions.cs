@@ -1,24 +1,23 @@
-using Agent.Antlr.Ast;
-using Agent.Antlr.Ast.Comparables;
-using Agent.Antlr.Checker;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Agent.Antlr.Ast;
+using Agent.Antlr.Ast.Comparables;
 using Moq;
 using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
 
-namespace Agent.Tests.checker
+namespace Agent.Tests.Checker
 {
     [ExcludeFromCodeCoverage]
     public class TestCheckerFunctions
     {
-        private Checker _sut;
+        private Antlr.Checker.Checking _sut;
 
         [SetUp]
         public void Setup()
         {
             Mock<AST> ast = new Mock<AST>();
-            _sut = new Checker(ast.Object);
+            _sut = new Antlr.Checker.Checking(ast.Object);
         }
 
 
