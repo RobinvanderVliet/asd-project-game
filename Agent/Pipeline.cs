@@ -1,10 +1,10 @@
-﻿using Agent.antlr.ast;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Agent.antlr.checker;
-using Agent.antlr.exception;
+using Agent.Antlr.Ast;
+using Agent.Antlr.Checker;
+using Agent.Antlr.Exception;
 using Agent.antlr.grammar;
-using Agent.antlr.parser;
+using Agent.Antlr.Parser;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using SyntaxErrorException = Agent.exceptions.SyntaxErrorException;
