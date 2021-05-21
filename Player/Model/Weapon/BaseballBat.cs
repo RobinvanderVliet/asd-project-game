@@ -7,7 +7,7 @@ namespace Player.Model.Weapon
     {
         public BaseBallBat()
         {
-            Name = "Baseball Bat";
+            ItemName = "Baseball Bat";
             Type = WeaponType.Melee;
             Rarity = Rarity.Uncommon;
             Speed = WeaponSpeed.Slow;

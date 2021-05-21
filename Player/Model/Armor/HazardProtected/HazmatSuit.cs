@@ -7,12 +7,12 @@ namespace Player.Model.Armor.HazardProtected
     {
         public HazmatSuit()
         {
-            Name = "Hazmat suit";
+            ItemName = "Hazmat suit";
             ArmorType = ArmorType.Body;
             Rarity = Rarity.Rare;
             ArmorProtectionPoints = 20;
-            RPP = 80;
-            SP = -20;
+            RadiationProtectionPoints = 80;
+            StaminaPoints = -20;
         }
     }
 }

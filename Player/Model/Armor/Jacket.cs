@@ -7,7 +7,7 @@ namespace Player.Model.Armor
     {
         public Jacket()
         {
-            Name = "Jacket";
+            ItemName = "Jacket";
             ArmorType = ArmorType.Body;
             Rarity = Rarity.Common;
             ArmorProtectionPoints = 10;

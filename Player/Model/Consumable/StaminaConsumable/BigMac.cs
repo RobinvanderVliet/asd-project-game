@@ -7,7 +7,7 @@ namespace Player.Model.Consumable.StaminaConsumable
     {
         public BigMac()
         {
-            Name = "Big Mac";
+            ItemName = "Big Mac";
             Stamina = Stamina.Low;
             Rarity = Rarity.Common;
         }

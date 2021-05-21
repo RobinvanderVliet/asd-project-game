@@ -1,11 +1,14 @@
-﻿using Player.Model.ItemStats;
+﻿using Player.Model;
+using Player.Model.ItemStats;
 using Player.Model.Weapon.WeaponStats;
 
 namespace Weapon
 {
-    public class Weapon
+    public class Weapon : IItem
     {
-        protected string Name { get; set; }
+        
+        public string Description { get; set; }
+        public string ItemName { get; set; }
         protected WeaponType Type { get; set; }
         protected Rarity Rarity { get; set; }
         protected WeaponSpeed Speed { get; set; }
@@ -26,5 +29,6 @@ namespace Weapon
         {
             return (int) Distance;
         }
+        
     }
 }

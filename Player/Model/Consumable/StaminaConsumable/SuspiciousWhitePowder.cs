@@ -7,7 +7,7 @@ namespace Player.Model.Consumable.StaminaConsumable
     {
         public SuspiciousWhitePowder()
         {
-            Name = "Suspicious white powder";
+            ItemName = "Suspicious white powder";
             Stamina = Stamina.High;
             Rarity = Rarity.Rare;
         }

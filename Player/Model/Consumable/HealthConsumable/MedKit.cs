@@ -7,7 +7,7 @@ namespace Player.Model.Consumable.HealthConsumable
     {
         public MedKit()
         {
-            Name = "Medkit";
+            ItemName = "Medkit";
             Rarity = Rarity.Rare;
             Health = Health.High;
         }

@@ -7,7 +7,7 @@ namespace Player.Model.Consumable.StaminaConsumable
     {
         public MonsterEnergy()
         {
-            Name = "Monster energy";
+            ItemName = "Monster energy";
             Stamina = Stamina.Medium;
             Rarity = Rarity.Uncommon;
         }

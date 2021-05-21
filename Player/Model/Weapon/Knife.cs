@@ -8,7 +8,7 @@ namespace Weapon
         
         public Knife()
         {
-            Name = "Knife";
+            ItemName = "Knife";
             Type = WeaponType.Melee;
             Rarity = Rarity.Common;
             Speed = WeaponSpeed.Slow;

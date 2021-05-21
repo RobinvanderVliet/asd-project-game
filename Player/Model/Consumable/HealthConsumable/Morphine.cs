@@ -7,7 +7,7 @@ namespace Player.Model.Consumable.HealthConsumable
     {
         public Morphine()
         {
-            Name = "Morphine";
+            ItemName = "Morphine";
             Health = Health.Medium;
             Rarity = Rarity.Uncommon;
         }

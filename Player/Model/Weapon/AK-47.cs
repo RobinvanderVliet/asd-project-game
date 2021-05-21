@@ -7,7 +7,7 @@ namespace Weapon
     {
         public AK_47()
         {
-            Name = "AK-47";
+            ItemName = "AK-47";
             Type = WeaponType.Range;
             Rarity = Rarity.Rare;
             Speed = WeaponSpeed.Average;

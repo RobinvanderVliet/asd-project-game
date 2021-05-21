@@ -7,7 +7,7 @@ namespace Player.Model.Consumable.HealthConsumable
     {
         public Bandage()
         {
-            Name = "Bandage";
+            ItemName = "Bandage";
             Health = Health.Low;
             Rarity = Rarity.Common;
         }

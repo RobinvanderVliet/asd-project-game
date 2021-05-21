@@ -7,7 +7,7 @@ namespace Weapon
     {
         public P90()
         {
-            Name = "P90";
+            ItemName = "P90";
             Type = WeaponType.Range;
             Rarity = Rarity.Rare;
             Speed = WeaponSpeed.Fast;

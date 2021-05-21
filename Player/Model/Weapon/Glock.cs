@@ -7,7 +7,7 @@ namespace Weapon
     {
         public Glock()
         {
-            Name = "Glock";
+            ItemName = "Glock";
             Type = WeaponType.Range;
             Rarity = Rarity.Uncommon;
             Speed = WeaponSpeed.Slow;

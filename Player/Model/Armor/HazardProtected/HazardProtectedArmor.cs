@@ -2,7 +2,7 @@
 {
     public class HazardProtectedArmor : Armor
     {
-        protected int RPP { get; set; }
-        protected int SP { get; set; }
+        protected int RadiationProtectionPoints { get; set; }
+        protected int StaminaPoints { get; set; }
     }
 }

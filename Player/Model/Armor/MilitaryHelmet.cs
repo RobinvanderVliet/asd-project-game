@@ -7,7 +7,7 @@ namespace Player.Model.Armor
     {
         public MilitaryHelmet()
         {
-            Name = "Military helmet";
+            ItemName = "Military helmet";
             ArmorType = ArmorType.Helmet;
             Rarity = Rarity.Rare;
             ArmorProtectionPoints = 20;

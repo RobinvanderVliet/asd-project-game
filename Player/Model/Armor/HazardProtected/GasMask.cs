@@ -7,12 +7,12 @@ namespace Player.Model.Armor.HazardProtected
     {
         public GasMask()
         {
-            Name = "Gas mask";
+            ItemName = "Gas mask";
             ArmorType = ArmorType.Helmet;
             Rarity = Rarity.Uncommon;
             ArmorProtectionPoints = 20;
-            RPP = 40;
-            SP = -20;
+            RadiationProtectionPoints = 40;
+            StaminaPoints = -20;
         }
     }
 }

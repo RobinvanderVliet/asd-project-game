@@ -3,9 +3,10 @@ using Player.Model.ItemStats;
 
 namespace Player.Model.Consumable
 {
-    public class Consumable
+    public class Consumable : IItem
     {
-        protected string Name { get; set; }
+        public string Description { get; set; }
+        public string ItemName { get; set; }
         protected Rarity Rarity { get; set; }
     }
 }

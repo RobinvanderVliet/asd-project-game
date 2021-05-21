@@ -7,7 +7,7 @@ namespace Player.Model.Consumable.HazardProtectedConsumable
     {
         public IodineTablets()
         {
-            Name = "Iodine tablets";
+            ItemName = "Iodine tablets";
             RPP = 20;
             Rarity = Rarity.Common;
         }

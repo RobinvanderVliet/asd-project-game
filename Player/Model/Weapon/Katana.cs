@@ -7,7 +7,7 @@ namespace Weapon
     {
         public Katana()
         {
-            Name = "Katana";
+            ItemName = "Katana";
             Type = WeaponType.Melee;
             Rarity = Rarity.Rare;
             Speed = WeaponSpeed.Fast;
