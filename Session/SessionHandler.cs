@@ -133,10 +133,9 @@ namespace Session
             if (!_hostActive)
             {
                 _hostInactiveCounter++;
-
-                if (_hostInactiveCounter > 5)
+                Console.WriteLine(_hostInactiveCounter);
+                if (_hostInactiveCounter >= 5)
                 {
-                    Console.WriteLine("ik kom hier dfdsfgsdgsdfgdfughdfughadfuikghadfugyifhgo");
                     _hostPingTimer.Dispose();
                     _hostActive = true;
                     _hostInactiveCounter = 0;
@@ -154,20 +153,25 @@ namespace Session
             if (packet.Header.Target.Equals("client")) {
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
-            if (packet.HandlerResponse != null)
+
+            if (packet.Header.SessionID.Equals(_clientController.SessionId))
             {
-                // Console.WriteLine("pong"); //TODO verwijderen
-                _hostActive = true;
-                return new HandlerResponseDTO(SendAction.Ignore, null);
+                if (packet.HandlerResponse != null)
+                {
+                    Console.WriteLine("pong"); //TODO verwijderen
+                    _hostActive = true;
+                }
+                else {
+                    SessionDTO sessionDTO = new SessionDTO {
+                        SessionType = SessionType.ReceivedPingResponse,
+                        Name = "pong"
+                    };
+                    var jsonObject = JsonConvert.SerializeObject(sessionDTO);
+                    return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
+                }   
             }
-            else {
-                SessionDTO sessionDTO = new SessionDTO {
-                    SessionType = SessionType.ReceivedPingResponse,
-                    Name = "pong"
-                };
-                var jsonObject = JsonConvert.SerializeObject(sessionDTO);
-                return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
-            }
+            
+            return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
         private HandlerResponseDTO handleRequestSessions()
@@ -241,7 +245,7 @@ namespace Session
 
         private void SendPing()
         {
-            // Console.WriteLine("ping"); //TODO verwijderen
+            Console.WriteLine("ping"); //TODO verwijderen
             SessionDTO sessionDTO = new SessionDTO{
                 SessionType = SessionType.SendPing,
                 Name = "ping"

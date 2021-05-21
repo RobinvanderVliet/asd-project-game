@@ -13,6 +13,7 @@ namespace Network
         private Dictionary<PacketType, IPacketHandler> _subscribers = new();
         private bool _isBackupHost;
         public bool IsBackupHost { get => _isBackupHost; set => _isBackupHost = value; }
+        public string SessionId { get => _sessionId; }
 
         public ClientController(INetworkComponent networkComponent)
         {
