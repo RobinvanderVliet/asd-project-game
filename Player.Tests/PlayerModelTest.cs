@@ -114,16 +114,6 @@ namespace Player.Tests
         }
         
         [Test]
-        public void Test_GetCurrentPosition_GetsCurrentPositionSuccessfully()
-        {
-            int expectedX = 26;
-            int expectedY = 11;
-            
-            Assert.AreEqual(expectedX, _sut.XPosition);
-            Assert.AreEqual(expectedY, _sut.YPosition);
-        }
-        
-        [Test]
         public void Test_SetCurrentPosition_SetsCurrentPositionSuccessfully()
         {
             int expectedX = 27;
