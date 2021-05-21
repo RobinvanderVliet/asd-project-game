@@ -13,7 +13,7 @@ namespace Network.Tests
 
         //Declaration of variables
         private NetworkComponent _sut;
-        private PacketHeaderDTO _packetHeaderDTO;
+        private HeartbeatDTO _packetHeaderDTO;
         private PacketDTO _packetDTO;
 
         //Declaration of mocks
@@ -29,7 +29,7 @@ namespace Network.Tests
             _mockedWebSocketConnection = new Mock<IWebSocketConnection>();
             _sut = new NetworkComponent(_mockedWebSocketConnection.Object);
             _sut.SetClientController(_mockedClientController.Object);
-            _packetHeaderDTO = new PacketHeaderDTO();
+            _packetHeaderDTO = new HeartbeatDTO();
             _packetDTO = new PacketDTO();
         }
 

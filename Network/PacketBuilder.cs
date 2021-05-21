@@ -5,7 +5,7 @@ namespace Network
     [ExcludeFromCodeCoverage]
     public class PacketBuilder
     {
-        PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+        HeartbeatDTO packetHeaderDTO = new HeartbeatDTO();
         PacketDTO packetDTO = new PacketDTO();
 
         public PacketBuilder SetTarget(string target)

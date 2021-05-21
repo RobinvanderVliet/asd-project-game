@@ -1,9 +1,9 @@
-﻿using Network.DTO;
-using System;
+﻿using System;
+using Session.DTO;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Network
+namespace Session
 {
     public class HeartbeatHandler : IHeartbeatHandler
     {
@@ -31,23 +31,23 @@ namespace Network
         public void ReceiveHeartbeat(string clientId)
         {
             if (!PlayerKnown(clientId))
-            { 
-               _players.Add(new HeartbeatDTO(clientId));
+            {
+                _players.Add(new HeartbeatDTO(clientId));
             }
             else
             {
                 UpdatePlayer(clientId);
                 UpdateStatus();
             }
-            
+
         }
 
         private void CheckStatus()
         {
             List<HeartbeatDTO> leavers = new List<HeartbeatDTO>();
-            foreach(HeartbeatDTO player in _players)
+            foreach (HeartbeatDTO player in _players)
             {
-                if(player.status == 0)
+                if (player.status)
                 {
                     leavers.Add(player);
                 }
@@ -61,21 +61,21 @@ namespace Network
         private void EnablePlayerAgent(List<HeartbeatDTO> leavers)
         {
             Console.WriteLine("Agents are enabled");
-            foreach(HeartbeatDTO player in leavers)
+            foreach (HeartbeatDTO player in leavers)
             {
                 _players.Remove(player);
             }
         }
 
-        private bool PlayerKnown(string sessionID) 
+        private bool PlayerKnown(string sessionID)
         {
-            if(_players == null)
+            if (_players == null)
             {
                 return false;
             }
-            foreach(HeartbeatDTO player in _players)
+            foreach (HeartbeatDTO player in _players)
             {
-                if(sessionID == player.sessionID)
+                if (sessionID == player.sessionID)
                 {
                     return true;
                 }
@@ -89,11 +89,11 @@ namespace Network
             {
                 if (DateTime.Now - player.time >= waitTime)
                 {
-                    player.status = 0;
+                    player.status = false;
                 }
                 else
                 {
-                    player.status = 1;
+                    player.status = true;
                 }
             }
             CheckStatus();
@@ -101,9 +101,9 @@ namespace Network
 
         private void UpdatePlayer(string sessionID)
         {
-            foreach(HeartbeatDTO player in _players)
+            foreach (HeartbeatDTO player in _players)
             {
-                if(player.sessionID == sessionID)
+                if (player.sessionID == sessionID)
                 {
                     player.time = DateTime.Now;
                 }

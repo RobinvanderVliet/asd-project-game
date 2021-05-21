@@ -1,24 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Network.DTO
+namespace Session.DTO
 {
     [ExcludeFromCodeCoverage]
     public class HeartbeatDTO
     {
-        public string sessionID {get; set;}
-        public int status {get; set;}
-        public DateTime time {get; set;}
+        public string sessionID { get; set; }
+        public bool status { get; set; }
+        public DateTime time { get; set; }
 
         public HeartbeatDTO(string sessionID)
         {
             this.sessionID = sessionID;
-            this.status = 1;
-            this.time = DateTime.Now;
+            status = true;
+            time = DateTime.Now;
         }
     }
 }
