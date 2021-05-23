@@ -21,6 +21,7 @@ namespace Session.Tests
         private SessionHandler _sut;
 
         private PacketDTO _packetDTO;
+        private const int HOSTINACTIVECOUNTER = 5;
 
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;
@@ -132,8 +133,9 @@ namespace Session.Tests
             _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
         }
 
-        [Test]
-        public void Test_HostPingEvent_SendPingPongReturnedCheck()
+
+        [Test, Sequential]
+        public void Test_HostPingEvent_SendPingPongReturnedCheck([Range(1,HOSTINACTIVECOUNTER)] int times)
         {
             // Arrange ---------
             SessionDTO sessionDTO = new SessionDTO(SessionType.SendPing);
@@ -145,32 +147,37 @@ namespace Session.Tests
             _sut.setHostPingTimer(new Timer());
             
             // Act ---------
-            Thread threadSut = new Thread(() => _sut.HostPingEvent(null,null));
-            Thread threadHost = new Thread(() => _sut.setHostActive(true));
-            
-            threadSut.Start();
-            
-            //wait till other thread is sleeping to mock host pong
-            var loop = true;
-            while (loop) {
-                if (threadSut.ThreadState == ThreadState.WaitSleepJoin) {
-                    threadHost.Start();
-                    loop = false;
+            for (int i = 0; i < times; i++)
+            {
+                Thread threadSut = new Thread(() => _sut.HostPingEvent(null, null));
+                Thread threadHost = new Thread(() => _sut.setHostActive(true));
+
+                threadSut.Start();
+
+                //wait till other thread is sleeping to mock host pong
+                var loop = true;
+                while (loop)
+                {
+                    if (threadSut.ThreadState == ThreadState.WaitSleepJoin)
+                    {
+                        threadHost.Start();
+                        loop = false;
+                    }
                 }
+
+                threadHost.Join();
+                threadSut.Join();
             }
 
-            threadHost.Join();
-            threadSut.Join();
-
             // Assert ---------
-            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
+            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Exactly(times));
             _mockedClientController.Verify(mock => mock.CreateHostController(), Times.Never);
             _mockedClientController.Verify(mock => mock.IsBackupHost, Times.Never);
             Assert.IsTrue(_sut.getHostActive());
         }
         
-        [Test]
-        public void Test_HostPingEvent_SendPingNoPongReturnedCheck()
+        [Test,Sequential]
+        public void Test_HostPingEvent_SendPingNoPongReturnedCheckUnderCount([Range(1,HOSTINACTIVECOUNTER-1)]int times)
         {
             // Arrange ---------
             SessionDTO sessionDTO = new SessionDTO(SessionType.SendPing);
@@ -181,11 +188,38 @@ namespace Session.Tests
             
             _sut.setHostPingTimer(new Timer());
             
-            // Act ---------
-            _sut.HostPingEvent(null,null);
+            //Act ---------
+            for (int i = 0; i < times; i++)
+            {
+                _sut.HostPingEvent(null,null);
+            }
 
             // Assert ---------
-            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
+            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Exactly(times));
+            _mockedClientController.Verify(mock => mock.CreateHostController(), Times.Never);
+            Assert.IsFalse(_sut.getHostActive());
+        }
+        
+        [Test]
+        public void Test_HostPingEvent_SendPingNoPongReturnedCheckCountHit()
+        {
+            // Arrange ---------
+            SessionDTO sessionDTO = new SessionDTO(SessionType.SendPing);
+            sessionDTO.Name = "ping";
+            var payload = JsonConvert.SerializeObject(sessionDTO);
+
+            _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Session));
+            
+            _sut.setHostPingTimer(new Timer());
+            
+            //Act ---------
+            for (int i = 0; i < HOSTINACTIVECOUNTER; i++)
+            {
+                _sut.HostPingEvent(null,null);
+            }
+
+            // Assert ---------
+            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Exactly(HOSTINACTIVECOUNTER));
             _mockedClientController.Verify(mock => mock.CreateHostController(), Times.Once);
             Assert.IsTrue(_sut.getHostActive());
         }
@@ -498,7 +532,7 @@ namespace Session.Tests
             HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
 
             _mockedClientController.SetupSequence(x => x.GetOriginId()).Returns(originIdHost);
-
+            _mockedClientController.SetupSequence(x => x.SessionId).Returns(generatedSessionId);
             // Act -------------
             HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
 
