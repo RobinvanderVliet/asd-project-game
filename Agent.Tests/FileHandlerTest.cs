@@ -81,7 +81,8 @@ namespace Agent.Tests
         {
             //Arrange
             var directory = string.Format(Path.GetFullPath(Path.Combine
-                (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resources\\Agent\\";
+                (GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory)))) + "/Resources/Agent/";
+
             if (Directory.Exists(directory))
             {
                 Directory.Delete(directory);
@@ -93,6 +94,14 @@ namespace Agent.Tests
             //Assert
             Assert.True(Directory.Exists(directory));
         }
-        
+
+        public String GoBackToRoot(String path) {
+            return Directory.GetParent
+                (Directory.GetParent
+                    (Directory.GetParent
+                        (Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).ToString()).ToString()).ToString()).ToString();
+
+        }
+
     }
 }
