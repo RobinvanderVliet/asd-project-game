@@ -108,7 +108,6 @@ namespace Creature.World
                     }
                     if (!addedLine) line += "-";
                 }
-                Console.WriteLine("test");
                 Console.WriteLine(line);
             }
         }

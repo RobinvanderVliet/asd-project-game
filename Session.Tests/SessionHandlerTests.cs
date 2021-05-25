@@ -76,7 +76,7 @@ namespace Session.Tests
 
             SessionDTO sessionDTOInHandlerResponse = new SessionDTO(SessionType.RequestSessionsResponse);
             sessionDTOInHandlerResponse.Name = "sessionName";
-            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SenDTOClients,
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients,
                 JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
             _packetDTO.HandlerResponse = handlerResponseDTO;
 
@@ -269,7 +269,7 @@ namespace Session.Tests
 
             SessionDTO sessionDTOInHandlerResponse = new SessionDTO(SessionType.RequestSessionsResponse);
             sessionDTOInHandlerResponse.Name = "sessionName";
-            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SenDTOClients,
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients,
                 JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
             _packetDTO.HandlerResponse = handlerResponseDTO;
 
@@ -302,7 +302,7 @@ namespace Session.Tests
 
             SessionDTO sessionDTOInHandlerResponse = new SessionDTO(SessionType.RequestSessionsResponse);
             sessionDTOInHandlerResponse.Name = "sessionName";
-            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SenDTOClients,
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients,
                 JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
             _packetDTO.HandlerResponse = handlerResponseDTO;
 
@@ -335,7 +335,7 @@ namespace Session.Tests
 
             SessionDTO sessionDTOInHandlerResponse = new SessionDTO(SessionType.RequestSessionsResponse);
             sessionDTOInHandlerResponse.Name = "sessionName";
-            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SenDTOClients,
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients,
                 JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
             _packetDTO.HandlerResponse = handlerResponseDTO;
 
@@ -400,7 +400,7 @@ namespace Session.Tests
             HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
 
             // Assert ----------
-            SendAction expectedSendAction = SendAction.SenDTOClients;
+            SendAction expectedSendAction = SendAction.SendToClients;
             Assert.AreEqual(expectedSendAction, actualResult.Action);
         }
 
@@ -432,7 +432,7 @@ namespace Session.Tests
             SessionDTO sessionDTOInHandlerResponse = new SessionDTO(SessionType.RequestToJoinSession);
             sessionDTOInHandlerResponse.ClientIds = sessionDTO.ClientIds;
             sessionDTOInHandlerResponse.ClientIds.Add(originIdHost);
-            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SenDTOClients,
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients,
                 JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
             _packetDTO.HandlerResponse = handlerResponseDTO;
 
@@ -481,7 +481,7 @@ namespace Session.Tests
             };
             sessionDTOInHandlerResponse.ClientIds.Add(originIdHost);
             
-            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SenDTOClients,
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients,
                 JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
             _packetDTO.HandlerResponse = handlerResponseDTO;
 

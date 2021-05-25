@@ -5,7 +5,6 @@ using LiteDB.Async;
 
 namespace DatabaseHandler
 {
-    [ExcludeFromCodeCoverage]
     public class DbConnection : IDbConnection
     {
         [ExcludeFromCodeCoverage]

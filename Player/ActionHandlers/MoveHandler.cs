@@ -91,7 +91,7 @@ namespace Player.ActionHandlers
                 HandleMove(moveDTO.PlayerPosition);
             }
             
-            return new HandlerResponseDTO(SendAction.SenDTOClients, null);
+            return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
         private void InsertToDatabase(MoveDTO moveDTO)

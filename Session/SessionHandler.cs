@@ -94,7 +94,6 @@ namespace Session
             sendSessionDTO(sessionDTO);
         }
 
-
         private void sendSessionDTO(SessionDTO sessionDTO)
         {
             var payload = JsonConvert.SerializeObject(sessionDTO);
@@ -209,6 +208,7 @@ namespace Session
             Console.WriteLine(packet.Header.SessionID + " Name: " + sessionDTO.Name);
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
+        
         private HandlerResponseDTO addPlayerToSession(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
@@ -226,8 +226,7 @@ namespace Session
                     sessionDTO.ClientIds.Add(client);
                 }
 
-
-                return new HandlerResponseDTO(SendAction.SenDTOClients, JsonConvert.SerializeObject(sessionDTO));
+                return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
             }
             else
             {
@@ -286,8 +285,7 @@ namespace Session
             Thread.Sleep(WAITTIMEPINGTIMER);
             CheckIfHostActive();
         }
-        
-        
+
         public void SwapToHost()
         {
             _clientController.CreateHostController();
@@ -299,9 +297,6 @@ namespace Session
             {
                 _heartbeatHandler.ReceiveHeartbeat(player);
             }
-
-            // TODO: Enable Heartbeat check and enable agents, maybe this will be done when hostcontroller is activated?
-            // TODO: Make new client backup host
             
             Console.WriteLine("Look at me, I'm the captain (Host) now!");
         }

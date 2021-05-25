@@ -86,7 +86,7 @@ namespace Session
         {
             var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
             HandleStartGameSession(startGameDTO);
-            return new HandlerResponseDTO(SendAction.SenDTOClients, null);
+            return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
         private void HandleStartGameSession(StartGameDTO startGameDTO)

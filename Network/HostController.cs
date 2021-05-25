@@ -31,7 +31,7 @@ namespace Network
             packet.Header.SessionID = _sessionId;
 
             
-            if (handlerResponse.Action == SendAction.SenDTOClients)
+            if (handlerResponse.Action == SendAction.SendToClients)
             {
                 packet.Header.Target = "client";
                 packet.HandlerResponse = handlerResponse;
@@ -44,9 +44,7 @@ namespace Network
                 _networkComponent.SendPacket(packet);
             }
         }
-
-       
-
+        
         [ExcludeFromCodeCoverage]
         public void SetSessionId(string sessionId)
         {

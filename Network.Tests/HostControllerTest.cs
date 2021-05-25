@@ -37,7 +37,7 @@ namespace Network.Tests
         {
             //Arrange ---------
             _packetHeaderDTO.SessionID = "TestSession";          
-            _handlerResponseDTO = new HandlerResponseDTO(SendAction.SenDTOClients, null);
+            _handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients, null);
             _packetDTO.Header = _packetHeaderDTO;           
             _mockedClientController.Setup(mock => mock.HandlePacket(_packetDTO)).Returns(_handlerResponseDTO);
             _packetHeaderDTO.Target = "client";
@@ -75,7 +75,7 @@ namespace Network.Tests
             _packetHeaderDTO.Target = "host";
             _packetHeaderDTO.PacketType = PacketType.Chat;
             _packetDTO.Header = _packetHeaderDTO;
-            _handlerResponseDTO = new HandlerResponseDTO(SendAction.SenDTOClients, null);
+            _handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients, null);
             _mockedClientController.Setup(mock => mock.HandlePacket(_packetDTO)).Returns(_handlerResponseDTO);
             _mockedNetworkComponent.Setup(mock => mock.SendPacket(_packetDTO));
 

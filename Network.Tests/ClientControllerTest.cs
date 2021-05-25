@@ -28,7 +28,7 @@ namespace Network.Tests
         {
             //Arrange
             var packetType = PacketType.Chat;
-            var expectedHandlerResponse = new HandlerResponseDTO(SendAction.SenDTOClients, "test");
+            var expectedHandlerResponse = new HandlerResponseDTO(SendAction.SendToClients, "test");
             var givenPacket = new PacketBuilder()
                 .SetTarget("client")
                 .SetPacketType(packetType)
@@ -53,7 +53,7 @@ namespace Network.Tests
         {
             //Arrange
             var packetType = PacketType.Session;
-            var expectedHandlerResponse = new HandlerResponseDTO(SendAction.SenDTOClients, "test");
+            var expectedHandlerResponse = new HandlerResponseDTO(SendAction.SendToClients, "test");
             var givenPacket = new PacketBuilder()
                 .SetTarget("client")
                 .SetPacketType(packetType)
@@ -78,7 +78,7 @@ namespace Network.Tests
         {
             //Arrange
             var packetType = PacketType.Session;
-            var expectedHandlerResponse = new HandlerResponseDTO(SendAction.SenDTOClients, "test");
+            var expectedHandlerResponse = new HandlerResponseDTO(SendAction.SendToClients, "test");
             var givenPacket = new PacketBuilder()
                 .SetTarget("client")
                 .SetPacketType(packetType)
