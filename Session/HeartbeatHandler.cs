@@ -39,7 +39,6 @@ namespace Session
             {
                 _players.Add(new HeartbeatDTO(clientId));
             }
-
         }
 
         private void CheckStatus()
@@ -47,7 +46,7 @@ namespace Session
             List<HeartbeatDTO> leavers = new List<HeartbeatDTO>();
             foreach (HeartbeatDTO player in _players)
             {
-                if (player.status)
+                if (!player.online)
                 {
                     leavers.Add(player);
                 }
@@ -78,11 +77,11 @@ namespace Session
             {
                 if (DateTime.Now - player.time >= waitTime)
                 {
-                    player.status = false;
+                    player.online = false;
                 }
                 else
                 {
-                    player.status = true;
+                    player.online = true;
                 }
             }
             CheckStatus();

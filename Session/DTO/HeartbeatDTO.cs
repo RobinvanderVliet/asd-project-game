@@ -7,13 +7,13 @@ namespace Session.DTO
     public class HeartbeatDTO
     {
         public string sessionID { get; set; }
-        public bool status { get; set; }
+        public bool online { get; set; }
         public DateTime time { get; set; }
 
         public HeartbeatDTO(string sessionID)
         {
             this.sessionID = sessionID;
-            status = true;
+            online = true;
             time = DateTime.Now;
         }
     }
