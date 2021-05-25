@@ -28,7 +28,7 @@ namespace Session.Tests
             }
 
             [Test]
-            public void Test_Heartbeat_Success()
+            public void Test_ReceiveHeartbeat_Success()
             {
                 string expected = String.Empty;
 
@@ -44,7 +44,7 @@ namespace Session.Tests
             }
 
             [Test]
-            public void Test_Heartbeat_Fail()
+            public void Test_ReceiveHeartbeat_Fail()
             {
                 string expected = string.Format("Agents are enabled\r\n", Environment.NewLine); ;
                 
