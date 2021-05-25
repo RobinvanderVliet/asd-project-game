@@ -29,17 +29,6 @@ namespace Session.Tests
 
             }
 
-            public string GetOuput()
-            {
-                return stringWriter.ToString();
-            }
-
-            public void Dispose()
-            {
-                Console.SetOut(originalOutput);
-                stringWriter.Dispose();
-            }
-
             [Test]
             public void Test_Heartbeat_Success()
             {
