@@ -6,6 +6,7 @@ using InputCommandHandler.Antlr.Parser;
 using InputCommandHandler.Antlr.Transformer;
 using InputCommandHandler.Exceptions;
 using Player.Services;
+using Session;
 
 namespace InputCommandHandler.Antlrr
 {
@@ -52,15 +53,13 @@ namespace InputCommandHandler.Antlrr
 
             _ast = listener.getAST();
         }
-
-
-        public void Transform(IPlayerService playerService)
+        public void Transform(IPlayerService playerService, ISessionService sessionService)
         {
             if (_ast == null)
             {
                 return;
             }
-            new Evaluator(playerService).Apply(_ast);
+            new Evaluator(playerService, sessionService).Apply(_ast);
         }
     }
 }

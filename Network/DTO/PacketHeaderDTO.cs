@@ -1,6 +1,6 @@
 ﻿namespace Network
 {
-    public class HeartbeatDTO
+    public class PacketHeaderDTO
     {
         public string Target { get; set; }
         public string OriginID { get; set; }
@@ -9,11 +9,11 @@
 
         public override bool Equals(object obj)
         {
-            return obj is HeartbeatDTO dTO &&
-                   Target == dTO.Target &&
-                   OriginID == dTO.OriginID &&
-                   SessionID == dTO.SessionID &&
-                   PacketType == dTO.PacketType;
+            return obj is PacketHeaderDTO DTO &&
+                   Target == DTO.Target &&
+                   OriginID == DTO.OriginID &&
+                   SessionID == DTO.SessionID &&
+                   PacketType == DTO.PacketType;
         }
     }
 }

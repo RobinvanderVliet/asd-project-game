@@ -1,8 +1,8 @@
-﻿using Agent.Antlr.Ast;
+﻿using System.Diagnostics.CodeAnalysis;
+using Agent.Antlr.Ast;
 using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
 
-namespace Agent.Tests.ast
+namespace Agent.Tests.Ast
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
