@@ -1,4 +1,4 @@
-﻿namespace Creature.Services
+﻿namespace InputCommandHandler
 {
     public interface IAgentService
     {

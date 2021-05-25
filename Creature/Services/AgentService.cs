@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using InputCommandHandler;
+using System.Collections.Generic;
 
 namespace Creature.Services
 {

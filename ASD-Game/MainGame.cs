@@ -12,6 +12,7 @@ using DataTransfer.DTO.Character;
 using Network;
 using Session;
 using Player.ActionHandlers;
+using Creature.Services;
 
 namespace ASD_project
 {
@@ -78,7 +79,7 @@ namespace ASD_project
                 //moet later vervangen worden
                 IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
                 IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, _moveHandler, _clientController, _worldService);
-
+                IAgentService agentService = new AgentService("myId");
                 ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
                 
                 
@@ -107,7 +108,7 @@ namespace ASD_project
                         // {
                         // IPlayerService player = createPlayer(playername);
                         Console.WriteLine("Type input messages below");
-                        inputHandler.HandleCommands(playerService, sessionService);
+                        inputHandler.HandleCommands(playerService, sessionService, agentService);
                   
                 }
             }
