@@ -14,6 +14,10 @@ namespace Network
         public WebSocketConnection(IPacketListener packetListener)
         {
             LoadConfigVariables();
+            if (Environment.GetEnvironmentVariable("TEST") != null)
+            {
+                _webSocketConnectionConfig.Ip = "host.docker.internal";
+            }
             _websocket = new WebSocket($"ws://{_webSocketConnectionConfig.Ip}:{_webSocketConnectionConfig.Port}/{_webSocketConnectionConfig.Path}");
             _packetListener = packetListener;
             AddBehaviorToWebsocket();

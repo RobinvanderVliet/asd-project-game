@@ -12,6 +12,7 @@ using DatabaseHandler.Poco;
 using DatabaseHandler.Services;
 using DatabaseHandler.Repository;
 using Timer = System.Timers.Timer;
+using System.Linq;
 
 namespace Session
 {
@@ -30,6 +31,7 @@ namespace Session
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Session);
+            DockerTestStartup();
         }
 
         public void StartSession(string sessionID)
@@ -391,6 +393,30 @@ namespace Session
         public void setHostPingTimer(Timer timer)
         {
             _hostPingTimer = timer;
+        }
+        public void DockerTestStartup()
+        {
+            if (Environment.GetEnvironmentVariable("TEST") != null)
+            {
+                var test = Environment.GetEnvironmentVariable("TEST");
+                if (test == "HOST")
+                {
+                    Console.WriteLine("I AM A TEST HOST!");
+                    CreateSession("Test");
+                }
+                else if (test == "CLIENT")
+                {
+                    Console.WriteLine("I AM A TEST CLIENT!");
+                    
+                    while (_availableSessions.Count == 0)
+                    {
+                        RequestSessions();
+                        System.Threading.Thread.Sleep(1000);
+                    }
+                    var key = _availableSessions.Keys.First();
+                    JoinSession(key);
+                }
+            }
         }
     }
 }
