@@ -2,10 +2,12 @@
 using Creature.Pathfinder;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace Creature.World
 {
+    [ExcludeFromCodeCoverage]
     public class DefaultWorld : IWorld
     {
         private List<ICreature> _creatures;

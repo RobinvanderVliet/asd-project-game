@@ -1,9 +1,9 @@
-﻿using Creature.Creature.StateMachine.Data;
-using Creature.World;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Creature.Creature.StateMachine;
+using Creature.Creature.StateMachine.Data;
 
 namespace Creature.Tests
 {
@@ -11,44 +11,55 @@ namespace Creature.Tests
     [TestFixture]
     class PlayerTest
     {
-        private ICreature _sut;
+        private Player _sut;
+        private Mock<ICreatureStateMachine> _creatureStateMachineMock;
+        private Mock<Network.IClientController> _clientControllerMock;
 
         [SetUp]
         public void Setup()
         {
-            Vector2 position = new Vector2(10, 10);
-            Mock<IWorld> worldMock = new Mock<IWorld>();
-            int health = 20;
-            int damage = 5;
-            int visionRange = 10;
-
-            PlayerData playerData = new PlayerData(position, health, damage, visionRange, worldMock.Object);
-            _sut = new Player(playerData, null);
+            _creatureStateMachineMock = new Mock<ICreatureStateMachine>();
+            _sut = new Player(_creatureStateMachineMock.Object, _clientControllerMock.Object);
         }
 
         [Test]
-        public void Test_ApplyDamage_KillsPlayer()
+        public void Test_ApplyDamage_DealsDamage()
         {
             // Arrange ---------
-
+            PlayerData playerData = new PlayerData(new Vector2(), 50, 10, 10, null);
+            _creatureStateMachineMock.Setup(c => c.CreatureData).Returns(playerData);
+            
             // Act -------------
             _sut.ApplyDamage(30);
 
             // Assert ----------
-            Assert.False(_sut.CreatureStateMachine.CreatureData.IsAlive);
+            Assert.AreEqual(_sut.CreatureStateMachine.CreatureData.Health, 20);
         }
-
+        
         [Test]
-        public void Test_HealAmount__Healts_Player()
+        public void Test_HealAmount_HealsPlayer()
+        {
+            // Arrange ---------
+            PlayerData playerData = new PlayerData(new Vector2(), 30, 10, 10, null);
+            _creatureStateMachineMock.Setup(c => c.CreatureData).Returns(playerData);
+            
+            // Act -------------
+            _sut.HealAmount(10);
+
+            // Assert ----------
+            Assert.AreEqual(_sut.CreatureStateMachine.CreatureData.Health, 40);
+        }
+        
+        [Test]
+        public void Test_Disconnect_StartsStateMachine()
         {
             // Arrange ---------
 
             // Act -------------
-            _sut.ApplyDamage(10);
-            _sut.HealAmount(10);
+            _sut.Disconnect();
 
             // Assert ----------
-            Assert.AreEqual(_sut.CreatureStateMachine.CreatureData.Health, 20);
+            _creatureStateMachineMock.Verify(creatureStateMachine => creatureStateMachine.StartStateMachine());
         }
     }
 }
