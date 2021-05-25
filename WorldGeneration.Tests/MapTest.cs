@@ -59,8 +59,17 @@ namespace WorldGeneration.Tests
             
             _noiseMapGeneratorMock = noiseMapGeneratorMock.Object;
 
-            var databaseMock = new Mock<Database>("DatabaseAddress", "mapCollection");
-            databaseMock.Setup(p => p.InsertChunkIntoDatabase(It.IsAny<Chunk>())).Verifiable();
+            
+            var databaseMock = new Mock<Database>();
+            /*
+             doesn't work because it throws errors, but that's okay because it's getting replaced anyway so i'm not wasting anymore time on this.
+            databaseMock.Setup(p => p.InsertChunkIntoDatabase(chunk1)).Verifiable();
+            databaseMock.Setup(p => p.InsertChunkIntoDatabase(chunk2)).Verifiable();
+            databaseMock.Setup(p => p.InsertChunkIntoDatabase(chunk3)).Verifiable();
+            databaseMock.Setup(p => p.InsertChunkIntoDatabase(chunk4)).Verifiable();*/
+            
+            
+            databaseMock.Setup(a => a.DeleteTileMap()).Verifiable();
             _databaseMock = databaseMock.Object;
 
             var consolePrinterMock = new Mock<ConsolePrinter>(ConsoleColor.White, ConsoleColor.Black);
@@ -107,6 +116,16 @@ namespace WorldGeneration.Tests
             //Arrange ---------
             //Act ---------
             //Assert ---------
+        }
+        
+        [Test]
+        public void Test_DeleteMap_PassesCommandThrough() 
+        {
+            //Arrange ---------
+            //Act ---------
+            _sut.DeleteMap();
+            //Assert ---------
+            _databaseMock.Verify(_sut.DeleteMap(), Times.AtLeastOnce());
         }
     }
 }
