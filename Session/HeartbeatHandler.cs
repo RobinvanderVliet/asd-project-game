@@ -16,6 +16,7 @@ namespace Session
         public HeartbeatHandler()
         {
             _players = new List<HeartbeatDTO>();
+            _heartbeatTimer = new Timer(TIMER);
             CheckHeartbeatTimer();
         }
 
@@ -26,6 +27,7 @@ namespace Session
             {
                 _players.Add(new HeartbeatDTO(player));
             }
+            _heartbeatTimer = new Timer(TIMER);
             CheckHeartbeatTimer();
         }
 
@@ -44,8 +46,6 @@ namespace Session
         
         private void CheckHeartbeatTimer()
         {
-            _heartbeatTimer = new Timer(TIMER);
-            _heartbeatTimer.Enabled = true;
             _heartbeatTimer.AutoReset = true;
             _heartbeatTimer.Elapsed += CheckHeartbeatEvent;
             _heartbeatTimer.Start();
@@ -53,7 +53,9 @@ namespace Session
 
         private void CheckHeartbeatEvent(object sender, ElapsedEventArgs e)
         {
+            _heartbeatTimer.Stop();
             UpdateStatus();
+            _heartbeatTimer.Start();
         }
 
         private void CheckStatus()
@@ -98,7 +100,6 @@ namespace Session
         private void UpdatePlayer(string clientID)
         {
             var player = _players.Find(x => x.clientID == clientID);
-            Console.WriteLine(player.time);
             player.time = DateTime.Now;
         }
     }

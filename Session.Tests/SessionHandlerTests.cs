@@ -25,6 +25,7 @@ namespace Session.Tests
 
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;
+        private Mock<Session> _mockedSession;
 
         [SetUp]
         public void Setup()
@@ -33,6 +34,7 @@ namespace Session.Tests
             standardOutput.AutoFlush = true;
             Console.SetOut(standardOutput);
             _mockedClientController = new Mock<IClientController>();
+            _mockedSession = new Mock<Session>();
             _sut = new SessionHandler(_mockedClientController.Object);
             _packetDTO = new PacketDTO();
         }
@@ -209,6 +211,9 @@ namespace Session.Tests
             var payload = JsonConvert.SerializeObject(sessionDTO);
 
             _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Session));
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns("1");
+            // _mockedSession.Setup(mock => mock.)
+            _sut.JoinSession("1");
             
             _sut.setHostPingTimer(new Timer());
             

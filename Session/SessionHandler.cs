@@ -20,7 +20,7 @@ namespace Session
         private bool _hostActive = true;
         private int _hostInactiveCounter = 0;
         private Timer _hostPingTimer;
-        private Timer _heartbeatTimer;
+        private Timer _senderHeartbeatTimer;
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
 
@@ -45,11 +45,6 @@ namespace Session
             }
             else
             {
-                // System.Threading.Timer timer = new System.Threading.Timer((e) =>
-                // {
-                //     SendHeartbeat();
-                // }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
-                
                 SendHeartbeatTimer();
 
                 SessionDTO receivedSessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
@@ -72,14 +67,14 @@ namespace Session
 
         private void SendHeartbeatTimer()
         {
-            _heartbeatTimer = new Timer(INTERVALTIMEPINGTIMER);
-            _heartbeatTimer.Enabled = true;
-            _heartbeatTimer.AutoReset = true;
-            _heartbeatTimer.Elapsed += HeartbeatEvent;
-            _heartbeatTimer.Start();
+            _senderHeartbeatTimer = new Timer(INTERVALTIMEPINGTIMER);
+            _senderHeartbeatTimer.Enabled = true;
+            _senderHeartbeatTimer.AutoReset = true;
+            _senderHeartbeatTimer.Elapsed += SenderHeartbeatEvent;
+            _senderHeartbeatTimer.Start();
         }
 
-        private void HeartbeatEvent(object sender, ElapsedEventArgs e)
+        private void SenderHeartbeatEvent(object sender, ElapsedEventArgs e)
         {
             SendHeartbeat();
         }
@@ -309,12 +304,13 @@ namespace Session
             _clientController.CreateHostController();
             _clientController.IsBackupHost = false;
             
-            _heartbeatTimer.Close();
+            _senderHeartbeatTimer.Close();
             
             Console.WriteLine("Look at me, I'm the captain (Host) now!");
-            List<string> heartbeatSenders = _session.GetAllClients();
+            
+            List<string> heartbeatSenders = new List<string>(_session.GetAllClients());
             heartbeatSenders.Remove(_clientController.GetOriginId());
-
+            
             _heartbeatHandler = new HeartbeatHandler(heartbeatSenders);
         }
 
