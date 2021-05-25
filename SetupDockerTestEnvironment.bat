@@ -35,7 +35,12 @@ echo Network switch is already running
 )
 
 echo Removing old containers and images!
-docker rm -f asd-game-host asd-game-client
+docker rm -f asd-game-host
+
+FOR /l %%x in (1, 1, 7) do (
+docker rm -f asd-game-client%%x
+)
+
 docker rmi -f asd-game
 
 cd %~dp0
@@ -47,8 +52,22 @@ docker build -t asd-game .
 
 echo Running images in containers!
 docker run -itd -e TEST=HOST --name asd-game-host asd-game
-docker run -itd -e TEST=CLIENT --name asd-game-client asd-game
 
+:askClients
+echo How many client's do you want?
+SET /P amount="Enter amount of clients: "
+IF %amount% GEQ 8 (
+echo You can only have a maximum of 7 clients
+goto :askClients
+)
+
+FOR /l %%x in (1, 1, %amount%) do (
+docker run -itd -e TEST=CLIENT --name asd-game-client%%x asd-game
+)
 echo Attach to Host & Client!
 start cmd.exe /k docker attach asd-game-host
-start cmd.exe /k docker attach asd-game-client
+
+FOR /l %%x in (1, 1, %amount%) do (
+start cmd.exe /k docker attach asd-game-client%%x
+)
+
