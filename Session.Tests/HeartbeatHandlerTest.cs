@@ -14,8 +14,8 @@ namespace Session.Tests
         {
             //Declaration and initialisation of constant variables
             private HeartbeatHandler _sut;
-            private StringWriter stringWriter;
-            private TextWriter originalOutput;
+            private StringWriter _stringWriter;
+            private TextWriter _originalOutput;
             //Declaration of mocks
 
 
@@ -23,9 +23,9 @@ namespace Session.Tests
             public void Setup()
             {
                 _sut = new HeartbeatHandler();
-                stringWriter = new StringWriter();
-                originalOutput = Console.Out;
-                Console.SetOut(stringWriter);
+                _stringWriter = new StringWriter();
+                _originalOutput = Console.Out;
+                Console.SetOut(_stringWriter);
 
             }
 
