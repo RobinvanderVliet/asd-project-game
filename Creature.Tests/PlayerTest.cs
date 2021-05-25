@@ -13,12 +13,13 @@ namespace Creature.Tests
     {
         private Player _sut;
         private Mock<ICreatureStateMachine> _creatureStateMachineMock;
+        private Mock<Network.IClientController> _clientControllerMock;
 
         [SetUp]
         public void Setup()
         {
             _creatureStateMachineMock = new Mock<ICreatureStateMachine>();
-            _sut = new Player(_creatureStateMachineMock.Object);
+            _sut = new Player(_creatureStateMachineMock.Object, _clientControllerMock.Object);
         }
 
         [Test]

@@ -5,7 +5,7 @@ namespace Creature
 {
     public class Player : ICreature
     {
-        private ClientController _clientController;
+        private IClientController _clientController;
         private ICreatureStateMachine _playerStateMachine;
 
         public ICreatureStateMachine CreatureStateMachine
@@ -13,9 +13,9 @@ namespace Creature
             get => _playerStateMachine;
         }
 
-        public Player(ICreatureStateMachine playerStateMachine)
+        public Player(ICreatureStateMachine playerStateMachine, IClientController clientController)
         {
-            _clientController = new ClientController(new NetworkComponent());
+            _clientController = clientController;
             SendChatMessage("Starting Agent to replace player");
             _playerStateMachine = playerStateMachine;
         }

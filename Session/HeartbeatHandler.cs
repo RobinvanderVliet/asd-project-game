@@ -43,14 +43,7 @@ namespace Session
 
         private void CheckStatus()
         {
-            List<HeartbeatDTO> leavers = new List<HeartbeatDTO>();
-            foreach (HeartbeatDTO player in _players)
-            {
-                if (!player.online)
-                {
-                    leavers.Add(player);
-                }
-            }
+            var leavers = _players.FindAll(x => !x.online);
             if (leavers.Count != 0)
             {
                 EnablePlayerAgent(leavers);
@@ -66,9 +59,9 @@ namespace Session
             }
         }
 
-        private bool PlayerKnown(string sessionID)
+        private bool PlayerKnown(string clientID)
         {
-            return _players.Exists(player => player.sessionID == sessionID);
+            return _players.Exists(player => player.clientID == clientID);
         }
 
         private void UpdateStatus()
@@ -87,15 +80,10 @@ namespace Session
             CheckStatus();
         }
 
-        private void UpdatePlayer(string sessionID)
+        private void UpdatePlayer(string clientID)
         {
-            foreach (HeartbeatDTO player in _players)
-            {
-                if (player.sessionID == sessionID)
-                {
-                    player.time = DateTime.Now;
-                }
-            }
+            var player = _players.Find(x => x.clientID == clientID);
+            player.time = DateTime.Now;
         }
     }
 }

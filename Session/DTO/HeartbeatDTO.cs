@@ -6,13 +6,13 @@ namespace Session.DTO
     [ExcludeFromCodeCoverage]
     public class HeartbeatDTO
     {
-        public string sessionID { get; set; }
+        public string clientID { get; set; }
         public bool online { get; set; }
         public DateTime time { get; set; }
 
-        public HeartbeatDTO(string sessionID)
+        public HeartbeatDTO(string clientID)
         {
-            this.sessionID = sessionID;
+            this.clientID = clientID;
             online = true;
             time = DateTime.Now;
         }

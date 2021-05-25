@@ -97,9 +97,6 @@ namespace Session
         public void SendHeartbeat()
         {
             SessionDTO sessionDTO = new SessionDTO(SessionType.SendHeartbeat);
-            sessionDTO.ClientIds = new List<string>();
-            sessionDTO.ClientIds.Add(_clientController.GetOriginId());
-
             sendSessionDTO(sessionDTO);
         }
 
@@ -168,7 +165,7 @@ namespace Session
                 switch (sessionDTO.SessionType)
                 {
                     case SessionType.SendHeartbeat:
-                        return HandleHeartbeat();
+                        return HandleHeartbeat(packet);
                     case SessionType.RequestSessions:
                         return handleRequestSessions();
                     case SessionType.RequestToJoinSession:
@@ -200,11 +197,11 @@ namespace Session
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
-        private HandlerResponseDTO HandleHeartbeat()
+        private HandlerResponseDTO HandleHeartbeat(PacketDTO packet)
         {
             if(_heartbeatHandler != null)
             {
-                _heartbeatHandler.ReceiveHeartbeat(_clientController.GetOriginId());
+                _heartbeatHandler.ReceiveHeartbeat(packet.Header.OriginID);
             }
 
             return new HandlerResponseDTO(SendAction.Ignore, null);
