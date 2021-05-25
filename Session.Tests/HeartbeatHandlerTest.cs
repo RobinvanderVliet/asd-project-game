@@ -16,8 +16,6 @@ namespace Session.Tests
             private HeartbeatHandler _sut;
             private StringWriter _stringWriter;
             private TextWriter _originalOutput;
-            //Declaration of mocks
-
 
             [SetUp]
             public void Setup()
@@ -32,11 +30,6 @@ namespace Session.Tests
             [Test]
             public void Test_Heartbeat_Success()
             {
-                // Arrange ------------
-
-                //Act ---------
-
-                //Assert ---------
                 string expected = String.Empty;
 
                 using (StringWriter sw = new StringWriter())
@@ -53,12 +46,6 @@ namespace Session.Tests
             [Test]
             public void Test_Heartbeat_Fail()
             {
-                // Arrange ------------
-
-                //Act ---------
-
-
-                //Assert ---------
                 string expected = string.Format("Agents are enabled\r\n", Environment.NewLine); ;
                 
                 using (StringWriter sw = new StringWriter())
