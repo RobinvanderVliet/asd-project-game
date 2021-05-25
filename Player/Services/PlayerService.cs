@@ -89,7 +89,7 @@ namespace Player.Services
         public void Shout(string messageValue)
         {
             //code for chat with other players in general chat
-            Console.WriteLine(_playerModel.Name + " sent message: " + messageValue);
+            //Console.WriteLine(_playerModel.Name + " sent message: " + messageValue);
         }
 
         public void AddHealth(int amount)
