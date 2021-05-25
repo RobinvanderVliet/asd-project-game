@@ -3,7 +3,7 @@ namespace Network
     public enum SendAction
     {
         ReturnToSender,
-        SendToClients,
+        SenDTOClients,
         Ignore
     }
 }

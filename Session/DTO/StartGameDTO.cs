@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Session.DTO
 {
-    public class StartGameDto
+    public class StartGameDTO
     {
         public string GameGuid { get; set; }
         public Dictionary<string, int[]> PlayerLocations  {get; set;}

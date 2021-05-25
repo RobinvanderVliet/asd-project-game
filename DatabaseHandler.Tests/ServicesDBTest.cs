@@ -101,8 +101,6 @@ namespace DatabaseHandler.Tests
             });
         }
 
-        
-
         /// <summary>
         /// ReadAsync(Chunk)
         ///
@@ -149,6 +147,7 @@ namespace DatabaseHandler.Tests
                 }).Result;
             });
         }
+        
         /// <summary>
         /// UpdateAsync(Chunk)
         ///

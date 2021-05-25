@@ -70,7 +70,7 @@ namespace Session
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
 
-            Console.Out.WriteLine("Created session with the name: " + _session.Name);
+            Console.WriteLine("Created session with the name: " + _session.Name);
 
             return _session.InSession;
         }
@@ -90,46 +90,83 @@ namespace Session
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
-
-
-            if (packet.Header.Target == "client" || packet.Header.Target == "host")
+        
+            if (packet.Header.SessionID == _session?.SessionId)
             {
-                switch (sessionDTO.SessionType)
+                if ((packet.Header.Target == "client" || packet.Header.Target == "host")
+                    && sessionDTO.SessionType == SessionType.RequestToJoinSession)
                 {
-                    case SessionType.RequestSessions:
-                        return handleRequestSessions();
-                    case SessionType.RequestToJoinSession:
-                        if (packet.Header.SessionID == _session?.SessionId)
-                        {
-                            return addPlayerToSession(packet);
-                        }
-                        else
-                        {
-                            return new HandlerResponseDTO(SendAction.Ignore, null);
-                        }
-                    case SessionType.SendPing:
-                        return handlePingRequest(packet);
+                    Console.WriteLine("addPlayerToSession");
+                    return addPlayerToSession(packet);
                 }
-            }
-            else if (packet.Header.Target == _clientController.GetOriginId())
-            {
-                if (sessionDTO.SessionType == SessionType.RequestSessions)
+                if ((packet.Header.Target == "client" || packet.Header.Target == "host" || packet.Header.Target == _clientController.GetOriginId()) 
+                    && sessionDTO.SessionType == SessionType.SendPing)
                 {
-                    return addRequestedSessions(packet);
-                }
-                else if (sessionDTO.SessionType == SessionType.SendPing) {
+                    // Console.WriteLine("handlePingRequest");
                     return handlePingRequest(packet);
                 }
-
-                return new HandlerResponseDTO(SendAction.Ignore, null);
             }
-
+            else
+            {
+                if ((packet.Header.Target == "client" || packet.Header.Target == "host")
+                    && sessionDTO.SessionType == SessionType.RequestSessions)
+                {
+                    // Console.WriteLine("handleRequestSessions");
+                    return handleRequestSessions();
+                } 
+                if (packet.Header.Target == _clientController.GetOriginId() 
+                    && sessionDTO.SessionType == SessionType.RequestSessions)
+                {
+                    Console.WriteLine("addRequestedSessions");
+                    return addRequestedSessions(packet);
+                }
+            }
+        
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
+        
+        // public HandlerResponseDTO HandlePacket(PacketDTO packet)
+        // {
+        //     SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
+        //
+        //
+        //     if (packet.Header.Target == "client" || packet.Header.Target == "host")
+        //     {
+        //         switch (sessionDTO.SessionType)
+        //         {
+        //             case SessionType.RequestSessions:
+        //                 return handleRequestSessions();
+        //             case SessionType.RequestToJoinSession:
+        //                 if (packet.Header.SessionID == _session?.SessionId)
+        //                 {
+        //                     return addPlayerToSession(packet);
+        //                 }
+        //                 else
+        //                 {
+        //                     return new HandlerResponseDTO(SendAction.Ignore, null);
+        //                 }
+        //             case SessionType.SendPing:
+        //                 return handlePingRequest(packet);
+        //         }
+        //     }
+        //     else if (packet.Header.Target == _clientController.GetOriginId())
+        //     {
+        //         if (sessionDTO.SessionType == SessionType.RequestSessions)
+        //         {
+        //             return addRequestedSessions(packet);
+        //         }
+        //         else if (sessionDTO.SessionType == SessionType.SendPing) {
+        //             return handlePingRequest(packet);
+        //         }
+        //
+        //         return new HandlerResponseDTO(SendAction.Ignore, null);
+        //     }
+        //
+        //     return new HandlerResponseDTO(SendAction.Ignore, null);
+        // }
 
         private void CheckIfHostActive() 
         {
-            
             if (!_hostActive)
             {
                 _hostInactiveCounter++;
@@ -154,11 +191,10 @@ namespace Session
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
 
-            if (packet.Header.SessionID.Equals(_clientController.SessionId))
-            {
+            // if (packet.Header.SessionID.Equals(_clientController.SessionId))
+            // {
                 if (packet.HandlerResponse != null)
                 {
-                    // Console.WriteLine("pong"); //TODO verwijderen
                     _hostActive = true;
                 }
                 else {
@@ -169,7 +205,7 @@ namespace Session
                     var jsonObject = JsonConvert.SerializeObject(sessionDTO);
                     return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
                 }   
-            }
+            // }
             
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
@@ -201,7 +237,6 @@ namespace Session
                 sessionDTO.ClientIds = new List<string>();
 
                 sessionDTO.SessionSeed = _session.SessionSeed;
-                // _session.SessionSeed = sessionDTO.SessionSeed;
 
                 foreach (string client in _session.GetAllClients())
                 {
@@ -209,7 +244,7 @@ namespace Session
                 }
 
 
-                return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
+                return new HandlerResponseDTO(SendAction.SenDTOClients, JsonConvert.SerializeObject(sessionDTO));
             }
             else
             {
@@ -217,13 +252,12 @@ namespace Session
                 _session.EmptyClients();
                 
                 _session.SessionSeed = sessionDTOClients.SessionSeed;
-                Console.Out.WriteLine(_session.SessionSeed);
                 
-                Console.Out.WriteLine("Players in your session:");
+                Console.WriteLine("Players in your session:");
                 foreach (string client in sessionDTOClients.ClientIds)
                 {
                     _session.AddClient(client);
-                    Console.Out.WriteLine(client);
+                    Console.WriteLine(client);
                 }
 
                 if (sessionDTOClients.ClientIds.Count > 0 && !_clientController.IsBackupHost) {
@@ -245,7 +279,6 @@ namespace Session
 
         private void SendPing()
         {
-            // Console.WriteLine("ping"); //TODO verwijderen
             SessionDTO sessionDTO = new SessionDTO{
                 SessionType = SessionType.SendPing,
                 Name = "ping"
@@ -257,7 +290,7 @@ namespace Session
 
         private void PingHostTimer()
         {
-            _hostPingTimer = new System.Timers.Timer(INTERVALTIMEPINGTIMER);
+            _hostPingTimer = new Timer(INTERVALTIMEPINGTIMER);
             _hostPingTimer.Enabled = true;
             _hostPingTimer.AutoReset = true;
             _hostPingTimer.Elapsed += HostPingEvent;
@@ -279,7 +312,7 @@ namespace Session
             // TODO: Enable Heartbeat check and enable agents, maybe this will be done when hostcontroller is activated?
             // TODO: Make new client backup host
             
-            Console.Out.WriteLine("Look at me, I'm the captain (Host) now!");
+            Console.WriteLine("Look at me, I'm the captain (Host) now!");
         }
 
         public Timer getHostPingTimer()

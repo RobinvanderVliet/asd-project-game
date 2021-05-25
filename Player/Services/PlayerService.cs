@@ -164,13 +164,13 @@ namespace Player.Services
             }
 
             
-            var mapCharacterDto = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
+            var mapCharacterDTO = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
                 (_worldService.getCurrentCharacterPositions().YPosition) + y, 
                 _currentPlayer.PlayerGuid, 
                 _worldService.getCurrentCharacterPositions().GameGuid, 
                 _currentPlayer.Symbol);
             
-            _moveHandler.SendMove(mapCharacterDto);
+            _moveHandler.SendMove(mapCharacterDTO);
             
             MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions();
            _currentPlayer.XPosition = currentCharacter.XPosition;

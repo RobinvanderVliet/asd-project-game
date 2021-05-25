@@ -1,10 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
 using LiteDB;
 
-namespace DatabaseHandler.Poco
+namespace DatabaseHandler.POCO
 {
     [ExcludeFromCodeCoverage]
-    public class GamePoco
+    public class GamePOCO
     {
         [BsonId]
         public string GameGuid { get; set; }

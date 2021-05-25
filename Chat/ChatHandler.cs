@@ -44,10 +44,10 @@ namespace Chat
             {
                 case ChatType.Say:
                     HandleSay(chatDTO.Message, chatDTO.OriginId);
-                    return new HandlerResponseDTO(SendAction.SendToClients, null);
+                    return new HandlerResponseDTO(SendAction.SenDTOClients, null);
                 case ChatType.Shout:
                     HandleShout(chatDTO.Message, chatDTO.OriginId);
-                    return new HandlerResponseDTO(SendAction.SendToClients, null);
+                    return new HandlerResponseDTO(SendAction.SenDTOClients, null);
             }
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }

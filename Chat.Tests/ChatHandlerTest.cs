@@ -94,7 +94,7 @@ namespace Chat.Tests
                 HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
 
                 //Assert ---------
-                HandlerResponseDTO ExpectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
+                HandlerResponseDTO ExpectedResult = new HandlerResponseDTO(SendAction.SenDTOClients, null);
                 string expected = string.Format(" said: Hello World\r\n", Environment.NewLine);
                 Assert.AreEqual(expected, sw.ToString());
                 Assert.AreEqual(ExpectedResult, actualResult);
@@ -117,7 +117,7 @@ namespace Chat.Tests
                 HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
 
                 //Assert ---------
-                HandlerResponseDTO ExpectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
+                HandlerResponseDTO ExpectedResult = new HandlerResponseDTO(SendAction.SenDTOClients, null);
                 string expected = string.Format(" shouted: Hello World\r\n", Environment.NewLine);
                 Assert.AreEqual(expected, sw.ToString());
                 Assert.AreEqual(ExpectedResult, actualResult);

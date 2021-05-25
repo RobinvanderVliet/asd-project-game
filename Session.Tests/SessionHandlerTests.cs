@@ -48,7 +48,7 @@ namespace Session.Tests
                 _sut.JoinSession(invalidSessionId);
 
                 //Assert ---------
-                string expected = string.Format("Could not find game!\r\n", Environment.NewLine); //TODO not working on Linux
+                string expected = string.Format("Could not find game!{0}", Environment.NewLine);
                 Assert.AreEqual(expected, sw.ToString());
             }
         }
@@ -75,7 +75,7 @@ namespace Session.Tests
 
             SessionDTO sessionDTOInHandlerResponse = new SessionDTO(SessionType.RequestSessionsResponse);
             sessionDTOInHandlerResponse.Name = "sessionName";
-            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients,
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SenDTOClients,
                 JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
             _packetDTO.HandlerResponse = handlerResponseDTO;
 
@@ -182,10 +182,13 @@ namespace Session.Tests
             _sut.setHostPingTimer(new Timer());
             
             // Act ---------
-            _sut.HostPingEvent(null,null);
+            for (int i = 0; i < 5; i++)
+            {
+                _sut.HostPingEvent(null,null);
+            }
 
             // Assert ---------
-            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
+            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Exactly(5));
             _mockedClientController.Verify(mock => mock.CreateHostController(), Times.Once);
             Assert.IsTrue(_sut.getHostActive());
         }
@@ -235,7 +238,7 @@ namespace Session.Tests
 
             SessionDTO sessionDTOInHandlerResponse = new SessionDTO(SessionType.RequestSessionsResponse);
             sessionDTOInHandlerResponse.Name = "sessionName";
-            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients,
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SenDTOClients,
                 JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
             _packetDTO.HandlerResponse = handlerResponseDTO;
 
@@ -268,7 +271,7 @@ namespace Session.Tests
 
             SessionDTO sessionDTOInHandlerResponse = new SessionDTO(SessionType.RequestSessionsResponse);
             sessionDTOInHandlerResponse.Name = "sessionName";
-            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients,
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SenDTOClients,
                 JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
             _packetDTO.HandlerResponse = handlerResponseDTO;
 
@@ -301,7 +304,7 @@ namespace Session.Tests
 
             SessionDTO sessionDTOInHandlerResponse = new SessionDTO(SessionType.RequestSessionsResponse);
             sessionDTOInHandlerResponse.Name = "sessionName";
-            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients,
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SenDTOClients,
                 JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
             _packetDTO.HandlerResponse = handlerResponseDTO;
 
@@ -366,7 +369,7 @@ namespace Session.Tests
             HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
 
             // Assert ----------
-            SendAction expectedSendAction = SendAction.SendToClients;
+            SendAction expectedSendAction = SendAction.SenDTOClients;
             Assert.AreEqual(expectedSendAction, actualResult.Action);
         }
 
@@ -398,7 +401,7 @@ namespace Session.Tests
             SessionDTO sessionDTOInHandlerResponse = new SessionDTO(SessionType.RequestToJoinSession);
             sessionDTOInHandlerResponse.ClientIds = sessionDTO.ClientIds;
             sessionDTOInHandlerResponse.ClientIds.Add(originIdHost);
-            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients,
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SenDTOClients,
                 JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
             _packetDTO.HandlerResponse = handlerResponseDTO;
 
@@ -446,7 +449,7 @@ namespace Session.Tests
             };
             sessionDTOInHandlerResponse.ClientIds.Add(originIdHost);
             
-            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients,
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SenDTOClients,
                 JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
             _packetDTO.HandlerResponse = handlerResponseDTO;
 
@@ -525,13 +528,13 @@ namespace Session.Tests
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            PacketHeaderDTO packetHeaderDto = new PacketHeaderDTO {
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO {
                 OriginID = originId,
                 SessionID = generatedSessionId,
                 PacketType = PacketType.Session,
                 Target = originId
             };
-            _packetDTO.Header = packetHeaderDto;
+            _packetDTO.Header = packetHeaderDTO;
             
             HandlerResponseDTO expectedHandlerResponse = new HandlerResponseDTO(SendAction.Ignore, null);
             _packetDTO.HandlerResponse = expectedHandlerResponse;
@@ -567,13 +570,13 @@ namespace Session.Tests
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
             
-            PacketHeaderDTO packetHeaderDto = new PacketHeaderDTO {
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO {
                 OriginID = originId,
                 SessionID = generatedSessionId,
                 PacketType = PacketType.Session,
                 Target = "client"
             };
-            _packetDTO.Header = packetHeaderDto;
+            _packetDTO.Header = packetHeaderDTO;
             
             HandlerResponseDTO expectedHandlerResponse = new HandlerResponseDTO(SendAction.Ignore, null);
             _packetDTO.HandlerResponse = expectedHandlerResponse;

@@ -31,7 +31,7 @@ namespace Network
             packet.Header.SessionID = _sessionId;
 
             
-            if (handlerResponse.Action == SendAction.SendToClients)
+            if (handlerResponse.Action == SendAction.SenDTOClients)
             {
                 packet.Header.Target = "client";
                 packet.HandlerResponse = handlerResponse;

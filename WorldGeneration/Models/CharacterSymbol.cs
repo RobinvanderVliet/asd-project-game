@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace WorldGeneration.Models
 {
+    [ExcludeFromCodeCoverage]
     public static class CharacterSymbol
     {
         public const string CURRENT_PLAYER = "#";

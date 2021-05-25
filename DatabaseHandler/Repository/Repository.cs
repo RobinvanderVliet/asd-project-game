@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using DatabaseHandler.Poco;
+using DatabaseHandler.POCO;
 using LiteDB;
 using LiteDB.Async;
 using Microsoft.Extensions.Logging;
@@ -75,16 +75,16 @@ namespace DatabaseHandler.Repository
             return result;
         }
 
-        public async Task<IEnumerable<PlayerPoco>> GetAllPoco()
+        public async Task<IEnumerable<PlayerPOCO>> GetAllPOCO()
         {
-            var result = await _db.GetCollection<PlayerPoco>(_collection).Query().ToListAsync();
+            var result = await _db.GetCollection<PlayerPOCO>(_collection).Query().ToListAsync();
             return result; 
         }
         
         
         public async Task<Boolean> UpdateAsyncPlayer(string playerGUID, int newPosX, int newPosY)
         {
-            var results =  _db.GetCollection<PlayerPoco>(_collection);
+            var results =  _db.GetCollection<PlayerPOCO>(_collection);
 
             var col = results.FindOneAsync(x => x.PlayerGuid.Equals(playerGUID));
             col.Result.XPosition = newPosX;

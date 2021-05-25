@@ -8,7 +8,7 @@ namespace Network
     public class ClientController : IPacketHandler, IClientController
     {
         private INetworkComponent _networkComponent;
-        private IHostController _hostController { get; set; }
+        private IHostController _hostController;
         private string _sessionId;
         private Dictionary<PacketType, IPacketHandler> _subscribers = new();
         private bool _isBackupHost;
