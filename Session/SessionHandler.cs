@@ -19,12 +19,13 @@ namespace Session
     {
         private IClientController _clientController;
         private Session _session;
+        private IHeartbeatHandler _heartbeatHandler;
         private Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;
         private Timer _hostPingTimer;
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
-        
+
         public SessionHandler(IClientController clientController)
         {
             _clientController = clientController;
@@ -48,8 +49,14 @@ namespace Session
             }
             else
             {
+                System.Threading.Timer timer = new System.Threading.Timer((e) =>
+                {
+                    SendHeartbeat();
+                }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
+       
                 SessionDTO receivedSessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
                 _session = new Session(receivedSessionDTO.Name);
+
                 _session.SessionId = sessionId;
                 _clientController.SetSessionId(sessionId);
                 Console.WriteLine("Trying to join game with name: " + _session.Name);
@@ -75,6 +82,7 @@ namespace Session
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
 
+            _heartbeatHandler = new HeartbeatHandler();
             Console.Out.WriteLine("Created session with the name: " + _session.Name);
 
             return _session.InSession;
@@ -85,6 +93,13 @@ namespace Session
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             sendSessionDTO(sessionDTO);
         }
+        
+        public void SendHeartbeat()
+        {
+            SessionDTO sessionDTO = new SessionDTO(SessionType.SendHeartbeat);
+            sendSessionDTO(sessionDTO);
+        }
+
 
         public StartGameDto SetupGameHost()
         {
@@ -139,7 +154,7 @@ namespace Session
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _clientController.SendPayload(payload, PacketType.Session);
         }
-
+         
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
@@ -149,6 +164,8 @@ namespace Session
             {
                 switch (sessionDTO.SessionType)
                 {
+                    case SessionType.SendHeartbeat:
+                        return HandleHeartbeat(packet);
                     case SessionType.RequestSessions:
                         return handleRequestSessions();
                     case SessionType.RequestToJoinSession:
@@ -175,6 +192,16 @@ namespace Session
                 }
 
                 return new HandlerResponseDTO(SendAction.Ignore, null);
+            }
+            
+            return new HandlerResponseDTO(SendAction.Ignore, null);
+        }
+
+        private HandlerResponseDTO HandleHeartbeat(PacketDTO packet)
+        {
+            if(_heartbeatHandler != null)
+            {
+                _heartbeatHandler.ReceiveHeartbeat(packet.Header.OriginID);
             }
 
             return new HandlerResponseDTO(SendAction.Ignore, null);
@@ -332,6 +359,14 @@ namespace Session
         {
             _clientController.CreateHostController();
             _clientController.IsBackupHost = false;
+
+            _heartbeatHandler = new HeartbeatHandler();
+
+            foreach(string player in _session.GetAllClients())
+            {
+                _heartbeatHandler.ReceiveHeartbeat(player);
+            }
+
             // TODO: Enable Heartbeat check and enable agents, maybe this will be done when hostcontroller is activated?
             // TODO: Make new client backup host
             

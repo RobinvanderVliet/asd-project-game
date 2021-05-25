@@ -78,7 +78,6 @@ namespace ASD_project
                 //moet later vervangen worden
                 IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
                 IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, _moveHandler, _clientController, _worldService);
-                Console.WriteLine("Type input messages below");
 
                 ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
                 

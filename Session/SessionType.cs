@@ -8,6 +8,7 @@ namespace Session
         StartSession,
         ClientJoinedSession,
         SendPing,
-        ReceivedPingResponse
+        ReceivedPingResponse,
+        SendHeartbeat
     }
 }
