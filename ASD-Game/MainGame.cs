@@ -12,6 +12,7 @@ using DataTransfer.DTO.Character;
 using Network;
 using Session;
 using Player.ActionHandlers;
+using UserInterface;
 
 namespace ASD_project
 {
@@ -69,7 +70,12 @@ namespace ASD_project
 
             public void Run()
             {
-                Console.WriteLine("Game is gestart");
+                // Console.WriteLine("Game is gestart");
+
+                ScreenHandler screenHandler = new ScreenHandler();
+                screenHandler.TransitionTo(new StartScreen());
+                screenHandler.DisplayScreen();
+                
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
 
                 // AgentConfigurationService agentConfigurationService = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), inputHandler);
@@ -106,7 +112,7 @@ namespace ASD_project
                         // if (playername.Length != 0)
                         // {
                         // IPlayerService player = createPlayer(playername);
-                        Console.WriteLine("Type input messages below");
+                        // Console.WriteLine("Type input messages below");
                         inputHandler.HandleCommands(playerService, sessionService);
                   
                 }

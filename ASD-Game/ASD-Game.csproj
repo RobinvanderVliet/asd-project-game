@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DatabaseHandler\DatabaseHandler.csproj" />
+    <ProjectReference Include="..\UserInterface\UserInterface.csproj" />
     <ProjectReference Include="..\WorldGeneration\WorldGeneration.csproj" />
   </ItemGroup>
 
