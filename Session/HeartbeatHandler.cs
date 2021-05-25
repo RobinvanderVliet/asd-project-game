@@ -1,7 +1,7 @@
 ﻿using System;
 using Session.DTO;
 using System.Collections.Generic;
-using System.Threading;
+using System.Timers;
 
 namespace Session
 {
@@ -10,22 +10,23 @@ namespace Session
         private List<HeartbeatDTO> _players;
         TimeSpan waitTime = TimeSpan.FromMilliseconds(1000);
 
+        private int TIMER = 1000;
+        private Timer _heartbeatTimer;
+
         public HeartbeatHandler()
         {
             _players = new List<HeartbeatDTO>();
-            Timer timer = new Timer((e) =>
-            {
-                UpdateStatus();
-            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(2000));
+            CheckHeartbeatTimer();
         }
 
-        public HeartbeatHandler(List<HeartbeatDTO> _playerlist)
+        public HeartbeatHandler(List<string> players)
         {
-            _players = _playerlist;
-            Timer timer = new Timer((e) =>
+            _players = new List<HeartbeatDTO>();
+            foreach (var player in players)
             {
-                UpdateStatus();
-            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(2000));
+                _players.Add(new HeartbeatDTO(player));
+            }
+            CheckHeartbeatTimer();
         }
 
         public void ReceiveHeartbeat(string clientId)
@@ -39,6 +40,20 @@ namespace Session
             {
                 _players.Add(new HeartbeatDTO(clientId));
             }
+        }
+        
+        private void CheckHeartbeatTimer()
+        {
+            _heartbeatTimer = new Timer(TIMER);
+            _heartbeatTimer.Enabled = true;
+            _heartbeatTimer.AutoReset = true;
+            _heartbeatTimer.Elapsed += CheckHeartbeatEvent;
+            _heartbeatTimer.Start();
+        }
+
+        private void CheckHeartbeatEvent(object sender, ElapsedEventArgs e)
+        {
+            UpdateStatus();
         }
 
         private void CheckStatus()
@@ -83,6 +98,7 @@ namespace Session
         private void UpdatePlayer(string clientID)
         {
             var player = _players.Find(x => x.clientID == clientID);
+            Console.WriteLine(player.time);
             player.time = DateTime.Now;
         }
     }

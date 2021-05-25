@@ -20,6 +20,7 @@ namespace Session
         private bool _hostActive = true;
         private int _hostInactiveCounter = 0;
         private Timer _hostPingTimer;
+        private Timer _heartbeatTimer;
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
 
@@ -44,11 +45,13 @@ namespace Session
             }
             else
             {
-                System.Threading.Timer timer = new System.Threading.Timer((e) =>
-                {
-                    SendHeartbeat();
-                }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
-       
+                // System.Threading.Timer timer = new System.Threading.Timer((e) =>
+                // {
+                //     SendHeartbeat();
+                // }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
+                
+                SendHeartbeatTimer();
+
                 SessionDTO receivedSessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
                 _session = new Session(receivedSessionDTO.Name);
 
@@ -67,6 +70,20 @@ namespace Session
             return joinSession;
         }
 
+        private void SendHeartbeatTimer()
+        {
+            _heartbeatTimer = new Timer(INTERVALTIMEPINGTIMER);
+            _heartbeatTimer.Enabled = true;
+            _heartbeatTimer.AutoReset = true;
+            _heartbeatTimer.Elapsed += HeartbeatEvent;
+            _heartbeatTimer.Start();
+        }
+
+        private void HeartbeatEvent(object sender, ElapsedEventArgs e)
+        {
+            SendHeartbeat();
+        }
+
         public bool CreateSession(string sessionName)
         {
             _session = new Session(sessionName);
@@ -77,6 +94,7 @@ namespace Session
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
 
+            _heartbeatHandler = new HeartbeatHandler();
             Console.WriteLine("Created session with the name: " + _session.Name);
 
             return _session.InSession;
@@ -103,7 +121,7 @@ namespace Session
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
-        
+            
             if (packet.Header.SessionID == _session?.SessionId)
             {
                 if (packet.Header.Target == "client" || packet.Header.Target == "host")
@@ -290,15 +308,14 @@ namespace Session
         {
             _clientController.CreateHostController();
             _clientController.IsBackupHost = false;
-
-            _heartbeatHandler = new HeartbeatHandler();
-
-            foreach(string player in _session.GetAllClients())
-            {
-                _heartbeatHandler.ReceiveHeartbeat(player);
-            }
+            
+            _heartbeatTimer.Close();
             
             Console.WriteLine("Look at me, I'm the captain (Host) now!");
+            List<string> heartbeatSenders = _session.GetAllClients();
+            heartbeatSenders.Remove(_clientController.GetOriginId());
+
+            _heartbeatHandler = new HeartbeatHandler(heartbeatSenders);
         }
 
         public Timer getHostPingTimer()
