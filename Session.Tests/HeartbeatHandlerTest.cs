@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using System.IO;
 using System;
+using System.Threading;
 
 namespace Session.Tests
 {
@@ -54,7 +55,7 @@ namespace Session.Tests
                     Console.SetOut(sw);
                     _sut.ReceiveHeartbeat("test");
                     _sut.ReceiveHeartbeat("test2");
-                    Task.Delay(2000);
+                    Thread.Sleep(2000);
                     _sut.ReceiveHeartbeat("test2");
 
                     //Assert ---------

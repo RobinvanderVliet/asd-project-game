@@ -206,14 +206,36 @@ namespace Session.Tests
         public void Test_HostPingEvent_SendPingNoPongReturnedCheckCountHit()
         {
             // Arrange ---------
+            string sessionId = "sessionId";
+            string hostOriginId = "hostTestOriginId";
+            string originId = "testOriginId";
+
+            SessionDTO sessionDTOjoin = new SessionDTO(SessionType.RequestSessions);
+            var payload = JsonConvert.SerializeObject(sessionDTOjoin);
+            _packetDTO.Payload = payload;
+            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            packetHeaderDTO.OriginID = hostOriginId;
+            packetHeaderDTO.SessionID = sessionId;
+            packetHeaderDTO.PacketType = PacketType.Session;
+            packetHeaderDTO.Target = originId;
+            _packetDTO.Header = packetHeaderDTO;
+
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
+
+            SessionDTO sessionDTOInHandlerResponse = new SessionDTO(SessionType.RequestSessionsResponse);
+            sessionDTOInHandlerResponse.Name = "sessionName";
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
+            _packetDTO.HandlerResponse = handlerResponseDTO;
+
+            _sut.HandlePacket(_packetDTO);
+
             SessionDTO sessionDTO = new SessionDTO(SessionType.SendPing);
             sessionDTO.Name = "ping";
-            var payload = JsonConvert.SerializeObject(sessionDTO);
+            var payloadping = JsonConvert.SerializeObject(sessionDTO);
 
-            _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Session));
+            _mockedClientController.Setup(mock => mock.SendPayload(payloadping, PacketType.Session));
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns("1");
-            // _mockedSession.Setup(mock => mock.)
-            _sut.JoinSession("1");
+            _sut.JoinSession(sessionId);
             
             _sut.setHostPingTimer(new Timer());
             
@@ -224,7 +246,7 @@ namespace Session.Tests
             }
 
             // Assert ---------
-            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Exactly(HOSTINACTIVECOUNTER));
+            _mockedClientController.Verify(mock => mock.SendPayload(payloadping, PacketType.Session), Times.Exactly(HOSTINACTIVECOUNTER));
             _mockedClientController.Verify(mock => mock.CreateHostController(), Times.Once);
             Assert.IsTrue(_sut.getHostActive());
         }
