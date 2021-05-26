@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DataTransfer.DTO.Character;
 
 namespace WorldGeneration
@@ -7,14 +8,14 @@ namespace WorldGeneration
     {
         private World _world;
 
-        public void UpdateCharacterPosition(MapCharacterDTO mapCharacterDto)
+        public void UpdateCharacterPosition(MapCharacterDTO mapCharacterDTO)
         {
-            _world.UpdateCharacterPosition(mapCharacterDto);
+            _world.UpdateCharacterPosition(mapCharacterDTO);
         }
 
-        public void AddCharacterToWorld(MapCharacterDTO mapCharacterDto, Boolean isCurrentPlayer)
+        public void AddCharacterToWorld(MapCharacterDTO mapCharacterDTO, bool isCurrentPlayer)
         {
-            _world.AddCharacterToWorld(mapCharacterDto, isCurrentPlayer);
+            _world.AddCharacterToWorld(mapCharacterDTO, isCurrentPlayer);
         }
 
         public void DisplayWorld()
@@ -30,6 +31,11 @@ namespace WorldGeneration
         public void GenerateWorld(int seed)
         {
             _world = new World(seed, 6);
+        }
+
+        public MapCharacterDTO getCurrentCharacterPositions()
+        {
+            return _world.CurrentPlayer;
         }
     }
 }

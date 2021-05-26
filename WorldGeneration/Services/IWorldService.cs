@@ -5,10 +5,11 @@ namespace WorldGeneration
 {
     public interface IWorldService
     {
-        void UpdateCharacterPosition(MapCharacterDTO mapCharacterDto);
-        void AddCharacterToWorld(MapCharacterDTO characterPositionDTO, Boolean isCurrentPlayer);
-        void DisplayWorld();
-        void DeleteMap();
-        void GenerateWorld(int seed);
+        public void UpdateCharacterPosition(MapCharacterDTO mapCharacterDTO);
+        public void AddCharacterToWorld(MapCharacterDTO characterPositionDTO, bool isCurrentPlayer);
+        public void DisplayWorld();
+        public void DeleteMap();
+        public void GenerateWorld(int seed);
+        public MapCharacterDTO getCurrentCharacterPositions();
     }
 }

@@ -6,8 +6,8 @@ namespace DataTransfer.DTO.Character
     {
         public int XPosition;
         public int YPosition;
-        public string Name;
-        public string Id;
+        public string PlayerGuid;
+        public string GameGuid;
         public string Symbol;
         public ConsoleColor Color;
         public ConsoleColor BackgroundColor;
@@ -15,7 +15,8 @@ namespace DataTransfer.DTO.Character
 
         public MapCharacterDTO(int xPosition
             , int yPosition
-            , string id
+            , string playerGuid
+            , string gameGuid
             , string symbol = null
             , ConsoleColor color = ConsoleColor.White
             , ConsoleColor backgroundColor = ConsoleColor.Black
@@ -23,7 +24,8 @@ namespace DataTransfer.DTO.Character
         {
             XPosition = xPosition;
             YPosition = yPosition;
-            Id = id;
+            PlayerGuid = playerGuid;
+            GameGuid = gameGuid;
             Symbol = symbol;
             Color = color;
             BackgroundColor = backgroundColor;

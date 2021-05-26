@@ -10,8 +10,8 @@ namespace Player.Model
         private string _name;
         public string Name { get => _name; set => _name = value; }
 
-        private string _id;
-        public string Id { get => _id; set => _id = value; }
+        private string _PlayerGuid;
+        public string PlayerGuid { get => _PlayerGuid; set => _PlayerGuid = value; }
         
         private int _health;
         public int Health { get => _health; set => _health = value; }
@@ -52,8 +52,6 @@ namespace Player.Model
             _inventory = inventory;
             _bitcoins = bitcoins;
             _radiationLevel = radiationLevel;
-            _xPosition = 26; 
-            _yPosition = 11;
         }
 
         public void AddHealth(int amount)
@@ -168,11 +166,6 @@ namespace Player.Model
                 throw new ItemException("Je hebt geen " + itemName + " item in je inventory!");
             }
         }
-
-        public void SetNewPlayerPosition(int x, int y)
-        {
-            _xPosition += x;
-            _yPosition += y;
-        }
+        
     }
 }

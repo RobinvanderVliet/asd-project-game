@@ -20,21 +20,23 @@ namespace Player.Services
         private readonly IChatHandler _chatHandler;
         //session handler in aparte classe gebruiken, kan maybe blijven staan? Weet niet of die nog gebrukt gaat worden. :(
         private readonly ISessionHandler _sessionHandler;
-        private readonly WorldService _worldService;
+        private readonly IWorldService _worldService;
         private readonly IClientController _clientController;
 
         public PlayerService(IPlayerModel currentPlayer
             , IChatHandler chatHandler
             , ISessionHandler sessionHandler
             , IMoveHandler moveHandler
-            , IClientController clientController)
+            , IClientController clientController
+            , IWorldService worldService)
         {
             _chatHandler = chatHandler;
             _sessionHandler = sessionHandler;
             _currentPlayer = currentPlayer;
             _moveHandler = moveHandler;
             _clientController = clientController;
-            currentPlayer.Id = _clientController.GetOriginId();
+            currentPlayer.PlayerGuid = _clientController.GetOriginId();
+            _worldService = worldService;
         }
 
         public void Attack(string direction)
@@ -87,7 +89,7 @@ namespace Player.Services
         public void Shout(string messageValue)
         {
             //code for chat with other players in general chat
-            Console.WriteLine(_currentPlayer.Name + " sent message: " + messageValue);
+            _chatHandler.SendShout(messageValue);
         }
 
         public void AddHealth(int amount)
@@ -182,14 +184,17 @@ namespace Player.Services
             }
 
             
-            _currentPlayer.SetNewPlayerPosition(x, y);
-            var mapCharacterDto = new MapCharacterDTO(_currentPlayer.XPosition, _currentPlayer.YPosition, _currentPlayer.Id, _currentPlayer.Symbol);
-
+            var mapCharacterDto = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
+                (_worldService.getCurrentCharacterPositions().YPosition) + y, 
+                _currentPlayer.PlayerGuid, 
+                _worldService.getCurrentCharacterPositions().GameGuid, 
+                _currentPlayer.Symbol);
+            
             _moveHandler.SendMove(mapCharacterDto);
             
-
-            // the next line of code should be changed by sending newPosition to a relevant method
-            Console.WriteLine("X: " + _currentPlayer.XPosition + ". Y: " + _currentPlayer.YPosition);
+            MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions();
+           _currentPlayer.XPosition = currentCharacter.XPosition;
+           _currentPlayer.YPosition = currentCharacter.YPosition;
         }
     }
 }
