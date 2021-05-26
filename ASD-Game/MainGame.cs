@@ -32,10 +32,10 @@ namespace ASD_project
             private List<MapCharacterDTO> playerPositions;
             private readonly IClientController _clientController;
             private readonly IWorldService _worldService;
-
+            private IScreenHandler _screenHandler;
 
             public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler,
-                ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IRepository<PlayerPoco> playerRepository, IClientController clientController, IWorldService worldService)
+                ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IRepository<PlayerPoco> playerRepository, IClientController clientController, IWorldService worldService, IScreenHandler screenHandler)
             {
                 _log = log;
                 _inventory = inventory;
@@ -46,6 +46,7 @@ namespace ASD_project
                 _gameSessionHandler = gameSessionHandler;
                 _clientController = clientController;
                 _worldService = worldService;
+                _screenHandler = screenHandler;
                 //  _mainGameRepository = mainGameRepository;
             }
 
@@ -71,51 +72,50 @@ namespace ASD_project
             public void Run()
             {
                 // Console.WriteLine("Game is gestart");
-
-                ScreenHandler screenHandler = new ScreenHandler();
-                screenHandler.TransitionTo(new StartScreen());
-                screenHandler.DisplayScreen();
                 
-                InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
+                _screenHandler.TransitionTo(new StartScreen(_sessionHandler));
+                _screenHandler.AcceptInput();
+
+                // InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
 
                 // AgentConfigurationService agentConfigurationService = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), inputHandler);
                 // agentConfigurationService.Configure();
 
                 //moet later vervangen worden
-                IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, _moveHandler, _clientController, _worldService);
+                // IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
+                // IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, _moveHandler, _clientController, _worldService);
+                //
+                // ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
 
-                ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
-                
-                
+
                 // inputHandler.HandleSession(sessionService);
-              
-                 //OF
-                 //Menu
-                 //Create or select player/Game
-                 //Handlecommands
-                 //Sessions
-                 
-                 //GameSessionHandler
-                 //Wordt gestart vanaf startSesion();
-                     //Maakt databases aan
-                 //Zet spelers op locatie.
-                 //Geeft aan dat game gestart is: while boolean op true ?. 
+
+                //OF
+                //Menu
+                //Create or select player/Game
+                //Handlecommands
+                //Sessions
+
+                //GameSessionHandler
+                //Wordt gestart vanaf startSesion();
+                //Maakt databases aan
+                //Zet spelers op locatie.
+                //Geeft aan dat game gestart is: while boolean op true ?. 
                 // inputHandler.HandlePlayer(sessionService);
-                
-                
-               
-                while (true) 
-                {
-                    // Console.WriteLine("create player");
-                        // String playername = Console.ReadLine();
-                        // if (playername.Length != 0)
-                        // {
-                        // IPlayerService player = createPlayer(playername);
-                        // Console.WriteLine("Type input messages below");
-                        inputHandler.HandleCommands(playerService, sessionService);
-                  
-                }
+
+
+
+                // while (true) 
+                // {
+                // Console.WriteLine("create player");
+                // String playername = Console.ReadLine();
+                // if (playername.Length != 0)
+                // {
+                // IPlayerService player = createPlayer(playername);
+                // Console.WriteLine("Type input messages below");
+                // inputHandler.HandleCommands(playerService, sessionService);
+
+                // }
             }
 
             // private IPlayerService createPlayer(String name, WorldService world)

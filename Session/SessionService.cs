@@ -14,7 +14,6 @@ namespace Session
         {
             _sessionHandler = sessionHandler;
             _gameSessionHandler = gameSessionHandler;
-
         }
 
         public void getSessionName()

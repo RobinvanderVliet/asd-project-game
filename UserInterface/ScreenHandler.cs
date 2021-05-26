@@ -2,23 +2,25 @@ using System;
 
 namespace UserInterface
 {
-    public class ScreenHandler
+    public class ScreenHandler : IScreenHandler
     {
         private Screen _screen = null;
         
         public void TransitionTo(Screen screen)
         {
+            Console.Clear();
             _screen = screen;
             _screen.SetScreen(this);
+            DisplayScreen();
         }
         public void DisplayScreen()
         {
-            // if (clearScreen)
-            // {
-            //     Console.Clear();
-            // }
-            
             _screen.DrawScreen();
+        }
+
+        public void AcceptInput()
+        {
+            _screen.HandleInput();
         }
     }
 }

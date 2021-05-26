@@ -4,7 +4,14 @@ namespace UserInterface
 {
     public abstract class Screen
     {
+        protected const int SCREEN_WIDTH = 80;
+        protected const int HEADER_X = 0;
+        protected const int HEADER_Y = 0;
+        protected const int HEADER_WIDTH = SCREEN_WIDTH - 2;
+        protected const int HEADER_HEIGHT = 1;
+        
         protected ScreenHandler _screenHandler;
+        
         protected string ulCorner = "╔";
         protected string llCorner = "╚";
         protected string urCorner = "╗";
@@ -12,6 +19,7 @@ namespace UserInterface
         protected string vertical = "║";
         protected string horizontal = "═";
         public abstract void DrawScreen();
+        public abstract void HandleInput();
         public void SetScreen(ScreenHandler screenHandler)
         {
             _screenHandler = screenHandler;
@@ -44,6 +52,30 @@ namespace UserInterface
             }
 
             Console.Write(lrCorner);
+        }
+
+        public void DrawHeader(string message)
+        {
+            DrawBox(HEADER_X, HEADER_Y, HEADER_WIDTH, HEADER_HEIGHT);
+            
+            Console.SetCursorPosition(HEADER_X + 2, HEADER_Y + 1);
+            Console.Write(message);
+        }
+        public void DrawInputBox(int x, int y, string message)
+        {
+            DrawBox(x, y, SCREEN_WIDTH - 2, 2);
+            Console.SetCursorPosition(x + 2, y + 1);
+            Console.Write(message);
+            Console.SetCursorPosition(x + 2, y + 2);
+            Console.Write(">");
+
+            var emptyLine = String.Empty;
+            for (int i = 0; i < 75; i++)
+            {
+                emptyLine += " ";
+            }
+            Console.WriteLine(emptyLine);
+            Console.SetCursorPosition(x + 4, y + 2);
         }
     }
 }

@@ -251,6 +251,9 @@ namespace Session
         {
             _availableSessions.TryAdd(packet.Header.SessionID, packet);
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
+            
+            // voeg update output op session screen
+            
             Console.WriteLine(
                 packet.Header.SessionID + " Name: " + sessionDTO.Name + " Seed: " + sessionDTO.SessionSeed);
             return new HandlerResponseDTO(SendAction.Ignore, null);

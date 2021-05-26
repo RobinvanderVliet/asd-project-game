@@ -16,6 +16,7 @@ using Network;
 using Player.ActionHandlers;
 using Session;
 using Player.Model;
+using UserInterface;
 
 namespace ASD_project
 {
@@ -56,6 +57,7 @@ namespace ASD_project
                     services.AddSingleton<IDbConnection, DbConnection>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
                     services.AddScoped(typeof(IServicesDb<>), typeof(ServicesDb<>));
+                    services.AddScoped<IScreenHandler, ScreenHandler>();
                 })
                 .UseSerilog()
                 .Build();
