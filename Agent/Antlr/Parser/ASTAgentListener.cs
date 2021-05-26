@@ -5,7 +5,7 @@ using System.Linq;
 using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
 using Agent.Antlr.Ast.Comparables.Subjects;
-using Agent.antlr.grammar;
+using Agent.Antlr.Grammar;
 using Action = Agent.Antlr.Ast.Action;
 
 namespace Agent.Antlr.Parser
