@@ -7,10 +7,6 @@ using System.Threading;
 using System.Timers;
 using Network.DTO;
 using WorldGeneration;
-using DatabaseHandler;
-using DatabaseHandler.Poco;
-using DatabaseHandler.Services;
-using DatabaseHandler.Repository;
 using Timer = System.Timers.Timer;
 
 namespace Session
@@ -22,7 +18,9 @@ namespace Session
         private IHeartbeatHandler _heartbeatHandler;
         private Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;
+        private int _hostInactiveCounter = 0;
         private Timer _hostPingTimer;
+        private Timer _senderHeartbeatTimer;
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
 
@@ -31,29 +29,24 @@ namespace Session
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Session);
         }
-
-        public void StartSession(string sessionID)
+        
+        public List<string> GetAllClients()
         {
-            var DTO = SetupGameHost();
-            sendGameSessionDTO(DTO);
-
-// bericht naar alle clients dat sessie is gestart
+           return _session.GetAllClients();
         }
-
-
+     
         public bool JoinSession(string sessionId)
         {
+            var joinSession = false;
+
             if (!_availableSessions.TryGetValue(sessionId, out PacketDTO packetDTO))
             {
                 Console.WriteLine("Could not find game!");
             }
             else
             {
-                System.Threading.Timer timer = new System.Threading.Timer((e) =>
-                {
-                    SendHeartbeat();
-                }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
-       
+                SendHeartbeatTimer();
+
                 SessionDTO receivedSessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
                 _session = new Session(receivedSessionDTO.Name);
 
@@ -66,10 +59,24 @@ namespace Session
                 sessionDTO.ClientIds.Add(_clientController.GetOriginId());
                 sessionDTO.SessionSeed = receivedSessionDTO.SessionSeed;
                 sendSessionDTO(sessionDTO);
-                _session.InSession = true;
+                joinSession = true;
             }
 
-            return _session.InSession;
+            return joinSession;
+        }
+
+        private void SendHeartbeatTimer()
+        {
+            _senderHeartbeatTimer = new Timer(INTERVALTIMEPINGTIMER);
+            _senderHeartbeatTimer.Enabled = true;
+            _senderHeartbeatTimer.AutoReset = true;
+            _senderHeartbeatTimer.Elapsed += SenderHeartbeatEvent;
+            _senderHeartbeatTimer.Start();
+        }
+
+        private void SenderHeartbeatEvent(object sender, ElapsedEventArgs e)
+        {
+            SendHeartbeat();
         }
 
         public bool CreateSession(string sessionName)
@@ -83,7 +90,7 @@ namespace Session
             _session.InSession = true;
 
             _heartbeatHandler = new HeartbeatHandler();
-            Console.Out.WriteLine("Created session with the name: " + _session.Name);
+            Console.WriteLine("Created session with the name: " + _session.Name);
 
             return _session.InSession;
         }
@@ -100,55 +107,6 @@ namespace Session
             sendSessionDTO(sessionDTO);
         }
 
-
-        public StartGameDto SetupGameHost()
-        {
-            var tmp = new DbConnection();
-            tmp.SetForeignKeys();
-
-            var playerRepository = new Repository<PlayerPoco>(tmp);
-            var tmpServicePlayer = new ServicesDb<PlayerPoco>(playerRepository);
-            var tmpGameRepostory = new Repository<GamePoco>(tmp);
-            var tmpServiceGame = new ServicesDb<GamePoco>(tmpGameRepostory);
-
-            Guid gameGuid = Guid.NewGuid();
-            var tmpObject = new GamePoco {GameGUID = gameGuid};
-            tmpServiceGame.CreateAsync(tmpObject);
-
-
-            List<string> allClients = _session.GetAllClients();
-            Dictionary<string, int[]> players = new Dictionary<string, int[]>();
-
-            int playerX = 26; // spawn position
-            int playerY = 11; // spawn position
-            foreach (string element in allClients)
-            {
-                int[] playerPosition = new int[2];
-                playerPosition[0] = playerX;
-                playerPosition[1] = playerY;
-                players.Add(element, playerPosition);
-                var tmpPlayer = new PlayerPoco
-                    {PlayerGUID = element, GameGUID = gameGuid, PositionX = playerX, PositionY = playerY};
-                tmpServicePlayer.CreateAsync(tmpPlayer);
-
-                playerX+=2; // spawn position + 2 each client
-                playerY+=2; // spawn position + 2 each client
-            }
-
-            StartGameDto startGameDto = new StartGameDto();
-            startGameDto.GameGuid = gameGuid.ToString();
-            startGameDto.PlayerLocations = players;
-
-            return startGameDto;
-        }
-
-
-        private void sendGameSessionDTO(StartGameDto startGameDto)
-        {
-            var payload = JsonConvert.SerializeObject(startGameDto);
-            _clientController.SendPayload(payload, PacketType.GameSession);
-        }
-
         private void sendSessionDTO(SessionDTO sessionDTO)
         {
             var payload = JsonConvert.SerializeObject(sessionDTO);
@@ -158,62 +116,69 @@ namespace Session
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
-
-
-            if (packet.Header.Target == "client" || packet.Header.Target == "host")
+            
+            if (packet.Header.SessionID == _session?.SessionId)
             {
-                switch (sessionDTO.SessionType)
+                if (packet.Header.Target == "client" || packet.Header.Target == "host")
                 {
-                    case SessionType.SendHeartbeat:
+                    if (sessionDTO.SessionType == SessionType.RequestToJoinSession)
+                    {
+                        return addPlayerToSession(packet);
+                    }
+                    if (sessionDTO.SessionType == SessionType.SendHeartbeat)
+                    {
                         return HandleHeartbeat(packet);
-                    case SessionType.RequestSessions:
-                        return handleRequestSessions();
-                    case SessionType.RequestToJoinSession:
-                        if (packet.Header.SessionID == _session?.SessionId)
-                        {
-                            return addPlayerToSession(packet);
-                        }
-                        else
-                        {
-                            return new HandlerResponseDTO(SendAction.Ignore, null);
-                        }
-                    case SessionType.SendPing:
-                        return handlePingRequest(packet);
+                    }
+                }
+                if ((packet.Header.Target == "client" || packet.Header.Target == "host" || packet.Header.Target == _clientController.GetOriginId()) 
+                    && sessionDTO.SessionType == SessionType.SendPing)
+                {
+                    return handlePingRequest(packet);
                 }
             }
-            else if (packet.Header.Target == _clientController.GetOriginId())
+            else
             {
-                if (sessionDTO.SessionType == SessionType.RequestSessions)
+                if ((packet.Header.Target == "client" || packet.Header.Target == "host")
+                    && sessionDTO.SessionType == SessionType.RequestSessions)
+                {
+                    return handleRequestSessions();
+                } 
+                if (packet.Header.Target == _clientController.GetOriginId() 
+                    && sessionDTO.SessionType == SessionType.RequestSessions)
                 {
                     return addRequestedSessions(packet);
                 }
-                else if (sessionDTO.SessionType == SessionType.SendPing) {
-                    return handlePingRequest(packet);
-                }
-
-                return new HandlerResponseDTO(SendAction.Ignore, null);
             }
-            
+        
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
-
+        
         private HandlerResponseDTO HandleHeartbeat(PacketDTO packet)
         {
             if(_heartbeatHandler != null)
             {
                 _heartbeatHandler.ReceiveHeartbeat(packet.Header.OriginID);
             }
-
+            
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
         private void CheckIfHostActive() 
         {
-            if (!_hostActive) 
+            if (!_hostActive)
             {
-                _hostPingTimer.Dispose();
-                _hostActive = true;
-                SwapToHost();
+                _hostInactiveCounter++;
+                if (_hostInactiveCounter >= 5)
+                {
+                    _hostPingTimer.Dispose();
+                    _hostActive = true;
+                    _hostInactiveCounter = 0;
+                    SwapToHost();   
+                }
+            }
+            else
+            {
+                _hostInactiveCounter = 0;
             }
         }
         
@@ -222,11 +187,10 @@ namespace Session
             if (packet.Header.Target.Equals("client")) {
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
+
             if (packet.HandlerResponse != null)
             {
-                Console.WriteLine("pong"); //TODO verwijderen
                 _hostActive = true;
-                return new HandlerResponseDTO(SendAction.Ignore, null);
             }
             else {
                 SessionDTO sessionDTO = new SessionDTO {
@@ -236,6 +200,8 @@ namespace Session
                 var jsonObject = JsonConvert.SerializeObject(sessionDTO);
                 return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
             }
+            
+            return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
         private HandlerResponseDTO handleRequestSessions()
@@ -251,29 +217,10 @@ namespace Session
         {
             _availableSessions.TryAdd(packet.Header.SessionID, packet);
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
-            Console.WriteLine(
-                packet.Header.SessionID + " Name: " + sessionDTO.Name + " Seed: " + sessionDTO.SessionSeed);
+            Console.WriteLine(packet.Header.SessionID + " Name: " + sessionDTO.Name);
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
-
-        // private HandlerResponseDTO StartSession(PacketDTO packet)
-        // {
-        //     if (packet.Header.Target == "host")
-        //     {
-        //         Console.WriteLine("starting Game");
-        //      StartGameDto startGameDto = SetupGameHost();
-        //      var jsonObject = JsonConvert.SerializeObject(startGameDto);
-        //      sendGameSessionDTO(startGameDto);
-        //      
-        //      return new HandlerResponseDTO(SendAction.SendToClients, jsonObject);
-        //      
-        //     }
-        //     else
-        //     {
-        //         return new HandlerResponseDTO(SendAction.Ignore, "You're not the host");
-        //     }
-        // }
-
+        
         private HandlerResponseDTO addPlayerToSession(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
@@ -284,13 +231,12 @@ namespace Session
                 _session.AddClient(sessionDTO.ClientIds[0]);
                 sessionDTO.ClientIds = new List<string>();
 
-
+                sessionDTO.SessionSeed = _session.SessionSeed;
 
                 foreach (string client in _session.GetAllClients())
                 {
                     sessionDTO.ClientIds.Add(client);
                 }
-
 
                 return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
             }
@@ -298,15 +244,14 @@ namespace Session
             {
                 SessionDTO sessionDTOClients = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
                 _session.EmptyClients();
-
-                _session.SessionSeed = sessionDTO.SessionSeed;
-                Console.Out.WriteLine(_session.SessionSeed);
-
-                Console.Out.WriteLine("Players in your session:");
+                
+                _session.SessionSeed = sessionDTOClients.SessionSeed;
+                
+                Console.WriteLine("Players in your session:");
                 foreach (string client in sessionDTOClients.ClientIds)
                 {
                     _session.AddClient(client);
-                    Console.Out.WriteLine(client);
+                    Console.WriteLine(client);
                 }
 
                 if (sessionDTOClients.ClientIds.Count > 0 && !_clientController.IsBackupHost) {
@@ -328,7 +273,6 @@ namespace Session
 
         private void SendPing()
         {
-            Console.WriteLine("ping"); //TODO verwijderen
             SessionDTO sessionDTO = new SessionDTO{
                 SessionType = SessionType.SendPing,
                 Name = "ping"
@@ -340,7 +284,7 @@ namespace Session
 
         private void PingHostTimer()
         {
-            _hostPingTimer = new System.Timers.Timer(INTERVALTIMEPINGTIMER);
+            _hostPingTimer = new Timer(INTERVALTIMEPINGTIMER);
             _hostPingTimer.Enabled = true;
             _hostPingTimer.AutoReset = true;
             _hostPingTimer.Elapsed += HostPingEvent;
@@ -353,24 +297,20 @@ namespace Session
             Thread.Sleep(WAITTIMEPINGTIMER);
             CheckIfHostActive();
         }
-        
-        
+
         public void SwapToHost()
         {
             _clientController.CreateHostController();
             _clientController.IsBackupHost = false;
-
-            _heartbeatHandler = new HeartbeatHandler();
-
-            foreach(string player in _session.GetAllClients())
-            {
-                _heartbeatHandler.ReceiveHeartbeat(player);
-            }
-
-            // TODO: Enable Heartbeat check and enable agents, maybe this will be done when hostcontroller is activated?
-            // TODO: Make new client backup host
             
-            Console.Out.WriteLine("Look at me, I'm the captain (Host) now!");
+            _senderHeartbeatTimer.Close();
+            
+            Console.WriteLine("Look at me, I'm the captain (Host) now!");
+            
+            List<string> heartbeatSenders = new List<string>(_session.GetAllClients());
+            heartbeatSenders.Remove(_clientController.GetOriginId());
+            
+            _heartbeatHandler = new HeartbeatHandler(heartbeatSenders);
         }
 
         public Timer getHostPingTimer()

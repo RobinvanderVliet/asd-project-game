@@ -1,5 +1,4 @@
 using System;
-using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 namespace Player.Model
 {

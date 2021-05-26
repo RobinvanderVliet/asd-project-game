@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using System.IO;
 using System;
+using System.Threading;
 
 namespace Session.Tests
 {
@@ -30,6 +31,7 @@ namespace Session.Tests
             [Test]
             public void Test_ReceiveHeartbeat_Success()
             {
+                //arrange
                 string expected = String.Empty;
 
                 using (StringWriter sw = new StringWriter())
@@ -46,6 +48,7 @@ namespace Session.Tests
             [Test]
             public void Test_ReceiveHeartbeat_Fail()
             {
+                //arrange
                 string expected = string.Format("Agents are enabled\r\n", Environment.NewLine); ;
                 
                 using (StringWriter sw = new StringWriter())
@@ -54,7 +57,7 @@ namespace Session.Tests
                     Console.SetOut(sw);
                     _sut.ReceiveHeartbeat("test");
                     _sut.ReceiveHeartbeat("test2");
-                    Task.Delay(2000);
+                    Thread.Sleep(2000);
                     _sut.ReceiveHeartbeat("test2");
 
                     //Assert ---------

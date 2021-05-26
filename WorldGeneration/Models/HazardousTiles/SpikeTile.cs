@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Models.HazardousTiles
 {
+    [ExcludeFromCodeCoverage]
     public class SpikeTile : IHazardousTile
     {
         public bool IsAccessible { get; set; }

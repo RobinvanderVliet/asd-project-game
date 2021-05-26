@@ -1,7 +1,9 @@
-﻿using WorldGeneration.Models.Interfaces;
+﻿using System.Diagnostics.CodeAnalysis;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Models.HazardousTiles
 {
+    [ExcludeFromCodeCoverage]
     public class GasTile : IHazardousTile
     {
         
