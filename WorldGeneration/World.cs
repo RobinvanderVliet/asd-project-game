@@ -23,19 +23,38 @@ namespace WorldGeneration
 
         public void UpdateCharacterPosition(MapCharacterDTO characterPositionDTO)
         {
+            var changed = false;
+
             if (CurrentPlayer.PlayerGuid == characterPositionDTO.PlayerGuid)
             {
-                CurrentPlayer.XPosition = characterPositionDTO.XPosition;
-                CurrentPlayer.YPosition = characterPositionDTO.YPosition;
+                if (CurrentPlayer.XPosition != characterPositionDTO.XPosition ||
+                    CurrentPlayer.YPosition != characterPositionDTO.YPosition)
+                {
+                    CurrentPlayer.XPosition = characterPositionDTO.XPosition;
+                    CurrentPlayer.YPosition = characterPositionDTO.YPosition;
+                    changed = true;
+                }
             }
 
             if (_characters.Any(x => x.PlayerGuid.Equals(characterPositionDTO.PlayerGuid)))
             {
-                _characters.Where(x => x.PlayerGuid.Equals(characterPositionDTO.PlayerGuid)).FirstOrDefault().XPosition = characterPositionDTO.XPosition;
-                _characters.Where(x => x.PlayerGuid.Equals(characterPositionDTO.PlayerGuid)).FirstOrDefault().YPosition = characterPositionDTO.YPosition;                
+                var dto = _characters.
+                    Where(x => x.PlayerGuid.Equals(characterPositionDTO.PlayerGuid)).FirstOrDefault();
+
+                if (dto.XPosition != characterPositionDTO.XPosition ||
+                    dto.YPosition != characterPositionDTO.YPosition)
+                {
+                    dto.XPosition = characterPositionDTO.XPosition;
+                    dto.YPosition = characterPositionDTO.YPosition;
+                    changed = true;
+                }             
             }
 
-            DisplayWorld();
+            //Only rerender if the position actually changed.
+            if (changed)
+            {
+                DisplayWorld();
+            }
         }
 
         public void AddCharacterToWorld(MapCharacterDTO mapCharacterDTO, bool isCurrentPlayer)
