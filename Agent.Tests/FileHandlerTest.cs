@@ -23,7 +23,7 @@ namespace Agent.Tests
         {
             //Arrange
             var expected = "combat when player nearby player then attack";
-            var fileLocation = string.Format(Path.GetFullPath(Path.Combine(Path.Combine(_sut.GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory))))) + "/resource/import_test_file_1.txt";
+            var fileLocation = string.Format(Path.GetFullPath(Path.Combine(_sut.GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory)))) + "/Resource/import_test_file_1.txt";
             
             //Act
             var result = _sut.ImportFile(fileLocation);
