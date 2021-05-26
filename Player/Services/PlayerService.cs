@@ -23,6 +23,7 @@ namespace Player.Services
         private readonly IWorldService _worldService;
         private readonly IClientController _clientController;
         private Timer _staminaTimer;
+        private Timer _radiationTimer;
 
         public PlayerService(IPlayerModel currentPlayer,
             IChatHandler chatHandler,
@@ -45,6 +46,12 @@ namespace Player.Services
             _staminaTimer.AutoReset = true;
             _staminaTimer.Elapsed += StaminaEvent;
             _staminaTimer.Start();
+            
+            _radiationTimer = new Timer(1000);
+            _radiationTimer.Enabled = true;
+            _radiationTimer.AutoReset = true;
+            _radiationTimer.Elapsed += RadiationEvent;
+            _radiationTimer.Start();
         }
 
         private void StaminaEvent(object sender, ElapsedEventArgs e)
@@ -63,6 +70,40 @@ namespace Player.Services
             _currentPlayer.Stamina = _relativeStatHandler.GetStamina();
 
             Console.WriteLine("Stamina regained! S: " + _currentPlayer.Stamina);
+        }
+
+        private void RadiationEvent(object sender, ElapsedEventArgs e)
+        {
+            if (!gameStarted)
+            {
+                return;
+            }
+
+            ITile tile = _worldService.GetTile(
+                _worldService.getCurrentCharacterPositions().XPosition, 
+                _worldService.getCurrentCharacterPositions().YPosition);
+
+            if (tile is GasTile)
+            {
+                var statDto = new RelativeStatDTO();
+                statDto.GameGuid = _worldService.getCurrentCharacterPositions().GameGuid;
+                statDto.PlayerGuid = _currentPlayer.PlayerGuid;
+
+                if (_currentPlayer.RadiationLevel > 0)
+                {
+                    statDto.RadiationLevel = -1;
+                }
+                else if (_currentPlayer.Health > 0)
+                {
+                    statDto.Health = -1;
+                }
+                
+                _relativeStatHandler.SendStat(statDto);
+                _currentPlayer.RadiationLevel = _relativeStatHandler.GetRadiationLevel();
+                _currentPlayer.Health = _relativeStatHandler.GetHealth();
+
+                Console.WriteLine("Radiation damage! H: " + _currentPlayer.Health + " | R: " + _currentPlayer.RadiationLevel);
+            }
         }
 
         public void Attack(string direction)
@@ -198,6 +239,7 @@ namespace Player.Services
             var mapCharacterDTO = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
                 (_worldService.getCurrentCharacterPositions().YPosition) + y,
                 stepsValue,
+                _currentPlayer.Health,
                 _currentPlayer.Stamina,
                 _currentPlayer.RadiationLevel,
                 _currentPlayer.PlayerGuid, 

@@ -104,11 +104,11 @@ namespace Session
             {
                 if (_clientController.GetOriginId() == player.Key) 
                 {
-                    _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], 0, 10, 10, player.Key, startGameDTO.GameGuid, CharacterSymbol.CURRENT_PLAYER), true);
+                    _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], 0, 100, 10, 10, player.Key, startGameDTO.GameGuid, CharacterSymbol.CURRENT_PLAYER), true);
                 } 
                 else 
                 {
-                    _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], 0, 10, 10, player.Key, startGameDTO.GameGuid,CharacterSymbol.ENEMY_PLAYER), false);
+                    _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], 0, 100, 10, 10, player.Key, startGameDTO.GameGuid,CharacterSymbol.ENEMY_PLAYER), false);
                 }
             }
             

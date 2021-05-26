@@ -31,6 +31,7 @@ namespace DataTransfer.DTO.Character
                 xPosition,
                 yPosition,
                 0,
+                health,
                 stamina,
                 radiationLevel,
                 playerGuid,

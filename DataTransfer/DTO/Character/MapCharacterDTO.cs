@@ -9,6 +9,7 @@ namespace DataTransfer.DTO.Character
         public int XPosition;
         public int YPosition;
         public int Steps;
+        public int Health;
         public int Stamina;
         public int RadiationLevel;
         public string PlayerGuid;
@@ -22,6 +23,7 @@ namespace DataTransfer.DTO.Character
             int xPosition, 
             int yPosition,
             int steps,
+            int health,
             int stamina,
             int radiationLevel,
             string playerGuid,
@@ -34,6 +36,7 @@ namespace DataTransfer.DTO.Character
             XPosition = xPosition;
             YPosition = yPosition;
             Steps = steps;
+            Health = health;
             Stamina = stamina;
             RadiationLevel = radiationLevel;
             PlayerGuid = playerGuid;
