@@ -8,6 +8,9 @@ namespace DataTransfer.DTO.Character
     {
         public int XPosition;
         public int YPosition;
+        public int Steps;
+        public int Stamina;
+        public int RadiationLevel;
         public string PlayerGuid;
         public string GameGuid;
         public string Symbol;
@@ -18,6 +21,9 @@ namespace DataTransfer.DTO.Character
         public MapCharacterDTO(
             int xPosition, 
             int yPosition,
+            int steps,
+            int stamina,
+            int radiationLevel,
             string playerGuid,
             string gameGuid, 
             string symbol = null, 
@@ -27,6 +33,9 @@ namespace DataTransfer.DTO.Character
         {
             XPosition = xPosition;
             YPosition = yPosition;
+            Steps = steps;
+            Stamina = stamina;
+            RadiationLevel = radiationLevel;
             PlayerGuid = playerGuid;
             GameGuid = gameGuid;
             Symbol = symbol;

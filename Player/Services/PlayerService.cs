@@ -6,6 +6,8 @@ using DataTransfer.DTO.Character;
 using Network;
 using Player.Model;
 using WorldGeneration;
+using WorldGeneration.Models.HazardousTiles;
+using WorldGeneration.Models.Interfaces;
 
 namespace Player.Services
 {
@@ -153,7 +155,7 @@ namespace Player.Services
                 case "forward":
                 case "up":
                 case "north":
-                    y = +stepsValue;
+                    y = stepsValue;
                     break;
                 case "backward":
                 case "down":
@@ -162,18 +164,21 @@ namespace Player.Services
                     break;
             }
 
-            
             var mapCharacterDTO = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
-                (_worldService.getCurrentCharacterPositions().YPosition) + y, 
+                (_worldService.getCurrentCharacterPositions().YPosition) + y,
+                stepsValue,
+                _currentPlayer.Stamina,
+                _currentPlayer.RadiationLevel,
                 _currentPlayer.PlayerGuid, 
                 _worldService.getCurrentCharacterPositions().GameGuid, 
                 _currentPlayer.Symbol);
             
             _moveHandler.SendMove(mapCharacterDTO);
             
-            MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions();
-           _currentPlayer.XPosition = currentCharacter.XPosition;
-           _currentPlayer.YPosition = currentCharacter.YPosition;
+            MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions(); 
+            _currentPlayer.XPosition = currentCharacter.XPosition; 
+            _currentPlayer.YPosition = currentCharacter.YPosition; 
+            _currentPlayer.Stamina = currentCharacter.Stamina;
         }
     }
 }

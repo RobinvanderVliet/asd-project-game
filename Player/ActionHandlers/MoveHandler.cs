@@ -72,12 +72,24 @@ namespace Player.ActionHandlers
                         x.XPosition == newPosPlayerX && x.YPosition == newPosPlayerY &&
                         x.GameGuid == moveDTO.PlayerPosition.GameGuid);
 
+                var resultStamina =
+                    allLocations.Result.Where(x =>
+                        x.GameGuid == moveDTO.PlayerPosition.GameGuid &&
+                        x.PlayerGuid == moveDTO.PlayerPosition.PlayerGuid
+                    ).Select(x => x.Stamina).FirstOrDefault();
+                
                 if (result.Any())
                 {
                     return new HandlerResponseDTO(SendAction.ReturnToSender, "Can't move to new position something is in the way");
                 }
+                else if (resultStamina < moveDTO.PlayerPosition.Steps)
+                {
+                    return new HandlerResponseDTO(SendAction.ReturnToSender, "You do not have enough stamina to move!");
+                }
                 else
                 {
+                    moveDTO.PlayerPosition.Stamina = resultStamina - moveDTO.PlayerPosition.Steps;
+                    
                     InsertToDatabase(moveDTO);
                     HandleMove(moveDTO.PlayerPosition);
                 }
@@ -105,9 +117,7 @@ namespace Player.ActionHandlers
 
             if (playerRepository.UpdateAsync(destination).Result == 1)
             {
-                var allPlayers = servicePlayer.GetAllAsync();
-                allPlayers.Wait();
-                Console.WriteLine("Updated :)");
+                //TODO: check if successful or not
             }
         }
 

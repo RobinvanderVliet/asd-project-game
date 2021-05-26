@@ -30,6 +30,9 @@ namespace DataTransfer.DTO.Character
             : base(
                 xPosition,
                 yPosition,
+                0,
+                stamina,
+                radiationLevel,
                 playerGuid,
                 gameGuid,
                 symbol,
