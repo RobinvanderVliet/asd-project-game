@@ -168,9 +168,9 @@ namespace Player.Services
                 (_worldService.getCurrentCharacterPositions().YPosition) + y, 
                 _currentPlayer.PlayerGuid, 
                 _worldService.getCurrentCharacterPositions().GameGuid, 
-                _currentPlayer.Symbol);
-            
+                _currentPlayer.Symbol);    
             _moveHandler.SendMove(mapCharacterDto);
+        
             
             MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions();
            _currentPlayer.XPosition = currentCharacter.XPosition;

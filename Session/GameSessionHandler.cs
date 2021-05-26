@@ -20,13 +20,15 @@ namespace Session
         private IClientController _clientController;
         private ISessionHandler _sessionHandler;
         private IWorldService _worldService;
+        private IGuidService _guidService;
         
-        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler)
+        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IGuidService guidService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
             _worldService = worldService;
             _sessionHandler = sessionHandler;
+            _guidService = guidService;
         }
         
         public void SendGameSession(ISessionHandler sessionHandler)
@@ -46,7 +48,7 @@ namespace Session
             var gameRepository = new Repository<GamePoco>(dbConnection);
             var gameService = new ServicesDb<GamePoco>(gameRepository);
 
-            string gameGuid = Guid.NewGuid().ToString();
+            string gameGuid = _guidService.NewGuid().ToString();
             var gamePoco = new GamePoco {GameGuid = gameGuid, PlayerGUIDHost = _clientController.GetOriginId()};
             gameService.CreateAsync(gamePoco);
   
@@ -82,6 +84,7 @@ namespace Session
             var payload = JsonConvert.SerializeObject(startGameDto);
             _clientController.SendPayload(payload, PacketType.GameSession);
         }
+        
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var startGameDTO = JsonConvert.DeserializeObject<StartGameDto>(packet.Payload);
@@ -104,7 +107,6 @@ namespace Session
                     _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, startGameDto.GameGuid,CharacterSymbol.ENEMY_PLAYER), false);
                 }
             }
-            
             _worldService.DisplayWorld();
         }
     }

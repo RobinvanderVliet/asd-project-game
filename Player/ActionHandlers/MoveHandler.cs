@@ -102,7 +102,6 @@ namespace Player.ActionHandlers
             {
                 var allPlayers = servicePlayer.GetAllAsync();
                 allPlayers.Wait();
-                Console.WriteLine("Updated :)");
             }
         }
 
