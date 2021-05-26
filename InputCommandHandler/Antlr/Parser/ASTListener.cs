@@ -34,26 +34,22 @@ namespace InputCommandHandler.Antlr.Parser
 
         public override void EnterShoot(PlayerCommandsParser.ShootContext context)
         {
-            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
-
+            _currentContainer.Push(new Shoot());
         }
 
         public override void ExitShoot(PlayerCommandsParser.ShootContext context)
         {
-            _currentContainer.Push(new Shoot());
-
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterSlash(PlayerCommandsParser.SlashContext context)
         {
-            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
-
+            _currentContainer.Push(new Slash());
         }
 
         public override void ExitSlash(PlayerCommandsParser.SlashContext context)
         {
-            _currentContainer.Push(new Slash());
-
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterDrop(PlayerCommandsParser.DropContext context)
@@ -185,10 +181,15 @@ namespace InputCommandHandler.Antlr.Parser
                 Move move = (Move) action;
                 move.AddChild(new Direction(context.GetText()));
             }
-            else if (action is Attack)
+            else if (action is Shoot)
             {
-                Attack attack = (Attack) action;
-                attack.AddChild(new Direction(context.GetText()));
+                Shoot shoot = (Shoot) action;
+                shoot.AddChild(new Direction(context.GetText()));
+            }
+            else if (action is Slash)
+            {
+                Slash slash = (Slash)action;
+                slash.AddChild(new Direction(context.GetText()));
             }
         }
 
