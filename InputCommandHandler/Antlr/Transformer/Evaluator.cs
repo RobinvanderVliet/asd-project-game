@@ -74,7 +74,15 @@ namespace InputCommandHandler.Antlr.Transformer
                     case StartSession:
                         TransformStartSession((StartSession)nodeBody[i]);
                         break;
+                    case Inspect:
+                        TransformInspect((Inspect)nodeBody[i]);
+                        break;
                 }
+        }
+
+        private void TransformInspect(Inspect inspect)
+        {
+            throw new NotImplementedException(); //TODO write link to handeler
         }
 
         private void TransformMove(Move move)
