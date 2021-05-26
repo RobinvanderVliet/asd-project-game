@@ -12,11 +12,13 @@ namespace Agent.Tests.Mapper
     public class FileToDictionaryMapperTest
     {
         private FileToDictionaryMapper _sut;
+        private FileHandler handler;
 
         [SetUp]
         public void Setup()
         {
             _sut = new FileToDictionaryMapper();
+            handler = new FileHandler();
 
         }
 
@@ -28,7 +30,7 @@ namespace Agent.Tests.Mapper
             expectedDictionary.Add("aggressiveness", "high");
             expectedDictionary.Add("explore", "random");
             expectedDictionary.Add("combat", "offensive");
-            var filepath = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest.txt";
+            var filepath = string.Format(Path.GetFullPath(Path.Combine(handler.GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory)))) + "Resource/npcFileTest.txt";
             
             //Act
             var actualDictionary = _sut.MapFileToConfiguration(filepath);

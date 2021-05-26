@@ -6,9 +6,10 @@ namespace Agent.Mapper
 {
     public class FileToDictionaryMapper
     {
+        public FileHandler fileHandler;
         public Dictionary<string, string> MapFileToConfiguration(string filepath)
         {
-            FileHandler fileHandler = new FileHandler();
+            fileHandler = new FileHandler();
             Dictionary<string, string> configuration = new  Dictionary<string, string>();
                     
             string content = fileHandler.ImportFile(filepath);
