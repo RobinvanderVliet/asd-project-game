@@ -27,9 +27,12 @@ namespace ASD_project
             private readonly IGameSessionHandler _gameSessionHandler;
             private readonly IClientController _clientController;
             private readonly IWorldService _worldService;
+            private readonly IRelativeStatHandler _relativeStatHandler;
 
-            public MainGame(ILogger<MainGame> log, IInventory inventory, IClientController clientController, IWorldService worldService, 
-                IChatHandler chatHandler, ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler)
+            public MainGame(ILogger<MainGame> log, IInventory inventory, IClientController clientController,
+                IWorldService worldService, IChatHandler chatHandler, ISessionHandler sessionHandler,
+                IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler,
+                IRelativeStatHandler relativeStatHandler)
             {
                 _log = log;
                 _inventory = inventory;
@@ -39,6 +42,7 @@ namespace ASD_project
                 _sessionHandler = sessionHandler;
                 _moveHandler = moveHandler;
                 _gameSessionHandler = gameSessionHandler;
+                _relativeStatHandler = relativeStatHandler;
             }
 
             public void Run()
@@ -52,7 +56,7 @@ namespace ASD_project
                 
                 //moet later vervangen worden
                 IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _moveHandler, _clientController, _worldService);
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _moveHandler, _clientController, _worldService, _relativeStatHandler);
 
                 ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
                 // moet vervangen worden met variabele: isRun

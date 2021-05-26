@@ -9,7 +9,7 @@ namespace ASD_project.Profiles
         public MapCharacterProfile()
         {
             CreateMap<MapCharacterDTO, PlayerPOCO>();
+            CreateMap<RelativeStatDTO, PlayerPOCO>();
         }
-        
     }
 }

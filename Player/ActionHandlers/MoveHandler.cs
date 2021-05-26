@@ -115,7 +115,7 @@ namespace Player.ActionHandlers
 
             var destination = _mapper.Map<PlayerPOCO>(moveDTO.PlayerPosition);
 
-            if (playerRepository.UpdateAsync(destination).Result == 1)
+            if (servicePlayer.UpdateAsync(destination).Result == 1)
             {
                 //TODO: check if successful or not
             }

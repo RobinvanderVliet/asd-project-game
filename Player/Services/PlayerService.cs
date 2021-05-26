@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Timers;
 using Player.ActionHandlers;
 using Chat;
 using DataTransfer.DTO.Character;
@@ -13,25 +14,55 @@ namespace Player.Services
 {
     public class PlayerService : IPlayerService
     {
+        private bool gameStarted;
         private readonly IPlayerModel _currentPlayer;
         private List<MapCharacterDTO> _playerPositions;
         private readonly IMoveHandler _moveHandler;
+        private readonly IRelativeStatHandler _relativeStatHandler;
         private readonly IChatHandler _chatHandler;
         private readonly IWorldService _worldService;
         private readonly IClientController _clientController;
+        private Timer _staminaTimer;
 
-        public PlayerService(IPlayerModel currentPlayer
-            , IChatHandler chatHandler
-            , IMoveHandler moveHandler
-            , IClientController clientController
-            , IWorldService worldService)
+        public PlayerService(IPlayerModel currentPlayer,
+            IChatHandler chatHandler,
+            IMoveHandler moveHandler,
+            IClientController clientController,
+            IWorldService worldService,
+            IRelativeStatHandler relativeStatHandler
+            )
         {
             _chatHandler = chatHandler;
             _currentPlayer = currentPlayer;
             _moveHandler = moveHandler;
+            _relativeStatHandler = relativeStatHandler;
             _clientController = clientController;
             currentPlayer.PlayerGuid = _clientController.GetOriginId();
             _worldService = worldService;
+
+            _staminaTimer = new Timer(1000);
+            _staminaTimer.Enabled = true;
+            _staminaTimer.AutoReset = true;
+            _staminaTimer.Elapsed += StaminaEvent;
+            _staminaTimer.Start();
+        }
+
+        private void StaminaEvent(object sender, ElapsedEventArgs e)
+        {
+            if (!gameStarted || _currentPlayer.Stamina >= 10)
+            {
+                return;
+            }
+
+            var statDto = new RelativeStatDTO();
+            statDto.GameGuid = _worldService.getCurrentCharacterPositions().GameGuid;
+            statDto.PlayerGuid = _currentPlayer.PlayerGuid;
+            statDto.Stamina = 1;
+
+            _relativeStatHandler.SendStat(statDto);
+            _currentPlayer.Stamina = _relativeStatHandler.GetStamina();
+
+            Console.WriteLine("Stamina regained! S: " + _currentPlayer.Stamina);
         }
 
         public void Attack(string direction)
@@ -179,6 +210,8 @@ namespace Player.Services
             _currentPlayer.XPosition = currentCharacter.XPosition; 
             _currentPlayer.YPosition = currentCharacter.YPosition; 
             _currentPlayer.Stamina = currentCharacter.Stamina;
+
+            gameStarted = true;
         }
     }
 }
