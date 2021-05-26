@@ -12,13 +12,15 @@ namespace DatabaseHandler.Services
 {
     public class ServicesDb<T> : IServicesDb<T>
     {
+        private readonly IDbConnection _dbConnection;
         private readonly ILogger<ServicesDb<T>> _log;
         private readonly IRepository<T> _repository;
 
-        public ServicesDb(IRepository<T> repository)
+        public ServicesDb(IRepository<T> repository = null)
         {
-            
-            _repository = repository;
+
+            _dbConnection = new DbConnection();
+            _repository = repository ?? new Repository<T>(_dbConnection);
             _log = new NullLogger<ServicesDb<T>>();
         }
 
@@ -31,19 +33,6 @@ namespace DatabaseHandler.Services
             catch (Exception ex)
             {
                 _log.LogError("Exception thrown trying to create a {Obj}: {Message}", typeof(T), ex.Message);
-                throw;
-            }
-        }
-
-        public Task<T> ReadAsync(T obj)
-        {
-            try
-            {
-                return _repository.ReadAsync(obj);
-            }
-            catch (Exception ex)
-            {
-                _log.LogError("Exception thrown trying to read a {Obj} from database: {Message}", typeof(T), ex.Message);
                 throw;
             }
         }

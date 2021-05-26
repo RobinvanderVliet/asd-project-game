@@ -17,9 +17,7 @@ namespace WorldGeneration
         private readonly int _seed;
         private List<Chunk> _chunks; // NOT readonly, don't listen to the compiler
         //private readonly DatabaseFunctions.Database _db;
-        private ServicesDb<Chunk> _dbService;
-        private Repository<Chunk> _repository;
-        private DbConnection _dbConnection;
+        private IServicesDb<Chunk> _dbService;
         private ChunkService _chunkService;
         private List<int[]> _chunksWithinLoadingRange;
 
@@ -29,21 +27,19 @@ namespace WorldGeneration
             INoiseMapGenerator noiseMapGenerator
             , int chunkSize
             , int seed
+            , IServicesDb<Chunk> dbServices
         )
         {
             _chunkSize = chunkSize;
             _chunks = new List<Chunk>();
             _seed = seed;
-            _noiseMapGenerator = noiseMapGenerator;            
+            _noiseMapGenerator = noiseMapGenerator;
+            _dbService = dbServices;
         }
 
         // checks if there are new chunks that have to be loaded
         private void LoadArea(int playerX, int playerY, int viewDistance) {
-            _dbConnection = new DbConnection();
-            _repository = new Repository<Chunk>(_dbConnection);
-            _dbService = new ServicesDb<Chunk>(_repository);
             _chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
-            ForgetUnloadedChunks();
             foreach (var chunkXY in _chunksWithinLoadingRange)
             {
                 if (!_chunks.Exists(chunk => chunk.X == chunkXY[0] && chunk.Y == chunkXY[1]))
@@ -52,10 +48,10 @@ namespace WorldGeneration
                         X = chunkXY[0], 
                         Y = chunkXY[1] 
                     };
-                    var results = _dbService.ReadAsync(chunk).Result;
-                    _chunks.Add(results == null
-                        ? GenerateNewChunk(chunkXY[0], chunkXY[1])
-                        : results);
+                    var getAll = _dbService.GetAllAsync();
+                    getAll.Wait();
+                    var results = getAll.Result.FirstOrDefault(c => c.Equals(chunk));
+                    _chunks.Add(results ?? GenerateNewChunk(chunkXY[0], chunkXY[1]));
                 }
             }
         }

@@ -1,4 +1,6 @@
 using System;
+using DatabaseHandler.Services;
+using DataTransfer.POCO.World;
 
 namespace WorldGeneration
 {
@@ -13,7 +15,7 @@ namespace WorldGeneration
             {
                 seed = new Random().Next(1, 999999);
             }           
-            return new Map(new NoiseMapGenerator(), chunkSize, seed);
+            return new Map(new NoiseMapGenerator(), chunkSize, seed, new ServicesDb<Chunk>());
         }
 
         public static int GenerateSeed()

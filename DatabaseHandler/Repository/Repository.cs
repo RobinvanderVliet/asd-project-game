@@ -34,14 +34,6 @@ namespace DatabaseHandler.Repository
         }
 
         [ExcludeFromCodeCoverage]
-        public async Task<T> ReadAsync(T obj)
-        {
-            var chunk = await _db.GetCollection<T>(_collection)
-                .FindOneAsync(c => c.Equals(obj));
-            return chunk;
-        }
-
-        [ExcludeFromCodeCoverage]
         public async Task<int> UpdateAsync(T obj)
         {
             var results = await _db.GetCollection<T>(_collection).UpdateAsync(obj);
@@ -75,7 +67,5 @@ namespace DatabaseHandler.Repository
             var result = await _db.GetCollection<PlayerPoco>(_collection).Query().ToListAsync();
             return result; 
         }
-
-     
     }
 }
