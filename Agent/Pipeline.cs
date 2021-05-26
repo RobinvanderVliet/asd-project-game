@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Agent.Antlr.Checker;
-using Agent.Antlr.Grammar;
+using Agent.Antlr.grammar;
 using Agent.Antlr.Parser;
 using Agent.Generator;
 using Antlr4.Runtime;

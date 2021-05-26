@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using DatabaseHandler.Poco;
-using DatabaseHandler.Repository;
 using Moq;
 using Network;
 using Network.DTO;
@@ -64,7 +62,7 @@ namespace Session.Tests
             
             var GUID = new Guid("16346707-31d3-4566-b87d-a0b45803b7ab");
             
-            StartGameDto startGameDto = new StartGameDto();
+            StartGameDTO startGameDto = new StartGameDTO();
             startGameDto.GameGuid = GUID.ToString();
             startGameDto.PlayerLocations = players;
 
@@ -110,7 +108,7 @@ namespace Session.Tests
             _sut.SendGameSession(_mockedsessionHandler.Object);
                
 
-                StartGameDto gameDto = new StartGameDto();
+                StartGameDTO gameDto = new StartGameDTO();
                 gameDto.PlayerLocations = players;
                 gameDto.GameGuid = Guid.NewGuid().ToString();
                 
