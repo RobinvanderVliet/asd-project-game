@@ -36,5 +36,12 @@ namespace WorldGeneration
         {
             return _world.CurrentPlayer;
         }
+
+        public void SearchCurrentTile()
+        {
+            var currentTile = _world.GetCurrentTile();
+            //haal items van currentTile en print die.
+            throw new NotImplementedException();
+        }
     }
 }

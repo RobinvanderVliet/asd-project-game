@@ -11,5 +11,6 @@ namespace WorldGeneration
         public void DeleteMap();
         public void GenerateWorld(int seed);
         public MapCharacterDTO getCurrentCharacterPositions();
+        public void SearchCurrentTile();
     }
 }

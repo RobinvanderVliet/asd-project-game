@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DataTransfer.DTO.Character;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
 {
@@ -61,6 +62,11 @@ namespace WorldGeneration
         public void deleteMap()
         {
             _map.DeleteMap();
+        }
+
+        public ITile GetCurrentTile()
+        {
+            return _map.GetLoadedTileByXAndY(CurrentPlayer.XPosition, CurrentPlayer.YPosition);
         }
     }
 }

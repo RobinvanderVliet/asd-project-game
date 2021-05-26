@@ -45,6 +45,6 @@ namespace Player.Services
         public void DropItem(string itemNameValue);
 
         public void HandleDirection(string directionValue, int stepsValue);
-        void Search();
+        public void Search();
     }
 }
