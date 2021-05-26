@@ -19,7 +19,7 @@ namespace Network
 
         public void ReceivePacket(PacketDTO packet)
         {
-            if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session || packet.Header.PacketType == PacketType.GameSession)
+            if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session)
             {
                 HandlePacket(packet);
             }
@@ -44,9 +44,7 @@ namespace Network
                 _networkComponent.SendPacket(packet);
             }
         }
-
-       
-
+        
         [ExcludeFromCodeCoverage]
         public void SetSessionId(string sessionId)
         {

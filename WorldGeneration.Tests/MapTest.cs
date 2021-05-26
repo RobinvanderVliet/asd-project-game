@@ -79,7 +79,7 @@
 //         }
 //
 //         [Test]
-//         public void Test_DisplayMap_DoesntLoadTooBigArea()
+//         public void Test_DisplayMap_DoesntLoaDTOoBigArea()
 //         {
 //             //Arrange ---------
 //             //Act ---------
@@ -88,7 +88,7 @@
 //         }
 //
 //         [Test]
-//         public void Test_DisplayMap_DoesntLoadTooSmallArea()
+//         public void Test_DisplayMap_DoesntLoaDTOoSmallArea()
 //         {
 //             //Arrange ---------
 //             //Act ---------

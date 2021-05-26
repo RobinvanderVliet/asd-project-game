@@ -57,7 +57,6 @@ namespace ASD_project
                     services.AddScoped<IWorldService, WorldService>();
                     services.AddScoped<IGuidService, GuidService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
-                    services.AddScoped<Session.Session>();
                     services.AddSingleton<IDbConnection, DbConnection>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
                     services.AddScoped(typeof(IServicesDb<>), typeof(ServicesDb<>));

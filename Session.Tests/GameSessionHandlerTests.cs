@@ -131,5 +131,5 @@ namespace Session.Tests
                 Assert.AreEqual(expectedResult.Action, actualResult.Action);
         }
         
-    } 
+    }
 }

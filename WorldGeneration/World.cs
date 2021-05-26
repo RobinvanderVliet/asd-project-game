@@ -38,14 +38,14 @@ namespace WorldGeneration
             DisplayWorld();
         }
 
-        public void AddCharacterToWorld(MapCharacterDTO mapCharacterDto, Boolean isCurrentPlayer)
+        public void AddCharacterToWorld(MapCharacterDTO mapCharacterDTO, bool isCurrentPlayer)
         {
             if (isCurrentPlayer)
             {
-                CurrentPlayer = mapCharacterDto;
+                CurrentPlayer = mapCharacterDTO;
             }
             
-            _characters.Add(mapCharacterDto);
+            _characters.Add(mapCharacterDTO);
         }
 
         public void DisplayWorld()

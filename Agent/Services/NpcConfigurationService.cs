@@ -1,39 +1,71 @@
-﻿using System;
+﻿using Agent.Exceptions;
+using System;
 using System.Collections.Generic;
-using System.IO;
-using Agent.antlr.ast.comparables.subjects;
 using Agent.Mapper;
 using Agent.Models;
-using Antlr4.Runtime.Misc;
+using InputCommandHandler;
+using Serilog;
 
 namespace Agent.Services
 {
-    public class NpcConfigurationService
+    public class NpcConfigurationService : BaseConfigurationService
     {
-        private List<NpcConfiguration> _npcConfigurations;
-        private FileToDictionaryMapper _fileToDictionaryMapper;
+        private List<Configuration> _npcConfigurations;
+        private InputCommandHandlerComponent _inputCommandHandlerComponent;
 
-        public NpcConfigurationService(List<NpcConfiguration> npcConfigurations, FileToDictionaryMapper fileToDictionaryMapper)
+        public NpcConfigurationService(List<Configuration> npcConfigurations, FileToDictionaryMapper fileToDictionaryMapper, InputCommandHandlerComponent inputCommandHandlerComponent)
         {
             _npcConfigurations = npcConfigurations;
-            _fileToDictionaryMapper = fileToDictionaryMapper;
+            FileToDictionaryMapper = fileToDictionaryMapper;
+            _inputCommandHandlerComponent = inputCommandHandlerComponent;
+            FileHandler = new FileHandler();
+            Pipeline = new Pipeline();
         }
 
-        public void CreateNpcConfiguration(string npcname, string filepath)
+        public override void CreateConfiguration(string npcName, string filepath)
         {
             var npcConfiguration = new NpcConfiguration();
-            npcConfiguration.NpcName = npcname;
-
-            npcConfiguration.Settings = _fileToDictionaryMapper.MapFileToConfiguration(filepath);
-            
+            npcConfiguration.NpcName = npcName;
+            npcConfiguration.Settings = FileToDictionaryMapper.MapFileToConfiguration(filepath);
             _npcConfigurations.Add(npcConfiguration);
-            
         }
-        
-        
-        public List<NpcConfiguration> GetConfigurations()
+
+        public override List<Configuration> GetConfigurations()
         {
             return _npcConfigurations;
+        }
+
+        public override void Configure()
+        {
+            //TODO: Seems like duplicate code for now, but must be refactored later to match anticipated feature 'Configure NPC during a game'
+            Console.WriteLine("What NPC do you wish to configure?");
+            var npc = _inputCommandHandlerComponent.GetCommand();
+            if (npc.Equals(CANCEL_COMMAND))
+            {
+                return;
+            }
+            Console.WriteLine("Please provide code for the NPC");
+            var code = _inputCommandHandlerComponent.GetCommand();
+            try
+            {
+                Pipeline.ParseString(code);
+                Pipeline.CheckAst();
+                var output = Pipeline.GenerateAst();
+                string fileName = "npc\\" + npc + "-config.cfg";
+                FileHandler.ExportFile(output, fileName);
+            }
+            catch (SyntaxErrorException e)
+            {
+                LastError = e.Message;
+                Log.Logger.Information("Syntax error: " + e.Message);
+                Configure();
+            }
+            catch (SemanticErrorException e)
+            {
+                LastError = e.Message;
+                Log.Logger.Information("Semantic error: " + e.Message);
+                Configure();
+            }
         }
     }
 }

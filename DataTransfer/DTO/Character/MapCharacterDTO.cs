@@ -1,7 +1,9 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DataTransfer.DTO.Character
 {
+    [ExcludeFromCodeCoverage]
     public class MapCharacterDTO
     {
         public int XPosition;
@@ -13,7 +15,15 @@ namespace DataTransfer.DTO.Character
         public ConsoleColor BackgroundColor;
         public int Team;
 
-        public MapCharacterDTO(int xPosition, int yPosition,string playerGuid,string gameGuid, string symbol = null , ConsoleColor color = ConsoleColor.White, ConsoleColor backgroundColor = ConsoleColor.Black, int team = 0)
+        public MapCharacterDTO(
+            int xPosition, 
+            int yPosition,
+            string playerGuid,
+            string gameGuid, 
+            string symbol = null, 
+            ConsoleColor color = ConsoleColor.White, 
+            ConsoleColor backgroundColor = ConsoleColor.Black, 
+            int team = 0)
         {
             XPosition = xPosition;
             YPosition = yPosition;

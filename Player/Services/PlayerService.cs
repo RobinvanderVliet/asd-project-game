@@ -68,8 +68,7 @@ namespace Player.Services
 
         public void Shout(string messageValue)
         {
-            //code for chat with other players in general chat
-            Console.WriteLine(_currentPlayer.Name + " sent message: " + messageValue);
+            _chatHandler.SendShout(messageValue);
         }
 
         public void AddHealth(int amount)
@@ -164,13 +163,13 @@ namespace Player.Services
             }
 
             
-            var mapCharacterDto = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
+            var mapCharacterDTO = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
                 (_worldService.getCurrentCharacterPositions().YPosition) + y, 
                 _currentPlayer.PlayerGuid, 
                 _worldService.getCurrentCharacterPositions().GameGuid, 
-                _currentPlayer.Symbol);    
-            _moveHandler.SendMove(mapCharacterDto);
-        
+                _currentPlayer.Symbol);
+            
+            _moveHandler.SendMove(mapCharacterDTO);
             
             MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions();
            _currentPlayer.XPosition = currentCharacter.XPosition;

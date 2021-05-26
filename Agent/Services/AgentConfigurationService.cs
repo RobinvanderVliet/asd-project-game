@@ -1,81 +1,89 @@
 ﻿using System;
 using System.Collections.Generic;
-using Agent.exceptions;
 using Agent.Mapper;
 using Agent.Models;
+using Agent.Exceptions;
+using InputCommandHandler;
+using Serilog;
 
 namespace Agent.Services
 {
-    public class AgentConfigurationService
+    public class AgentConfigurationService : BaseConfigurationService
     {
-        private Pipeline _pipeline;
-        private FileHandler _fileHandler;
-        private FileToDictionaryMapper _fileToDictionaryMapper;
-        private List<AgentConfiguration> _agentConfigurations;
-        private const string CancelCommand = "cancel"; 
+        private InlineConfig _inlineConfig;
+        private List<Configuration> _agentConfigurations;
+        private InputCommandHandlerComponent _inputCommandHandlerComponent;
 
-        public AgentConfigurationService()
+        public AgentConfigurationService(List<Configuration> agentConfigurations, FileToDictionaryMapper fileToDictionaryMapper, InputCommandHandlerComponent inputCommandHandlerComponent)
         {
-            _pipeline = new Pipeline();
-            _fileHandler = new FileHandler();
-            _fileToDictionaryMapper = new FileToDictionaryMapper();
-            _agentConfigurations = new List<AgentConfiguration>();
+            FileToDictionaryMapper = fileToDictionaryMapper;
+            _agentConfigurations = agentConfigurations;
+            _inputCommandHandlerComponent = inputCommandHandlerComponent;
+            _inlineConfig = new InlineConfig();
+            FileHandler = new FileHandler();
+            Pipeline = new Pipeline();
         }
         
-        public void StartConfiguration()
+        public override void Configure()
         {
             Console.WriteLine("Please provide a path to your code file");
-            var input = Console.ReadLine();
+            var input = _inputCommandHandlerComponent.GetCommand();
 
-            if (input.Equals(CancelCommand))
+            if (input.Equals(CANCEL_COMMAND))
             {
                 return;
             }
-
-            var content = String.Empty;;
-            try
+            
+            if (input.Equals(LOAD_COMMAND)) 
             {
-                content = _fileHandler.ImportFile(input);
-            }
-            catch (FileException e)
-            {
-                Console.WriteLine("Something went wrong: " + e);    
-                StartConfiguration();
+                _inlineConfig.setup();
+                return;
             }
             
-
             try
             {
-                _pipeline.ParseString(content);
-                _pipeline.CheckAst();
-                var output = _pipeline.GenerateAst();
-                _fileHandler.ExportFile(output);
+                var content = FileHandler.ImportFile(input);
+                Pipeline.ParseString(content);
+                Pipeline.CheckAst();
+                var output = Pipeline.GenerateAst();
+
+                string fileName = "agent\\agent-config.cfg";
+                FileHandler.ExportFile(output, fileName);
             }
             catch (SyntaxErrorException e)
             {
-                Console.WriteLine("Syntax error: " + e.Message);
-                StartConfiguration();
-            } 
+                LastError = e.Message;
+                Log.Logger.Information("Syntax error: " + e.Message);
+                Configure();
+            }
             catch (SemanticErrorException e)
             {
-                Console.WriteLine("Semantic error: " + e.Message);
-                StartConfiguration();
+                LastError = e.Message;
+                Log.Logger.Information("Semantic error: " + e.Message);
+                Configure();
+            }
+            catch (FileException e)
+            {
+                LastError = e.Message;
+                Log.Logger.Information("File error: " + e.Message);
+                Configure();
             }
         }
-
-        public void CreateAgentConfiguration(string agentName, string filepath)
+        
+        public override void CreateConfiguration(string agentName, string filepath)
         {
             var agentConfiguration = new AgentConfiguration();
             agentConfiguration.AgentName = agentName;
-
-           agentConfiguration.Settings = _fileToDictionaryMapper.MapFileToConfiguration(filepath);
-
-           _agentConfigurations.Add(agentConfiguration);
+            agentConfiguration.Settings = FileToDictionaryMapper.MapFileToConfiguration(filepath);
+            _agentConfigurations.Add(agentConfiguration);
         }
         
-        public List<AgentConfiguration> GetConfigurations()
+        public override List<Configuration> GetConfigurations()
         {
             return _agentConfigurations;
         }
+        
     }
+
+    
 }

@@ -1,8 +1,10 @@
-﻿using Creature.World;
+﻿using System.Diagnostics.CodeAnalysis;
+using Creature.World;
 using System.Numerics;
 
 namespace Creature.Creature.StateMachine.Data
 {
+    [ExcludeFromCodeCoverage]
     public class PlayerData : ICreatureData
     {
         private Vector2 _position;

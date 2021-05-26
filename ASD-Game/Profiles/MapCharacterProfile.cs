@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DatabaseHandler.Poco;
+using DatabaseHandler.POCO;
 using DataTransfer.DTO.Character;
 
 namespace ASD_project.Profiles
@@ -8,7 +8,7 @@ namespace ASD_project.Profiles
     {
         public MapCharacterProfile()
         {
-            CreateMap<MapCharacterDTO, PlayerPoco>();
+            CreateMap<MapCharacterDTO, PlayerPOCO>();
         }
         
     }
