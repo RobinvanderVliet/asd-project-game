@@ -10,10 +10,10 @@ namespace Agent.Mapper
 {
     public class FileToDictionaryMapper
     {
-        public Dictionary<string, string> MapFileToConfiguration(string filepath)
+        public List<string[]> MapFileToConfiguration(string filepath)
         {
             FileHandler fileHandler = new FileHandler();
-            Dictionary<string, string> configuration = new  Dictionary<string, string>();
+            List<string[]> configuration = new List<string[]>();
 
             string content = String.Empty;
             try
@@ -37,7 +37,7 @@ namespace Agent.Mapper
                 }
                     //Trim removes spaces before and after given string. string 'Less than' will keep its format.
                 var seperatedComponents = setting.Split("=");
-                configuration.Add(seperatedComponents[0].Trim(), seperatedComponents[1].Trim());
+                configuration.Add(new string[] { seperatedComponents[0].Trim(), seperatedComponents[1].Trim() } );
             }
 
             return configuration;
