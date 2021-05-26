@@ -40,7 +40,8 @@ namespace InputCommandHandler.Tests
         {
             Input pickup = new Input();
 
-            pickup.AddChild(new Pickup());
+            pickup.AddChild(new Pickup()
+                .AddChild(new Step(1)));
 
             return new AST(pickup);
         }
@@ -189,11 +190,13 @@ namespace InputCommandHandler.Tests
         [Test]
         public void Test_AstListener_CreatesPickupAst()
         {
-            //act
+            // Act
             AST exp = PickupCommand();
-            //arrange
-            AST sut = SetupParser("pickup");
-            //assert
+            
+            // Arrange
+            AST sut = SetupParser("pickup 1");
+            
+            // Assert
             Assert.AreEqual(exp, sut);
         }
 
