@@ -304,5 +304,25 @@ namespace InputCommandHandler.Tests
                 .AddChild(new Message(sessionId)));
             return new AST(joinSession);
         }
+        
+        [Test]
+        public void Test_Apply_InspectItemActionIsCalled()
+        {
+            //arrange
+            string inventorySlot = "armor";
+            var ast = InspectAST(inventorySlot);
+            //act
+            _sut.Apply(ast);
+            //assert
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.InspectItem(inventorySlot), Times.Once);
+        }
+
+        public static AST InspectAST(string inventorySlot)
+        {
+            Input inspect = new Input();
+            inspect.AddChild(new Inspect()
+                .AddChild(new InventorySlot(inventorySlot)));
+            return new AST(inspect);
+        }
     }
 }

@@ -80,11 +80,6 @@ namespace InputCommandHandler.Antlr.Transformer
                 }
         }
 
-        private void TransformInspect(Inspect inspect)
-        {
-            throw new NotImplementedException(); //TODO write link to handeler
-        }
-
         private void TransformMove(Move move)
         {
             switch (move.Steps.StepValue)
@@ -164,5 +159,9 @@ namespace InputCommandHandler.Antlr.Transformer
             _sessionService.StartSession();
         }
         
+        private void TransformInspect(Inspect inspect)
+        {
+            _playerService.InspectItem(inspect.InventorySlot.InventorySlotValue);
+        }
     }
 }
