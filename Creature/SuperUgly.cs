@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace Creature
 {
+    [ExcludeFromCodeCoverage]
     public class SuperUgly
     {
         private static readonly char _seperator = Path.DirectorySeparatorChar;

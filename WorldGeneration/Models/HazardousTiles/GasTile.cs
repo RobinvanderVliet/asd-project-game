@@ -1,18 +1,22 @@
-﻿using WorldGeneration.Models.Interfaces;
+﻿using System.Diagnostics.CodeAnalysis;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Models.HazardousTiles
 {
+    [ExcludeFromCodeCoverage]
     public class GasTile : IHazardousTile
     {
         
         public bool IsAccessible { get; set; }
         public string Symbol { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-        public GasTile(int radius = 1)
+        public int XPosition { get; set; }
+        public int YPosition { get; set; }
+        public GasTile(int x, int y, int radius = 1)
         {
             Symbol = TileSymbol.GAS;
             IsAccessible = true;
+            XPosition = x;
+            YPosition = y;
 
             Radius = radius;
         }

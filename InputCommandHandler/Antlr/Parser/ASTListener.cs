@@ -112,6 +112,16 @@ namespace InputCommandHandler.Antlr.Parser
             _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
+        public override void EnterStartSession(PlayerCommandsParser.StartSessionContext context)
+        {
+            _currentContainer.Push(new StartSession());
+        }
+
+        public override void ExitStartSession(PlayerCommandsParser.StartSessionContext context)
+        {
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
+        }
+
         public override void EnterShout(PlayerCommandsParser.ShoutContext context)
         {
             _currentContainer.Push(new Shout());
@@ -195,6 +205,10 @@ namespace InputCommandHandler.Antlr.Parser
             else if (action is JoinSession joinSession)
             {
                 joinSession.AddChild(new Message(context.GetText()));
+            }
+            else if (action is StartSession startSession)
+            {
+                startSession.AddChild(new Message(context.GetText()));
             }
         }
     }

@@ -5,8 +5,8 @@ namespace Session
         RequestSessions,
         RequestSessionsResponse,
         RequestToJoinSession,
-        ClientJoinedSession,
         SendPing,
-        ReceivedPingResponse
+        ReceivedPingResponse,
+        SendHeartbeat
     }
 }

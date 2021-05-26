@@ -1,38 +1,40 @@
 ﻿using System;
+using System.Collections.Generic;
+using Player.ActionHandlers;
 using Chat;
+using DataTransfer.DTO.Character;
+using Network;
 using Player.Model;
-using Session;
+using WorldGeneration;
 
 namespace Player.Services
 {
     public class PlayerService : IPlayerService
     {
-        private readonly IPlayerModel _playerModel;
+        private readonly IPlayerModel _currentPlayer;
+        private List<MapCharacterDTO> _playerPositions;
+        private readonly IMoveHandler _moveHandler;
         private readonly IChatHandler _chatHandler;
-        private readonly ISessionHandler _sessionHandler;
-        private const int DEFAULT_STEPS = 0;
+        private readonly IWorldService _worldService;
+        private readonly IClientController _clientController;
 
-        public PlayerService(IPlayerModel playerModel, IChatHandler chatHandler, ISessionHandler sessionHandler)
+        public PlayerService(IPlayerModel currentPlayer
+            , IChatHandler chatHandler
+            , IMoveHandler moveHandler
+            , IClientController clientController
+            , IWorldService worldService)
         {
-            _playerModel = playerModel;
             _chatHandler = chatHandler;
-            _sessionHandler = sessionHandler;
+            _currentPlayer = currentPlayer;
+            _moveHandler = moveHandler;
+            _clientController = clientController;
+            currentPlayer.PlayerGuid = _clientController.GetOriginId();
+            _worldService = worldService;
         }
 
         public void Attack(string direction)
         {
-            //player1.getTile();
-            //check with the gameboard whether or not there's a player in the given direction from this tile
-            //player2 = tile(x,y).getPlayer
-            //if yes {
-            //int dmg = player1.GetAttackDamage();
-            //player1.RemoveStamina(1);
-            // player2.RemoveHealth(dmg);
-            //} else {  
-            //  Console.WriteLine("You swung at nothing!");
-            // player1.RemoveStamina(1);
-            //}
-            Console.WriteLine("Attacked in " + direction + " direction.");
+          Console.WriteLine("Attacked in " + direction + " direction.");
         }
 
         public void ExitCurrentGame()
@@ -62,137 +64,116 @@ namespace Player.Services
         public void Say(string messageValue)
         {
             _chatHandler.SendSay(messageValue);
-            //code for chat with other players in team chat
-            // Console.WriteLine(_playerModel.Name + " sent message: " + messageValue);
         }
 
         public void Shout(string messageValue)
         {
-            //code for chat with other players in general chat
-            Console.WriteLine(_playerModel.Name + " sent message: " + messageValue);
+            _chatHandler.SendShout(messageValue);
         }
-        
+
         public void AddHealth(int amount)
         {
-            _playerModel.AddHealth(amount);
+            _currentPlayer.AddHealth(amount);
         }
 
         public void RemoveHealth(int amount)
         {
-            _playerModel.RemoveHealth(amount);
+            _currentPlayer.RemoveHealth(amount);
         }
 
         public void AddStamina(int amount)
         {
-            _playerModel.AddStamina(amount);
+            _currentPlayer.AddStamina(amount);
         }
 
         public void RemoveStamina(int amount)
         {
-            _playerModel.RemoveStamina(amount);
+            _currentPlayer.RemoveStamina(amount);
         }
 
         public IItem GetItem(string itemName)
         {
-            return _playerModel.GetItem(itemName);
+            return _currentPlayer.GetItem(itemName);
         }
 
         public void AddInventoryItem(IItem item)
         {
-            _playerModel.AddInventoryItem(item);
+            _currentPlayer.AddInventoryItem(item);
         }
 
         public void RemoveInventoryItem(IItem item)
         {
-            _playerModel.RemoveInventoryItem(item);
+            _currentPlayer.RemoveInventoryItem(item);
         }
 
         public void EmptyInventory()
         {
-            _playerModel.EmptyInventory();
+            _currentPlayer.EmptyInventory();
         }
 
         public void AddBitcoins(int amount)
         {
-            _playerModel.AddBitcoins(amount);
+            _currentPlayer.AddBitcoins(amount);
         }
 
         public void RemoveBitcoins(int amount)
         {
-            _playerModel.RemoveBitcoins(amount);
+            _currentPlayer.RemoveBitcoins(amount);
         }
 
         public int GetAttackDamage()
         {
-            return _playerModel.GetAttackDamage();
+            return _currentPlayer.GetAttackDamage();
         }
-        
+
         public void PickupItem()
         {
-            _playerModel.PickupItem();
+            _currentPlayer.PickupItem();
         }
 
         public void DropItem(string itemNameValue)
         {
-            _playerModel.DropItem(itemNameValue);
+            _currentPlayer.DropItem(itemNameValue);
         }
-        
+
         public void HandleDirection(string directionValue, int stepsValue)
         {
-            var newMovement = new int[2];
+            int x = 0;
+            int y = 0;
             switch (directionValue)
             {
                 case "right":
                 case "east":
-                    newMovement[0] = stepsValue;
-                    newMovement[1] = DEFAULT_STEPS;
+                    x = stepsValue;
                     break;
                 case "left":
                 case "west":
-                    newMovement[0] = -stepsValue;
-                    newMovement[1] = DEFAULT_STEPS;
+                    x = -stepsValue;
                     break;
                 case "forward":
                 case "up":
                 case "north":
-                    newMovement[0] = DEFAULT_STEPS;
-                    newMovement[1] = -stepsValue;
+                    y = +stepsValue;
                     break;
                 case "backward":
                 case "down":
                 case "south":
-                    newMovement[0] = DEFAULT_STEPS;
-                    newMovement[1] = stepsValue;
+                    y = -stepsValue;
                     break;
             }
 
-            _playerModel.SetNewPlayerPosition(newMovement);
-
-            // the next line of code should be changed by sending newPosition to a relevant method
-            WriteCommand(_playerModel.CurrentPosition);
-        }
-
-        public void CreateSession(string messageValue)
-        {
-            _sessionHandler.CreateSession(messageValue);
-        }
-
-        public void JoinSession(string messageValue)
-        {
-            _sessionHandler.JoinSession(messageValue);
-        }
-
-        public void RequestSessions()
-        {
-            _sessionHandler.RequestSessions();
-        }
-
-        // !!! METHODS BELOW ARE TEMPORARY, PROTOTYPE ONLY !!!
-        private void WriteCommand(int[] newPosition)
-        {
-            // returns the new position
-            _playerModel.CurrentPosition = newPosition;
-            Console.WriteLine("X: " + newPosition[0] + ". Y: " + newPosition[1]);
+            
+            var mapCharacterDTO = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
+                (_worldService.getCurrentCharacterPositions().YPosition) + y, 
+                _currentPlayer.PlayerGuid, 
+                _worldService.getCurrentCharacterPositions().GameGuid, 
+                _currentPlayer.Symbol);
+            
+            _moveHandler.SendMove(mapCharacterDTO);
+            
+            MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions();
+           _currentPlayer.XPosition = currentCharacter.XPosition;
+           _currentPlayer.YPosition = currentCharacter.YPosition;
         }
     }
 }

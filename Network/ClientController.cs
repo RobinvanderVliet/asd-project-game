@@ -11,11 +11,15 @@ namespace Network
         private IHostController _hostController;
         private string _sessionId;
         private Dictionary<PacketType, IPacketHandler> _subscribers = new();
+        private bool _isBackupHost;
+        public bool IsBackupHost { get => _isBackupHost; set => _isBackupHost = value; }
+        public string SessionId { get => _sessionId; }
 
         public ClientController(INetworkComponent networkComponent)
         {
             _networkComponent = networkComponent;
             _networkComponent.SetClientController(this);
+            _isBackupHost = false;
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
@@ -53,7 +57,7 @@ namespace Network
 
         public void SendPayload(string payload, PacketType packetType)
         {
-            if (String.IsNullOrEmpty(payload))
+            if (string.IsNullOrEmpty(payload))
             {
                 throw new Exception("Payload is empty.");
             }
@@ -85,19 +89,9 @@ namespace Network
             _hostController = hostController;
         }
 
-        public void MarkBackupHost()
+        public bool IsHost()
         {
-            _backupHostService.EnableBackupHost();
-        }
-
-        public void UnmarkBackupHost()
-        {
-            _backupHostService.DisableBackupHost();
-        }
-
-        public Boolean IsBackupHost()
-        {
-            return _backupHostService.IsBackupHost();
+            return _hostController != null;
         }
     }
 }
