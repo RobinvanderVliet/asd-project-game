@@ -13,7 +13,7 @@ namespace Player.Model
         //public Tile _currentTile { get; set; }
         public IInventory Inventory { get; set; }
         public IBitcoin Bitcoins { get; set; }
-        public IRadiationLevel RadiationLevel { get; set; }
+        public int RadiationLevel { get; set; }
         public int XPosition { get; set; }
 
         public int YPosition { get; set; }

@@ -23,8 +23,8 @@ namespace Player.Model
         public IInventory Inventory { get => _inventory; set => _inventory = value; }
         private IBitcoin _bitcoins;
         public IBitcoin Bitcoins { get => _bitcoins; set => _bitcoins = value; }
-        private IRadiationLevel _radiationLevel;
-        public IRadiationLevel RadiationLevel { get => _radiationLevel; set => _radiationLevel = value; }
+        private int _radiationLevel;
+        public int RadiationLevel { get => _radiationLevel; set => _radiationLevel = value; }
 
         private int _xPosition;
         private int _yPosition;
@@ -39,6 +39,7 @@ namespace Player.Model
         //random default values for health&stamina for now
         private const int HEALTHCAP = 100;
         private const int STAMINACAP = 10;
+        private const int RADIATIONLEVELCAP = 10;
 
 
         public PlayerModel(string name, IInventory inventory, IBitcoin bitcoins, IRadiationLevel radiationLevel
@@ -50,7 +51,7 @@ namespace Player.Model
             _stamina = STAMINACAP;
             _inventory = inventory;
             _bitcoins = bitcoins;
-            _radiationLevel = radiationLevel;
+            _radiationLevel = RADIATIONLEVELCAP;
         }
 
         public void AddHealth(int amount)
