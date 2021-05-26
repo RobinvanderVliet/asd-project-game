@@ -13,8 +13,8 @@ namespace Creature.Services
     // TODO: if host use playerIds to replace player with agent
     public class AgentService : IAgentService
     {
-        private ICreature _agent;
-        private bool _isActivated = false;
+        private readonly ICreature _agent;
+        private bool _isActivated;
 
         public AgentService(BaseConfigurationService agentConfigurationService, IPlayerModel playerModel)
         {

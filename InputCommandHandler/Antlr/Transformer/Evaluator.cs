@@ -120,6 +120,13 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformReplace()
         {
+            if (_agentService.IsActivated())
+            {
+                Console.WriteLine("Your agent is now active");
+                _agentService.DeActivate();
+                return;
+            }
+            Console.WriteLine("Your agent is now inactive");
             _agentService.Activate();
         }
 
