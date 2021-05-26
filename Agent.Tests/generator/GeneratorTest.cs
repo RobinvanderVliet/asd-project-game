@@ -34,7 +34,5 @@ namespace Agent.Tests.generator
             //Assert
             Assert.True(true);
         }
-
-
     }
 }
