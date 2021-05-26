@@ -177,6 +177,25 @@ namespace InputCommandHandler.Tests
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.ExitCurrentGame(), Times.Once);
         }
 
+        public static AST SearchAst()
+        {
+            Input exit = new Input();
+            exit.AddChild(new Search());
+            return new AST(exit);
+        }
+
+        [Test]
+        public void Test_Apply_HandleSearchActionIsCalled()
+        {
+            //arrange
+            var ast = SearchAst();
+            _mockedPlayerService.Setup(mock => mock.Search());
+            //act
+            _sut.Apply(ast);
+            //assert
+            _mockedPlayerService.Verify(mock => mock.Search(), Times.Once);
+        }
+
         public static AST ExitAst()
         {
             Input exit = new Input();

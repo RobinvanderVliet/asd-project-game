@@ -74,6 +74,9 @@ namespace InputCommandHandler.Antlr.Transformer
                     case StartSession:
                         TransformStartSession((StartSession)nodeBody[i]);
                         break;
+                    case Search:
+                        TransformSearch();
+                        break;
                 }
         }
 
@@ -155,6 +158,11 @@ namespace InputCommandHandler.Antlr.Transformer
         {
             _sessionService.StartSession();
         }
-        
+
+        private void TransformSearch()
+        {
+            _playerService.Search();
+        }
+
     }
 }

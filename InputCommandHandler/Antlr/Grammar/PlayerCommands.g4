@@ -24,6 +24,7 @@ CREATE_SESSION : 'create_session';
 JOIN_SESSION : 'join_session';
 REQUEST_SESSIONS : 'request_sessions';
 START_SESSION : 'start_session';
+SEARCH : 'search';
 
 FORWARD: 'forward';
 UP: 'up';
@@ -61,7 +62,9 @@ command:
     CREATE_SESSION SPACE message #createSession |
     JOIN_SESSION SPACE message #joinSession |
     REQUEST_SESSIONS #requestSessions |
-    START_SESSION #startSession;
+    START_SESSION #startSession |
+    SEARCH #search;
+
 
 forward: FORWARD | UP | NORTH;
 backward: BACKWARD | DOWN | SOUTH;

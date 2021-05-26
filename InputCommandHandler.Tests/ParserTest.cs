@@ -119,6 +119,15 @@ namespace InputCommandHandler.Tests
 
             return new AST(resume);
         }
+        
+        public static AST SearchCommand()
+        {
+            Input search = new Input();
+
+            search.AddChild(new Search());
+
+            return new AST(search);
+        }
 
         [Test]
         public void Test_AstListener_CreatesDropAst()
@@ -251,7 +260,18 @@ namespace InputCommandHandler.Tests
             //assert
             Assert.AreEqual(exp, sut);
         }
-        
+
+        [Test]
+        public void Test_AstListener_CreatesSearchAst()
+        {
+            //act
+            AST exp = SearchCommand();
+            //arrange
+            AST sut = SetupParser("search");
+            //assert
+            Assert.AreEqual(exp, sut);
+        }
+
         [Test]
         public void Test_AstListener_CreatesMoveAstWithForward2Steps()
         {

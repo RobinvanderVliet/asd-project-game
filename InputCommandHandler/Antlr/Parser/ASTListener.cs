@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Antlr4.Runtime.Misc;
 using InputCommandHandler.Antlr.Ast;
 using InputCommandHandler.Antlr.Ast.Actions;
 using InputCommandHandler.Antlr.Grammar;
@@ -160,6 +161,16 @@ namespace InputCommandHandler.Antlr.Parser
         public override void ExitResume(PlayerCommandsParser.ResumeContext context)
         {
             _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+        }
+
+        public override void EnterSearch(PlayerCommandsParser.SearchContext context)
+        {
+            _currentContainer.Push(new Search());
+        }
+
+        public override void ExitSearch(PlayerCommandsParser.SearchContext context)
+        {
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterDirection(PlayerCommandsParser.DirectionContext context)
