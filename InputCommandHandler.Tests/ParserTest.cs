@@ -54,23 +54,33 @@ namespace InputCommandHandler.Tests
             return new AST(pickup);
         }
 
-        public static AST AttackCommand(string direction)
+        public static AST SlashCommand(string direction)
         {
-            Input attack = new Input();
+            Input slash = new Input();
 
-            attack.AddChild(new Attack()
+            slash.AddChild(new Slash()
                 .AddChild(new Direction(direction)));
 
-            return new AST(attack);
+            return new AST(slash);
+        }
+
+        public static AST ShootCommand(string direction)
+        {
+            Input shoot = new Input();
+
+            shoot.AddChild(new Shoot()
+                .AddChild(new Direction(direction)));
+
+            return new AST(shoot);
         }
 
         public static AST DropCommand()
         {
-            Input attack = new Input();
+            Input drop = new Input();
 
-            attack.AddChild(new Drop());
+            drop.AddChild(new Drop());
 
-            return new AST(attack);
+            return new AST(drop);
         }
 
         public static AST SayCommand(string message)
@@ -143,45 +153,89 @@ namespace InputCommandHandler.Tests
         }
 
         [Test]
-        public void Test_AstListener_CreatesAttackAstTWithDirectionForward()
+        public void Test_AstListener_CreatesSlashAstTWithDirectionForward()
         {
             //act
-            AST exp = AttackCommand("forward");
+            AST exp = SlashCommand("forward");
             //arrange
-            AST sut = SetupParser("attack forward");
+            AST sut = SetupParser("slash forward");
             //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
-        public void Test_AstListener_CreatesAttackAstTWithDirectionLeft()
+        public void Test_AstListener_CreatesSlashAstTWithDirectionLeft()
         {
             //act
-            AST exp = AttackCommand("left");
+            AST exp = SlashCommand("left");
             //arrange
-            AST sut = SetupParser("attack left");
+            AST sut = SetupParser("slash left");
             //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
-        public void Test_AstListener_CreatesAttackAstTWithDirectionRight()
+        public void Test_AstListener_CreatesSlashAstTWithDirectionRight()
         {
             //act
-            AST exp = AttackCommand("right");
+            AST exp = SlashCommand("right");
             //arrange
-            AST sut = SetupParser("attack right");
+            AST sut = SetupParser("slash right");
             //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
-        public void Test_AstListener_CreatesAttackAstTWithDirectionBackward()
+        public void Test_AstListener_CreatesSlashAstTWithDirectionBackward()
         {
             //act
-            AST exp = AttackCommand("backward");
+            AST exp = SlashCommand("backward");
             //arrange
-            AST sut = SetupParser("attack backward");
+            AST sut = SetupParser("slash backward");
+            //assert
+            Assert.AreEqual(exp, sut);
+        }
+
+        [Test]
+        public void Test_AstListener_CreatesShootAstTWithDirectionForward()
+        {
+            //act
+            AST exp = ShootCommand("forward");
+            //arrange
+            AST sut = SetupParser("shoot forward");
+            //assert
+            Assert.AreEqual(exp, sut);
+        }
+
+        [Test]
+        public void Test_AstListener_CreatesShootAstTWithDirectionLeft()
+        {
+            //act
+            AST exp = ShootCommand("left");
+            //arrange
+            AST sut = SetupParser("shoot left");
+            //assert
+            Assert.AreEqual(exp, sut);
+        }
+
+        [Test]
+        public void Test_AstListener_CreatesShootAstTWithDirectionRight()
+        {
+            //act
+            AST exp = ShootCommand("right");
+            //arrange
+            AST sut = SetupParser("shoot right");
+            //assert
+            Assert.AreEqual(exp, sut);
+        }
+
+        [Test]
+        public void Test_AstListener_CreatesShootAstTWithDirectionBackward()
+        {
+            //act
+            AST exp = ShootCommand("backward");
+            //arrange
+            AST sut = SetupParser("shoot backward");
             //assert
             Assert.AreEqual(exp, sut);
         }

@@ -7,9 +7,9 @@ SPACE: ' '+;
 MOVE: 'move';
 WALK: 'walk';
 GO: 'go';
-ATTACK: 'attack';
 SLASH: 'slash';
 STRIKE: 'strike';
+SHOOT: 'shoot';
 PICKUP: 'pickup';
 GET: 'get';
 DROP: 'drop';
@@ -49,7 +49,8 @@ message: MESSAGE;
 
 command:
     (MOVE | WALK | GO) SPACE direction (SPACE step)? #move |
-    (ATTACK | SLASH | STRIKE) SPACE direction #attack |
+    (SHOOT) SPACE direction #shoot |
+    (SLASH | STRIKE) SPACE direction # slash |
     (PICKUP | GET) #pickup |
     DROP #drop |  
     (EXIT | LEAVE) #exit |

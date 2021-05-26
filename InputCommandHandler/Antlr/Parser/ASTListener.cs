@@ -32,14 +32,28 @@ namespace InputCommandHandler.Antlr.Parser
             _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
-        public override void EnterAttack(PlayerCommandsParser.AttackContext context)
+        public override void EnterShoot(PlayerCommandsParser.ShootContext context)
         {
-            _currentContainer.Push(new Attack());
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
+
         }
 
-        public override void ExitAttack(PlayerCommandsParser.AttackContext context)
+        public override void ExitShoot(PlayerCommandsParser.ShootContext context)
         {
-            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+            _currentContainer.Push(new Shoot());
+
+        }
+
+        public override void EnterSlash(PlayerCommandsParser.SlashContext context)
+        {
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
+
+        }
+
+        public override void ExitSlash(PlayerCommandsParser.SlashContext context)
+        {
+            _currentContainer.Push(new Slash());
+
         }
 
         public override void EnterDrop(PlayerCommandsParser.DropContext context)
