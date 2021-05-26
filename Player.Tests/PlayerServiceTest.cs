@@ -291,4 +291,183 @@
 //             _mockedSessionHandler.Verify(mock => mock.JoinSession(sessionId));
 //         }
 //     }
+//          [Test]
+//         public void Test_RemoveHealth_WithoutDying()
+//         {
+//             _sut.RemoveHealth(50);
+//             
+//             Assert.AreEqual(50, _sut.Health);
+//         }
+//         
+//         [Test]
+//         public void Test_RemoveHealth_StopsAtDyingState()
+//         {
+//             _sut.RemoveHealth(200);
+//             
+//             Assert.AreEqual(0, _sut.Health);
+//         }
+//         
+//         [Test]
+//         public void Test_AddHealth_WithoutExceedingHealthCap()
+//         {
+//             _sut.RemoveHealth(50);
+//             
+//             _sut.AddHealth(40);
+//             
+//             Assert.AreEqual(90, _sut.Health);
+//         }
+//         
+//         [Test]
+//         public void Test_AddHealth_ReachesHealthCap()
+//         {
+//             _sut.RemoveHealth(30);
+//             
+//             _sut.AddHealth(40);
+//             
+//             Assert.AreEqual(100, _sut.Health);
+//         }
+//         
+//         [Test]
+//         public void Test_RemoveStamina_WithoutRunningOutOfMana()
+//         {
+//             _sut.RemoveStamina(5);
+//             
+//             Assert.AreEqual(5, _sut.Stamina);
+//         }
+//         
+//         [Test]
+//         public void Test_RemoveStamina_StopsAtNoMana()
+//         {
+//             _sut.RemoveStamina(20);
+//             
+//             Assert.AreEqual(0, _sut.Stamina);
+//         }
+//         
+//         [Test]
+//         public void Test_AddStamina_WithoutExceedingStaminaCap()
+//         {
+//             _sut.RemoveStamina(5);
+//             
+//             _sut.AddStamina(4);
+//             
+//             Assert.AreEqual(9, _sut.Stamina);
+//         }
+//         
+//         [Test]
+//         public void Test_AddStamina_ReachesStaminaCap()
+//         {
+//             _sut.RemoveStamina(3);
+//             
+//             _sut.AddStamina(4);
+//             
+//             Assert.AreEqual(10, _sut.Stamina);
+//         }
+//         
+//         [Test]
+//         public void Test_GetItem_VerifyInventoryMoqWorks()
+//         {
+//             Item item = new Item("ItemName", "Description");
+//             _mockedInventory.Setup(mockedInventory => mockedInventory.GetItem("ItemName")).Returns(item);
+//             
+//             Assert.AreEqual(item, _sut.GetItem("ItemName"));
+//             _mockedInventory.Verify(mockedInventory => mockedInventory.GetItem("ItemName"), Times.Once);
+//         }
+//         
+//         [Test]
+//         public void Test_AddInventoryItem_AddsItemSuccessfully()
+//         {
+//             Item item = new Item("ItemName", "Description");
+//             _mockedInventory.Setup(mockedInventory => mockedInventory.AddItem(item));
+//
+//             _sut.AddInventoryItem(item);
+//             
+//             _mockedInventory.Verify(mockedInventory => mockedInventory.AddItem(item), Times.Once);
+//         }
+//         
+//         [Test]
+//         public void Test_RemoveInventoryItem_RemovesItemSuccessfully()
+//         {
+//             Item item = new Item("ItemName", "Description");
+//             _mockedInventory.Setup(mockedInventory => mockedInventory.RemoveItem(item));
+//
+//             _sut.RemoveInventoryItem(item);
+//             
+//             _mockedInventory.Verify(mockedInventory => mockedInventory.RemoveItem(item), Times.Once);
+//         }
+//         
+//         [Test]
+//         public void Test_EmptyInventory_EmptiesInventorySuccessfully()
+//         {
+//             _mockedInventory.Setup(mockedInventory => mockedInventory.EmptyInventory());
+//
+//             _sut.EmptyInventory();
+//             
+//             _mockedInventory.Verify(mockedInventory => mockedInventory.EmptyInventory(), Times.Once);
+//         }
+//         
+//         [Test]
+//         public void Test_GetAmount_VerifyBitcoinMoqWorks()
+//         {
+//             _mockedBitcoins.Setup(mockedBitcoins => mockedBitcoins.Amount).Returns(20);
+//
+//             Assert.AreEqual(20, _sut.Bitcoins.Amount);
+//             _mockedBitcoins.Verify(mockedBitcoins => mockedBitcoins.Amount, Times.Once);
+//         }
+//         
+//         [Test]
+//         public void Test_AddBitcoins_AddsBitcoinsSuccessfully()
+//         {
+//             _mockedBitcoins.Setup(mockedBitcoins => mockedBitcoins.AddAmount(20));
+//
+//             _sut.AddBitcoins(20);
+//             
+//             _mockedBitcoins.Verify(mockedBitcoins => mockedBitcoins.AddAmount(20), Times.Once);
+//         }
+//         
+//         [Test]
+//         public void Test_RemoveBitcoins_RemovesBitcoinsSuccessfully()
+//         {
+//             _mockedBitcoins.Setup(mockedBitcoins => mockedBitcoins.RemoveAmount(10));
+//
+//             _sut.RemoveBitcoins(10);
+//             
+//             _mockedBitcoins.Verify(mockedBitcoins => mockedBitcoins.RemoveAmount(10), Times.Once);
+//         }
+//         
+//         [Test]
+//         public void Test_DropItem_DropsItemSuccessfully()
+//         {
+//             Item item = new Item("ItemName", "Description");
+//             _mockedInventory.Setup(mockedInventory => mockedInventory.GetItem("ItemName")).Returns(item);
+//             _mockedInventory.Setup(mockedInventory => mockedInventory.RemoveItem(item));
+//
+//             _sut.DropItem("ItemName");
+//             
+//             _mockedInventory.Verify(mockedInventory => mockedInventory.RemoveItem(item), Times.Once);
+//         }
+//         
+//         [Test]
+//         public void Test_DropItem_ThrowsExceptionBecauseNoItemExists()
+//         {
+//             _mockedInventory.Setup(mockedInventory => mockedInventory.GetItem("ItemName"));
+//         
+//             Assert.Throws<ItemException>(() => _sut.DropItem("ItemName"));
+//         }
+//         
+//         [Test]
+//         public void Test_GetAttackDamage_GetDefaultAttackDamage()
+//         {
+//             Assert.AreEqual(5, _sut.GetAttackDamage());
+//         }
+//         
+//         [Test]
+//         public void Test_GetLevel_VerifyRadiationLevelMoqWorks()
+//         {
+//             _mockedRadiationLevel.Setup(mockedRadiationLevel => mockedRadiationLevel.Level).Returns(1);
+//
+//             Assert.AreEqual(1, _sut.RadiationLevel.Level);
+//             _mockedRadiationLevel.Verify(mockedRadiationLevel => mockedRadiationLevel.Level, Times.Once);
+//         }
+//
+
 // }

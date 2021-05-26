@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using Player.ActionHandlers;
 using Chat;
 using DataTransfer.DTO.Character;
 using Network;
+using Player.Exceptions;
 using Player.Model;
 using WorldGeneration;
 
@@ -12,11 +12,16 @@ namespace Player.Services
     public class PlayerService : IPlayerService
     {
         private readonly IPlayerModel _currentPlayer;
-        private List<MapCharacterDTO> _playerPositions;
         private readonly IMoveHandler _moveHandler;
         private readonly IChatHandler _chatHandler;
         private readonly IWorldService _worldService;
         private readonly IClientController _clientController;
+
+        //random default values for health&stamina for now
+        private const int MINIMUM_HEALTH = 0;
+        private const int HEALTHCAP = 100;
+        private const int MINIMUM_STAMINA = 0;
+        private const int STAMINACAP = 10;
 
         public PlayerService(IPlayerModel currentPlayer
             , IChatHandler chatHandler
@@ -34,7 +39,7 @@ namespace Player.Services
 
         public void Attack(string direction)
         {
-          Console.WriteLine("Attacked in " + direction + " direction.");
+            Console.WriteLine("Attacked in " + direction + " direction.");
         }
 
         public void ExitCurrentGame()
@@ -73,67 +78,114 @@ namespace Player.Services
 
         public void AddHealth(int amount)
         {
-            _currentPlayer.AddHealth(amount);
+            if (_currentPlayer.Health + amount >= HEALTHCAP)
+            {
+                _currentPlayer.Health = HEALTHCAP;
+            }
+            else
+            {
+                _currentPlayer.Health += amount;
+            }
         }
 
         public void RemoveHealth(int amount)
         {
-            _currentPlayer.RemoveHealth(amount);
+            if (_currentPlayer.Health - amount <= MINIMUM_HEALTH)
+            {
+                _currentPlayer.Health = MINIMUM_HEALTH;
+                //extra code for when a player dies goes here
+            }
+            else
+            {
+                _currentPlayer.Health -= amount;
+            }
         }
 
         public void AddStamina(int amount)
         {
-            _currentPlayer.AddStamina(amount);
+            if (_currentPlayer.Stamina + amount >= STAMINACAP)
+            {
+                _currentPlayer.Stamina = STAMINACAP;
+            }
+            else
+            {
+                _currentPlayer.Stamina += amount;
+            }
         }
 
         public void RemoveStamina(int amount)
         {
-            _currentPlayer.RemoveStamina(amount);
+            if (_currentPlayer.Stamina - amount <= MINIMUM_STAMINA)
+            {
+                _currentPlayer.Stamina = MINIMUM_STAMINA;
+            }
+            else
+            {
+                _currentPlayer.Stamina -= amount;
+            }
         }
 
         public IItem GetItem(string itemName)
         {
-            return _currentPlayer.GetItem(itemName);
+            return _currentPlayer.Inventory.GetItem(itemName);
         }
 
         public void AddInventoryItem(IItem item)
         {
-            _currentPlayer.AddInventoryItem(item);
+            _currentPlayer.Inventory.AddItem(item);
         }
 
         public void RemoveInventoryItem(IItem item)
         {
-            _currentPlayer.RemoveInventoryItem(item);
+            _currentPlayer.Inventory.RemoveItem(item);
         }
 
         public void EmptyInventory()
         {
-            _currentPlayer.EmptyInventory();
+            _currentPlayer.Inventory.EmptyInventory();
         }
 
         public void AddBitcoins(int amount)
         {
-            _currentPlayer.AddBitcoins(amount);
+            _currentPlayer.Bitcoins.AddAmount(amount);
         }
 
         public void RemoveBitcoins(int amount)
         {
-            _currentPlayer.RemoveBitcoins(amount);
+            _currentPlayer.Bitcoins.RemoveAmount(amount);
         }
 
         public int GetAttackDamage()
         {
-            return _currentPlayer.GetAttackDamage();
+            int dmg = 5 + GetItemDamage();
+            return dmg;
+        }
+        
+        private int GetItemDamage()
+        {
+            //things like passive damage items go here]
+            return 0;
         }
 
         public void PickupItem()
         {
-            _currentPlayer.PickupItem();
+            //Item item = currentTile.pickupItem();
+            // _currentPlayer.Inventory.AddItem(item);
+            Console.WriteLine("Item opgepakt!");
         }
 
-        public void DropItem(string itemNameValue)
+        public void DropItem(string itemName)
         {
-            _currentPlayer.DropItem(itemNameValue);
+            IItem item = _currentPlayer.Inventory.GetItem(itemName);
+            if (item != null)
+            {
+                RemoveInventoryItem(item);
+                Console.WriteLine(item.ItemName + " laten vallen.");
+            }
+            else
+            {
+                throw new ItemException("Je hebt geen " + itemName + " item in je inventory!");
+            }
         }
 
         public void HandleDirection(string directionValue, int stepsValue)
@@ -172,8 +224,8 @@ namespace Player.Services
             _moveHandler.SendMove(mapCharacterDTO);
             
             MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions();
-           _currentPlayer.XPosition = currentCharacter.XPosition;
-           _currentPlayer.YPosition = currentCharacter.YPosition;
+            _currentPlayer.XPosition = currentCharacter.XPosition;
+            _currentPlayer.YPosition = currentCharacter.YPosition;
         }
     }
 }
