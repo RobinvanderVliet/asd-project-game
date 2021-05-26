@@ -67,5 +67,10 @@ namespace Creature.Creature.StateMachine
             _passiveStateMachine = builder.Build().CreatePassiveStateMachine();
             _passiveStateMachine.Start();
         }
+
+        public void StopStateMachine()
+        {
+            _passiveStateMachine.Stop();
+        }
     }
 }
