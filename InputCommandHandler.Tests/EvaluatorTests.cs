@@ -304,5 +304,26 @@ namespace InputCommandHandler.Tests
                 .AddChild(new Message(sessionId)));
             return new AST(joinSession);
         }
+
+        [Test]
+        public void Test_Apply_HandleUseActionIsCalled()
+        {
+            //arrange
+            int index = 1;
+            var ast = UseAST(index);
+            _mockedPlayerService.Setup(mock => mock.Use(index));
+            //act
+            _sut.Apply(ast);
+            //assert
+            _mockedPlayerService.Verify(mock => mock.Use(index), Times.Once);
+        }
+
+        private static AST UseAST(int index)
+        {
+            Input use = new Input();
+            use.AddChild(new Use()
+                .AddChild(new Step(index)));
+            return new AST(use);
+        }
     }
 }
