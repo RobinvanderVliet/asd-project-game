@@ -1,5 +1,6 @@
 using System;
 using DataTransfer.DTO.Character;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
 {
@@ -35,6 +36,11 @@ namespace WorldGeneration
         public MapCharacterDTO getCurrentCharacterPositions()
         {
             return _world.CurrentPlayer;
+        }
+
+        public ITile GetTile(int x, int y)
+        {
+            return _world._map.GetLoadedTileByXAndY(x, y);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using DataTransfer.DTO.Character;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
 {
@@ -11,5 +12,6 @@ namespace WorldGeneration
         public void DeleteMap();
         public void GenerateWorld(int seed);
         public MapCharacterDTO getCurrentCharacterPositions();
+        public ITile GetTile(int x, int y);
     }
 }

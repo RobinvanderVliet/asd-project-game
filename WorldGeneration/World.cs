@@ -7,7 +7,7 @@ namespace WorldGeneration
 {
     public class World
     {
-        private Map _map;
+        public Map _map;
         public MapCharacterDTO CurrentPlayer { get; set; }
         private IList<MapCharacterDTO> _characters { get; set; }
         private readonly int _viewDistance;
