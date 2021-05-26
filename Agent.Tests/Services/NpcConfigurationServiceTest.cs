@@ -19,7 +19,7 @@ namespace Agent.Tests.Services
         private Mock<FileHandler> _fileHandlerMock;
         private Mock<Pipeline> _pipelineMock;
         private Mock<InputCommandHandlerComponent> _mockedRetriever;
-        private FileHandler handler;
+        private FileHandler _handler;
         
         [SetUp]
         public void Setup()
@@ -30,14 +30,14 @@ namespace Agent.Tests.Services
             _sut.FileHandler = _fileHandlerMock.Object;
             _pipelineMock = new Mock<Pipeline>();
             _sut.Pipeline = _pipelineMock.Object;
-            handler = new FileHandler();
+            _handler = new FileHandler();
         }
         
         [Test]
         public void Test_CreateNewNpcConfiguration_WithNewNpc()
         {
             //Arrange
-            var filepath = handler.GetBaseDirectory() + "/Resource/npcFileTest.txt";
+            var filepath = _handler.GetBaseDirectory() + "/Resource/npcFileTest.txt";
             
             //Act
             _sut.CreateConfiguration("TestNPCName", filepath);

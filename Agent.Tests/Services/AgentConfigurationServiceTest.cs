@@ -16,7 +16,7 @@ namespace Agent.Tests.Services
     public class AgentConfigurationServiceTests
     {
         private AgentConfigurationService _sut;
-        private FileHandler handler = new FileHandler(); 
+        private FileHandler _handler; 
         private Mock<FileHandler> _fileHandlerMock;
         private Mock<Pipeline> _pipelineMock;
         private Mock<InputCommandHandlerComponent> _mockedRetriever;
@@ -30,13 +30,14 @@ namespace Agent.Tests.Services
             _sut.FileHandler = _fileHandlerMock.Object;
             _pipelineMock = new Mock<Pipeline>();
             _sut.Pipeline = _pipelineMock.Object;
+            = new FileHandler();
         }
 
         [Test]
         public void Test_Configure_SyntaxError()
         {
             //Arrange
-            var input = handler.GetBaseDirectory() + "/Resource/AgentConfigurationTestFileParseException.txt";
+            var input = _handler.GetBaseDirectory() + "/Resource/AgentConfigurationTestFileParseException.txt";
 
             _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
             
@@ -73,7 +74,7 @@ namespace Agent.Tests.Services
         public void Test_Configure_FileError()
         {
             //Arrange
-            var input = handler.GetBaseDirectory() + "/Resources/AgentTestFileWrongExtension.txt";
+            var input = _handler.GetBaseDirectory() + "/Resources/AgentTestFileWrongExtension.txt";
             var error = "File not found";
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Throws(new FileException(error));
             _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
@@ -89,7 +90,7 @@ namespace Agent.Tests.Services
         public void Test_Configure_SavesFileInAgentFolder()
         {
             //Arrange
-            var input = handler.GetBaseDirectory() + "/Resources/AgentConfigurationTestFile.txt";
+            var input = _handler.GetBaseDirectory() + "/Resources/AgentConfigurationTestFile.txt";
             _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input);
             
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("aggressiveness=high");
@@ -105,7 +106,7 @@ namespace Agent.Tests.Services
         public void Test_CreateNewAgentConfiguration_WithNewAgent()
         {
             //Arrange
-            var filepath = handler.GetBaseDirectory() + "/Resource/agent_test.cfg";
+            var filepath = _handler.GetBaseDirectory() + "/Resource/agent_test.cfg";
 
             //Act
             _sut.CreateConfiguration("Agent", filepath);
