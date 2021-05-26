@@ -8,7 +8,7 @@ namespace Creature.Creature.NeuralNetworking
         public int nextConnectionNo = 1000;
 
         public List<ConnectionGene> genes;
-        public List<Node> nodes;
+        public List<NeuralNode> nodes;
 
         public int inputs;
         public int outputs;
@@ -16,7 +16,7 @@ namespace Creature.Creature.NeuralNetworking
         public int nextNode = 0;
         public int biasNode;
 
-        public List<Node> network;
+        public List<NeuralNode> network;
 
         Random random = new Random();
 
@@ -28,7 +28,7 @@ namespace Creature.Creature.NeuralNetworking
             //create input nodes
             for (int i = 0; i < inputs; i++)
             {
-                nodes.Add(new Node(i + inputs));
+                nodes.Add(new NeuralNode(i + inputs));
                 nextNode++;
                 nodes[i].layer = 0;
             }
@@ -36,20 +36,20 @@ namespace Creature.Creature.NeuralNetworking
             //create output nodes
             for (int i = 0; i < outputs; i++)
             {
-                nodes.Add(new Node(i + outputs));
+                nodes.Add(new NeuralNode(i + outputs));
                 nodes[i].layer = 1;
                 nextNode++;
             }
 
             //bias node
-            nodes.Add(new Node(nextNode));
+            nodes.Add(new NeuralNode(nextNode));
             biasNode = nextNode;
             nextNode++;
             nodes[biasNode].layer = 0;
         }
 
         //return node that matches number
-        public Node GetNode(int nodeNumber)
+        public NeuralNode GetNode(int nodeNumber)
         {
             for(int i = 0; i < nodes.Count; i++)
             {
@@ -112,7 +112,7 @@ namespace Creature.Creature.NeuralNetworking
         public void GenerateNetwork()
         {
             ConnectNodes();
-            network = new List<Node>();
+            network = new List<NeuralNode>();
             //for each layer add the node in that layer, since layers cannot connect to themselves there is no need to order the nodes within a layer
 
             for (int l = 0; l < layers; l++)
@@ -153,7 +153,7 @@ namespace Creature.Creature.NeuralNetworking
             genes[randomConnection].enabled = false;//disable it
 
             int newNodeNo = nextNode;
-            nodes.Add(new Node(newNodeNo));
+            nodes.Add(new NeuralNode(newNodeNo));
             nextNode++;
             //add a new connection to the new node with a weight of 1
             int connectionInnovationNumber = GetInnovationNumber(innovationHistory, genes[randomConnection].fromNode, GetNode(newNodeNo));
@@ -239,7 +239,7 @@ namespace Creature.Creature.NeuralNetworking
         //returns the innovation number for the new mutation
         //if this mutation has never been seen before then it will be given a new unique innovation number
         //if this mutation matches a previous mutation then it will be given the same innovation number as the previous one
-        public int GetInnovationNumber(List<ConnectionHistory> innovationHistory, Node from, Node to)
+        public int GetInnovationNumber(List<ConnectionHistory> innovationHistory, NeuralNode from, NeuralNode to)
         {
             Boolean isNew = true;
             int connectionInnovationNumber = nextConnectionNo;

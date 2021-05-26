@@ -30,10 +30,10 @@ namespace Creature.Creature
         public float[] decision = new float[genomeOutputs];
 
         //Data for fitnessCalculation
-        public static int DamageDealt;
-        public static int DamageTaken;
         public int lifeSpan = 0;
         public Boolean dead;
+        public static int DamageDealt;
+        public static int DamageTaken;
         public static int HealthHealed;
         public static int StatsGained;
         public static Boolean EnemyKilled;
@@ -61,6 +61,11 @@ namespace Creature.Creature
             //maye use this to sperate the training settings
         }
 
+        public void Update()
+        {
+
+        }
+
         public void Look()
         {
             //get smartMonster x cord
@@ -85,7 +90,7 @@ namespace Creature.Creature
             //get player stamina
 
             //get monster stamina?
-            //getusabelitem
+            //get usabel item
             //get distance to items
             //get total player stats
             //get total monster stats
@@ -161,12 +166,12 @@ namespace Creature.Creature
             {
                 killPoints =+ 100000000;
             }
-            if(Dead)
+            if(dead)
             {
                 deathpoints = -100;
             }
             fitness =
-                (float)((DamageDealt - DamageTaken) + (LifeSpan * 0.2) + HealthHealed + StatsGained + killPoints + deathpoints);
+                (float)((DamageDealt - DamageTaken) + (lifeSpan * 0.2) + HealthHealed + StatsGained + killPoints + deathpoints);
         }
 
         public SmartMonster Crossover(SmartMonster parent2)

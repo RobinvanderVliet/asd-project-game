@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Creature.Pathfinder;
 
 namespace Creature.Creature.NeuralNetworking
 {
@@ -12,6 +13,8 @@ namespace Creature.Creature.NeuralNetworking
         private Random _random = new Random();
         private PathFinder _pathfinder;
 
+        private Stack<Node> path = new Stack<Node>();
+
         public void Wander(Vector2 loc) 
         {
             int newXLoc = _random.Next(0, 30);
@@ -19,7 +22,7 @@ namespace Creature.Creature.NeuralNetworking
 
             Vector2 destination = new Vector2(newXLoc, newYLoc);
 
-            _pathfinder.FindPath(loc, destination);
+            path = _pathfinder.FindPath(loc, destination);
         }
 
         public void Attack(ICreature player, ICreature smartmonster)
@@ -35,17 +38,17 @@ namespace Creature.Creature.NeuralNetworking
             if(player.CreatureStateMachine.CreatureData.Position.X == smartmonster.CreatureStateMachine.CreatureData.Position.X)
             {
                 Vector2 newDestination = new Vector2(smartmonster.CreatureStateMachine.CreatureData.Position.X, smartmonster.CreatureStateMachine.CreatureData.Position.Y + 10);
-                _pathfinder.FindPath(smartmonster.CreatureStateMachine.CreatureData.Position, newDestination);
+                path = _pathfinder.FindPath(smartmonster.CreatureStateMachine.CreatureData.Position, newDestination);
             }
             else if (player.CreatureStateMachine.CreatureData.Position.Y == smartmonster.CreatureStateMachine.CreatureData.Position.Y)
             {
                 Vector2 newDestination = new Vector2(smartmonster.CreatureStateMachine.CreatureData.Position.Y, smartmonster.CreatureStateMachine.CreatureData.Position.X + 10);
-                _pathfinder.FindPath(smartmonster.CreatureStateMachine.CreatureData.Position, newDestination);
+                path = _pathfinder.FindPath(smartmonster.CreatureStateMachine.CreatureData.Position, newDestination);
             }
             else
             {
                 Vector2 newDestination = new Vector2(smartmonster.CreatureStateMachine.CreatureData.Position.Y+10, smartmonster.CreatureStateMachine.CreatureData.Position.X + 10);
-                _pathfinder.FindPath(smartmonster.CreatureStateMachine.CreatureData.Position, newDestination);
+                path = _pathfinder.FindPath(smartmonster.CreatureStateMachine.CreatureData.Position, newDestination);
             }
         }
 
@@ -56,7 +59,7 @@ namespace Creature.Creature.NeuralNetworking
 
         public void RunToMonster(ICreature monster, ICreature smartmonster) 
         {
-            _pathfinder.FindPath(monster.CreatureStateMachine.CreatureData.Position, smartmonster.CreatureStateMachine.CreatureData.Position);
+            path = _pathfinder.FindPath(monster.CreatureStateMachine.CreatureData.Position, smartmonster.CreatureStateMachine.CreatureData.Position);
         }
 
         public void GrabItem(Vector2 loc) 

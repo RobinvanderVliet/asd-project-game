@@ -5,13 +5,13 @@ namespace Creature.Creature.NeuralNetworking
 {
     public class ConnectionGene
     {
-        public Node fromNode;
-        public Node toNode;
+        public NeuralNode fromNode;
+        public NeuralNode toNode;
         public float weight;
         public Boolean enabled = true;
         public int innovationNo;
 
-        public ConnectionGene(Node from, Node to, float weight, int inno)
+        public ConnectionGene(NeuralNode from, NeuralNode to, float weight, int inno)
         {
             this.fromNode = from;
             this.toNode = to;
@@ -54,7 +54,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //returns a copy of this connectionGene
-        public ConnectionGene Clone(Node from, Node to)
+        public ConnectionGene Clone(NeuralNode from, NeuralNode to)
         {
             ConnectionGene clone = new ConnectionGene(from, to, weight, innovationNo);
             clone.enabled = enabled;
