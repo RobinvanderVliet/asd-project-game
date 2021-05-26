@@ -19,10 +19,11 @@ namespace DatabaseHandler.Repository
         private readonly ILogger<Repository<T>> _log;
 
         [ExcludeFromCodeCoverage]
-        public Repository(IDbConnection connection, string collection = null)
+        public Repository(string collection = null)
         {
-            _collection = collection ?? typeof(T).Name;
+            IDbConnection connection = new DbConnection();
             _db = connection.GetConnectionAsync();
+            _collection = collection ?? typeof(T).Name;
             _log = new NullLogger<Repository<T>>();
         }
 

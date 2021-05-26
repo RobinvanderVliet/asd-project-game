@@ -86,10 +86,8 @@ namespace Session
             var tmp = new DbConnection();
             tmp.SetForeignKeys();
 
-            var playerRepository = new Repository<PlayerPoco>(tmp);
-            var tmpServicePlayer = new ServicesDb<PlayerPoco>(playerRepository);
-            var tmpGameRepostory = new Repository<GamePoco>(tmp);
-            var tmpServiceGame = new ServicesDb<GamePoco>(tmpGameRepostory);
+            var tmpServicePlayer = new ServicesDb<PlayerPoco>();
+            var tmpServiceGame = new ServicesDb<GamePoco>();
 
             Guid gameGuid = Guid.NewGuid();
             var tmpObject = new GamePoco {GameGUID = gameGuid};
