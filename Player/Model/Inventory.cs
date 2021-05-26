@@ -42,7 +42,13 @@ namespace Player.Model
 
         public void AddConsumableItem(IItem item)
         {
-            _consumableItems.Add(item);
+            if(_consumableItems.Count <= 3)
+            {
+                _consumableItems.Add(item);
+            } else
+            {
+                System.Console.WriteLine("You already have 3 consumable items in your inventory!");
+            }
         }
 
         public void RemoveConsumableItem(IItem item)
