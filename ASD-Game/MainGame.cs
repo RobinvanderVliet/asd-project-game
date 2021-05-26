@@ -88,13 +88,7 @@ namespace ASD_project
                 //moet later vervangen worden
                 IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
                 IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, _moveHandler, _clientController, _worldService);
-
-                // TODO: fix agent data
-                PlayerData agentData = new PlayerData(new Vector2(playerModel.XPosition, playerModel.YPosition),
-                    playerModel.Health, playerModel.GetAttackDamage(), 10, null);
-                PlayerStateMachine agentStateMachine = new PlayerStateMachine(agentData, new RuleSet(agentConfigurationService.GetConfigurations()[0].Settings));
-                Creature.Player agent = new Creature.Player(agentStateMachine, _clientController);
-                IAgentService agentService = new AgentService(agent);
+                IAgentService agentService = new AgentService(agentConfigurationService, playerModel);
                 
                 ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
                 

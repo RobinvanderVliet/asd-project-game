@@ -1,4 +1,11 @@
-﻿using InputCommandHandler;
+﻿using System;
+using System.Numerics;
+using Agent.Services;
+using Creature.Creature.StateMachine;
+using Creature.Creature.StateMachine.CustomRuleSet;
+using Creature.Creature.StateMachine.Data;
+using InputCommandHandler;
+using Player.Model;
 
 namespace Creature.Services
 {
@@ -9,9 +16,15 @@ namespace Creature.Services
         private ICreature _agent;
         private bool _isActivated;
 
-        public AgentService(ICreature agent)
+        public AgentService(AgentConfigurationService agentConfigurationService, IPlayerModel playerModel)
         {
-            _agent = agent;
+            var agentData = new PlayerData(new Vector2(playerModel.XPosition, playerModel.YPosition),
+                playerModel.Health, playerModel.GetAttackDamage(), 10, null);
+
+            var agentStateMachine = new PlayerStateMachine(agentData,
+                new RuleSet(agentConfigurationService.GetConfigurations()[0].Settings));
+
+            _agent = new Player(agentStateMachine);
         }
 
         public void Activate()

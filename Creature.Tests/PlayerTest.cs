@@ -19,7 +19,7 @@ namespace Creature.Tests
         public void Setup()
         {
             _creatureStateMachineMock = new Mock<ICreatureStateMachine>();
-            _sut = new Player(_creatureStateMachineMock.Object, _clientControllerMock.Object);
+            _sut = new Player(_creatureStateMachineMock.Object);
         }
 
         [Test]
@@ -48,18 +48,6 @@ namespace Creature.Tests
 
             // Assert ----------
             Assert.AreEqual(_sut.CreatureStateMachine.CreatureData.Health, 40);
-        }
-        
-        [Test]
-        public void Test_Disconnect_StartsStateMachine()
-        {
-            // Arrange ---------
-
-            // Act -------------
-            _sut.Disconnect();
-
-            // Assert ----------
-            _creatureStateMachineMock.Verify(creatureStateMachine => creatureStateMachine.StartStateMachine());
         }
     }
 }
