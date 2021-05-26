@@ -199,7 +199,20 @@ namespace InputCommandHandler.Tests
             // Assert
             Assert.AreEqual(exp, sut);
         }
-
+        
+        [Test]
+        public void Test_AstListener_CreatesPickupAstWithDoubleDigits()
+        {
+            // Act
+            AST exp = PickupCommand(10);
+            
+            // Arrange
+            AST sut = SetupParser("pickup 10");
+            
+            // Assert
+            Assert.AreEqual(exp, sut);
+        }
+        
         [Test]
         public void Test_AstListener_CreatesSayAstWithMessage()
         {
