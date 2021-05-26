@@ -23,7 +23,7 @@ namespace Agent.Tests
         {
             //Arrange
             var expected = "combat when player nearby player then attack";
-            var fileLocation = string.Format(Path.GetFullPath(Path.Combine(_sut.GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory)))) + "/Resource/import_test_file_1.txt";
+            var fileLocation = _sut.GetBaseDirectory() + "/Resource/import_test_file_1.txt";
             
             //Act
             var result = _sut.ImportFile(fileLocation);
@@ -35,8 +35,7 @@ namespace Agent.Tests
         public void Test_ImportFile_ThrowsFileException1()
         { 
             //Arrange
-            var fileLocation = string.Format(Path.GetFullPath(Path.Combine
-                        (Path.Combine(_sut.GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory))))) + "Resource/ThisFileDoesNotExist.txt";
+            var fileLocation = _sut.GetBaseDirectory() + "Resource/ThisFileDoesNotExist.txt";
 
             //Act
             var exception = Assert.Throws<FileException>(() =>
@@ -50,8 +49,7 @@ namespace Agent.Tests
         public void Test_ImportFile_ThrowsFileException2()
         { 
             //Arrange
-            var fileLocation = string.Format(Path.GetFullPath(Path.Combine
-                (Path.Combine(_sut.GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory))))) + "/Resource/AgentTestFileWrongExtension.xml";
+            var fileLocation = _sut.GetBaseDirectory() + "/Resource/AgentTestFileWrongExtension.xml";
 
             //Act
             var exception = Assert.Throws<FileException>(() =>
@@ -66,7 +64,7 @@ namespace Agent.Tests
         {
             //Arrange
             var expected = "combat=defensive" + Environment.NewLine + "explore=random";
-            var fileLocation = string.Format(Path.GetFullPath(Path.Combine(_sut.GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory)))) + "/Resource/";
+            var fileLocation = _sut.GetBaseDirectory() + "/Resource/";
             var fileName = "AgentExportFile.cfg";
             
             //Act
@@ -82,8 +80,7 @@ namespace Agent.Tests
         public void Test_CreateDirectory_DirectoryCreated()
         {
             //Arrange
-            var directory = string.Format(Path.GetFullPath(Path.Combine
-                (_sut.GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory)))) + "/Resources/Agent/";
+            var directory = _sut.GetBaseDirectory() + "/Resources/Agent/";
 
             if (Directory.Exists(directory))
             {
