@@ -74,7 +74,16 @@ namespace InputCommandHandler.Antlr.Transformer
                     case StartSession:
                         TransformStartSession((StartSession)nodeBody[i]);
                         break;
+                    case Use:
+                        TransformUse((Use)nodeBody[i]);
+                        break;
+
                 }
+        }
+
+        private void TransformUse(Use use)
+        {
+            _playerService.Use(use.Step.StepValue);
         }
 
         private void TransformMove(Move move)

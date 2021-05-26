@@ -46,5 +46,7 @@ namespace Player.Services
 
         public void HandleDirection(string directionValue, int stepsValue);
 
+        public void Use(int itemIndex);
+
     }
 }

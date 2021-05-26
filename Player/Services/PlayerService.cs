@@ -175,5 +175,10 @@ namespace Player.Services
            _currentPlayer.XPosition = currentCharacter.XPosition;
            _currentPlayer.YPosition = currentCharacter.YPosition;
         }
+
+        public void Use(int itemIndex)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
