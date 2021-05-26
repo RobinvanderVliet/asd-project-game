@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Player.ActionHandlers;
 using Chat;
 using DataTransfer.DTO.Character;
 using Network;
+using Player.ActionHandlers;
 using Player.Model;
 using WorldGeneration;
 
@@ -126,8 +126,9 @@ namespace Player.Services
             return _currentPlayer.GetAttackDamage();
         }
 
-        public void PickupItem()
+        public void PickupItem(int item)
         {
+            // TODO: Do something with item.
             _currentPlayer.PickupItem();
         }
 

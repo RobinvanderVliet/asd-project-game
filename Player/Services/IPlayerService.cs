@@ -40,7 +40,7 @@ namespace Player.Services
 
         public int GetAttackDamage();
 
-        public void PickupItem();
+        public void PickupItem(int item);
 
         public void DropItem(string itemNameValue);
 

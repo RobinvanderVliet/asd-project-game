@@ -48,7 +48,7 @@ namespace InputCommandHandler.Antlr.Transformer
                         TransformPause();
                         break;
                     case Pickup:
-                        TransformPickup();
+                        TransformPickup((Pickup)nodeBody[i]);
                         break;
                     case Replace:
                         TransformReplace();
@@ -91,9 +91,9 @@ namespace InputCommandHandler.Antlr.Transformer
             }
         }
 
-        private void TransformPickup()
+        private void TransformPickup(Pickup pickup)
         {
-            _playerService.PickupItem();
+            _playerService.PickupItem(pickup.Item.StepValue);
         }
 
         private void TransformDrop(Drop drop)
