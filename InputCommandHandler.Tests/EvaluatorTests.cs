@@ -31,7 +31,7 @@ namespace InputCommandHandler.Tests
             //arrange
             var ast = MoveAST(1, "up");
 
-            _mockedPlayerService.Setup(x => x.HandleDirection("up", 1));f
+            _mockedPlayerService.Setup(x => x.HandleDirection("up", 1));
             //act
             _sut.Apply(ast);
             //assert
