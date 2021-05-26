@@ -4,6 +4,6 @@
     {
         public void Activate();
         public void DeActivate();
-        public void IsActivated();
+        public bool IsActivated();
     }
 }
