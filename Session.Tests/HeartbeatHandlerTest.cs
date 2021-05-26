@@ -31,6 +31,7 @@ namespace Session.Tests
             [Test]
             public void Test_ReceiveHeartbeat_Success()
             {
+                //arrange
                 string expected = String.Empty;
 
                 using (StringWriter sw = new StringWriter())
@@ -47,6 +48,7 @@ namespace Session.Tests
             [Test]
             public void Test_ReceiveHeartbeat_Fail()
             {
+                //arrange
                 string expected = string.Format("Agents are enabled\r\n", Environment.NewLine); ;
                 
                 using (StringWriter sw = new StringWriter())

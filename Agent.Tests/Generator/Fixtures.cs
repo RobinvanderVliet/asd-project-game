@@ -31,7 +31,7 @@ namespace Agent.Tests.Generator
         {
             var configuration = new Configuration();
 
-            configuration.AddChild((new Setting("combat"))
+            configuration.AddChild((new Setting("walking"))
                     .AddChild((new Condition())
                         .AddChild((new When())
                             .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
@@ -51,7 +51,7 @@ namespace Agent.Tests.Generator
                     )
                 )
             );
-            configuration.AddChild((new Setting("combat"))
+            configuration.AddChild((new Setting("sleeping"))
                 .AddChild((new Condition())
                     .AddChild((new When())
                         .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
