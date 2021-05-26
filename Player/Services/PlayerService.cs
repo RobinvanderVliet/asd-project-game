@@ -222,9 +222,10 @@ namespace Player.Services
             
             _moveHandler.SendMove(mapCharacterDTO);
             
-            MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions();
-            _currentPlayer.XPosition = currentCharacter.XPosition;
-            _currentPlayer.YPosition = currentCharacter.YPosition;
+            //is dit dubbelop?
+            // MapCharacterDTO currentCharacter = _worldService.getCurrentCharacterPositions();
+            // _currentPlayer.XPosition = currentCharacter.XPosition;
+            // _currentPlayer.YPosition = currentCharacter.YPosition;
         }
     }
 }

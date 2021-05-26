@@ -6,6 +6,7 @@ using Moq;
 using Network;
 using NUnit.Framework;
 using Player.ActionHandlers;
+using Player.Exceptions;
 using Player.Model;
 using Player.Services;
 using Session;
@@ -69,13 +70,13 @@ namespace Player.Tests
         public void Test_AddHealth_WithoutExceedingHealthCap()
         {
             //arrange
-            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.Health).Returns(50);
+            _mockedPlayerModel.SetupGet(_mockedPlayerModel => _mockedPlayerModel.Health).Returns(50);
             
             //act
             _sut.AddHealth(40);
             
             //assert
-            _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.Health, Times.Exactly(2));
+            _mockedPlayerModel.VerifySet(_mockedPlayerModel => _mockedPlayerModel.Health = 90);
         }
 
         [Test]
@@ -88,165 +89,221 @@ namespace Player.Tests
             _sut.AddHealth(40);
             
             //assert
-            _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.Health, Times.Exactly(2));
+            _mockedPlayerModel.VerifySet(_mockedPlayerModel => _mockedPlayerModel.Health = 100);
         }
-         
         
+        [Test]
+        public void Test_RemoveHealth_WithoutDying()
+        {
+            //arrange
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.Health).Returns(100);
+            
+            //act
+            _sut.RemoveHealth(50);
+            
+            //assert
+            _mockedPlayerModel.VerifySet(_mockedPlayerModel => _mockedPlayerModel.Health = 50);
+        }
 
-        // [Test]
-        // public void Test_AddHealth_CallsFunctionFromPlayerModel()
-        // {
-        //     int health = 10;
-        //     _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.AddHealth(health));
-        //
-        //     _sut.AddHealth(health);
-        //
-        //     _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.AddHealth(health));
-        // }
-        //
-        // [Test]
-        // public void Test_RemoveHealth_CallsFunctionFromPlayerModel()
-        // {
-        //     int health = 10;
-        //     _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.RemoveHealth(health));
-        //
-        //     _sut.RemoveHealth(health);
-        //
-        //     _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.RemoveHealth(health));
-        // }
-        //
-        // [Test]
-        // public void Test_AddStamina_CallsFunctionFromPlayerModel()
-        // {
-        //     int stamina = 10;
-        //     _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.AddStamina(stamina));
-        //
-        //     _sut.AddStamina(stamina);
-        //
-        //     _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.AddStamina(stamina));
-        // }
-        //
-        // [Test]
-        // public void Test_RemoveStamina_CallsFunctionFromPlayerModel()
-        // {
-        //     int stamina = 10;
-        //     _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.RemoveStamina(stamina));
-        //
-        //     _sut.RemoveStamina(stamina);
-        //
-        //     _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.RemoveStamina(stamina));
-        // }
-        //
-        // [Test]
-        // public void Test_GetItem_CallsFunctionFromPlayerModel()
-        // {
-        //     Item item = new Item("ItemName", "Description");
-        //     _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.GetItem("ItemName")).Returns(item);
-        //
-        //     Assert.AreEqual(item, _sut.GetItem("ItemName"));
-        //     _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.GetItem("ItemName"));
-        // }
-        //
-        // [Test]
-        // public void Test_AddInventoryItem_CallsFunctionFromPlayerModel()
-        // {
-        //     Item item = new Item("ItemName", "Description");
-        //     _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.AddInventoryItem(item));
-        //
-        //     _sut.AddInventoryItem(item);
-        //
-        //     _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.AddInventoryItem(item));
-        // }
-        //
-        // [Test]
-        // public void Test_RemoveInventoryItem_CallsFunctionFromPlayerModel()
-        // {
-        //     Item item = new Item("ItemName", "Description");
-        //     _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.RemoveInventoryItem(item));
-        //
-        //     _sut.RemoveInventoryItem(item);
-        //
-        //     _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.RemoveInventoryItem(item));
-        // }
-        //
-        // [Test]
-        // public void Test_EmptyInventory_CallsFunctionFromPlayerModel()
-        // {
-        //     _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.EmptyInventory());
-        //
-        //     _sut.EmptyInventory();
-        //
-        //     _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.EmptyInventory());
-        // }
-        //
-        // [Test]
-        // public void Test_AddBitcoins_CallsFunctionFromPlayerModel()
-        // {
-        //     int amount = 10;
-        //     _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.AddBitcoins(amount));
-        //
-        //     _sut.AddBitcoins(amount);
-        //
-        //     _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.AddBitcoins(amount));
-        // }
-        //
-        // [Test]
-        // public void Test_RemoveBitcoins_CallsFunctionFromPlayerModel()
-        // {
-        //     int amount = 10;
-        //     _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.RemoveBitcoins(amount));
-        //
-        //     _sut.RemoveBitcoins(amount);
-        //
-        //     _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.RemoveBitcoins(amount));
-        // }
-        //
-        // [Test]
-        // public void Test_GetAttackDamage_CallsFunctionFromPlayerModel()
-        // {
-        //     int dmg = 5;
-        //     _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.GetAttackDamage()).Returns(dmg);
-        //
-        //     Assert.AreEqual(dmg, _sut.GetAttackDamage());
-        //     _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.GetAttackDamage());
-        // }
-        //
-        // [Test]
-        // public void Test_PickupItem_CallsFunctionFromPlayerModel()
-        // {
-        //     _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.PickupItem());
-        //
-        //     _sut.PickupItem();
-        //
-        //     _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.PickupItem());
-        // }
-        //
-        // [Test]
-        // public void Test_DropItem_CallsFunctionFromPlayerModel()
-        // {
-        //     string itemName = "Test";
-        //     _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.DropItem(itemName));
-        //
-        //     _sut.DropItem(itemName);
-        //
-        //     _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.DropItem(itemName));
-        // }
+        [Test]
+        public void Test_RemoveHealth_StopsAtDyingState()
+        {
+            //arrange
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.Health).Returns(100);
+            
+            //act
+            _sut.RemoveHealth(200);
+            
+            //assert
+            _mockedPlayerModel.VerifySet(_mockedPlayerModel => _mockedPlayerModel.Health = 0);
+        }
+        
+        [Test]
+        public void Test_AddStamina_WithoutExceedingStaminaCap()
+        {
+            //arrange
+            _mockedPlayerModel.SetupGet(_mockedPlayerModel => _mockedPlayerModel.Stamina).Returns(5);
+            
+            //act
+            _sut.AddStamina(4);
+            
+            //assert
+            _mockedPlayerModel.VerifySet(_mockedPlayerModel => _mockedPlayerModel.Stamina = 9);
+        }
+
+        [Test]
+        public void Test_AddStamina_ReachesStaminaCap()
+        {
+            //arrange
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.Stamina).Returns(7);
+            
+            //act
+            _sut.AddStamina(4);
+            
+            //assert
+            _mockedPlayerModel.VerifySet(_mockedPlayerModel => _mockedPlayerModel.Stamina = 10);
+        }
+        
+        [Test]
+        public void Test_RemoveStamina_WithoutDying()
+        {
+            //arrange
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.Stamina).Returns(10);
+            
+            //act
+            _sut.RemoveStamina(5);
+            
+            //assert
+            _mockedPlayerModel.VerifySet(_mockedPlayerModel => _mockedPlayerModel.Stamina = 5);
+        }
+
+        [Test]
+        public void Test_RemoveStamina_StopsAtDyingState()
+        {
+            //arrange
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.Stamina).Returns(10);
+            
+            //act
+            _sut.RemoveStamina(20);
+            
+            //assert
+            _mockedPlayerModel.VerifySet(_mockedPlayerModel => _mockedPlayerModel.Stamina = 0);
+        }
+        
+        [Test]
+        public void Test_GetItem_VerifyFunctionCallsInventoryGetItem()
+        {
+            //arrange
+            Item item = new Item("ItemName", "Description");
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.Inventory.GetItem("ItemName")).Returns(item);
+            
+            //act
+            _sut.GetItem("ItemName");
+            //assert
+            _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.Inventory.GetItem("ItemName"), Times.Once);
+        }
+        
+        [Test]
+        public void Test_GetItem_GetsCorrectItem()
+        {
+            //arrange
+            Item item = new Item("ItemName", "Description");
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.Inventory.GetItem("ItemName")).Returns(item);
+            
+            //act & assert
+            Assert.AreEqual(item, _sut.GetItem("ItemName"));
+        }
+
+        [Test]
+        public void Test_AddInventoryItem_AddsItemSuccessfully()
+        {
+            //arrange
+            Item item = new Item("ItemName", "Description");
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.Inventory.AddItem(item));
+            //act
+            _sut.AddInventoryItem(item);
+            //assert
+            _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.Inventory.AddItem(item), Times.Once);
+        }
+
+        [Test]
+        public void Test_RemoveInventoryItem_RemovesItemSuccessfully()
+        {
+            //arrange
+            Item item = new Item("ItemName", "Description");
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.Inventory.RemoveItem(item));
+            //act
+            _sut.RemoveInventoryItem(item);
+            //assert
+            _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.Inventory.RemoveItem(item), Times.Once);
+        }
+
+        [Test]
+        public void Test_EmptyInventory_EmptiesInventorySuccessfully()
+        {
+            //arrange
+            Item item = new Item("ItemName", "Description");
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.Inventory.EmptyInventory());
+            //act
+            _sut.EmptyInventory();
+            //assert
+            _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.Inventory.EmptyInventory(), Times.Once);
+        }
+
+        [Test]
+        public void Test_AddBitcoins_AddsBitcoinsSuccessfully()
+        {
+            //arrange
+            Item item = new Item("ItemName", "Description");
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.Bitcoins.AddAmount(20));
+            //act
+            _sut.AddBitcoins(20);
+            //assert
+            _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.Bitcoins.AddAmount(20), Times.Once);
+        }
+
+        [Test]
+        public void Test_RemoveBitcoins_RemovesBitcoinsSuccessfully()
+        {
+            //arrange
+            Item item = new Item("ItemName", "Description");
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.Bitcoins.RemoveAmount(10));
+            //act
+            _sut.RemoveBitcoins(10);
+            //assert
+            _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.Bitcoins.RemoveAmount(10), Times.Once);
+        }
+        
+        [Test]
+        public void Test_GetAttackDamage_GetDefaultAttackDamage()
+        {
+            Assert.AreEqual(5, _sut.GetAttackDamage());
+        }
+
+        [Test]
+        public void Test_DropItem_DropsItemSuccessfully()
+        {
+            //arrange
+            Item item = new Item("ItemName", "Description");
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.Inventory.GetItem("ItemName")).Returns(item);
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.Inventory.RemoveItem(item));
+            //act
+            _sut.DropItem("ItemName");
+            //assert
+            _mockedPlayerModel.Verify(_mockedPlayerModel => _mockedPlayerModel.Inventory.RemoveItem(item), Times.Once);
+        }
+
+        [Test]
+        public void Test_DropItem_ThrowsExceptionBecauseNoItemExists()
+        {
+            _mockedPlayerModel.Setup(_mockedPlayerModel => _mockedPlayerModel.Inventory.GetItem("ItemName"));
+
+            Assert.Throws<ItemException>(() => _sut.DropItem("ItemName"));
+        }
 
         // [Test]
         // public void Test_GetCurrentPosition_VerifyPlayerModelMoqWorks1()
         // {
+        //     //arrange
         //     var direction_right = "right";
         //     int steps = 5;
         //     int x = 26;
         //     int y = 11;
+        //     
+        //     //ff checken of dit in de setup kan
         //     _mockedMapCharacterDTO = new Mock<MapCharacterDTO>(x,y, "test", "test2");
-        //
+        //     
         //     _mockedMapCharacterDTO.SetupSet(mock => mock.XPosition = x);
         //     _mockedMapCharacterDTO.SetupSet(mock => mock.YPosition = y);
         //     // _mockedMapCharacterDTO.Setup(_mockedMapCharacterDTO => _mockedMapCharacterDTO.YPosition >> y);
         //
+        //     _mockedWorldService.Setup(mock => mock.getCurrentCharacterPositions()).Returns(_mockedMapCharacterDTO.Object);
+        //     _mockedMoveHandler.Setup(_mockedMoveHandler => _mockedMoveHandler.SendMove());
+        //     
+        //     //act
         //     _sut.HandleDirection(direction_right, steps);
         //     
+        //     //assert
         //     // _mockedMapCharacterDTO.Verify(mock => mock.XPosition == x);
         //     // _mockedMapCharacterDTO.Verify(mock => mock.YPosition == y);
         //     _mockedMapCharacterDTO.Verify(_mockedMapCharacterDTO => _mockedMapCharacterDTO.XPosition, Times.Once);
@@ -346,166 +403,5 @@ namespace Player.Tests
         //     // Assert
         //     _mockedSessionHandler.Verify(mock => mock.JoinSession(sessionId));
         // }
-
-        
-//          [Test]
-//         public void Test_RemoveHealth_WithoutDying()
-//         {
-//             _sut.RemoveHealth(50);
-//             
-//             Assert.AreEqual(50, _sut.Health);
-//         }
-//         
-//         [Test]
-//         public void Test_RemoveHealth_StopsAtDyingState()
-//         {
-//             _sut.RemoveHealth(200);
-//             
-//             Assert.AreEqual(0, _sut.Health);
-//         }
-//         
-
-//         [Test]
-//         public void Test_RemoveStamina_WithoutRunningOutOfMana()
-//         {
-//             _sut.RemoveStamina(5);
-//             
-//             Assert.AreEqual(5, _sut.Stamina);
-//         }
-//         
-//         [Test]
-//         public void Test_RemoveStamina_StopsAtNoMana()
-//         {
-//             _sut.RemoveStamina(20);
-//             
-//             Assert.AreEqual(0, _sut.Stamina);
-//         }
-//         
-//         [Test]
-//         public void Test_AddStamina_WithoutExceedingStaminaCap()
-//         {
-//             _sut.RemoveStamina(5);
-//             
-//             _sut.AddStamina(4);
-//             
-//             Assert.AreEqual(9, _sut.Stamina);
-//         }
-//         
-//         [Test]
-//         public void Test_AddStamina_ReachesStaminaCap()
-//         {
-//             _sut.RemoveStamina(3);
-//             
-//             _sut.AddStamina(4);
-//             
-//             Assert.AreEqual(10, _sut.Stamina);
-//         }
-//         
-//         [Test]
-//         public void Test_GetItem_VerifyInventoryMoqWorks()
-//         {
-//             Item item = new Item("ItemName", "Description");
-//             _mockedInventory.Setup(mockedInventory => mockedInventory.GetItem("ItemName")).Returns(item);
-//             
-//             Assert.AreEqual(item, _sut.GetItem("ItemName"));
-//             _mockedInventory.Verify(mockedInventory => mockedInventory.GetItem("ItemName"), Times.Once);
-//         }
-//         
-//         [Test]
-//         public void Test_AddInventoryItem_AddsItemSuccessfully()
-//         {
-//             Item item = new Item("ItemName", "Description");
-//             _mockedInventory.Setup(mockedInventory => mockedInventory.AddItem(item));
-//
-//             _sut.AddInventoryItem(item);
-//             
-//             _mockedInventory.Verify(mockedInventory => mockedInventory.AddItem(item), Times.Once);
-//         }
-//         
-//         [Test]
-//         public void Test_RemoveInventoryItem_RemovesItemSuccessfully()
-//         {
-//             Item item = new Item("ItemName", "Description");
-//             _mockedInventory.Setup(mockedInventory => mockedInventory.RemoveItem(item));
-//
-//             _sut.RemoveInventoryItem(item);
-//             
-//             _mockedInventory.Verify(mockedInventory => mockedInventory.RemoveItem(item), Times.Once);
-//         }
-//         
-//         [Test]
-//         public void Test_EmptyInventory_EmptiesInventorySuccessfully()
-//         {
-//             _mockedInventory.Setup(mockedInventory => mockedInventory.EmptyInventory());
-//
-//             _sut.EmptyInventory();
-//             
-//             _mockedInventory.Verify(mockedInventory => mockedInventory.EmptyInventory(), Times.Once);
-//         }
-//         
-//         [Test]
-//         public void Test_GetAmount_VerifyBitcoinMoqWorks()
-//         {
-//             _mockedBitcoins.Setup(mockedBitcoins => mockedBitcoins.Amount).Returns(20);
-//
-//             Assert.AreEqual(20, _sut.Bitcoins.Amount);
-//             _mockedBitcoins.Verify(mockedBitcoins => mockedBitcoins.Amount, Times.Once);
-//         }
-//         
-//         [Test]
-//         public void Test_AddBitcoins_AddsBitcoinsSuccessfully()
-//         {
-//             _mockedBitcoins.Setup(mockedBitcoins => mockedBitcoins.AddAmount(20));
-//
-//             _sut.AddBitcoins(20);
-//             
-//             _mockedBitcoins.Verify(mockedBitcoins => mockedBitcoins.AddAmount(20), Times.Once);
-//         }
-//         
-//         [Test]
-//         public void Test_RemoveBitcoins_RemovesBitcoinsSuccessfully()
-//         {
-//             _mockedBitcoins.Setup(mockedBitcoins => mockedBitcoins.RemoveAmount(10));
-//
-//             _sut.RemoveBitcoins(10);
-//             
-//             _mockedBitcoins.Verify(mockedBitcoins => mockedBitcoins.RemoveAmount(10), Times.Once);
-//         }
-//         
-//         [Test]
-//         public void Test_DropItem_DropsItemSuccessfully()
-//         {
-//             Item item = new Item("ItemName", "Description");
-//             _mockedInventory.Setup(mockedInventory => mockedInventory.GetItem("ItemName")).Returns(item);
-//             _mockedInventory.Setup(mockedInventory => mockedInventory.RemoveItem(item));
-//
-//             _sut.DropItem("ItemName");
-//             
-//             _mockedInventory.Verify(mockedInventory => mockedInventory.RemoveItem(item), Times.Once);
-//         }
-//         
-//         [Test]
-//         public void Test_DropItem_ThrowsExceptionBecauseNoItemExists()
-//         {
-//             _mockedInventory.Setup(mockedInventory => mockedInventory.GetItem("ItemName"));
-//         
-//             Assert.Throws<ItemException>(() => _sut.DropItem("ItemName"));
-//         }
-//         
-//         [Test]
-//         public void Test_GetAttackDamage_GetDefaultAttackDamage()
-//         {
-//             Assert.AreEqual(5, _sut.GetAttackDamage());
-//         }
-//         
-//         [Test]
-//         public void Test_GetLevel_VerifyRadiationLevelMoqWorks()
-//         {
-//             _mockedRadiationLevel.Setup(mockedRadiationLevel => mockedRadiationLevel.Level).Returns(1);
-//
-//             Assert.AreEqual(1, _sut.RadiationLevel.Level);
-//             _mockedRadiationLevel.Verify(mockedRadiationLevel => mockedRadiationLevel.Level, Times.Once);
-//         }
-//
     }
 }
