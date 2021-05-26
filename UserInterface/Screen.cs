@@ -19,7 +19,6 @@ namespace UserInterface
         protected string vertical = "║";
         protected string horizontal = "═";
         public abstract void DrawScreen();
-        public abstract void HandleInput();
         public void SetScreen(ScreenHandler screenHandler)
         {
             _screenHandler = screenHandler;

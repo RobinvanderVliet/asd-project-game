@@ -11,6 +11,7 @@ using DatabaseHandler;
 using DatabaseHandler.Poco;
 using DatabaseHandler.Services;
 using DatabaseHandler.Repository;
+using UserInterface;
 using Timer = System.Timers.Timer;
 
 namespace Session
@@ -25,11 +26,12 @@ namespace Session
         private Timer _hostPingTimer;
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
-
-        public SessionHandler(IClientController clientController)
+        private IScreenHandler _screenHandler;
+        public SessionHandler(IClientController clientController, IScreenHandler screenHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Session);
+            _screenHandler = screenHandler;
         }
 
         public void StartSession(string sessionID)
@@ -251,11 +253,15 @@ namespace Session
         {
             _availableSessions.TryAdd(packet.Header.SessionID, packet);
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
-            
-            // voeg update output op session screen
-            
-            Console.WriteLine(
-                packet.Header.SessionID + " Name: " + sessionDTO.Name + " Seed: " + sessionDTO.SessionSeed);
+
+            if (_screenHandler.Screen is SessionScreen)
+            {
+                SessionScreen screen = _screenHandler.Screen as SessionScreen;
+                screen.UpdateSessions(sessionDTO);
+            }
+
+            // Console.WriteLine(
+            //     packet.Header.SessionID + " Name: " + sessionDTO.Name + " Seed: " + sessionDTO.SessionSeed);
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 

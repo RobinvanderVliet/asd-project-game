@@ -1,6 +1,6 @@
 namespace UserInterface
 {
-    public class EditorScreen : Screen
+    public class GameScreen : Screen
     {
         public override void DrawScreen()
         {

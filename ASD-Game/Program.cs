@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using WorldGeneration;
 using Player;
 using Chat;
+using InputCommandHandler;
 using Player.Services;
 using Network;
 using Player.ActionHandlers;
@@ -58,6 +59,7 @@ namespace ASD_project
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
                     services.AddScoped(typeof(IServicesDb<>), typeof(ServicesDb<>));
                     services.AddScoped<IScreenHandler, ScreenHandler>();
+                    services.AddScoped<IInputCommandHandlerComponent, InputCommandHandlerComponent>();
                 })
                 .UseSerilog()
                 .Build();

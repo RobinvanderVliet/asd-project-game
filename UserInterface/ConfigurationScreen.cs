@@ -8,10 +8,5 @@ namespace UserInterface
         {
             Console.Write("configuration");
         }
-
-        public override void HandleInput()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

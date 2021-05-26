@@ -33,9 +33,10 @@ namespace ASD_project
             private readonly IClientController _clientController;
             private readonly IWorldService _worldService;
             private IScreenHandler _screenHandler;
+            private IInputCommandHandlerComponent _inputHandler;
 
             public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler,
-                ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IRepository<PlayerPoco> playerRepository, IClientController clientController, IWorldService worldService, IScreenHandler screenHandler)
+                ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IRepository<PlayerPoco> playerRepository, IClientController clientController, IWorldService worldService, IInputCommandHandlerComponent inputHandler, IScreenHandler screenHandler)
             {
                 _log = log;
                 _inventory = inventory;
@@ -47,6 +48,7 @@ namespace ASD_project
                 _clientController = clientController;
                 _worldService = worldService;
                 _screenHandler = screenHandler;
+                _inputHandler = inputHandler;
                 //  _mainGameRepository = mainGameRepository;
             }
 
@@ -74,7 +76,6 @@ namespace ASD_project
                 // Console.WriteLine("Game is gestart");
                 
                 _screenHandler.TransitionTo(new StartScreen(_sessionHandler));
-                _screenHandler.AcceptInput();
 
                 // InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
 
@@ -85,7 +86,7 @@ namespace ASD_project
                 // IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
                 // IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, _moveHandler, _clientController, _worldService);
                 //
-                // ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
+                ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
 
 
                 // inputHandler.HandleSession(sessionService);
@@ -105,17 +106,31 @@ namespace ASD_project
 
 
 
-                // while (true) 
-                // {
-                // Console.WriteLine("create player");
-                // String playername = Console.ReadLine();
-                // if (playername.Length != 0)
-                // {
-                // IPlayerService player = createPlayer(playername);
-                // Console.WriteLine("Type input messages below");
-                // inputHandler.HandleCommands(playerService, sessionService);
+                while (true)
+                {
+                    var currentScreen = _screenHandler.Screen;
 
-                // }
+                    if (currentScreen is StartScreen)
+                    {
+                        _inputHandler.HandleStartScreenCommands(_screenHandler, sessionService);
+                    }
+                    else if (currentScreen is SessionScreen)
+                    {
+                        
+                    }
+                    else if (currentScreen is GameScreen)
+                    {
+                    }
+                    
+                    // Console.WriteLine("create player");
+                    // String playername = Console.ReadLine();
+                    // if (playername.Length != 0)
+                    // {
+                    // IPlayerService player = createPlayer(playername);
+                    // Console.WriteLine("Type input messages below");
+                    // inputHandler.HandleCommands(playerService, sessionService);
+
+                }
             }
 
             // private IPlayerService createPlayer(String name, WorldService world)

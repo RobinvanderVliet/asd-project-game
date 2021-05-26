@@ -6,10 +6,5 @@ namespace UserInterface
         {
             throw new System.NotImplementedException();
         }
-
-        public override void HandleInput()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
