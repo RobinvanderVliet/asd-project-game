@@ -6,12 +6,12 @@ namespace Player.Model
     {
         public List<IItem> ConsumableItemList { get; set; }
 
-        public IItem GetItem(string itemName);
+        public IItem GetConsumableItem(string itemName);
 
-        public void AddItem(IItem item);
+        public void AddConsumableItem(IItem item);
 
-        public void RemoveItem(IItem item);
+        public void RemoveConsumableItem(IItem item);
 
-        public void EmptyInventory();
+        public void EmptyConsumableItemList();
     }
 }

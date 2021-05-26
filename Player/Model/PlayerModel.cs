@@ -104,22 +104,22 @@ namespace Player.Model
 
         public IItem GetItem(string itemName)
         {
-            return _inventory.GetItem(itemName);
+            return _inventory.GetConsumableItem(itemName);
         }
 
         public void AddInventoryItem(IItem item)
         {
-            _inventory.AddItem(item);
+            _inventory.AddConsumableItem(item);
         }
 
         public void RemoveInventoryItem(IItem item)
         {
-            _inventory.RemoveItem(item);
+            _inventory.RemoveConsumableItem(item);
         }
 
         public void EmptyInventory()
         {
-            _inventory.EmptyInventory();
+            _inventory.EmptyConsumableItemList();
         }
 
         public void AddBitcoins(int amount)
@@ -154,7 +154,7 @@ namespace Player.Model
 
         public void DropItem(string itemName)
         {
-            IItem item = _inventory.GetItem(itemName);
+            IItem item = _inventory.GetConsumableItem(itemName);
             if (item != null)
             {
                 RemoveInventoryItem(item);

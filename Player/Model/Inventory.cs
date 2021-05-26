@@ -24,7 +24,7 @@ namespace Player.Model
             _consumableItems = new List<IItem>();
         }
 
-        public IItem GetItem(string itemName)
+        public IItem GetConsumableItem(string itemName)
         {
             foreach (var item in _consumableItems)
             {
@@ -36,17 +36,17 @@ namespace Player.Model
             return null;
         }
 
-        public void AddItem(IItem item)
+        public void AddConsumableItem(IItem item)
         {
             _consumableItems.Add(item);
         }
 
-        public void RemoveItem(IItem item)
+        public void RemoveConsumableItem(IItem item)
         {
             _consumableItems.Remove(item);
         }
 
-        public void EmptyInventory()
+        public void EmptyConsumableItemList()
         {
             _consumableItems.Clear();
         }

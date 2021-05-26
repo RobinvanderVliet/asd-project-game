@@ -38,7 +38,7 @@ namespace Player.Tests
             Item item = new Item("ItemName", "Description");
             _sut.ConsumableItemList.Add(item);
             
-            Assert.AreEqual(item, _sut.GetItem("ItemName"));
+            Assert.AreEqual(item, _sut.GetConsumableItem("ItemName"));
         }
         
         [Test]
@@ -47,7 +47,7 @@ namespace Player.Tests
             Item item = new Item("ItemName", "Description");
             _sut.ConsumableItemList.Add(item);
             
-            Assert.AreEqual(null, _sut.GetItem("UnexistingItemName"));
+            Assert.AreEqual(null, _sut.GetConsumableItem("UnexistingItemName"));
         }
         
         [Test]
@@ -55,9 +55,9 @@ namespace Player.Tests
         {
             Item item = new Item("ItemName", "Description");
             
-            _sut.AddItem(item);
+            _sut.AddConsumableItem(item);
             
-            Assert.AreEqual(item, _sut.GetItem("ItemName"));
+            Assert.AreEqual(item, _sut.GetConsumableItem("ItemName"));
         }
         
         [Test]
@@ -66,7 +66,7 @@ namespace Player.Tests
             Item item = new Item("ItemName", "Description");
             _sut.ConsumableItemList.Add(item);
             
-            _sut.RemoveItem(item);
+            _sut.RemoveConsumableItem(item);
             
             Assert.AreEqual(new List<IItem>(), _sut.ConsumableItemList);
         }
@@ -75,9 +75,9 @@ namespace Player.Tests
         public void Test_EmptyInventory_EmptiesInventorySuccessfully()
         {
             Item item = new Item("ItemName", "Description");
-            _sut.AddItem(item);
+            _sut.AddConsumableItem(item);
             
-            _sut.EmptyInventory();
+            _sut.EmptyConsumableItemList();
             
             Assert.AreEqual(new List<IItem>(), _sut.ConsumableItemList);
         }

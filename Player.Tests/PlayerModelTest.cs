@@ -212,42 +212,42 @@ namespace Player.Tests
         public void Test_GetItem_VerifyInventoryMoqWorks()
         {
             Item item = new Item("ItemName", "Description");
-            _mockedInventory.Setup(mockedInventory => mockedInventory.GetItem("ItemName")).Returns(item);
+            _mockedInventory.Setup(mockedInventory => mockedInventory.GetConsumableItem("ItemName")).Returns(item);
             
             Assert.AreEqual(item, _sut.GetItem("ItemName"));
-            _mockedInventory.Verify(mockedInventory => mockedInventory.GetItem("ItemName"), Times.Once);
+            _mockedInventory.Verify(mockedInventory => mockedInventory.GetConsumableItem("ItemName"), Times.Once);
         }
         
         [Test]
         public void Test_AddInventoryItem_AddsItemSuccessfully()
         {
             Item item = new Item("ItemName", "Description");
-            _mockedInventory.Setup(mockedInventory => mockedInventory.AddItem(item));
+            _mockedInventory.Setup(mockedInventory => mockedInventory.AddConsumableItem(item));
 
             _sut.AddInventoryItem(item);
             
-            _mockedInventory.Verify(mockedInventory => mockedInventory.AddItem(item), Times.Once);
+            _mockedInventory.Verify(mockedInventory => mockedInventory.AddConsumableItem(item), Times.Once);
         }
         
         [Test]
         public void Test_RemoveInventoryItem_RemovesItemSuccessfully()
         {
             Item item = new Item("ItemName", "Description");
-            _mockedInventory.Setup(mockedInventory => mockedInventory.RemoveItem(item));
+            _mockedInventory.Setup(mockedInventory => mockedInventory.RemoveConsumableItem(item));
 
             _sut.RemoveInventoryItem(item);
             
-            _mockedInventory.Verify(mockedInventory => mockedInventory.RemoveItem(item), Times.Once);
+            _mockedInventory.Verify(mockedInventory => mockedInventory.RemoveConsumableItem(item), Times.Once);
         }
         
         [Test]
         public void Test_EmptyInventory_EmptiesInventorySuccessfully()
         {
-            _mockedInventory.Setup(mockedInventory => mockedInventory.EmptyInventory());
+            _mockedInventory.Setup(mockedInventory => mockedInventory.EmptyConsumableItemList());
 
             _sut.EmptyInventory();
             
-            _mockedInventory.Verify(mockedInventory => mockedInventory.EmptyInventory(), Times.Once);
+            _mockedInventory.Verify(mockedInventory => mockedInventory.EmptyConsumableItemList(), Times.Once);
         }
         
         [Test]
@@ -283,18 +283,18 @@ namespace Player.Tests
         public void Test_DropItem_DropsItemSuccessfully()
         {
             Item item = new Item("ItemName", "Description");
-            _mockedInventory.Setup(mockedInventory => mockedInventory.GetItem("ItemName")).Returns(item);
-            _mockedInventory.Setup(mockedInventory => mockedInventory.RemoveItem(item));
+            _mockedInventory.Setup(mockedInventory => mockedInventory.GetConsumableItem("ItemName")).Returns(item);
+            _mockedInventory.Setup(mockedInventory => mockedInventory.RemoveConsumableItem(item));
 
             _sut.DropItem("ItemName");
             
-            _mockedInventory.Verify(mockedInventory => mockedInventory.RemoveItem(item), Times.Once);
+            _mockedInventory.Verify(mockedInventory => mockedInventory.RemoveConsumableItem(item), Times.Once);
         }
         
         [Test]
         public void Test_DropItem_ThrowsExceptionBecauseNoItemExists()
         {
-            _mockedInventory.Setup(mockedInventory => mockedInventory.GetItem("ItemName"));
+            _mockedInventory.Setup(mockedInventory => mockedInventory.GetConsumableItem("ItemName"));
         
             Assert.Throws<ItemException>(() => _sut.DropItem("ItemName"));
         }
