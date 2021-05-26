@@ -180,17 +180,8 @@ namespace InputCommandHandler.Antlr.Parser
 
         public override void EnterStep(PlayerCommandsParser.StepContext context)
         {
-            var action = _currentContainer.Peek();
-
-            if (action is Move)
-            {
-                Move move = (Move) action;
-                move.AddChild(new Step(Convert.ToInt32(context.GetText())));
-            } else if (action is Pickup)
-            {
-                Pickup pickup = (Pickup) action;
-                pickup.AddChild(new Step(Convert.ToInt32(context.GetText())));
-            }
+            ASTNode action = (ASTNode) _currentContainer.Peek();
+            action?.AddChild(new Step(Convert.ToInt32(context.GetText())));
         }
 
         public override void EnterMessage(PlayerCommandsParser.MessageContext context)
