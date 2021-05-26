@@ -36,12 +36,12 @@ namespace InputCommandHandler.Tests
             return listener.getAST();
         }
 
-        public static AST PickupCommand(int number)
+        public static AST PickupCommand()
         {
             Input pickup = new Input();
 
             pickup.AddChild(new Pickup()
-                .AddChild(new Step(number)));
+                .AddChild(new Step(1)));
 
             return new AST(pickup);
         }
@@ -191,7 +191,7 @@ namespace InputCommandHandler.Tests
         public void Test_AstListener_CreatesPickupAst()
         {
             // Act
-            AST exp = PickupCommand(1);
+            AST exp = PickupCommand();
             
             // Arrange
             AST sut = SetupParser("pickup 1");
