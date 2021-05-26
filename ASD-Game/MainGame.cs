@@ -6,13 +6,22 @@ using InputCommandHandler;
 using Player.Model;
 using Player.Services;
 using System.Collections.Generic;
+using System.Numerics;
+using Agent.Mapper;
+using Agent.Models;
+using Agent.Services;
 using WorldGeneration;
 using Chat;
+using Creature;
+using Creature.Creature.StateMachine;
+using Creature.Creature.StateMachine.CustomRuleSet;
+using Creature.Creature.StateMachine.Data;
 using DataTransfer.DTO.Character;
 using Network;
 using Session;
 using Player.ActionHandlers;
 using Creature.Services;
+using Player = Creature.Player;
 
 namespace ASD_project
 {
@@ -73,13 +82,20 @@ namespace ASD_project
                 Console.WriteLine("Game is gestart");
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
 
-                // AgentConfigurationService agentConfigurationService = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), inputHandler);
-                // agentConfigurationService.Configure();
+                AgentConfigurationService agentConfigurationService = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), inputHandler);
+                agentConfigurationService.CreateConfiguration("monster", SuperUgly.MONSTER_PATH);
 
                 //moet later vervangen worden
                 IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
                 IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, _moveHandler, _clientController, _worldService);
-                IAgentService agentService = new AgentService("myId");
+
+                // TODO: fix agent data
+                PlayerData agentData = new PlayerData(new Vector2(playerModel.XPosition, playerModel.YPosition),
+                    playerModel.Health, playerModel.GetAttackDamage(), 10, null);
+                PlayerStateMachine agentStateMachine = new PlayerStateMachine(agentData, new RuleSet(agentConfigurationService.GetConfigurations()[0].Settings));
+                Creature.Player agent = new Creature.Player(agentStateMachine, _clientController);
+                IAgentService agentService = new AgentService(agent);
+                
                 ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
                 
                 

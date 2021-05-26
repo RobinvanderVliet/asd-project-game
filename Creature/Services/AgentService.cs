@@ -1,30 +1,34 @@
 ﻿using InputCommandHandler;
-using System.Collections.Generic;
 
 namespace Creature.Services
 {
+    // TODO: integrate with world generation for creature creation
+    // TODO: integrate with group 1 for difficulty
     public class AgentService : IAgentService
     {
-        private Dictionary<string, ICreature> agents;
+        private ICreature _agent;
+        private bool _isActivated;
 
-        public AgentService(string playerId)
+        public AgentService(ICreature agent)
         {
-            
+            _agent = agent;
         }
-        
+
         public void Activate()
         {
-            throw new System.NotImplementedException();
+            _isActivated = true;
+            _agent.CreatureStateMachine.StartStateMachine();
         }
 
         public void DeActivate()
         {
-            throw new System.NotImplementedException();
+            _isActivated = false;
+            _agent.CreatureStateMachine.StopStateMachine();
         }
 
-        public void IsActivated()
+        public bool IsActivated()
         {
-            throw new System.NotImplementedException();
+            return _isActivated;
         }
     }
 }
