@@ -26,16 +26,20 @@ namespace InputCommandHandler.Tests
         [Test]
         public void Test_ParseCommand_ThrowsSyntaxErrorWhenCommandNotRecognised()
         {
+            //act
+            //arrange&assert
             Assert.Throws<CommandSyntaxException>(() => _sut.ParseCommand("me forward"));
         }
 
         [Test]
         public void Test_ParseCommand_ParsingACommandWorksAsExpected()
         {
+            //act
             _sut.ParseCommand("move forward");
             AST ast = _sut.Ast;
+            //arrange
             AST exp = MoveCommand(1, "forward");
-
+            //assert
             Assert.AreEqual(exp, ast);
         }
 

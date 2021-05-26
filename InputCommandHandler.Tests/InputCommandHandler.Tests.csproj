@@ -21,6 +21,7 @@
     <ItemGroup>
       <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
       <ProjectReference Include="..\Player\Player.csproj" />
+      <ProjectReference Include="..\Session\Session.csproj" />
     </ItemGroup>
 
 </Project>

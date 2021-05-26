@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Session
+﻿namespace Session
 {
     public class SessionService : ISessionService
     {
@@ -8,20 +6,14 @@ namespace Session
         private readonly IGameSessionHandler _gameSessionHandler; 
         public bool inSession { get; set; }
 
-        public bool inGame { get; set; }
+        public bool InGame { get; set; }
 
         public SessionService(ISessionHandler sessionHandler, IGameSessionHandler gameSessionHandler)
         {
             _sessionHandler = sessionHandler;
             _gameSessionHandler = gameSessionHandler;
-
         }
 
-        public void getSessionName()
-        {
-            
-        }
-        
         public void CreateSession(string messageValue)
         {
             inSession = _sessionHandler.CreateSession(messageValue);

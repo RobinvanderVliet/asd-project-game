@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Models.LootableTiles
 {
+    [ExcludeFromCodeCoverage]
     public class ChestTile : ILootAbleTile
     {
         public bool IsAccessible { get; set; }
