@@ -63,17 +63,25 @@ namespace Creature.World
             foreach (ICreature creature in _creatures)
             {
                 ICreature player = _players[0];
-                if (Vector2.DistanceSquared(creature.CreatureStateMachine.CreatureData.Position, player.CreatureStateMachine.CreatureData.Position) < creature.CreatureStateMachine.CreatureData.VisionRange)
+                int attackRange = 1;
+                int visionRange = creature.CreatureStateMachine.CreatureData.VisionRange;
+
+                if (creature.CreatureStateMachine.CreatureData.RuleSet["combat"] == "offensive")
+                {
+                    visionRange += 6;
+                }
+
+                if (Vector2.DistanceSquared(creature.CreatureStateMachine.CreatureData.Position, player.CreatureStateMachine.CreatureData.Position) <= visionRange)
                 {
                     creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.SPOTTED_PLAYER, player.CreatureStateMachine.CreatureData);
 
                     Vector2 monsterPosition = creature.CreatureStateMachine.CreatureData.Position;
                     Vector2 playerPosition = player.CreatureStateMachine.CreatureData.Position;
 
-                    if ((monsterPosition.X + 1f) == playerPosition.X && (monsterPosition.Y == playerPosition.Y)
-                        || (monsterPosition.X - 1f) == playerPosition.X && (monsterPosition.Y == playerPosition.Y)
-                        || (monsterPosition.Y + 1f) == playerPosition.Y && (monsterPosition.X == playerPosition.X)
-                        || (monsterPosition.Y - 1f) == playerPosition.Y && (monsterPosition.X == playerPosition.X))
+                    if ((monsterPosition.X + attackRange) == playerPosition.X && (monsterPosition.Y == playerPosition.Y)
+                        || (monsterPosition.X - attackRange) == playerPosition.X && (monsterPosition.Y == playerPosition.Y)
+                        || (monsterPosition.Y + attackRange) == playerPosition.Y && (monsterPosition.X == playerPosition.X)
+                        || (monsterPosition.Y - attackRange) == playerPosition.Y && (monsterPosition.X == playerPosition.X))
                     {
                         creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.PLAYER_IN_RANGE, player.CreatureStateMachine.CreatureData);
                     }

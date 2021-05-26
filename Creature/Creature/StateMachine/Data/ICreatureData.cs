@@ -1,5 +1,5 @@
-﻿using Creature.Creature.StateMachine.CustomRuleSet;
-using Creature.World;
+﻿using Creature.World;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace Creature.Creature.StateMachine.Data
@@ -13,7 +13,7 @@ namespace Creature.Creature.StateMachine.Data
         double Health { get; set; }
         IWorld World { get; set;  }
 
-        RuleSet RuleSet { get; set; }
+        Dictionary<string, string> RuleSet { get; }
 
     }
 }

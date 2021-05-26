@@ -5,10 +5,8 @@ using Creature.Creature.StateMachine.Data;
 using Creature.World;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using Creature.Creature.StateMachine.CustomRuleSet;
 
 namespace Creature
 {
@@ -22,21 +20,20 @@ namespace Creature
             NpcConfigurationService npcConfigurationService = new NpcConfigurationService(new List<NpcConfiguration>(), new FileToDictionaryMapper());
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
-            
-            RuleSet agentRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[0].Settings);
-            RuleSet playerRuleSet = new RuleSet(npcConfigurationService.GetConfigurations()[1].Settings);
-            
-            PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, null);
-            AgentData agentData = new AgentData(new Vector2(10, 10), 20, 5, 50, world, false, agentRuleSet);
+            npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
 
-            
+            PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, npcConfigurationService.GetConfigurations()[0].Settings);
+            //AgentData agentData = new AgentData(new Vector2(10, 10), 20, 5, 50, world, false, npcConfigurationService.GetConfigurations()[1].Settings);
+            MonsterData monsterData = new MonsterData(new Vector2(10, 15), 20, 5, 50, world, npcConfigurationService.GetConfigurations()[2].Settings, false);
+
             ICreature player = new Player(playerData);
-            ICreature agent = new Agent(agentData);
+            //ICreature agent = new Agent(agentData);
+            ICreature monster = new Monster(monsterData);
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);
-            world.SpawnAgent(agent);
-            
+            //world.SpawnAgent(agent);
+            world.SpawnCreature(monster);
 
             world.Render();
 

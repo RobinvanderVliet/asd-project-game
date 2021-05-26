@@ -1,5 +1,4 @@
-﻿using Creature.Creature.StateMachine.CustomRuleSet;
-using Creature.Creature.StateMachine.Data;
+﻿using Creature.Creature.StateMachine.Data;
 using System;
 
 namespace Creature.Creature.StateMachine.State
@@ -20,6 +19,8 @@ namespace Creature.Creature.StateMachine.State
         {
             ICreatureData playerData = creatureData;
             playerData.Health -= playerData.Damage;
+
+            Console.WriteLine("Player health: " + playerData.Health);
 
            // throw new NotImplementedException();
         }
