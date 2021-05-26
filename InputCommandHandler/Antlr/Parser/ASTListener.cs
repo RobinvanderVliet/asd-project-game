@@ -211,5 +211,12 @@ namespace InputCommandHandler.Antlr.Parser
                 startSession.AddChild(new Message(context.GetText()));
             }
         }
+
+        public override void EnterRequestSavedGames(PlayerCommandsParser.RequestSavedGamesContext context)
+        {
+            
+        }
+        
+        public override void ExitRequestSavedGames(PlayerCommandsParser.RequestSavedGamesContext context){}
     }
 }
