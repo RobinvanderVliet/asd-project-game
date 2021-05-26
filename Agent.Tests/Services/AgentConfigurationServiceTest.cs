@@ -30,7 +30,7 @@ namespace Agent.Tests.Services
             _sut.FileHandler = _fileHandlerMock.Object;
             _pipelineMock = new Mock<Pipeline>();
             _sut.Pipeline = _pipelineMock.Object;
-            = new FileHandler();
+            _handler = new FileHandler();
         }
 
         [Test]
