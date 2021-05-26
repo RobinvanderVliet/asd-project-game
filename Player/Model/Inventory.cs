@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Player.Model.Armor;
+using System.Collections.Generic;
+using Weapon;
 
 namespace Player.Model
 {
@@ -22,6 +24,8 @@ namespace Player.Model
         public Inventory()
         {
             _consumableItems = new List<IItem>();
+            _helmet = new Bandana();
+            _meleeWeapon = new Knife();
         }
 
         public IItem GetConsumableItem(string itemName)
