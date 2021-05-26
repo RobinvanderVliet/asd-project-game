@@ -37,5 +37,17 @@ namespace InputCommandHandler.Antlr.Ast.Actions
 
             return this;
         }  
+        
+        [ExcludeFromCodeCoverage]
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Inspect);
+        }
+
+        [ExcludeFromCodeCoverage]
+        public bool Equals(Inspect other)
+        {
+            return true;
+        }
     }
 }
