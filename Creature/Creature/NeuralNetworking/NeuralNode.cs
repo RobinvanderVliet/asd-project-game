@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Creature.Creature.NeuralNetworking
 {
-    public class Node
+    public class NeuralNode
     {
 
         public int number {get; set;}
@@ -12,7 +12,7 @@ namespace Creature.Creature.NeuralNetworking
         public List<ConnectionGene> outputConnections {get; set;}
         public int layer {get; set;}
 
-        public Node(int number)
+        public NeuralNode(int number)
         {
             this.number = number;
         }
@@ -46,7 +46,7 @@ namespace Creature.Creature.NeuralNetworking
 
         //returns whether this node connected to the parameter node
         //used when adding a new connection 
-        public Boolean IsConnectedTo(Node node)
+        public Boolean IsConnectedTo(NeuralNode node)
         {
             if (node.layer == layer)
             {
@@ -80,9 +80,9 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //returns a copy of this node
-        public Node Clone()
+        public NeuralNode Clone()
         {
-            Node clone = new Node(number);
+            NeuralNode clone = new NeuralNode(number);
             clone.layer = layer;
             return clone;
         }

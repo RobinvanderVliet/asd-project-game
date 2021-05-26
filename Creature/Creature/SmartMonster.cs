@@ -4,12 +4,13 @@ using System;
 using Creature.Creature.StateMachine.Data;
 using System.Collections.Generic;
 using Creature.Creature.NeuralNetworking.TrainingScenario;
+using System.Numerics;
 
 namespace Creature.Creature
 {
     public class SmartMonster : ICreature
     {
-        private ICreatureData _creatureData;
+        public ICreatureData creatureData;
         private IDataGatheringService _dataGatheringService = new DataGatheringService();
         private SmartCreatureActions smartactions;
 
@@ -31,19 +32,18 @@ namespace Creature.Creature
 
         //Data for fitnessCalculation
         public int lifeSpan = 0;
-        public Boolean dead;
-        public static int DamageDealt;
-        public static int DamageTaken;
-        public static int HealthHealed;
-        public static int StatsGained;
-        public static Boolean EnemyKilled;
-
+        public Boolean dead = false;
+        public int DamageDealt { get; set; } = 0;
+        public int DamageTaken { get; set; } = 0;
+        public int HealthHealed { get; set; } = 0;
+        public int StatsGained { get; set; } = 0;
+        public int EnemysKilled { get; set; } = 0;
 
         public ICreatureStateMachine CreatureStateMachine => null;
 
         public SmartMonster(ICreatureData creatureData)
         {
-            _creatureData = creatureData;
+            this.creatureData = creatureData;
         }
 
         public void ApplyDamage(double amount)
@@ -63,22 +63,26 @@ namespace Creature.Creature
 
         public void Update()
         {
-
+            if(smartactions.path != null)
+            {
+                creatureData.Position = smartactions.path.Pop().Position;
+            }
+            lifeSpan++;
         }
 
         public void Look()
         {
             //get smartMonster x cord
-            vision[0] = _creatureData.Position.X;
+            vision[0] = creatureData.Position.X;
             //get smartMonster y cord
-            vision[1] = _creatureData.Position.Y;
+            vision[1] = creatureData.Position.Y;
             //get smartMonster damage
-            vision[2] = _creatureData.Damage;
+            vision[2] = creatureData.Damage;
             //get smartMonster health
-            vision[3] = (float) _creatureData.Health;
+            vision[3] = (float) creatureData.Health;
 
             //calculate closest player and monster
-            _dataGatheringService.ScanMap(_creatureData.Position, _creatureData.VisionRange);
+            _dataGatheringService.ScanMap(creatureData.Position, creatureData.VisionRange);
             //get distance to player
             vision[4] = _dataGatheringService.distanceToClosestPlayer;
             //get distance to monster
@@ -116,7 +120,7 @@ namespace Creature.Creature
             if (max < 0.7)
             {
                 //Wander action
-                smartactions.Wander(_creatureData.Position);
+                smartactions.Wander(creatureData.Position);
                 return;
             }
 
@@ -147,7 +151,7 @@ namespace Creature.Creature
         //returns a clone of this player with the same brian
         public SmartMonster Clone()
         {
-            SmartMonster clone = new SmartMonster(_creatureData);
+            SmartMonster clone = new SmartMonster(creatureData);
             clone.brain = brain.Clone();
             clone.fitness = fitness;
             clone.brain.GenerateNetwork();
@@ -162,9 +166,9 @@ namespace Creature.Creature
             int killPoints = 0;
             int deathpoints = 0;
             //Fitness calculation
-            if(EnemyKilled)
+            if(EnemysKilled < 0)
             {
-                killPoints =+ 100000000;
+                killPoints =+ 100000000*EnemysKilled;
             }
             if(dead)
             {
@@ -176,7 +180,7 @@ namespace Creature.Creature
 
         public SmartMonster Crossover(SmartMonster parent2)
         {
-            SmartMonster child = new SmartMonster(parent2._creatureData);
+            SmartMonster child = new SmartMonster(parent2.creatureData);
             child.brain = brain.Crossover(parent2.brain);
             child.brain.GenerateNetwork();
             return child;
@@ -187,7 +191,7 @@ namespace Creature.Creature
 
         public SmartMonster CloneForReplay()
         {
-            SmartMonster clone = new SmartMonster(_creatureData);
+            SmartMonster clone = new SmartMonster(creatureData);
             clone.brain = brain.Clone();
             clone.fitness = fitness;
             clone.brain.GenerateNetwork();

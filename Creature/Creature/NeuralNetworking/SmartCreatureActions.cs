@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using Creature.Pathfinder;
 
 namespace Creature.Creature.NeuralNetworking
@@ -13,7 +10,7 @@ namespace Creature.Creature.NeuralNetworking
         private Random _random = new Random();
         private PathFinder _pathfinder;
 
-        private Stack<Node> path = new Stack<Node>();
+        public Stack<Node> path = new Stack<Node>();
 
         public void Wander(Vector2 loc) 
         {
@@ -25,30 +22,35 @@ namespace Creature.Creature.NeuralNetworking
             path = _pathfinder.FindPath(loc, destination);
         }
 
-        public void Attack(ICreature player, ICreature smartmonster)
+        public void Attack(ICreature player, SmartMonster smartmonster)
         {
-            if(IsAdjacent(player.CreatureStateMachine.CreatureData.Position,smartmonster.CreatureStateMachine.CreatureData.Position))
+            if(IsAdjacent(player.CreatureStateMachine.CreatureData.Position,smartmonster.creatureData.Position))
             {
-                smartmonster.ApplyDamage(smartmonster.CreatureStateMachine.CreatureData.Damage);
+                player.CreatureStateMachine.CreatureData.Health = player.CreatureStateMachine.CreatureData.Health - smartmonster.creatureData.Damage;
+                smartmonster.DamageDealt = smartmonster.DamageDealt + smartmonster.creatureData.Damage;
+                if(player.CreatureStateMachine.CreatureData.Health < smartmonster.creatureData.Damage)
+                {
+                    smartmonster.EnemysKilled++;
+                }
             }
         }
 
-        public void Flee(ICreature player, ICreature smartmonster) 
+        public void Flee(ICreature player, SmartMonster smartmonster) 
         {
-            if(player.CreatureStateMachine.CreatureData.Position.X == smartmonster.CreatureStateMachine.CreatureData.Position.X)
+            if(player.CreatureStateMachine.CreatureData.Position.X == smartmonster.creatureData.Position.X)
             {
-                Vector2 newDestination = new Vector2(smartmonster.CreatureStateMachine.CreatureData.Position.X, smartmonster.CreatureStateMachine.CreatureData.Position.Y + 10);
-                path = _pathfinder.FindPath(smartmonster.CreatureStateMachine.CreatureData.Position, newDestination);
+                Vector2 newDestination = new Vector2(smartmonster.creatureData.Position.X, smartmonster.creatureData.Position.Y + 10);
+                path = _pathfinder.FindPath(smartmonster.creatureData.Position, newDestination);
             }
-            else if (player.CreatureStateMachine.CreatureData.Position.Y == smartmonster.CreatureStateMachine.CreatureData.Position.Y)
+            else if (player.CreatureStateMachine.CreatureData.Position.Y == smartmonster.creatureData.Position.Y)
             {
-                Vector2 newDestination = new Vector2(smartmonster.CreatureStateMachine.CreatureData.Position.Y, smartmonster.CreatureStateMachine.CreatureData.Position.X + 10);
-                path = _pathfinder.FindPath(smartmonster.CreatureStateMachine.CreatureData.Position, newDestination);
+                Vector2 newDestination = new Vector2(smartmonster.creatureData.Position.Y, smartmonster.creatureData.Position.X + 10);
+                path = _pathfinder.FindPath(smartmonster.creatureData.Position, newDestination);
             }
             else
             {
-                Vector2 newDestination = new Vector2(smartmonster.CreatureStateMachine.CreatureData.Position.Y+10, smartmonster.CreatureStateMachine.CreatureData.Position.X + 10);
-                path = _pathfinder.FindPath(smartmonster.CreatureStateMachine.CreatureData.Position, newDestination);
+                Vector2 newDestination = new Vector2(smartmonster.creatureData.Position.Y+10, smartmonster.creatureData.Position.X + 10);
+                path = _pathfinder.FindPath(smartmonster.creatureData.Position, newDestination);
             }
         }
 
@@ -57,9 +59,9 @@ namespace Creature.Creature.NeuralNetworking
             //To be implemented
         }
 
-        public void RunToMonster(ICreature monster, ICreature smartmonster) 
+        public void RunToMonster(ICreature monster, SmartMonster smartmonster) 
         {
-            path = _pathfinder.FindPath(monster.CreatureStateMachine.CreatureData.Position, smartmonster.CreatureStateMachine.CreatureData.Position);
+            path = _pathfinder.FindPath(monster.CreatureStateMachine.CreatureData.Position, smartmonster.creatureData.Position);
         }
 
         public void GrabItem(Vector2 loc) 
@@ -67,11 +69,20 @@ namespace Creature.Creature.NeuralNetworking
             //To be implemented
         }
 
+        public void TakeDamage(ICreature player, SmartMonster smartMonster)
+        {
+            smartMonster.DamageTaken = player.CreatureStateMachine.CreatureData.Damage;
+
+            if(smartMonster.creatureData.Health <= 0)
+            {
+                smartMonster.dead = true;
+            }
+        }
+
         private bool IsAdjacent(Vector2 loc1, Vector2 loc2)
         {
             float distance = Vector2.Distance(loc1, loc2);
             return (distance < 2);
-
         }
 
     }
