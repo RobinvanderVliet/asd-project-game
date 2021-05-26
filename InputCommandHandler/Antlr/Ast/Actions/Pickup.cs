@@ -6,6 +6,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
     public class Pickup : Command, IEquatable<Pickup>
     {
         private Step _item;
+        [ExcludeFromCodeCoverage]
         public Step Item { get => _item; private set => _item = value; }
 
         public override ASTNode AddChild(ASTNode child)
@@ -27,7 +28,10 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         [ExcludeFromCodeCoverage]
         public bool Equals(Pickup other)
         {
-            return other != null && _item.Equals(other._item);
+            if (other == null)
+                return false;
+            
+            return _item.Equals(other._item);
         }
     }
 }
