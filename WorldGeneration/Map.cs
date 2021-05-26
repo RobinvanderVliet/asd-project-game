@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DatabaseHandler;
-using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using DataTransfer.DTO.Character;
 using DataTransfer.Model.World;
@@ -125,7 +123,6 @@ namespace WorldGeneration
         private Chunk GenerateNewChunk(int chunkX, int chunkY)
         {
             var chunk = _noiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize, _seed);
-            //_db.InsertChunkIntoDatabase(chunk);
             _dbService.CreateAsync(chunk);
             return chunk;
         }
