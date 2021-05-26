@@ -214,8 +214,7 @@ namespace Player.Services
                     break;
             }
 
-            
-            var mapCharacterDTO = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
+            var mapCharacterDto = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
                 (_worldService.getCurrentCharacterPositions().YPosition) + y, 
                 _currentPlayer.PlayerGuid, 
                 _worldService.getCurrentCharacterPositions().GameGuid, 
