@@ -1,3 +1,4 @@
+using Agent.Antlr.Grammar;
 using Antlr4.Runtime.Misc;
 using System;
 using System.Collections.Generic;
@@ -5,7 +6,6 @@ using System.Linq;
 using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
 using Agent.Antlr.Ast.Comparables.Subjects;
-using Agent.Antlr.grammar;
 using Action = Agent.Antlr.Ast.Action;
 
 namespace Agent.Antlr.Parser
