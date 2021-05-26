@@ -28,26 +28,31 @@ namespace InputCommandHandler.Tests
         [Test]
         public void Test_HandleDirection_RunsCorrectly()
         {
+            //arrange
             var ast = MoveAST(1, "up");
 
-            _mockedPlayerService.Setup(x => x.HandleDirection("up", 1));
+            _mockedPlayerService.Setup(x => x.HandleDirection("up", 1));f
+            //act
             _sut.Apply(ast);
+            //assert
             _mockedPlayerService.VerifyAll();
         }
 
         [Test]
         public void Test_HandleDirection_ThrowsExceptionWithStepsLessThan1()
         {
+            //arrange
             var ast = MoveAST(0, "up");
-
+            //act & assert
             Assert.Throws<MoveException>(() => _sut.Apply(ast));
         }
 
         [Test]
         public void Test_HandleDirection_ThrowsExceptionWithStepsMoreThan10()
         {
+            //arrange
             var ast = MoveAST(11, "up");
-
+            //act & assert
             Assert.Throws<MoveException>(() => _sut.Apply(ast));
         }
 
@@ -63,11 +68,12 @@ namespace InputCommandHandler.Tests
         [Test]
         public void Test_Apply_HandlePickupActionIsCalled()
         {
+            //arrange
             var ast = PickupAST();
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.PickupItem());
-
+            //act
             _sut.Apply(ast);
-
+            //assert
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.PickupItem(), Times.Once);
         }
 
@@ -81,11 +87,12 @@ namespace InputCommandHandler.Tests
         [Test]
         public void Test_Apply_HandleDropActionIsCalled()
         {
+            //arrange
             var ast = DropAST("item");
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.DropItem("item"));
-
+            //act
             _sut.Apply(ast);
-
+            //assert
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem("item"), Times.Once);
         }
 
@@ -100,12 +107,13 @@ namespace InputCommandHandler.Tests
         [Test]
         public void Test_Apply_HandleAttackActionIsCalled()
         {
+            //arrange
             string direction = "right";
             var ast = AttackAST(direction);
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Attack(direction));
-
+            //act
             _sut.Apply(ast);
-
+            //assert
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Attack(direction), Times.Once);
         }
 
@@ -120,11 +128,12 @@ namespace InputCommandHandler.Tests
         [Test]
         public void Test_Apply_HandleSayActionIsCalled()
         {
+            //arrange
             var ast = SayAST("test");
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Say("test"));
-
+            //act
             _sut.Apply(ast);
-
+            //assert
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Say("test"), Times.Once);
         }
 
@@ -139,11 +148,12 @@ namespace InputCommandHandler.Tests
         [Test]
         public void Test_Apply_HandleShoutActionIsCalled()
         {
+            //arrange
             var ast = ShoutAST("test");
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Shout("test"));
-
+            //act
             _sut.Apply(ast);
-
+            //assert
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Shout("test"), Times.Once);
         }
 
@@ -158,11 +168,12 @@ namespace InputCommandHandler.Tests
         [Test]
         public void Test_Apply_HandleExitActionIsCalled()
         {
+            //arrange
             var ast = ExitAst();
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.ExitCurrentGame());
-
+            //act
             _sut.Apply(ast);
-
+            //assert
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.ExitCurrentGame(), Times.Once);
         }
 
@@ -176,11 +187,12 @@ namespace InputCommandHandler.Tests
         [Test]
         public void Test_Apply_HandlePauseActionIsCalled()
         {
+            //arrange
             var ast = PauseAst();
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Pause());
-
+            //act
             _sut.Apply(ast);
-
+            //assert
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Pause(), Times.Once);
         }
 
@@ -194,11 +206,12 @@ namespace InputCommandHandler.Tests
         [Test]
         public void Test_Apply_HandleResumeActionIsCalled()
         {
+            //arrange
             var ast = ResumeAst();
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Resume());
-
+            //act
             _sut.Apply(ast);
-
+            //assert
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Resume(), Times.Once);
         }
 
@@ -212,11 +225,12 @@ namespace InputCommandHandler.Tests
         [Test]
         public void Test_Apply_HandleReplaceActionIsCalled()
         {
+            //arrange
             var ast = ReplaceAst();
             _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.ReplaceByAgent());
-
+            //act
             _sut.Apply(ast);
-
+            //assert
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.ReplaceByAgent(), Times.Once);
         }
 
