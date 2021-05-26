@@ -30,7 +30,7 @@ namespace Agent.Tests.Mapper
             expectedDictionary.Add("aggressiveness", "high");
             expectedDictionary.Add("explore", "random");
             expectedDictionary.Add("combat", "offensive");
-            var filepath = string.Format(Path.GetFullPath(Path.Combine(handler.GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory)))) + "Resource/npcFileTest.txt";
+            var filepath = string.Format(Path.GetFullPath(Path.Combine(handler.GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory)))) + "/Resource/npcFileTest.txt";
             
             //Act
             var actualDictionary = _sut.MapFileToConfiguration(filepath);
