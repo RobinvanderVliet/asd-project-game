@@ -49,24 +49,25 @@ namespace Agent.Tests.Services
             Assert.AreEqual("missing '=' at 'wrong'", _sut.LastError);
         }
         
-        [Test]
-        public void Test_Configure_CatchesSemanticError()
-        {
-            //Arrange
-            var input = handler.GetBaseDirectory() + "Resources/AgentTestFileWrongExtension.txt";
+        // Deze test moet getest worden als er een checker is
+        //[Test]
+        //public void Test_Configure_CatchesSemanticError()
+        //{
+        //    //Arrange
+        //    var input = handler.GetBaseDirectory() + "Resources/AgentTestFileWrongExtension.txt";
 
-            var error = "Semantic error";
+        //    var error = "Semantic error";
             
-            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
-            _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("explore=high");
-            _pipelineMock.Setup(x => x.CheckAst()).Throws(new SemanticErrorException(error));
+        //    _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
+        //    _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("explore=high");
+        //    _pipelineMock.Setup(x => x.CheckAst()).Throws(new SemanticErrorException(error));
 
-            //Act
-            _sut.Configure();
+        //    //Act
+        //    _sut.Configure();
 
-            //Assert
-            Assert.AreEqual(error, _sut.LastError);
-        }
+        //    //Assert
+        //    Assert.AreEqual(error, _sut.LastError);
+        //}
         
         [Test]
         public void Test_Configure_FileError()
