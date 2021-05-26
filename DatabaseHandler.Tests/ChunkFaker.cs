@@ -1,5 +1,5 @@
 using AutoBogus;
-using DataTransfer.POCO.World;
+using DataTransfer.Model.World;
 
 namespace DatabaseHandler.Tests
 {

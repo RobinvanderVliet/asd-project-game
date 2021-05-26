@@ -1,6 +1,6 @@
 using System;
 using DataTransfer.DTO.Character;
-using DataTransfer.POCO.World;
+using DataTransfer.Model.World;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;

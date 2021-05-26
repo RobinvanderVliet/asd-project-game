@@ -1,5 +1,5 @@
 ﻿using System;
-using DataTransfer.POCO.World;
+using DataTransfer.Model.World;
 using Player.Exceptions;
 using WorldGeneration.Models;
 
