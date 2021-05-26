@@ -46,7 +46,7 @@ namespace Agent.Tests.Mapper
         public void Test_MapFileToConfiguration_Unsuccessful()
         {
             //Arrange
-            var filepath = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest_2.txt";
+            var filepath = string.Format(Path.GetFullPath(Path.Combine(handler.GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory)))) + "Resource/npcFileTest_2.txt";
             
             //Act & Assert
             Assert.Throws<SyntaxErrorException>(() => _sut.MapFileToConfiguration(filepath));
