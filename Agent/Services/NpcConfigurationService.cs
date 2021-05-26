@@ -51,7 +51,7 @@ namespace Agent.Services
                 Pipeline.ParseString(code);
                 Pipeline.CheckAst();
                 var output = Pipeline.GenerateAst();
-                string fileName = "npc\\" + npc + "-config.cfg";
+                string fileName = "npc/" + npc + "-config.cfg";
                 FileHandler.ExportFile(output, fileName);
             }
             catch (SyntaxErrorException e)
