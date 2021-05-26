@@ -4,7 +4,7 @@ namespace Player.Model
 {
     public interface IInventory
     {
-        public List<IItem> ItemList { get; set; }
+        public List<IItem> ConsumableItemList { get; set; }
 
         public IItem GetItem(string itemName);
 
