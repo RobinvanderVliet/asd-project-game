@@ -6,9 +6,9 @@ using System.Numerics;
 
 namespace Creature.Creature.StateMachine.State
 {
-    public class FollowPlayerState : CreatureState
+    public class FollowCreatureState : CreatureState
     {
-        public FollowPlayerState(ICreatureData creatureData) : base(creatureData)
+        public FollowCreatureState(ICreatureData creatureData) : base(creatureData)
         {
             _creatureData = creatureData;
         }

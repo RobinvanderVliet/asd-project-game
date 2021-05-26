@@ -3,9 +3,9 @@ using System;
 
 namespace Creature.Creature.StateMachine.State
 {
-    public class AttackPlayerState : CreatureState
+    public class GrabState : CreatureState
     {
-        public AttackPlayerState(ICreatureData creatureData) : base(creatureData)
+        public GrabState(ICreatureData creatureData) : base(creatureData)
         {
             _creatureData = creatureData;
         }
@@ -17,12 +17,7 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do(ICreatureData creatureData)
         {
-            ICreatureData playerData = creatureData;
-            playerData.Health -= playerData.Damage;
-
-            Console.WriteLine("Player health: " + playerData.Health);
-
-           // throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
     }
 }
