@@ -1,10 +1,20 @@
 ﻿using DataTransfer.DTO.Character;
 using Network;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
+using DatabaseHandler;
+using DatabaseHandler.POCO;
+using DatabaseHandler.Repository;
+using DatabaseHandler.Services;
+using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Player.DTO;
 using WorldGeneration;
 using Player.Model;
+
 
 namespace Player.ActionHandlers
 {
@@ -13,146 +23,98 @@ namespace Player.ActionHandlers
         private IClientController _clientController;
         private IPlayerModel _currentPlayer;
         private string _game;
-        private string _playerGuid; 
-        // private Dictionary<string, int[]> _PlayerLocations  {get; set;}
+        private string _playerGuid;
         private IWorldService _worldService;
+        private IMapper _mapper;
 
-        public MoveHandler(IClientController clientController, IWorldService worldService)
+        public MoveHandler(IMapper mapper, IClientController clientController, IWorldService worldService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Move);
             _worldService = worldService;
+            _mapper = mapper;
         }
 
         public void SendMove(MapCharacterDTO player)
         {
-  
-            // _currentPlayer = player;
-            // var playerPostionDTO = new PlayerPositionDTO(player.XPosition, player.YPosition, player.Name, player.Team);
             var moveDTO = new MoveDTO(player);
             SendMoveDTO(moveDTO);
-        } 
-       
+        }
+
         private void SendMoveDTO(MoveDTO moveDTO)
         {
             var payload = JsonConvert.SerializeObject(moveDTO);
             _clientController.SendPayload(payload, PacketType.Move);
         }
-        
+
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
-            HandleMove(moveDTO.PlayerPosition);
+
+            //check for backup host like comments below
+            //(_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost)
+            if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
+            {
+                var dbConnection = new DbConnection();
+
+                var playerRepository = new Repository<PlayerPOCO>(dbConnection);
+                var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
+
+                var allLocations = servicePlayer.GetAllAsync();
+
+                allLocations.Wait();
+
+                int newPosPlayerX = moveDTO.PlayerPosition.XPosition;
+                int newPosPlayerY = moveDTO.PlayerPosition.YPosition;
+
+                var result =
+                    allLocations.Result.Where(x =>
+                        x.XPosition == newPosPlayerX && x.YPosition == newPosPlayerY &&
+                        x.GameGuid == moveDTO.PlayerPosition.GameGuid);
+
+                if (result.Any())
+                {
+                    return new HandlerResponseDTO(SendAction.ReturnToSender, "Can't move to new position something is in the way");
+                }
+                else
+                {
+                    InsertToDatabase(moveDTO);
+                    HandleMove(moveDTO.PlayerPosition);
+                }
+            }
+            else if (packet.Header.Target.Equals(_clientController.GetOriginId()))
+            {
+                Console.WriteLine(packet.HandlerResponse.ResultMessage);
+            }
+            else
+            {
+                HandleMove(moveDTO.PlayerPosition);
+            }
             
-            // if (packet.Header.PacketType == PacketType.Move)
-            // {
-            //     
-            //     Console.WriteLine("Game started in MoveHandler :)");
-            //     
-            // } else if (packet.Header.PacketType == PacketType.Move)
-            // {
-            //     
-            //     Console.WriteLine("Moved in moveHandler :)");   
-            //  
-            // }
-            
-            
-            //
-            // var packetDTO = JsonConvert.DeserializeObject<StartGameDto>(packet.Payload);
-            // var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
-            //
-            // if (packet.Header.Target.Equals("client"))
-            // {
-            //     if (packetDTO != null)
-            //     {
-            //         _PlayerLocations = packetDTO.PlayerLocations;
-            //         Game = packetDTO.GameName; 
-            //     }
-            // }
-            //
-            // if (packet.Header.Target.Equals("host"))
-            // {
-            //     var tmp = new DbConnection();
-            //     tmp.SetForeignKeys();
-            //
-            //     var playerRepository = new Repository<PlayerPoco>(tmp);
-            //     var tmpServicePlayer = new ServicesDb<PlayerPoco>(playerRepository);
-            //     var tmpGameRepostory = new Repository<GamePoco>(tmp);
-            //     var tmpServiceGame = new ServicesDb<GamePoco>(tmpGameRepostory);
-            //
-            //     var allLocations = playerRepository.GetAllPoco();
-            //
-            //     if (moveDTO != null)
-            //     {
-            //        int newPosPlayerX =  moveDTO.Player.X;
-            //        int newPosPlayerY = moveDTO.Player.Y;
-            //
-            //        var result =
-            //            allLocations.Result.Where(x => x.PositionX == newPosPlayerX && x.PositionY == newPosPlayerY);
-            //
-            //        if (result.Any())
-            //        {
-            //            return new HandlerResponseDTO(SendAction.Ignore, "Can't move to new position already something in the way");
-            //
-            //        }
-            //        else
-            //        {
-            //      //      PlayerPoco updatedPlayerPoco = new PlayerPoco(playerGuid = _clientController.GetOriginId().ToString());
-            //       //     playerRepository.UpdateAsync()
-            //        }
-            //     }
-            //
-            //  
-            //
-            //     // foreach(var element in packetDTO.PlayerLocations)
-            //     // {
-            //     //     var positions = element.Key[1];
-            //     //
-            //     // }
-            //
-            //
-            //
-            //
-            //
-            //
-            //     //  allLocations.Result.Where(x => x.PositionX
-            //
-            //
-            // }
-            //
-            // //Check welk actie het is:
-            //
-            // //check if pakketje is host: Zo ja Controlleer of het kan zert dan in database en stuur naar alle clients een bericht
-            //
-            //
-            //
-            //
-            // //check if pakketje is client: Zo ja voer het uit. 
-            // HandleMove(moveDTO.Player);
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
-        private void InsertToDatabase(MoveDTO moveDto)
+        private void InsertToDatabase(MoveDTO moveDTO)
         {
-           //Get database
-           //Check database
-           //Insert Database
-           //if inserted then send to all a message
-           
-            
-            
+            var dbConnection = new DbConnection();
+
+            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
+            var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
+
+            var destination = _mapper.Map<PlayerPOCO>(moveDTO.PlayerPosition);
+
+            if (playerRepository.UpdateAsync(destination).Result == 1)
+            {
+                var allPlayers = servicePlayer.GetAllAsync();
+                allPlayers.Wait();
+                Console.WriteLine("Updated :)");
+            }
         }
-                
-       private void HandleMove(MapCharacterDTO playerPosition) // hiervan move DTO maken
-       {
-           _worldService.UpdateCharacterPosition(playerPosition);
-           _worldService.DisplayWorld();
-           
-           //_player.ChangePositionOfAPlayer(player);
-           // als host dan in globale db aanpassen voor die speler (hostcontoller (HandlePacket))
-           
-         
-       }
-        
+
+        private void HandleMove(MapCharacterDTO playerPosition)
+        {
+            _worldService.UpdateCharacterPosition(playerPosition);
+            _worldService.DisplayWorld();
+        }
     }
 }

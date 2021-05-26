@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using DataTransfer.DTO.Character;
 
 namespace DataTransfer.DTO.Creature
 {
+    [ExcludeFromCodeCoverage]
     public class CreatureDTO : CharacterDTO
     {
         public CreatureDTO(int xPosition

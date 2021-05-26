@@ -1,1 +1,0 @@
-https://bitbucket.aimsites.nl/projects/VDFZEH/repos/asd-project-game/pull-requests/87/diff#DataTransfer/DataTransfer.csproj
