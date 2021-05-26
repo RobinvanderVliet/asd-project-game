@@ -5,8 +5,10 @@ namespace Agent.Antlr.Ast
     public class Condition : Node
     {
         private When _whenClause;
+        public When WhenClause {get => _whenClause;}
         private Otherwise _otherwiseClause;
-
+        public Otherwise OtherwiseClause {get => _otherwiseClause;}
+        
         public override string GetNodeType()
         {
             return "Condition";
@@ -58,16 +60,6 @@ namespace Agent.Antlr.Ast
             }
 
             return this;
-        }
-
-        public When GetWhenClause()
-        {
-            return _whenClause;
-        }
-
-        public Otherwise GetOtherWiseClause()
-        {
-            return _otherwiseClause;
         }
     }
 }

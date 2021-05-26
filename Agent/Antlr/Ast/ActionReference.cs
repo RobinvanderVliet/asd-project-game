@@ -5,8 +5,8 @@ namespace Agent.Antlr.Ast
 {
     public class ActionReference : Node
     {
-        private Subject _subject;
         private Item _item;
+        public Item Item {get => _item;}
         
         public string Name { get; set; }
         
@@ -26,8 +26,6 @@ namespace Agent.Antlr.Ast
             var children = new List<Node>();
             if (_item != null)
                 children.Add(_item);
-            if (_subject != null)
-                children.Add(_subject);
             children.AddRange(body);
             
             return children;
@@ -36,9 +34,6 @@ namespace Agent.Antlr.Ast
         public override Node AddChild(Node node)
         {
             switch (node) {
-                case Subject subject:
-                    _subject = subject;
-                    break;
                 case Item item:
                     _item = item;
                     break;

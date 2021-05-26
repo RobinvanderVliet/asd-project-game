@@ -60,7 +60,7 @@ namespace Agent.Tests.Ast
         public void Test_GetNodeOpponent_CorrectOutput()
         {
             //Arrange
-            var node = new Opponent(TESTNAME);
+            var node = new Antlr.Ast.Comparables.Subjects.AgentSubject(TESTNAME);
             //Act
             var result = node.GetNodeType();
             //Assert

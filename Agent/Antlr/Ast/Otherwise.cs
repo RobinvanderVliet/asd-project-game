@@ -5,6 +5,7 @@ namespace Agent.Antlr.Ast
     public class Otherwise : Node
     {
         private ActionReference _action;
+        public ActionReference Action { get => _action; }
         
         public string Value { get; set; }
         

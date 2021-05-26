@@ -5,9 +5,13 @@ namespace Agent.Antlr.Ast
     public class When : Node
     {
         private Comparable _comparableL;
+        public Comparable ComparableL {get=> _comparableL;}
         private Comparable _comparableR;
+        public Comparable ComparableR {get => _comparableR;}
         private Comparison _comparison;
+        public Comparison Comparison {get => _comparison;}
         private ActionReference _then;
+        public ActionReference Then {get => _then;}
 
         public override string GetNodeType()
         {
@@ -62,48 +66,5 @@ namespace Agent.Antlr.Ast
 
             return this;
         }
-        
-
-        public Comparable GetComparableL()
-        {
-            return _comparableL;
-        }
-
-        public void SetComparableL(Comparable comparable)
-        {
-            _comparableL = comparable;
-        }
-        
-        
-        public Comparable GetComparableR()
-        {
-            return _comparableR;
-        }
-
-        public void SetComparableR(Comparable comparable)
-        {
-            _comparableR = comparable;
-        }
-
-        public Comparison GetComparison()
-        {
-            return _comparison;
-        }
-
-        public void SetComparison(Comparison comparison)
-        {
-            _comparison = comparison;
-        }
-        
-        public ActionReference GetThen()
-        {
-            return _then;
-        }
-
-        public void SetThen(ActionReference then)
-        {
-            _then = then;
-        }
-
     }
 }

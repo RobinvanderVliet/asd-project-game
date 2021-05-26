@@ -27,7 +27,7 @@ DOES_NOT_CONTAIN: 'does not contain';
 PLAYER: 'player';
 NPC: 'npc';
 INVENTORY: 'inventory';
-OPPONENT: 'opponent';
+AGENT: 'agent';
 
 //OBJECTS
 POTION: 'potion';
@@ -71,6 +71,6 @@ string: DOUBLE_QUOTE STRING+ DOUBLE_QUOTE;
 comparable: item | itemStat | subject | subjectStat | stat | INT;
 itemStat: item stat;
 subjectStat: subject stat;
-subject: PLAYER #player | NPC #npc | OPPONENT #opponent | INVENTORY #inventory | CURRENT #current | STRING #tile;
+subject: PLAYER #player | NPC #npc | AGENT #agent | INVENTORY #inventory | CURRENT #current | STRING #tile;
 item: ITEM | POTION | WEAPON | string;
 stat: STRENGTH | POWER | HEALTH | STAMINA;
