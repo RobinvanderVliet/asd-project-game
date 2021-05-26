@@ -37,7 +37,7 @@ namespace Agent
         public virtual void ExportFile(string content, string fileName)
         {
             string safeFileLocation = string.Format(Path.GetFullPath(Path.Combine
-                (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\" + fileName;
+                (GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory)))) + "Resource/" + fileName;
 
             CreateDirectory(safeFileLocation);
 
@@ -57,6 +57,15 @@ namespace Agent
             {
                 Directory.CreateDirectory(directoryName);
             }
+        }
+
+        public string GoBackToRoot(String path)
+        {
+            return Directory.GetParent
+                (Directory.GetParent
+                    (Directory.GetParent
+                        (Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).ToString()).ToString()).ToString()).ToString();
+
         }
     }
 }
