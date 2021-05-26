@@ -8,7 +8,7 @@ using InputCommandHandler.Exceptions;
 using Player.Services;
 using Session;
 
-namespace InputCommandHandler.Antlrr
+namespace InputCommandHandler.Antlr
 {
     public class Pipeline : IAntlrErrorListener<IToken>
     {
