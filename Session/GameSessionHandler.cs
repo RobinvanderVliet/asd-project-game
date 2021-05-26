@@ -20,13 +20,15 @@ namespace Session
         private IClientController _clientController;
         private ISessionHandler _sessionHandler;
         private IWorldService _worldService;
+        private IGuidService _guidService;
         
-        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler)
+        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IGuidService guidService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
             _worldService = worldService;
             _sessionHandler = sessionHandler;
+            _guidService = guidService;
         }
         
         public void SendGameSession(ISessionHandler sessionHandler)
@@ -45,7 +47,7 @@ namespace Session
             var gameRepository = new Repository<GamePOCO>(dbConnection);
             var gameService = new ServicesDb<GamePOCO>(gameRepository);
 
-            string gameGuid = Guid.NewGuid().ToString();
+            string gameGuid = _guidService.NewGuid().ToString();
             var gamePOCO = new GamePOCO {GameGuid = gameGuid, PlayerGUIDHost = _clientController.GetOriginId()};
             gameService.CreateAsync(gamePOCO);
   
@@ -104,7 +106,6 @@ namespace Session
                     _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, startGameDTO.GameGuid,CharacterSymbol.ENEMY_PLAYER), false);
                 }
             }
-            
             _worldService.DisplayWorld();
         }
     }
