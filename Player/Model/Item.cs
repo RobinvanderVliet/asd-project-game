@@ -7,10 +7,10 @@
         private string _description;
         public string Description { get => _description; set => _description = value; }
         
-        public Item(string itemName, string decription)
+        public Item(string itemName, string description)
         {
             _itemName = itemName;
-            _description = decription;
+            _description = description;
         }
     }
 }

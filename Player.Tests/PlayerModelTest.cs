@@ -116,19 +116,24 @@ namespace Player.Tests
         [Test]
         public void Test_GetCurrentPosition_GetsCurrentPositionSuccessfully()
         {
-            int[] expected = {26, 11};
+            int expectedX = 26;
+            int expectedY = 11;
             
-            Assert.AreEqual(expected, _sut.CurrentPosition);
+            Assert.AreEqual(expectedX, _sut.XPosition);
+            Assert.AreEqual(expectedY, _sut.YPosition);
         }
         
         [Test]
         public void Test_SetCurrentPosition_SetsCurrentPositionSuccessfully()
         {
-            int[] expected = {27, 11};
+            int expectedX = 27;
+            int expectedY = 12;
             
-            _sut.CurrentPosition = expected;
+            _sut.XPosition = expectedX;
+            _sut.YPosition = expectedY;
             
-            Assert.AreEqual(expected, _sut.CurrentPosition);
+            Assert.AreEqual(expectedX, _sut.XPosition);
+            Assert.AreEqual(expectedY, _sut.YPosition);
         }
 
         [Test]
@@ -307,17 +312,6 @@ namespace Player.Tests
 
             Assert.AreEqual(1, _sut.RadiationLevel.Level);
             _mockedRadiationLevel.Verify(mockedRadiationLevel => mockedRadiationLevel.Level, Times.Once);
-        }
-        
-        [Test]
-        public void Test_SetNewPlayerPosition_SetsNewPlayerPosition()
-        {
-            int[] test = {0, 5};
-            int[] expected = {26, 16};
-            
-            _sut.SetNewPlayerPosition(test);
-            
-            Assert.AreEqual(expected, _sut.CurrentPosition);
         }
     }
 }

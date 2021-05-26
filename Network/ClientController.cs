@@ -8,19 +8,22 @@ namespace Network
     public class ClientController : IPacketHandler, IClientController
     {
         private INetworkComponent _networkComponent;
-        private IHostController _hostController;
+        private IHostController _hostController { get; set; }
         private string _sessionId;
         private Dictionary<PacketType, IPacketHandler> _subscribers = new();
+        private bool _isBackupHost;
+        public bool IsBackupHost { get => _isBackupHost; set => _isBackupHost = value; }
 
         public ClientController(INetworkComponent networkComponent)
         {
             _networkComponent = networkComponent;
             _networkComponent.SetClientController(this);
+            _isBackupHost = false;
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-            if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session)
+            if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session || packet.Header.PacketType == PacketType.GameSession)
             {
                 return _subscribers.GetValueOrDefault(packet.Header.PacketType).HandlePacket(packet);
             }
@@ -83,6 +86,11 @@ namespace Network
         public void SetHostController(IHostController hostController)
         {
             _hostController = hostController;
+        }
+
+        public bool IsHost()
+        {
+            return _hostController != null;
         }
     }
 }

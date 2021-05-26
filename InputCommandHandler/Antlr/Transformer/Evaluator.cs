@@ -1,21 +1,25 @@
+using System;
 using InputCommandHandler.Antlr.Ast;
 using InputCommandHandler.Antlr.Ast.Actions;
 using InputCommandHandler.Exceptions;
 using Player.Services;
+using Session;
 
 namespace InputCommandHandler.Antlr.Transformer
 {
     public class Evaluator : ITransform
     {
         private readonly IPlayerService _playerService;
+        private readonly ISessionService _sessionService;
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
+        private String _commando;
 
-        public Evaluator(IPlayerService playerService)
+        public Evaluator(IPlayerService playerService, ISessionService sessionService)
         {
             _playerService = playerService;
+            _sessionService = sessionService;
         }
-
         public void Apply(AST ast)
         {
             TransformNode(ast.Root);
@@ -66,6 +70,9 @@ namespace InputCommandHandler.Antlr.Transformer
                         break;
                     case RequestSessions:
                         TransformRequestSessions((RequestSessions)nodeBody[i]);
+                        break;
+                    case StartSession:
+                        TransformStartSession((StartSession)nodeBody[i]);
                         break;
                 }
         }
@@ -131,17 +138,22 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformCreateSession(CreateSession createSession)
         {
-            _playerService.CreateSession(createSession.Message.MessageValue);
+            _sessionService.CreateSession(createSession.Message.MessageValue);
         }
 
         private void TransformJoinSession(JoinSession joinSession)
         {
-            _playerService.JoinSession(joinSession.Message.MessageValue);
+            _sessionService.JoinSession(joinSession.Message.MessageValue);
         }
 
         private void TransformRequestSessions(RequestSessions requestSessions)
         {
-            _playerService.RequestSessions();
+            _sessionService.RequestSessions();
+        }
+
+        private void TransformStartSession(StartSession startSession)
+        {
+            _sessionService.StartSession();
         }
         
     }

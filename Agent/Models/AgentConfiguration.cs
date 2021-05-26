@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Agent.Models
+﻿namespace Agent.Models
 {
     public class AgentConfiguration : Configuration
     {

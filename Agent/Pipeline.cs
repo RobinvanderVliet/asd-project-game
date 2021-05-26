@@ -1,13 +1,13 @@
-﻿using Agent.antlr.ast;
+﻿using Agent.Antlr.Ast;
 using System;
 using System.Collections.Generic;
-using Agent.antlr.checker;
-using Agent.antlr.exception;
-using Agent.antlr.grammar;
-using Agent.parser;
+using Agent.Antlr.Checker;
+using Agent.Antlr.Grammar;
+using Agent.Antlr.Parser;
+using Agent.Generator;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using SyntaxErrorException = Agent.exceptions.SyntaxErrorException;
+using SyntaxErrorException = Agent.Exceptions.SyntaxErrorException;
 
 namespace Agent
 {
@@ -16,15 +16,14 @@ namespace Agent
         private AST _ast;
 
         private List<string> _errors;
-        private Checker _checker;
-        // private Transformer transformer;
-        private Generator generator;
+        private Checking _checking;
+        private Generating _generating;
 
         public Pipeline()
         {
             _errors = new List<string>();
             // transformer = new Transformer();
-            generator = new Generator();
+            _generating = new Generating();
         }
 
         public void ParseString(String input)
@@ -44,28 +43,21 @@ namespace Agent
             ASTAgentListener astAgentListener = new ASTAgentListener();
             walker.Walk(astAgentListener, parseTree);
             _ast = astAgentListener.GetAST();
+
         }
 
-        public void CheckAst()
+        public virtual void CheckAst()
         {
-            // checker = new Checker(ast);
-            // TODO: Implement checker calls
-        }
-        
-        public void TransformAst()
-        {
-            ThrowExceptionIfAstIsNull();
+            if(_checking == null)
+            {
+                _checking = new Checking(_ast);
+            }
+            //_checking.Check(_ast);
         }
 
         public string GenerateAst()
         {
-            return generator.Execute(_ast);
-        }
-
-        private void ThrowExceptionIfAstIsNull()
-        {
-            if (_ast == null)
-                throw new UndefinedAstException();
+            return _generating.Execute(_ast);
         }
 
         public AST Ast
@@ -81,9 +73,9 @@ namespace Agent
             _errors.Clear();
         }
         
-        public Checker Checker
+        public Checking Checking
         {
-            set => _checker = value;
+            set => _checking = value;
         }
         
         public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine,

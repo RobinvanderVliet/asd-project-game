@@ -4,6 +4,11 @@ namespace Session
     {
         RequestSessions,
         RequestSessionsResponse,
-        RequestToJoinSession
+        RequestToJoinSession,
+        StartSession,
+        ClientJoinedSession,
+        SendPing,
+        ReceivedPingResponse,
+        SendHeartbeat
     }
 }

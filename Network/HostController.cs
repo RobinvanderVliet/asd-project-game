@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Network.DTO;
 
@@ -19,7 +20,7 @@ namespace Network
 
         public void ReceivePacket(PacketDTO packet)
         {
-            if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session)
+            if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session || packet.Header.PacketType == PacketType.GameSession)
             {
                 HandlePacket(packet);
             }
@@ -29,6 +30,8 @@ namespace Network
         {
             HandlerResponseDTO handlerResponse = _client.HandlePacket(packet);
             packet.Header.SessionID = _sessionId;
+
+            
             if (handlerResponse.Action == SendAction.SendToClients)
             {
                 packet.Header.Target = "client";
@@ -42,6 +45,8 @@ namespace Network
                 _networkComponent.SendPacket(packet);
             }
         }
+
+       
 
         [ExcludeFromCodeCoverage]
         public void SetSessionId(string sessionId)

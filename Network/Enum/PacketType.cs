@@ -4,6 +4,8 @@
     {
         Chat,
         Move,
-        Session
+        Session,
+        GameSession
+        
     }
 }
