@@ -308,12 +308,14 @@ namespace InputCommandHandler.Tests
         [Test]
         public void Test_Apply_InspectItemActionIsCalled()
         {
-            //arrange
+            //Arrange
             string inventorySlot = "armor";
             var ast = InspectAST(inventorySlot);
-            //act
+            
+            //Act
             _sut.Apply(ast);
-            //assert
+            
+            //Assert
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.InspectItem(inventorySlot), Times.Once);
         }
 
