@@ -42,7 +42,6 @@ namespace Creature.Creature.NeuralNetworking
                 {
                     pop[i].Look();//get inputs for brain 
                     pop[i].Think();//use outputs from neural network
-                    pop[i].Update();//move the SmartMonster according to the outputs from the neural network
                     if (!showNothing)
                     {
                         pop[i].Show();

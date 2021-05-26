@@ -1,14 +1,9 @@
-﻿using Agent.Mapper;
-using Agent.Services;
-using Agent.Models;
+﻿using Creature.Creature.StateMachine;
 using Creature.Creature.StateMachine.Data;
-using Creature.Creature.StateMachine.CustomRuleSet;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Creature.Creature.NeuralNetworking.TrainingScenario
 {
@@ -20,21 +15,29 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         private int _worldSize = 30;
         private Random _random = new Random();
+
+        private int playerCount = 5;
+        private int monsterCount = 5;
+
         private int maxPlayerCount = 5;
         private int maxMonsterCount = 5;
 
+        public TrainingMapGenerator()
+        {
+            GenerateWorld();
+        }
 
-        public List<List<int>> GenerateWorld()
+        private List<List<int>> GenerateWorld()
         {
             for(int i = 0; i < _worldSize; i++)
             {
                 for (int j = 0; j < _worldSize; j++)
                 {
                     trainingmap.Add(RandomTile(i,j));
-
                 }
             }
-            return null;
+            GenerateCreatures();
+            return trainingmap;
         }
 
         private List<int> RandomTile(int x, int y)
@@ -51,10 +54,12 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
             switch (_random.Next(0, 10))
             {
                 case 5:
+                    if(monsterCount < maxMonsterCount)
                     NewMonster();
                     break;
 
                 case 10:
+                    if (playerCount < maxPlayerCount)
                     NewPlayer();
                     break;
 
@@ -65,22 +70,50 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         private void NewMonster()
         {
-            Vector2 location = new(_random.Next(0, 30), _random.Next(0, 30);
-            StateMachine.Data.MonsterData monsterData =
-            new StateMachine.Data.MonsterData(
+            Vector2 location = new(_random.Next(0, 30), _random.Next(0, 30));
+            
+            MonsterData monsterData =
+            new MonsterData
+            (
                 location,
                 _random.NextDouble() * (5 - 20) + 5,
                 _random.Next(1, 5),
                 20,
                 null,
                 false
-                );
-            monsters.Add(new Monster(monsterData, monsterRuleSet));
+            );
+
+            ICreatureStateMachine monsterStateMachine = new MonsterStateMachine(monsterData,null);
+
+            monsters.Add(new Monster(monsterStateMachine));
+            monsterCount++;
         }
 
         private void NewPlayer()
         {
+            Vector2 location = new(_random.Next(0, 30), _random.Next(0, 30));
 
+            MonsterData monsterData =
+            new MonsterData
+            (
+                location,
+                _random.NextDouble() * (5 - 20) + 5,
+                _random.Next(1, 5),
+                20,
+                null,
+                false
+            );
+
+            ICreatureStateMachine monsterStateMachine = new MonsterStateMachine(monsterData, null);
+
+            monsters.Add(new Monster(monsterStateMachine));
+
+            playerCount++;
+        }
+
+        private void AddSmartMonster()
+        {
+            
         }
     }
 }

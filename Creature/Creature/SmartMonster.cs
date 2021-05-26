@@ -2,30 +2,42 @@
 using Creature.Creature.StateMachine;
 using System;
 using Creature.Creature.StateMachine.Data;
+using System.Collections.Generic;
+using Creature.Creature.NeuralNetworking.TrainingScenario;
 
 namespace Creature.Creature
 {
     public class SmartMonster : ICreature
     {
         private ICreatureData _creatureData;
+        private IDataGatheringService _dataGatheringService = new DataGatheringService();
+        private SmartCreatureActions smartactions;
 
         public float fitness;
         public Genome brain;
         public Boolean replay = false;
 
         public float unadjestedFitness;
-        public int lifeSpan = 0;
         public int bestScore = 0;
 
-        public Boolean dead;
         public int score;
         public int gen = 0;
 
-        public static int genomeInputs = 11;
+        public static int genomeInputs = 8;
         public static int genomeOutputs = 6;
 
         public float[] vision = new float[genomeInputs];
         public float[] decision = new float[genomeOutputs];
+
+        //Data for fitnessCalculation
+        public static int DamageDealt;
+        public static int DamageTaken;
+        public int lifeSpan = 0;
+        public Boolean dead;
+        public static int HealthHealed;
+        public static int StatsGained;
+        public static Boolean EnemyKilled;
+
 
         public ICreatureStateMachine CreatureStateMachine => null;
 
@@ -49,26 +61,31 @@ namespace Creature.Creature
             //maye use this to sperate the training settings
         }
 
-        public void Update()
-        {
-            //Do actions
-        }
-
         public void Look()
         {
-            vision[0] = (_creatureData.IsAlive) ? 1 : 0;
-            vision[1] = _creatureData.Position.X;
-            vision[2] = _creatureData.Position.Y;
-            vision[3] = _creatureData.VisionRange;
-            vision[4] = _creatureData.Damage;
-            vision[5] = (float) _creatureData.Health;
+            //get smartMonster x cord
+            vision[0] = _creatureData.Position.X;
+            //get smartMonster y cord
+            vision[1] = _creatureData.Position.Y;
+            //get smartMonster damage
+            vision[2] = _creatureData.Damage;
+            //get smartMonster health
+            vision[3] = (float) _creatureData.Health;
 
+            //calculate closest player and monster
+            _dataGatheringService.ScanMap(_creatureData.Position, _creatureData.VisionRange);
+            //get distance to player
+            vision[4] = _dataGatheringService.distanceToClosestPlayer;
+            //get distance to monster
+            vision[5] = _dataGatheringService.distanceToClosestMonster;
             //getplayerhealth
+            vision[6] = (float)_dataGatheringService.closestPlayer.CreatureStateMachine.CreatureData.Health;
+            //get player damage
+            vision[7] = _dataGatheringService.closestPlayer.CreatureStateMachine.CreatureData.Damage;
             //get player stamina
+
             //get monster stamina?
             //getusabelitem
-            //get distance to player
-            //get distance to monster
             //get distance to items
             //get total player stats
             //get total monster stats
@@ -93,22 +110,26 @@ namespace Creature.Creature
 
             if (max < 0.7)
             {
-                //wander action
+                //Wander action
+                smartactions.Wander(_creatureData.Position);
                 return;
             }
 
             switch (maxIndex)
             {
                 case 0:
-                //Attack atction
+                    //Attack action
+                    smartactions.Attack(_dataGatheringService.closestPlayer, this);
                     break;
                 case 1:
-                //Flee action
+                    //Flee action
+                    smartactions.Flee(_dataGatheringService.closestPlayer, this);
                     break;
                 case 2:
                 //UseItem action
                     break;
                 case 3:
+                    smartactions.RunToMonster(_dataGatheringService.closestMonster, this);
                 //Run to Monster action
                     break;
                 case 4:
@@ -133,11 +154,19 @@ namespace Creature.Creature
         //for Genetic algorithm
         public void CalculateFitness()
         {
-            /*
-             * fitness calculation
-             * 
-             * damageDealt*1 - damageTaken*1 + TimeAlive * 0.1 + healthGained*0.2 + statsGained*0.5 + EnemysKilled*100000000000 - Died*100
-             */
+            int killPoints = 0;
+            int deathpoints = 0;
+            //Fitness calculation
+            if(EnemyKilled)
+            {
+                killPoints =+ 100000000;
+            }
+            if(Dead)
+            {
+                deathpoints = -100;
+            }
+            fitness =
+                (float)((DamageDealt - DamageTaken) + (LifeSpan * 0.2) + HealthHealed + StatsGained + killPoints + deathpoints);
         }
 
         public SmartMonster Crossover(SmartMonster parent2)
@@ -171,5 +200,7 @@ namespace Creature.Creature
 
             return clone;
         }
+
+
     }
 }
