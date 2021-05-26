@@ -50,7 +50,7 @@ message: MESSAGE;
 command:
     (MOVE | WALK | GO) SPACE direction (SPACE step)? #move |
     (ATTACK | SLASH | STRIKE) SPACE direction #attack |
-    (PICKUP | GET) #pickup |
+    (PICKUP | GET) SPACE NUMBER #pickup |
     DROP #drop |  
     (EXIT | LEAVE) #exit |
     SAY SPACE message #say |
