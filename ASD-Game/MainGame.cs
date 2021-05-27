@@ -1,6 +1,5 @@
 using Chat;
 using InputCommandHandler;
-using Microsoft.Extensions.Logging;
 using Network;
 using Player.ActionHandlers;
 using Player.Model;
@@ -15,7 +14,6 @@ namespace ASD_project
     {
         public class MainGame : IMainGame
         {
-            private readonly ILogger<MainGame> _log;
             private readonly IInventory _inventory;
             private readonly IChatHandler _chatHandler;
             private readonly ISessionHandler _sessionHandler;
@@ -24,10 +22,9 @@ namespace ASD_project
             private readonly IClientController _clientController;
             private readonly IWorldService _worldService;
 
-            public MainGame(ILogger<MainGame> log, IInventory inventory, IClientController clientController, IWorldService worldService,
+            public MainGame(IInventory inventory, IClientController clientController, IWorldService worldService,
                 IChatHandler chatHandler, ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler)
             {
-                _log = log;
                 _inventory = inventory;
                 _clientController = clientController;
                 _worldService = worldService;
