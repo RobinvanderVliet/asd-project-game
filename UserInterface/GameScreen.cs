@@ -39,6 +39,29 @@ namespace UserInterface
             _gameChatScreen.DrawScreen();
             _gameWorldScreen.DrawScreen();
             DrawInputBox(INPUT_X, INPUT_Y, "Insert an option");
+
+            demoMessages();
         } 
+
+        public void addMessage(string message)
+        {
+            _gameChatScreen.AddMessage(message);
+        }
+
+        public void demoMessages()
+        {
+            for (int i = 1; i <= 15; i++)
+            {
+                if (i == 12)
+                {
+                    _gameChatScreen.AddMessage("This is a test message to show that the text will properly wrap onto the next line. This is great to have so you don't have to limit the size of messages to much.");
+                }
+                else
+                {
+                    _gameChatScreen.AddMessage("Test " + i);
+                }
+                System.Threading.Thread.Sleep(500);
+            }
+        }
     }
 }

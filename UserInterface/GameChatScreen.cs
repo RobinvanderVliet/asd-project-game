@@ -20,18 +20,6 @@ namespace UserInterface
             _yPosition = y;
             _width = width;
             _height = height;
-
-            //temp test
-            AddMessage("Test 1");
-            AddMessage("Test 2");
-            AddMessage("Test 3");
-            AddMessage("Test 4");
-            AddMessage("Test 5");
-            AddMessage("Test 6");
-            AddMessage("Test 7");
-            AddMessage("Test 8");
-            AddMessage("Test 9");
-            AddMessage("Test 10");
         }
 
         public override void DrawScreen()
@@ -47,9 +35,12 @@ namespace UserInterface
 
         private void DrawMessages()
         {
+            int originalCursorX = Console.CursorLeft;
+            int originalCursorY = Console.CursorTop;
             Queue<string> tempMessages = new Queue<string>();
             ClearMessages();
-            for (int i = 0; i <= _height - OFFSET_TOP; i++)
+            int messageCount = messages.Count;
+            for (int i = 0; i < messageCount; i++)
             {
                 string message = messages.Dequeue();
                 Console.SetCursorPosition(_xPosition + OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
@@ -57,6 +48,7 @@ namespace UserInterface
                 tempMessages.Enqueue(message);
             }
             messages = tempMessages;
+            Console.SetCursorPosition(originalCursorX, originalCursorY);
         }
 
         private void ClearMessages()
@@ -69,12 +61,30 @@ namespace UserInterface
         }
 
         public void AddMessage(string message)
-        {
-            if(messages.Count == _height)
+        {   
+            if (message.Length >= _width - BORDER_SIZE)
+            {
+                int chunkSize = _width - BORDER_SIZE;
+                int stringLength = message.Length;
+                for (int i = 0; i < stringLength; i += chunkSize)
+                {
+                    if (i + chunkSize > stringLength)
+                    {
+                        chunkSize = stringLength - i;
+                    }
+                    messages.Enqueue(message.Substring(i, chunkSize));
+                    messages.Dequeue();
+                }
+            }
+            else
+            {
+                messages.Enqueue(message);
+            }
+            if (messages.Count > _height)
             {
                 messages.Dequeue();
             }
-            messages.Enqueue(message);
+            DrawMessages();
         }
     }
 }
