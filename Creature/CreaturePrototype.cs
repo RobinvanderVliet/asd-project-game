@@ -29,6 +29,10 @@ namespace Creature
             settings.Add(new Setting("combat_engage_inventory_comparison", "contains"));
             settings.Add(new Setting("combat_engage_inventory_comparison_true", "use knife"));
             settings.Add(new Setting("explore_engage_inventory_comparison_true", "use knife"));
+            settings.Add(new Setting("explore_engage_inventory_comparison_truea", "use knsife"));
+            settings.Add(new Setting("explore_engadsge_inventory_comparison_truea", "use kdsnsife"));
+            settings.Add(new Setting("combat_engadsge_inventory_comparison_truea", "use kdsnsife"));
+            settings.Add(new Setting("combat_eangadsge_inventory_comparison_truea", "use kdsnsifae"));
 
             var monsterData = new MonsterData(new Vector2(10, 15), 20, 5, 50, world, settings, false);
             var playerData = new PlayerData(new Vector2(5, 5), 100, 5, 10, world, new List<Setting>());

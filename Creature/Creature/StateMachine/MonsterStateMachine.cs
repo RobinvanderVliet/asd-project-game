@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
 using Creature.Creature.StateMachine.Data;
@@ -61,23 +60,18 @@ namespace Creature.Creature.StateMachine
             var ruleset = CreatureData.RuleSet;
             for (var i = 0; i < ruleset.Count; i++)
             {
-                if (_settings.Count == 0)
-                {
-                    _settings.Push(ruleset[i]);
-                    continue;
-                }
-
-                var prevType =
-                    _settings.Peek().Property[.._settings.Peek().Property.IndexOf("_", StringComparison.Ordinal)];
-
-                _settings.Push(ruleset[i]);
-
                 var currentType =
                     ruleset[i].Property[..ruleset[i].Property.IndexOf("_", StringComparison.Ordinal)];
 
-                if (prevType == currentType) continue;
-                AddBehavior(builder, prevType);
+                if (_settings.Count > 0)
+                {
+                    var prevType =
+                        _settings.Peek().Property[.._settings.Peek().Property.IndexOf("_", StringComparison.Ordinal)];
 
+                    if (prevType != currentType) AddBehavior(builder, prevType);
+                }
+
+                _settings.Push(ruleset[i]);
                 if (i == ruleset.Count - 1) AddBehavior(builder, currentType);
             }
 
@@ -110,16 +104,18 @@ namespace Creature.Creature.StateMachine
             {
                 throw new NotSupportedSettingException();
             }
+
+            _settings.Clear();
         }
 
         private void AddExploreBehavior(StateMachineDefinitionBuilder<CreatureState, CreatureEvent.Event> builder)
         {
-            _settings.Clear();
+            // TODO: implement behavior
         }
 
         private void AddCombatBehavior(StateMachineDefinitionBuilder<CreatureState, CreatureEvent.Event> builder)
         {
-            _settings.Clear();
+            // TODO: implement behavior
         }
     }
 }
