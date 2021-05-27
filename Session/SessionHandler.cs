@@ -226,7 +226,7 @@ namespace Session
             if (_screenHandler.Screen is SessionScreen)
             {
                 SessionScreen screen = _screenHandler.Screen as SessionScreen;
-                screen.UpdateSessions(sessionDTO, packet.Header.SessionID);
+                screen.UpdateSessions(sessionDTO.Name, packet.Header.SessionID);
             }
 
             // Console.WriteLine(
