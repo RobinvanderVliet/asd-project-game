@@ -15,17 +15,14 @@ namespace Player.Model
         private IItem _helmet;
         public IItem Helmet { get => _helmet; set => _helmet = value; }
 
-        private IItem _meleeWeapon;
-        public IItem MeleeWeapon { get => _meleeWeapon; set => _meleeWeapon = value; }
-
-        private IItem _rangedWeapon;
-        public IItem RangedWeapon { get => _rangedWeapon; set => _rangedWeapon = value; }
+        private IItem _weapon;
+        public IItem Weapon { get => _weapon; set => _weapon = value; }
 
         public Inventory()
         {
             _consumableItems = new List<IItem>();
             _helmet = new Bandana();
-            _meleeWeapon = new Knife();
+            _weapon = new Knife();
         }
 
         public IItem GetConsumableItem(string itemName)

@@ -9,9 +9,7 @@ namespace Player.Model
 
         public IItem Helmet { get; set; }
 
-        public IItem MeleeWeapon { get; set; }
-
-        public IItem RangedWeapon { get; set; }
+        public IItem Weapon { get; set; }
 
         public IItem GetConsumableItem(string itemName);
 
