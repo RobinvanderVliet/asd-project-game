@@ -33,6 +33,7 @@ namespace WorldGeneration
             {
                 for (var x = 0; x < chunkRowSize; x++)
                 {
+                    // IF in roadmap, add road, ELSE continue below.
                     map[y * chunkRowSize + x] = GetTileFromNoise(noise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize)
                         , x + chunkRowSize * chunkX
                         , chunkRowSize * chunkY - chunkRowSize + y);
