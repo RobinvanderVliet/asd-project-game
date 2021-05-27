@@ -1,5 +1,8 @@
-﻿namespace WorldGeneration
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace WorldGeneration
 {
+    [ExcludeFromCodeCoverage]
     public class Character
     {
         public string Name { get; set; }
