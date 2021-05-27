@@ -1,17 +1,17 @@
 ﻿using System;
-using DataTransfer.POCO.World.Interfaces;
+using DataTransfer.Model.World.Interfaces;
 
-namespace DataTransfer.POCO.World.BuildingTiles
+namespace DataTransfer.Model.World.BuildingTiles
 {
-    public class DoorTile : IBuildingTile
+    public class HouseTile : IBuildingTile
     {
         public bool IsAccessible { get; set; }
         public string Symbol { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
-        public DoorTile()
+        public HouseTile()
         {
-            Symbol = TileSymbol.DOOR;
+            Symbol = TileSymbol.HOUSE;
             IsAccessible = true;
         }
 

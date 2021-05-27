@@ -1,8 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
-using DataTransfer.POCO.World;
-using DataTransfer.POCO.World.Interfaces;
-using DataTransfer.POCO.World.LootableTiles;
-using DataTransfer.POCO.World.TerrainTiles;
+using DataTransfer.Model.World;
+using DataTransfer.Model.World.Interfaces;
+using DataTransfer.Model.World.LootableTiles;
+using DataTransfer.Model.World.TerrainTiles;
 using NUnit.Framework;
 using Moq;
 //using WorldGeneration.DatabaseFunctions;

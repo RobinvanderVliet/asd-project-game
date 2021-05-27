@@ -1,6 +1,6 @@
-﻿using DataTransfer.POCO.World.Interfaces;
+﻿using DataTransfer.Model.World.Interfaces;
 
-namespace DataTransfer.POCO.World
+namespace DataTransfer.Model.World
 {
     public abstract class Tile : ITile
     {

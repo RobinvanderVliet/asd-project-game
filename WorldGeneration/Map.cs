@@ -5,8 +5,8 @@ using DatabaseHandler;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using DataTransfer.DTO.Character;
-using DataTransfer.POCO.World;
-using DataTransfer.POCO.World.Interfaces;
+using DataTransfer.Model.World;
+using DataTransfer.Model.World.Interfaces;
 using WorldGeneration.Services;
 
 namespace WorldGeneration

@@ -1,7 +1,7 @@
 ﻿using System;
-using DataTransfer.POCO.World.Interfaces;
+using DataTransfer.Model.World.Interfaces;
 
-namespace DataTransfer.POCO.World.LootableTiles
+namespace DataTransfer.Model.World.LootableTiles
 {
     public class ChestTile : ILootAbleTile
     {

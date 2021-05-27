@@ -1,4 +1,4 @@
-namespace DataTransfer.POCO.World.Interfaces
+namespace DataTransfer.Model.World.Interfaces
 {
     public interface ITerrainTile : ITile
     {

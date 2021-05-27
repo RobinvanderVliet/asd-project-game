@@ -1,4 +1,4 @@
-using DataTransfer.POCO.World;
+using DataTransfer.Model.World;
 
 namespace WorldGeneration
 {

@@ -1,7 +1,7 @@
 using System;
-using DataTransfer.POCO.World.Interfaces;
+using DataTransfer.Model.World.Interfaces;
 
-namespace DataTransfer.POCO.World
+namespace DataTransfer.Model.World
 {
     public class Chunk : IEquatable<Chunk>
     {
