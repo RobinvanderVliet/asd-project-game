@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LiteDB;
 
-namespace DatabaseHandler.Poco
+namespace DataTransfer.POCO.Player
 {
     public class PlayerItemPoco
     {

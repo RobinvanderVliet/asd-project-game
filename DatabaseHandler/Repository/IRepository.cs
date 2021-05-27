@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DatabaseHandler.Poco;
 using LiteDB;
 
 namespace DatabaseHandler.Repository
@@ -12,7 +11,6 @@ namespace DatabaseHandler.Repository
         Task<int> DeleteAsync(T obj);
         Task<IEnumerable<T>> GetAllAsync();
         Task<int> DeleteAllAsync();
-        public Task<IEnumerable<PlayerPoco>> GetAllPoco();
 
     }
 }

@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Logging;
 using System;
-using DatabaseHandler.Poco;
 using DatabaseHandler.Repository;
 using InputCommandHandler;
 using Player.Model;
@@ -9,6 +8,7 @@ using System.Collections.Generic;
 using WorldGeneration;
 using Chat;
 using DataTransfer.DTO.Character;
+using DataTransfer.POCO.Player;
 using Network;
 using Session;
 using Player.ActionHandlers;

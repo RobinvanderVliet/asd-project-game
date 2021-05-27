@@ -1,7 +1,9 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using DatabaseHandler.Poco;
+using DataTransfer.POCO.Agent;
+using DataTransfer.POCO.Player;
+using DataTransfer.POCO.World;
 using LiteDB;
 using LiteDB.Async;
 

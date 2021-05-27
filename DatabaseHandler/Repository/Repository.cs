@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using DatabaseHandler.Poco;
 using LiteDB;
 using LiteDB.Async;
 using Microsoft.Extensions.Logging;
@@ -66,12 +64,6 @@ namespace DatabaseHandler.Repository
         {
             var result = await _db.GetCollection<T>(_collection).DeleteAllAsync();
             return result;
-        }
-
-        public async Task<IEnumerable<PlayerPoco>> GetAllPoco()
-        {
-            var result = await _db.GetCollection<PlayerPoco>(_collection).Query().ToListAsync();
-            return result; 
         }
     }
 }
