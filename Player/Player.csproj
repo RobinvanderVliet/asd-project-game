@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Chat\Chat.csproj" />
-    <ProjectReference Include="..\Item\Item.csproj" />
+    <ProjectReference Include="..\Item\Items.csproj" />
     <ProjectReference Include="..\Session\Session.csproj" />
     <ProjectReference Include="..\WorldGeneration\WorldGeneration.csproj" />
   </ItemGroup>

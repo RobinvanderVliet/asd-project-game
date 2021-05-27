@@ -1,4 +1,6 @@
-﻿using System;
+﻿//should be deleted
+
+/*using System;
 using System.Collections.Generic;
 using Player.ActionHandlers;
 using Chat;
@@ -176,4 +178,4 @@ namespace Player.Services
            _currentPlayer.YPosition = currentCharacter.YPosition;
         }
     }
-}
+}*/

@@ -1,4 +1,7 @@
-﻿using Player.Model;
+﻿//should be deleted
+
+/*using Items;
+using Player.Model;
 
 namespace Player.Services
 {
@@ -26,11 +29,11 @@ namespace Player.Services
 
         public void RemoveStamina(int amount);
 
-        public IItem GetItem(string itemName);
+        public Item GetItem(string itemName);
 
-        public void AddInventoryItem(IItem item);
+        public void AddInventoryItem(Item item);
 
-        public void RemoveInventoryItem(IItem item);
+        public void RemoveInventoryItem(Item item);
 
         public void EmptyInventory();
 
@@ -47,4 +50,4 @@ namespace Player.Services
         public void HandleDirection(string directionValue, int stepsValue);
 
     }
-}
+}*/

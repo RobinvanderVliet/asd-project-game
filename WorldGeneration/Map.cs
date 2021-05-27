@@ -107,7 +107,7 @@ namespace WorldGeneration
             }
         }
         
-        private string GetDisplaySymbol(Tile tile, List<Character> characters)
+        private string GetDisplaySymbol(ITile tile, List<Character> characters)
         {
             var characterOnTile = characters.Find(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
             if(characterOnTile != null)
@@ -153,7 +153,7 @@ namespace WorldGeneration
         }
         
         // find a LOADED tile by the coordinates
-        public Tile GetLoadedTileByXAndY(int x, int y)
+        public ITile GetLoadedTileByXAndY(int x, int y)
         {
             var tile = GetChunkForTileXAndY(x, y).GetTileByWorldCoordinates(x, y);
             return tile;

@@ -7,13 +7,13 @@ namespace WorldGeneration.Models
     {
         public int X { get; set; }
         public int Y { get; set; }
-        public Tile[] Map { get; set; }
+        public ITile[] Map { get; set; }
         public int RowSize { get; set; }
         
         public Chunk()
         {
         }
-        public Chunk(int x, int y, Tile[] map, int rowSize)
+        public Chunk(int x, int y, ITile[] map, int rowSize)
         {
             X = x;
             Y = y;
@@ -52,7 +52,7 @@ namespace WorldGeneration.Models
             return x1 + y1;
         }
         
-        public Tile GetTileByWorldCoordinates(int x, int y)
+        public ITile GetTileByWorldCoordinates(int x, int y)
         {
             return Map[GetPositionInTileArrayByWorldCoordinates(x,y)];
         }

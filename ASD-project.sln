@@ -57,15 +57,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session", "Session\Session.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session.Tests", "Session.Tests\Session.Tests.csproj", "{E6798022-665C-4C32-BE31-7B67044573D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTransfer", "DataTransfer\DataTransfer.csproj", "{72F4734F-C1B9-4A09-B10F-60693FB7202E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTransfer", "DataTransfer\DataTransfer.csproj", "{72F4734F-C1B9-4A09-B10F-60693FB7202E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseHandler", "DatabaseHandler\DatabaseHandler.csproj", "{9F652EF7-0D83-4002-BB30-F20A2ECA72DF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseHandler.Tests", "DatabaseHandler.Tests\DatabaseHandler.Tests.csproj", "{811B30C5-AFDC-4C65-9971-4BCFFA039F54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Item", "Item\Item.csproj", "{A9222651-F7C2-44EB-8134-BD02570FD5F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Items", "Item\Items.csproj", "{A9222651-F7C2-44EB-8134-BD02570FD5F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Item.Tests", "Item.Tests\Item.Tests.csproj", "{B6672BC9-2437-46AE-9E3F-E760D1DA5030}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Item.Tests", "Item.Tests\Item.Tests.csproj", "{B6672BC9-2437-46AE-9E3F-E760D1DA5030}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

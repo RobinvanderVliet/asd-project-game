@@ -1,6 +1,5 @@
 ﻿using System;
 using Items.Consumable.ConsumableStats;
-using Player.Model.Consumable.ConsumableStats;
 using Player.Model.ItemStats;
 
 namespace Items.Consumable

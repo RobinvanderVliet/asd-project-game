@@ -1,4 +1,4 @@
-﻿using Player.Model.Consumable.ConsumableStats;
+﻿using Items.Consumable.ConsumableStats;
 
 namespace Items.Consumable
 {
