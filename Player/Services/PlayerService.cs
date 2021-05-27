@@ -15,28 +15,36 @@ namespace Player.Services
 {
     public class PlayerService : IPlayerService
     {
-        private readonly IPlayerModel _currentPlayer;
+        private IPlayerModel _currentPlayer;
+        
+        public IPlayerModel CurrentPlayer { get => _currentPlayer; set => _currentPlayer = value; }
+        
         private readonly IMoveHandler _moveHandler;
         private readonly IChatHandler _chatHandler;
         //session handler in aparte classe gebruiken, kan maybe blijven staan? Weet niet of die nog gebrukt gaat worden. :(
         private readonly ISessionHandler _sessionHandler;
         private readonly IWorldService _worldService;
         private readonly IClientController _clientController;
-
-        public PlayerService(IPlayerModel currentPlayer
-            , IChatHandler chatHandler
+        private IInventory _inventory;
+        public PlayerService(IChatHandler chatHandler
             , ISessionHandler sessionHandler
             , IMoveHandler moveHandler
             , IClientController clientController
-            , IWorldService worldService)
+            , IWorldService worldService
+            , IInventory inventory)
         {
             _chatHandler = chatHandler;
             _sessionHandler = sessionHandler;
-            _currentPlayer = currentPlayer;
             _moveHandler = moveHandler;
             _clientController = clientController;
-            currentPlayer.PlayerGuid = _clientController.GetOriginId();
             _worldService = worldService;
+            _inventory = inventory;
+        }
+
+        public void SetupPlayer()
+        {
+            CurrentPlayer = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
+            CurrentPlayer.PlayerGuid = _clientController.GetOriginId();
         }
 
         public void Attack(string direction)

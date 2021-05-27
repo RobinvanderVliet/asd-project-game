@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Timers;
 using InputCommandHandler.Antlrr;
 using InputCommandHandler.Exceptions;
 using Player.Services;
 using Session;
+using Session.DTO;
 using UserInterface;
+using WebSocketSharp;
 
 namespace InputCommandHandler
 {
@@ -11,17 +14,27 @@ namespace InputCommandHandler
     {
         private IPlayerService _playerService;
         private ISessionService _sessionService;
-        public void HandleCommands(IPlayerService playerService, ISessionService sessionService)
+        private IScreenHandler _screenHandler;
+        private static Timer aTimer;
+        private const string RETURN_KEYWORD = "return";
+
+        public InputCommandHandlerComponent(IPlayerService playerService, ISessionService sessionService, IScreenHandler screenHandler)
         {
-            SendCommand(GetCommand(), playerService, sessionService);
+            _playerService = playerService;
+            _sessionService = sessionService;
+            _screenHandler = screenHandler;
         }
-        private static void SendCommand(string commando, IPlayerService playerService, ISessionService sessionService)
+        public void HandleGameScreenCommands()
+        {
+            SendCommand(GetCommand());
+        }
+        private void SendCommand(string commando)
         {
             try
             {
-                var pipeline = new Pipeline();
+                var pipeline = new Pipeline(_playerService, _sessionService);
                 pipeline.ParseCommand(commando);
-                pipeline.Transform(playerService, sessionService);
+                pipeline.Transform();
             }
             catch (CommandSyntaxException e)
             {
@@ -38,33 +51,62 @@ namespace InputCommandHandler
             return Console.ReadLine();
         }
 
-        public void HandleStartScreenCommands(IScreenHandler screenHandler, ISessionService sessionService)
+        public void HandleStartScreenCommands()
         {
-            var input = Console.ReadLine();
-            int option;
+            var input = GetCommand();
+            var option = 0;
             int.TryParse(input, out option);
             
             switch (option)
             {
                 case 1:
-                    screenHandler.TransitionTo(new ConfigurationScreen());
+                    _screenHandler.TransitionTo(new ConfigurationScreen());
                     break;
                 case 2:
-                    screenHandler.TransitionTo(new SessionScreen());
-                    sessionService.RequestSessions();
+                    _sessionService.RequestSessions();
+                    _screenHandler.TransitionTo(new SessionScreen());
                     break;
                 case 3:
-                    screenHandler.TransitionTo(new EditorScreen());
+                    _screenHandler.TransitionTo(new EditorScreen());
                     break;
                 case 4:
-                    screenHandler.TransitionTo(new HelpScreen());
-                    break;
-                case 5:
                     Environment.Exit(0);
                     break;
                 default:
-                    Environment.Exit(0);
+                    StartScreen startScreen = _screenHandler.Screen as StartScreen;
+                    startScreen.UpdateInputMessage("Not a valid option, try again!");
                     break;
+            }
+        }
+
+        public void HandleSessionScreenCommands()
+        {
+            var input = GetCommand();
+            int sessionNumber = 0;
+            int.TryParse(input, out sessionNumber);
+            SessionScreen sessionScreen = _screenHandler.Screen as SessionScreen;
+
+            if (input == RETURN_KEYWORD)
+            {
+                _screenHandler.TransitionTo(new StartScreen());
+            }
+            else if (sessionNumber > 0)
+            {
+                string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
+
+                if (sessionId.IsNullOrEmpty())
+                {
+                    sessionScreen.UpdateInputMessage("Not a valid session, try again!");
+                }
+                else
+                {
+                    SendCommand("join_session \"" + sessionId + "\"");
+                    _screenHandler.TransitionTo(new ConfigurationScreen()); // maybe a waiting screen in stead?   
+                }
+            }
+            else
+            {
+                sessionScreen.UpdateInputMessage("That is not a number, please try again!");
             }
         }
     }

@@ -253,11 +253,10 @@ namespace Session
         {
             _availableSessions.TryAdd(packet.Header.SessionID, packet);
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
-
             if (_screenHandler.Screen is SessionScreen)
             {
                 SessionScreen screen = _screenHandler.Screen as SessionScreen;
-                screen.UpdateSessions(sessionDTO);
+                screen.UpdateSessions(sessionDTO, packet.Header.SessionID);
             }
 
             // Console.WriteLine(
@@ -362,7 +361,6 @@ namespace Session
             Thread.Sleep(WAITTIMEPINGTIMER);
             CheckIfHostActive();
         }
-        
         
         public void SwapToHost()
         {

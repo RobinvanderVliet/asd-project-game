@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
+using UserInterface;
 using Timer = System.Timers.Timer;
 
 namespace Session.Tests
@@ -24,6 +25,7 @@ namespace Session.Tests
 
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;
+        private Mock<IScreenHandler> _mockedScreenHandler;
 
         [SetUp]
         public void Setup()
@@ -32,7 +34,8 @@ namespace Session.Tests
             standardOutput.AutoFlush = true;
             Console.SetOut(standardOutput);
             _mockedClientController = new Mock<IClientController>();
-            _sut = new SessionHandler(_mockedClientController.Object);
+            _mockedScreenHandler = new Mock<IScreenHandler>();
+            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object);
             _packetDTO = new PacketDTO();
         }
 
