@@ -4,6 +4,7 @@ using System.Linq;
 using DatabaseHandler;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
+using Display;
 using DataTransfer.DTO.Character;
 using DataTransfer.Model.World;
 using DataTransfer.Model.World.Interfaces;
@@ -22,12 +23,14 @@ namespace WorldGeneration
         private List<int[]> _chunksWithinLoadingRange;
 
         private INoiseMapGenerator _noiseMapGenerator;
+        private IConsolePrinter _consolePrinter;
 
         public Map(
             INoiseMapGenerator noiseMapGenerator
             , int chunkSize
             , int seed
             , IServicesDb<Chunk> dbServices
+            , IConsolePrinter consolePrinter 
         )
         {
             _chunkSize = chunkSize;
@@ -35,6 +38,7 @@ namespace WorldGeneration
             _seed = seed;
             _noiseMapGenerator = noiseMapGenerator;
             _dbService = dbServices;
+            _consolePrinter = consolePrinter;
         }
 
         // checks if there are new chunks that have to be loaded

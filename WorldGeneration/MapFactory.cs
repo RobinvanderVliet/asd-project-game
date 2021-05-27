@@ -1,10 +1,11 @@
 using System;
 using DatabaseHandler.Services;
 using DataTransfer.Model.World;
+using Display;
 
 namespace WorldGeneration
 {
-    public abstract class MapFactory
+    public class MapFactory
     {
         public static Map GenerateMap(int chunkSize = 8, int seed = -1123581321)
         {
@@ -16,6 +17,8 @@ namespace WorldGeneration
                 seed = new Random().Next(1, 999999);
             }           
             return new Map(new NoiseMapGenerator(), chunkSize, seed, new ServicesDb<Chunk>());
+            return new Map(new NoiseMapGenerator(), new DatabaseFunctions.Database(dbLocation, collectionName), chunkSize, seed, new Display.ConsolePrinter());
+            }
         }
 
         public static int GenerateSeed()
