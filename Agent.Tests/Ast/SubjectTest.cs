@@ -75,7 +75,7 @@ namespace Agent.Tests.Ast
             //Act
             var result = node.GetNodeType();
             //Assert
-            Assert.AreEqual("Player", result);
+            Assert.AreEqual("ActionHandling", result);
         }
 
         [Test]

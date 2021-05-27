@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using ActionHandling;
 using Chat;
 using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
@@ -6,7 +7,6 @@ using InputHandling.Antlr.Transformer;
 using InputHandling.Exceptions;
 using Moq;
 using NUnit.Framework;
-using Player.ActionHandlers;
 using Session;
 
 namespace InputHandling.Tests

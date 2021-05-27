@@ -22,7 +22,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\InputHandling\InputHandling.csproj" />
-      <ProjectReference Include="..\Player\Player.csproj" />
+      <ProjectReference Include="..\ActionHandling\ActionHandling.csproj" />
       <ProjectReference Include="..\Session\Session.csproj" />
     </ItemGroup>
 

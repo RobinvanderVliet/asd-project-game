@@ -4,19 +4,16 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.IO;
-using AutoMapper;
 using DatabaseHandler;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using WorldGeneration;
-using Player;
+using ActionHandling;
 using Chat;
 using InputHandling;
 using InputHandling.Antlr;
 using InputHandling.Antlr.Transformer;
 using Network;
-using Player.ActionHandlers;
 using Session;
 using UserInterface;
 
@@ -47,7 +44,6 @@ namespace ASD_project
                     services.AddScoped<IClientController, ClientController>();
                     services.AddScoped<IChatHandler, ChatHandler>();
                     services.AddScoped<ISessionHandler, SessionHandler>();
-                    services.AddScoped<ISessionService, SessionService>();
                     services.AddScoped<IMoveHandler, MoveHandler>();
                     services.AddScoped<IWorldService, WorldService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();

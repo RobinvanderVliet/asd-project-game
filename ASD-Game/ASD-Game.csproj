@@ -35,7 +35,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Chat\Chat.csproj" />
     <ProjectReference Include="..\InputHandling\InputHandling.csproj" />
-    <ProjectReference Include="..\Player\Player.csproj" />
+    <ProjectReference Include="..\ActionHandling\ActionHandling.csproj" />
   </ItemGroup>
 
   <ItemGroup>
