@@ -39,7 +39,7 @@ WEST: 'west';
 RIGHT: 'right';
 EAST: 'east';
 
-NUMBER: '0' | [0-9]*;
+//NUMBER: '0' | [0-9]*;
 MESSAGE: '"' ~'"'+ '"';
 //MESSAGE: ~[\r\n]+;
 
@@ -47,7 +47,7 @@ MESSAGE: '"' ~'"'+ '"';
 
 input: command EOF;
 
-step: NUMBER;
+step: '0';
 message: MESSAGE;
 
 command:

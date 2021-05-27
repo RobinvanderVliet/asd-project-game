@@ -134,7 +134,7 @@ namespace InputCommandHandler.Antlr.Parser
 
         public override void EnterLoadGame(PlayerCommandsParser.LoadGameContext context)
         {
-            _currentContainer.Push(new StartSession());
+            _currentContainer.Push(new LoadGame());
         }
 
         public override void ExitLoadGame(PlayerCommandsParser.LoadGameContext context)
@@ -229,6 +229,10 @@ namespace InputCommandHandler.Antlr.Parser
             else if (action is StartSession startSession)
             {
                 startSession.AddChild(new Message(context.GetText()));
+            }
+            else if (action is LoadGame loadGame)
+            {
+                loadGame.AddChild(new Message(context.GetText()));
             }
         }
 
