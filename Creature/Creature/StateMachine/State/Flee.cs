@@ -4,9 +4,9 @@ using Creature.Creature.StateMachine.Data;
 
 namespace Creature.Creature.StateMachine.State
 {
-    public class Flee : CreatureState
+    public class FleeState : CreatureState
     {
-        public Flee(ICreatureData creatureData, ICreatureData enemie) : base(creatureData)
+        public FleeState(ICreatureData creatureData) : base(creatureData)
         {
             _creatureData = creatureData;
         }

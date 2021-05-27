@@ -40,7 +40,7 @@ namespace Creature.Creature.StateMachine
             CreatureState wanderState = new WanderState(CreatureData);
             CreatureState useConsumableState = new UseConsumableState(CreatureData);
             CreatureState attackPlayerState = new AttackState(CreatureData);
-            CreatureState fleeFromPlayerState = new FleeFromCreatureState(CreatureData);
+            CreatureState fleeState = new FleeState(CreatureData);
 
             // Wandering
             builder.In(followPlayerState).On(CreatureEvent.Event.LOST_PLAYER).Goto(wanderState);
@@ -57,11 +57,11 @@ namespace Creature.Creature.StateMachine
             builder.In(useConsumableState).On(CreatureEvent.Event.REGAINED_HEALTH_PLAYER_IN_RANGE).Goto(attackPlayerState).Execute<ICreatureData>(new AttackState(CreatureData).Do);
 
             // Use potion
-            builder.In(attackPlayerState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
+            builder.In(fleeState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
             builder.In(followPlayerState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
 
             //Flee 
-            
+            builder.In(attackPlayerState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(fleeState).Execute<ICreatureData>(new FleeState(CreatureData).Do);
             
             builder.WithInitialState(wanderState);
 
