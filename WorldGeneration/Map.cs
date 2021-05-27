@@ -18,7 +18,7 @@ namespace WorldGeneration
         private readonly int _seed;
         private List<Chunk> _chunks; // NOT readonly, don't listen to the compiler
         //private readonly DatabaseFunctions.Database _db;
-        private IServicesDb<Chunk> _dbService;
+        private IDatabaseService<Chunk> _dbService;
         private ChunkService _chunkService;
         private List<int[]> _chunksWithinLoadingRange;
 
@@ -29,7 +29,7 @@ namespace WorldGeneration
             INoiseMapGenerator noiseMapGenerator
             , int chunkSize
             , int seed
-            , IServicesDb<Chunk> dbServices
+            , IDatabaseService<Chunk> dbServices
             , IConsolePrinter consolePrinter 
         )
         {

@@ -19,6 +19,7 @@ namespace WorldGeneration
             return new Map(new NoiseMapGenerator(), chunkSize, seed, new ServicesDb<Chunk>());
             return new Map(new NoiseMapGenerator(), new DatabaseFunctions.Database(dbLocation, collectionName), chunkSize, seed, new Display.ConsolePrinter());
             }
+            return new Map(new NoiseMapGenerator(), chunkSize, seed, new DatabaseService<Chunk>());
         }
 
         public static int GenerateSeed()
