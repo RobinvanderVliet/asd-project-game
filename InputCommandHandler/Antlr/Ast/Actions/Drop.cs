@@ -47,5 +47,9 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         {
             return true;
         }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

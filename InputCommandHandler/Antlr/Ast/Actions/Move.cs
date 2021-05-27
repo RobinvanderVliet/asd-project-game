@@ -66,5 +66,9 @@ namespace InputCommandHandler.Antlr.Ast.Actions
 
             return Direction.Equals(other.Direction) && Steps.Equals(other.Steps);
         }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
