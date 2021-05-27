@@ -1,7 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using DatabaseHandler.Services;
 using DataTransfer.DTO.Character;
+using DataTransfer.Model.World;
+using DataTransfer.Model.World.Interfaces;
+using DataTransfer.Model.World.LootableTiles;
+using DataTransfer.Model.World.TerrainTiles;
 using Display;
 using NUnit.Framework;
 using Moq;
@@ -56,7 +61,7 @@ namespace WorldGeneration.Tests
             _noiseMapGeneratorMock = noiseMapGeneratorMock.Object;
 
             
-            var databaseMock = new Mock<Database>();
+            var databaseMock = new Mock<DatabaseService<>>();
             /*
              doesn't work because it throws errors, but that's okay because it's getting replaced anyway so i'm not wasting anymore time on this.
             databaseMock.Setup(p => p.InsertChunkIntoDatabase(chunk1)).Verifiable();
