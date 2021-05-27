@@ -91,8 +91,8 @@ namespace Session
             var tmp = new DbConnection();
             tmp.SetForeignKeys();
 
-            var tmpServicePlayer = new ServicesDb<PlayerPoco>();
-            var tmpServiceGame = new ServicesDb<GamePoco>();
+            var tmpServicePlayer = new DatabaseService<PlayerPoco>();
+            var tmpServiceGame = new DatabaseService<GamePoco>();
 
             Guid gameGuid = Guid.NewGuid();
             var tmpObject = new GamePoco {GameGUID = gameGuid};

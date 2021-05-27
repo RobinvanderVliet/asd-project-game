@@ -15,7 +15,7 @@ namespace WorldGeneration
             {
                 seed = new Random().Next(1, 999999);
             }           
-            return new Map(new NoiseMapGenerator(), chunkSize, seed, new ServicesDb<Chunk>());
+            return new Map(new NoiseMapGenerator(), chunkSize, seed, new DatabaseService<Chunk>());
         }
 
         public static int GenerateSeed()

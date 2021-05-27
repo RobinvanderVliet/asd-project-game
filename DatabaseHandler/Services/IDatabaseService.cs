@@ -4,7 +4,7 @@ using LiteDB;
 
 namespace DatabaseHandler.Services
 {
-    public interface IServicesDb<T>
+    public interface IDatabaseService<T>
     {
         Task<BsonValue> CreateAsync(T obj);
         Task<int> UpdateAsync(T obj);
