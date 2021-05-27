@@ -4,7 +4,7 @@ namespace UserInterface
 {
     public abstract class Screen
     {
-        protected const int SCREEN_WIDTH = 80;
+        protected const int SCREEN_WIDTH = 120;
         protected const int HEADER_X = 0;
         protected const int HEADER_Y = 0;
         protected const int HEADER_WIDTH = SCREEN_WIDTH - 2;
