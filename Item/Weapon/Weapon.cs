@@ -6,14 +6,13 @@ namespace Weapon
 {
     public class Weapon : IItem
     {
-        
         public string Description { get; set; }
         public string ItemName { get; set; }
-        protected WeaponType Type { get; set; }
-        protected Rarity Rarity { get; set; }
-        protected WeaponSpeed Speed { get; set; }
-        protected WeaponDamage Damage { get; set; }
-        protected WeaponDistance Distance { get; set; }
+        public WeaponType Type { get; set; }
+        public Rarity Rarity { get; set; }
+        public WeaponSpeed Speed { get; set; }
+        public WeaponDamage Damage { get; set; }
+        public WeaponDistance Distance { get; set; }
 
         public int GetWeaponSpeed()
         {
