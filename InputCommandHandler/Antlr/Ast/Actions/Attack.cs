@@ -34,5 +34,9 @@ namespace InputCommandHandler.Antlr.Ast.Actions
 
             return _direction.Equals(other._direction);
         }
+        public override int GetHashCode()
+        {
+            return _direction.GetHashCode();
+        }
     }
 }
