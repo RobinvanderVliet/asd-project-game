@@ -24,7 +24,7 @@ namespace Network
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-            if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session)
+            if((packet.Header.SessionID == _sessionId && _sessionId != null)  || packet.Header.PacketType == PacketType.Session)
             {
                 return _subscribers.GetValueOrDefault(packet.Header.PacketType).HandlePacket(packet);
             }
