@@ -22,6 +22,7 @@ namespace WorldGeneration
                     noiseData[x, y] = (int)noise.GetNoise(x, y);
                 }
             }
+            
             return noiseData;
         }
 
