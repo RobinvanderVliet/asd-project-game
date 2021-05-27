@@ -15,9 +15,9 @@ namespace Creature.World
         private List<List<Node>> _nodes;
         private int _size;
 
-        public List<ICreature> Creatures => Creatures;
+        public List<ICreature> Creatures => _creatures;
 
-        public List<ICreature> Players => Players;
+        public List<ICreature> Players => _players;
 
         public List<List<Node>> Nodes => _nodes;
         public int Size => _size;
