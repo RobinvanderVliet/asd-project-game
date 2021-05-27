@@ -170,12 +170,12 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformLoadGame(LoadGame loadGame)
         {
-            _sessionService.LoadGame();
+            _gamesSessionService.LoadGame(loadGame.Message.MessageValue);
         }
 
         private void TransformStartGame(StartGame startGame)
         {
-            _sessionService.StartGame();
+            _gamesSessionService.StartGame();
         }
 
         private void TransformRequestSavedGames(RequestSavedGames requestSavedGames)

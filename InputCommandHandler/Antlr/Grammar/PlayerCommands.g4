@@ -25,6 +25,8 @@ JOIN_SESSION : 'join_session';
 REQUEST_SESSIONS : 'request_sessions';
 START_SESSION : 'start_session';
 REQUEST_SAVED_GAMES : 'request_saved_games';
+LOAD_GAME : 'load_game';
+START_GAME : 'start_game';
 
 FORWARD: 'forward';
 UP: 'up';
@@ -63,7 +65,7 @@ command:
     JOIN_SESSION SPACE message #joinSession |
     REQUEST_SESSIONS #requestSessions |
     START_SESSION #startSession |
-    LOAD_GAME #loadGame |
+    LOAD_GAME SPACE message #loadGame |
     START_GAME #startGame |
     REQUEST_SAVED_GAMES #requestSavedGames;
 

@@ -32,8 +32,29 @@ namespace Session
             allGames.Wait();
 
             // join 2 tabels on eachother
-            var joinedTables = allHistory.Result.Select(x => x.PlayerId).Concat(allGames.Result.Select(x => x.PlayerGUIDHost));
-            Console.WriteLine(joinedTables);
+            var joinedTables = from p in allGames.Result
+                               join pi in allHistory.Result
+                               on p.PlayerGUIDHost equals pi.PlayerId
+                               select new
+                               {
+                                   p.PlayerGUIDHost,
+                                   p.GameGuid
+                               };
+
+            foreach(var element in joinedTables)
+            {
+                Console.WriteLine(element);
+            }
+        }
+
+        public void LoadGame(string value)
+        {
+            Console.WriteLine("load game " + value);
+        }
+
+        public void StartGame()
+        {
+            throw new NotImplementedException();
         }
     }
 }

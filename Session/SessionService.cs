@@ -33,15 +33,5 @@
         {
             _gameSessionHandler.SendGameSession(_sessionHandler);
         }
-
-        public void StartGame()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void LoadGame()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
