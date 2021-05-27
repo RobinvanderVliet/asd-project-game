@@ -11,12 +11,12 @@ namespace Agent.Tests.Mapper
     [ExcludeFromCodeCoverage]
     public class FileToDictionaryMapperTest
     {
-        private FileToDictionaryMapper _sut;
+        private FileToSettingListMapper _sut;
 
         [SetUp]
         public void Setup()
         {
-            _sut = new FileToDictionaryMapper();
+            _sut = new FileToSettingListMapper();
 
         }
 
@@ -24,20 +24,17 @@ namespace Agent.Tests.Mapper
         public void Test_MapFileToConfiguration_Successful()
         {
             //Arrange
-            Dictionary<string, string> expectedDictionary = new Dictionary<string, string>();
-            expectedDictionary.Add("aggressiveness", "high");
-            expectedDictionary.Add("explore", "random");
-            expectedDictionary.Add("combat", "offensive");
+            List<Setting> expected = new List<Setting>();
+            expected.Add(new Setting("aggressiveness", "high"));
+            expected.Add(new Setting("explore", "random"));
+            expected.Add(new Setting("combat", "offensive"));
             var filepath = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest.txt";
             
             //Act
-            var actualDictionary = _sut.MapFileToConfiguration(filepath);
+            var actual = _sut.MapFileToConfiguration(filepath);
 
             //Assert
-            Assert.AreEqual(expectedDictionary, actualDictionary);
-            Assert.AreEqual(expectedDictionary["explore"], actualDictionary["explore"]);
-
-
+            Assert.AreEqual(expected, actual);
         }
         
         [Test]
