@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Moq;
+﻿using Moq;
 using Network;
-using Newtonsoft.Json;
 using NUnit.Framework;
-using Session.DTO;
+using System;
+using System.IO;
 using WorldGeneration;
 
 namespace Session.Tests
@@ -30,10 +27,10 @@ namespace Session.Tests
             _mockedClientController = new Mock<IClientController>();
             _mockedWorldService = new Mock<IWorldService>();
             _mockedsessionHandler = new Mock<ISessionHandler>();
-            _sut = new GameSessionHandler(_mockedClientController.Object,_mockedWorldService.Object,_mockedsessionHandler.Object);
+            _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedsessionHandler.Object);
             _packetDTO = new PacketDTO();
         }
-        
+
         //Test below fails, not worth fixing atm since no other functions get tested
         // [Test]
         // public void Test_SendGameSession_CallsSendPayloadWithCorrectPayload()
@@ -61,6 +58,6 @@ namespace Session.Tests
         //     _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
         // }
 
-        
+
     }
 }

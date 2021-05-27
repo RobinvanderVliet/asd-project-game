@@ -15,7 +15,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         {
             _steps = new Step();
         }
-        
+
         public ArrayList GetChildren()
         {
             var children = new ArrayList();
@@ -23,21 +23,21 @@ namespace InputCommandHandler.Antlr.Ast.Actions
             children.Add(Steps);
             return children;
         }
-        
+
         public override ASTNode AddChild(ASTNode child)
         {
             if (child is Direction)
             {
-                Direction = (Direction) child;
+                Direction = (Direction)child;
             }
             else if (child is Step)
             {
-                Steps = (Step) child;
+                Steps = (Step)child;
             }
 
             return this;
         }
-        
+
         public ASTNode RemoveChild(ASTNode child)
         {
             if (child is Direction && child == Direction)
@@ -51,7 +51,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
 
             return this;
         }
-        
+
         [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {

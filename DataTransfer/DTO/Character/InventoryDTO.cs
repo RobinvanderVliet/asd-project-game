@@ -6,6 +6,6 @@ namespace DataTransfer.DTO.Character
     [ExcludeFromCodeCoverage]
     public class InventoryDTO
     {
-        private List<ItemDTO> ItemList { get ; set ; }
+        private List<ItemDTO> ItemList { get; set; }
     }
 }

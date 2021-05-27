@@ -1,8 +1,8 @@
+using Agent.Antlr.Ast;
+using Agent.Antlr.Ast.Comparables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Agent.Antlr.Ast;
-using Agent.Antlr.Ast.Comparables;
 
 namespace Agent.Antlr.Checker
 {
@@ -18,7 +18,7 @@ namespace Agent.Antlr.Checker
             }
             //Entry of checkStatCombination in Pipeline
         }
-        
+
         public void CheckStatCombination(List<Node> nodes)
         {
             foreach (Node node in nodes)
@@ -26,16 +26,16 @@ namespace Agent.Antlr.Checker
                 if (node.GetChildren().Count > 0)
                 {
                     CheckStatCombination(node.GetChildren());
-                    
+
                 }
-                
+
                 if (node is When)
                 {
-                    var comparable = (Comparable) node.GetChildren().FirstOrDefault();
+                    var comparable = (Comparable)node.GetChildren().FirstOrDefault();
 
                     if (comparable is Item)
                     {
-                        if (!CheckItemAndAllowedStat((Item) comparable))
+                        if (!CheckItemAndAllowedStat((Item)comparable))
                         {
                             comparable.SetError("There is an invalid combination of item and stat");
                         }
@@ -43,7 +43,7 @@ namespace Agent.Antlr.Checker
                 }
                 if (node is Stat)
                 {
-                    
+
                 }
             }
         }
@@ -51,7 +51,7 @@ namespace Agent.Antlr.Checker
         public bool CheckItemAndAllowedStat(Item comparable)
         {
             bool itemAllowed = false;
-            
+
             string[][] allowedItemStatsCombinations =
             {
                 //              ITEM     STAT
@@ -60,7 +60,7 @@ namespace Agent.Antlr.Checker
             };
 
             String itemName = comparable.Name;
-            Stat stat = (Stat) comparable.GetChildren()[0];
+            Stat stat = (Stat)comparable.GetChildren()[0];
             String statName = stat.Name;
 
 

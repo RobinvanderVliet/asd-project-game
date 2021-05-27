@@ -1,9 +1,7 @@
-using System.Collections;
-
 namespace InputCommandHandler.Antlr.Ast.Actions
 {
-    public class RequestSessions: Command
+    public class RequestSessions : Command
     {
-        
+
     }
 }

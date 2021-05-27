@@ -6,7 +6,7 @@ namespace Weapon
 {
     public class Weapon : IItem
     {
-        
+
         public string Description { get; set; }
         public string ItemName { get; set; }
         protected WeaponType Type { get; set; }
@@ -17,18 +17,18 @@ namespace Weapon
 
         public int GetWeaponSpeed()
         {
-            return (int) Speed;
+            return (int)Speed;
         }
 
         public int GetWeaponDamage()
         {
-            return (int) Damage;
+            return (int)Damage;
         }
-        
+
         public int GetWeaponDistance()
         {
-            return (int) Distance;
+            return (int)Distance;
         }
-        
+
     }
 }

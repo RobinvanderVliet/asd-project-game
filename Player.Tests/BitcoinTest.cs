@@ -1,6 +1,6 @@
-using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using Player.Model;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Player.Tests
 {
@@ -8,13 +8,13 @@ namespace Player.Tests
     public class BitcoinTest
     {
         private Bitcoin _sut;
-        
+
         [SetUp]
         public void Setup()
         {
             _sut = new Bitcoin(20);
         }
-        
+
         [Test]
         public void Test_GetAmount_GetsAmountSuccessfully()
         {
@@ -23,7 +23,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(20, _sut.Amount);
         }
-        
+
         [Test]
         public void Test_SetAmount_SetsAmountSuccessfully()
         {
@@ -34,7 +34,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(amount, _sut.Amount);
         }
-        
+
         [Test]
         public void Test_AddAmount_AddsGivenAmountSuccessfully()
         {
@@ -44,7 +44,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(40, _sut.Amount);
         }
-        
+
         [Test]
         public void Test_RemoveAmount_RemovesGivenAmountSuccessfully()
         {

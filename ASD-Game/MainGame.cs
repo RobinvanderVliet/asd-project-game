@@ -1,17 +1,13 @@
-using Microsoft.Extensions.Logging;
-using System;
+using Chat;
 using InputCommandHandler;
+using Microsoft.Extensions.Logging;
+using Network;
+using Player.ActionHandlers;
 using Player.Model;
 using Player.Services;
-using System.Collections.Generic;
-using Agent.Mapper;
-using Agent.Models;
-using Agent.Services;
-using WorldGeneration;
-using Chat;
-using Network;
 using Session;
-using Player.ActionHandlers;
+using System;
+using WorldGeneration;
 
 namespace ASD_project
 {
@@ -28,7 +24,7 @@ namespace ASD_project
             private readonly IClientController _clientController;
             private readonly IWorldService _worldService;
 
-            public MainGame(ILogger<MainGame> log, IInventory inventory, IClientController clientController, IWorldService worldService, 
+            public MainGame(ILogger<MainGame> log, IInventory inventory, IClientController clientController, IWorldService worldService,
                 IChatHandler chatHandler, ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler)
             {
                 _log = log;
@@ -49,14 +45,14 @@ namespace ASD_project
                 // TODO: Remove from this method, a command needs to be made
                 // AgentConfigurationService agentConfigurationService = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), inputHandler);
                 // agentConfigurationService.Configure();
-                
+
                 //moet later vervangen worden
                 IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
                 IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _moveHandler, _clientController, _worldService);
 
                 ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
                 // moet vervangen worden met variabele: isRun
-                while (true) 
+                while (true)
                 {
                     Console.WriteLine("Type input messages below");
                     inputHandler.HandleCommands(playerService, sessionService);

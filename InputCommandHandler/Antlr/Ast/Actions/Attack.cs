@@ -12,7 +12,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         {
             if (child is Direction)
             {
-                _direction = (Direction) child;
+                _direction = (Direction)child;
             }
 
             return this;

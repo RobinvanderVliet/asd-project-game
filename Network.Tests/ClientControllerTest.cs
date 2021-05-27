@@ -1,8 +1,8 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using Moq;
+﻿using Moq;
 using Network.DTO;
 using NUnit.Framework;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Network.Tests
 {
@@ -13,7 +13,7 @@ namespace Network.Tests
 
         private ClientController _sut;
         private readonly string _sessionId = "1";
-        
+
         private Mock<INetworkComponent> _mockedNetworkComponent;
 
         [SetUp]
@@ -130,7 +130,7 @@ namespace Network.Tests
             string expectedExceptionMessage = "Payload is empty.";
             string payload = null;
             var packetType = PacketType.Chat;
-            
+
             //Act
             var ex = Assert.Throws<Exception>(() => _sut.SendPayload(payload, packetType));
 
@@ -191,10 +191,10 @@ namespace Network.Tests
             //Arrange
             Mock<IHostController> mockedHostController = new Mock<IHostController>();
             _sut.SetHostController(mockedHostController.Object);
-            
+
             //Act
             _sut.SetSessionId(_sessionId);
-            
+
             //Assert
             mockedHostController.Verify(mock => mock.SetSessionId(_sessionId), Times.Once);
         }

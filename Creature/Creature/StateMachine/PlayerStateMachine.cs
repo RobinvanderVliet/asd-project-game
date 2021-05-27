@@ -19,7 +19,8 @@ namespace Creature.Creature.StateMachine
             _ruleset = ruleSet;
         }
 
-        public ICreatureData CreatureData {
+        public ICreatureData CreatureData
+        {
             get => _playerData;
             set => _playerData = (PlayerData)value;
         }

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using Antlr4.Runtime;
+﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using InputCommandHandler.Antlr.Ast;
 using InputCommandHandler.Antlr.Ast.Actions;
 using InputCommandHandler.Antlr.Grammar;
 using InputCommandHandler.Antlr.Parser;
 using NUnit.Framework;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace InputCommandHandler.Tests
 {
@@ -251,7 +251,7 @@ namespace InputCommandHandler.Tests
             //assert
             Assert.AreEqual(exp, sut);
         }
-        
+
         [Test]
         public void Test_AstListener_CreatesMoveAstWithForward2Steps()
         {
@@ -383,7 +383,7 @@ namespace InputCommandHandler.Tests
             //assert
             Assert.AreEqual(exp, sut);
         }
-        
+
         // Help method for checking command
         public static AST MoveCommand(int steps, string direction)
         {

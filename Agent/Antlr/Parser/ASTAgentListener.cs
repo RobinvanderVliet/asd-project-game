@@ -1,11 +1,11 @@
+using Agent.Antlr.Ast;
+using Agent.Antlr.Ast.Comparables;
+using Agent.Antlr.Ast.Comparables.Subjects;
 using Agent.Antlr.Grammar;
 using Antlr4.Runtime.Misc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Agent.Antlr.Ast;
-using Agent.Antlr.Ast.Comparables;
-using Agent.Antlr.Ast.Comparables.Subjects;
 using Action = Agent.Antlr.Ast.Action;
 
 namespace Agent.Antlr.Parser
@@ -135,8 +135,8 @@ namespace Agent.Antlr.Parser
 
         public override void ExitStat([NotNull] AgentConfigurationParser.StatContext context)
         {
-            if (!_itemStat) 
-            { 
+            if (!_itemStat)
+            {
                 Node temp = _currentContainer.Pop();
                 _currentContainer.Peek().AddChild(temp);
             }
@@ -186,7 +186,7 @@ namespace Agent.Antlr.Parser
 
         public override void ExitAction([NotNull] AgentConfigurationParser.ActionContext context)
         {
-            if (_currentContainer.Peek() is ActionReference && ((ActionReference)_currentContainer.Peek()).Name != "use") 
+            if (_currentContainer.Peek() is ActionReference && ((ActionReference)_currentContainer.Peek()).Name != "use")
             {
                 Node temp = _currentContainer.Pop();
                 _currentContainer.Peek().AddChild(temp);
@@ -299,7 +299,8 @@ namespace Agent.Antlr.Parser
         {
             int x = 0;
             String value = context.children.FirstOrDefault().GetText();
-            if (int.TryParse(value, out x)) {
+            if (int.TryParse(value, out x))
+            {
                 Int node = new Int(int.Parse(context.children.FirstOrDefault().GetText()));
                 _currentContainer.Peek().AddChild(node);
             }

@@ -85,14 +85,15 @@ namespace Creature.World
                 }
             }
 
-            for (int y = _size; y > 0; y--) {
+            for (int y = _size; y > 0; y--)
+            {
                 string line = null;
 
                 for (int x = 0; x < _size; x++)
                 {
                     bool addedLine = false;
                     ICreature player = _players[0];
-                    
+
                     if (player.CreatureStateMachine.CreatureData.Position.X == x && player.CreatureStateMachine.CreatureData.Position.Y == y)
                     {
                         line += "+";

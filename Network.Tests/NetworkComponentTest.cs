@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
-using Moq;
+﻿using Moq;
 using Newtonsoft.Json;
+using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Network.Tests
 {
@@ -37,7 +37,7 @@ namespace Network.Tests
         public void Test_ReceivePacket_SendPacketToHostControllerWithTargetHost()
         {
             //Arrange ---------
-            _sut.SetHostController(_mockedHostController.Object);       
+            _sut.SetHostController(_mockedHostController.Object);
             _packetHeaderDTO.Target = "host";
             _packetDTO.Header = _packetHeaderDTO;
             _mockedHostController.Setup(mock => mock.ReceivePacket(_packetDTO));

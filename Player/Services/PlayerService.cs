@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Player.ActionHandlers;
-using Chat;
+﻿using Chat;
 using DataTransfer.DTO.Character;
 using Network;
+using Player.ActionHandlers;
 using Player.Model;
+using System;
+using System.Collections.Generic;
 using WorldGeneration;
 
 namespace Player.Services
@@ -34,7 +34,7 @@ namespace Player.Services
 
         public void Attack(string direction)
         {
-          Console.WriteLine("Attacked in " + direction + " direction.");
+            Console.WriteLine("Attacked in " + direction + " direction.");
         }
 
         public void ExitCurrentGame()
@@ -162,18 +162,18 @@ namespace Player.Services
                     break;
             }
 
-            
-            var mapCharacterDTO = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
-                (_worldService.getCurrentCharacterPositions().YPosition) + y, 
-                _currentPlayer.PlayerGuid, 
-                _worldService.getCurrentCharacterPositions().GameGuid, 
+
+            var mapCharacterDTO = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x,
+                (_worldService.getCurrentCharacterPositions().YPosition) + y,
+                _currentPlayer.PlayerGuid,
+                _worldService.getCurrentCharacterPositions().GameGuid,
                 _currentPlayer.Symbol);
-            
+
             _moveHandler.SendMove(mapCharacterDTO);
-            
-            MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions();
-           _currentPlayer.XPosition = currentCharacter.XPosition;
-           _currentPlayer.YPosition = currentCharacter.YPosition;
+
+            MapCharacterDTO currentCharacter = _worldService.getCurrentCharacterPositions();
+            _currentPlayer.XPosition = currentCharacter.XPosition;
+            _currentPlayer.YPosition = currentCharacter.YPosition;
         }
     }
 }

@@ -1,16 +1,16 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast;
+﻿using Agent.Antlr.Ast;
 using Agent.Generator;
 using Moq;
 using NUnit.Framework;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.Generator
 {
     [ExcludeFromCodeCoverage]
     public class GeneratorTest
     {
-        
+
         private Generating _sut;
         private Fixtures _fix;
         [SetUp]

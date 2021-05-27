@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UserInterface
+﻿namespace UserInterface
 {
     public class Class1
     {

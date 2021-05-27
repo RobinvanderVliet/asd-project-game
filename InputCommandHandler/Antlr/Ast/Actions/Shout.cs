@@ -20,7 +20,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         {
             if (child is Message)
             {
-                _message = (Message) child;
+                _message = (Message)child;
             }
 
             return this;

@@ -27,7 +27,7 @@ namespace Creature.Creature.StateMachine
 
         public void FireEvent(CreatureEvent.Event creatureEvent, object argument)
         {
-             _passiveStateMachine.Fire(creatureEvent, argument);
+            _passiveStateMachine.Fire(creatureEvent, argument);
         }
 
         public void FireEvent(CreatureEvent.Event creatureEvent)
