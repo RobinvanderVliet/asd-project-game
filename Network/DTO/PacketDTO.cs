@@ -18,7 +18,7 @@ namespace Network
         }
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return Payload.GetHashCode();
         }
     }
 }

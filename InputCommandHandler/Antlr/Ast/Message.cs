@@ -30,7 +30,7 @@ namespace InputCommandHandler.Antlr.Ast
         }
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return _message.GetHashCode();
         }
     }
 }

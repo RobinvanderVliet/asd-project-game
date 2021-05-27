@@ -17,7 +17,7 @@
         }
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return PacketType.GetHashCode();
         }
     }
 }

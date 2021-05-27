@@ -52,7 +52,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         }
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return _message.GetHashCode();
         }
     }
 }

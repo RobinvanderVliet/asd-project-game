@@ -22,7 +22,7 @@ namespace Network.DTO
         }
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return Action.GetHashCode();
         }
     }
 }
