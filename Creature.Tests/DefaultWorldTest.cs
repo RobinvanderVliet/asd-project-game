@@ -9,6 +9,7 @@ using System.Numerics;
 namespace Creature.Tests
 {
     [ExcludeFromCodeCoverage]
+    [TestFixture]
     class DefaultWorldTest
     {
         private Mock<ICreature> _firstCreatureMock;

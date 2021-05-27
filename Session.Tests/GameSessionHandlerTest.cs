@@ -2,12 +2,15 @@
 using Network;
 using NUnit.Framework;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using WorldGeneration;
 
 namespace Session.Tests
 {
-    public class GameSessionHandlerTests
+    [ExcludeFromCodeCoverage]
+    [TestFixture]
+    public class GameSessionHandlerTest
     {
         private GameSessionHandler _sut;
 

@@ -8,6 +8,7 @@ using System.Numerics;
 namespace Creature.Tests
 {
     [ExcludeFromCodeCoverage]
+    [TestFixture]
     class MonsterTest
     {
         private Monster _sut;
