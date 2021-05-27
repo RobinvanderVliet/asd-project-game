@@ -19,7 +19,7 @@ namespace DatabaseHandler.Repository
         [ExcludeFromCodeCoverage]
         public Repository(string collection = null)
         {
-            IDbConnection connection = new DbConnection();
+            IDBConnection connection = new DBConnection();
             _db = connection.GetConnectionAsync();
             _collection = collection ?? typeof(T).Name;
             _log = new NullLogger<Repository<T>>();

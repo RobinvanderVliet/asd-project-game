@@ -7,9 +7,7 @@ using System.IO;
 using DatabaseHandler;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using WorldGeneration;
-using Player;
 using Chat;
 using Player.Services;
 using Network;
@@ -53,7 +51,7 @@ namespace ASD_project
                     services.AddScoped<IMoveHandler, MoveHandler>();
                     services.AddScoped<IWorldService, WorldService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
-                    services.AddSingleton<IDbConnection, DbConnection>();
+                    services.AddSingleton<IDBConnection, DBConnection>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
                     services.AddScoped(typeof(IDatabaseService<>), typeof(DatabaseService<>));
                 })

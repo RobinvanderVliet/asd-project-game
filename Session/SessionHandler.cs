@@ -88,7 +88,7 @@ namespace Session
 
         public StartGameDto SetupGameHost()
         {
-            var tmp = new DbConnection();
+            var tmp = new DBConnection();
             tmp.SetForeignKeys();
 
             var tmpServicePlayer = new DatabaseService<PlayerPoco>();

@@ -7,11 +7,11 @@ namespace DataTransfer.POCO.World
     [ExcludeFromCodeCoverage]
     public class ChunkPoco : IEquatable<ChunkPoco>
     {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public ITile[] Map { get; set; }
-        public int RowSize { get; set; }
-
+        public int X;
+        public int Y;
+        public ITile[] Map;
+        public int RowSize;
+        
         public bool Equals(ChunkPoco other)
         {
             if (ReferenceEquals(null, other))
