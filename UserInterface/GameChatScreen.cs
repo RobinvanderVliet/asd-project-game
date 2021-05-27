@@ -26,7 +26,7 @@ namespace UserInterface
             DrawChatBox();
         }
 
-        public void DrawChatBox()
+        private void DrawChatBox()
         {
             DrawBox(_xPosition, _yPosition, _width, _height);
         }

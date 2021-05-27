@@ -26,7 +26,7 @@ namespace UserInterface
             DrawWorldBox();
         }
 
-        public void DrawWorldBox()
+        private void DrawWorldBox()
         {
             DrawBox(_xPosition, _yPosition, _width, _height);
         }

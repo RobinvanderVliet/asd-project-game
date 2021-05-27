@@ -39,12 +39,6 @@ namespace UserInterface
             _gameChatScreen.DrawScreen();
             _gameWorldScreen.DrawScreen();
             DrawInputBox(INPUT_X, INPUT_Y, "Insert an option");
-        }
-
-
-
-
-
-        
+        } 
     }
 }

@@ -93,10 +93,5 @@ namespace UserInterface
             Console.Write("Slot 3: " + _slotThree);
 
         }
-
-        public int getStatHeight()
-        {
-            return _height;
-        }
     }
 }
