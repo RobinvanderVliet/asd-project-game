@@ -18,7 +18,7 @@ namespace DatabaseHandler
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception: {Message}", ex.Message);
+                Console.WriteLine("Exception: " + ex.Message);
                 throw;
             }
         }

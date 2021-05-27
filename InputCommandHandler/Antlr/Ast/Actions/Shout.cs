@@ -50,6 +50,10 @@ namespace InputCommandHandler.Antlr.Ast.Actions
 
             return _message.Equals(other._message);
         }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
 

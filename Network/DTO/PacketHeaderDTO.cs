@@ -15,5 +15,9 @@
                    SessionID == DTO.SessionID &&
                    PacketType == DTO.PacketType;
         }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

@@ -20,5 +20,9 @@ namespace Network.DTO
                    Action == DTO.Action &&
                    ResultMessage == DTO.ResultMessage;
         }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
