@@ -22,6 +22,12 @@ namespace InputHandling
             _sessionHandler = sessionHandler;
             _screenHandler = screenHandler;
         }
+
+        public InputHandler()
+        {
+
+        }
+
         public void HandleGameScreenCommands()
         {
             SendCommand(GetCommand());
