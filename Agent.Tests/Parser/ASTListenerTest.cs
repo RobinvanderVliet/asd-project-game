@@ -8,7 +8,7 @@ using Antlr4.Runtime.Tree;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Linq;
-using Agent.Antlr.Grammar;
+using Agent.antlr.grammar;
 
 namespace Agent.Tests.parser
 {
