@@ -21,7 +21,7 @@ namespace Session.Tests
         [Test]
         public void Test_NewGuidReturnsGuid()
         {
-            //Arrange
+            //Arrange and Act
             var result = _sut.NewGuid();
             
             //Assert
