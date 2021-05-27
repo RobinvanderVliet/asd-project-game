@@ -15,7 +15,6 @@ using Player.DTO;
 using WorldGeneration;
 using Player.Model;
 
-
 namespace Player.ActionHandlers
 {
     public class MoveHandler : IMoveHandler, IPacketHandler

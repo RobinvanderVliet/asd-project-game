@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Creature.Creature;
 using Creature.Creature.StateMachine;
 using Creature.Creature.StateMachine.Data;
 using Network;
@@ -12,7 +13,7 @@ namespace Creature.Tests
     [TestFixture]
     class PlayerTest
     {
-        private Player _sut;
+        private Creature.Player _sut;
         private Mock<ICreatureStateMachine> _creatureStateMachineMock;
         private Mock<Network.IClientController> _clientControllerMock;
 
@@ -21,7 +22,7 @@ namespace Creature.Tests
         {
             _creatureStateMachineMock = new Mock<ICreatureStateMachine>();
             _clientControllerMock = new Mock<IClientController>();
-            _sut = new Player(_creatureStateMachineMock.Object, _clientControllerMock.Object);
+            _sut = new Creature.Player(_creatureStateMachineMock.Object, _clientControllerMock.Object);
         }
 
         [Test]

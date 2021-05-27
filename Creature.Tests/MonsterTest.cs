@@ -3,6 +3,7 @@ using Moq;
 using System.Numerics;
 using Creature.Creature.StateMachine.Data;
 using System.Diagnostics.CodeAnalysis;
+using Creature.Creature;
 using Creature.Creature.StateMachine;
 
 namespace Creature.Tests

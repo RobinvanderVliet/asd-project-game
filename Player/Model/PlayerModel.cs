@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using WorldGeneration.Models;
 
 namespace Player.Model
 {
+    [ExcludeFromCodeCoverage]
     public class PlayerModel : IPlayerModel
     {
         public string Name { get; set; }
