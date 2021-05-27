@@ -12,8 +12,6 @@ namespace DatabaseHandler
     [ExcludeFromCodeCoverage]
     public class DbConnection : IDbConnection
     {
-        private ILiteDatabaseAsync _dbConnection;
-
         [ExcludeFromCodeCoverage]
         public void SetForeignKeys()
         {
@@ -56,9 +54,9 @@ namespace DatabaseHandler
             try
             {
                 var currentDirectory = Directory.GetCurrentDirectory();
-                _dbConnection =
+                var connection =
                     new LiteDatabaseAsync(@"Filename=" + currentDirectory + "\\ASD-Game.db;connection=shared;");
-                return _dbConnection;
+                return connection;
             }
             catch (Exception ex)
             {

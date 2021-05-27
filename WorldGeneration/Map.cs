@@ -16,7 +16,6 @@ namespace WorldGeneration
         private readonly int _chunkSize;
         private readonly int _seed;
         private List<Chunk> _chunks; // NOT readonly, don't listen to the compiler
-        //private readonly DatabaseFunctions.Database _db;
         private IDatabaseService<Chunk> _dbService;
         private ChunkService _chunkService;
         private List<int[]> _chunksWithinLoadingRange;
@@ -125,7 +124,6 @@ namespace WorldGeneration
         private Chunk GenerateNewChunk(int chunkX, int chunkY)
         {
             var chunk = _noiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize, _seed);
-            //_db.InsertChunkIntoDatabase(chunk);
             _dbService.CreateAsync(chunk);
             return chunk;
         }
@@ -150,8 +148,7 @@ namespace WorldGeneration
             _dbService.DeleteAllAsync();
         }
         
-        // find a LOADED tile by the coordinates
-        public ITile GetLoadedTileByXAndY(int x, int y)
+        private ITile GetLoadedTileByXAndY(int x, int y)
         {
             _chunkService = new ChunkService(GetChunkForTileXAndY(x, y));
             return _chunkService.GetTileByWorldCoordinates(x, y);
