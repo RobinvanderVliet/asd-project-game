@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Creature.Creature.StateMachine;
 
 namespace Creature
 {
@@ -22,18 +23,18 @@ namespace Creature
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
 
-            PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, npcConfigurationService.GetConfigurations()[0].Settings);
+            PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, new List<Setting>());
             //AgentData agentData = new AgentData(new Vector2(10, 10), 20, 5, 50, world, false, npcConfigurationService.GetConfigurations()[1].Settings);
-            MonsterData monsterData = new MonsterData(new Vector2(10, 15), 20, 5, 50, world, npcConfigurationService.GetConfigurations()[2].Settings, false);
+            MonsterData monsterData = new MonsterData(new Vector2(10, 15), 20, 5, 50, world, new List<Setting>(), false);
 
             ICreature player = new Player(playerData);
             //ICreature agent = new Agent(agentData);
-            ICreature monster = new Monster(monsterData);
+            //ICreature monster = new Monster(monsterData);
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);
             //world.SpawnAgent(agent);
-            world.SpawnCreature(monster);
+            //world.SpawnCreature(monster);
 
             world.Render();
 

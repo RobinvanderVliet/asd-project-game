@@ -66,10 +66,11 @@ namespace Creature.World
                 int attackRange = 1;
                 int visionRange = creature.CreatureStateMachine.CreatureData.VisionRange;
 
-                if (creature.CreatureStateMachine.CreatureData.RuleSet["combat"] == "offensive")
-                {
-                    visionRange += 6;
-                }
+                // TODO: implement this using List<Setting>
+                // if (creature.CreatureStateMachine.CreatureData.RuleSet["combat"] == "offensive")
+                // {
+                //     visionRange += 6;
+                // }
 
                 if (Vector2.DistanceSquared(creature.CreatureStateMachine.CreatureData.Position, player.CreatureStateMachine.CreatureData.Position) <= visionRange)
                 {

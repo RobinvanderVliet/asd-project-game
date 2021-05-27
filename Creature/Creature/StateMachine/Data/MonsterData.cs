@@ -11,10 +11,10 @@ namespace Creature.Creature.StateMachine.Data
         private int _damage;
         private int _visionRange;
         private IWorld _world;
-        private Dictionary<string, string> _ruleSet;
+        private List<Setting> _ruleSet;
         private bool _following;
 
-        public bool IsAlive { get => _health > 0; }
+        public bool IsAlive => _health > 0;
 
         public Vector2 Position
         {
@@ -46,7 +46,7 @@ namespace Creature.Creature.StateMachine.Data
             set => _world = value;
         }
 
-        public Dictionary<string, string> RuleSet
+        public List<Setting> RuleSet
         {
             get => _ruleSet;
         }
@@ -57,7 +57,7 @@ namespace Creature.Creature.StateMachine.Data
             set => _following = value;
         }
 
-        public MonsterData(Vector2 position, double health, int damage, int visionRange, IWorld world, Dictionary<string, string> ruleSet, bool following)
+        public MonsterData(Vector2 position, double health, int damage, int visionRange, IWorld world, List<Setting> ruleSet, bool following)
         {
             _position = position;
             _health = health;
