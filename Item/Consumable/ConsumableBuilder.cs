@@ -78,11 +78,11 @@ namespace Item.Consumable
             }
         }
 
-        public void SetRpp(int Rpp)
+        public void SetRpp(int rpp)
         {
             if (_consumable is HazardProtectedConsumable consumable)
             {
-                consumable.RPP = Rpp;
+                consumable.RPP = rpp;
             }
         }
 
