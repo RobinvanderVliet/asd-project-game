@@ -2,9 +2,9 @@
 
 namespace Player.Model.Consumable.HealthConsumable
 {
-    public class HealthConsumable : Consumable
+    public class HealthConsumable : global::Item.Consumable.Consumable
     {
-        protected Health Health { get; set; }
+        public Health Health { get; set; }
 
         public int getHealth()
         {

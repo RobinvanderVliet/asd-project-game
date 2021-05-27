@@ -1,4 +1,4 @@
-namespace Player.Model.Weapon.WeaponStats
+namespace Item.Weapon.WeaponStats
 {
     public enum WeaponDamage
     {

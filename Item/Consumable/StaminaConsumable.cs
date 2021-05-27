@@ -2,9 +2,9 @@
 
 namespace Player.Model.Consumable.StaminaConsumable
 {
-    public class StaminaConsumable : Consumable
+    public class StaminaConsumable : global::Item.Consumable.Consumable
     {
-        protected Stamina Stamina { get; set; }
+        public Stamina Stamina { get; set; }
 
         public int getStamina()
         {

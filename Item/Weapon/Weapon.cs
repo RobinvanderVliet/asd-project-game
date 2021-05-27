@@ -1,8 +1,8 @@
-﻿using Player.Model;
+﻿using Item.Weapon.WeaponStats;
+using Player.Model;
 using Player.Model.ItemStats;
-using Player.Model.Weapon.WeaponStats;
 
-namespace Weapon
+namespace Item.Weapon
 {
     public class Weapon : IItem
     {
