@@ -74,6 +74,9 @@ namespace InputCommandHandler.Antlr.Transformer
                     case StartSession:
                         TransformStartSession((StartSession)nodeBody[i]);
                         break;
+                    case Inspect:
+                        TransformInspect((Inspect)nodeBody[i]);
+                        break;
                 }
         }
 
@@ -156,5 +159,9 @@ namespace InputCommandHandler.Antlr.Transformer
             _sessionService.StartSession();
         }
         
+        private void TransformInspect(Inspect inspect)
+        {
+            _playerService.InspectItem(inspect.InventorySlot.InventorySlotValue);
+        }
     }
 }

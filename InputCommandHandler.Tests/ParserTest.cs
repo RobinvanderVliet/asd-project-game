@@ -396,5 +396,29 @@ namespace InputCommandHandler.Tests
 
             return new AST(moveForward);
         }
+        
+        public static AST InspectCommand(string inventorySlot)
+        {
+            Input inspect = new Input();
+
+            inspect.AddChild(new Inspect()
+                .AddChild(new InventorySlot(inventorySlot)));
+            
+            return new AST(inspect);
+        }
+        
+        [Test]
+        public void Test_AstListener_CreatesInspectCommand()
+        {
+            // Arrange
+            const string inventorySlot = "armor";
+            AST exp = InspectCommand(inventorySlot);
+            
+            // Act
+            AST sut = SetupParser($"inspect \"{inventorySlot}\"");
+
+            // Assert
+            Assert.AreEqual(exp, sut);
+        }
     }
 }
