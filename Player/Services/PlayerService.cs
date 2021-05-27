@@ -4,7 +4,6 @@ using Player.ActionHandlers;
 using Player.DTO;
 using Chat;
 using DataTransfer.DTO.Character;
-using DataTransfer.DTO.Player;
 using Network;
 using Player.Model;
 using Session;
@@ -33,7 +32,6 @@ namespace Player.Services
             , IInventory inventory)
         {
             _chatHandler = chatHandler;
-            _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
             _clientController = clientController;
             _worldService = worldService;
