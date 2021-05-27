@@ -56,8 +56,8 @@ namespace Creature
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);
-            //world.SpawnAgent(agent);
-            world.SpawnCreature(monster);
+            world.SpawnAgent(agent);
+            //world.SpawnCreature(monster);
 
             world.Render();
 
