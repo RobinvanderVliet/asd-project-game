@@ -24,7 +24,7 @@ CREATE_SESSION : 'create_session';
 JOIN_SESSION : 'join_session';
 REQUEST_SESSIONS : 'request_sessions';
 START_SESSION : 'start_session';
-REQUEST_SAVED_GAMES : 'request_saved_games'
+REQUEST_SAVED_GAMES : 'request_saved_games';
 
 FORWARD: 'forward';
 UP: 'up';

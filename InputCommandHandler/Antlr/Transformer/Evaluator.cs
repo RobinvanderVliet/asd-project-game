@@ -11,15 +11,18 @@ namespace InputCommandHandler.Antlr.Transformer
     {
         private readonly IPlayerService _playerService;
         private readonly ISessionService _sessionService;
+        private readonly IGamesSessionService _gamesSessionService;
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private String _commando;
 
-        public Evaluator(IPlayerService playerService, ISessionService sessionService)
+        public Evaluator(IPlayerService playerService, ISessionService sessionService, IGamesSessionService gamesSessionService)
         {
             _playerService = playerService;
             _sessionService = sessionService;
+            _gamesSessionService = gamesSessionService;
         }
+        
         public void Apply(AST ast)
         {
             TransformNode(ast.Root);
@@ -73,6 +76,9 @@ namespace InputCommandHandler.Antlr.Transformer
                         break;
                     case StartSession:
                         TransformStartSession((StartSession)nodeBody[i]);
+                        break;
+                    case RequestSavedGames:
+                        TransformRequestSavedGames((RequestSavedGames)nodeBody[i]);
                         break;
                 }
         }
@@ -154,6 +160,11 @@ namespace InputCommandHandler.Antlr.Transformer
         private void TransformStartSession(StartSession startSession)
         {
             _sessionService.StartSession();
+        }
+
+        private void TransformRequestSavedGames(RequestSavedGames requestSavedGames)
+        {
+            _gamesSessionService.RequestSavedGames();
         }
         
     }

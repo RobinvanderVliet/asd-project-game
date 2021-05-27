@@ -59,6 +59,7 @@ namespace ASD_project
                     services.AddSingleton<IDbConnection, DbConnection>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
                     services.AddScoped(typeof(IServicesDb<>), typeof(ServicesDb<>));
+                    services.AddScoped<IGamesSessionService, GamesSessionService>();
                 })
                 .UseSerilog()
                 .Build();

@@ -53,13 +53,13 @@ namespace InputCommandHandler.Antlrr
 
             _ast = listener.getAST();
         }
-        public void Transform(IPlayerService playerService, ISessionService sessionService)
+        public void Transform(IPlayerService playerService, ISessionService sessionService, IGamesSessionService gamesSessionService)
         {
             if (_ast == null)
             {
                 return;
             }
-            new Evaluator(playerService, sessionService).Apply(_ast);
+            new Evaluator(playerService, sessionService, gamesSessionService).Apply(_ast);
         }
     }
 }
