@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="antlr\grammar\AgentConfiguration.g4" />
+    <Content Include="Antlr\grammar\AgentConfiguration.g4" />
   </ItemGroup>
 
   <ItemGroup>
