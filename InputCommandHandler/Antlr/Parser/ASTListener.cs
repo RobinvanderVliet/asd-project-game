@@ -39,7 +39,7 @@ namespace InputCommandHandler.Antlr.Parser
 
         public override void ExitAttack(PlayerCommandsParser.AttackContext context)
         {
-            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterDrop(PlayerCommandsParser.DropContext context)
@@ -173,8 +173,8 @@ namespace InputCommandHandler.Antlr.Parser
             }
             else if (action is Attack)
             {
-                Attack attack = (Attack) action;
-                attack.AddChild(new Direction(context.GetText()));
+                Attack shoot = (Attack) action;
+                shoot.AddChild(new Direction(context.GetText()));
             }
         }
 

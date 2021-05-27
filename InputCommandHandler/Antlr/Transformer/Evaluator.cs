@@ -35,6 +35,9 @@ namespace InputCommandHandler.Antlr.Transformer
                     case Attack:
                         TransformAttack((Attack)nodeBody[i]);
                         break;
+                    case CreateSession:
+                        TransformCreateSession((CreateSession)nodeBody[i]);
+                        break;
                     case Drop:
                         TransformDrop((Drop)nodeBody[i]);
                         break;
@@ -61,9 +64,6 @@ namespace InputCommandHandler.Antlr.Transformer
                         break;
                     case Shout:
                         TransformShout((Shout)nodeBody[i]);
-                        break;
-                    case CreateSession:
-                        TransformCreateSession((CreateSession)nodeBody[i]);
                         break;
                     case JoinSession:
                         TransformJoinSession((JoinSession)nodeBody[i]);

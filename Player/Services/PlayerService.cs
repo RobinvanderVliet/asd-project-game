@@ -34,8 +34,9 @@ namespace Player.Services
 
         public void Attack(string direction)
         {
-          Console.WriteLine("Attacked in " + direction + " direction.");
+          Console.WriteLine("Attack to " + direction + " direction.");
         }
+
 
         public void ExitCurrentGame()
         {
