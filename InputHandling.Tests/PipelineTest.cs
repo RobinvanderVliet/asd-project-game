@@ -6,14 +6,12 @@ using InputHandling.Antlr.Transformer;
 using InputHandling.Exceptions;
 using Moq;
 using NUnit.Framework;
-using Player.Model;
 
 namespace InputHandling.Tests
 {
     [ExcludeFromCodeCoverage]
     public class PipelineTest
     {
-        private Mock<IPlayerModel> mockedPlayer;
         private Mock<Evaluator> mockedEvaluator;
         private Pipeline _sut;
 

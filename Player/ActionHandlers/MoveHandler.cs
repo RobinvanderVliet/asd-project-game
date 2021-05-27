@@ -143,17 +143,17 @@ namespace Player.ActionHandlers
             }
 
             
-            var mapCharacterDTO = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
-                (_worldService.getCurrentCharacterPositions().YPosition) + y, 
-                _currentPlayer.PlayerGuid, 
-                _worldService.getCurrentCharacterPositions().GameGuid, 
-                _currentPlayer.Symbol);
-            
-            SendMove(mapCharacterDTO);
-            
-            MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions();
-            _currentPlayer.XPosition = currentCharacter.XPosition;
-            _currentPlayer.YPosition = currentCharacter.YPosition;
+            // var mapCharacterDTO = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
+            //     (_worldService.getCurrentCharacterPositions().YPosition) + y, 
+            //     _currentPlayer.PlayerGuid, 
+            //     _worldService.getCurrentCharacterPositions().GameGuid, 
+            //     _currentPlayer.Symbol);
+            //
+            // SendMove(mapCharacterDTO);
+            //
+            // MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions();
+            // _currentPlayer.XPosition = currentCharacter.XPosition;
+            // _currentPlayer.YPosition = currentCharacter.YPosition;
         }
     }
 }

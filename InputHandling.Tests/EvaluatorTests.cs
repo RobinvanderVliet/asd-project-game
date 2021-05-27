@@ -7,7 +7,6 @@ using InputHandling.Exceptions;
 using Moq;
 using NUnit.Framework;
 using Player.ActionHandlers;
-using Player.Services;
 using Session;
 
 namespace InputHandling.Tests

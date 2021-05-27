@@ -16,11 +16,9 @@ using Chat;
 using InputHandling;
 using InputHandling.Antlr;
 using InputHandling.Antlr.Transformer;
-using Player.Services;
 using Network;
 using Player.ActionHandlers;
 using Session;
-using Player.Model;
 using UserInterface;
 
 namespace ASD_project
@@ -47,12 +45,6 @@ namespace ASD_project
                 {
                     services.AddAutoMapper(typeof(MapCharacterProfile));
                     services.AddTransient<IMainGame, MainGame>();
-                    services.AddScoped<IPlayerService, PlayerService>();
-                    services.AddScoped<IPlayerModel, PlayerModel>();
-                    services.AddScoped<IInventory, Inventory>();
-                    services.AddScoped<IItem, Item>();
-                    services.AddScoped<IBitcoin, Bitcoin>();
-                    services.AddScoped<IRadiationLevel, RadiationLevel>();
                     services.AddScoped<INetworkComponent, NetworkComponent>();
                     services.AddScoped<IClientController, ClientController>();
                     services.AddScoped<IChatHandler, ChatHandler>();
