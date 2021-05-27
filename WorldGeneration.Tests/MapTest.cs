@@ -5,7 +5,7 @@ using DataTransfer.POCO.World.LootableTiles;
 using DataTransfer.POCO.World.TerrainTiles;
 using NUnit.Framework;
 using Moq;
-using WorldGeneration.DatabaseFunctions;
+//using WorldGeneration.DatabaseFunctions;
 
 namespace WorldGeneration.Tests
 {
@@ -21,7 +21,7 @@ namespace WorldGeneration.Tests
  
         //Declaration of mocks
         private INoiseMapGenerator _noiseMapGeneratorMock;
-        private DatabaseFunctions.Database _databaseMock;
+        //private DatabaseFunctions.Database _databaseMock;
  
         [SetUp]
         public void Setup()
@@ -52,7 +52,7 @@ namespace WorldGeneration.Tests
             
             _noiseMapGeneratorMock = noiseMapGeneratorMock.Object;
 
-            _databaseMock = new Mock<Database>().Object;
+            //_databaseMock = new Mock<Database>().Object;
             
             //_sut = new Map(_noiseMapGeneratorMock, _databaseMock, chunkSize, seed);
 
