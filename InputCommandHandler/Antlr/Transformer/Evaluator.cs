@@ -101,7 +101,7 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformDrop(Drop drop)
         {
-            _playerService.DropItem(drop.ItemName.MessageValue);
+            _playerService.DropItem(drop.InventorySlot.InventorySlotValue);
         }
 
         private void TransformAttack(Attack attack)
