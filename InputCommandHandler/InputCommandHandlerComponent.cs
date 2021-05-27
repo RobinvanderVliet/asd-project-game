@@ -67,9 +67,12 @@ namespace InputCommandHandler
                     _screenHandler.TransitionTo(new SessionScreen());
                     break;
                 case 3:
-                    _screenHandler.TransitionTo(new EditorScreen());
+                    _screenHandler.TransitionTo(new LoadScreen());
                     break;
                 case 4:
+                    _screenHandler.TransitionTo(new EditorScreen());
+                    break;
+                case 5:
                     Environment.Exit(0);
                     break;
                 default:
