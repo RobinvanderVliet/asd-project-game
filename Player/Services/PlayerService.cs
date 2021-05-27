@@ -32,15 +32,11 @@ namespace Player.Services
             _worldService = worldService;
         }
 
-        public void Slash(string direction)
+        public void Attack(string direction)
         {
-          Console.WriteLine("Slashed in " + direction + " direction.");
+          Console.WriteLine("Attack to " + direction + " direction.");
         }
 
-        public void Shoot(string direction)
-        {
-            Console.WriteLine("Shot in " + direction + " direction.");
-        }
 
         public void ExitCurrentGame()
         {

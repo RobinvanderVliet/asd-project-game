@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace InputCommandHandler.Antlr.Ast.Actions
 {
-    public class Slash : Command, IEquatable<Slash>
+    public class Attack : Command, IEquatable<Attack>
     {
         private Direction _direction;
         public Direction Direction { get => _direction; private set => _direction = value; }
@@ -21,11 +21,11 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
-            return Equals(obj as Slash);
+            return Equals(obj as Attack);
         }
 
         [ExcludeFromCodeCoverage]
-        public bool Equals(Slash other)
+        public bool Equals(Attack other)
         {
             if (other == null)
             {

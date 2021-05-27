@@ -105,45 +105,24 @@ namespace InputCommandHandler.Tests
         }
 
         [Test]
-        public void Test_Apply_HandleSlashActionIsCalled()
+        public void Test_Apply_HandleAttackActionIsCalled()
         {
             //arrange
             string direction = "right";
-            var ast = SlashAST(direction);
-            _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Slash(direction));
+            var ast = AttackAST(direction);
+            _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Attack(direction));
             //act
             _sut.Apply(ast);
             //assert
-            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Slash(direction), Times.Once);
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Attack(direction), Times.Once);
         }
 
-        public static AST SlashAST(string direction)
+        public static AST AttackAST(string direction)
         {
-            Input Slash = new Input();
-            Slash.AddChild(new Slash()
+            Input Attack = new Input();
+            Attack.AddChild(new Attack()
                 .AddChild(new Direction(direction)));
-            return new AST(Slash);
-        }
-
-        [Test]
-        public void Test_Apply_HandleShootActionIsCalled()
-        {
-            //arrange
-            string direction = "right";
-            var ast = ShootAST(direction);
-            _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.Shoot(direction));
-            //act
-            _sut.Apply(ast);
-            //assert
-            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.Shoot(direction), Times.Once);
-        }
-
-        public static AST ShootAST(string direction)
-        {
-            Input Shoot = new Input();
-            Shoot.AddChild(new Shoot()
-                .AddChild(new Direction(direction)));
-            return new AST(Shoot);
+            return new AST(Attack);
         }
 
         [Test]

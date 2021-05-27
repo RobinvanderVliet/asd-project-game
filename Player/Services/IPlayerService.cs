@@ -4,9 +4,7 @@ namespace Player.Services
 {
     public interface IPlayerService
     {
-        public void Slash(string direction);
-
-        public void Shoot(string direction);
+        public void Attack(string direction);
 
         public void ExitCurrentGame();
 

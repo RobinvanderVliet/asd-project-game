@@ -32,6 +32,9 @@ namespace InputCommandHandler.Antlr.Transformer
             for (int i = 0; i < nodeBody.Count; i++)
                 switch (nodeBody[i])
                 {
+                    case Attack:
+                        TransformAttack((Attack)nodeBody[i]);
+                        break;
                     case CreateSession:
                         TransformCreateSession((CreateSession)nodeBody[i]);
                         break;
@@ -59,14 +62,8 @@ namespace InputCommandHandler.Antlr.Transformer
                     case Say:
                         TransformSay((Say)nodeBody[i]);
                         break;
-                    case Shoot:
-                        TransformShoot((Shoot)nodeBody[i]);
-                        break;
                     case Shout:
                         TransformShout((Shout)nodeBody[i]);
-                        break;
-                    case Slash:
-                        TransformSlash((Slash)nodeBody[i]);
                         break;
                     case JoinSession:
                         TransformJoinSession((JoinSession)nodeBody[i]);
@@ -104,14 +101,9 @@ namespace InputCommandHandler.Antlr.Transformer
             _playerService.DropItem(drop.ItemName.MessageValue);
         }
 
-        private void TransformSlash(Slash slash)
+        private void TransformAttack(Attack attack)
         {
-            _playerService.Slash(slash.Direction.DirectionValue);
-        }
-
-        private void TransformShoot(Shoot shoot)
-        {
-            _playerService.Shoot(shoot.Direction.DirectionValue);
+            _playerService.Attack(attack.Direction.DirectionValue);
         }
 
         private void TransformExit()
