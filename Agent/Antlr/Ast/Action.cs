@@ -5,12 +5,13 @@ namespace Agent.Antlr.Ast
     public class Action : Node
     {
         private List<Node> _conditions = new List<Node>();
-
-        public string Name { get; set; }
+        public List<Node> Conditions { get => _conditions; }
+        private string _name;
+        public string Name { get => _name;}
 
         public Action(string name)
         {
-            Name = name;
+            _name = name;
         }
 
 

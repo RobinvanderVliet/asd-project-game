@@ -31,7 +31,6 @@ namespace Agent.Antlr.Checker
             "random", "circle", "line", "none", "defensive", "offensive"
         };
         
-        private List<Node> _symboltable;
 
         public Checking(AST ast)
         {
@@ -39,11 +38,6 @@ namespace Agent.Antlr.Checker
             
             Check(ast.root);
             
-            // foreach (Node node in ast.root.GetChildren())
-            // {
-            //     _symboltable.Add(node);
-            // }
-            //Entry of checkStatCombination in Pipeline
         }
         public virtual void Check(Node node)
         {
@@ -80,7 +74,15 @@ namespace Agent.Antlr.Checker
             {
                 node.SetError("'" + node.Name + "' is not a valid/programmable action!");
             }
-            
+
+            foreach (Condition condition in node.Conditions)
+            {
+                if (condition.OtherwiseClause.Action.Name.Equals(node.Name) ||
+                    condition.WhenClause.Then.Name.Equals(node.Name))
+                {
+                    node.SetError("No recursion allowed!");
+                }
+            }
         }
 
         
@@ -93,7 +95,7 @@ namespace Agent.Antlr.Checker
                     node.SetError("use must be followed by an item!");
                 }
             }
-            if (!IsAction(node.Name))
+            if (!IsActionReference(node.Name))
             {
                 node.SetError("'" + node.Name + "' is not a valid action!");
             }
@@ -202,7 +204,7 @@ namespace Agent.Antlr.Checker
             return _rulevalues.Contains(value);
         }
 
-        private bool IsValidActionReference(string name)
+        private bool IsActionReference(string name)
         {
             return _actionreferences.Contains(name);
         }
