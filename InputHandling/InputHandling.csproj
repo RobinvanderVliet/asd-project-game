@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <RootNamespace>InputCommandHandler</RootNamespace>
+        <RootNamespace>InputHandling</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

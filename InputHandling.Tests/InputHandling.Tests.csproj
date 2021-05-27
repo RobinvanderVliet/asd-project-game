@@ -5,7 +5,7 @@
 
         <IsPackable>false</IsPackable>
 
-        <RootNamespace>InputCommandHandler.Tests</RootNamespace>
+        <RootNamespace>InputHandling.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
