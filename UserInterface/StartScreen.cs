@@ -7,39 +7,46 @@ namespace UserInterface
     public class StartScreen : Screen
     {
         private const int OPTIONS_X = 0;
-        private const int OPTIONS_Y = HEADER_HEIGHT + 2;
-        private const int OPTIONS_WIDTH = SCREEN_WIDTH - 2;
-        private const int OPTIONS_HEIGHT = 5;
-        
-        private const int INPUT_X = 0;
-        private const int INPUT_Y = HEADER_HEIGHT + OPTIONS_HEIGHT + 4;
+        private const int OPTIONS_Y = HEADER_HEIGHT + BORDER_SIZE;
+        private const int OPTIONS_WIDTH = SCREEN_WIDTH - BORDER_SIZE;
 
-        private ISessionHandler _sessionHandler;
+        private const int INPUT_X = 0;
+        private const int INPUT_Y = HEADER_HEIGHT + BORDER_SIZE * 2;
         
-        private List<string> _options = new() {"Host a new session", "Join a session", "Agent editor", "Help", "Leave game"};
-        
-        public StartScreen(ISessionHandler sessionHandler)
+        private List<string> _options = new()
         {
-            _sessionHandler = sessionHandler;
-        }
-        
+            "Host a new session", 
+            "Join a session", 
+            "Load a session", 
+            "Agent editor", 
+            "Leave game"
+        };
+
+        private const string HEADER_TEXT = "Welcome to The Apocalypse We Wanted! Pick an option to continue...";
+        private const string INPUT_MESSAGE = "Insert an option";
+
         public override void DrawScreen()
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            DrawHeader("Welcome to The Apocalypse We Wanted! Pick an option to continue...");
+            DrawHeader(HEADER_TEXT);
             DrawOptionBox();
-            DrawInputBox(INPUT_X, INPUT_Y, "Insert an option");
+            DrawInputBox(INPUT_X, INPUT_Y + _options.Count, INPUT_MESSAGE);
         }
         private void DrawOptionBox()
         {
-            DrawBox(OPTIONS_X, OPTIONS_Y, OPTIONS_WIDTH, OPTIONS_HEIGHT);
+            DrawBox(OPTIONS_X, OPTIONS_Y, OPTIONS_WIDTH, _options.Count);
 
             foreach (var option in _options)
             {
-                int optionNumber = _options.IndexOf(option);
-                Console.SetCursorPosition(2, OPTIONS_Y + optionNumber + 1);
-                Console.Write(optionNumber + 1 + ": " + option);
+                int optionNumber = _options.IndexOf(option) + 1;
+                Console.SetCursorPosition(OFFSET_LEFT, OPTIONS_Y + optionNumber);
+                Console.Write(optionNumber + ": " + option);
             }
+        }
+
+        public void UpdateInputMessage(string message)
+        {
+            DrawInputBox(INPUT_X, INPUT_Y + _options.Count, message);
         }
     }
 }

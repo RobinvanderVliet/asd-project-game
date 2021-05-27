@@ -52,6 +52,7 @@ namespace ASD_project
                     services.AddScoped<IClientController, ClientController>();
                     services.AddScoped<IChatHandler, ChatHandler>();
                     services.AddScoped<ISessionHandler, SessionHandler>();
+                    services.AddScoped<ISessionService, SessionService>();
                     services.AddScoped<IMoveHandler, MoveHandler>();
                     services.AddScoped<IWorldService, WorldService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();

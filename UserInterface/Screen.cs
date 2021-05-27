@@ -9,6 +9,10 @@ namespace UserInterface
         protected const int HEADER_Y = 0;
         protected const int HEADER_WIDTH = SCREEN_WIDTH - 2;
         protected const int HEADER_HEIGHT = 1;
+        protected const int BORDER_SIZE = 2;
+        protected const int OFFSET_TOP = 1;
+        protected const int OFFSET_LEFT = 2;
+        protected const int INPUT_HEIGHT = 2;
         
         protected ScreenHandler _screenHandler;
         
@@ -57,23 +61,19 @@ namespace UserInterface
         {
             DrawBox(HEADER_X, HEADER_Y, HEADER_WIDTH, HEADER_HEIGHT);
             
-            Console.SetCursorPosition(HEADER_X + 2, HEADER_Y + 1);
+            Console.SetCursorPosition(HEADER_X + OFFSET_LEFT, HEADER_Y + OFFSET_TOP);
             Console.Write(message);
         }
         public void DrawInputBox(int x, int y, string message)
         {
-            DrawBox(x, y, SCREEN_WIDTH - 2, 2);
-            Console.SetCursorPosition(x + 2, y + 1);
+            DrawBox(x, y, SCREEN_WIDTH - BORDER_SIZE, INPUT_HEIGHT);
+            Console.SetCursorPosition(x + OFFSET_LEFT - OFFSET_TOP, y + OFFSET_TOP);
+            Console.Write(new string(' ', SCREEN_WIDTH - BORDER_SIZE));
+            Console.SetCursorPosition(x + OFFSET_LEFT, y + OFFSET_TOP);
             Console.Write(message);
-            Console.SetCursorPosition(x + 2, y + 2);
+            Console.SetCursorPosition(x + OFFSET_LEFT, y + BORDER_SIZE);
             Console.Write(">");
-
-            var emptyLine = String.Empty;
-            for (int i = 0; i < 75; i++)
-            {
-                emptyLine += " ";
-            }
-            Console.WriteLine(emptyLine);
+            Console.Write(new string(' ', SCREEN_WIDTH - BORDER_SIZE - Console.CursorLeft));
             Console.SetCursorPosition(x + 4, y + 2);
         }
     }
