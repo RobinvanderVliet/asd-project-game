@@ -16,11 +16,11 @@ namespace WorldGeneration
     {
         private readonly int _chunkSize;
         private readonly int _seed;
-        private List<Chunk> _chunks; // NOT readonly, don't listen to the compiler
+        private IList<Chunk> _chunks; // NOT readonly, don't listen to the compiler
         //private readonly DatabaseFunctions.Database _db;
         private IDatabaseService<Chunk> _dbService;
         private ChunkService _chunkService;
-        private List<int[]> _chunksWithinLoadingRange;
+        private IList<int[]> _chunksWithinLoadingRange;
 
         private INoiseMapGenerator _noiseMapGenerator;
         private IConsolePrinter _consolePrinter;
@@ -30,11 +30,12 @@ namespace WorldGeneration
             , int chunkSize
             , int seed
             , IDatabaseService<Chunk> dbServices
-            , IConsolePrinter consolePrinter 
+            , IConsolePrinter consolePrinter
+            , IList<Chunk> chunks = null
         )
         {
             _chunkSize = chunkSize;
-            _chunks = new List<Chunk>();
+            _chunks = chunks ?? new List<Chunk>();
             _seed = seed;
             _noiseMapGenerator = noiseMapGenerator;
             _dbService = dbServices;
@@ -46,7 +47,7 @@ namespace WorldGeneration
             _chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
             foreach (var chunkXY in _chunksWithinLoadingRange)
             {
-                if (!_chunks.Exists(chunk => chunk.X == chunkXY[0] && chunk.Y == chunkXY[1]))
+                if (!_chunks.Any(chunk => chunk.X == chunkXY[0] && chunk.Y == chunkXY[1]))
                 { // chunk isn't loaded in local memory yet
                     var chunk = new Chunk { 
                         X = chunkXY[0], 

@@ -26,10 +26,11 @@ namespace WorldGeneration.Tests
  
         //Declaration of mocks
         private INoiseMapGenerator _noiseMapGeneratorMock;
-        private DatabaseFunctions.Database _databaseMock;
+        private IDatabaseService<Chunk> _databaseServiceMock;
         private MapCharacterDTO _mapCharacterDTO;
         private List<MapCharacterDTO> _mapCharacterDTOList;
-        private ConsolePrinter _consolePrinterMock;
+        private IConsolePrinter _consolePrinterMock;
+        private IList<Chunk> _chunks;
  
         [SetUp]
         public void Setup()
@@ -43,11 +44,12 @@ namespace WorldGeneration.Tests
             var map2 = new ITile[] {new StreetTile(1,1), new StreetTile(1,2), new StreetTile(1,3), new StreetTile(1,4)};
             var map3 = new ITile[] {new WaterTile(1,1), new WaterTile(1,2), new WaterTile(1,3), new WaterTile(1,4)};
             var map4 = new ITile[] {new DirtTile(1,1), new DirtTile(1,2), new DirtTile(1,3), new DirtTile(1,4)};
-            var map5 = new ITile[] {new ChestTile(), new ChestTile(), new ChestTile(), new ChestTile()};
+            var map5 = new ITile[] {new DirtTile(1,1), new DirtTile(1,2), new DirtTile(1,3), new DirtTile(1,4)};
             var chunk1 = new Chunk(0, 0, map1, chunkSize);
             var chunk2 = new Chunk(-1, 0, map2, chunkSize);
             var chunk3 = new Chunk(0, -1, map3, chunkSize);
             var chunk4 = new Chunk(-1, -1, map4, chunkSize);
+            _chunks = new List<Chunk>() {} ;
 
             //Initialisation of mocks
             var noiseMapGeneratorMock = new Mock<INoiseMapGenerator>();
@@ -56,27 +58,24 @@ namespace WorldGeneration.Tests
             noiseMapGeneratorMock.Setup(p => p.GenerateChunk(0,-1, 2, seed)).Returns(chunk3);
             noiseMapGeneratorMock.Setup(p => p.GenerateChunk(-1,-1, 2, seed)).Returns(chunk4);
             noiseMapGeneratorMock.Setup(p => p.GenerateChunk(It.IsAny<int>(),It.IsAny<int>(), 2, seed))
-                .Callback((int x, int y, int size, int seed) => new Chunk(x, y, map5, chunkSize));
+                .Returns((int x, int y, int size, int seed) => new Chunk(x, y, map5, chunkSize));
             
             _noiseMapGeneratorMock = noiseMapGeneratorMock.Object;
+            var databaseMock = new Mock<IDatabaseService<Chunk>>();
+            databaseMock.Setup(p => p.CreateAsync(It.IsAny<Chunk>())).ReturnsAsync((Chunk item) =>
+            {
+                _chunks.Add(item);
+                return true;
+            });
+            databaseMock.Setup(p => p.GetAllAsync()).ReturnsAsync(_chunks);
+            databaseMock.Setup(a => a.DeleteAllAsync()).Verifiable();
+            
+            _databaseServiceMock = databaseMock.Object;
 
-            
-            var databaseMock = new Mock<DatabaseService<>>();
-            /*
-             doesn't work because it throws errors, but that's okay because it's getting replaced anyway so i'm not wasting anymore time on this.
-            databaseMock.Setup(p => p.InsertChunkIntoDatabase(chunk1)).Verifiable();
-            databaseMock.Setup(p => p.InsertChunkIntoDatabase(chunk2)).Verifiable();
-            databaseMock.Setup(p => p.InsertChunkIntoDatabase(chunk3)).Verifiable();
-            databaseMock.Setup(p => p.InsertChunkIntoDatabase(chunk4)).Verifiable();*/
-            
-            
-            databaseMock.Setup(a => a.DeleteTileMap()).Verifiable();
-            _databaseMock = databaseMock.Object;
-
-            var consolePrinterMock = new Mock<ConsolePrinter>(ConsoleColor.White, ConsoleColor.Black);
+            var consolePrinterMock = new Mock<IConsolePrinter>();
             _consolePrinterMock = consolePrinterMock.Object;
             
-            _sut = new Map(_noiseMapGeneratorMock, _databaseMock, chunkSize, seed, _consolePrinterMock);
+            _sut = new Map(_noiseMapGeneratorMock, chunkSize, seed, _databaseServiceMock, _consolePrinterMock, _chunks);
 
             _mapCharacterDTO = new MapCharacterDTO(0, 0, "naam", "d");
             
@@ -89,7 +88,7 @@ namespace WorldGeneration.Tests
         {
             //Arrange ---------
             //Act ---------
-            var map = new Map(new NoiseMapGenerator(), new Database("c:\\temp\\db.db", "test"),2,51, new ConsolePrinter());
+            var map = new Map(new NoiseMapGenerator(),2,51, _databaseServiceMock,new ConsolePrinter(), _chunks);
             //Assert ---------
         }
         
@@ -98,6 +97,7 @@ namespace WorldGeneration.Tests
         {
             //Arrange ---------
             //Act ---------
+            var ab = _chunks;
             _sut.DisplayMap(_mapCharacterDTO,1, _mapCharacterDTOList);
             //Assert ---------
         }
@@ -126,7 +126,7 @@ namespace WorldGeneration.Tests
             //Act ---------
             _sut.DeleteMap();
             //Assert ---------
-            _databaseMock.Verify(_sut.DeleteMap(), Times.AtLeastOnce());
+            //_databaseServiceMock.ver(_sut.DeleteMap(), Times.AtLeastOnce());
         }
     }
 }
