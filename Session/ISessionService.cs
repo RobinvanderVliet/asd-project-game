@@ -10,5 +10,9 @@
 
         public void StartSession();
 
+        public void StartGame();
+
+        public void LoadGame();
+
     }
 }

@@ -74,6 +74,12 @@ namespace InputCommandHandler.Antlr.Transformer
                     case StartSession:
                         TransformStartSession((StartSession)nodeBody[i]);
                         break;
+                    case LoadGame:
+                        TransformLoadGame((LoadGame)nodeBody[i]);
+                        break;
+                    case StartGame:
+                        TransformStartGame((StartGame)nodeBody[i]);
+                        break;
                 }
         }
 
@@ -155,6 +161,16 @@ namespace InputCommandHandler.Antlr.Transformer
         {
             _sessionService.StartSession();
         }
-        
+
+        private void TransformLoadGame(LoadGame loadGame)
+        {
+            _sessionService.LoadGame();
+        }
+
+        private void TransformStartGame(StartGame startGame)
+        {
+            _sessionService.StartGame();
+        }
+
     }
 }

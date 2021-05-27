@@ -122,6 +122,26 @@ namespace InputCommandHandler.Antlr.Parser
             _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
+        public override void EnterStartGame(PlayerCommandsParser.StartGameContext context)
+        {
+            _currentContainer.Push(new StartSession());
+        }
+
+        public override void ExitStartGame(PlayerCommandsParser.StartGameContext context)
+        {
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
+        }
+
+        public override void EnterLoadGame(PlayerCommandsParser.LoadGameContext context)
+        {
+            _currentContainer.Push(new StartSession());
+        }
+
+        public override void ExitLoadGame(PlayerCommandsParser.LoadGameContext context)
+        {
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
+        }
+
         public override void EnterShout(PlayerCommandsParser.ShoutContext context)
         {
             _currentContainer.Push(new Shout());
