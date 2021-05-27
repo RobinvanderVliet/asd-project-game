@@ -25,11 +25,20 @@ namespace Creature
 
             PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, new List<Setting>());
             AgentData agentData = new AgentData(new Vector2(10, 10), 20, 5, 50, world, new List<Setting>(), false);
-            MonsterData monsterData = new MonsterData(new Vector2(10, 15), 20, 5, 50, world, new List<Setting>(), false);
+
+
+            var settings = new List<Setting>();
+            settings.Add(new Setting("combat_engage_inventory_comparable", "inventory"));
+            settings.Add(new Setting("combat_engage_inventory_treshold", "knife"));
+            settings.Add(new Setting("combat_engage_inventory_comparison", "contains"));
+            settings.Add(new Setting("combat_engage_inventory_comparison_true", "use knife"));
+            settings.Add(new Setting("explore_engage_inventory_comparison_true", "use knife"));
+
+            MonsterData monsterData = new MonsterData(new Vector2(10, 15), 20, 5, 50, world, settings, false);
 
             ICreature player = new Player(playerData);
             ICreature agent = new Agent(agentData);
-            //ICreature monster = new Monster(monsterData);
+            ICreature monster = new Monster(monsterData);
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);
@@ -37,7 +46,7 @@ namespace Creature
             world.SpawnAgent(agent);
 
             // TODO: fix monster statemachine to get this working
-            //world.SpawnCreature(monster);
+            world.SpawnCreature(monster);
 
             world.Render();
 
