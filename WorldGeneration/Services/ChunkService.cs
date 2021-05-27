@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace WorldGeneration.Services
         {
             _chunk = chunk;
         }
+        [ExcludeFromCodeCoverage]
         public int[] GetTileCoordinatesInChunk(int indexInArray)
         {
             var x = indexInArray % _chunk.RowSize;

@@ -56,9 +56,9 @@ namespace WorldGeneration
                         X = chunkXY[0], 
                         Y = chunkXY[1] 
                     };
-                    var getAll = _dbService.GetAllAsync();
-                    getAll.Wait();
-                    var results = getAll.Result.FirstOrDefault(c => c.Equals(chunk));
+                    var getAllChunksQuery = _dbService.GetAllAsync();
+                    getAllChunksQuery.Wait();
+                    var results = getAllChunksQuery.Result.FirstOrDefault(c => c.X == chunkXY[0] && c.Y == chunkXY[1]);
                     if (results == null)
                     {
                         _chunks.Add(GenerateNewChunk(chunkXY[0], chunkXY[1]));
@@ -145,7 +145,6 @@ namespace WorldGeneration
         private Chunk GenerateNewChunk(int chunkX, int chunkY)
         {
             var chunk = _noiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize, _seed);
-            //_db.InsertChunkIntoDatabase(chunk);
             _dbService.CreateAsync(chunk);
             return chunk;
         }
@@ -157,11 +156,6 @@ namespace WorldGeneration
                 && chunk.X * _chunkSize > x - _chunkSize 
                 && chunk.Y * _chunkSize >= y &&
                 chunk.Y * _chunkSize < y + _chunkSize);
-            
-            if (chunk == null)
-            {
-                throw new Exception("Tried to find a chunk that has not been loaded");
-            }
             return chunk;
         }
         

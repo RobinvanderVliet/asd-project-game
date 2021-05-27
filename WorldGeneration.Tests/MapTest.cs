@@ -57,7 +57,7 @@ namespace WorldGeneration.Tests
             var chunk2 = new Chunk(-1, 0, map2, _chunkSize);
             var chunk3 = new Chunk(0, -1, map3, _chunkSize);
             var chunk4 = new Chunk(-1, -1, map4, _chunkSize);
-            _chunks = new List<Chunk>() {} ;
+            _chunks = new List<Chunk>() {chunk1, chunk2, chunk3, chunk4} ;
 
             //Initialisation of mocks
             _noiseMapGeneratorMock = new Mock<INoiseMapGenerator>();
@@ -73,7 +73,6 @@ namespace WorldGeneration.Tests
             _databaseServiceMock.Setup(p => p.CreateAsync(It.IsAny<Chunk>())).Verifiable();
             _databaseServiceMock.Setup(p => p.GetAllAsync()).ReturnsAsync(_chunks);
             _databaseServiceMock.Setup(a => a.DeleteAllAsync()).Verifiable();
-            _databaseServiceMock.Setup(a => a.()).Verifiable();
             
             _databaseServiceMockObject = _databaseServiceMock.Object;
 
@@ -90,7 +89,7 @@ namespace WorldGeneration.Tests
             _mapCharacterDTOList.Add(_mapCharacter1DTO);
             _mapCharacterDTOList.Add(_mapCharacter2DTO);
             
-            _sut = new Map(_noiseMapGeneratorMockObject, _chunkSize, _seed, _databaseServiceMockObject, _consolePrinterMockObject, _chunks);
+            _sut = new Map(_noiseMapGeneratorMockObject, _chunkSize, _seed, _databaseServiceMockObject, _consolePrinterMockObject);
         }
         
         [Test]
@@ -180,9 +179,22 @@ namespace WorldGeneration.Tests
         {
             //Arrange ---------
             //Act ---------
-            _sut.DisplayMap(_mapCharacter1DTO,1, _mapCharacterDTOList);
-            _sut.DisplayMap(_mapCharacter1DTO,1, _mapCharacterDTOList);
+            _sut.DisplayMap(_mapCharacter1DTO,2, _mapCharacterDTOList);
             //Assert ---------
+            _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText(" " + _chunks[0].Map[0].Symbol), Times.AtLeast(1));
+            _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText(" " + _chunks[1].Map[0].Symbol), Times.AtLeast(1));
+            _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText(" " + _chunks[2].Map[0].Symbol), Times.AtLeast(1));
+            _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText(" " + _chunks[3].Map[0].Symbol), Times.AtLeast(1));
         }
+        /*
+        [Test]
+        public void Test_DisplayMap_UsesChunksIfTheyAreFoundInRAMemory() 
+        {
+            //Arrange ---------
+            var map = new Map(_noiseMapGeneratorMockObject,21,51, _databaseServiceMockObject, _consolePrinterMockObject, _chunks);
+            //Act ---------
+            map.DisplayMap(_mapCharacter1DTO,1, _mapCharacterDTOList);
+            //Assert ---------
+        }*/
     }
 }
