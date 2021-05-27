@@ -116,5 +116,45 @@ namespace Player.ActionHandlers
             _worldService.UpdateCharacterPosition(playerPosition);
             _worldService.DisplayWorld();
         }
+        
+        public void HandleDirection(string directionValue, int stepsValue)
+        {
+            int x = 0;
+            int y = 0;
+            switch (directionValue)
+            {
+                case "right":
+                case "east":
+                    x = stepsValue;
+                    break;
+                case "left":
+                case "west":
+                    x = -stepsValue;
+                    break;
+                case "forward":
+                case "up":
+                case "north":
+                    y = +stepsValue;
+                    break;
+                case "backward":
+                case "down":
+                case "south":
+                    y = -stepsValue;
+                    break;
+            }
+
+            
+            var mapCharacterDTO = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
+                (_worldService.getCurrentCharacterPositions().YPosition) + y, 
+                _currentPlayer.PlayerGuid, 
+                _worldService.getCurrentCharacterPositions().GameGuid, 
+                _currentPlayer.Symbol);
+            
+            SendMove(mapCharacterDTO);
+            
+            MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions();
+            _currentPlayer.XPosition = currentCharacter.XPosition;
+            _currentPlayer.YPosition = currentCharacter.YPosition;
+        }
     }
 }

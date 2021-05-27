@@ -29,9 +29,8 @@ namespace Session
             _sessionHandler = sessionHandler;
         }
         
-        public void SendGameSession(ISessionHandler sessionHandler)
+        public void SendGameSession()
         {
-            _sessionHandler = sessionHandler;
             var StartGameDTO = SetupGameHost();
             SendGameSessionDTO(StartGameDTO);
         }

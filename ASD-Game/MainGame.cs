@@ -1,4 +1,4 @@
-using InputCommandHandler;
+using InputHandling;
 using Player.Services;
 using UserInterface;
 
@@ -8,19 +8,16 @@ namespace ASD_project
     {
         public class MainGame : IMainGame
         {
-            private IInputCommandHandlerComponent _inputHandler;
+            private IInputHandler _inputHandler;
             private IScreenHandler _screenHandler;
-            private IPlayerService _playerService;
 
-            public MainGame(IInputCommandHandlerComponent inputHandler, IScreenHandler screenHandler, IPlayerService playerService)
+            public MainGame(IInputHandler inputHandler, IScreenHandler screenHandler)
             {
                 _screenHandler = screenHandler;
                 _inputHandler = inputHandler;
-                _playerService = playerService;
             }
             public void Run()
             {
-                _playerService.SetupPlayer();
                 _screenHandler.TransitionTo(new StartScreen());
 
                 while (true)
