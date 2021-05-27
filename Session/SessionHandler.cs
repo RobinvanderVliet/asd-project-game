@@ -34,7 +34,7 @@ namespace Session
         {
            return _session.GetAllClients();
         }
-     
+
         public bool JoinSession(string sessionId)
         {
             var joinSession = false;
@@ -79,7 +79,7 @@ namespace Session
             SendHeartbeat();
         }
 
-        public bool CreateSession(string sessionName)
+        public bool CreateSession(string sessionName, bool savedGame)
         {
             _session = new Session(sessionName);
             _session.GenerateSessionId();
@@ -88,6 +88,7 @@ namespace Session
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
+            _session.SavedGame = savedGame;
 
             _heartbeatHandler = new HeartbeatHandler();
             Console.WriteLine("Created session with the name: " + _session.Name);
@@ -209,6 +210,7 @@ namespace Session
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessionsResponse);
             sessionDTO.Name = _session.Name;
             sessionDTO.SessionSeed = _session.SessionSeed;
+            sessionDTO.SavedGame = _session.SavedGame;
             var jsonObject = JsonConvert.SerializeObject(sessionDTO);
             return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
         }
@@ -217,7 +219,7 @@ namespace Session
         {
             _availableSessions.TryAdd(packet.Header.SessionID, packet);
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
-            Console.WriteLine(packet.Header.SessionID + " Name: " + sessionDTO.Name);
+            Console.WriteLine(packet.Header.SessionID + " Name: " + sessionDTO.Name + " " + sessionDTO.SavedGame);
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
         
@@ -331,6 +333,16 @@ namespace Session
         public void setHostPingTimer(Timer timer)
         {
             _hostPingTimer = timer;
+        }
+
+        public bool GetSavedGame()
+        {
+            return _session.SavedGame;
+        }
+
+        public string GetSavedGameName()
+        {
+            return _session.Name;
         }
     }
 }

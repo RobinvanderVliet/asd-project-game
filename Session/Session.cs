@@ -15,6 +15,7 @@ namespace Session
         public string SessionId { get => _sessionId; set => _sessionId = value; }
 
         public bool InSession = false;
+        public bool SavedGame = false;
         
         private List<string> _joinedClients = new();
 

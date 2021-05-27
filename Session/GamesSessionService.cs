@@ -10,10 +10,12 @@ namespace Session
     public class GamesSessionService : IGamesSessionService
     {
         private readonly IGameSessionHandler _gameSessionHandler;
+        private readonly ISessionHandler _sessionHandler;
 
-        public GamesSessionService(IGameSessionHandler gameSessionHandler)
+        public GamesSessionService(IGameSessionHandler gameSessionHandler, ISessionHandler sessionHandler)
         {
             _gameSessionHandler = gameSessionHandler;
+            _sessionHandler = sessionHandler;
         }
 
         public void RequestSavedGames()
@@ -49,7 +51,9 @@ namespace Session
 
         public void LoadGame(string value)
         {
+            // vanaf hier naar GameHandler
             Console.WriteLine("load game " + value);
+            _sessionHandler.CreateSession(value, true);
         }
 
         public void StartGame()
