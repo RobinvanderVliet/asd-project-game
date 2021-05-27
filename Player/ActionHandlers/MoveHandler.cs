@@ -20,6 +20,8 @@ namespace Player.ActionHandlers
 {
     public class MoveHandler : IMoveHandler, IPacketHandler
     {
+        private int _stamina;
+
         private IClientController _clientController;
         private IPlayerModel _currentPlayer;
         private string _game;
@@ -88,7 +90,7 @@ namespace Player.ActionHandlers
                 }
                 else
                 {
-                    moveDTO.PlayerPosition.Stamina = resultStamina - moveDTO.PlayerPosition.Steps;
+                    _stamina = moveDTO.PlayerPosition.Stamina = resultStamina - moveDTO.PlayerPosition.Steps;
                     
                     InsertToDatabase(moveDTO);
                     HandleMove(moveDTO.PlayerPosition);
@@ -125,6 +127,11 @@ namespace Player.ActionHandlers
         {
             _worldService.UpdateCharacterPosition(playerPosition);
             _worldService.DisplayWorld();
+        }
+
+        public int GetStamina()
+        {
+            return _stamina;
         }
     }
 }

@@ -251,7 +251,7 @@ namespace Player.Services
             MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions(); 
             _currentPlayer.XPosition = currentCharacter.XPosition; 
             _currentPlayer.YPosition = currentCharacter.YPosition; 
-            _currentPlayer.Stamina = currentCharacter.Stamina;
+            _currentPlayer.Stamina = _moveHandler.GetStamina();
 
             gameStarted = true;
         }
