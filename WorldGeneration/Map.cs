@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DatabaseHandler;
-using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using DataTransfer.DTO.Character;
 using DataTransfer.Model.World;
@@ -16,41 +14,41 @@ namespace WorldGeneration
         private readonly int _chunkSize;
         private readonly int _seed;
         private List<Chunk> _chunks; // NOT readonly, don't listen to the compiler
-        private IDatabaseService<Chunk> _dbService;
+        private readonly IDatabaseService<Chunk> _chunkDbService;
         private ChunkService _chunkService;
         private List<int[]> _chunksWithinLoadingRange;
-
-        private INoiseMapGenerator _noiseMapGenerator;
+        private readonly INoiseMapGenerator _noiseMapGenerator;
 
         public Map(
             INoiseMapGenerator noiseMapGenerator
             , int chunkSize
             , int seed
-            , IDatabaseService<Chunk> dbServices
+            , IDatabaseService<Chunk> chunkDbServices
         )
         {
             _chunkSize = chunkSize;
             _chunks = new List<Chunk>();
             _seed = seed;
             _noiseMapGenerator = noiseMapGenerator;
-            _dbService = dbServices;
+            _chunkDbService = chunkDbServices;
         }
 
         // checks if there are new chunks that have to be loaded
         private void LoadArea(int playerX, int playerY, int viewDistance) {
             _chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
-            foreach (var chunkXY in _chunksWithinLoadingRange)
+            foreach (var chunkItem in _chunksWithinLoadingRange)
             {
-                if (!_chunks.Exists(chunk => chunk.X == chunkXY[0] && chunk.Y == chunkXY[1]))
-                { // chunk isn't loaded in local memory yet
+                if (_chunks.Exists(chunk => chunk.X == chunkItem[0] && chunk.Y == chunkItem[1])) continue;
+                {
+                    // chunk isn't loaded in local memory yet
                     var chunk = new Chunk { 
-                        X = chunkXY[0], 
-                        Y = chunkXY[1] 
+                        X = chunkItem[0], 
+                        Y = chunkItem[1] 
                     };
-                    var getAll = _dbService.GetAllAsync();
+                    var getAll = _chunkDbService.GetAllAsync();
                     getAll.Wait();
                     var results = getAll.Result.FirstOrDefault(c => c.Equals(chunk));
-                    _chunks.Add(results ?? GenerateNewChunk(chunkXY[0], chunkXY[1]));
+                    _chunks.Add(results ?? GenerateNewChunk(chunkItem[0], chunkItem[1]));
                 }
             }
         }
@@ -59,8 +57,8 @@ namespace WorldGeneration
         {
             // viewDistance * 2 is to get a full screen
             // , + playerX to get to the right location
-            // , + chunksize to add some loading buffer
-            // , / chunksize to convert tile coordinates to world coordinates
+            // , + chunk size to add some loading buffer
+            // , / chunk size to convert tile coordinates to world coordinates
             // same for the other variables
             var maxX = (playerX + viewDistance * 2 + _chunkSize) / _chunkSize; 
             var minX = (playerX - viewDistance * 2 - _chunkSize) / _chunkSize;
@@ -124,17 +122,17 @@ namespace WorldGeneration
         private Chunk GenerateNewChunk(int chunkX, int chunkY)
         {
             var chunk = _noiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize, _seed);
-            _dbService.CreateAsync(chunk);
+            _chunkDbService.CreateAsync(chunk);
             return chunk;
         }
 
         private Chunk GetChunkForTileXAndY(int x, int y)
         {
-            var chunk = _chunks.FirstOrDefault(chunk =>
-                chunk.X * _chunkSize <= x 
-                && chunk.X * _chunkSize > x - _chunkSize 
-                && chunk.Y * _chunkSize >= y &&
-                chunk.Y * _chunkSize < y + _chunkSize);
+            var chunk = _chunks.FirstOrDefault(item =>
+                item.X * _chunkSize <= x 
+                && item.X * _chunkSize > x - _chunkSize 
+                && item.Y * _chunkSize >= y &&
+                item.Y * _chunkSize < y + _chunkSize);
             
             if (chunk == null)
             {
@@ -145,7 +143,7 @@ namespace WorldGeneration
         
         public void DeleteMap()
         {
-            _dbService.DeleteAllAsync();
+            _chunkDbService.DeleteAllAsync();
         }
         
         private ITile GetLoadedTileByXAndY(int x, int y)
