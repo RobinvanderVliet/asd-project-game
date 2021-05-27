@@ -38,8 +38,7 @@ RIGHT: 'right';
 EAST: 'east';
 ARMOR: 'armor';
 HELMET: 'helmet';
-RANGED: 'ranged';
-MELEE: 'melee';
+WEAPON: 'weapon';
 SLOT: 'slot';
 
 NUMBER: '0' | [0-9]*;
@@ -75,4 +74,4 @@ backward: BACKWARD | DOWN | SOUTH;
 left: LEFT | WEST;
 right: RIGHT  | EAST;
 direction: forward | backward | left | right;
-inventorySlot: ARMOR | HELMET | RANGED | MELEE | SLOT SPACE NUMBER;
+inventorySlot: ARMOR | HELMET | WEAPON | SLOT SPACE NUMBER;
