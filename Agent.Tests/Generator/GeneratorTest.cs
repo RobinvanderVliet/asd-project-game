@@ -20,6 +20,7 @@ namespace Agent.Tests.Generator
             _fix = new Fixtures();
         }
         [Test]
+        [Repeat(5)] //added for safety
         [TestCase("test1.txt")]
         [TestCase("test2.txt")]
         [TestCase("test3.txt")]

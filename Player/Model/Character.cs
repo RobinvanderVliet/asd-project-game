@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Models

@@ -44,10 +44,10 @@ namespace Agent.Services
             {
                 var content = FileHandler.ImportFile(input);
                 Pipeline.ParseString(content);
-                //Pipeline.CheckAst();
+                Pipeline.CheckAst();
                 var output = Pipeline.GenerateAst();
 
-                string fileName = "agent\\agent-config.cfg";
+                string fileName = "agent/agent-config.cfg";
                 FileHandler.ExportFile(output, fileName);
             }
             catch (SyntaxErrorException e)

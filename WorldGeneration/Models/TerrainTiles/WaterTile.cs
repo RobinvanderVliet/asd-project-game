@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Models.TerrainTiles
 {
+    [ExcludeFromCodeCoverage]
     public class WaterTile : ITerrainTile
     {
         public bool IsAccessible { get; set; }

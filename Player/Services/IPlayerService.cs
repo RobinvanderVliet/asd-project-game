@@ -1,6 +1,4 @@
-﻿using DataTransfer.DTO.Player;
-using Player.DTO;
-using Player.Model;
+﻿using Player.Model;
 
 namespace Player.Services
 {
@@ -48,5 +46,6 @@ namespace Player.Services
 
         public void HandleDirection(string directionValue, int stepsValue);
 
+        public void SetupPlayer();
     }
 }
