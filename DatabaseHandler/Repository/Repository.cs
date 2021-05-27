@@ -13,13 +13,11 @@ namespace DatabaseHandler.Repository
     {
         private readonly string _collection;
         private readonly ILiteDatabaseAsync _db;
-        private readonly ILogger<Repository<T>> _log;
 
         public Repository(IDbConnection connection, string collection = null)
         {
             _collection = collection ?? typeof(T).Name;
             _db = connection.GetConnectionAsync();
-            _log = new NullLogger<Repository<T>>();
         }
 
         public async Task<BsonValue> CreateAsync(T obj)
