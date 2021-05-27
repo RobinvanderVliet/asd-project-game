@@ -1,41 +1,25 @@
+using InputHandling.Antlr;
+using Moq;
 using NUnit.Framework;
+using Session;
+using UserInterface;
 
 namespace InputHandling.Tests
 {
     public class InputHandlerTest
     {
         IInputHandler _sut;
-
+        private Mock<IPipeline> _mockedPipeline;
+        private Mock<ISessionHandler> _mockedSessionHandler;
+        private Mock<IScreenHandler> _mockedScreenHandler;
+        
         [SetUp]
         public void Setup()
         {
-            // _sut = new InputHandler();
-            
+            _mockedPipeline = new Mock<IPipeline>();
+            _mockedScreenHandler = new Mock<IScreenHandler>();
+            _mockedScreenHandler = new Mock<IScreenHandler>();
+            _sut = new InputHandler();
         }
-        
-        [Test]
-        public void Test_HandleSessionScreenCommands_HandlesOption()
-        {
-            
-        }
-        
-        [Test]
-        public void Test_HandleSessionScreenCommands_DisplaysError()
-        {
-            
-        }
-        
-        [Test]
-        public void Test_HandleGameScreenCommands_HandlesOption()
-        {
-            
-        }
-        
-        [Test]
-        public void Test_HandleGameScreenCommands_DisplaysError()
-        {
-            
-        }
-
     }
 }
