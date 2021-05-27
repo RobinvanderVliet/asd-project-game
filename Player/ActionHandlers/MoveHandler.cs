@@ -20,9 +20,6 @@ namespace Player.ActionHandlers
     public class MoveHandler : IMoveHandler, IPacketHandler
     {
         private IClientController _clientController;
-        //private IPlayerModel _currentPlayer;
-        private string _game;
-        private string _playerGuid;
         private IWorldService _worldService;
         private IMapper _mapper;
 
@@ -142,18 +139,19 @@ namespace Player.ActionHandlers
                     break;
             }
 
-            
-            var mapCharacterDTO = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
-                (_worldService.getCurrentCharacterPositions().YPosition) + y, 
-                _currentPlayer.PlayerGuid, 
-                _worldService.getCurrentCharacterPositions().GameGuid, 
-                _currentPlayer.Symbol);
+            var currentPlayer = _worldService.getCurrentPlayer();
+
+            var mapCharacterDTO = new MapCharacterDTO((currentPlayer.XPosition) + x, 
+                (currentPlayer.YPosition) + y, 
+                currentPlayer.Guid, 
+                _clientController.SessionId, 
+                currentPlayer.Symbol);
             
             SendMove(mapCharacterDTO);
-            
-            MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions();
+            //volgens mij is dit stuk hieronder overbodig:
+/*            MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions();
             _currentPlayer.XPosition = currentCharacter.XPosition;
-            _currentPlayer.YPosition = currentCharacter.YPosition;
+            _currentPlayer.YPosition = currentCharacter.YPosition;*/
         }
     }
 }
