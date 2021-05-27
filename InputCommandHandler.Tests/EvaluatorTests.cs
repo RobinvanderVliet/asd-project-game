@@ -87,20 +87,22 @@ namespace InputCommandHandler.Tests
         [Test]
         public void Test_Apply_HandleDropActionIsCalled()
         {
-            //arrange
-            var ast = DropAST("item");
-            _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.DropItem("item"));
-            //act
+            //Arrange
+            string inventorySlot = "armor";
+            var ast = DropAST(inventorySlot);
+
+            //Act
             _sut.Apply(ast);
-            //assert
-            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem("item"), Times.Once);
+
+            //Assert
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem(inventorySlot), Times.Once);
         }
 
-        public static AST DropAST(string itemName)
+        public static AST DropAST(string inventorySlot)
         {
             Input drop = new Input();
             drop.AddChild(new Drop()
-                .AddChild(new Message(itemName)));
+                .AddChild(new InventorySlot(inventorySlot)));
             return new AST(drop);
         }
 

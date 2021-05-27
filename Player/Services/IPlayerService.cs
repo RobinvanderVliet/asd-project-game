@@ -42,7 +42,7 @@ namespace Player.Services
 
         public void PickupItem();
 
-        public void DropItem(string itemNameValue);
+        public void DropItem(string inventorySlot);
 
         public void HandleDirection(string directionValue, int stepsValue);
         
