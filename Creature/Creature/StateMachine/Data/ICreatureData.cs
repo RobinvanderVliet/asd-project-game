@@ -13,7 +13,7 @@ namespace Creature.Creature.StateMachine.Data
         double Health { get; set; }
         IWorld World { get; set;  }
 
-        List<Dictionary<string, string>> RuleSet { get; }
+        Dictionary<string, string> RuleSet { get; }
 
     }
 }

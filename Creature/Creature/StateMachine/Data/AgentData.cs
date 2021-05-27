@@ -12,7 +12,7 @@ namespace Creature.Creature.StateMachine.Data
         private int _visionRange;
         private IWorld _world;
         private bool _following;
-        private List<Dictionary<string, string>> _ruleSet;
+        private Dictionary<string, string> _ruleSet;
 
         public bool IsAlive
         {
@@ -49,7 +49,7 @@ namespace Creature.Creature.StateMachine.Data
             set => _world = value;
         }
 
-        public List<Dictionary<string, string>> RuleSet
+        public Dictionary<string, string> RuleSet
         {
             get => _ruleSet;
         }
@@ -60,7 +60,7 @@ namespace Creature.Creature.StateMachine.Data
             set => _following = value;
         }
         
-        public AgentData(Vector2 position, double health, int damage, int visionRange, IWorld world, List<Dictionary<string, string>> agentRuleSet, bool following)
+        public AgentData(Vector2 position, double health, int damage, int visionRange, IWorld world, Dictionary<string, string> agentRuleSet, bool following)
         {
             _position = position;
             _health = health;

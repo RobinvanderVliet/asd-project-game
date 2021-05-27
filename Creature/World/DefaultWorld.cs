@@ -66,7 +66,7 @@ namespace Creature.World
                 int attackRange = 1;
                 int visionRange = creature.CreatureStateMachine.CreatureData.VisionRange;
 
-                //if (creature.CreatureStateMachine.CreatureData.RuleSet["combat"] == "offensive")
+                if (creature.CreatureStateMachine.CreatureData.RuleSet["combat"] == "offensive")
                 {
                     visionRange += 6;
                 }

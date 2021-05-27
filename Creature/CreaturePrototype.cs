@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using System.Linq;
 
 namespace Creature
 {
@@ -23,35 +22,12 @@ namespace Creature
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
 
-            List<Dictionary<string, string>> listOfDictionaries = new List<Dictionary<string, string>>()
-            {
-                new Dictionary<string, string>()
-                {
-                    {"combat_default_monster_comparable","monster"},
-                    {"combat_default_monster_threshold","player"},
-                    {"combat_default_monster_comparison","sees"},
-                    //{"combat_default_monster_comparison_true","follow"}
-                    {"combat_default_monster_comparison_true","flee"}
-                },
-                new Dictionary<string,string>()
-                {
-                    {"combat_default_monster_comparable","monster"},
-                    {"combat_default_monster_threshold","player"},
-                    {"combat_default_monster_comparison","nearby"},
-                    {"combat_default_monster_comparison_true","attack"}
-                }
-            };
-
-            var lines = listOfDictionaries[0].Select(kvp => kvp.Key + ": " + kvp.Value.ToString());
-            System.Diagnostics.Debug.WriteLine(string.Join(Environment.NewLine, lines));
-
-            //PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, npcConfigurationService.GetConfigurations()[0].Settings);
-            PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, listOfDictionaries);
-            AgentData agentData = new AgentData(new Vector2(10, 10), 20, 5, 50, world, listOfDictionaries, false);
-            MonsterData monsterData = new MonsterData(new Vector2(10, 15), 20, 5, 50, world, listOfDictionaries, false);
+            PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, npcConfigurationService.GetConfigurations()[0].Settings);
+            //AgentData agentData = new AgentData(new Vector2(10, 10), 20, 5, 50, world, false, npcConfigurationService.GetConfigurations()[1].Settings);
+            MonsterData monsterData = new MonsterData(new Vector2(10, 15), 20, 5, 50, world, npcConfigurationService.GetConfigurations()[2].Settings, false);
 
             ICreature player = new Player(playerData);
-            ICreature agent = new Agent(agentData);
+            //ICreature agent = new Agent(agentData);
             ICreature monster = new Monster(monsterData);
 
             world.GenerateWorldNodes();
