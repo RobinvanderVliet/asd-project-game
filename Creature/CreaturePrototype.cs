@@ -24,16 +24,19 @@ namespace Creature
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
 
             PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, new List<Setting>());
-            //AgentData agentData = new AgentData(new Vector2(10, 10), 20, 5, 50, world, false, npcConfigurationService.GetConfigurations()[1].Settings);
+            AgentData agentData = new AgentData(new Vector2(10, 10), 20, 5, 50, world, new List<Setting>(), false);
             MonsterData monsterData = new MonsterData(new Vector2(10, 15), 20, 5, 50, world, new List<Setting>(), false);
 
             ICreature player = new Player(playerData);
-            //ICreature agent = new Agent(agentData);
+            ICreature agent = new Agent(agentData);
             //ICreature monster = new Monster(monsterData);
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);
-            //world.SpawnAgent(agent);
+            
+            world.SpawnAgent(agent);
+
+            // TODO: fix monster statemachine to get this working
             //world.SpawnCreature(monster);
 
             world.Render();
