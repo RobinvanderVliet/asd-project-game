@@ -14,7 +14,7 @@ using WorldGeneration.Models;
 
 namespace Session
 {
-    public class GameSessionHandler : IPacketHandler, IGameSessionHandler
+    public class GameSessionHandler : IPacketHandler, IGameSessionHandler 
     {
         private IClientController _clientController;
         private ISessionHandler _sessionHandler;
