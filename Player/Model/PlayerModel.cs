@@ -38,7 +38,7 @@ namespace Player.Model
 
         //random default values for health&stamina for now
         private const int HEALTHCAP = 100;
-        private const int STAMINACAP = 10;
+        private const int STAMINACAP = 100;
         private const int RADIATIONLEVELCAP = 10;
 
 

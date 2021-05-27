@@ -56,7 +56,7 @@ namespace Player.Services
 
         private void StaminaEvent(object sender, ElapsedEventArgs e)
         {
-            if (!gameStarted || _currentPlayer.Stamina >= 10)
+            if (!gameStarted || _currentPlayer.Stamina >= 100)
             {
                 return;
             }
