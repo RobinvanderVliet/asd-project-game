@@ -10,9 +10,6 @@ namespace InputHandling.Antlr.Transformer
 {
     public class Evaluator : IEvaluator
     {
-        // private readonly IPlayerService _playerService;
-        // private readonly ISessionService _sessionService;
-
         private ISessionHandler _sessionHandler;
         private IMoveHandler _moveHandler;
         private IGameSessionHandler _gameSessionHandler;
@@ -28,8 +25,6 @@ namespace InputHandling.Antlr.Transformer
             _moveHandler = moveHandler;
             _gameSessionHandler = gameSessionHandler;
             _chatHandler = chatHandler;
-            // _playerService = playerService;
-            // _sessionService = sessionService;
         }
         public void Apply(AST ast)
         {
@@ -105,73 +100,61 @@ namespace InputHandling.Antlr.Transformer
         private void TransformPickup()
         {
             // TODO: Call InventoryHandler method
-            // _playerService.PickupItem();
         }
 
         private void TransformDrop(Drop drop)
         {
-            // TODO: Call InventoryHandler method
-            // _playerService.DropItem(drop.ItemName.MessageValue);
+            // TODO: Call InventoryHandler method with (drop.ItemName.MessageValue)
         }
 
         private void TransformAttack(Attack attack)
         {
-            // TODO: Call AttackHandler method
-            // _playerService.Attack(attack.Direction.DirectionValue);
+            // TODO: Call AttackHandler method with (attack.Direction.DirectionValue)
         }
 
         private void TransformExit()
         {
-            // TODO: Implement motherfuckers
-            // _playerService.ExitCurrentGame();
+            // TODO: Implement exitHandler
         }
 
         private void TransformPause()
         {
             // TODO: Remove? Must be replaced by save
-            // _playerService.Pause();
         }
 
         private void TransformReplace()
         {
             // TODO: Replace by agent, maybe an AgentHandler?
-            // _playerService.ReplaceByAgent();
         }
 
         private void TransformResume()
         {
             // TODO: Remove? Must be replaced by load functionality
-            // _playerService.Resume();
         }
 
         private void TransformSay(Say say)
         {
             _chatHandler.SendSay(say.Message.MessageValue);
-            // _playerService.Say(say.Message.MessageValue);
         }
 
         private void TransformShout(Shout shout)
         {
             _chatHandler.SendShout(shout.Message.MessageValue);
-            // _playerService.Shout(shout.Message.MessageValue);
         }
 
         private void TransformCreateSession(CreateSession createSession)
         {
-            // _sessionService.CreateSession(createSession.Message.MessageValue);
             _sessionHandler.CreateSession(createSession.Message.MessageValue);
         }
 
         private void TransformJoinSession(JoinSession joinSession)
         {
-            // _sessionService.JoinSession(joinSession.Message.MessageValue);
             _sessionHandler.JoinSession(joinSession.Message.MessageValue);
         }
 
         private void TransformRequestSessions(RequestSessions requestSessions)
         {
             _sessionHandler.RequestSessions();
-            // _sessionService.RequestSessions();
         }
 
         private void TransformStartSession(StartSession startSession)

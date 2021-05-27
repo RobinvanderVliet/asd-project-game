@@ -36,7 +36,6 @@ namespace InputHandling
         {
             try
             {
-                // var pipeline = new Pipeline();
                 _pipeline.ParseCommand(commando);
                 _pipeline.Transform();
             }
