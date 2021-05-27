@@ -1,6 +1,3 @@
-using System;
-using DataTransfer.DTO.Character;
-
 namespace WorldGeneration
 {
     public class WorldService : IWorldService

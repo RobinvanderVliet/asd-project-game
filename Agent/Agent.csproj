@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataTransfer\DataTransfer.csproj" />
     <ProjectReference Include="..\InputHandling\InputHandling.csproj" />
   </ItemGroup>
 

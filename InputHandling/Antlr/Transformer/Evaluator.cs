@@ -97,7 +97,7 @@ namespace InputHandling.Antlr.Transformer
                 case > MAXIMUM_STEPS:
                     throw new MoveException($"Too many steps, the maximum is {MAXIMUM_STEPS}.");
                 default:
-                    _moveHandler.HandleDirection(move.Direction.DirectionValue, move.Steps.StepValue);
+                    _moveHandler.SendMove(move.Direction.DirectionValue, move.Steps.StepValue);
                     break;
             }
         }

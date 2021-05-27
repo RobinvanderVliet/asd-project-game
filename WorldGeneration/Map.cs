@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataTransfer.DTO.Character;
 using WorldGeneration.Models;
 using WorldGeneration.Models.Interfaces;
 
@@ -118,11 +117,6 @@ namespace WorldGeneration
             {
                 return tile.Symbol;
             }
-        }
-
-        private bool IsPlayerOnTile(ITile tile, MapCharacterDTO player)
-        {
-            return tile.XPosition == player.XPosition && tile.YPosition == player.YPosition - 1;
         }
 
         private Chunk GenerateNewChunk(int chunkX, int chunkY)

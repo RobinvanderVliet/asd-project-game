@@ -1,7 +1,4 @@
-﻿using System;
-using DataTransfer.DTO.Character;
-
-namespace WorldGeneration
+﻿namespace WorldGeneration
 {
     public interface IWorldService
     {

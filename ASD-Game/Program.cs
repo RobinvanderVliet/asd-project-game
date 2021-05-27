@@ -4,7 +4,6 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.IO;
-using ASD_project.Profiles;
 using AutoMapper;
 using DatabaseHandler;
 using DatabaseHandler.Repository;
@@ -43,7 +42,6 @@ namespace ASD_project
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddAutoMapper(typeof(MapCharacterProfile));
                     services.AddTransient<IMainGame, MainGame>();
                     services.AddScoped<INetworkComponent, NetworkComponent>();
                     services.AddScoped<IClientController, ClientController>();

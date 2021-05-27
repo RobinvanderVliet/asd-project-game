@@ -4,7 +4,6 @@ using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
-using DataTransfer.DTO.Character;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
@@ -44,8 +43,7 @@ namespace Session
             var gameRepository = new Repository<GamePOCO>(dbConnection);
             var gameService = new ServicesDb<GamePOCO>(gameRepository);
 
-            string gameGuid = Guid.NewGuid().ToString();
-            var gamePOCO = new GamePOCO {GameGuid = gameGuid, PlayerGUIDHost = _clientController.GetOriginId()};
+            var gamePOCO = new GamePOCO {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
             gameService.CreateAsync(gamePOCO);
   
             List<string> allClients = _sessionHandler.GetAllClients();
@@ -54,14 +52,14 @@ namespace Session
             // Needs to be refactored to something random in construction; this was for testing
             int playerX = 26; // spawn position
             int playerY = 11; // spawn position
-            foreach (string element in allClients)
+            foreach (string clientId in allClients)
             {
                 int[] playerPosition = new int[2];
                 playerPosition[0] = playerX;
                 playerPosition[1] = playerY;
-                players.Add(element, playerPosition);
+                players.Add(clientId, playerPosition);
                 var tmpPlayer = new PlayerPOCO
-                    {PlayerGuid = element, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
+                    {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
                 servicePlayer.CreateAsync(tmpPlayer);
 
                 playerX += 2; // spawn position + 2 each client
@@ -69,7 +67,7 @@ namespace Session
             }
 
             StartGameDTO startGameDTO = new StartGameDTO();
-            startGameDTO.GameGuid = gameGuid;
+            startGameDTO.GameGuid = _clientController.SessionId;
             startGameDTO.PlayerLocations = players;
 
             return startGameDTO;
