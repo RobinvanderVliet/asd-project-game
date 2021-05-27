@@ -119,7 +119,7 @@ namespace InputCommandHandler.Antlr.Parser
 
         public override void ExitStartSession(PlayerCommandsParser.StartSessionContext context)
         {
-            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
         public override void EnterStartGame(PlayerCommandsParser.StartGameContext context)
@@ -230,6 +230,16 @@ namespace InputCommandHandler.Antlr.Parser
             {
                 startSession.AddChild(new Message(context.GetText()));
             }
+        }
+
+        public override void EnterRequestSavedGames(PlayerCommandsParser.RequestSavedGamesContext context)
+        {
+            _currentContainer.Push(new RequestSavedGames());
+        }
+
+        public override void ExitRequestSavedGames(PlayerCommandsParser.RequestSavedGamesContext context)
+        {
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
     }
 }

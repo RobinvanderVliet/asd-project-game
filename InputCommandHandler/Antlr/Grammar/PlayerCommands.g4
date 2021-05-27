@@ -24,6 +24,7 @@ CREATE_SESSION : 'create_session';
 JOIN_SESSION : 'join_session';
 REQUEST_SESSIONS : 'request_sessions';
 START_SESSION : 'start_session';
+REQUEST_SAVED_GAMES : 'request_saved_games';
 
 FORWARD: 'forward';
 UP: 'up';
@@ -63,7 +64,8 @@ command:
     REQUEST_SESSIONS #requestSessions |
     START_SESSION #startSession |
     LOAD_GAME #loadGame |
-    START_GAME #startGame;
+    START_GAME #startGame |
+    REQUEST_SAVED_GAMES #requestSavedGames;
 
 forward: FORWARD | UP | NORTH;
 backward: BACKWARD | DOWN | SOUTH;

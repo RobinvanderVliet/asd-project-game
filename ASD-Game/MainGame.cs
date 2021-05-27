@@ -27,9 +27,11 @@ namespace ASD_project
             private readonly IGameSessionHandler _gameSessionHandler;
             private readonly IClientController _clientController;
             private readonly IWorldService _worldService;
+            private readonly IGamesSessionService _gamesSessionService;
 
             public MainGame(ILogger<MainGame> log, IInventory inventory, IClientController clientController, IWorldService worldService, 
-                IChatHandler chatHandler, ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler)
+                IChatHandler chatHandler, ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler
+                , IGamesSessionService gamesSessionService)
             {
                 _log = log;
                 _inventory = inventory;
@@ -39,6 +41,7 @@ namespace ASD_project
                 _sessionHandler = sessionHandler;
                 _moveHandler = moveHandler;
                 _gameSessionHandler = gameSessionHandler;
+                _gamesSessionService = gamesSessionService;
             }
 
             public void Run()
@@ -59,7 +62,7 @@ namespace ASD_project
                 while (true) 
                 {
                     Console.WriteLine("Type input messages below");
-                    inputHandler.HandleCommands(playerService, sessionService);
+                    inputHandler.HandleCommands(playerService, sessionService, _gamesSessionService);
                 }
             }
         }

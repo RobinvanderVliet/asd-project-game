@@ -16,13 +16,15 @@ namespace InputCommandHandler.Tests
         private Evaluator _sut;
         private Mock<IPlayerService> _mockedPlayerService;
         private Mock<ISessionService> _mockedSessionService;
+        private Mock<IGamesSessionService> _mockedSavedGamesSessionService;
 
         [SetUp]
         public void Setup()
         {
             _mockedPlayerService = new Mock<IPlayerService>();
             _mockedSessionService = new Mock<ISessionService>();
-            _sut = new Evaluator(_mockedPlayerService.Object, _mockedSessionService.Object);
+            _mockedSavedGamesSessionService = new Mock<IGamesSessionService>();
+            _sut = new Evaluator(_mockedPlayerService.Object, _mockedSessionService.Object, _mockedSavedGamesSessionService.Object);
         }
 
         [Test]

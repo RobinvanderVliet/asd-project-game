@@ -14,21 +14,21 @@ using WorldGeneration.Models;
 
 namespace Session
 {
-    
-    public class GameSessionHandler : IPacketHandler, IGameSessionHandler
+    public class GameSessionHandler : IPacketHandler, IGameSessionHandler 
     {
         private IClientController _clientController;
         private ISessionHandler _sessionHandler;
         private IWorldService _worldService;
-        
-        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler)
+
+        public GameSessionHandler(IClientController clientController, IWorldService worldService,
+            ISessionHandler sessionHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
             _worldService = worldService;
             _sessionHandler = sessionHandler;
         }
-        
+
         public void SendGameSession(ISessionHandler sessionHandler)
         {
             _sessionHandler = sessionHandler;
@@ -48,10 +48,10 @@ namespace Session
             string gameGuid = Guid.NewGuid().ToString();
             var gamePOCO = new GamePOCO {GameGuid = gameGuid, PlayerGUIDHost = _clientController.GetOriginId()};
             gameService.CreateAsync(gamePOCO);
-  
+
             List<string> allClients = _sessionHandler.GetAllClients();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
-            
+
             // Needs to be refactored to something random in construction; this was for testing
             int playerX = 26; // spawn position
             int playerY = 11; // spawn position
@@ -75,13 +75,13 @@ namespace Session
 
             return startGameDTO;
         }
-        
+
         private void SendGameSessionDTO(StartGameDTO startGameDTO)
         {
             var payload = JsonConvert.SerializeObject(startGameDTO);
             _clientController.SendPayload(payload, PacketType.GameSession);
         }
-        
+
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
@@ -95,16 +95,29 @@ namespace Session
 
             foreach (var player in startGameDTO.PlayerLocations)
             {
-                if (_clientController.GetOriginId() == player.Key) 
+                if (_clientController.GetOriginId() == player.Key)
                 {
-                    _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, startGameDTO.GameGuid, CharacterSymbol.CURRENT_PLAYER), true);
-                } 
-                else 
+                    var tmp = new DbConnection();
+                    
+                    var clientHistoryRepository = new Repository<ClientHistoryPoco>(tmp);
+                    var tmpClientHistory = new ServicesDb<ClientHistoryPoco>(clientHistoryRepository);
+                    
+                    var tmpObject = new ClientHistoryPoco() {PlayerId = player.Key, GameId = startGameDTO.GameGuid};
+                    
+                    tmpClientHistory.CreateAsync(tmpObject);
+                    
+                    _worldService.AddCharacterToWorld(
+                        new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, startGameDTO.GameGuid,
+                            CharacterSymbol.CURRENT_PLAYER), true);
+                }
+                else
                 {
-                    _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, startGameDTO.GameGuid,CharacterSymbol.ENEMY_PLAYER), false);
+                    _worldService.AddCharacterToWorld(
+                        new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, startGameDTO.GameGuid,
+                            CharacterSymbol.ENEMY_PLAYER), false);
                 }
             }
-            
+
             _worldService.DisplayWorld();
         }
     }
