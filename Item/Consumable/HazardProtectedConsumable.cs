@@ -1,6 +1,6 @@
-﻿namespace Item.Consumable
+﻿namespace Items.Consumable
 {
-    public class HazardProtectedConsumable : global::Item.Consumable.Consumable
+    public class HazardProtectedConsumable : Consumable
     {
         public int RPP { get; set; }
     }

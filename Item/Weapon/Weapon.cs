@@ -1,13 +1,11 @@
-﻿using Item.Weapon.WeaponStats;
+﻿using Items.Weapon.WeaponStats;
 using Player.Model;
 using Player.Model.ItemStats;
 
-namespace Item.Weapon
+namespace Items.Weapon
 {
-    public class Weapon : IItem
+    public class Weapon : Item
     {
-        public string Description { get; set; }
-        public string ItemName { get; set; }
         public WeaponType Type { get; set; }
         public Rarity Rarity { get; set; }
         public WeaponSpeed Speed { get; set; }

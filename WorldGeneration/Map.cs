@@ -91,7 +91,7 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
 
-        public void DisplayMap(MapCharacterDTO currentPlayer, int viewDistance, IList<MapCharacterDTO> characters)
+        public void DisplayMap(Player currentPlayer, int viewDistance, List<Character> characters)
         {
             var playerX = currentPlayer.XPosition;
             var playerY = currentPlayer.YPosition;
@@ -101,32 +101,23 @@ namespace WorldGeneration
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
                 {
                     var tile = GetLoadedTileByXAndY(x, y);
-                    Console.Write($" {GetDisplaySymbol(currentPlayer, tile, characters)}");
+                    Console.Write($" {GetDisplaySymbol(tile, characters)}");
                 }
                 Console.WriteLine("");
             }
         }
         
-        private string GetDisplaySymbol(MapCharacterDTO currentPlayer, ITile tile, IList<MapCharacterDTO> characters)
+        private string GetDisplaySymbol(Tile tile, List<Character> characters)
         {
-            bool currentPlayerOnTile = IsPlayerOnTile(tile, currentPlayer);
-            if (currentPlayerOnTile)
+            var characterOnTile = characters.Find(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
+            if(characterOnTile != null)
             {
-                return currentPlayer.Symbol;
-            }
-            foreach (var characterOnTile in characters.Where(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition))
-            {
-                if (characterOnTile.Symbol == CharacterSymbol.FRIENDLY_PLAYER)
-                {
-                    if (characterOnTile.Team != currentPlayer.Team || characterOnTile.Team == 0)
-                    {
-                        return CharacterSymbol.ENEMY_PLAYER;
-                    }
-                    return CharacterSymbol.FRIENDLY_PLAYER;
-                }
                 return characterOnTile.Symbol;
             }
-            return tile.Symbol;
+            else
+            {
+                return tile.Symbol;
+            }
         }
 
         private bool IsPlayerOnTile(ITile tile, MapCharacterDTO player)
@@ -162,7 +153,7 @@ namespace WorldGeneration
         }
         
         // find a LOADED tile by the coordinates
-        public ITile GetLoadedTileByXAndY(int x, int y)
+        public Tile GetLoadedTileByXAndY(int x, int y)
         {
             var tile = GetChunkForTileXAndY(x, y).GetTileByWorldCoordinates(x, y);
             return tile;

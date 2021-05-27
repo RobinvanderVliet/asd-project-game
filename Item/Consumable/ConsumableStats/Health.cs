@@ -1,4 +1,4 @@
-namespace Player.Model.Consumable.ConsumableStats
+namespace Items.Consumable.ConsumableStats
 {
     public enum Health
     {

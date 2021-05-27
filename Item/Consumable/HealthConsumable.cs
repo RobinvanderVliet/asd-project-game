@@ -1,8 +1,8 @@
 ﻿using Player.Model.Consumable.ConsumableStats;
 
-namespace Item.Consumable
+namespace Items.Consumable
 {
-    public class HealthConsumable : global::Item.Consumable.Consumable
+    public class HealthConsumable : Consumable
     {
         public Health Health { get; set; }
 
@@ -10,6 +10,5 @@ namespace Item.Consumable
         {
             return (int) Health;
         }
-
     }
 }

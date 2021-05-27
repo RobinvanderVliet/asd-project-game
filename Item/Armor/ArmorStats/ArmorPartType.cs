@@ -1,4 +1,4 @@
-﻿namespace Item.Armor.ArmorStats
+﻿namespace Items.Armor.ArmorStats
 {
     public enum ArmorPartType
     {

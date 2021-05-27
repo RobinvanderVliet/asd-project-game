@@ -1,13 +1,11 @@
-﻿using Item.Armor.ArmorStats;
+﻿using Items.Armor.ArmorStats;
 using Player.Model;
 using Player.Model.ItemStats;
 
-namespace Item.Armor
+namespace Items.Armor
 {
-    public class Armor : IItem
+    public class Armor : Item
     {
-        public string ItemName { get; set; }
-        public string Description { get; set; }
         public ArmorPartType ArmorPartType { get; set; }
         public int ArmorProtectionPoints { get; set; }
         public Rarity Rarity { get; set; }

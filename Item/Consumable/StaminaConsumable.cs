@@ -1,8 +1,8 @@
 ﻿using Player.Model.Consumable.ConsumableStats;
 
-namespace Item.Consumable
+namespace Items.Consumable
 {
-    public class StaminaConsumable : global::Item.Consumable.Consumable
+    public class StaminaConsumable : Consumable
     {
         public Stamina Stamina { get; set; }
 

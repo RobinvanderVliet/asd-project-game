@@ -1,4 +1,4 @@
-﻿namespace Item.Consumable.ConsumableStats
+﻿namespace Items.Consumable.ConsumableStats
 {
     public enum ConsumableType
     {

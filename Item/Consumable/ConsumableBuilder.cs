@@ -1,9 +1,9 @@
 ﻿using System;
-using Item.Consumable.ConsumableStats;
+using Items.Consumable.ConsumableStats;
 using Player.Model.Consumable.ConsumableStats;
 using Player.Model.ItemStats;
 
-namespace Item.Consumable
+namespace Items.Consumable
 {
     public class ConsumableBuilder : IBuilder
     {

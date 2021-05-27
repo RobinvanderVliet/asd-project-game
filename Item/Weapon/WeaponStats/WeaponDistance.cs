@@ -1,4 +1,4 @@
-namespace Item.Weapon.WeaponStats
+namespace Items.Weapon.WeaponStats
 {
     public enum WeaponDistance
     {

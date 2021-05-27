@@ -1,16 +1,16 @@
-﻿using Item.Weapon.WeaponStats;
+﻿using Items.Weapon.WeaponStats;
 using Player.Model;
 using Player.Model.ItemStats;
 
-namespace Item.Weapon
+namespace Items.Weapon
 {
     public class WeaponBuilder : IBuilder
     {
-        private Item.Weapon.Weapon _weapon;
+        private Weapon _weapon;
 
         private WeaponBuilder()
         {
-            _weapon = new Item.Weapon.Weapon();
+            _weapon = new Weapon();
         }
 
         public void SetName(string name)
@@ -50,10 +50,10 @@ namespace Item.Weapon
         
         public void Reset()
         {
-            _weapon = new Item.Weapon.Weapon();
+            _weapon = new Weapon();
         }
         
-        public Item.Weapon.Weapon GetItem()
+        public Weapon GetItem()
         {
             return _weapon;
         }

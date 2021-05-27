@@ -2,12 +2,15 @@
 using Player.Model;
 using Player.Model.ItemStats;
 
-namespace Item.Consumable
+namespace Items.Consumable
 {
-    public class Consumable : IItem
+    public class Consumable : Item
     {
-        public string Description { get; set; }
-        public string ItemName { get; set; }
         public Rarity Rarity { get; set; }
+
+        public Consumable()
+        {
+
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Player.Model.ItemStats;
 
-namespace Item
+namespace Items
 {
     public interface IBuilder
     {
