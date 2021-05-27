@@ -1,8 +1,11 @@
-﻿using Appccelerate.StateMachine;
+﻿using System;
+using System.Collections.Generic;
+using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
 using Creature.Creature.StateMachine.Data;
 using Creature.Creature.StateMachine.Event;
 using Creature.Creature.StateMachine.State;
+using Creature.Exception;
 
 namespace Creature.Creature.StateMachine
 {
@@ -10,6 +13,14 @@ namespace Creature.Creature.StateMachine
     {
         private PassiveStateMachine<CreatureState, CreatureEvent.Event> _passiveStateMachine;
         private MonsterData _monsterData;
+
+        private Stack<Setting> _settings;
+
+        private CreatureState _followPlayerState;
+        private CreatureState _wanderState;
+        private CreatureState _useConsumableState;
+        private CreatureState _attackPlayerState;
+        private CreatureState _fleeFromCreatureState;
 
         public MonsterStateMachine(MonsterData monsterData)
         {
@@ -19,12 +30,12 @@ namespace Creature.Creature.StateMachine
         public ICreatureData CreatureData
         {
             get => _monsterData;
-            set => _monsterData = (MonsterData)value;
+            set => _monsterData = (MonsterData) value;
         }
 
         public void FireEvent(CreatureEvent.Event creatureEvent, object argument)
         {
-             _passiveStateMachine.Fire(creatureEvent, argument);
+            _passiveStateMachine.Fire(creatureEvent, argument);
         }
 
         public void FireEvent(CreatureEvent.Event creatureEvent)
@@ -36,57 +47,75 @@ namespace Creature.Creature.StateMachine
         {
             var builder = new StateMachineDefinitionBuilder<CreatureState, CreatureEvent.Event>();
 
-            CreatureState followPlayerState = new FollowCreatureState(CreatureData);
-            CreatureState wanderState = new WanderState(CreatureData);
-            CreatureState useConsumableState = new UseConsumableState(CreatureData);
-            CreatureState attackPlayerState = new AttackState(CreatureData);
-            CreatureState fleeFromCreatureState = new FleeFromCreatureState(CreatureData);
+            _settings = new Stack<Setting>();
+            _followPlayerState = new FollowCreatureState(CreatureData);
+            _wanderState = new WanderState(CreatureData);
+            _useConsumableState = new UseConsumableState(CreatureData);
+            _attackPlayerState = new AttackState(CreatureData);
+            _fleeFromCreatureState = new FleeFromCreatureState(CreatureData);
 
             // Wandering
-            builder.In(followPlayerState).On(CreatureEvent.Event.LOST_PLAYER).Goto(wanderState);
+            builder.In(_followPlayerState).On(CreatureEvent.Event.LOST_PLAYER).Goto(_wanderState);
 
-            // TODO: implement this using Setting
-            // foreach (var setting in CreatureData.RuleSet)
-            // {
-            //     if (setting.Property == "combat_default_monster_threshold" && setting.Value == "player")
-            //     {
-            //         if (setting.ContainsKey("combat_default_monster_comparison") && setting["combat_default_monster_comparison"] == "nearby")
-            //         {
-            //             if (setting.ContainsKey("combat_default_monster_comparison_true") && setting["combat_default_monster_comparison_true"] == "attack")
-            //             {
-            //                 builder.In(followPlayerState).On(CreatureEvent.Event.PLAYER_IN_RANGE).If<ICreatureData>((c) => typeof(PlayerData) == c.GetType()).Goto(attackPlayerState).Execute<ICreatureData>(new AttackState(CreatureData).Do);
-            //                 builder.In(attackPlayerState).On(CreatureEvent.Event.PLAYER_IN_RANGE).If<ICreatureData>((c) => typeof(PlayerData) == c.GetType()).Execute<ICreatureData>(new AttackState(CreatureData).Do);
-            //             }
-            //         }
-            //         else if (setting.ContainsKey("combat_default_monster_comparison") && setting["combat_default_monster_comparison"] == "sees")
-            //         {
-            //             if (setting.ContainsKey("combat_default_monster_comparison_true") && setting["combat_default_monster_comparison_true"] == "follow")
-            //             {
-            //                 builder.In(wanderState).On(CreatureEvent.Event.SPOTTED_PLAYER).Goto(followPlayerState).Execute<ICreatureData>(new FollowCreatureState(CreatureData).Do);
-            //                 builder.In(followPlayerState).On(CreatureEvent.Event.SPOTTED_PLAYER).Goto(followPlayerState).Execute<ICreatureData>(new FollowCreatureState(CreatureData).Do);
-            //                 
-            //                 builder.In(useConsumableState).On(CreatureEvent.Event.REGAINED_HEALTH_PLAYER_OUT_OF_RANGE).Goto(followPlayerState).Execute<ICreatureData>(new FollowCreatureState(CreatureData).Do);
-            //                 builder.In(attackPlayerState).On(CreatureEvent.Event.PLAYER_OUT_OF_RANGE).Goto(followPlayerState).Execute<ICreatureData>(new FollowCreatureState(CreatureData).Do);
-            //             }
-            //             else if (setting.ContainsKey("combat_default_monster_comparison_true") && setting["combat_default_monster_comparison_true"] == "flee")
-            //             {
-            //                 builder.In(wanderState).On(CreatureEvent.Event.SPOTTED_PLAYER).Goto(fleeFromCreatureState).Execute<ICreatureData>(new FleeFromCreatureState(CreatureData).Do);
-            //                 builder.In(fleeFromCreatureState).On(CreatureEvent.Event.SPOTTED_PLAYER).Goto(fleeFromCreatureState).Execute<ICreatureData>(new FleeFromCreatureState(CreatureData).Do);
-            //             }
-            //         }
-            //     }
-            // }
+            var ruleset = CreatureData.RuleSet;
+            for (var i = 0; i < ruleset.Count; i++)
+            {
+                var currentType =
+                    ruleset[i].Property[..ruleset[i].Property.IndexOf("_", StringComparison.Ordinal)];
 
-            builder.In(useConsumableState).On(CreatureEvent.Event.REGAINED_HEALTH_PLAYER_IN_RANGE).Goto(attackPlayerState).Execute<ICreatureData>(new AttackState(CreatureData).Do);
+                if (_settings.Count > 0)
+                {
+                    var prevType =
+                        _settings.Peek().Property[.._settings.Peek().Property.IndexOf("_", StringComparison.Ordinal)];
+
+                    if (prevType != currentType) AddBehavior(builder, prevType);
+                }
+
+                _settings.Push(ruleset[i]);
+                if (i == ruleset.Count - 1) AddBehavior(builder, currentType);
+            }
+
+            builder.In(_useConsumableState).On(CreatureEvent.Event.REGAINED_HEALTH_PLAYER_IN_RANGE)
+                .Goto(_attackPlayerState).Execute<ICreatureData>(new AttackState(CreatureData).Do);
 
             // Use potion
-            builder.In(attackPlayerState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
-            builder.In(followPlayerState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
+            builder.In(_attackPlayerState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(_useConsumableState)
+                .Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
+            builder.In(_followPlayerState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(_useConsumableState)
+                .Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
 
-            builder.WithInitialState(wanderState);
+            builder.WithInitialState(_useConsumableState);
 
             _passiveStateMachine = builder.Build().CreatePassiveStateMachine();
             _passiveStateMachine.Start();
+        }
+
+        private void AddBehavior(StateMachineDefinitionBuilder<CreatureState, CreatureEvent.Event> builder, string type)
+        {
+            if (type.StartsWith("explore"))
+            {
+                AddExploreBehavior(builder);
+            }
+            else if (type.StartsWith("combat"))
+            {
+                AddCombatBehavior(builder);
+            }
+            else
+            {
+                throw new NotSupportedSettingException();
+            }
+
+            _settings.Clear();
+        }
+
+        private void AddExploreBehavior(StateMachineDefinitionBuilder<CreatureState, CreatureEvent.Event> builder)
+        {
+            // TODO: implement behavior
+        }
+
+        private void AddCombatBehavior(StateMachineDefinitionBuilder<CreatureState, CreatureEvent.Event> builder)
+        {
+            // TODO: implement behavior
         }
     }
 }

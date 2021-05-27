@@ -24,6 +24,17 @@ namespace Creature
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
+            
+            var settings = new List<Setting>();
+            settings.Add(new Setting("combat_engage_inventory_comparable", "inventory"));
+            settings.Add(new Setting("combat_engage_inventory_treshold", "knife"));
+            settings.Add(new Setting("combat_engage_inventory_comparison", "contains"));
+            settings.Add(new Setting("combat_engage_inventory_comparison_true", "use knife"));
+            settings.Add(new Setting("explore_engage_inventory_comparison_true", "use knife"));
+            settings.Add(new Setting("explore_engage_inventory_comparison_truea", "use knsife"));
+            settings.Add(new Setting("explore_engadsge_inventory_comparison_truea", "use kdsnsife"));
+            settings.Add(new Setting("combat_engadsge_inventory_comparison_truea", "use kdsnsife"));
+            settings.Add(new Setting("combat_eangadsge_inventory_comparison_truea", "use kdsnsifae"));
 
             PlayerData playerData = new PlayerData(new Vector2(5, 5), 100, 90, 10, world, new List<Setting>());
             AgentData agentData = new AgentData(new Vector2(10, 10), 100, 1, 10, world, new List<Setting>(), false);
@@ -40,7 +51,7 @@ namespace Creature
             //world.SpawnAgent(agent);
 
             // TODO: fix monster statemachine to get this working
-            //world.SpawnCreature(monster);
+            // world.SpawnCreature(monster);
 
             world.Render();
 
