@@ -15,13 +15,13 @@ namespace WorldGeneration
             noise.SetFrequency(0.015f);
             noise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
             var noiseData = new int[size, size];
-            for (var y = 0; y < size; y++)
-            {
-                for (var x = 0; x < size; x++)
-                {
-                    noiseData[x, y] = (int)noise.GetNoise(x, y);
-                }
-            }
+            // for (var y = 0; y < size; y++)
+            // {
+            //     for (var x = 0; x < size; x++)
+            //     {
+            //         noiseData[x, y] = (int)noise.GetNoise(x, y);
+            //     }
+            // }
             return noiseData;
         }
 
