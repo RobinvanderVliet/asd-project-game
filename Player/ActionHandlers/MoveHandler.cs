@@ -8,7 +8,6 @@ using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
-using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Player.DTO;
@@ -21,7 +20,7 @@ namespace Player.ActionHandlers
     public class MoveHandler : IMoveHandler, IPacketHandler
     {
         private IClientController _clientController;
-        private IPlayerModel _currentPlayer;
+        //private IPlayerModel _currentPlayer;
         private string _game;
         private string _playerGuid;
         private IWorldService _worldService;
@@ -113,7 +112,7 @@ namespace Player.ActionHandlers
 
         private void HandleMove(MapCharacterDTO playerPosition)
         {
-            _worldService.UpdateCharacterPosition(playerPosition);
+            _worldService.UpdateCharacterPosition(playerPosition.PlayerGuid, playerPosition.XPosition, playerPosition.YPosition);
             _worldService.DisplayWorld();
         }
         

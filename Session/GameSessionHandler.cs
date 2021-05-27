@@ -92,15 +92,17 @@ namespace Session
         {
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
 
+            // add name to players
             foreach (var player in startGameDTO.PlayerLocations)
             {
                 if (_clientController.GetOriginId() == player.Key) 
                 {
-                    _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, startGameDTO.GameGuid, CharacterSymbol.CURRENT_PLAYER), true);
+                    // add name to players
+                    _worldService.AddPlayerToWorld(new WorldGeneration.Player("gerrit", player.Value[0], player.Value[1], CharacterSymbol.CURRENT_PLAYER, player.Key), true);
                 } 
                 else 
                 {
-                    _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, startGameDTO.GameGuid,CharacterSymbol.ENEMY_PLAYER), false);
+                    _worldService.AddPlayerToWorld(new WorldGeneration.Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key), false);
                 }
             }
             

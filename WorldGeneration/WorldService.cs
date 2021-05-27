@@ -7,14 +7,14 @@ namespace WorldGeneration
     {
         private World _world;
 
-        public void UpdateCharacterPosition(MapCharacterDTO mapCharacterDTO)
+        public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
         {
-            _world.UpdateCharacterPosition(mapCharacterDTO);
+            _world.UpdateCharacterPosition(userId, newXPosition, newYPosition);
         }
 
-        public void AddCharacterToWorld(MapCharacterDTO mapCharacterDTO, bool isCurrentPlayer)
+        public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
         {
-            _world.AddCharacterToWorld(mapCharacterDTO, isCurrentPlayer);
+            _world.AddPlayerToWorld(player, isCurrentPlayer);
         }
 
         public void DisplayWorld()
@@ -32,7 +32,7 @@ namespace WorldGeneration
             _world = new World(seed, 6);
         }
 
-        public MapCharacterDTO getCurrentCharacterPositions()
+        public Player getCurrentPlayer()
         {
             return _world.CurrentPlayer;
         }

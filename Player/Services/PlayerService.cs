@@ -1,4 +1,6 @@
-﻿using System;
+﻿//should be deleted
+
+/*using System;
 using System.Collections.Generic;
 using Player.ActionHandlers;
 using Player.DTO;
@@ -188,4 +190,4 @@ namespace Player.Services
            _currentPlayer.YPosition = currentCharacter.YPosition;
         }
     }
-}
+}*/

@@ -10,6 +10,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\DataTransfer\DataTransfer.csproj" />
+    <ProjectReference Include="..\Item\Items.csproj" />
   </ItemGroup>
 
 </Project>
