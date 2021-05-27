@@ -4,14 +4,19 @@ namespace Player.Model
 {
     public interface IInventory
     {
-        public List<IItem> ItemList { get; set; }
+        public List<IItem> ConsumableItemList { get; set; }
+        public IItem Armor { get; set; }
 
-        public IItem GetItem(string itemName);
+        public IItem Helmet { get; set; }
 
-        public void AddItem(IItem item);
+        public IItem Weapon { get; set; }
 
-        public void RemoveItem(IItem item);
+        public IItem GetConsumableItem(string itemName);
 
-        public void EmptyInventory();
+        public void AddConsumableItem(IItem item);
+
+        public void RemoveConsumableItem(IItem item);
+
+        public void EmptyConsumableItemList();
     }
 }

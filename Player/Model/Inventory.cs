@@ -1,20 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using Player.Model.Armor;
+using System.Collections.Generic;
+using Weapon;
 
 namespace Player.Model
 {
     public class Inventory : IInventory
     {
-        private List<IItem> _itemList;
-        public List<IItem> ItemList { get => _itemList; set => _itemList = value; }
+        private List<IItem> _consumableItems;
+        public List<IItem> ConsumableItemList { get => _consumableItems; set => _consumableItems = value; }
+
+        private IItem _armor;
+        public IItem Armor { get => _armor; set => _armor = value; }
+
+        private IItem _helmet;
+        public IItem Helmet { get => _helmet; set => _helmet = value; }
+
+        private IItem _weapon;
+        public IItem Weapon { get => _weapon; set => _weapon = value; }
 
         public Inventory()
         {
-            _itemList = new List<IItem>();
+            _consumableItems = new List<IItem>();
+            _helmet = new Bandana();
+            _weapon = new Knife();
         }
 
-        public IItem GetItem(string itemName)
+        public IItem GetConsumableItem(string itemName)
         {
-            foreach (var item in _itemList)
+            foreach (var item in _consumableItems)
             {
                 if (item.ItemName == itemName)
                 {
@@ -24,19 +37,25 @@ namespace Player.Model
             return null;
         }
 
-        public void AddItem(IItem item)
+        public void AddConsumableItem(IItem item)
         {
-            _itemList.Add(item);
+            if(_consumableItems.Count <= 3)
+            {
+                _consumableItems.Add(item);
+            } else
+            {
+                System.Console.WriteLine("You already have 3 consumable items in your inventory!");
+            }
         }
 
-        public void RemoveItem(IItem item)
+        public void RemoveConsumableItem(IItem item)
         {
-            _itemList.Remove(item);
+            _consumableItems.Remove(item);
         }
 
-        public void EmptyInventory()
+        public void EmptyConsumableItemList()
         {
-            _itemList.Clear();
+            _consumableItems.Clear();
         }
     }
 }
