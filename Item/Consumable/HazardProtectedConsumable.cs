@@ -1,4 +1,4 @@
-﻿namespace Player.Model.Consumable.HazardProtectedConsumable
+﻿namespace Item.Consumable
 {
     public class HazardProtectedConsumable : global::Item.Consumable.Consumable
     {

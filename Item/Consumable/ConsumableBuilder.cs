@@ -1,10 +1,6 @@
 ﻿using System;
 using Item.Consumable.ConsumableStats;
-using Player.Model;
 using Player.Model.Consumable.ConsumableStats;
-using Player.Model.Consumable.HazardProtectedConsumable;
-using Player.Model.Consumable.HealthConsumable;
-using Player.Model.Consumable.StaminaConsumable;
 using Player.Model.ItemStats;
 
 namespace Item.Consumable

@@ -2,7 +2,7 @@
 using Player.Model;
 using Player.Model.ItemStats;
 
-namespace Weapon
+namespace Item.Weapon
 {
     public class WeaponBuilder : IBuilder
     {

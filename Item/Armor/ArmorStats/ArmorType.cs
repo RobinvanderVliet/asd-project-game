@@ -1,7 +1,7 @@
-﻿namespace Player.Model.Armor.ArmorStats
+﻿namespace Item.Armor.ArmorStats
 {
 public enum ArmorType
     {
-        Body, Helmet
+        HazardProtectedArmor, DefaultArmor
     }
 }

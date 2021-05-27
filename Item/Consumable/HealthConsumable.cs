@@ -1,6 +1,6 @@
 ﻿using Player.Model.Consumable.ConsumableStats;
 
-namespace Player.Model.Consumable.HealthConsumable
+namespace Item.Consumable
 {
     public class HealthConsumable : global::Item.Consumable.Consumable
     {
