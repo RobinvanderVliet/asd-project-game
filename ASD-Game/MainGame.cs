@@ -21,7 +21,7 @@ namespace ASD_project
             public void Run()
             {
                 _playerService.SetupPlayer();
-                _screenHandler.TransitionTo(new StartScreen());
+                _screenHandler.TransitionTo(new GameScreen());
 
                 while (true)
                 {

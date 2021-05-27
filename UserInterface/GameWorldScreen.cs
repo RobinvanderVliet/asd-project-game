@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace UserInterface
 {
-    class GameChatScreen : Screen
+    class GameWorldScreen : Screen
     {
         private int _xPosition;
         private int _yPosition;
         private int _width;
         private int _height;
 
-        public GameChatScreen(int x, int y, int width, int height)
+        public GameWorldScreen(int x, int y, int width, int height)
         {
             _xPosition = x;
             _yPosition = y;
@@ -23,13 +23,12 @@ namespace UserInterface
 
         public override void DrawScreen()
         {
-            DrawChatBox();
+            DrawWorldBox();
         }
 
-        public void DrawChatBox()
+        public void DrawWorldBox()
         {
             DrawBox(_xPosition, _yPosition, _width, _height);
         }
-
     }
 }
