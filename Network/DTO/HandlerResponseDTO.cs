@@ -7,7 +7,7 @@ namespace Network.DTO
     {
         public SendAction Action { get; set; }
         public string ResultMessage { get; set; }
-    
+
         public HandlerResponseDTO(SendAction action, string resultMessage)
         {
             Action = action;

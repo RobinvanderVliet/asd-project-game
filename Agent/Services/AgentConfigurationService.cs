@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Agent.Exceptions;
 using Agent.Mapper;
 using Agent.Models;
-using Agent.Exceptions;
 using InputCommandHandler;
 using Serilog;
+using System;
+using System.Collections.Generic;
 
 namespace Agent.Services
 {
@@ -23,7 +23,7 @@ namespace Agent.Services
             FileHandler = new FileHandler();
             Pipeline = new Pipeline();
         }
-        
+
         public override void Configure()
         {
             Console.WriteLine("Please provide a path to your code file");
@@ -33,13 +33,13 @@ namespace Agent.Services
             {
                 return;
             }
-            
-            if (input.Equals(LOAD_COMMAND)) 
+
+            if (input.Equals(LOAD_COMMAND))
             {
                 _inlineConfig.setup();
                 return;
             }
-            
+
             try
             {
                 var content = FileHandler.ImportFile(input);
@@ -69,7 +69,7 @@ namespace Agent.Services
                 Configure();
             }
         }
-        
+
         public override void CreateConfiguration(string agentName, string filepath)
         {
             var agentConfiguration = new AgentConfiguration();
@@ -77,13 +77,13 @@ namespace Agent.Services
             agentConfiguration.Settings = FileToDictionaryMapper.MapFileToConfiguration(filepath);
             _agentConfigurations.Add(agentConfiguration);
         }
-        
+
         public override List<Configuration> GetConfigurations()
         {
             return _agentConfigurations;
         }
-        
+
     }
 
-    
+
 }

@@ -51,7 +51,7 @@ namespace Creature.Pathfinder
             get => _isWalkable;
             set => _isWalkable = value;
         }
-        
+
         public Node(Vector2 pos, bool isWalkable, float weight = 1)
         {
             _parent = null;

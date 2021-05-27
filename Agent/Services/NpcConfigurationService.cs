@@ -1,10 +1,10 @@
 ﻿using Agent.Exceptions;
-using System;
-using System.Collections.Generic;
 using Agent.Mapper;
 using Agent.Models;
 using InputCommandHandler;
 using Serilog;
+using System;
+using System.Collections.Generic;
 
 namespace Agent.Services
 {

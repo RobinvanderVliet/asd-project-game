@@ -1,6 +1,6 @@
-using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using Player.Model;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Player.Tests
 {
@@ -8,13 +8,13 @@ namespace Player.Tests
     public class RadiationLevelTest
     {
         private RadiationLevel _sut;
-        
+
         [SetUp]
         public void Setup()
         {
             _sut = new RadiationLevel(1);
         }
-        
+
         [Test]
         public void Test_GetLevel_GetsLevelSuccessfully()
         {
@@ -23,7 +23,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(1, _sut.Level);
         }
-        
+
         [Test]
         public void Test_SetLevel_SetsLevelSuccessfully()
         {

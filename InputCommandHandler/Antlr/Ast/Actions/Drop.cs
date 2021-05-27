@@ -8,7 +8,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
     {
         private Message _itemName;
         public Message ItemName { get => _itemName; private set => _itemName = value; }
-        
+
         public ArrayList GetChildren()
         {
             var children = new ArrayList();
@@ -20,7 +20,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         {
             if (child is Message)
             {
-                _itemName = (Message) child;
+                _itemName = (Message)child;
             }
 
             return this;
@@ -35,7 +35,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
 
             return this;
         }
-        
+
         [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {

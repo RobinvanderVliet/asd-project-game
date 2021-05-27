@@ -1,5 +1,5 @@
-﻿using System;
-using Player.Exceptions;
+﻿using Player.Exceptions;
+using System;
 using WorldGeneration.Models;
 
 namespace Player.Model
@@ -11,7 +11,7 @@ namespace Player.Model
 
         private string _PlayerGuid;
         public string PlayerGuid { get => _PlayerGuid; set => _PlayerGuid = value; }
-        
+
         private int _health;
         public int Health { get => _health; set => _health = value; }
         private int _stamina;
@@ -30,7 +30,7 @@ namespace Player.Model
         private int _yPosition;
         public int XPosition { get => _xPosition; set => _xPosition = value; }
         public int YPosition { get => _yPosition; set => _yPosition = value; }
-        
+
         public string Symbol { get => _symbol; set => _symbol = value; }
         public ConsoleColor Color { get; set; }
         public int Team { get; set; }
@@ -42,7 +42,7 @@ namespace Player.Model
 
 
         public PlayerModel(string name, IInventory inventory, IBitcoin bitcoins, IRadiationLevel radiationLevel
-            //, Tile tile
+        //, Tile tile
         )
         {
             _name = name;
@@ -165,6 +165,6 @@ namespace Player.Model
                 throw new ItemException("Je hebt geen " + itemName + " item in je inventory!");
             }
         }
-        
+
     }
 }

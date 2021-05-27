@@ -1,5 +1,5 @@
-﻿using System;
-using Session.DTO;
+﻿using Session.DTO;
+using System;
 using System.Collections.Generic;
 using System.Timers;
 
@@ -43,7 +43,7 @@ namespace Session
                 _players.Add(new HeartbeatDTO(clientId));
             }
         }
-        
+
         private void CheckHeartbeatTimer()
         {
             _heartbeatTimer.AutoReset = true;

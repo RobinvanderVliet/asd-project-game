@@ -1,19 +1,17 @@
-﻿using DataTransfer.DTO.Character;
-using Network;
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
+using DataTransfer.DTO.Character;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Player.DTO;
-using WorldGeneration;
 using Player.Model;
+using System;
+using System.Linq;
+using WorldGeneration;
 
 
 namespace Player.ActionHandlers
@@ -90,7 +88,7 @@ namespace Player.ActionHandlers
             {
                 HandleMove(moveDTO.PlayerPosition);
             }
-            
+
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 

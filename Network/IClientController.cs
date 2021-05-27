@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Network
+﻿namespace Network
 {
     public interface IClientController
     {

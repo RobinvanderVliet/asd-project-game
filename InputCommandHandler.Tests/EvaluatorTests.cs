@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using InputCommandHandler.Antlr.Ast;
+﻿using InputCommandHandler.Antlr.Ast;
 using InputCommandHandler.Antlr.Ast.Actions;
 using InputCommandHandler.Antlr.Transformer;
 using InputCommandHandler.Exceptions;
@@ -7,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using Player.Services;
 using Session;
+using System.Diagnostics.CodeAnalysis;
 
 namespace InputCommandHandler.Tests
 {

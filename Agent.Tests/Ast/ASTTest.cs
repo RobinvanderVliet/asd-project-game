@@ -1,6 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast;
+﻿using Agent.Antlr.Ast;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.Ast
 {
@@ -8,7 +8,7 @@ namespace Agent.Tests.Ast
     [TestFixture]
     public class ASTTest
     {
-    
+
 
         [Test]
         public void Test_Constructor_NoParameters()
@@ -19,7 +19,7 @@ namespace Agent.Tests.Ast
             //Assert
             Assert.IsInstanceOf(typeof(Configuration), result.root);
         }
-        
+
         [Test]
         public void Test_Constructor_WithParameters()
         {
@@ -28,8 +28,8 @@ namespace Agent.Tests.Ast
             //Act
             var result = new AST(configuration);
             //Assert
-            Assert.AreEqual(configuration,result.root);
+            Assert.AreEqual(configuration, result.root);
         }
-        
+
     }
 }

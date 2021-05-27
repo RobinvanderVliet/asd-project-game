@@ -1,23 +1,20 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Serilog;
-using System;
-using System.IO;
-using ASD_project.Profiles;
-using AutoMapper;
+﻿using ASD_project.Profiles;
+using Chat;
 using DatabaseHandler;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using WorldGeneration;
-using Player;
-using Chat;
-using Player.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Network;
 using Player.ActionHandlers;
-using Session;
 using Player.Model;
+using Player.Services;
+using Serilog;
+using Session;
+using System;
+using System.IO;
+using WorldGeneration;
 
 namespace ASD_project
 {
@@ -62,13 +59,13 @@ namespace ASD_project
                 })
                 .UseSerilog()
                 .Build();
-            
+
 
             var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);
             svc.Run();
         }
 
-        static void BuildConfig(IConfigurationBuilder builder) 
+        static void BuildConfig(IConfigurationBuilder builder)
         {
             builder.SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)

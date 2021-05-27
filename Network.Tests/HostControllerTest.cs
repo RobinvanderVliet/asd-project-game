@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
+﻿using Moq;
 using Network.DTO;
-using Moq;
+using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Network.Tests
 {
@@ -36,9 +36,9 @@ namespace Network.Tests
         public void Test_ReceivePacket_SendPacketToClients()
         {
             //Arrange ---------
-            _packetHeaderDTO.SessionID = "TestSession";          
+            _packetHeaderDTO.SessionID = "TestSession";
             _handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients, null);
-            _packetDTO.Header = _packetHeaderDTO;           
+            _packetDTO.Header = _packetHeaderDTO;
             _mockedClientController.Setup(mock => mock.HandlePacket(_packetDTO)).Returns(_handlerResponseDTO);
             _packetHeaderDTO.Target = "client";
             _mockedNetworkComponent.Setup(mock => mock.SendPacket(_packetDTO));
@@ -54,7 +54,7 @@ namespace Network.Tests
         public void Test_ReceivePacket_SendPacketToOriginId()
         {
             //Arrange ---------
-            _packetHeaderDTO.SessionID = "TestSession";           
+            _packetHeaderDTO.SessionID = "TestSession";
             _packetHeaderDTO.OriginID = "TestOriginId";
             _handlerResponseDTO = new HandlerResponseDTO(SendAction.ReturnToSender, null);
             _packetDTO.Header = _packetHeaderDTO;

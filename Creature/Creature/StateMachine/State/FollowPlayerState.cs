@@ -1,6 +1,6 @@
-﻿using System;
-using Creature.Creature.StateMachine.Data;
+﻿using Creature.Creature.StateMachine.Data;
 using Creature.Pathfinder;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
