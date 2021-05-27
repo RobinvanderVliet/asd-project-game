@@ -60,6 +60,9 @@ namespace Creature.Creature.StateMachine
             builder.In(attackPlayerState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
             builder.In(followPlayerState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
 
+            //Flee 
+            
+            
             builder.WithInitialState(wanderState);
 
             _passiveStateMachine = builder.Build().CreatePassiveStateMachine();
