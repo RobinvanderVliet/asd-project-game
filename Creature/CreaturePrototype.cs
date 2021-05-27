@@ -14,6 +14,8 @@ namespace Creature
     [ExcludeFromCodeCoverage]
     class CreaturePrototype
     {
+
+        private static ICreature testAgent;
         static void Main(string[] args)
         {
             IWorld world = new DefaultWorld(25);
@@ -23,18 +25,19 @@ namespace Creature
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
 
-            PlayerData playerData = new PlayerData(new Vector2(5, 5), 100, 5, 10, world, new List<Setting>());
+            PlayerData playerData = new PlayerData(new Vector2(5, 5), 100, 90, 10, world, new List<Setting>());
             AgentData agentData = new AgentData(new Vector2(10, 10), 100, 1, 10, world, new List<Setting>(), false);
             MonsterData monsterData = new MonsterData(new Vector2(10, 15), 20, 5, 50, world, new List<Setting>(), false);
 
             ICreature player = new Player(playerData);
-            ICreature agent = new Agent(agentData);
+            testAgent = new Agent(agentData);
+            //ICreature agent = new Agent(agentData);
             //ICreature monster = new Monster(monsterData);
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);
-            
-            world.SpawnAgent(agent);
+            world.SpawnAgent(testAgent);
+            //world.SpawnAgent(agent);
 
             // TODO: fix monster statemachine to get this working
             //world.SpawnCreature(monster);
@@ -66,9 +69,18 @@ namespace Creature
                 case "d":
                     player.Position = new Vector2(player.Position.X + 1, player.Position.Y);
                     break;
+                case "attack":
+                    testAgent.ApplyDamage(player.Damage);
+                    break;
                 default:
                     break;
             }
         }
+
+        private void setTestAgent(ICreature agent)
+        {
+            testAgent = agent;
+        }
+        
     }
 }

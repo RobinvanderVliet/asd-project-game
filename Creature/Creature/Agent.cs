@@ -1,5 +1,7 @@
-﻿using Creature.Creature.StateMachine;
+﻿using System;
+using Creature.Creature.StateMachine;
 using Creature.Creature.StateMachine.Data;
+using Creature.Creature.StateMachine.Event;
 
 namespace Creature
 {
@@ -21,6 +23,11 @@ namespace Creature
         public void ApplyDamage(double amount)
         {
             _agentStateMachine.CreatureData.Health -= amount;
+            Console.WriteLine( amount + " damage is applied to Agent remaining health = " + _agentStateMachine.CreatureData.Health );
+            if (_agentStateMachine.CreatureData.Health <= 30)
+            {
+                _agentStateMachine.FireEvent(CreatureEvent.Event.ALMOST_DEAD, _agentStateMachine.CreatureData);
+            }
         }
 
         public void HealAmount(double amount)
