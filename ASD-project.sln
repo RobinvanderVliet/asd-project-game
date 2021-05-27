@@ -32,8 +32,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lobby.Tests", "Lobby.Tests\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParserLexer.Tests", "ParserLexer.Tests\ParserLexer.Tests.csproj", "{1CA408BF-A6AA-49EF-853F-6127D982916D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Player.Tests", "Player.Tests\Player.Tests.csproj", "{CAA259BF-33A8-4B49-99F0-BDD65FA32265}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserInterface.Tests", "UserInterface.Tests\UserInterface.Tests.csproj", "{A2999ED5-88D0-4289-B35B-F50697110627}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldGeneration.Tests", "WorldGeneration.Tests\WorldGeneration.Tests.csproj", "{4E35DC1D-7AAD-47A6-B700-AF0433C0C9BD}"
@@ -125,10 +123,6 @@ Global
 		{1CA408BF-A6AA-49EF-853F-6127D982916D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CA408BF-A6AA-49EF-853F-6127D982916D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CA408BF-A6AA-49EF-853F-6127D982916D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CAA259BF-33A8-4B49-99F0-BDD65FA32265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CAA259BF-33A8-4B49-99F0-BDD65FA32265}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CAA259BF-33A8-4B49-99F0-BDD65FA32265}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CAA259BF-33A8-4B49-99F0-BDD65FA32265}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A2999ED5-88D0-4289-B35B-F50697110627}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A2999ED5-88D0-4289-B35B-F50697110627}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2999ED5-88D0-4289-B35B-F50697110627}.Release|Any CPU.ActiveCfg = Release|Any CPU
