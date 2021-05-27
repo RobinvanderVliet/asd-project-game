@@ -1,8 +1,13 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using DatabaseHandler.Services;
+using DataTransfer.DTO.Character;
 using DataTransfer.Model.World;
 using DataTransfer.Model.World.Interfaces;
 using DataTransfer.Model.World.LootableTiles;
 using DataTransfer.Model.World.TerrainTiles;
+using Display;
 using NUnit.Framework;
 using Moq;
 //using WorldGeneration.DatabaseFunctions;
@@ -21,7 +26,10 @@ namespace WorldGeneration.Tests
  
         //Declaration of mocks
         private INoiseMapGenerator _noiseMapGeneratorMock;
-        //private DatabaseFunctions.Database _databaseMock;
+        private DatabaseFunctions.Database _databaseMock;
+        private MapCharacterDTO _mapCharacterDTO;
+        private List<MapCharacterDTO> _mapCharacterDTOList;
+        private ConsolePrinter _consolePrinterMock;
  
         [SetUp]
         public void Setup()
@@ -52,18 +60,36 @@ namespace WorldGeneration.Tests
             
             _noiseMapGeneratorMock = noiseMapGeneratorMock.Object;
 
-            //_databaseMock = new Mock<Database>().Object;
             
-            //_sut = new Map(_noiseMapGeneratorMock, _databaseMock, chunkSize, seed);
+            var databaseMock = new Mock<DatabaseService<>>();
+            /*
+             doesn't work because it throws errors, but that's okay because it's getting replaced anyway so i'm not wasting anymore time on this.
+            databaseMock.Setup(p => p.InsertChunkIntoDatabase(chunk1)).Verifiable();
+            databaseMock.Setup(p => p.InsertChunkIntoDatabase(chunk2)).Verifiable();
+            databaseMock.Setup(p => p.InsertChunkIntoDatabase(chunk3)).Verifiable();
+            databaseMock.Setup(p => p.InsertChunkIntoDatabase(chunk4)).Verifiable();*/
+            
+            
+            databaseMock.Setup(a => a.DeleteTileMap()).Verifiable();
+            _databaseMock = databaseMock.Object;
 
+            var consolePrinterMock = new Mock<ConsolePrinter>(ConsoleColor.White, ConsoleColor.Black);
+            _consolePrinterMock = consolePrinterMock.Object;
+            
+            _sut = new Map(_noiseMapGeneratorMock, _databaseMock, chunkSize, seed, _consolePrinterMock);
+
+            _mapCharacterDTO = new MapCharacterDTO(0, 0, "naam", "d");
+            
+            _mapCharacterDTOList = new List<MapCharacterDTO>();
+            _mapCharacterDTOList.Add(_mapCharacterDTO);
         }
         
         [Test]
-        public void Test_Map_DoesntThrowException() 
+        public void Test_MapConstructor_DoesntThrowException() 
         {
             //Arrange ---------
             //Act ---------
-            //var map = new Map(new NoiseMapGenerator(), new DatabaseFunctions.Database("c:\\temp\\db.db", "test"),2,51);
+            var map = new Map(new NoiseMapGenerator(), new Database("c:\\temp\\db.db", "test"),2,51, new ConsolePrinter());
             //Assert ---------
         }
         
@@ -72,7 +98,7 @@ namespace WorldGeneration.Tests
         {
             //Arrange ---------
             //Act ---------
-            //_sut.DisplayMap(0,0, 1);
+            _sut.DisplayMap(_mapCharacterDTO,1, _mapCharacterDTOList);
             //Assert ---------
         }
         
@@ -91,6 +117,16 @@ namespace WorldGeneration.Tests
             //Arrange ---------
             //Act ---------
             //Assert ---------
+        }
+        
+        [Test]
+        public void Test_DeleteMap_PassesCommandThrough() 
+        {
+            //Arrange ---------
+            //Act ---------
+            _sut.DeleteMap();
+            //Assert ---------
+            _databaseMock.Verify(_sut.DeleteMap(), Times.AtLeastOnce());
         }
     }
 }

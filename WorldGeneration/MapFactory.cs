@@ -1,12 +1,13 @@
 using System;
 using DatabaseHandler.Services;
 using DataTransfer.Model.World;
+using Display;
 
 namespace WorldGeneration
 {
-    public abstract class MapFactory
+    public class MapFactory
     {
-        public static Map GenerateMap(int chunkSize = 8, int seed = -1123581321)
+        public static Map GenerateMap(int chunkSize = 8, int seed = 0)
         {
             // default chunksize is 8. Can be adjusted in the line above
             
@@ -14,8 +15,10 @@ namespace WorldGeneration
             if (seed == -1123581321)
             {
                 seed = new Random().Next(1, 999999);
-            }           
-            return new Map(new NoiseMapGenerator(), chunkSize, seed, new DatabaseService<Chunk>());
+            }
+
+            return new Map(new NoiseMapGenerator(), chunkSize, seed, new DatabaseService<Chunk>(),
+                new ConsolePrinter());
         }
 
         public static int GenerateSeed()
