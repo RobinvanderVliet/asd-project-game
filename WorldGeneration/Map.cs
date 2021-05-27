@@ -16,8 +16,7 @@ namespace WorldGeneration
     {
         private readonly int _chunkSize;
         private readonly int _seed;
-        private IList<Chunk> _chunks; // NOT readonly, don't listen to the compiler
-        //private readonly DatabaseFunctions.Database _db;
+        private IList<Chunk> _chunks;
         private IDatabaseService<Chunk> _dbService;
         private ChunkService _chunkService;
         private IList<int[]> _chunksWithinLoadingRange;
@@ -34,6 +33,10 @@ namespace WorldGeneration
             , IList<Chunk> chunks = null
         )
         {
+            if (chunkSize < 1)
+            {
+                throw new InvalidOperationException("Chunksize smaller than 1.");
+            }
             _chunkSize = chunkSize;
             _chunks = chunks ?? new List<Chunk>();
             _seed = seed;
@@ -56,7 +59,14 @@ namespace WorldGeneration
                     var getAll = _dbService.GetAllAsync();
                     getAll.Wait();
                     var results = getAll.Result.FirstOrDefault(c => c.Equals(chunk));
-                    _chunks.Add(results ?? GenerateNewChunk(chunkXY[0], chunkXY[1]));
+                    if (results == null)
+                    {
+                        _chunks.Add(GenerateNewChunk(chunkXY[0], chunkXY[1]));
+                    }
+                    else
+                    {
+                        _chunks.Add(results);
+                    }
                 }
             }
         }
@@ -86,6 +96,11 @@ namespace WorldGeneration
 
         public void DisplayMap(MapCharacterDTO currentPlayer, int viewDistance, IList<MapCharacterDTO> characters)
         {
+            if (viewDistance < 0)
+            {
+                throw new InvalidOperationException("viewDistance smaller than 0.");
+            }
+            
             var playerX = currentPlayer.XPosition;
             var playerY = currentPlayer.YPosition;
             LoadArea(playerX, playerY, viewDistance);
@@ -94,9 +109,9 @@ namespace WorldGeneration
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
                 {
                     var tile = GetLoadedTileByXAndY(x, y);
-                    Console.Write($" {GetDisplaySymbol(currentPlayer, tile, characters)}");
+                    _consolePrinter.PrintText($" {GetDisplaySymbol(currentPlayer, tile, characters)}");
                 }
-                Console.WriteLine("");
+                _consolePrinter.NextLine();
             }
         }
         
@@ -152,6 +167,7 @@ namespace WorldGeneration
         
         public void DeleteMap()
         {
+            _chunks.Clear();
             _dbService.DeleteAllAsync();
         }
         

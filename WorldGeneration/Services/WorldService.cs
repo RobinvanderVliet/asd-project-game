@@ -25,7 +25,7 @@ namespace WorldGeneration
         
         public void DeleteMap()
         {
-            _world.deleteMap();
+            _world.DeleteMap();
         }
 
         public void GenerateWorld(int seed)

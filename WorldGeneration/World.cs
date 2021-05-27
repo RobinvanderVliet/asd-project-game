@@ -18,7 +18,7 @@ namespace WorldGeneration
             // AddCharacterToWorld(currentPlayer);
             _map = MapFactory.GenerateMap(seed: seed);
             _viewDistance = viewDistance;
-            _map.DeleteMap();
+            DeleteMap();
         }
 
         public void UpdateCharacterPosition(MapCharacterDTO characterPositionDTO)
@@ -57,7 +57,7 @@ namespace WorldGeneration
             _map.DisplayMap(CurrentPlayer, _viewDistance, Characters);
         }
 
-        public void deleteMap()
+        public void DeleteMap()
         {
             _map.DeleteMap();
         }
