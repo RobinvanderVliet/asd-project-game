@@ -19,10 +19,9 @@ namespace Player.Services
         
         public IPlayerModel CurrentPlayer { get => _currentPlayer; set => _currentPlayer = value; }
         
+        private List<MapCharacterDTO> _playerPositions;
         private readonly IMoveHandler _moveHandler;
         private readonly IChatHandler _chatHandler;
-        //session handler in aparte classe gebruiken, kan maybe blijven staan? Weet niet of die nog gebrukt gaat worden. :(
-        private readonly ISessionHandler _sessionHandler;
         private readonly IWorldService _worldService;
         private readonly IClientController _clientController;
         private IInventory _inventory;
@@ -49,18 +48,7 @@ namespace Player.Services
 
         public void Attack(string direction)
         {
-            //player1.getTile();
-            //check with the gameboard whether or not there's a player in the given direction from this tile
-            //player2 = tile(x,y).getPlayer
-            //if yes {
-            //int dmg = player1.GetAttackDamage();
-            //player1.RemoveStamina(1);
-            // player2.RemoveHealth(dmg);
-            //} else {  
-            //  Console.WriteLine("You swung at nothing!");
-            // player1.RemoveStamina(1);
-            //}
-            Console.WriteLine("Attacked in " + direction + " direction.");
+          Console.WriteLine("Attacked in " + direction + " direction.");
         }
 
         public void ExitCurrentGame()
@@ -90,14 +78,11 @@ namespace Player.Services
         public void Say(string messageValue)
         {
             _chatHandler.SendSay(messageValue);
-            //code for chat with other players in team chat
-            //Console.WriteLine(_currentPlayer.Name + " sent message: " + messageValue);
         }
 
         public void Shout(string messageValue)
         {
-            //code for chat with other players in general chat
-            //Console.WriteLine(_playerModel.Name + " sent message: " + messageValue);
+            _chatHandler.SendShout(messageValue);
         }
 
         public void AddHealth(int amount)
@@ -192,13 +177,13 @@ namespace Player.Services
             }
 
             
-            var mapCharacterDto = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
+            var mapCharacterDTO = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
                 (_worldService.getCurrentCharacterPositions().YPosition) + y, 
                 _currentPlayer.PlayerGuid, 
                 _worldService.getCurrentCharacterPositions().GameGuid, 
                 _currentPlayer.Symbol);
             
-            _moveHandler.SendMove(mapCharacterDto);
+            _moveHandler.SendMove(mapCharacterDTO);
             
             MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions();
            _currentPlayer.XPosition = currentCharacter.XPosition;

@@ -1,6 +1,4 @@
-﻿using DataTransfer.DTO.Player;
-using Player.DTO;
-using Player.Model;
+﻿using Player.Model;
 
 namespace Player.Services
 {
