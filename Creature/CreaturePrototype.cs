@@ -23,8 +23,8 @@ namespace Creature
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
 
-            PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, new List<Setting>());
-            AgentData agentData = new AgentData(new Vector2(10, 10), 20, 5, 50, world, new List<Setting>(), false);
+            PlayerData playerData = new PlayerData(new Vector2(5, 5), 100, 5, 10, world, new List<Setting>());
+            AgentData agentData = new AgentData(new Vector2(10, 10), 100, 1, 10, world, new List<Setting>(), false);
             MonsterData monsterData = new MonsterData(new Vector2(10, 15), 20, 5, 50, world, new List<Setting>(), false);
 
             ICreature player = new Player(playerData);
