@@ -15,11 +15,11 @@ namespace InputCommandHandler.Antlrr
         private AST _ast;
         public AST Ast { get => _ast; private set => _ast = value; }
 
-        public void SyntaxError(IRecognizer recognizer, 
-                                IToken offendingSymbol, 
-                                int line, 
-                                int charPositionInLine, 
-                                string msg, 
+        public void SyntaxError(IRecognizer recognizer,
+                                IToken offendingSymbol,
+                                int line,
+                                int charPositionInLine,
+                                string msg,
                                 RecognitionException e)
         {
             throw new CommandSyntaxException(msg);

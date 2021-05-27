@@ -1,11 +1,11 @@
-﻿using System;
-using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
+﻿using Chat.DTO;
 using Moq;
 using Network;
-using Chat.DTO;
 using Network.DTO;
 using Newtonsoft.Json;
+using NUnit.Framework;
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace Chat.Tests
@@ -98,7 +98,7 @@ namespace Chat.Tests
                 string expected = string.Format(" said: Hello World{0}", Environment.NewLine);
                 Assert.AreEqual(expected, sw.ToString());
                 Assert.AreEqual(ExpectedResult, actualResult);
-            }                 
+            }
         }
 
         [Test]

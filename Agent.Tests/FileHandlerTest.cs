@@ -1,8 +1,8 @@
-﻿using NUnit.Framework;
+﻿using Agent.Exceptions;
+using NUnit.Framework;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using Agent.Exceptions;
 
 namespace Agent.Tests
 {
@@ -24,7 +24,7 @@ namespace Agent.Tests
             //Arrange
             var expected = "combat when player nearby player then attack";
             var fileLocation = _sut.GetBaseDirectory() + "/Resource/import_test_file_1.txt";
-            
+
             //Act
             var result = _sut.ImportFile(fileLocation);
 
@@ -33,7 +33,7 @@ namespace Agent.Tests
         }
         [Test]
         public void Test_ImportFile_ThrowsFileException1()
-        { 
+        {
             //Arrange
             var fileLocation = _sut.GetBaseDirectory() + "Resource/ThisFileDoesNotExist.txt";
 
@@ -44,10 +44,10 @@ namespace Agent.Tests
             //Assert
             Assert.AreEqual("File not found!", exception.Message);
         }
-        
+
         [Test]
         public void Test_ImportFile_ThrowsFileException2()
-        { 
+        {
             //Arrange
             var fileLocation = _sut.GetBaseDirectory() + "/Resource/AgentTestFileWrongExtension.xml";
 
@@ -66,7 +66,7 @@ namespace Agent.Tests
             var expected = "combat=defensive" + Environment.NewLine + "explore=random";
             var fileLocation = _sut.GetBaseDirectory() + "/Resource/";
             var fileName = "AgentExportFile.cfg";
-            
+
             //Act
             _sut.ExportFile(expected, fileName);
 
@@ -86,10 +86,10 @@ namespace Agent.Tests
             {
                 Directory.Delete(directory);
             }
-            
+
             //Act
             _sut.CreateDirectory(directory + "TestFile.txt");
-            
+
             //Assert
             Assert.True(Directory.Exists(directory));
         }

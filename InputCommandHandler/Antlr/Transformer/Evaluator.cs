@@ -1,9 +1,9 @@
-using System;
 using InputCommandHandler.Antlr.Ast;
 using InputCommandHandler.Antlr.Ast.Actions;
 using InputCommandHandler.Exceptions;
 using Player.Services;
 using Session;
+using System;
 
 namespace InputCommandHandler.Antlr.Transformer
 {
@@ -155,6 +155,6 @@ namespace InputCommandHandler.Antlr.Transformer
         {
             _sessionService.StartSession();
         }
-        
+
     }
 }

@@ -1,6 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast;
+﻿using Agent.Antlr.Ast;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 using Action = Agent.Antlr.Ast.Action;
 
 namespace Agent.Tests.Ast
@@ -75,7 +75,7 @@ namespace Agent.Tests.Ast
             Assert.True(result);
         }
 
-   
+
         [Test]
         public void Test_RemoveChild_RemoveNodeChild()
         {

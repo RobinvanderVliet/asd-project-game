@@ -1,8 +1,8 @@
-using System.Diagnostics.CodeAnalysis;
 using Moq;
 using NUnit.Framework;
 using Player.Exceptions;
 using Player.Model;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Player.Tests
 {
@@ -22,7 +22,7 @@ namespace Player.Tests
             _mockedRadiationLevel = new Mock<IRadiationLevel>();
             _sut = new PlayerModel("Jan", _mockedInventory.Object, _mockedBitcoins.Object, _mockedRadiationLevel.Object);
         }
-        
+
         [Test]
         public void Test_GetName_GetsNameSuccessfully()
         {
@@ -31,7 +31,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual("Jan", _sut.Name);
         }
-        
+
         [Test]
         public void Test_SetName_SetsNameSuccessfully()
         {
@@ -42,7 +42,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(name, _sut.Name);
         }
-        
+
         [Test]
         public void Test_GetHealth_GetsHealthSuccessfully()
         {
@@ -51,7 +51,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(100, _sut.Health);
         }
-        
+
         [Test]
         public void Test_SetHealth_SetsHealthSuccessfully()
         {
@@ -62,7 +62,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(HP, _sut.Health);
         }
-        
+
         [Test]
         public void Test_GetStamina_GetsStaminaSuccessfully()
         {
@@ -71,7 +71,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(10, _sut.Stamina);
         }
-        
+
         [Test]
         public void Test_SetStamina_SetsStaminaSuccessfully()
         {
@@ -82,7 +82,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(stamina, _sut.Stamina);
         }
-        
+
         [Test]
         public void Test_GetInventory_GetsInventorySuccessfully()
         {
@@ -91,7 +91,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(_mockedInventory.Object, _sut.Inventory);
         }
-        
+
         [Test]
         public void Test_SetInventory_SetsInventorySuccessfully()
         {
@@ -102,7 +102,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(inventory, _sut.Inventory);
         }
-        
+
         [Test]
         public void Test_GetBitcoins_GetsBitcoinsSuccessfully()
         {
@@ -111,7 +111,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(_mockedBitcoins.Object, _sut.Bitcoins);
         }
-        
+
         [Test]
         public void Test_SetBitcoins_SetsBitcoinsSuccessfully()
         {
@@ -122,7 +122,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(bitcoins, _sut.Bitcoins);
         }
-        
+
         [Test]
         public void Test_GetRadiationLevel_GetsRadiationLevelSuccessfully()
         {
@@ -131,7 +131,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(_mockedRadiationLevel.Object, _sut.RadiationLevel);
         }
-        
+
         [Test]
         public void Test_SetRadiationLevel_SetsRadiationLevelSuccessfully()
         {
@@ -142,7 +142,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(radiationLevel, _sut.RadiationLevel);
         }
-        
+
         [Test]
         public void Test_SetCurrentPosition_SetsCurrentPositionSuccessfully()
         {
@@ -166,7 +166,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(50, _sut.Health);
         }
-        
+
         [Test]
         public void Test_RemoveHealth_StopsAtDyingState()
         {
@@ -176,7 +176,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(0, _sut.Health);
         }
-        
+
         [Test]
         public void Test_AddHealth_WithoutExceedingHealthCap()
         {
@@ -187,7 +187,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(90, _sut.Health);
         }
-        
+
         [Test]
         public void Test_AddHealth_ReachesHealthCap()
         {
@@ -198,7 +198,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(100, _sut.Health);
         }
-        
+
         [Test]
         public void Test_RemoveStamina_WithoutRunningOutOfMana()
         {
@@ -208,7 +208,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(5, _sut.Stamina);
         }
-        
+
         [Test]
         public void Test_RemoveStamina_StopsAtNoMana()
         {
@@ -218,7 +218,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(0, _sut.Stamina);
         }
-        
+
         [Test]
         public void Test_AddStamina_WithoutExceedingStaminaCap()
         {
@@ -229,7 +229,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(9, _sut.Stamina);
         }
-        
+
         [Test]
         public void Test_AddStamina_ReachesStaminaCap()
         {
@@ -240,7 +240,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(10, _sut.Stamina);
         }
-        
+
         [Test]
         public void Test_GetItem_VerifyInventoryMoqWorks()
         {
@@ -251,7 +251,7 @@ namespace Player.Tests
             Assert.AreEqual(item, _sut.GetItem("ItemName"));
             _mockedInventory.Verify(mockedInventory => mockedInventory.GetItem("ItemName"), Times.Once);
         }
-        
+
         [Test]
         public void Test_AddInventoryItem_AddsItemSuccessfully()
         {
@@ -263,7 +263,7 @@ namespace Player.Tests
             //assert
             _mockedInventory.Verify(mockedInventory => mockedInventory.AddItem(item), Times.Once);
         }
-        
+
         [Test]
         public void Test_RemoveInventoryItem_RemovesItemSuccessfully()
         {
@@ -275,7 +275,7 @@ namespace Player.Tests
             //assert
             _mockedInventory.Verify(mockedInventory => mockedInventory.RemoveItem(item), Times.Once);
         }
-        
+
         [Test]
         public void Test_EmptyInventory_EmptiesInventorySuccessfully()
         {
@@ -286,7 +286,7 @@ namespace Player.Tests
             //assert
             _mockedInventory.Verify(mockedInventory => mockedInventory.EmptyInventory(), Times.Once);
         }
-        
+
         [Test]
         public void Test_GetAmount_VerifyBitcoinMoqWorks()
         {
@@ -296,7 +296,7 @@ namespace Player.Tests
             Assert.AreEqual(20, _sut.Bitcoins.Amount);
             _mockedBitcoins.Verify(mockedBitcoins => mockedBitcoins.Amount, Times.Once);
         }
-        
+
         [Test]
         public void Test_AddBitcoins_AddsBitcoinsSuccessfully()
         {
@@ -307,7 +307,7 @@ namespace Player.Tests
             //assert
             _mockedBitcoins.Verify(mockedBitcoins => mockedBitcoins.AddAmount(20), Times.Once);
         }
-        
+
         [Test]
         public void Test_RemoveBitcoins_RemovesBitcoinsSuccessfully()
         {
@@ -318,7 +318,7 @@ namespace Player.Tests
             //assert
             _mockedBitcoins.Verify(mockedBitcoins => mockedBitcoins.RemoveAmount(10), Times.Once);
         }
-        
+
         [Test]
         public void Test_DropItem_DropsItemSuccessfully()
         {
@@ -331,7 +331,7 @@ namespace Player.Tests
             //assert
             _mockedInventory.Verify(mockedInventory => mockedInventory.RemoveItem(item), Times.Once);
         }
-        
+
         [Test]
         public void Test_DropItem_ThrowsExceptionBecauseNoItemExists()
         {
@@ -340,7 +340,7 @@ namespace Player.Tests
             //act & assert
             Assert.Throws<ItemException>(() => _sut.DropItem("ItemName"));
         }
-        
+
         [Test]
         public void Test_GetAttackDamage_GetDefaultAttackDamage()
         {
@@ -349,7 +349,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(5, _sut.GetAttackDamage());
         }
-        
+
         [Test]
         public void Test_GetLevel_VerifyRadiationLevelMoqWorks()
         {

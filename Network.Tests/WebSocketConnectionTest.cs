@@ -1,7 +1,7 @@
-using NUnit.Framework;
 using Moq;
-using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
+using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace Network.Tests

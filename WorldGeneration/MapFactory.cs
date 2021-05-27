@@ -12,7 +12,7 @@ namespace WorldGeneration
             {
                 seed = new Random().Next(1, 999999);
             }
-            
+
             return new Map(new NoiseMapGenerator(), new DatabaseFunctions.Database(dbLocation, collectionName), chunkSize, seed);
         }
 

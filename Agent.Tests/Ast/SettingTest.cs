@@ -1,6 +1,6 @@
-using System.Diagnostics.CodeAnalysis;
 using Agent.Antlr.Ast;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 using Action = Agent.Antlr.Ast.Action;
 
 namespace Agent.Tests.Ast
@@ -18,7 +18,7 @@ namespace Agent.Tests.Ast
             _setting = new Setting("Setting");
         }
 
-    
+
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
@@ -29,7 +29,7 @@ namespace Agent.Tests.Ast
             Assert.AreEqual(result, TYPE);
         }
 
-   
+
         [Test]
         public void Test_AddChild_Action()
         {
@@ -39,13 +39,13 @@ namespace Agent.Tests.Ast
 
             //Act
 
-            var result = ( _setting.GetChildren()[0])?.GetNodeType();
+            var result = (_setting.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual(result, "Action");
         }
-        
-   
+
+
         [Test]
         public void Test_AddChild_Condition()
         {
@@ -55,12 +55,12 @@ namespace Agent.Tests.Ast
 
             //Act
 
-            var result = ( _setting.GetChildren()[0]).GetNodeType();
+            var result = (_setting.GetChildren()[0]).GetNodeType();
 
             //Assert
             Assert.AreEqual("Condition", result);
         }
-        
+
         [Test]
         public void Test_AddChild_Node()
         {
@@ -70,10 +70,10 @@ namespace Agent.Tests.Ast
 
             //Act
 
-            var result = ( _setting.GetChildren()[0]).GetNodeType();
+            var result = (_setting.GetChildren()[0]).GetNodeType();
 
             //Assert
-            Assert.AreEqual( "Node", result);
+            Assert.AreEqual("Node", result);
         }
     }
 }

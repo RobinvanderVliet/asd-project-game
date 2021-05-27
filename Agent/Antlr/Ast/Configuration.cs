@@ -3,7 +3,7 @@
 
     public class Configuration : Node
     {
-        public Configuration(){}
+        public Configuration() { }
 
         public override string GetNodeType()
         {

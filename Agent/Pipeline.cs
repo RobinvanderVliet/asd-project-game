@@ -1,12 +1,12 @@
 ﻿using Agent.Antlr.Ast;
-using System;
-using System.Collections.Generic;
 using Agent.Antlr.Checker;
 using Agent.Antlr.Grammar;
 using Agent.Antlr.Parser;
 using Agent.Generator;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using System;
+using System.Collections.Generic;
 using SyntaxErrorException = Agent.Exceptions.SyntaxErrorException;
 
 namespace Agent
@@ -39,7 +39,7 @@ namespace Agent
             parser.AddErrorListener(this);
             var parseTree = parser.configuration();
             ParseTreeWalker walker = new ParseTreeWalker();
-            
+
             ASTAgentListener astAgentListener = new ASTAgentListener();
             walker.Walk(astAgentListener, parseTree);
             _ast = astAgentListener.GetAST();
@@ -48,7 +48,7 @@ namespace Agent
 
         public virtual void CheckAst()
         {
-            if(_checking == null)
+            if (_checking == null)
             {
                 _checking = new Checking(_ast);
             }
@@ -72,12 +72,12 @@ namespace Agent
         {
             _errors.Clear();
         }
-        
+
         public Checking Checking
         {
             set => _checking = value;
         }
-        
+
         public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine,
             string msg,
             RecognitionException e)

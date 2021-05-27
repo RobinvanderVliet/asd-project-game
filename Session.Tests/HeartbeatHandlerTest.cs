@@ -1,8 +1,7 @@
 ﻿using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
-using System.IO;
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Threading;
 
 namespace Session.Tests
@@ -50,7 +49,7 @@ namespace Session.Tests
             {
                 //arrange
                 string expected = string.Format("Agents are enabled{0}", Environment.NewLine);
-                
+
                 using (StringWriter sw = new StringWriter())
                 {
                     //Act ---------

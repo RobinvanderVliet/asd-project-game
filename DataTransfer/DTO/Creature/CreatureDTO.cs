@@ -1,6 +1,6 @@
+using DataTransfer.DTO.Character;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using DataTransfer.DTO.Character;
 
 namespace DataTransfer.DTO.Creature
 {
@@ -12,19 +12,19 @@ namespace DataTransfer.DTO.Creature
             , string playerGuid
             , string gameGuid
             , string symbol
-            ,  ConsoleColor color = ConsoleColor.White
+            , ConsoleColor color = ConsoleColor.White
             , ConsoleColor backgroundColor = ConsoleColor.Black
             , int team = 0
             , int health = default
             , int stamina = default
             , int radiationLevel = default
             , InventoryDTO inventory = null
-            , BitcoinDTO bitcoins = null) 
+            , BitcoinDTO bitcoins = null)
             : base(xPosition
                 , yPosition
                 , playerGuid
                 , gameGuid
-                , symbol,  color
+                , symbol, color
                 , backgroundColor
                 , team
                 , health

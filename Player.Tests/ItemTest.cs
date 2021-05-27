@@ -1,6 +1,6 @@
-using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using Player.Model;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Player.Tests
 {
@@ -8,13 +8,13 @@ namespace Player.Tests
     public class ItemTest
     {
         private Item _sut;
-        
+
         [SetUp]
         public void Setup()
         {
             _sut = new Item("ItemName", "Description");
         }
-        
+
         [Test]
         public void Test_GetItemName_GetsItemNameSuccessfully()
         {
@@ -23,7 +23,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual("ItemName", _sut.ItemName);
         }
-        
+
         [Test]
         public void Test_SetItemName_SetsItemNameSuccessfully()
         {
@@ -34,7 +34,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(itemName, _sut.ItemName);
         }
-        
+
         [Test]
         public void Test_GetDescription_GetsDescriptionSuccessfully()
         {
@@ -43,7 +43,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual("Description", _sut.Description);
         }
-        
+
         [Test]
         public void Test_SetDescription_SetsDescriptionSuccessfully()
         {

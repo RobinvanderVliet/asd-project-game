@@ -1,7 +1,7 @@
-﻿using System;
+﻿using DataTransfer.DTO.Character;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataTransfer.DTO.Character;
 
 namespace WorldGeneration
 {
@@ -32,7 +32,7 @@ namespace WorldGeneration
             if (_characters.Any(x => x.PlayerGuid.Equals(characterPositionDTO.PlayerGuid)))
             {
                 _characters.Where(x => x.PlayerGuid.Equals(characterPositionDTO.PlayerGuid)).FirstOrDefault().XPosition = characterPositionDTO.XPosition;
-                _characters.Where(x => x.PlayerGuid.Equals(characterPositionDTO.PlayerGuid)).FirstOrDefault().YPosition = characterPositionDTO.YPosition;                
+                _characters.Where(x => x.PlayerGuid.Equals(characterPositionDTO.PlayerGuid)).FirstOrDefault().YPosition = characterPositionDTO.YPosition;
             }
 
             DisplayWorld();
@@ -44,7 +44,7 @@ namespace WorldGeneration
             {
                 CurrentPlayer = mapCharacterDTO;
             }
-            
+
             _characters.Add(mapCharacterDTO);
         }
 
@@ -64,4 +64,4 @@ namespace WorldGeneration
         }
     }
 }
-     
+

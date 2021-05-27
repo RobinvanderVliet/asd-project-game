@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
@@ -9,18 +7,20 @@ using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
+using System;
+using System.Collections.Generic;
 using WorldGeneration;
 using WorldGeneration.Models;
 
 namespace Session
 {
-    
+
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
     {
         private IClientController _clientController;
         private ISessionHandler _sessionHandler;
         private IWorldService _worldService;
-        
+
         public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler)
         {
             _clientController = clientController;
@@ -28,7 +28,7 @@ namespace Session
             _worldService = worldService;
             _sessionHandler = sessionHandler;
         }
-        
+
         public void SendGameSession(ISessionHandler sessionHandler)
         {
             _sessionHandler = sessionHandler;
@@ -46,12 +46,12 @@ namespace Session
             var gameService = new ServicesDb<GamePOCO>(gameRepository);
 
             string gameGuid = Guid.NewGuid().ToString();
-            var gamePOCO = new GamePOCO {GameGuid = gameGuid, PlayerGUIDHost = _clientController.GetOriginId()};
+            var gamePOCO = new GamePOCO { GameGuid = gameGuid, PlayerGUIDHost = _clientController.GetOriginId() };
             gameService.CreateAsync(gamePOCO);
-  
+
             List<string> allClients = _sessionHandler.GetAllClients();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
-            
+
             // Needs to be refactored to something random in construction; this was for testing
             int playerX = 26; // spawn position
             int playerY = 11; // spawn position
@@ -62,7 +62,7 @@ namespace Session
                 playerPosition[1] = playerY;
                 players.Add(element, playerPosition);
                 var tmpPlayer = new PlayerPOCO
-                    {PlayerGuid = element, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
+                { PlayerGuid = element, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY };
                 servicePlayer.CreateAsync(tmpPlayer);
 
                 playerX += 2; // spawn position + 2 each client
@@ -75,13 +75,13 @@ namespace Session
 
             return startGameDTO;
         }
-        
+
         private void SendGameSessionDTO(StartGameDTO startGameDTO)
         {
             var payload = JsonConvert.SerializeObject(startGameDTO);
             _clientController.SendPayload(payload, PacketType.GameSession);
         }
-        
+
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
@@ -95,16 +95,16 @@ namespace Session
 
             foreach (var player in startGameDTO.PlayerLocations)
             {
-                if (_clientController.GetOriginId() == player.Key) 
+                if (_clientController.GetOriginId() == player.Key)
                 {
                     _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, startGameDTO.GameGuid, CharacterSymbol.CURRENT_PLAYER), true);
-                } 
-                else 
+                }
+                else
                 {
-                    _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, startGameDTO.GameGuid,CharacterSymbol.ENEMY_PLAYER), false);
+                    _worldService.AddCharacterToWorld(new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, startGameDTO.GameGuid, CharacterSymbol.ENEMY_PLAYER), false);
                 }
             }
-            
+
             _worldService.DisplayWorld();
         }
     }

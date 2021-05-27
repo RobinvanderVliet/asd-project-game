@@ -7,9 +7,9 @@ namespace Agent.Antlr.Ast.Comparables
     {
 
         private Stat _stat;
-        
+
         public string Name { get; set; }
-        
+
         public Item(string name)
         {
             Name = name;
@@ -23,7 +23,8 @@ namespace Agent.Antlr.Ast.Comparables
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            if (_stat != null) {
+            if (_stat != null)
+            {
                 children.Add(_stat);
             }
             children.AddRange(body);
@@ -32,10 +33,12 @@ namespace Agent.Antlr.Ast.Comparables
 
         public override Node AddChild(Node node)
         {
-            if (node is Stat stat) {
+            if (node is Stat stat)
+            {
                 _stat = stat;
             }
-            else {
+            else
+            {
                 body.Add(node);
             }
             return this;

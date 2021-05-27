@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Agent.Mapper;
+﻿using Agent.Mapper;
 using InputCommandHandler;
+using System.Collections.Generic;
 using Configuration = Agent.Models.Configuration;
 
 namespace Agent.Services
@@ -16,11 +16,11 @@ namespace Agent.Services
         public FileHandler FileHandler { get => _fileHandler; set => _fileHandler = value; }
 
         public InputCommandHandlerComponent InputCommandHandlerComponent;
-        
+
         protected const string CANCEL_COMMAND = "cancel";
         protected const string LOAD_COMMAND = "load";
         public string LastError = "";
-        
+
         public abstract void CreateConfiguration(string configurationName, string filepath);
 
         public abstract List<Configuration> GetConfigurations();

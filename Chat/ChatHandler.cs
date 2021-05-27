@@ -1,8 +1,8 @@
 ﻿using Chat.DTO;
 using Network;
+using Network.DTO;
 using Newtonsoft.Json;
 using System;
-using Network.DTO;
 
 namespace Chat
 {
@@ -32,14 +32,14 @@ namespace Chat
 
         private void SendChatDTO(ChatDTO chatDTO)
         {
-            var payload = JsonConvert.SerializeObject(chatDTO);        
+            var payload = JsonConvert.SerializeObject(chatDTO);
             _clientController.SendPayload(payload, PacketType.Chat);
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var chatDTO = JsonConvert.DeserializeObject<ChatDTO>(packet.Payload);
-           
+
             switch (chatDTO.ChatType)
             {
                 case ChatType.Say:

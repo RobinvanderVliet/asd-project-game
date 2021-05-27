@@ -1,5 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Creature.World;
+﻿using Creature.World;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace Creature.Creature.StateMachine.Data

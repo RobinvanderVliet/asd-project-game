@@ -6,7 +6,7 @@ namespace WorldGeneration.Models.HazardousTiles
     [ExcludeFromCodeCoverage]
     public class GasTile : IHazardousTile
     {
-        
+
         public bool IsAccessible { get; set; }
         public string Symbol { get; set; }
         public int XPosition { get; set; }

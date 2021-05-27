@@ -5,14 +5,15 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.Parser
 {
-   
+
     [ExcludeFromCodeCoverage]
     public static class Fixtures
     {
 
         public static AST GetFixture(string name)
         {
-            switch (name) {
+            switch (name)
+            {
                 case "test1.txt":
                     return GetTestFixture1();
                 case "test2.txt":
@@ -23,8 +24,8 @@ namespace Agent.Tests.Parser
                     return new AST();
             }
         }
-        
-        
+
+
         private static AST GetTestFixture1()
         {
             var configuration = new Configuration();
@@ -140,7 +141,7 @@ namespace Agent.Tests.Parser
                     )
                 )
             );
-            
+
             configuration.AddChild((new Setting("explore"))
                 .AddChild((new Condition())
                     .AddChild((new When())
@@ -173,13 +174,13 @@ namespace Agent.Tests.Parser
                     )
                 )
             );
-            
-            
-            
+
+
+
             return new AST(configuration);
         }
-        
-        
-        
+
+
+
     }
 }

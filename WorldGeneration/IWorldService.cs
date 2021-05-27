@@ -1,5 +1,4 @@
-﻿using System;
-using DataTransfer.DTO.Character;
+﻿using DataTransfer.DTO.Character;
 
 namespace WorldGeneration
 {

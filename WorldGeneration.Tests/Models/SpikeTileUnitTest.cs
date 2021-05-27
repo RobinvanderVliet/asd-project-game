@@ -1,6 +1,5 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 using WorldGeneration.Models.HazardousTiles;
 using WorldGeneration.Models.Interfaces;
 
@@ -11,14 +10,14 @@ namespace WorldGeneration.Tests
     {
         private IHazardousTile _tile;
         private string _tileSymbol;
-        
+
         [SetUp]
         public void Setup()
         {
-            _tile = new SpikeTile(1,1);
+            _tile = new SpikeTile(1, 1);
             _tileSymbol = "\u25B2";
         }
-        
+
         [Test]
         public void Test_InstanceOf_SpikeTile()
         {
@@ -27,7 +26,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile, Is.InstanceOf<SpikeTile>());
         }
-        
+
         [Test]
         public void Test_InstanceOf_HazardousTile()
         {
@@ -36,7 +35,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile, Is.InstanceOf<IHazardousTile>());
         }
-        
+
         [Test]
         public void Test_InstanceOf_Tile()
         {
@@ -45,7 +44,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile, Is.InstanceOf<ITile>());
         }
-        
+
         [Test]
         public void Test_SetX_EqualsTo_5()
         {
@@ -55,7 +54,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile.XPosition, Is.EqualTo(5));
         }
-        
+
         [Test]
         public void Test_SetY_EqualsTo_5()
         {
@@ -65,7 +64,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile.YPosition, Is.EqualTo(5));
         }
-        
+
         [Test]
         public void Test_TileSymbol_EqualsTo_SpikeTileSymbol()
         {
@@ -74,7 +73,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
         }
-        
+
         [Test]
         public void Test_GetDamage_GreaterThan_1()
         {
@@ -84,7 +83,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile.GetDamage(time), Is.GreaterThan(1));
         }
-        
+
         [Test]
         public void Test_GetDamage_LessThan_11()
         {
@@ -94,7 +93,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile.GetDamage(time), Is.LessThan(11));
         }
-        
+
         [Test]
         public void Test_IsAccessible_EqualsTo_True()
         {
