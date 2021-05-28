@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UserInterface
 {
-    class GameChatScreen : Screen
+    public class GameChatScreen : Screen
     {
         private int _xPosition;
         private int _yPosition;
@@ -66,6 +66,13 @@ namespace UserInterface
             {
                 int chunkSize = _width - BORDER_SIZE;
                 int stringLength = message.Length;
+                int maxSize = chunkSize * _height;
+                if (stringLength > maxSize)
+                {
+                    message = message.Substring(0, maxSize - 3) + "...";
+                    stringLength = maxSize;
+                }
+
                 for (int i = 0; i < stringLength; i += chunkSize)
                 {
                     if (i + chunkSize > stringLength)
@@ -73,7 +80,11 @@ namespace UserInterface
                         chunkSize = stringLength - i;
                     }
                     messages.Enqueue(message.Substring(i, chunkSize));
-                    messages.Dequeue();
+
+                    if (messages.Count > _height)
+                    {
+                        messages.Dequeue();
+                    }
                 }
             }
             else

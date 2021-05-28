@@ -95,7 +95,12 @@ namespace Session
             _session.InSession = true;
 
             _heartbeatHandler = new HeartbeatHandler();
-            Console.WriteLine("Created session with the name: " + _session.Name);
+
+            if (_screenHandler.Screen is GameScreen)
+            {
+                GameScreen screen = _screenHandler.Screen as GameScreen;
+                screen.AddMessage("Created session with the name: " + _session.Name);
+            }
 
             return _session.InSession;
         }
@@ -318,8 +323,12 @@ namespace Session
             
             _senderHeartbeatTimer.Close();
             
-            Console.WriteLine("Look at me, I'm the captain (Host) now!");
-            
+            if (_screenHandler.Screen is GameScreen)
+            {
+                GameScreen screen = _screenHandler.Screen as GameScreen;
+                screen.AddMessage("Look at me, I'm the captain (Host) now!");
+            }
+
             List<string> heartbeatSenders = new List<string>(_session.GetAllClients());
             heartbeatSenders.Remove(_clientController.GetOriginId());
             

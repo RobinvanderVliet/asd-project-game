@@ -15,14 +15,14 @@ namespace UserInterface
 
         private const int CHAT_X = HEADER_X;
         private const int CHAT_Y = STAT_HEIGHT + BORDER_SIZE;
-        private const int CHAT_WIDTH = (SCREEN_WIDTH - BORDER_SIZE) / 2;
-        private const int CHAT_HEIGHT = 10;
+        private const int CHAT_WIDTH = (SCREEN_WIDTH - BORDER_SIZE) - (WORLD_WITH + BORDER_SIZE);
+        private const int CHAT_HEIGHT = 13;
 
         private const int WORLD_X = CHAT_WIDTH + BORDER_SIZE;
         private const int WORLD_Y = STAT_HEIGHT + BORDER_SIZE;
-        private const int WORLD_WITH = (SCREEN_WIDTH - BORDER_SIZE * 3) / 2;
-        private const int WORLD_HEIGHT = 10;
-
+        
+        private const int WORLD_HEIGHT = 13;
+        private const int WORLD_WITH = 25;
         private const int INPUT_X = HEADER_X;
         private const int INPUT_Y = STAT_HEIGHT + CHAT_HEIGHT + (BORDER_SIZE * 2);
 
@@ -39,28 +39,14 @@ namespace UserInterface
             _gameChatScreen.DrawScreen();
             _gameWorldScreen.DrawScreen();
             DrawInputBox(INPUT_X, INPUT_Y, "Insert an option");
-
-            demoMessages();
         } 
 
-        public void addMessage(string message)
+        public void AddMessage(string message)
         {
-            _gameChatScreen.AddMessage(message);
-        }
-
-        public void demoMessages()
-        {
-            for (int i = 1; i <= 15; i++)
+            if (_screenHandler.Screen is GameScreen)
             {
-                if (i == 12)
-                {
-                    _gameChatScreen.AddMessage("This is a test message to show that the text will properly wrap onto the next line. This is great to have so you don't have to limit the size of messages to much.");
-                }
-                else
-                {
-                    _gameChatScreen.AddMessage("Test " + i);
-                }
-                System.Threading.Thread.Sleep(500);
+                _gameChatScreen.AddMessage(message);
+                DrawInputBox(INPUT_X, INPUT_Y, "Insert an option");
             }
         }
     }
