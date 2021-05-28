@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using InputHandling.Antlr;
 using Moq;
 using NUnit.Framework;
@@ -6,6 +7,7 @@ using UserInterface;
 
 namespace InputHandling.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class InputHandlerTest
     {
         IInputHandler _sut;
