@@ -1,4 +1,9 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Linq;
+using AutoMapper;
+using DatabaseHandler;
+using DatabaseHandler.POCO;
+using DatabaseHandler.Repository;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
@@ -67,10 +72,37 @@ namespace Player.ActionHandlers
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             AttackDTO attackDto = JsonConvert.DeserializeObject<AttackDTO>(packet.Payload);
-            // iets voor host attackDto.AttackedPlayerGuid = playerToAttack guid
-            // altijd
-             HandleAttack(attackDto);
-             return new HandlerResponseDTO(SendAction.SendToClients, null);
+
+            if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
+            {
+                var dbConnection = new DbConnection();
+
+                var playerRepository = new Repository<PlayerPOCO>(dbConnection);
+                var playerToAttackGuid = playerRepository.GetAllAsync().Result.FirstOrDefault(player =>
+                    player.XPosition == attackDto.XPosition && player.YPosition == attackDto.YPosition).PlayerGuid; // check wat er uit komt als er geen speler staat
+                
+                if (playerToAttackGuid.Equals(""))
+                {
+                    return new HandlerResponseDTO(SendAction.ReturnToSender, "There is no enemy to attack");
+                }
+                else
+                {
+                    attackDto.AttackedPlayerGuid = playerToAttackGuid;
+
+                    var player = playerRepository.GetAllAsync().Result
+                        .FirstOrDefault(player => player.PlayerGuid == attackDto.AttackedPlayerGuid);
+                
+                    player.Health -= attackDto.Damage;
+                    playerRepository.UpdateAsync(player);
+                }
+            }
+            else if (packet.Header.Target.Equals(_clientController.GetOriginId()))
+            {
+                Console.WriteLine(packet.HandlerResponse.ResultMessage);
+                // stamina verlagen
+            }
+            HandleAttack(attackDto);
+            return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
         private void HandleAttack(AttackDTO attackDto)
@@ -78,6 +110,7 @@ namespace Player.ActionHandlers
             if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
             {
                 // stamina verlagen
+                
             }
 
             if (_clientController.GetOriginId().Equals(attackDto.AttackedPlayerGuid))
