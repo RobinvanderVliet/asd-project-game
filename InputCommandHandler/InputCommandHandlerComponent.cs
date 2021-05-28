@@ -18,7 +18,7 @@ namespace InputCommandHandler
         private IPlayerService _playerService;
         private ISessionService _sessionService;
         private IScreenHandler _screenHandler;
-        private static Timer aTimer;
+        private static Timer  _timer;
         private const string RETURN_KEYWORD = "return";
 
         public InputCommandHandlerComponent(IPlayerService playerService, ISessionService sessionService, IScreenHandler screenHandler)
@@ -155,14 +155,17 @@ namespace InputCommandHandler
             {
                 Console.WriteLine("BINNEN CUSTOM COMBAT RULE");
                 //customCombatRule();
-            } else if (answers.ElementAt(3).Contains("yes"))
+            }
+
+            if (answers.ElementAt(3).Contains("yes"))
             {
                 Console.WriteLine("BINNEN CUSTOM EXPLORE RULE");
                 //customExploreRule();
             }
             
-            //editorScreen.UpdateLastQuestion("de huidige vraag");
-
+            //naar de volgende scherm gaan!
         }
+
+        private void 
     }
 }
