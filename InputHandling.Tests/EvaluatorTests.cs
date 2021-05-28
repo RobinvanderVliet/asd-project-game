@@ -7,6 +7,7 @@ using InputHandling.Antlr.Transformer;
 using InputHandling.Exceptions;
 using Moq;
 using NUnit.Framework;
+using Player.ActionHandlers;
 using Session;
 
 namespace InputHandling.Tests
@@ -19,6 +20,7 @@ namespace InputHandling.Tests
         private Mock<IMoveHandler> _mockedMoveHandler;
         private Mock<IGameSessionHandler> _mockedGameSessionHandler;
         private Mock<IChatHandler> _mockedChatHandler;
+        private Mock<IAttackHandler> _mockedAttackHandler;
     
         [SetUp]
         public void Setup()
@@ -27,7 +29,8 @@ namespace InputHandling.Tests
             _mockedMoveHandler = new Mock<IMoveHandler>();
             _mockedGameSessionHandler = new Mock<IGameSessionHandler>();
             _mockedChatHandler = new Mock<IChatHandler>();
-            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object);
+            _mockedAttackHandler = new Mock<IAttackHandler>();
+            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedAttackHandler.Object);
         }
     
         [Test]
