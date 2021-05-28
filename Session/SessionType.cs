@@ -7,6 +7,7 @@ namespace Session
         RequestToJoinSession,
         SendPing,
         ReceivedPingResponse,
-        SendHeartbeat
+        SendHeartbeat,
+        NewBackUpHost
     }
 }

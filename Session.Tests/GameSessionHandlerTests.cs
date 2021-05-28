@@ -18,17 +18,19 @@ namespace Session.Tests
         private PacketDTO _packetDTO;
 
         //Declaration of mocks
-        private Mock<IClientController> _mockedClientController;
+        private Mock<ClientController> _mockedClientController; //change this to the interface and all test break, your choice.
         private Mock<IWorldService> _mockedWorldService;
         private Mock<ISessionHandler> _mockedsessionHandler;
 
         [SetUp]
         public void Setup()
         {
+            Mock<INetworkComponent> tmpMock = new();
+
             var standardOutput = new StreamWriter(Console.OpenStandardOutput());
             standardOutput.AutoFlush = true;
             Console.SetOut(standardOutput);
-            _mockedClientController = new Mock<IClientController>();
+            _mockedClientController = new Mock<ClientController>(tmpMock.Object);
             _mockedWorldService = new Mock<IWorldService>();
             _mockedsessionHandler = new Mock<ISessionHandler>();
             _sut = new GameSessionHandler(_mockedClientController.Object,_mockedWorldService.Object,_mockedsessionHandler.Object);
@@ -78,9 +80,7 @@ namespace Session.Tests
                 Payload = JsonConvert.SerializeObject(tmp)
             };
 
-            //needed for setting of backuphost -> if methode is found of use mock pls refactor this.
-            _sut = new(new ClientController(new NetworkComponent()), _mockedWorldService.Object, _mockedsessionHandler.Object);
-            _sut.ClientController.IsBackupHost = true;
+            _sut.ClientController.SetBackupHost(true);
 
             //mocked setup
             _mockedsessionHandler.Setup(x => x.GetAllClients()).Returns(new List<string> {"een super cool ID"});

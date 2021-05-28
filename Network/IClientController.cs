@@ -12,5 +12,6 @@ namespace Network
         public void CreateHostController();
         public string GetOriginId();
         public bool IsHost();
+        public void SetBackupHost(bool value);
     }
 }
