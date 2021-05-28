@@ -20,7 +20,7 @@ namespace InputCommandHandler.Tests
         [SetUp]
         public void SetUp()
         {
-            _sut = new Pipeline();
+            _sut = new Pipeline(null, null);
         }
 
         [Test]

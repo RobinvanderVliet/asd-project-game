@@ -1,35 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using Player.ActionHandlers;
+using Player.DTO;
 using Chat;
 using DataTransfer.DTO.Character;
 using Network;
 using Player.Model;
+using Session;
 using WorldGeneration;
+using WorldGeneration.Models;
 
 namespace Player.Services
 {
     public class PlayerService : IPlayerService
     {
-        private readonly IPlayerModel _currentPlayer;
+        private IPlayerModel _currentPlayer;
+        
+        public IPlayerModel CurrentPlayer { get => _currentPlayer; set => _currentPlayer = value; }
+        
         private List<MapCharacterDTO> _playerPositions;
         private readonly IMoveHandler _moveHandler;
         private readonly IChatHandler _chatHandler;
         private readonly IWorldService _worldService;
         private readonly IClientController _clientController;
-
-        public PlayerService(IPlayerModel currentPlayer
-            , IChatHandler chatHandler
+        private IInventory _inventory;
+        public PlayerService(IChatHandler chatHandler
+            , ISessionHandler sessionHandler
             , IMoveHandler moveHandler
             , IClientController clientController
-            , IWorldService worldService)
+            , IWorldService worldService
+            , IInventory inventory)
         {
             _chatHandler = chatHandler;
-            _currentPlayer = currentPlayer;
             _moveHandler = moveHandler;
             _clientController = clientController;
-            currentPlayer.PlayerGuid = _clientController.GetOriginId();
             _worldService = worldService;
+            _inventory = inventory;
+        }
+
+        public void SetupPlayer()
+        {
+            CurrentPlayer = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
+            CurrentPlayer.PlayerGuid = _clientController.GetOriginId();
         }
 
         public void Attack(string direction)

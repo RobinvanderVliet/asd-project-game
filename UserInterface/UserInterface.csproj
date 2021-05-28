@@ -4,4 +4,10 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="Session, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Session.Tests\bin\Debug\net5.0\Session.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

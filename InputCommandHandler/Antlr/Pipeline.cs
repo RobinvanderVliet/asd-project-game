@@ -15,6 +15,14 @@ namespace InputCommandHandler.Antlrr
         private AST _ast;
         public AST Ast { get => _ast; private set => _ast = value; }
 
+        private IPlayerService _playerService;
+        private ISessionService _sessionService;
+        public Pipeline(IPlayerService playerService, ISessionService sessionService)
+        {
+            _playerService = playerService;
+            _sessionService = sessionService;
+        }
+
         public void SyntaxError(IRecognizer recognizer, 
                                 IToken offendingSymbol, 
                                 int line, 
@@ -53,13 +61,13 @@ namespace InputCommandHandler.Antlrr
 
             _ast = listener.getAST();
         }
-        public void Transform(IPlayerService playerService, ISessionService sessionService)
+        public void Transform()
         {
             if (_ast == null)
             {
                 return;
             }
-            new Evaluator(playerService, sessionService).Apply(_ast);
+            new Evaluator(_playerService, _sessionService).Apply(_ast);
         }
     }
 }
