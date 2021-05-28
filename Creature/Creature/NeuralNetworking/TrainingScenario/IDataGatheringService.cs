@@ -9,11 +9,11 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 {
     public interface IDataGatheringService
     {
-        public ICreature closestPlayer { get; set; }
+        public TrainerAI closestPlayer { get; set; }
         public Single distanceToClosestPlayer { get; set; }
-        public ICreature closestMonster { get; set; }
+        public TrainerAI closestMonster { get; set; }
         public Single distanceToClosestMonster { get; set; }
 
-        public void ScanMap(Vector2 loc, int visionRange);
+        public void ScanMap(SmartMonster smartMonster, int visionRange);
     }
 }

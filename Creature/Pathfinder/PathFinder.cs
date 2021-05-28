@@ -12,6 +12,8 @@ namespace Creature
         private int _gridRows;
         private int _gridCols;
 
+             //todo 
+
         public PathFinder(List<List<Node>> nodes)
         {
             _grid = nodes;
@@ -19,24 +21,42 @@ namespace Creature
             _gridCols = _grid.Count;
         }
 
+        private void resetGrid()
+        {
+            for (int row = 0; row < _gridRows; row ++)
+            {
+                for (int col = 0; col < _gridCols; col++)
+                {
+                    _grid[row][col].DistanceToTarget = -1;
+                    _grid[row][col].Cost = 1;
+                    _grid[row][col].Parent = null;
+                }
+            }
+        }
         public Stack<Node> FindPath(Vector2 startPosition, Vector2 endPosition)
         {
+
             Node startNode = new Node(new Vector2((int)startPosition.X, (int)(startPosition.Y)), true);
             Node endNode = new Node(new Vector2((int)endPosition.X, (int)(endPosition.Y)), true);
-
+            
             Stack<Node> pathStack = new Stack<Node>();
 
-            PriorityQueue<Node> openList = new PriorityQueue<Node>();
+            List<Node> openList = new List<Node>();
             List<Node> closedList = new List<Node>();
 
             List<Node> adjacencies;
+            //TODO morgen ff kieken
+            resetGrid();
+
             Node currentNode = startNode;
+            
+            openList.Add(currentNode);
 
-            openList.Enqueue(currentNode);
 
-            while (openList.Count > 0 && !AreNodesAtSamePosition(openList.Peek(), endNode))
+
+            while (openList.Count > 0 && !AreNodesAtSamePosition(openList[0], endNode))
             {
-                openList.Dequeue();
+                openList.RemoveAt(0);
                 closedList.Add(currentNode);
 
                 adjacencies = GetAdjacentNodes(currentNode);
@@ -45,20 +65,29 @@ namespace Creature
                 {
                     if (adjNode.IsWalkable)
                     {
-                        if (!(openList.Contains(adjNode)) && (!closedList.Contains(adjNode) || currentNode.FScore > adjNode.FScore) )
-                        {
-                            if (closedList.Contains(adjNode) && currentNode.FScore > adjNode.FScore)
+                        if (!openList.Contains(adjNode))
+                        {                                                      
+                            if (!closedList.Contains(adjNode))
                             {
-                                closedList.Remove(adjNode);
+                                adjNode.Parent = currentNode;
+                                adjNode.DistanceToTarget = Math.Abs(adjNode.Position.X - endNode.Position.X) + Math.Abs(adjNode.Position.Y - endNode.Position.Y);
+                                adjNode.Cost = adjNode.Weight + adjNode.Parent.Cost;
+                                openList.Add(adjNode);
                             }
-                            adjNode.Parent = currentNode;
-                            adjNode.DistanceToTarget = Math.Abs(adjNode.Position.X - endNode.Position.X) + Math.Abs(adjNode.Position.Y - endNode.Position.Y);
-                            adjNode.Cost = adjNode.Weight + adjNode.Parent.Cost;
-                            openList.Enqueue(adjNode);
+                            else if (adjNode.FScore > (adjNode.Weight + adjNode.Parent.Cost + adjNode.DistanceToTarget))
+                            {
+                                adjNode.Parent = currentNode;
+                                adjNode.DistanceToTarget = Math.Abs(adjNode.Position.X - endNode.Position.X) + Math.Abs(adjNode.Position.Y - endNode.Position.Y);
+                                adjNode.Cost = adjNode.Weight + adjNode.Parent.Cost;
+                            }
+                            
                         }
                     }
                 }
-                currentNode = openList.Peek();
+                if (openList.Count > 0)
+                {
+                    currentNode = openList[0];
+                }
             }
 
             if (!AreNodesAtSamePosition(currentNode, endNode))
@@ -81,7 +110,14 @@ namespace Creature
 
         private bool AreNodesAtSamePosition(Node a, Node b)
         {
-            return a.Position.X.Equals(b.Position.X) && a.Position.Y.Equals(b.Position.Y);
+            if (a != null && b != null)
+            {
+                return a.Position.X.Equals(b.Position.X) && a.Position.Y.Equals(b.Position.Y);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private List<Node> GetAdjacentNodes(Node node)

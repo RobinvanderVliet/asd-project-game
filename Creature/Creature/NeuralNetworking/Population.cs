@@ -16,14 +16,12 @@ namespace Creature.Creature.NeuralNetworking
 
         public Boolean massExtinctionEvent = false;
         public Boolean newStage = false;
+        Boolean showNothing = false;
         public int populationLife = 0;
-
-        public Boolean showNothing = false;
 
         //constructor
         public Population(int size, ICreatureData creatureData)
         {
-
             for (int i = 0; i < size; i++)
             {
                 pop.Add(new SmartMonster(creatureData));
@@ -100,21 +98,22 @@ namespace Creature.Creature.NeuralNetworking
             KillBadSpecies();//kill species which are so bad that they cant reproduce
 
 
-            Console.WriteLine("generation", gen, "Number of mutations", innovationHistory.Count, "species: " + species.Count, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+            Console.WriteLine("generation "+ gen + " Number of mutations "+ innovationHistory.Count + " species: " + species.Count, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 
 
             float averageSum = GetAvgFitnessSum();
             List<SmartMonster> children = new List<SmartMonster>();//the next generation
-            Console.WriteLine("Species:");
+            //Console.WriteLine("Species:");
             for (int j = 0; j < species.Count; j++)
             {//for each species
-
-                Console.WriteLine("best unadjusted fitness:", species[j].bestFitness);
+                 
+                Console.WriteLine("best unadjusted fitness:" + species[j].bestFitness);
                 for (int i = 0; i < species[j].creatures.Count; i++)
                 {
-                    Console.WriteLine("SmartMonster " + i, "fitness: " + species[j].creatures[i].fitness, "score " + species[j].creatures[i].score, ' ');
+                    Console.WriteLine("SmartMonster " + i + "fitness: " + species[j].creatures[i].fitness);
                 }
                 Console.WriteLine();
+               
                 children.Add(species[j].champ.Clone());//add champion without any mutation
 
                 int NoOfChildren = (int)((species[j].averageFitness / averageSum * pop.Count) - 1);//the number of children this species is allowed, note -1 is because the champ is already added
@@ -132,7 +131,8 @@ namespace Creature.Creature.NeuralNetworking
             pop = children; //set the children as the current population
             gen += 1;
             for (int i = 0; i < pop.Count; i++)
-            {//generate networks for each of the children
+            {
+            //generate networks for each of the children
                 pop[i].brain.GenerateNetwork();
             }
 

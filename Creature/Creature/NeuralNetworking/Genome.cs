@@ -5,10 +5,8 @@ namespace Creature.Creature.NeuralNetworking
 {
     public class Genome
     {
-        public int nextConnectionNo = 1000;
-
-        public List<ConnectionGene> genes;
-        public List<NeuralNode> nodes;
+        public List<ConnectionGene> genes = new List<ConnectionGene>();
+        public List<NeuralNode> nodes = new List<NeuralNode>();
 
         public int inputs;
         public int outputs;
@@ -16,7 +14,9 @@ namespace Creature.Creature.NeuralNetworking
         public int nextNode = 0;
         public int biasNode;
 
-        public List<NeuralNode> network;
+        public int nextConnectionNo = 1000;
+
+        public List<NeuralNode> network = new List<NeuralNode>();
 
         Random random = new Random();
 
@@ -28,7 +28,7 @@ namespace Creature.Creature.NeuralNetworking
             //create input nodes
             for (int i = 0; i < inputs; i++)
             {
-                nodes.Add(new NeuralNode(i + inputs));
+                nodes.Add(new NeuralNode(i));
                 nextNode++;
                 nodes[i].layer = 0;
             }
@@ -81,7 +81,7 @@ namespace Creature.Creature.NeuralNetworking
         {
             for (int i = 0; i < inputs; i++)
             {
-                nodes[i].outputValue = inputValues[i];
+                nodes[outputs + i].outputValue = inputValues[i];
             }
             nodes[biasNode].outputValue = 1;//output of bias is 1
 
@@ -95,7 +95,7 @@ namespace Creature.Creature.NeuralNetworking
             float[] outs = new float[outputs];
             for (int i = 0; i < outputs; i++)
             {
-                outs[i] = nodes[inputs + i].outputValue;
+                outs[i] = nodes[i].outputValue;
             }
 
             for (int i = 0; i < nodes.Count; i++)
@@ -314,7 +314,7 @@ namespace Creature.Creature.NeuralNetworking
                 AddConnection(innovationHistory);
             }
 
-            float rand1 = random.Next(1);
+            float rand1 = (float)(random.NextDouble());
             if (rand1 < 0.8)
             { 
                 // 80% of the time mutate weights
@@ -324,7 +324,7 @@ namespace Creature.Creature.NeuralNetworking
                 }
             }
             //5% of the time add a new connection
-            float rand2 = random.Next(1);
+            float rand2 = (float)(random.NextDouble());
             if (rand2 < 0.08)
             {
                 AddConnection(innovationHistory);
@@ -332,7 +332,7 @@ namespace Creature.Creature.NeuralNetworking
 
 
             //1% of the time add a node
-            float rand3 = random.Next(1);
+            float rand3 = (float)(random.NextDouble());
             if (rand3 < 0.02)
             {
                 AddNode(innovationHistory);
@@ -363,13 +363,13 @@ namespace Creature.Creature.NeuralNetworking
                     {
                         //if either of the matching genes are disabled
 
-                        if (random.Next(1) < 0.75)
+                        if ((float)random.NextDouble() < 0.75)
                         {
                             //75% of the time disabel the childs gene
                             setEnabled = false;
                         }
                     }
-                    float rand = random.Next(1);
+                    float rand = (float)random.NextDouble();
                     if (rand < 0.5)
                     {
                         childGenes.Add(genes[i]);
@@ -463,7 +463,7 @@ namespace Creature.Creature.NeuralNetworking
         //prints out info about the genome to the console 
         public void PrintGenome()
         {
-            Console.WriteLine("Print genome  layers:", layers);
+            Console.WriteLine("Print genome  layers: " + layers);
             Console.WriteLine("bias node: " + biasNode);
             Console.WriteLine("nodes");
             for (int i = 0; i < nodes.Count; i++)

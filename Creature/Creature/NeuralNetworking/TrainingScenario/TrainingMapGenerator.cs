@@ -1,5 +1,6 @@
 ﻿using Creature.Creature.StateMachine;
 using Creature.Creature.StateMachine.Data;
+using Creature.Pathfinder;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -9,111 +10,96 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 {
     public class TrainingMapGenerator
     {
-        public List<List<int>> trainingmap = new List<List<int>>();
-        public List<ICreature> players = new List<ICreature>();
-        public List<ICreature> monsters = new List<ICreature>();
+        public List<List<Node>> trainingmap = new List<List<Node>>();
+        public List<TrainerAI> players = new List<TrainerAI>();
+        public List<TrainerAI> monsters = new List<TrainerAI>();
 
         private int _worldSize = 30;
         private Random _random = new Random();
 
-        private int playerCount = 5;
-        private int monsterCount = 5;
-
-        private int maxPlayerCount = 5;
-        private int maxMonsterCount = 5;
+        public char symbolWall = '|';
+        public char[,] board = new char[30, 30];
 
         public TrainingMapGenerator()
         {
             GenerateWorld();
         }
 
-        private List<List<int>> GenerateWorld()
+        private List<List<Node>> GenerateWorld()
         {
-            for(int i = 0; i < _worldSize; i++)
-            {
-                for (int j = 0; j < _worldSize; j++)
-                {
-                    trainingmap.Add(RandomTile(i,j));
-                }
-            }
+            GenerateNodes();
             GenerateCreatures();
             return trainingmap;
         }
 
-        private List<int> RandomTile(int x, int y)
+        private void GenerateBoard()
         {
-            List<int> tile = new List<int>();
-            tile.Add(x);
-            tile.Add(y);
-            tile.Add(_random.Next(0,5));
-            return tile;
+            for (int i = 0; i < _worldSize; i++)
+            {
+                for (int j = 0; j < _worldSize; j++)
+                {
+                    board[i, j] = '◙';
+                }
+            }
+        }
+
+        private void GenerateNodes()
+        {
+            for (int row = 0; row < _worldSize; row++)
+            {
+                List<Node> nodePoints = new List<Node>();
+                for (int col = 0; col < _worldSize; col++)
+                {
+                    Vector2 nodeLocation = new Vector2(row, col);
+                    Node node = new Node(nodeLocation, isPassable(board[row, col]));
+                    nodePoints.Add(node);
+                }
+                trainingmap.Add(nodePoints);
+            }
         }
 
         private void GenerateCreatures()
         {
-            switch (_random.Next(0, 10))
+            for (int i = 0; i <= 20; i++)
             {
-                case 5:
-                    if(monsterCount < maxMonsterCount)
-                    NewMonster();
-                    break;
-
-                case 10:
-                    if (playerCount < maxPlayerCount)
+                if(i < 5)
+                {
                     NewPlayer();
-                    break;
-
-                default:
-                    break;
+                }
+                else
+                {
+                    NewMonster();
+                }
             }
         }
 
         private void NewMonster()
         {
-            Vector2 location = new(_random.Next(0, 30), _random.Next(0, 30));
-            
-            MonsterData monsterData =
-            new MonsterData
-            (
-                location,
-                _random.NextDouble() * (5 - 20) + 5,
-                _random.Next(1, 5),
-                20,
-                null,
-                false
-            );
+            Vector2 location = new(_random.Next(0, 29), _random.Next(0, 29));
 
-            ICreatureStateMachine monsterStateMachine = new MonsterStateMachine(monsterData,null);
-
-            monsters.Add(new Monster(monsterStateMachine));
-            monsterCount++;
+            TrainerAI trainerAI = new TrainerAI(location, "monster");
+            monsters.Add(trainerAI);
         }
 
         private void NewPlayer()
         {
-            Vector2 location = new(_random.Next(0, 30), _random.Next(0, 30));
+            Vector2 location = new(_random.Next(0, 29), _random.Next(0, 29));
 
-            MonsterData monsterData =
-            new MonsterData
-            (
-                location,
-                _random.NextDouble() * (5 - 20) + 5,
-                _random.Next(1, 5),
-                20,
-                null,
-                false
-            );
+            TrainerAI trainerAI = new TrainerAI(location, "player");
 
-            ICreatureStateMachine monsterStateMachine = new MonsterStateMachine(monsterData, null);
-
-            monsters.Add(new Monster(monsterStateMachine));
-
-            playerCount++;
+            players.Add(trainerAI);
         }
 
-        private void AddSmartMonster()
+        bool isPassable(char symbol)
         {
-            
+            if (symbol == symbolWall)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }

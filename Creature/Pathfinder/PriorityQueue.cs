@@ -35,10 +35,23 @@ namespace Creature.Pathfinder
             return false;
         }
 
+        public T ItemAt(int index)
+        {
+            return _elements[index];            
+        }
+
         public T Peek()
         {
-            T frontItem = _elements[0];
-            return frontItem;
+            if (_elements.Count > 0)
+            {
+                T frontItem = _elements[0];
+                return frontItem;
+            }
+            else
+            {
+                return default(T);
+            }
+                
         }
 
         public void Enqueue(T item)

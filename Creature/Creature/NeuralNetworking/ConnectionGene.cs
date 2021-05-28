@@ -22,7 +22,7 @@ namespace Creature.Creature.NeuralNetworking
         public void MutateWeight()
         {
             var random = new Random();
-            float rand2 = random.Next(1);
+            float rand2 = (float)random.NextDouble();
             if (rand2 < 0.1)
             {//10% of the time completely change the weight
                 weight = random.Next(-1, 1);
@@ -48,7 +48,7 @@ namespace Creature.Creature.NeuralNetworking
             double mean = 100;
             double stdDev = 10;
 
-            MathNet.Numerics.Distributions.Normal normalDist = new Normal(mean, stdDev);
+            Normal normalDist = new Normal(mean, stdDev);
             float randomGaussianValue = (float)normalDist.Sample();
             return randomGaussianValue;
         }

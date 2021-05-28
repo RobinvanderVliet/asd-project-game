@@ -11,8 +11,9 @@ namespace Creature.Creature
     public class SmartMonster : ICreature
     {
         public ICreatureData creatureData;
-        private IDataGatheringService _dataGatheringService = new DataGatheringService();
-        private SmartCreatureActions smartactions;
+        private IDataGatheringService _dataGatheringService;
+        public SmartCreatureActions smartactions;
+        public TrainingMapGenerator trainingMapGenerator;
 
         public float fitness;
         public Genome brain;
@@ -39,11 +40,18 @@ namespace Creature.Creature
         public int StatsGained { get; set; } = 0;
         public int EnemysKilled { get; set; } = 0;
 
+        private float currDistanceToPlayer;
+        private float currDistanceToMonster;
+
         public ICreatureStateMachine CreatureStateMachine => null;
 
         public SmartMonster(ICreatureData creatureData)
         {
             this.creatureData = creatureData;
+            this.trainingMapGenerator = new TrainingMapGenerator();
+            this.smartactions = new SmartCreatureActions(trainingMapGenerator.trainingmap);
+            this._dataGatheringService = new DataGatheringService();
+            brain = new Genome(genomeInputs, genomeOutputs);
         }
 
         public void ApplyDamage(double amount)
@@ -63,11 +71,19 @@ namespace Creature.Creature
 
         public void Update()
         {
-            if(smartactions.path != null)
+            if(lifeSpan > 1000)
             {
-                creatureData.Position = smartactions.path.Pop().Position;
+                dead = true;
             }
             lifeSpan++;
+            foreach(TrainerAI monster in trainingMapGenerator.monsters)
+            {
+                monster.update(this);
+            }
+            foreach (TrainerAI player in trainingMapGenerator.players)
+            {
+                player.update(this);
+            }
         }
 
         public void Look()
@@ -82,17 +98,26 @@ namespace Creature.Creature
             vision[3] = (float) creatureData.Health;
 
             //calculate closest player and monster
-            _dataGatheringService.ScanMap(creatureData.Position, creatureData.VisionRange);
+            _dataGatheringService.ScanMap(this, creatureData.VisionRange);
+            // needs to be player location in X and Y
             //get distance to player
             vision[4] = _dataGatheringService.distanceToClosestPlayer;
             //get distance to monster
             vision[5] = _dataGatheringService.distanceToClosestMonster;
-            //getplayerhealth
-            vision[6] = (float)_dataGatheringService.closestPlayer.CreatureStateMachine.CreatureData.Health;
-            //get player damage
-            vision[7] = _dataGatheringService.closestPlayer.CreatureStateMachine.CreatureData.Damage;
-            //get player stamina
 
+            if (_dataGatheringService.closestPlayer == null)
+            {
+                vision[6] = 0;
+                vision[7] = 0;
+            }
+            else 
+            {
+                //getplayerhealth
+                vision[6] = (float)_dataGatheringService.closestPlayer.health;
+                //get player damage
+                vision[7] = _dataGatheringService.closestPlayer.damage;
+            }
+            //get player stamina
             //get monster stamina?
             //get usabel item
             //get distance to items
@@ -119,8 +144,28 @@ namespace Creature.Creature
 
             if (max < 0.7)
             {
-                //Wander action
-                smartactions.Wander(creatureData.Position);
+                //Wander action nneds to be split up in directions
+                smartactions.Wander(this, creatureData.Position);
+                if (_dataGatheringService.distanceToClosestPlayer < currDistanceToPlayer)
+                {
+                    score = score + 10;
+                    currDistanceToPlayer = _dataGatheringService.distanceToClosestPlayer;
+                }
+                else if (_dataGatheringService.distanceToClosestPlayer > currDistanceToPlayer)
+                {
+                    score = score - 10;
+                    currDistanceToPlayer = _dataGatheringService.distanceToClosestPlayer;
+                }
+                if(_dataGatheringService.distanceToClosestMonster < currDistanceToMonster)
+                {
+                    score = score + 3;
+                    currDistanceToMonster = _dataGatheringService.distanceToClosestMonster;
+                }
+                else if (_dataGatheringService.distanceToClosestMonster < currDistanceToMonster)
+                {
+                    score = score- 3;
+                    currDistanceToMonster = _dataGatheringService.distanceToClosestMonster;
+                }
                 return;
             }
 
@@ -129,20 +174,26 @@ namespace Creature.Creature
                 case 0:
                     //Attack action
                     smartactions.Attack(_dataGatheringService.closestPlayer, this);
+                    
+                    score = +100;
                     break;
                 case 1:
                     //Flee action
                     smartactions.Flee(_dataGatheringService.closestPlayer, this);
+                    score = -10;
                     break;
                 case 2:
-                //UseItem action
+                    //UseItem action
+                    score = -10;
                     break;
                 case 3:
                     smartactions.RunToMonster(_dataGatheringService.closestMonster, this);
-                //Run to Monster action
+                    score = -10;
+                    //Run to Monster action
                     break;
                 case 4:
-                //Grab item action
+                    //Grab item action
+                    score = -10;
                     break;
             }
 
@@ -175,7 +226,7 @@ namespace Creature.Creature
                 deathpoints = -100;
             }
             fitness =
-                (float)((DamageDealt - DamageTaken) + (lifeSpan * 0.2) + HealthHealed + StatsGained + killPoints + deathpoints);
+                (float)((DamageDealt*5 - DamageTaken*2) + /*(lifeSpan * 0.0001) +*/ HealthHealed + StatsGained + killPoints + deathpoints + score);
         }
 
         public SmartMonster Crossover(SmartMonster parent2)

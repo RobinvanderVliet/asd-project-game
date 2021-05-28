@@ -11,6 +11,7 @@ namespace Creature.Pathfinder
         private float _cost;
         private float _weight;
         private bool _isWalkable;
+        private const int INFINITE = 99999;
 
         public Node Parent
         {

@@ -9,7 +9,7 @@ namespace Creature.Creature.NeuralNetworking
         public int number {get; set;}
         public float inputSum = 0;
         public float outputValue = 0;
-        public List<ConnectionGene> outputConnections {get; set;}
+        public List<ConnectionGene> outputConnections { get; set; } = new List<ConnectionGene>();
         public int layer {get; set;}
 
         public NeuralNode(int number)

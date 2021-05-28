@@ -5,7 +5,7 @@ namespace Creature.Creature.NeuralNetworking
 {
     public class Species
     {
-        public List<SmartMonster> creatures;
+        public List<SmartMonster> creatures = new List<SmartMonster>();
         public float bestFitness = 0;
         public float averageFitness = 0;
         public int staleness = 0;
@@ -27,6 +27,7 @@ namespace Creature.Creature.NeuralNetworking
             creatures.Add(sm);
             bestFitness = sm.fitness;
             rep = sm.brain.Clone();
+            champ = sm.CloneForReplay();
         }
 
         //add a player to the species
@@ -126,7 +127,7 @@ namespace Creature.Creature.NeuralNetworking
             creatures = temp;
             if (creatures.Count == 0)
             {
-                Console.WriteLine("fucking");
+                Console.WriteLine("Dammit");
                 staleness = 200;
                 return;
             }
@@ -136,6 +137,7 @@ namespace Creature.Creature.NeuralNetworking
                 staleness = 0;
                 bestFitness = creatures[0].fitness;
                 rep = creatures[0].brain.Clone();
+                champ = creatures[0].CloneForReplay();
             }
             else
             {
@@ -160,7 +162,7 @@ namespace Creature.Creature.NeuralNetworking
         public SmartMonster GiveMeBaby(List<ConnectionHistory> innovationHistory)
         {
             SmartMonster baby;
-            if (random.Next(1) < 0.25)
+            if ((float)random.NextDouble() < 0.25)
             {
                 //25% of the time there is no crossover and the child is simply a clone of a random(ish) player
                 baby = SelectPlayer().Clone();
@@ -196,7 +198,7 @@ namespace Creature.Creature.NeuralNetworking
                 fitnessSum += creatures[i].fitness;
             }
 
-            float rand = NextFloat(random);
+            float rand = (float)random.NextDouble();
             float runningSum = 0;
 
             for (int i = 0; i < creatures.Count; i++)
@@ -209,14 +211,6 @@ namespace Creature.Creature.NeuralNetworking
             }
             //unreachable code to make the parser happy
             return creatures[0];
-        }
-
-        static float NextFloat(Random random)
-        {
-            double mantissa = (random.NextDouble() * 2.0) - 1.0;
-            // choose -149 instead of -126 to also generate subnormal floats (*)
-            double exponent = Math.Pow(2.0, random.Next(-126, 128));
-            return (float)(mantissa * exponent);
         }
 
         //kills off bottom half of the species
