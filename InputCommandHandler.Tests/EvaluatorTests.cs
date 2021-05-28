@@ -87,20 +87,30 @@ namespace InputCommandHandler.Tests
         [Test]
         public void Test_Apply_HandleDropActionIsCalled()
         {
-            //arrange
-            var ast = DropAST("item");
-            _mockedPlayerService.Setup(mockedPlayer => mockedPlayer.DropItem("item"));
-            //act
+            //Arrange
+            string inventorySlot = "armor";
+            var ast = DropAST(inventorySlot);
+            string inventorySlot1 = "helmet";
+            var ast1 = DropAST(inventorySlot1);
+            string inventorySlot2 = "weapon";
+            var ast2 = DropAST(inventorySlot2);
+
+            //Act
             _sut.Apply(ast);
-            //assert
-            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem("item"), Times.Once);
+            _sut.Apply(ast1);
+            _sut.Apply(ast2);
+
+            //Assert
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem(inventorySlot), Times.Once);
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem(inventorySlot1), Times.Once);
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem(inventorySlot2), Times.Once);
         }
 
-        public static AST DropAST(string itemName)
+        public static AST DropAST(string inventorySlot)
         {
             Input drop = new Input();
             drop.AddChild(new Drop()
-                .AddChild(new Message(itemName)));
+                .AddChild(new InventorySlot(inventorySlot)));
             return new AST(drop);
         }
 
@@ -303,6 +313,28 @@ namespace InputCommandHandler.Tests
             joinSession.AddChild(new JoinSession()
                 .AddChild(new Message(sessionId)));
             return new AST(joinSession);
+        }
+        
+        [Test]
+        public void Test_Apply_InspectItemActionIsCalled()
+        {
+            //Arrange
+            string inventorySlot = "armor";
+            var ast = InspectAST(inventorySlot);
+            
+            //Act
+            _sut.Apply(ast);
+            
+            //Assert
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.InspectItem(inventorySlot), Times.Once);
+        }
+
+        public static AST InspectAST(string inventorySlot)
+        {
+            Input inspect = new Input();
+            inspect.AddChild(new Inspect()
+                .AddChild(new InventorySlot(inventorySlot)));
+            return new AST(inspect);
         }
     }
 }

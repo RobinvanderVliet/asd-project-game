@@ -74,6 +74,9 @@ namespace InputCommandHandler.Antlr.Transformer
                     case StartSession:
                         TransformStartSession((StartSession)nodeBody[i]);
                         break;
+                    case Inspect:
+                        TransformInspect((Inspect)nodeBody[i]);
+                        break;
                 }
         }
 
@@ -98,7 +101,7 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformDrop(Drop drop)
         {
-            _playerService.DropItem(drop.ItemName.MessageValue);
+            _playerService.DropItem(drop.InventorySlot.InventorySlotValue);
         }
 
         private void TransformAttack(Attack attack)
@@ -156,5 +159,9 @@ namespace InputCommandHandler.Antlr.Transformer
             _sessionService.StartSession();
         }
         
+        private void TransformInspect(Inspect inspect)
+        {
+            _playerService.InspectItem(inspect.InventorySlot.InventorySlotValue);
+        }
     }
 }

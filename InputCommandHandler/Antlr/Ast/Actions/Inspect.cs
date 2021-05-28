@@ -1,15 +1,15 @@
-using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
 namespace InputCommandHandler.Antlr.Ast.Actions
 {
-    public class Drop : Command, IEquatable<Drop>
+    public class Inspect: Command
     {
         private InventorySlot _inventorySlot;
         [ExcludeFromCodeCoverage]
         public InventorySlot InventorySlot { get => _inventorySlot; private set => _inventorySlot = value; }
 
+        [ExcludeFromCodeCoverage]
         public ArrayList GetChildren()
         {
             var children = new ArrayList();
@@ -21,12 +21,13 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         {
             if (child is InventorySlot)
             {
-                _inventorySlot = (InventorySlot)child;
+                _inventorySlot = (InventorySlot) child;
             }
 
             return this;
         }
 
+        [ExcludeFromCodeCoverage]
         public ASTNode RemoveChild(ASTNode child)
         {
             if (child is InventorySlot && child == _inventorySlot)
@@ -35,16 +36,16 @@ namespace InputCommandHandler.Antlr.Ast.Actions
             }
 
             return this;
-        }
+        }  
         
         [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
-            return Equals(obj as Drop);
+            return Equals(obj as Inspect);
         }
 
         [ExcludeFromCodeCoverage]
-        public bool Equals(Drop other)
+        public bool Equals(Inspect other)
         {
             return true;
         }
