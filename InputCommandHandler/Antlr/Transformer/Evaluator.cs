@@ -74,6 +74,9 @@ namespace InputCommandHandler.Antlr.Transformer
                     case StartSession:
                         TransformStartSession((StartSession)nodeBody[i]);
                         break;
+                    case Inspect:
+                        TransformInspect((Inspect)nodeBody[i]);
+                        break;
                 }
         }
 
@@ -156,5 +159,17 @@ namespace InputCommandHandler.Antlr.Transformer
             _sessionService.StartSession();
         }
         
+        private void TransformInspect(Inspect inspect)
+        {
+            string slot = inspect.InventorySlot.InventorySlotValue;
+            if (slot == "armor" | slot == "weapon" | slot == "helmet" | slot == "slot 1" | slot == "slot 2" | slot == "slot 3")
+            {
+                _playerService.InspectItem(inspect.InventorySlot.InventorySlotValue);
+            }
+            else
+            {
+                throw new SlotException($"The slot you provided {slot} is not valid.");
+            }
+        }
     }
 }

@@ -24,6 +24,7 @@ CREATE_SESSION : 'create_session';
 JOIN_SESSION : 'join_session';
 REQUEST_SESSIONS : 'request_sessions';
 START_SESSION : 'start_session';
+INSPECT : 'inspect';
 
 FORWARD: 'forward';
 UP: 'up';
@@ -35,8 +36,12 @@ LEFT: 'left';
 WEST: 'west';
 RIGHT: 'right';
 EAST: 'east';
+ARMOR: 'armor';
+HELMET: 'helmet';
+WEAPON: 'weapon';
+SLOT: 'slot';
 
-NUMBER: '0' | [0-9]*;
+NUMBER: '0' | [0-9]+;
 MESSAGE: '"' ~'"'+ '"';
 //MESSAGE: ~[\r\n]+;
 
@@ -45,6 +50,7 @@ MESSAGE: '"' ~'"'+ '"';
 input: command EOF;
 
 step: NUMBER;
+slotdigit: NUMBER;
 message: MESSAGE;
 
 command:
@@ -61,10 +67,12 @@ command:
     CREATE_SESSION SPACE message #createSession |
     JOIN_SESSION SPACE message #joinSession |
     REQUEST_SESSIONS #requestSessions |
-    START_SESSION #startSession;
+    START_SESSION #startSession |
+    INSPECT SPACE inventorySlot #inspect;
 
 forward: FORWARD | UP | NORTH;
 backward: BACKWARD | DOWN | SOUTH;
 left: LEFT | WEST;
 right: RIGHT  | EAST;
 direction: forward | backward | left | right;
+inventorySlot: ARMOR | HELMET | WEAPON | SLOT SPACE slotdigit;

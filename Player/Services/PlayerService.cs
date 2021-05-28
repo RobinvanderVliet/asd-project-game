@@ -175,5 +175,10 @@ namespace Player.Services
            _currentPlayer.XPosition = currentCharacter.XPosition;
            _currentPlayer.YPosition = currentCharacter.YPosition;
         }
+
+        public void InspectItem(string inventorySlot)
+        {
+            Console.WriteLine("not Implemented"); //TODO ADD IMPLEMENTATION
+        }
     }
 }
