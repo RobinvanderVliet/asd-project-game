@@ -12,7 +12,7 @@ using WorldGeneration.Services;
 
 namespace WorldGeneration
 {
-    public class Map
+    public class Map : IMap
     {
         private readonly int _chunkSize;
         private readonly int _seed;

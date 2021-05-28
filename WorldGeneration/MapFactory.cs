@@ -6,13 +6,19 @@ using Display;
 
 namespace WorldGeneration
 {
-    public class MapFactory
+    public class MapFactory: IMapFactory
+
     {
         [ExcludeFromCodeCoverage]
-        public Map GenerateMap(int chunkSize = 8, int seed = 0)
+        
+        public IMap GenerateMap(int seed = 0)
         {
+            return GenerateMap(8, seed);
             // default chunksize is 8. Can be adjusted in the line above
-            
+        }
+        
+        public IMap GenerateMap(int chunkSize, int seed)
+        {
             // If seed is 0 it becomes random
             if (seed == 0)
             {
@@ -23,7 +29,7 @@ namespace WorldGeneration
                 new ConsolePrinter());
         }
 
-        public static int GenerateSeed()
+        public int GenerateSeed()
         {
             return new Random().Next(1, 9999999);
         }

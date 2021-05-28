@@ -7,16 +7,15 @@ namespace WorldGeneration
 {
     public class World
     {
-        private Map _map;
+        private IMap _map;
         public MapCharacterDTO CurrentPlayer { get; set; }
         private IList<MapCharacterDTO> _characters { get; set; }
         private readonly int _viewDistance;
 
-        public World(int seed, int viewDistance, MapFactory mapFactory)
+        public World(int seed, int viewDistance, IMapFactory mapFactory)
         {
             _characters = new List<MapCharacterDTO>();
-            // AddCharacterToWorld(currentPlayer);
-            _map = mapFactory.GenerateMap(seed: seed);
+            _map = mapFactory.GenerateMap(seed);
             _viewDistance = viewDistance;
             DeleteMap();
         }
@@ -53,7 +52,6 @@ namespace WorldGeneration
             {
                 return;
             }
-            Console.Clear();
             _map.DisplayMap(CurrentPlayer, _viewDistance, _characters);
         }
 
