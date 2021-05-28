@@ -416,7 +416,7 @@ namespace InputCommandHandler.Tests
             AST exp = InspectCommand(inventorySlot);
             
             // Act
-            AST sut = SetupParser($"inspect \"{inventorySlot}\"");
+            AST sut = SetupParser($"inspect {inventorySlot}");
 
             // Assert
             Assert.AreEqual(exp, sut);
@@ -430,40 +430,26 @@ namespace InputCommandHandler.Tests
             AST exp = InspectCommand(inventorySlot);
             
             // Act
-            AST sut = SetupParser($"inspect \"{inventorySlot}\"");
+            AST sut = SetupParser($"inspect {inventorySlot}");
 
             // Assert
             Assert.AreEqual(exp, sut);
         }
         
         [Test]
-        public void Test_AstListener_CreatesInspectCommandWithRanged()
+        public void Test_AstListener_CreatesInspectCommandWithWeapon()
         {
             // Arrange
-            const string inventorySlot = "ranged";
+            const string inventorySlot = "weapon";
             AST exp = InspectCommand(inventorySlot);
             
             // Act
-            AST sut = SetupParser($"inspect \"{inventorySlot}\"");
+            AST sut = SetupParser($"inspect {inventorySlot}");
 
             // Assert
             Assert.AreEqual(exp, sut);
         }
-        
-        [Test]
-        public void Test_AstListener_CreatesInspectCommandWithMelee()
-        {
-            // Arrange
-            const string inventorySlot = "melee";
-            AST exp = InspectCommand(inventorySlot);
-            
-            // Act
-            AST sut = SetupParser($"inspect \"{inventorySlot}\"");
 
-            // Assert
-            Assert.AreEqual(exp, sut);
-        }
-        
         [Test]
         public void Test_AstListener_CreatesInspectCommandWithSlot1()
         {
