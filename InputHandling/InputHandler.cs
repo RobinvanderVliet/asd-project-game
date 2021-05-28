@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Timers;
 using InputHandling.Antlr;
 using InputHandling.Exceptions;
@@ -8,6 +9,7 @@ using WebSocketSharp;
 
 namespace InputHandling
 {
+    [ExcludeFromCodeCoverage]
     public class InputHandler : IInputHandler
     {
         private IPipeline _pipeline;
