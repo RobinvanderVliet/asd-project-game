@@ -10,7 +10,7 @@ namespace Agent.Antlr.Ast.Comparables.Subjects
 
         public override string GetNodeType()
         {
-            return "ActionHandling";
+            return "Player";
         }
     }
 }

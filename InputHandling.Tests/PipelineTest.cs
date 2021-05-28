@@ -12,13 +12,14 @@ namespace InputHandling.Tests
     [ExcludeFromCodeCoverage]
     public class PipelineTest
     {
-        private Mock<Evaluator> mockedEvaluator;
+        private Mock<IEvaluator> _mockedEvaluator;
         private Pipeline _sut;
 
         [SetUp]
         public void SetUp()
         {
-            _sut = new Pipeline(null);
+            _mockedEvaluator = new Mock<IEvaluator>();
+            _sut = new Pipeline(_mockedEvaluator.Object);
         }
 
         [Test]

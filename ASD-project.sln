@@ -61,7 +61,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseHandler.Tests", "Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Items", "Item\Items.csproj", "{A9222651-F7C2-44EB-8134-BD02570FD5F1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Item.Tests", "Item.Tests\Item.Tests.csproj", "{B6672BC9-2437-46AE-9E3F-E760D1DA5030}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Items.Tests", "Items.Tests\Items.Tests.csproj", "{B6672BC9-2437-46AE-9E3F-E760D1DA5030}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionHandling.Tests", "ActionHandling.Tests\ActionHandling.Tests.csproj", "{04BC26CF-EA4C-4DF4-BA64-C52B3D4938AB}"
 EndProject
