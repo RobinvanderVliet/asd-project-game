@@ -20,7 +20,8 @@ namespace InputCommandHandler
                 pipeline.ParseCommand(commando);
                 pipeline.Transform(playerService, sessionService);
             }
-            catch (Exception e) //CommandSyntaxException,MoveException,SlotException
+            //CommandSyntaxException,MoveException,SlotException
+            catch (Exception e) 
             {
                 Console.WriteLine(e.Message);
             }
