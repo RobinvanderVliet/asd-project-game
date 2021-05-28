@@ -178,6 +178,10 @@ namespace InputHandling
             bool nextLine = true;
             EditorScreen editorScreen = _screenHandler.Screen as EditorScreen;
 
+            string input;
+
+            builder.Append("combat {");
+
             editorScreen.UpdateLastQuestion("this is and example line: When player nearby player then attack" + Environment.NewLine + "press enter to continue...");
             
             Console.ReadLine();
@@ -185,23 +189,37 @@ namespace InputHandling
 
             while (nextLine)
             {
-                editorScreen.UpdateLastQuestion("when ....." + Environment.NewLine + variables.comparebles.ToString()) ;
-                var input = Console.ReadLine();
+                editorScreen.UpdateLastQuestion(
+                    "Please enter your own combat rule" 
+                    + Environment.NewLine
+                    + "This is and example line: When player nearby player then attack (optional: otherwise flee)"
+                    + Environment.NewLine
+                    + "Press help + item, armour, weapon, comparison, consumables, actions, bitcoinItems, comparables");
 
-                if (variables.consumables.Contains(input)){
+                input = Console.ReadLine();
+                input = input.ToLower();
 
-                    if (input.Equals("item"))
+                var rule = input.Split(" ");
+                //basis check hier!
+
+                while (true) { 
+                    Console.Clear();
+                    editorScreen.UpdateLastQuestion("Do you want to add another rule? yes or no");
+                    input = Console.ReadLine();
+                    input = input.ToLower();
+                    if(input.Equals("yes") || input.Equals("no"))
                     {
-                        //zoeken welk item?
+                        break;
                     }
-                    else
-                    {
-                        Console.Clear();
-                        editorScreen.UpdateLastQuestion(input + "........" + Environment.NewLine + variables.comparison.ToString());
-                    }
+                }
+
+                if (input.Equals("no"))
+                {
+                    nextLine = false;
                 }
             }
 
+            builder.Append("}");
             return builder.ToString();
         }
 

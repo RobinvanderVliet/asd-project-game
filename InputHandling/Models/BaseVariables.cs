@@ -79,16 +79,6 @@ namespace InputHandling.Models
             "collect"
         };
 
-        public readonly List<string> ruleValues = new()
-        {
-            "random",
-            "circle",
-            "line",
-            "none",
-            "defensive",
-            "offensive"
-        };
-
         public readonly List<string> weapons = new()
         {
             "knife",
