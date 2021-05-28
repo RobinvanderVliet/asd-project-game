@@ -13,6 +13,7 @@ namespace Agent.Services
         private InlineConfig _inlineConfig;
         private List<Configuration> _agentConfigurations;
         private InputCommandHandlerComponent _inputCommandHandlerComponent;
+        private ConfigEditor _configEditor;
 
         public AgentConfigurationService(List<Configuration> agentConfigurations, FileToDictionaryMapper fileToDictionaryMapper, InputCommandHandlerComponent inputCommandHandlerComponent)
         {
@@ -20,13 +21,15 @@ namespace Agent.Services
             _agentConfigurations = agentConfigurations;
             _inputCommandHandlerComponent = inputCommandHandlerComponent;
             _inlineConfig = new InlineConfig();
+            _configEditor = new ConfigEditor(_inputCommandHandlerComponent);
             FileHandler = new FileHandler();
             Pipeline = new Pipeline();
+  
         }
         
         public override void Configure()
         {
-            Console.WriteLine("Please provide a path to your code file");
+            Console.WriteLine("Please provide a path to your code file or type \'editor\' to set agent rules step by step");
             var input = _inputCommandHandlerComponent.GetCommand();
 
             if (input.Equals(CANCEL_COMMAND))
@@ -38,6 +41,11 @@ namespace Agent.Services
             {
                 _inlineConfig.setup();
                 return;
+            }
+
+            if (input.Equals(EDITOR_COMMAND))
+            {
+                _configEditor.startEditor();
             }
             
             try

@@ -18,7 +18,7 @@ namespace Agent.Mapper
                     
             foreach (var setting in splitContent)
             {
-                if (setting.Equals(""))
+                if (setting.Equals(string.Empty))
                 {
                     throw new SyntaxErrorException("The config file for npc or agent contains an empty row. This is not allowed.");
                 }

@@ -19,6 +19,7 @@ namespace Agent.Services
         
         protected const string CANCEL_COMMAND = "cancel";
         protected const string LOAD_COMMAND = "load";
+        protected const string EDITOR_COMMAND = "editor";
         public string LastError = "";
         
         public abstract void CreateConfiguration(string configurationName, string filepath);
