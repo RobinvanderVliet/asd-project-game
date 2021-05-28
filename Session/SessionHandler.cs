@@ -147,6 +147,11 @@ namespace Session
                         return HandleHeartbeat(packet);
                     }
                 }
+                
+                if (packet.Header.Target.Equals(_clientController.GetOriginId()))
+                {
+                    Console.WriteLine(packet.HandlerResponse.ResultMessage);
+                }
 
                 if ((packet.Header.Target == "client" || packet.Header.Target == "host" ||
                      packet.Header.Target == _clientController.GetOriginId())
@@ -265,10 +270,9 @@ namespace Session
                     var allPlayerId = servicePlayer.GetAllAsync();
                     allPlayerId.Wait();
                     var result =
-                        allPlayerId.Result.Where(x => x.GameGuid == _session.SessionId && x.PlayerGuid == clientId);
+                        allPlayerId.Result.Where(x => x.GameGuid == _session.SessionId && x.PlayerGuid == clientId).FirstOrDefault();
 
-                    // if (result.All(x => x.PlayerGuid.Equals(clientId)))
-                    if (false)
+                    if (result != null)
                     {
                         Console.WriteLine(sessionDTO.ClientIds[0] + " Has joined your session: ");
                         _session.AddClient(sessionDTO.ClientIds[0]);
@@ -280,6 +284,8 @@ namespace Session
                     {
                         return new HandlerResponseDTO(SendAction.ReturnToSender, "Not allowed to join saved game");
                     }
+                    return new HandlerResponseDTO(SendAction.ReturnToSender, "Not allowed to join saved game");
+
                 }
                 else
                 {
@@ -293,15 +299,10 @@ namespace Session
                     {
                         sessionDTO.ClientIds.Add(client);
                     }
+                    
+                    return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
+
                 }
-
-                return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
-            }
-
-            else if (packet.Header.Target.Equals(_clientController.GetOriginId()))
-            {
-                Console.WriteLine(packet.HandlerResponse.ResultMessage);
-                return new HandlerResponseDTO(SendAction.Ignore, null);
             }
             else
             {
