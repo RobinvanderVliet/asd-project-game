@@ -1,85 +1,67 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using DataTransfer.DTO.Character;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
 {
     public class World
     {
-        public Map _map;
-        public MapCharacterDTO CurrentPlayer { get; set; }
-        private IList<MapCharacterDTO> _characters { get; set; }
+        private Map _map;
+        public Player CurrentPlayer { get; set; }
+        private List<Player> _players;
         private readonly int _viewDistance;
 
         public World(int seed, int viewDistance)
         {
-            _characters = new List<MapCharacterDTO>();
-            // AddCharacterToWorld(currentPlayer);
+            _players = new ();
             _map = MapFactory.GenerateMap(seed: seed);
             _viewDistance = viewDistance;
             _map.DeleteMap();
         }
 
-        public void UpdateCharacterPosition(MapCharacterDTO characterPositionDTO)
+        public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
         {
-            var changed = false;
-
-            if (CurrentPlayer.PlayerGuid == characterPositionDTO.PlayerGuid)
+            if (CurrentPlayer.Id == userId)
             {
-                if (CurrentPlayer.XPosition != characterPositionDTO.XPosition ||
-                    CurrentPlayer.YPosition != characterPositionDTO.YPosition)
-                {
-                    CurrentPlayer.XPosition = characterPositionDTO.XPosition;
-                    CurrentPlayer.YPosition = characterPositionDTO.YPosition;
-                    changed = true;
-                }
+                CurrentPlayer.XPosition = newXPosition;
+                CurrentPlayer.YPosition = newYPosition;
             }
-
-            if (_characters.Any(x => x.PlayerGuid.Equals(characterPositionDTO.PlayerGuid)))
+            else
             {
-                var dto = _characters.
-                    Where(x => x.PlayerGuid.Equals(characterPositionDTO.PlayerGuid)).FirstOrDefault();
-
-                if (dto.XPosition != characterPositionDTO.XPosition ||
-                    dto.YPosition != characterPositionDTO.YPosition)
-                {
-                    dto.XPosition = characterPositionDTO.XPosition;
-                    dto.YPosition = characterPositionDTO.YPosition;
-                    changed = true;
-                }             
+                var player = _players.Find(x => x.Id == userId);
+                player.XPosition = newXPosition;
+                player.YPosition = newYPosition;
             }
-
-            //Only rerender if the position actually changed.
-            if (changed)
-            {
-                DisplayWorld();
-            }
+            DisplayWorld();
         }
 
-        public void AddCharacterToWorld(MapCharacterDTO mapCharacterDTO, bool isCurrentPlayer)
+        public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
         {
             if (isCurrentPlayer)
             {
-                CurrentPlayer = mapCharacterDTO;
+                CurrentPlayer = player;
             }
-            
-            _characters.Add(mapCharacterDTO);
+            _players.Add(player);
         }
 
         public void DisplayWorld()
         {
-            if (CurrentPlayer is null || _characters is null)
+            if (CurrentPlayer != null && _players != null)
             {
-                return;
+                Console.Clear();
+                _map.DisplayMap(CurrentPlayer, _viewDistance, new List<Character>(_players));
             }
-            Console.Clear();
-            _map.DisplayMap(CurrentPlayer, _viewDistance, _characters);
+            
         }
 
         public void deleteMap()
         {
             _map.DeleteMap();
+        }
+
+        public ITile GetLoadedTileByXAndY(int x, int y)
+        {
+            return _map.GetLoadedTileByXAndY(x, y);
         }
     }
 }

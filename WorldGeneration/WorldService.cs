@@ -1,5 +1,3 @@
-using System;
-using DataTransfer.DTO.Character;
 using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
@@ -8,14 +6,19 @@ namespace WorldGeneration
     {
         private World _world;
 
-        public void UpdateCharacterPosition(MapCharacterDTO mapCharacterDTO)
+        public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
         {
-            _world.UpdateCharacterPosition(mapCharacterDTO);
+            _world.UpdateCharacterPosition(userId, newXPosition, newYPosition);
         }
 
-        public void AddCharacterToWorld(MapCharacterDTO mapCharacterDTO, bool isCurrentPlayer)
+        public void UpdatePlayer(Player player)
         {
-            _world.AddCharacterToWorld(mapCharacterDTO, isCurrentPlayer);
+            _world.CurrentPlayer = player;
+        }
+
+        public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
+        {
+            _world.AddPlayerToWorld(player, isCurrentPlayer);
         }
 
         public void DisplayWorld()
@@ -33,14 +36,14 @@ namespace WorldGeneration
             _world = new World(seed, 6);
         }
 
-        public MapCharacterDTO getCurrentCharacterPositions()
+        public Player getCurrentPlayer()
         {
             return _world.CurrentPlayer;
         }
 
         public ITile GetTile(int x, int y)
         {
-            return _world._map.GetLoadedTileByXAndY(x, y);
+            return _world.GetLoadedTileByXAndY(x, y);
         }
     }
 }
