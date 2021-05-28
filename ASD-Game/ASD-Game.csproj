@@ -34,8 +34,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Chat\Chat.csproj" />
-    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
-    <ProjectReference Include="..\Player\Player.csproj" />
+    <ProjectReference Include="..\InputHandling\InputHandling.csproj" />
+    <ProjectReference Include="..\ActionHandling\ActionHandling.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,6 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Profiles\" />
     <Folder Include="resource\agent\" />
   </ItemGroup>
 
