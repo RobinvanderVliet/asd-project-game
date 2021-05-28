@@ -42,7 +42,7 @@ RANGED: 'ranged';
 MELEE: 'melee';
 SLOT: 'slot';
 
-NUMBER: '0' | [0-9]*;
+NUMBER: '0' | [0-9]+;
 MESSAGE: '"' ~'"'+ '"';
 //MESSAGE: ~[\r\n]+;
 
@@ -51,6 +51,7 @@ MESSAGE: '"' ~'"'+ '"';
 input: command EOF;
 
 step: NUMBER;
+slotdigit: NUMBER;
 message: MESSAGE;
 
 command:
@@ -75,4 +76,4 @@ backward: BACKWARD | DOWN | SOUTH;
 left: LEFT | WEST;
 right: RIGHT  | EAST;
 direction: forward | backward | left | right;
-inventorySlot: ARMOR | HELMET | RANGED | MELEE | SLOT SPACE NUMBER;
+inventorySlot: ARMOR | HELMET | RANGED | MELEE | SLOT SPACE slotdigit;

@@ -36,7 +36,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
             }
 
             return this;
-        }  
+        }
         
         [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
@@ -47,7 +47,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         [ExcludeFromCodeCoverage]
         public bool Equals(Inspect other)
         {
-            return true;
+            return _inventorySlot.Equals(other.InventorySlot);
         }
     }
 }

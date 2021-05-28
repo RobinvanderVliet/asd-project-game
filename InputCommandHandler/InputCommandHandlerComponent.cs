@@ -28,6 +28,10 @@ namespace InputCommandHandler
             {
                 Console.WriteLine(e.Message);
             }
+            catch (SlotException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         public virtual string GetCommand()

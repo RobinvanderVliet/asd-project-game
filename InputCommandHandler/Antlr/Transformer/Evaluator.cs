@@ -161,7 +161,15 @@ namespace InputCommandHandler.Antlr.Transformer
         
         private void TransformInspect(Inspect inspect)
         {
-            _playerService.InspectItem(inspect.InventorySlot.InventorySlotValue);
+            string slot = inspect.InventorySlot.InventorySlotValue;
+            if (slot == "armor" | slot == "melee" | slot == "ranged" | slot == "helmet" | slot == "slot 1" | slot == "slot 2" | slot == "slot 3")
+            {
+                _playerService.InspectItem(inspect.InventorySlot.InventorySlotValue);
+            }
+            else
+            {
+                throw new SlotException($"The slot you provided {slot} is not valid.");
+            }
         }
     }
 }

@@ -178,7 +178,7 @@ namespace Player.Services
 
         public void InspectItem(string inventorySlot)
         {
-            throw new NotImplementedException(); //TODO ADD IMPLEMENTATION
+            Console.WriteLine("not Implemented"); //TODO ADD IMPLEMENTATION
         }
     }
 }
