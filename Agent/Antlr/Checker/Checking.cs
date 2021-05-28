@@ -45,6 +45,11 @@ namespace Agent.Antlr.Checker
             "scrap-electronics", "gpu-upgrade", "usb-stick", "bitcoin-wallet"
         };
 
+        private readonly List<string> _stats = new()
+        {
+            "RPP"
+        };
+
         private readonly List<string> _tiles = new()
         {
             "street", "grass", "dirt", "water", "office-space", "airplane", 

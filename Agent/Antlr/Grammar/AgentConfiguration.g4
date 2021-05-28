@@ -30,16 +30,17 @@ INVENTORY: 'inventory';
 AGENT: 'agent';
 
 //OBJECTS
-POTION: 'potion';
-ITEM: 'item';
-WEAPON: 'weapon';
 CURRENT: 'current';
 
 //STATS
-STRENGTH: 'strength';
 HEALTH: 'health';
-POWER: 'power';
+ARMOR: 'armor';
+RADIATION: 'radiation';
 STAMINA: 'stamina';
+HP: 'HP';
+AP: 'AP';
+RPP: 'RPP';
+SP: 'SP';
 
 //SETTINGS
 GENERAL: 'general';
@@ -72,5 +73,5 @@ comparable: item | itemStat | subject | subjectStat | stat | INT;
 itemStat: item stat;
 subjectStat: subject stat;
 subject: PLAYER #player | NPC #npc | AGENT #agent | INVENTORY #inventory | CURRENT #current | STRING #tile;
-item: ITEM | POTION | WEAPON | string;
-stat: STRENGTH | POWER | HEALTH | STAMINA;
+item: string;
+stat: HEALTH | ARMOR | RADIATION | STAMINA | HP | AP | RPP | SP;
