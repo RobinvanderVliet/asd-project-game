@@ -10,7 +10,6 @@ namespace Player.DTO
         public int Damage { get; set; }
 
         public string PlayerGuid { get; set; }
-        
         public string AttackedPlayerGuid { get; set; }
     }
 }

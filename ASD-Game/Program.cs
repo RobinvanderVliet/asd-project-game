@@ -14,6 +14,7 @@ using InputHandling;
 using InputHandling.Antlr;
 using InputHandling.Antlr.Transformer;
 using Network;
+using Player.ActionHandlers;
 using Session;
 using UserInterface;
 
@@ -45,6 +46,7 @@ namespace ASD_project
                     services.AddScoped<IChatHandler, ChatHandler>();
                     services.AddScoped<ISessionHandler, SessionHandler>();
                     services.AddScoped<IMoveHandler, MoveHandler>();
+                    services.AddScoped<IAttackHandler, AttackHandler>();
                     services.AddScoped<IWorldService, WorldService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
                     services.AddSingleton<IDbConnection, DbConnection>();
