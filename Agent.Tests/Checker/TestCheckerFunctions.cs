@@ -4,9 +4,7 @@ using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
 using Agent.Antlr.Ast.Comparables.Subjects;
 using Agent.Antlr.Checker;
-using Moq;
 using NUnit.Framework;
-using Weapon = Weapon.Weapon;
 
 namespace Agent.Tests.Checker
 {

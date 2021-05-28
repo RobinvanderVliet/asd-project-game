@@ -60,7 +60,7 @@ namespace Agent.Generator
             string text = ""; 
             foreach (Node child in parent.GetChildren())
             {
-                string subject = GenerateCompareble(((Condition)parent).GetWhenClause().GetComparableL());
+                string subject = GenerateCompareble(((Condition)parent).WhenClause.ComparableL);
                 text += GenerateClause(child, setting, action, subject);
             }
             return text;
@@ -95,16 +95,16 @@ namespace Agent.Generator
                 switch (i)
                 {
                     case 0:
-                        text += settingName + "_" + action + "_" + subject + "_" + "comparable" + "=" + GenerateCompareble(((When)parent).GetComparableL()) + Environment.NewLine;
+                        text += settingName + "_" + action + "_" + subject + "_" + "comparable" + "=" + GenerateCompareble(((When)parent).ComparableL) + Environment.NewLine;
                         break;
                     case 1:
-                        text += settingName + "_" + action + "_" + subject + "_" + "treshold" + "=" + GenerateCompareble(((When)parent).GetComparableR()) + Environment.NewLine;
+                        text += settingName + "_" + action + "_" + subject + "_" + "treshold" + "=" + GenerateCompareble(((When)parent).ComparableR) + Environment.NewLine;
                         break;
                     case 2:
-                        text += settingName + "_" + action + "_" + subject + "_" + "comparision" + "=" + ((When)parent).GetComparison().ComparisonType + Environment.NewLine;
+                        text += settingName + "_" + action + "_" + subject + "_" + "comparision" + "=" + ((When)parent).Comparison.ComparisonType + Environment.NewLine;
                         break;
                     case 3:
-                        text += settingName + "_" + action + "_" + subject + "_" + "comparision" + "_" + status + "=" + ((When)parent).GetThen().Name + Environment.NewLine;
+                        text += settingName + "_" + action + "_" + subject + "_" + "comparision" + "_" + status + "=" + ((When)parent).Then.Name + Environment.NewLine;
                         break;
                 }
             }

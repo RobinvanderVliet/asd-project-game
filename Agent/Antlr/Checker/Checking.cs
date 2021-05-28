@@ -148,7 +148,6 @@ namespace Agent.Antlr.Checker
             {
                 ActionReference otherwiseAction = otherwise.Action;
                 ActionReference thenAction = node.WhenClause.Then;
-                string name = thenAction.Name;
                 if (otherwiseAction.Name.Equals(thenAction.Name))
                 {
                     node.SetError("Otherwise action cant be the same as then action!");
