@@ -2,12 +2,12 @@
 using DataTransfer.Model.World;
 using DataTransfer.Model.World.Interfaces;
 
-namespace WorldGeneration.Services
+namespace WorldGeneration.Helper
 {
-    public class ChunkService
+    public class ChunkHelper
     {
         private readonly Chunk _chunk;
-        public ChunkService(Chunk chunk)
+        public ChunkHelper(Chunk chunk)
         {
             _chunk = chunk;
         }
@@ -18,7 +18,7 @@ namespace WorldGeneration.Services
             return new[] { x, y };
         }
 
-        public int GetPositionInTileArrayByWorldCoordinates(int x, int y)
+        private int GetPositionInTileArrayByWorldCoordinates(int x, int y)
         {
 
             var yPos = Math.Abs(y);

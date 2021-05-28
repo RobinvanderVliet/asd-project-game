@@ -5,7 +5,7 @@ using DatabaseHandler.Services;
 using DataTransfer.DTO.Character;
 using DataTransfer.Model.World;
 using DataTransfer.Model.World.Interfaces;
-using WorldGeneration.Services;
+using WorldGeneration.Helper;
 
 namespace WorldGeneration
 {
@@ -15,7 +15,7 @@ namespace WorldGeneration
         private readonly int _seed;
         private List<Chunk> _chunks; // NOT readonly, don't listen to the compiler
         private readonly IDatabaseService<Chunk> _chunkDbService;
-        private ChunkService _chunkService;
+        private ChunkHelper _chunkHelper;
         private List<int[]> _chunksWithinLoadingRange;
         private readonly INoiseMapGenerator _noiseMapGenerator;
 
@@ -148,8 +148,8 @@ namespace WorldGeneration
         
         private ITile GetLoadedTileByXAndY(int x, int y)
         {
-            _chunkService = new ChunkService(GetChunkForTileXAndY(x, y));
-            return _chunkService.GetTileByWorldCoordinates(x, y);
+            _chunkHelper = new ChunkHelper(GetChunkForTileXAndY(x, y));
+            return _chunkHelper.GetTileByWorldCoordinates(x, y);
         }
     }
 }

@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using LiteDB;
 
-namespace DataTransfer.POCO.Player
+namespace DatabaseHandler.POCO
 {
     [ExcludeFromCodeCoverage]
     public class PlayerPoco

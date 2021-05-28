@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using DataTransfer.Model.World.Interfaces;
 
-namespace DataTransfer.POCO.World
+namespace DatabaseHandler.POCO
 {
     [ExcludeFromCodeCoverage]
     public class ChunkPoco : IEquatable<ChunkPoco>

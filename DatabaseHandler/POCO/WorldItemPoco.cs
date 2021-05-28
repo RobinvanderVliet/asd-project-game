@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LiteDB;
 
-namespace DataTransfer.POCO.World
+namespace DatabaseHandler.POCO
 {
     public class WorldItemPoco
     {

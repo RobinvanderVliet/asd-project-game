@@ -8,9 +8,8 @@ using System.Timers;
 using Network.DTO;
 using WorldGeneration;
 using DatabaseHandler;
+using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
-using DataTransfer.POCO.Player;
-using DataTransfer.POCO.World;
 using Timer = System.Timers.Timer;
 
 namespace Session
