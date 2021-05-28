@@ -1,12 +1,9 @@
 using DataTransfer.DTO.Character;
 
-namespace ActionHandling
+namespace Session
 {
     public interface IRelativeStatHandler
     {
         public void SendStat(RelativeStatDTO stat);
-        public int GetHealth();
-        public int GetStamina();
-        public int GetRadiationLevel();
     }
 }

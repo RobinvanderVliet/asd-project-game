@@ -105,21 +105,24 @@ namespace ActionHandling
                     allLocations.Result.Where(x =>
                         x.PlayerGuid == moveDTO.UserId
                     ).Select(x => x.Stamina).FirstOrDefault();
+                Console.WriteLine("Stamina uit db: " + resultStamina);
 
                 if (result.Any())
                 {
+                    Console.WriteLine("Can't move to new position something is in the way");
                     return new HandlerResponseDTO(SendAction.ReturnToSender, "Can't move to new position something is in the way");
                 }
                 else if (resultStamina < steps)
                 {
+                    Console.WriteLine("You do not have enough stamina to move!");
                     return new HandlerResponseDTO(SendAction.ReturnToSender, "You do not have enough stamina to move!");
                 }
                 else
                 {
                     moveDTO.Stamina = resultStamina - steps;
-                    
                     InsertToDatabase(moveDTO);
                     HandleMove(moveDTO);
+                    packet.Payload = JsonConvert.SerializeObject(moveDTO);
                 }
             }
             else if (packet.Header.Target.Equals(_clientController.GetOriginId()))
@@ -128,6 +131,8 @@ namespace ActionHandling
             }
             else
             {
+                Console.WriteLine(moveDTO.UserId);
+                Console.WriteLine(moveDTO.Stamina);
                 HandleMove(moveDTO);
             }
             
@@ -143,12 +148,15 @@ namespace ActionHandling
 
             player.XPosition = moveDTO.XPosition;
             player.YPosition = moveDTO.YPosition;
+            player.Stamina = moveDTO.Stamina;
             playerRepository.UpdateAsync(player);
         }
 
         private void HandleMove(MoveDTO moveDTO)
         {
+            Console.WriteLine("afjlsfjakfdafaksflsajf " +moveDTO.Stamina);
             _worldService.UpdateCharacterPosition(moveDTO.UserId, moveDTO.XPosition, moveDTO.YPosition);
+            _worldService.UpdateCharacterStamina(moveDTO.Stamina);
             _worldService.DisplayWorld();
         }
     }

@@ -33,6 +33,7 @@ namespace InputHandling
         {
             SendCommand(GetCommand());
         }
+        
         private void SendCommand(string commando)
         {
             try

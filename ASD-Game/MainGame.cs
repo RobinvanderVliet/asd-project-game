@@ -12,18 +12,15 @@ namespace ASD_project
             private const bool DEBUG_INTERFACE = true; //TODO: remove when UI is complete, obviously
             private IInputHandler _inputHandler;
             private IScreenHandler _screenHandler;
-            private IRelativeStatHandler _relativeStatHandler;
 
-            public MainGame(IInputHandler inputHandler, IScreenHandler screenHandler,IRelativeStatHandler relativeStatHandler)
+            public MainGame(IInputHandler inputHandler, IScreenHandler screenHandler)
             {
                 _screenHandler = screenHandler;
                 _inputHandler = inputHandler;
-                _relativeStatHandler = relativeStatHandler;
             }
 
             public void Run()
             {
-
                 if (!DEBUG_INTERFACE)
                 {
                     _screenHandler.TransitionTo(new StartScreen());

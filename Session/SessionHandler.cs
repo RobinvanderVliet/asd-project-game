@@ -7,9 +7,6 @@ using System.Threading;
 using System.Timers;
 using Network.DTO;
 using WorldGeneration;
-using DatabaseHandler;
-using DatabaseHandler.Services;
-using DatabaseHandler.Repository;
 using UserInterface;
 using Timer = System.Timers.Timer;
 
@@ -22,6 +19,7 @@ namespace Session
         private IClientController _clientController;
         private Session _session;
         private IHeartbeatHandler _heartbeatHandler;
+        private RelativeStatHandler test;
         private Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;
         private int _hostInactiveCounter = 0;

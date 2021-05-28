@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
@@ -19,6 +18,7 @@ namespace Session
         private IClientController _clientController;
         private ISessionHandler _sessionHandler;
         private IWorldService _worldService;
+        private IRelativeStatHandler _relativeStatHandler;
         
         public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler)
         {
@@ -59,7 +59,7 @@ namespace Session
                 playerPosition[1] = playerY;
                 players.Add(clientId, playerPosition);
                 var tmpPlayer = new PlayerPOCO
-                    {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
+                    {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, Stamina = 100, XPosition = playerX, YPosition = playerY};
                 servicePlayer.CreateAsync(tmpPlayer);
 
                 playerX += 2; // spawn position + 2 each client
@@ -69,7 +69,7 @@ namespace Session
             StartGameDTO startGameDTO = new StartGameDTO();
             startGameDTO.GameGuid = _clientController.SessionId;
             startGameDTO.PlayerLocations = players;
-
+            
             return startGameDTO;
         }
         
@@ -105,6 +105,8 @@ namespace Session
             }
             
             _worldService.DisplayWorld();
+            
+            _relativeStatHandler = new RelativeStatHandler(_clientController, _worldService);
         }
     }
 }

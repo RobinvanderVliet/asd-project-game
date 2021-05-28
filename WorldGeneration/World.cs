@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
@@ -34,6 +35,21 @@ namespace WorldGeneration
             }
             DisplayWorld();
         }
+        
+        public void UpdateCharacterHealth(int health)
+        {
+            CurrentPlayer.Health = health;
+        }
+        
+        public void UpdateCharacterStamina(int stamina)
+        {
+            CurrentPlayer.Stamina = stamina;
+        }
+        
+        public void UpdateCharacterRadiationLevel(int radiationLevel)
+        {
+            CurrentPlayer.RadiationLevel = radiationLevel;
+        }
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
         {
@@ -48,7 +64,7 @@ namespace WorldGeneration
         {
             if (CurrentPlayer != null && _players != null)
             {
-                Console.Clear();
+                // Console.Clear();
                 _map.DisplayMap(CurrentPlayer, _viewDistance, new List<Character>(_players));
             }
             
