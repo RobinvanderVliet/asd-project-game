@@ -22,7 +22,7 @@ namespace Session
         {
             // return list met alle games waar ik host ben
             var tmp = new DbConnection();
-                    
+
             var clientHistoryRepository = new Repository<ClientHistoryPoco>(tmp);
             var clientHistory = new ServicesDb<ClientHistoryPoco>(clientHistoryRepository);
             var gameRepository = new Repository<GamePOCO>(tmp);
@@ -35,15 +35,15 @@ namespace Session
 
             // join 2 tabels on eachother
             var joinedTables = from p in allGames.Result
-                               join pi in allHistory.Result
-                               on p.PlayerGUIDHost equals pi.PlayerId
-                               select new
-                               {
-                                   p.PlayerGUIDHost,
-                                   p.GameGuid
-                               };
+                join pi in allHistory.Result
+                    on p.PlayerGUIDHost equals pi.PlayerId
+                select new
+                {
+                    p.PlayerGUIDHost,
+                    p.GameGuid
+                };
 
-            foreach(var element in joinedTables)
+            foreach (var element in joinedTables)
             {
                 Console.WriteLine(element);
             }
@@ -52,8 +52,9 @@ namespace Session
         public void LoadGame(string value)
         {
             // vanaf hier naar GameHandler
-            Console.WriteLine("load game " + value);
-            _sessionHandler.CreateSession(value, true);
+            Console.WriteLine("load game with name: ");
+            var gameName = Console.ReadLine();
+            _sessionHandler.CreateSession(gameName, true, value);
         }
 
         public void StartGame()

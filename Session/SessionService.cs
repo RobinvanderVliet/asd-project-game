@@ -16,7 +16,7 @@
 
         public void CreateSession(string messageValue)
         {
-            inSession = _sessionHandler.CreateSession(messageValue, false);
+            inSession = _sessionHandler.CreateSession(messageValue, false, null);
         }
 
         public void JoinSession(string messageValue)

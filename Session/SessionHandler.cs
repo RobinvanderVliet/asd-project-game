@@ -79,10 +79,19 @@ namespace Session
             SendHeartbeat();
         }
 
-        public bool CreateSession(string sessionName, bool savedGame)
+        public bool CreateSession(string sessionName, bool savedGame, string? sessionId)
         {
             _session = new Session(sessionName);
-            _session.GenerateSessionId();
+            _session.SessionId = sessionId;
+            if (sessionId is null)
+            {
+                _session.GenerateSessionId();
+            }
+            else
+            {
+                _session.SessionId = sessionId;
+            }
+            
             _session.AddClient(_clientController.GetOriginId());
             _session.SessionSeed = MapFactory.GenerateSeed();
             _clientController.CreateHostController();

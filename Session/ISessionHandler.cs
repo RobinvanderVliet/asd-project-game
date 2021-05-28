@@ -6,7 +6,7 @@ namespace Session
     public interface ISessionHandler
     {
         public bool JoinSession(string sessionId);
-        public bool CreateSession(string sessionName, bool savedGame);
+        public bool CreateSession(string sessionName, bool savedGame, string? sessionId);
         public void RequestSessions();
         public void SendHeartbeat();
         public int GetSessionSeed();

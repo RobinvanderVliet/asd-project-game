@@ -112,7 +112,7 @@ namespace Session.Tests
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()));
 
             // Act ----------------
-            _sut.CreateSession(testSessionName);
+            _sut.CreateSession(testSessionName, false, null);
 
             // Assert -------------
             _mockedClientController.Verify(mock => mock.CreateHostController(), Times.Once());
@@ -255,7 +255,7 @@ namespace Session.Tests
         public void Test_HandlePacket_RequestSessionsAtClientOrHost()
         {
             // Arrange ---------
-            _sut.CreateSession("testSessionName");
+            _sut.CreateSession("testSessionName", false, null);
 
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             var payload = JsonConvert.SerializeObject(sessionDTO);
@@ -378,7 +378,7 @@ namespace Session.Tests
         public void Test_HandlePacket_RequestToJoinSessionThatDoesNotExist()
         {
             // Arrange ---------
-            _sut.CreateSession("testSessionName");
+            _sut.CreateSession("testSessionName", false, null);
 
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
             var payload = JsonConvert.SerializeObject(sessionDTO);
@@ -405,7 +405,7 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName");
+            _sut.CreateSession("testSessionName", false, null);
 
             string originId = "testOriginId";
 
@@ -438,7 +438,7 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName");
+            _sut.CreateSession("testSessionName", false, null);
 
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";
@@ -479,7 +479,7 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName");
+            _sut.CreateSession("testSessionName", false, null);
 
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";
@@ -531,7 +531,7 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName");
+            _sut.CreateSession("testSessionName", false, null);
 
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";
@@ -576,7 +576,7 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName");
+            _sut.CreateSession("testSessionName", false, null);
 
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";
@@ -617,7 +617,7 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName");
+            _sut.CreateSession("testSessionName", false, null);
 
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";
