@@ -16,10 +16,10 @@ namespace Creature.Creature.NeuralNetworking
         public float weightDiffCoeff = 0.5f;
         public float compatibilityThreshold = 3;
 
-        Random random = new Random();
+        public readonly Random random = new Random();
+
         public Species()
         {
-
         }
 
         public Species(SmartMonster sm)
@@ -54,7 +54,7 @@ namespace Creature.Creature.NeuralNetworking
 
         //returns the number of excess and disjoint genes between the 2 input genomes
         //i.e. returns the number of genes which dont match
-        public float GetExcessDisjoint(Genome brain1, Genome brain2)
+        public static float GetExcessDisjoint(Genome brain1, Genome brain2)
         {
             float matching = 0.0f;
             for (int i = 0; i < brain1.genes.Count; i++)
@@ -72,7 +72,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //returns the avereage weight difference between matching genes in the input genomes
-        public float AverageWeightDiff(Genome brain1, Genome brain2)
+        public static float AverageWeightDiff(Genome brain1, Genome brain2)
         {
             if (brain1.genes.Count == 0 || brain2.genes.Count == 0)
             {
@@ -100,13 +100,12 @@ namespace Creature.Creature.NeuralNetworking
             return totalDiff / matching;
         }
 
-        //sorts the species by fitness 
+        //sorts the species by fitness
         public void SortSpecies()
         {
-
             List<SmartMonster> temp = new List<SmartMonster>();
 
-            //selection short 
+            //selection short
             for (int i = 0; i < creatures.Count; i++)
             {
                 float max = 0;
@@ -149,7 +148,6 @@ namespace Creature.Creature.NeuralNetworking
         //simple stuff
         public void SetAverage()
         {
-
             float sum = 0;
             for (int i = 0; i < creatures.Count; i++)
             {
@@ -169,9 +167,9 @@ namespace Creature.Creature.NeuralNetworking
             }
             else
             {
-                //75% of the time do crossover 
+                //75% of the time do crossover
 
-                //get 2 random(ish) parents 
+                //get 2 random(ish) parents
                 SmartMonster parent1 = SelectPlayer();
                 SmartMonster parent2 = SelectPlayer();
 
@@ -225,8 +223,8 @@ namespace Creature.Creature.NeuralNetworking
                 }
             }
         }
-        
-        //in order to protect unique players, the fitnesses of each player is divided by the number of players in the species that that player belongs to 
+
+        //in order to protect unique players, the fitnesses of each player is divided by the number of players in the species that that player belongs to
         public void FitnessSharing()
         {
             for (int i = 0; i < creatures.Count; i++)

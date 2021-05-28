@@ -5,12 +5,11 @@ namespace Creature.Creature.NeuralNetworking
 {
     public class NeuralNode
     {
-
-        public int number {get; set;}
+        public int number { get; set; }
         public float inputSum = 0;
         public float outputValue = 0;
         public List<ConnectionGene> outputConnections { get; set; } = new List<ConnectionGene>();
-        public int layer {get; set;}
+        public int layer { get; set; }
 
         public NeuralNode(int number)
         {
@@ -38,14 +37,14 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //sigmoid activation function
-        public float Sigmoid(float x)
+        public static float Sigmoid(float x)
         {
             float k = (float)Math.Exp(x);
             return k / (1.0f + k);
         }
 
         //returns whether this node connected to the parameter node
-        //used when adding a new connection 
+        //used when adding a new connection
         public Boolean IsConnectedTo(NeuralNode node)
         {
             if (node.layer == layer)
@@ -86,6 +85,5 @@ namespace Creature.Creature.NeuralNetworking
             clone.layer = layer;
             return clone;
         }
-
     }
 }

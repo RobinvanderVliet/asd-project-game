@@ -43,7 +43,7 @@ namespace Creature.Creature.NeuralNetworking
             }
         }
 
-        private float NextGaussian()
+        private static float NextGaussian()
         {
             double mean = 100;
             double stdDev = 10;

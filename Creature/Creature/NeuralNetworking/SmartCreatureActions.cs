@@ -8,8 +8,8 @@ namespace Creature.Creature.NeuralNetworking
 {
     public class SmartCreatureActions
     {
-        private Random _random = new Random();
-        private PathFinder _pathfinder;
+        private readonly Random _random = new Random();
+        private readonly PathFinder _pathfinder;
 
         public Stack<Node> path = new Stack<Node>();
 
@@ -18,7 +18,7 @@ namespace Creature.Creature.NeuralNetworking
             _pathfinder = new PathFinder(map);
         }
 
-        public void Wander(SmartMonster smartmonster, Vector2 loc) 
+        public void Wander(SmartMonster smartmonster, Vector2 loc)
         {
             if (path == null || path.Count == 0)
             {
@@ -33,9 +33,9 @@ namespace Creature.Creature.NeuralNetworking
             smartmonster.creatureData.Position = path.Pop().Position;
         }
 
-        public void WalkUp(SmartMonster smartMonster) 
+        public void WalkUp(SmartMonster smartMonster)
         {
-            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X, smartMonster.creatureData.Position.Y+1);
+            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X, smartMonster.creatureData.Position.Y + 1);
             if (IsValidMove(destination))
             {
                 path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
@@ -55,7 +55,7 @@ namespace Creature.Creature.NeuralNetworking
 
         public void WalkLeft(SmartMonster smartMonster)
         {
-            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X -1, smartMonster.creatureData.Position.Y);
+            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X - 1, smartMonster.creatureData.Position.Y);
             if (IsValidMove(destination))
             {
                 path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
@@ -65,7 +65,7 @@ namespace Creature.Creature.NeuralNetworking
 
         public void WalkRight(SmartMonster smartMonster)
         {
-            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X +1, smartMonster.creatureData.Position.Y);
+            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X + 1, smartMonster.creatureData.Position.Y);
             if (IsValidMove(destination))
             {
                 path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
@@ -75,11 +75,11 @@ namespace Creature.Creature.NeuralNetworking
 
         public void Attack(TrainerAI player, SmartMonster smartmonster)
         {
-            if(player != null &&IsAdjacent(player.location,smartmonster.creatureData.Position))
+            if (player != null && IsAdjacent(player.location, smartmonster.creatureData.Position))
             {
                 player.health = player.health - smartmonster.creatureData.Damage;
                 smartmonster.DamageDealt = smartmonster.DamageDealt + smartmonster.creatureData.Damage;
-                if(player.health < smartmonster.creatureData.Damage)
+                if (player.health < smartmonster.creatureData.Damage)
                 {
                     smartmonster.EnemysKilled++;
                 }
@@ -90,7 +90,7 @@ namespace Creature.Creature.NeuralNetworking
             }
         }
 
-        public void Flee(TrainerAI player, SmartMonster smartmonster) 
+        public void Flee(TrainerAI player, SmartMonster smartmonster)
         {
             if (player != null)
             {
@@ -105,7 +105,7 @@ namespace Creature.Creature.NeuralNetworking
                             CheckPath(smartmonster);
                         }
                     }
-                    else if(smartmonster.creatureData.Position.Y >= 10)
+                    else if (smartmonster.creatureData.Position.Y >= 10)
                     {
                         Vector2 newDestination = new Vector2(smartmonster.creatureData.Position.X, smartmonster.creatureData.Position.Y - 10);
                         if (IsValidMove(newDestination))
@@ -126,7 +126,7 @@ namespace Creature.Creature.NeuralNetworking
                             CheckPath(smartmonster);
                         }
                     }
-                    else if(smartmonster.creatureData.Position.X >= 10)
+                    else if (smartmonster.creatureData.Position.X >= 10)
                     {
                         Vector2 newDestination = new Vector2(smartmonster.creatureData.Position.Y, smartmonster.creatureData.Position.X - 10);
                         if (IsValidMove(newDestination))
@@ -147,7 +147,7 @@ namespace Creature.Creature.NeuralNetworking
                             CheckPath(smartmonster);
                         }
                     }
-                    else if(smartmonster.creatureData.Position.X >= 10 && smartmonster.creatureData.Position.Y >= 10)
+                    else if (smartmonster.creatureData.Position.X >= 10 && smartmonster.creatureData.Position.Y >= 10)
                     {
                         Vector2 newDestination = new Vector2(smartmonster.creatureData.Position.Y - 10, smartmonster.creatureData.Position.X - 10);
                         if (IsValidMove(newDestination))
@@ -160,12 +160,12 @@ namespace Creature.Creature.NeuralNetworking
             }
         }
 
-        public void UseItem() 
+        public void UseItem()
         {
             //To be implemented
         }
 
-        public void RunToMonster(TrainerAI monster, SmartMonster smartmonster) 
+        public void RunToMonster(TrainerAI monster, SmartMonster smartmonster)
         {
             if (monster != null)
             {
@@ -174,7 +174,7 @@ namespace Creature.Creature.NeuralNetworking
             }
         }
 
-        public void GrabItem(Vector2 loc) 
+        public void GrabItem(Vector2 loc)
         {
             //To be implemented
         }
@@ -182,14 +182,13 @@ namespace Creature.Creature.NeuralNetworking
         public void TakeDamage(int damage, SmartMonster smartMonster)
         {
             smartMonster.DamageTaken = damage;
-            Console.WriteLine();
-            if(smartMonster.creatureData.Health <= 0)
+            if (smartMonster.creatureData.Health <= 0)
             {
                 smartMonster.dead = true;
             }
         }
 
-        private bool IsAdjacent(Vector2 loc1, Vector2 loc2)
+        private static bool IsAdjacent(Vector2 loc1, Vector2 loc2)
         {
             float distance = Vector2.Distance(loc1, loc2);
             return (distance < 2);
@@ -203,14 +202,14 @@ namespace Creature.Creature.NeuralNetworking
             }
         }
 
-        private bool IsValidMove(Vector2 destination)
+        private static bool IsValidMove(Vector2 destination)
         {
             int topOfMap = 0;
             int botOfMap = 29;
             int leftOfMap = 0;
             int rightOfMap = 29;
 
-            if(destination.X > leftOfMap && destination.X < rightOfMap && destination.Y > topOfMap && destination.Y < botOfMap)
+            if (destination.X > leftOfMap && destination.X < rightOfMap && destination.Y > topOfMap && destination.Y < botOfMap)
             {
                 return true;
             }

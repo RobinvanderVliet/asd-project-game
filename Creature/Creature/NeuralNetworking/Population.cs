@@ -7,7 +7,7 @@ namespace Creature.Creature.NeuralNetworking
     public class Population
     {
         public List<SmartMonster> pop = new List<SmartMonster>();
-        public SmartMonster bestSmartMonster;//the best ever SmartMonster 
+        public SmartMonster bestSmartMonster;//the best ever SmartMonster
         public int bestScore = 0;//the score of the best ever SmartMonster
         public int gen;
         public List<ConnectionHistory> innovationHistory = new List<ConnectionHistory>();
@@ -16,7 +16,7 @@ namespace Creature.Creature.NeuralNetworking
 
         public Boolean massExtinctionEvent = false;
         public Boolean newStage = false;
-        Boolean showNothing = false;
+        public readonly Boolean showNothing = false;
         public int populationLife = 0;
 
         //constructor
@@ -38,7 +38,7 @@ namespace Creature.Creature.NeuralNetworking
             {
                 if (!pop[i].dead)
                 {
-                    pop[i].Look();//get inputs for brain 
+                    pop[i].Look();//get inputs for brain
                     pop[i].Think();//use outputs from neural network
                     pop[i].Update();//move the SmartMonster according to the outputs from the neural network
                     if (!showNothing)
@@ -68,14 +68,11 @@ namespace Creature.Creature.NeuralNetworking
             SmartMonster tempBest = species[0].creatures[0];
             tempBest.gen = gen;
 
-
             //if best this gen is better than the global best score then set the global best as the best this gen
 
             if (tempBest.score > bestScore)
             {
                 genSmartMonsters.Add(tempBest.CloneForReplay());
-                Console.WriteLine("old best:", bestScore);
-                Console.WriteLine("new best:", tempBest.score);
                 bestScore = tempBest.score;
                 bestSmartMonster = tempBest.CloneForReplay();
             }
@@ -84,7 +81,7 @@ namespace Creature.Creature.NeuralNetworking
         //this function is called when all the SmartMonsters in the population are dead and a new generation needs to be made
         public void NaturalSelection()
         {
-            Speciate();//seperate the population into species 
+            Speciate();//seperate the population into species
             CalculateFitness();//calculate the fitness of each SmartMonster
             SortSpecies();//sort the species to be ranked in fitness order, best first
             if (massExtinctionEvent)
@@ -97,23 +94,12 @@ namespace Creature.Creature.NeuralNetworking
             KillStaleSpecies();//remove species which haven't improved in the last 15(ish) generations
             KillBadSpecies();//kill species which are so bad that they cant reproduce
 
-
-            Console.WriteLine("generation "+ gen + " Number of mutations "+ innovationHistory.Count + " species: " + species.Count, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-
-
             float averageSum = GetAvgFitnessSum();
             List<SmartMonster> children = new List<SmartMonster>();//the next generation
             //Console.WriteLine("Species:");
             for (int j = 0; j < species.Count; j++)
-            {//for each species
-                 
-                Console.WriteLine("best unadjusted fitness:" + species[j].bestFitness);
-                for (int i = 0; i < species[j].creatures.Count; i++)
-                {
-                    Console.WriteLine("SmartMonster " + i + "fitness: " + species[j].creatures[i].fitness);
-                }
-                Console.WriteLine();
-               
+            {
+                //for each species
                 children.Add(species[j].champ.Clone());//add champion without any mutation
 
                 int NoOfChildren = (int)((species[j].averageFitness / averageSum * pop.Count) - 1);//the number of children this species is allowed, note -1 is because the champ is already added
@@ -124,7 +110,7 @@ namespace Creature.Creature.NeuralNetworking
             }
 
             while (children.Count < pop.Count)
-            {//if not enough babies (due to flooring the number of children to get a whole int) 
+            {//if not enough babies (due to flooring the number of children to get a whole int)
                 children.Add(species[0].GiveMeBaby(innovationHistory));//get babies from the best species
             }
             pop.Clear();
@@ -132,7 +118,7 @@ namespace Creature.Creature.NeuralNetworking
             gen += 1;
             for (int i = 0; i < pop.Count; i++)
             {
-            //generate networks for each of the children
+                //generate networks for each of the children
                 pop[i].brain.GenerateNetwork();
             }
 
@@ -142,14 +128,14 @@ namespace Creature.Creature.NeuralNetworking
         //seperate population into species based on how similar they are to the leaders of each species in the previous gen
         public void Speciate()
         {
-            foreach(Species s in species)
+            foreach (Species s in species)
             {//empty species
                 s.creatures.Clear();
             }
             for (int i = 0; i < pop.Count; i++)
             {//for each SmartMonster
                 Boolean speciesFound = false;
-                foreach(Species s in species)
+                foreach (Species s in species)
                 {//for each species
                     if (s.SameSpecies(pop[i].brain))
                     {//if the SmartMonster is similar enough to be considered in the same species
@@ -165,7 +151,7 @@ namespace Creature.Creature.NeuralNetworking
             }
         }
 
-        //calculates the fitness of all of the SmartMonsters 
+        //calculates the fitness of all of the SmartMonsters
         public void CalculateFitness()
         {
             for (int i = 1; i < pop.Count; i++)
@@ -178,7 +164,7 @@ namespace Creature.Creature.NeuralNetworking
         public void SortSpecies()
         {
             //sort the SmartMonsters within a species
-            foreach(Species s in species)
+            foreach (Species s in species)
             {
                 s.SortSpecies();
             }
@@ -226,7 +212,7 @@ namespace Creature.Creature.NeuralNetworking
             for (int i = 1; i < species.Count; i++)
             {
                 if (species[i].averageFitness / averageSum * pop.Count < 1)
-                {//if wont be given a single child 
+                {//if wont be given a single child
                     species.RemoveAt(i);//sad
                     i--;
                 }
@@ -237,7 +223,7 @@ namespace Creature.Creature.NeuralNetworking
         public float GetAvgFitnessSum()
         {
             float averageSum = 0;
-            foreach(Species s in species)
+            foreach (Species s in species)
             {
                 averageSum += s.averageFitness;
             }
@@ -247,14 +233,13 @@ namespace Creature.Creature.NeuralNetworking
         //kill the bottom half of each species
         public void CullSpecies()
         {
-            foreach(Species s in species)
+            foreach (Species s in species)
             {
                 s.Cull(); //kill bottom half
                 s.FitnessSharing();//also while we're at it lets do fitness sharing
                 s.SetAverage();//reset averages because they will have changed
             }
         }
-
 
         public void MassExtinction()
         {

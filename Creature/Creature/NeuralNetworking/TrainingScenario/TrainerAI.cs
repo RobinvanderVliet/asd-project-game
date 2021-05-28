@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Creature.Creature.NeuralNetworking.TrainingScenario
 {
@@ -15,10 +11,9 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         public Vector2 location;
 
-        private Random random = new Random();
-        private DataGatheringService dataGatheringService;
+        private readonly Random random = new Random();
+        private readonly DataGatheringService dataGatheringService;
         private SmartMonster _target;
-        private TrainerAI _monsterTarget;
 
         public TrainerAI(Vector2 loc, string type)
         {
@@ -31,7 +26,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         public void update(SmartMonster smartMonster)
         {
-            if(Adjecent(smartMonster))
+            if (Adjecent(smartMonster))
             {
                 Attack(_target);
             }
@@ -43,7 +38,8 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         public bool Adjecent(SmartMonster smartMonster)
         {
-            if(type.Equals("player"))
+            TrainerAI _monsterTarget;
+            if (type.Equals("player"))
             {
                 _target = dataGatheringService.ScanMapPlayerAI(location, smartMonster);
                 if (_target != null)
@@ -61,8 +57,6 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                 }
                 return false;
             }
-
-            
         }
 
         private void Attack(SmartMonster smartMonster)
@@ -79,10 +73,10 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         private void Walk()
         {
-            if(location.X < 28 && location.Y < 28 && location.X > 2 && location.Y > 2)
+            if (location.X < 28 && location.Y < 28 && location.X > 2 && location.Y > 2)
             {
                 int direction = random.Next(1, 2);
-                if(direction < 2)
+                if (direction < 2)
                 {
                     int direction2 = random.Next(1, 2);
                     if (direction2 < 2)
@@ -93,7 +87,6 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                     {
                         location.Y++;
                     }
-                    
                 }
                 else
                 {

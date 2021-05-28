@@ -2,16 +2,14 @@
 using Creature.Creature.StateMachine;
 using System;
 using Creature.Creature.StateMachine.Data;
-using System.Collections.Generic;
 using Creature.Creature.NeuralNetworking.TrainingScenario;
-using System.Numerics;
 
 namespace Creature.Creature
 {
     public class SmartMonster : ICreature
     {
         public ICreatureData creatureData;
-        private IDataGatheringService _dataGatheringService;
+        private readonly IDataGatheringService _dataGatheringService;
         public SmartCreatureActions smartactions;
         public TrainingMapGenerator trainingMapGenerator;
 
@@ -25,14 +23,15 @@ namespace Creature.Creature
         public int score;
         public int gen = 0;
 
-        public static int genomeInputs = 14;
-        public static int genomeOutputs = 6;
+        public static readonly int genomeInputs = 14;
+        public static readonly int genomeOutputs = 6;
 
         public float[] vision = new float[genomeInputs];
         public float[] decision = new float[genomeOutputs];
 
         //Data for fitnessCalculation
         public int lifeSpan = 0;
+
         public Boolean dead = false;
         public int DamageDealt { get; set; } = 0;
         public int DamageTaken { get; set; } = 0;
@@ -64,7 +63,7 @@ namespace Creature.Creature
             throw new NotImplementedException();
         }
 
-        public void Show()
+        public static void Show()
         {
             //maye use this to sperate the training settings
         }
@@ -72,12 +71,12 @@ namespace Creature.Creature
         public void Update()
         {
             _dataGatheringService.CheckNewPosition(this);
-            if(lifeSpan > 1000)
+            if (lifeSpan > 1000)
             {
                 dead = true;
             }
             lifeSpan++;
-            foreach(TrainerAI monster in trainingMapGenerator.monsters)
+            foreach (TrainerAI monster in trainingMapGenerator.monsters)
             {
                 monster.update(this);
             }
@@ -96,7 +95,7 @@ namespace Creature.Creature
             //get smartMonster damage
             vision[2] = creatureData.Damage;
             //get smartMonster health
-            vision[3] = (float) creatureData.Health;
+            vision[3] = (float)creatureData.Health;
 
             //calculate closest player and monster
             _dataGatheringService.ScanMap(this, creatureData.VisionRange);
@@ -113,7 +112,7 @@ namespace Creature.Creature
                 vision[8] = 0;
                 vision[9] = 0;
             }
-            else 
+            else
             {
                 //getplayerhealth
                 vision[6] = (float)_dataGatheringService.closestPlayer.health;
@@ -151,7 +150,7 @@ namespace Creature.Creature
             //get attack range
         }
 
-        public void Think() 
+        public void Think()
         {
             float max = 0;
             int maxIndex = 0;
@@ -182,42 +181,49 @@ namespace Creature.Creature
                     smartactions.Attack(_dataGatheringService.closestPlayer, this);
                     score = +20;
                     break;
+
                 case 1:
                     //Flee action
                     smartactions.Flee(_dataGatheringService.closestPlayer, this);
                     score = -8;
                     break;
+
                 case 2:
                     //UseItem action
                     score = -10;
                     break;
+
                 case 3:
                     smartactions.RunToMonster(_dataGatheringService.closestMonster, this);
                     score = -3;
                     //Run to Monster action
                     break;
+
                 case 4:
                     //Grab item action
                     score = -10;
                     break;
+
                 case 5:
                     //Move up action
                     smartactions.WalkUp(this);
                     break;
+
                 case 6:
                     //Move down action
                     smartactions.WalkDown(this);
                     break;
+
                 case 7:
                     //Move left action
                     smartactions.WalkLeft(this);
                     break;
+
                 case 8:
                     //Move right action
                     smartactions.WalkRight(this);
                     break;
             }
-
         }
 
         //returns a clone of this player with the same brian
@@ -238,16 +244,16 @@ namespace Creature.Creature
             int killPoints = 0;
             int deathpoints = 0;
             //Fitness calculation
-            if(EnemysKilled < 0)
+            if (EnemysKilled < 0)
             {
-                killPoints =+ 100000000*EnemysKilled;
+                killPoints += 100000000 * EnemysKilled;
             }
-            if(dead)
+            if (dead)
             {
                 deathpoints = -100;
             }
             fitness =
-                (float)((DamageDealt*5 - DamageTaken*2) + /*(lifeSpan * 0.0001) +*/ HealthHealed + StatsGained + killPoints + deathpoints + score);
+                (float)((DamageDealt * 5 - DamageTaken * 2) + (lifeSpan / 300) + HealthHealed + StatsGained + killPoints + deathpoints + score);
         }
 
         public SmartMonster Crossover(SmartMonster parent2)
@@ -272,16 +278,11 @@ namespace Creature.Creature
             clone.replay = true;
             if (replay)
             {
-                
             }
             else
             {
-                
             }
-
             return clone;
         }
-
-
     }
 }

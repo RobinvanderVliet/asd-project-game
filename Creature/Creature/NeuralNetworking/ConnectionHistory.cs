@@ -22,24 +22,19 @@ namespace Creature.Creature.NeuralNetworking
         //returns whether the genome matches the original genome and the connection is between the same nodes
         public Boolean Matches(Genome genome, NeuralNode from, NeuralNode to)
         {
-            if (genome.genes.Count == innovationNumbers.Count)
-            { 
-                //if the number of connections are different then the genoemes aren't the same
-                if (from.number == fromNode && to.number == toNode)
+            if (genome.genes.Count == innovationNumbers.Count && (from.number == fromNode && to.number == toNode))
+            {
+                //next check if all the innovation numbers match from the genome
+                for (int i = 0; i < genome.genes.Count; i++)
                 {
-                    //next check if all the innovation numbers match from the genome
-                    for (int i = 0; i < genome.genes.Count; i++)
+                    if (!innovationNumbers.Contains(genome.genes[i].innovationNo))
                     {
-                        if (!innovationNumbers.Contains(genome.genes[i].innovationNo))
-                        {
-                            return false;
-                        }
+                        return false;
                     }
-
-                    //if reached this far then the innovationNumbers match the genes innovation numbers and the connection is between the same nodes
-                    //so it does match
-                    return true;
                 }
+                //if reached this far then the innovationNumbers match the genes innovation numbers and the connection is between the same nodes
+                //so it does match
+                return true;
             }
             return false;
         }

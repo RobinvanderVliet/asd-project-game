@@ -1,10 +1,7 @@
-﻿using Creature.Creature.StateMachine;
-using Creature.Creature.StateMachine.Data;
-using Creature.Pathfinder;
+﻿using Creature.Pathfinder;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-
 
 namespace Creature.Creature.NeuralNetworking.TrainingScenario
 {
@@ -14,8 +11,8 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
         public List<TrainerAI> players = new List<TrainerAI>();
         public List<TrainerAI> monsters = new List<TrainerAI>();
 
-        private int _worldSize = 30;
-        private Random _random = new Random();
+        private readonly int _worldSize = 30;
+        private readonly Random _random = new Random();
 
         public char symbolWall = '|';
         public char[,] board = new char[30, 30];
@@ -25,22 +22,10 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
             GenerateWorld();
         }
 
-        private List<List<Node>> GenerateWorld()
+        private void GenerateWorld()
         {
             GenerateNodes();
             GenerateCreatures();
-            return trainingmap;
-        }
-
-        private void GenerateBoard()
-        {
-            for (int i = 0; i < _worldSize; i++)
-            {
-                for (int j = 0; j < _worldSize; j++)
-                {
-                    board[i, j] = '◙';
-                }
-            }
         }
 
         private void GenerateNodes()
@@ -62,7 +47,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
         {
             for (int i = 0; i <= 20; i++)
             {
-                if(i < 5)
+                if (i < 5)
                 {
                     NewPlayer();
                 }
@@ -89,7 +74,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
             players.Add(trainerAI);
         }
 
-        bool isPassable(char symbol)
+        private bool isPassable(char symbol)
         {
             if (symbol == symbolWall)
             {
