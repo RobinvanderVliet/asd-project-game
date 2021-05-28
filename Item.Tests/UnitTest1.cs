@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 
 namespace Item.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class Tests
     {
         [SetUp]

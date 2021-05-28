@@ -1,4 +1,4 @@
-﻿namespace Player.Model.ItemStats
+﻿namespace Items.ItemStats
 {
     public enum Rarity
     {

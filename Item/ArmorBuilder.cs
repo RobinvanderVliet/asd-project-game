@@ -1,8 +1,8 @@
-﻿using System;
-using Items.Armor.ArmorStats;
-using Player.Model.ItemStats;
+﻿using Items.ArmorStats;
+using Items.ItemStats;
+using System;
 
-namespace Items.Armor
+namespace Items
 {
     public class ArmorBuilder : IBuilder
     {

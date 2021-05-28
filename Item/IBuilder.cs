@@ -1,4 +1,4 @@
-﻿using Player.Model.ItemStats;
+﻿using Items.ItemStats;
 
 namespace Items
 {

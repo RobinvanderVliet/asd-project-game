@@ -1,6 +1,6 @@
-﻿using Items.Consumable.ConsumableStats;
+﻿using Items.Consumables.ConsumableStats;
 
-namespace Items.Consumable
+namespace Items.Consumables
 {
     public class HealthConsumable : Consumable
     {
