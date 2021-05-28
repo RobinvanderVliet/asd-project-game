@@ -1,5 +1,4 @@
 using Agent.Antlr.Ast;
-using Agent.Antlr.Grammar;
 using NUnit.Framework;
 using Agent.Antlr.Parser;
 using System;
@@ -9,6 +8,7 @@ using Antlr4.Runtime.Tree;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Linq;
+using Agent.Antlr.Grammar;
 
 namespace Agent.Tests.parser
 {

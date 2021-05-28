@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using DatabaseHandler.Poco;
 using LiteDB;
 using LiteDB.Async;
 using Microsoft.Extensions.Logging;
@@ -19,10 +17,11 @@ namespace DatabaseHandler.Repository
         private readonly ILogger<Repository<T>> _log;
 
         [ExcludeFromCodeCoverage]
-        public Repository(IDbConnection connection, string collection = null)
+        public Repository(string collection = null)
         {
-            _collection = collection ?? typeof(T).Name;
+            IDBConnection connection = new DBConnection();
             _db = connection.GetConnectionAsync();
+            _collection = collection ?? typeof(T).Name;
             _log = new NullLogger<Repository<T>>();
         }
 
@@ -31,14 +30,6 @@ namespace DatabaseHandler.Repository
         {
             var result = await _db.GetCollection<T>(_collection).InsertAsync(obj);
             return result;
-        }
-
-        [ExcludeFromCodeCoverage]
-        public async Task<T> ReadAsync(T obj)
-        {
-            var chunk = await _db.GetCollection<T>(_collection)
-                .FindOneAsync(c => c.Equals(obj));
-            return chunk;
         }
 
         [ExcludeFromCodeCoverage]
@@ -74,13 +65,5 @@ namespace DatabaseHandler.Repository
             var result = await _db.GetCollection<T>(_collection).DeleteAllAsync();
             return result;
         }
-
-        public async Task<IEnumerable<PlayerPoco>> GetAllPoco()
-        {
-            var result = await _db.GetCollection<PlayerPoco>(_collection).Query().ToListAsync();
-            return result; 
-        }
-
-     
     }
 }

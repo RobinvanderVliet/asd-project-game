@@ -1,11 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
+using DataTransfer.Model.World;
+using DataTransfer.Model.World.Interfaces;
+using DataTransfer.Model.World.LootableTiles;
+using DataTransfer.Model.World.TerrainTiles;
 using NUnit.Framework;
 using Moq;
-using WorldGeneration.DatabaseFunctions;
-using WorldGeneration.Models;
-using WorldGeneration.Models.Interfaces;
-using WorldGeneration.Models.LootableTiles;
-using WorldGeneration.Models.TerrainTiles;
+//using WorldGeneration.DatabaseFunctions;
 
 namespace WorldGeneration.Tests
 {
@@ -21,7 +21,7 @@ namespace WorldGeneration.Tests
  
         //Declaration of mocks
         private INoiseMapGenerator _noiseMapGeneratorMock;
-        private DatabaseFunctions.Database _databaseMock;
+        //private DatabaseFunctions.Database _databaseMock;
  
         [SetUp]
         public void Setup()
@@ -52,9 +52,9 @@ namespace WorldGeneration.Tests
             
             _noiseMapGeneratorMock = noiseMapGeneratorMock.Object;
 
-            _databaseMock = new Mock<Database>().Object;
+            //_databaseMock = new Mock<Database>().Object;
             
-            _sut = new Map(_noiseMapGeneratorMock, _databaseMock, chunkSize, seed);
+            //_sut = new Map(_noiseMapGeneratorMock, _databaseMock, chunkSize, seed);
 
         }
         
@@ -63,7 +63,7 @@ namespace WorldGeneration.Tests
         {
             //Arrange ---------
             //Act ---------
-            var map = new Map(new NoiseMapGenerator(), new DatabaseFunctions.Database("c:\\temp\\db.db", "test"),2,51);
+            //var map = new Map(new NoiseMapGenerator(), new DatabaseFunctions.Database("c:\\temp\\db.db", "test"),2,51);
             //Assert ---------
         }
         

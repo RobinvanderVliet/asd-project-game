@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\WorldGeneration\WorldGeneration.csproj" />
+      <ProjectReference Include="..\DataTransfer\DataTransfer.csproj" />
     </ItemGroup>
 
 </Project>
