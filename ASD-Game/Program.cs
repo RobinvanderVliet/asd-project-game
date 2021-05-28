@@ -4,22 +4,17 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.IO;
-using Agent;
-using ASD_project.Profiles;
-using AutoMapper;
 using DatabaseHandler;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using WorldGeneration;
-using Player;
+using ActionHandling;
 using Chat;
-using InputCommandHandler;
-using Player.Services;
+using InputHandling;
+using InputHandling.Antlr;
+using InputHandling.Antlr.Transformer;
 using Network;
-using Player.ActionHandlers;
 using Session;
-using Player.Model;
 using UserInterface;
 
 namespace ASD_project
@@ -44,19 +39,11 @@ namespace ASD_project
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddAutoMapper(typeof(MapCharacterProfile));
                     services.AddTransient<IMainGame, MainGame>();
-                    services.AddScoped<IPlayerService, PlayerService>();
-                    services.AddScoped<IPlayerModel, PlayerModel>();
-                    services.AddScoped<IInventory, Inventory>();
-                    services.AddScoped<IItem, Item>();
-                    services.AddScoped<IBitcoin, Bitcoin>();
-                    services.AddScoped<IRadiationLevel, RadiationLevel>();
                     services.AddScoped<INetworkComponent, NetworkComponent>();
                     services.AddScoped<IClientController, ClientController>();
                     services.AddScoped<IChatHandler, ChatHandler>();
                     services.AddScoped<ISessionHandler, SessionHandler>();
-                    services.AddScoped<ISessionService, SessionService>();
                     services.AddScoped<IMoveHandler, MoveHandler>();
                     services.AddScoped<IWorldService, WorldService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
@@ -64,7 +51,9 @@ namespace ASD_project
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
                     services.AddScoped(typeof(IServicesDb<>), typeof(ServicesDb<>));
                     services.AddScoped<IScreenHandler, ScreenHandler>();
-                    services.AddScoped<IInputCommandHandlerComponent, InputCommandHandlerComponent>();
+                    services.AddScoped<IInputHandler, InputHandler>();
+                    services.AddScoped<IPipeline, Pipeline>();
+                    services.AddScoped<IEvaluator, Evaluator>();
                 })
                 .UseSerilog()
                 .Build();

@@ -22,6 +22,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataTransfer\DataTransfer.csproj" />
+    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
+    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
+    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
+    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
+    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
+    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
+    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
+    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
+    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
   </ItemGroup>
 
 </Project>
