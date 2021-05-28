@@ -8,7 +8,7 @@ namespace Agent.Antlr.Ast.Comparables
 
         private Stat _stat;
         
-        public string Name { get; set; }
+        public string Name { get; }
         
         public Item(string name)
         {

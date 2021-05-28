@@ -4,14 +4,10 @@ namespace Agent.Antlr.Ast
 {
     public class When : Node
     {
-        private Comparable _comparableL;
-        public Comparable ComparableL {get=> _comparableL;}
-        private Comparable _comparableR;
-        public Comparable ComparableR {get => _comparableR;}
-        private Comparison _comparison;
-        public Comparison Comparison {get => _comparison;}
-        private ActionReference _then;
-        public ActionReference Then {get => _then;}
+        public Comparable ComparableL {get; set; }
+        public Comparable ComparableR {get; set; }
+        public Comparison Comparison {get; set; }
+        public ActionReference Then {get; set; }
 
         public override string GetNodeType()
         {
@@ -22,14 +18,14 @@ namespace Agent.Antlr.Ast
         {
             var children = new List<Node>();
 
-            if (_comparableL != null)
-                children.Add(_comparableL);
-            if (_comparison != null)
-                children.Add(_comparison);
-            if (_comparableR != null)
-                children.Add(_comparableR);
-            if (_then != null)
-                children.Add(_then);
+            if (ComparableL != null)
+                children.Add(ComparableL);
+            if (Comparison != null)
+                children.Add(Comparison);
+            if (ComparableR != null)
+                children.Add(ComparableR);
+            if (Then != null)
+                children.Add(Then);
 
             children.AddRange(body);
             return children;
@@ -40,13 +36,13 @@ namespace Agent.Antlr.Ast
             switch (node)
             {
                 case Comparable comparable:
-                    if (_comparableL == null) 
+                    if (ComparableL == null) 
                     {
-                        _comparableL = comparable;
+                        ComparableL = comparable;
                     }
-                    else if (_comparableR == null) 
+                    else if (ComparableR == null) 
                     {
-                        _comparableR = comparable;
+                        ComparableR = comparable;
                     }
                     else
                     {
@@ -54,10 +50,10 @@ namespace Agent.Antlr.Ast
                     }
                     break;
                 case ActionReference action:
-                    _then = action;
+                    Then = action;
                     break;
                 case Comparison comparison:
-                    _comparison = comparison;
+                    Comparison = comparison;
                     break;
                 default:
                     body.Add(node);

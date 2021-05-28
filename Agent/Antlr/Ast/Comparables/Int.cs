@@ -2,7 +2,7 @@
 {
     public class Int : Comparable
     {
-        public int Value { get; set; }
+        public int Value { get; }
         
         public Int(int value)
         {

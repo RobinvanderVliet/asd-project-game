@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
 using Agent.Antlr.Ast.Comparables.Subjects;
@@ -9,59 +7,85 @@ using Action = Agent.Antlr.Ast.Action;
 namespace Agent.Antlr.Checker
 {
     public class Checking
-    { 
-    
-        
-        private List<string> _actions = new List<string>()
+    {
+        private readonly List<string> _actions = new()
         {
             "engage", "collect"
         };
-        private List<string> _actionreferences = new List<string>()
+        private readonly List<string> _actionReferences = new()
         {
             "walk", "attack", "grab", "drop", "flee", "use", "replace"
         };    
 
-        private List<string> _settings = new List<string>()
+        private readonly List<string> _settings = new()
         {
             "explore", "combat"
         };
 
-        private List<string> _rulevalues = new List<string>()
+        private readonly List<string> _ruleValues = new ()
         {
             "random", "circle", "line", "none", "defensive", "offensive"
         };
         
+        private  readonly List<string> _weapons = new ()
+        {
+            "knife", "baseball-bat", "katana", "glock", "p90", "ak-47"
+        };
+        private readonly List<string> _consumables = new ()
+        {
+            "bandage", "morphine", "medkit", "big-mac", "monster-energy", "suspicious-white-powder", "lodine-tablets"
+        };            
+        private readonly List<string> _armor = new ()
+        {
+            "jacket", "flak-vest", "tactical-vest", "bandana", "hard-hat", "military-helmet", "gas-mask","hazmat-suit"
+        };
+
+        private readonly List<string> _bitcoinItems = new()
+        {
+            "scrap-electronics", "gpu-upgrade", "usb-stick", "bitcoin-wallet"
+        };
+
+        private readonly List<string> _tiles = new()
+        {
+            "street", "grass", "dirt", "water", "office-space", "airplane", 
+            "house","gas", "spikes","fire", "health-boost", "stamina-boost",     
+            "bitcoin-mining-farm", "chest", "door", "wall"
+        };
+
 
         public Checking(AST ast)
         {
-            _actionreferences.AddRange(_actions);
-            
             Check(ast.root);
-            
         }
-        public virtual void Check(Node node)
+        
+        private void Check(Node node)
         {
-            if (node is ActionReference)
+            switch (node)
             {
-                CheckActionReference((ActionReference) node);
+                case ActionReference actionReferenceNode:
+                    CheckActionReference(actionReferenceNode);
+                    break;
+                case Rule ruleNode:
+                    CheckRule(ruleNode);
+                    break;
+                case Condition conditionNode:
+                    CheckCondition(conditionNode);
+                    break;
+                case When whenNode:
+                    CheckWhen(whenNode);
+                    break;
+                case Action actionNode:
+                    CheckAction(actionNode);
+                    break;
+                case Item itemNode:
+                    CheckItem(itemNode);
+                    break;
+                case Tile tileNode:
+                    CheckTile(tileNode);
+                    break;
             }
-            else if (node is Rule)
-            {
-                CheckRule((Rule)node);
-            }
-            else if (node is Condition)
-            {
-                CheckCondition((Condition) node);
-            }
-            else if (node is When)
-            {
-                CheckWhen((When) node);
-            }else if (node is Action)
-            {
-                CheckAction((Action) node);
-            }
-
-            foreach (Node child in node.GetChildren())
+            
+            foreach (var child in node.GetChildren())
             {
                 Check(child);
             }
@@ -74,7 +98,6 @@ namespace Agent.Antlr.Checker
             {
                 node.SetError("'" + node.Name + "' is not a valid/programmable action!");
             }
-
             foreach (Condition condition in node.Conditions)
             {
                 if (condition.OtherwiseClause.Action.Name.Equals(node.Name) ||
@@ -85,7 +108,6 @@ namespace Agent.Antlr.Checker
             }
         }
 
-        
         private void CheckActionReference(ActionReference node)
         {
             if (node.Name.Equals("use"))
@@ -140,7 +162,7 @@ namespace Agent.Antlr.Checker
             {
                 case "contains":
                 case "does not contain":
-                    CheckContains(node, comparableL);
+                    CheckContains(node, comparableL, comparableR);
                     break;
                 case "greater than":
                 case "less than":
@@ -157,42 +179,62 @@ namespace Agent.Antlr.Checker
             }
         }
         
-        private void CheckContains(Comparison node,Comparable comparableL)
+        private void CheckContains(Comparison node,Comparable comparableL, Comparable comparableR)
         {
-            if (!(comparableL is Inventory))
+            if (comparableL is not Inventory)
             {
-                node.SetError("'" + node.ComparisonType + "' must use inventory! (inventory +" + node.ComparisonType + "...) ");
+                node.SetError("Left side of the comparison '" + node.ComparisonType + "' must be inventory!");
+            }
+
+            if (comparableR is not Item)
+            {
+                node.SetError("Left side of the comparison '" + node.ComparisonType + "' must be an item!");
             }
         }
 
         private void CheckValueComparison(Comparison node,Comparable comparableL, Comparable comparableR)
         {
-            if (!((comparableL is Int || comparableR is Stat) && (comparableL is Stat || comparableR is Stat)))
+            if (comparableL is not Stat)
             {
-                node.SetError("'" + node.ComparisonType + "' must be used with int values or Stats only");
+                node.SetError("Left side of the comparison '" + node.ComparisonType + "' must be a stat!");
+            }
+            if (comparableR is not Int)
+            {
+                node.SetError("Right side of te comparison'" + node.ComparisonType + "' must be an int value!");
             }
         }
 
         private void CheckSubjectComparison(Comparison node,Comparable comparableL, Comparable comparableR)
         {
-            if (!(comparableL is AgentSubject))
+            if (comparableL is not AgentSubject)
             {
-                node.SetError("'" + node.ComparisonType + "' must use agent! (agent +" + node.ComparisonType + "...) ");
+                node.SetError("Left side of the comparison '" + node.ComparisonType + "' must be agent!");
             }
-            if (comparableR is AgentSubject)
+            if (comparableR is AgentSubject or Inventory)
             {
-                node.SetError("'" + node.ComparisonType + "' cant use agent as the second comparable,");
-            }
-            else if (comparableR is Inventory)
+                node.SetError("Right side of the comparison '" + node.ComparisonType + "' cant be agent or inventory");
+            } 
+            else if (comparableR is not Subject)
             {
-                node.SetError("'" + node.ComparisonType + "' cant use inventory as the second comparable,");
-            }
-            else if (!(comparableR is Subject))
-            {
-                node.SetError("'" + node.ComparisonType + "' must use a subject as the second comparable,");
+                node.SetError("Right side of the comparison '" + node.ComparisonType + "' must be a subject!");
             }
         }
 
+        private void CheckTile(Tile node)
+        {
+            if (!IsTile(node.Name))
+            {
+                node.SetError("'" + node.Name + "' is not a valid Tile");
+            }
+        }
+        
+        private void CheckItem(Item node)
+        {
+            if (!IsItem(node.Name))
+            {
+                node.SetError("'" + node.Name + "' is not a valid item!");
+            }
+        }
 
         private bool IsSetting(string name)
         {
@@ -201,80 +243,29 @@ namespace Agent.Antlr.Checker
 
         private bool IsRuleValue(string value)
         {
-            return _rulevalues.Contains(value);
+            return _ruleValues.Contains(value);
         }
 
         private bool IsActionReference(string name)
         {
-            return _actionreferences.Contains(name);
+            return _actionReferences.Contains(name) || IsAction(name);
         }
         
         private bool IsAction(string name)
         {
             return _actions.Contains(name);
         }
-        
-        
-        
-        
-        
-        
-        public void CheckStatCombination(List<Node> nodes)
-        {
-            foreach (Node node in nodes)
-            {
-                if (node.GetChildren().Count > 0)
-                {
-                    CheckStatCombination(node.GetChildren());
-                    
-                }
-                
-                if (node is When)
-                {
-                    var comparable = (Comparable) node.GetChildren().FirstOrDefault();
 
-                    if (comparable is Item)
-                    {
-                        if (!CheckItemAndAllowedStat((Item) comparable))
-                        {
-                            comparable.SetError("There is an invalid combination of item and stat");
-                        }
-                    }
-                }
-                if (node is Stat)
-                {
-                    
-                }
-            }
+        private bool IsItem(string name)
+        {
+            return _armor.Contains(name) || _bitcoinItems.Contains(name) || _consumables.Contains(name) ||
+                   _weapons.Contains(name);
         }
 
-        public bool CheckItemAndAllowedStat(Item comparable)
+        private bool IsTile(string name)
         {
-            bool itemAllowed = false;
-            
-            string[][] allowedItemStatsCombinations =
-            {
-                //              ITEM     STAT
-                new[] {"Weapon", "Power"},
-                new[] {"Potion", "Health"},
-            };
-
-            String itemName = comparable.Name;
-            Stat stat = (Stat) comparable.GetChildren()[0];
-            String statName = stat.Name;
-
-
-            foreach (string[] s in allowedItemStatsCombinations)
-            {
-                if (itemName != s[0] || statName != s[1]) continue;
-                itemAllowed = true;
-                if (itemAllowed) break;
-
-            }
-            return itemAllowed;
+            return _tiles.Contains(name);
         }
-
-      
     }
 }
 

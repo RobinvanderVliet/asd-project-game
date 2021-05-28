@@ -4,8 +4,7 @@ namespace Agent.Antlr.Ast
 {
     public class Otherwise : Node
     {
-        private ActionReference _action;
-        public ActionReference Action { get => _action; }
+        public ActionReference Action { get; set; }
         
         public string Value { get; set; }
         
@@ -17,8 +16,8 @@ namespace Agent.Antlr.Ast
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            if(_action!= null){
-                children.Add(_action);
+            if(Action!= null){
+                children.Add(Action);
             };
             children.AddRange(body);
             return children;
@@ -27,7 +26,7 @@ namespace Agent.Antlr.Ast
         public override Node AddChild(Node node)
         {
             if (node is ActionReference actionReference) {
-                _action = actionReference;
+                Action = actionReference;
             }
             else {
                 body.Add(node);

@@ -6,10 +6,10 @@ namespace Agent.Antlr.Ast
     public class Setting : Node
     {
         
-        private List<Node> _conditions = new List<Node>();
-        private List<Node> _actions = new List<Node>();
-        
-        public string SettingName { get; set; }
+        private readonly List<Node> _conditions = new ();
+        private readonly List<Node> _actions = new ();
+
+        public string SettingName {get ;}
         
         public Setting(string settingName)
         {
