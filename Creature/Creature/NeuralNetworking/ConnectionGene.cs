@@ -1,8 +1,10 @@
 ﻿using MathNet.Numerics.Distributions;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Creature.Creature.NeuralNetworking
 {
+    [ExcludeFromCodeCoverage]
     public class ConnectionGene
     {
         public NeuralNode fromNode;
@@ -38,7 +40,6 @@ namespace Creature.Creature.NeuralNetworking
                 if (weight < -1)
                 {
                     weight = -1;
-
                 }
             }
         }

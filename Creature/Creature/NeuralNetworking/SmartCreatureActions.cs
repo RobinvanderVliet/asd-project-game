@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Creature.Creature.NeuralNetworking.TrainingScenario;
 using Creature.Pathfinder;
@@ -13,6 +14,7 @@ namespace Creature.Creature.NeuralNetworking
 
         public Stack<Node> path = new Stack<Node>();
 
+        [ExcludeFromCodeCoverage]
         public SmartCreatureActions(List<List<Node>> map)
         {
             _pathfinder = new PathFinder(map);

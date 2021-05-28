@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Creature.Creature.NeuralNetworking
 {
@@ -62,6 +63,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //Add connection going out of a node so that is can get the next node during the feed formward
+        [ExcludeFromCodeCoverage]
         public void ConnectNodes()
         {
             for (int i = 0; i < nodes.Count; i++)
@@ -134,6 +136,7 @@ namespace Creature.Creature.NeuralNetworking
         //it does this by picking a random connection and disabling it then 2 new connections are added
         //1 between the input node of the disabled connection and the new node
         //and the other between the new node and the output of the disabled connection
+        [ExcludeFromCodeCoverage]
         public void AddNode(List<ConnectionHistory> innovationHistory)
         {
             //pick a random connection to create a node between
@@ -186,6 +189,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //adds a connection between 2 nodes which aren't currently connected
+        [ExcludeFromCodeCoverage]
         public void AddConnection(List<ConnectionHistory> innovationHistory)
         {
             //cannot add a connection to a fully connected network
@@ -223,6 +227,7 @@ namespace Creature.Creature.NeuralNetworking
             ConnectNodes();
         }
 
+        [ExcludeFromCodeCoverage]
         public Boolean BadConnectionNodeHasBeenMade(int r1, int r2)
         {
             if (nodes[r1].layer == nodes[r2].layer) return true; // if the nodes are in the same layer
@@ -234,6 +239,7 @@ namespace Creature.Creature.NeuralNetworking
         //returns the innovation number for the new mutation
         //if this mutation has never been seen before then it will be given a new unique innovation number
         //if this mutation matches a previous mutation then it will be given the same innovation number as the previous one
+        [ExcludeFromCodeCoverage]
         public int GetInnovationNumber(List<ConnectionHistory> innovationHistory, NeuralNode from, NeuralNode to)
         {
             Boolean isNew = true;
@@ -268,6 +274,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //returns whether the network is fully connected or not
+        [ExcludeFromCodeCoverage]
         public Boolean FullyConnected()
         {
             int maxConnections = 0;
@@ -302,6 +309,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //mutates the genome
+        [ExcludeFromCodeCoverage]
         public void Mutate(List<ConnectionHistory> innovationHistory)
         {
             if (genes.Count == 0)
@@ -334,6 +342,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //called when this Genome is better that the other parent
+        [ExcludeFromCodeCoverage]
         public Genome Crossover(Genome parent2)
         {
             Genome child = new Genome(inputs, outputs, true);
@@ -401,6 +410,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //create an empty genome
+        [ExcludeFromCodeCoverage]
         public Genome(int input, int output, Boolean crossover)
         {
             //set input number and output number
@@ -422,6 +432,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //returns a copy of this genome
+        [ExcludeFromCodeCoverage]
         public Genome Clone()
         {
             Genome clone = new Genome(inputs, outputs, true);
@@ -449,6 +460,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //prints out info about the genome to the console
+        [ExcludeFromCodeCoverage]
         public void PrintGenome()
         {
             Console.WriteLine("Print genome  layers: " + layers);

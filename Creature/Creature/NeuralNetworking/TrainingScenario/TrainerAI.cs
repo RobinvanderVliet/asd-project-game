@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace Creature.Creature.NeuralNetworking.TrainingScenario
@@ -15,6 +16,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
         private readonly DataGatheringService dataGatheringService;
         private SmartMonster _target;
 
+        [ExcludeFromCodeCoverage]
         public TrainerAI(Vector2 loc, string type)
         {
             this.damage = random.Next(5, 10);

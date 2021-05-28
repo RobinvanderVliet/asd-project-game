@@ -3,6 +3,7 @@ using Creature.Creature.StateMachine;
 using System;
 using Creature.Creature.StateMachine.Data;
 using Creature.Creature.NeuralNetworking.TrainingScenario;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Creature.Creature
 {
@@ -44,6 +45,7 @@ namespace Creature.Creature
 
         public ICreatureStateMachine CreatureStateMachine => null;
 
+        [ExcludeFromCodeCoverage]
         public SmartMonster(ICreatureData creatureData)
         {
             this.creatureData = creatureData;
@@ -53,16 +55,19 @@ namespace Creature.Creature
             brain = new Genome(genomeInputs, genomeOutputs);
         }
 
+        [ExcludeFromCodeCoverage]
         public void ApplyDamage(double amount)
         {
             throw new NotImplementedException();
         }
 
+        [ExcludeFromCodeCoverage]
         public void HealAmount(double amount)
         {
             throw new NotImplementedException();
         }
 
+        [ExcludeFromCodeCoverage]
         public void Show()
         {
             //maye use this to sperate the training settings
@@ -96,7 +101,6 @@ namespace Creature.Creature
             vision[2] = creatureData.Damage;
             //get smartMonster health
             vision[3] = (float)creatureData.Health;
-
             //calculate closest player and monster
             _dataGatheringService.ScanMap(this, creatureData.VisionRange);
             // needs to be player location in X and Y
@@ -226,7 +230,8 @@ namespace Creature.Creature
             }
         }
 
-        //returns a clone of this player with the same brian
+        //returns a clone of this player with the same brain
+        [ExcludeFromCodeCoverage]
         public SmartMonster Clone()
         {
             SmartMonster clone = new SmartMonster(creatureData);
@@ -256,6 +261,7 @@ namespace Creature.Creature
                 (float)((DamageDealt * 5 - DamageTaken * 2) + (lifeSpan / 300) + HealthHealed + StatsGained + killPoints + deathpoints + score);
         }
 
+        [ExcludeFromCodeCoverage]
         public SmartMonster Crossover(SmartMonster parent2)
         {
             SmartMonster child = new SmartMonster(parent2.creatureData);
@@ -266,7 +272,7 @@ namespace Creature.Creature
 
         //since there is some randomness in games sometimes when we want to replay the game we need to remove that randomness
         //this fuction does that
-
+        [ExcludeFromCodeCoverage]
         public SmartMonster CloneForReplay()
         {
             SmartMonster clone = new SmartMonster(creatureData);

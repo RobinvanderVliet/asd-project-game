@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Creature.Creature.NeuralNetworking
 {
@@ -37,6 +38,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //sigmoid activation function
+        [ExcludeFromCodeCoverage]
         public static float Sigmoid(float x)
         {
             float k = (float)Math.Exp(x);
@@ -79,6 +81,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //returns a copy of this node
+        [ExcludeFromCodeCoverage]
         public NeuralNode Clone()
         {
             NeuralNode clone = new NeuralNode(number);

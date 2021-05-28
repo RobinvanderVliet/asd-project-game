@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Creature.Creature.NeuralNetworking
 {
+    [ExcludeFromCodeCoverage]
     public class ConnectionHistory
     {
         public int fromNode;

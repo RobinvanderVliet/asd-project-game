@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Creature.Creature.StateMachine.Data;
 
 namespace Creature.Creature.NeuralNetworking
@@ -31,6 +32,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //update all the SmartMonsters which are alive
+        [ExcludeFromCodeCoverage]
         public void UpdateAlive()
         {
             populationLife++;

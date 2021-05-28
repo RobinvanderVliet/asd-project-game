@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Creature.Creature.NeuralNetworking
 {
@@ -18,10 +19,12 @@ namespace Creature.Creature.NeuralNetworking
 
         public readonly Random random = new Random();
 
+        [ExcludeFromCodeCoverage]
         public Species()
         {
         }
 
+        [ExcludeFromCodeCoverage]
         public Species(SmartMonster sm)
         {
             creatures.Add(sm);
@@ -157,6 +160,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //gets baby from the players in this species
+        [ExcludeFromCodeCoverage]
         public SmartMonster GiveMeBaby(List<ConnectionHistory> innovationHistory)
         {
             SmartMonster baby;

@@ -1,6 +1,7 @@
 ﻿using Creature.Pathfinder;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace Creature.Creature.NeuralNetworking.TrainingScenario
@@ -17,6 +18,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
         public char symbolWall = '|';
         public char[,] board = new char[30, 30];
 
+        [ExcludeFromCodeCoverage]
         public TrainingMapGenerator()
         {
             GenerateWorld();
@@ -74,6 +76,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
             players.Add(trainerAI);
         }
 
+        [ExcludeFromCodeCoverage]
         private bool isPassable(char symbol)
         {
             if (symbol == symbolWall)
