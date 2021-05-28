@@ -12,8 +12,6 @@ namespace Creature
         private int _gridRows;
         private int _gridCols;
 
-             //todo 
-
         public PathFinder(List<List<Node>> nodes)
         {
             _grid = nodes;
@@ -23,7 +21,7 @@ namespace Creature
 
         private void resetGrid()
         {
-            for (int row = 0; row < _gridRows; row ++)
+            for (int row = 0; row < _gridRows; row++)
             {
                 for (int col = 0; col < _gridCols; col++)
                 {
@@ -35,24 +33,21 @@ namespace Creature
         }
         public Stack<Node> FindPath(Vector2 startPosition, Vector2 endPosition)
         {
-
             Node startNode = new Node(new Vector2((int)startPosition.X, (int)(startPosition.Y)), true);
             Node endNode = new Node(new Vector2((int)endPosition.X, (int)(endPosition.Y)), true);
-            
+
             Stack<Node> pathStack = new Stack<Node>();
 
             List<Node> openList = new List<Node>();
             List<Node> closedList = new List<Node>();
 
             List<Node> adjacencies;
-            //TODO morgen ff kieken
+
             resetGrid();
 
             Node currentNode = startNode;
-            
+
             openList.Add(currentNode);
-
-
 
             while (openList.Count > 0 && !AreNodesAtSamePosition(openList[0], endNode))
             {
@@ -66,7 +61,7 @@ namespace Creature
                     if (adjNode.IsWalkable)
                     {
                         if (!openList.Contains(adjNode))
-                        {                                                      
+                        {
                             if (!closedList.Contains(adjNode))
                             {
                                 adjNode.Parent = currentNode;
@@ -79,8 +74,9 @@ namespace Creature
                                 adjNode.Parent = currentNode;
                                 adjNode.DistanceToTarget = Math.Abs(adjNode.Position.X - endNode.Position.X) + Math.Abs(adjNode.Position.Y - endNode.Position.Y);
                                 adjNode.Cost = adjNode.Weight + adjNode.Parent.Cost;
+                                closedList.Remove(adjNode);
+                                openList.Add(adjNode);
                             }
-                            
                         }
                     }
                 }

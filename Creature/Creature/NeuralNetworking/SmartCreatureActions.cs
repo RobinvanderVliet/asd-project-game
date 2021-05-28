@@ -28,9 +28,49 @@ namespace Creature.Creature.NeuralNetworking
                 Vector2 destination = new Vector2(newXLoc, newYLoc);
 
                 path = _pathfinder.FindPath(loc, destination);
+                CheckPath(smartmonster);
             }
             smartmonster.creatureData.Position = path.Pop().Position;
+        }
 
+        public void WalkUp(SmartMonster smartMonster) 
+        {
+            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X, smartMonster.creatureData.Position.Y+1);
+            if (IsValidMove(destination))
+            {
+                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
+                CheckPath(smartMonster);
+            }
+        }
+
+        public void WalkDown(SmartMonster smartMonster)
+        {
+            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X, smartMonster.creatureData.Position.Y - 1);
+            if (IsValidMove(destination))
+            {
+                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
+                CheckPath(smartMonster);
+            }
+        }
+
+        public void WalkLeft(SmartMonster smartMonster)
+        {
+            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X -1, smartMonster.creatureData.Position.Y);
+            if (IsValidMove(destination))
+            {
+                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
+                CheckPath(smartMonster);
+            }
+        }
+
+        public void WalkRight(SmartMonster smartMonster)
+        {
+            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X +1, smartMonster.creatureData.Position.Y);
+            if (IsValidMove(destination))
+            {
+                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
+                CheckPath(smartMonster);
+            }
         }
 
         public void Attack(TrainerAI player, SmartMonster smartmonster)
@@ -46,7 +86,7 @@ namespace Creature.Creature.NeuralNetworking
             }
             else
             {
-                smartmonster.score =- 25;
+                smartmonster.score -= 25;
             }
         }
 
@@ -59,12 +99,20 @@ namespace Creature.Creature.NeuralNetworking
                     if (smartmonster.creatureData.Position.Y <= 19)
                     {
                         Vector2 newDestination = new Vector2(smartmonster.creatureData.Position.X, smartmonster.creatureData.Position.Y + 10);
-                        path = _pathfinder.FindPath(smartmonster.creatureData.Position, newDestination);
+                        if (IsValidMove(newDestination))
+                        {
+                            path = _pathfinder.FindPath(smartmonster.creatureData.Position, newDestination);
+                            CheckPath(smartmonster);
+                        }
                     }
                     else if(smartmonster.creatureData.Position.Y >= 10)
                     {
                         Vector2 newDestination = new Vector2(smartmonster.creatureData.Position.X, smartmonster.creatureData.Position.Y - 10);
-                        path = _pathfinder.FindPath(smartmonster.creatureData.Position, newDestination);
+                        if (IsValidMove(newDestination))
+                        {
+                            path = _pathfinder.FindPath(smartmonster.creatureData.Position, newDestination);
+                            CheckPath(smartmonster);
+                        }
                     }
                 }
                 else if (player.location.Y == smartmonster.creatureData.Position.Y)
@@ -72,12 +120,20 @@ namespace Creature.Creature.NeuralNetworking
                     if (smartmonster.creatureData.Position.X <= 19)
                     {
                         Vector2 newDestination = new Vector2(smartmonster.creatureData.Position.Y, smartmonster.creatureData.Position.X + 10);
-                        path = _pathfinder.FindPath(smartmonster.creatureData.Position, newDestination);
+                        if (IsValidMove(newDestination))
+                        {
+                            path = _pathfinder.FindPath(smartmonster.creatureData.Position, newDestination);
+                            CheckPath(smartmonster);
+                        }
                     }
                     else if(smartmonster.creatureData.Position.X >= 10)
                     {
                         Vector2 newDestination = new Vector2(smartmonster.creatureData.Position.Y, smartmonster.creatureData.Position.X - 10);
-                        path = _pathfinder.FindPath(smartmonster.creatureData.Position, newDestination);
+                        if (IsValidMove(newDestination))
+                        {
+                            path = _pathfinder.FindPath(smartmonster.creatureData.Position, newDestination);
+                            CheckPath(smartmonster);
+                        }
                     }
                 }
                 else
@@ -85,12 +141,20 @@ namespace Creature.Creature.NeuralNetworking
                     if (smartmonster.creatureData.Position.X <= 19 && smartmonster.creatureData.Position.Y <= 19)
                     {
                         Vector2 newDestination = new Vector2(smartmonster.creatureData.Position.Y + 10, smartmonster.creatureData.Position.X + 10);
-                        path = _pathfinder.FindPath(smartmonster.creatureData.Position, newDestination);
+                        if (IsValidMove(newDestination))
+                        {
+                            path = _pathfinder.FindPath(smartmonster.creatureData.Position, newDestination);
+                            CheckPath(smartmonster);
+                        }
                     }
                     else if(smartmonster.creatureData.Position.X >= 10 && smartmonster.creatureData.Position.Y >= 10)
                     {
                         Vector2 newDestination = new Vector2(smartmonster.creatureData.Position.Y - 10, smartmonster.creatureData.Position.X - 10);
-                        path = _pathfinder.FindPath(smartmonster.creatureData.Position, newDestination);
+                        if (IsValidMove(newDestination))
+                        {
+                            path = _pathfinder.FindPath(smartmonster.creatureData.Position, newDestination);
+                            CheckPath(smartmonster);
+                        }
                     }
                 }
             }
@@ -106,6 +170,7 @@ namespace Creature.Creature.NeuralNetworking
             if (monster != null)
             {
                 path = _pathfinder.FindPath(monster.location, smartmonster.creatureData.Position);
+                CheckPath(smartmonster);
             }
         }
 
@@ -130,5 +195,27 @@ namespace Creature.Creature.NeuralNetworking
             return (distance < 2);
         }
 
+        private void CheckPath(SmartMonster smartMonster)
+        {
+            if (path == null)
+            {
+                smartMonster.score--;
+            }
+        }
+
+        private bool IsValidMove(Vector2 destination)
+        {
+            int topOfMap = 0;
+            int botOfMap = 29;
+            int leftOfMap = 0;
+            int rightOfMap = 29;
+
+            if(destination.X > leftOfMap && destination.X < rightOfMap && destination.Y > topOfMap && destination.Y < botOfMap)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

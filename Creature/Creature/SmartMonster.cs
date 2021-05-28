@@ -25,7 +25,7 @@ namespace Creature.Creature
         public int score;
         public int gen = 0;
 
-        public static int genomeInputs = 8;
+        public static int genomeInputs = 14;
         public static int genomeOutputs = 6;
 
         public float[] vision = new float[genomeInputs];
@@ -40,8 +40,8 @@ namespace Creature.Creature
         public int StatsGained { get; set; } = 0;
         public int EnemysKilled { get; set; } = 0;
 
-        private float currDistanceToPlayer;
-        private float currDistanceToMonster;
+        public float currDistanceToPlayer;
+        public float currDistanceToMonster;
 
         public ICreatureStateMachine CreatureStateMachine => null;
 
@@ -71,6 +71,7 @@ namespace Creature.Creature
 
         public void Update()
         {
+            _dataGatheringService.CheckNewPosition(this);
             if(lifeSpan > 1000)
             {
                 dead = true;
@@ -109,6 +110,8 @@ namespace Creature.Creature
             {
                 vision[6] = 0;
                 vision[7] = 0;
+                vision[8] = 0;
+                vision[9] = 0;
             }
             else 
             {
@@ -116,6 +119,28 @@ namespace Creature.Creature
                 vision[6] = (float)_dataGatheringService.closestPlayer.health;
                 //get player damage
                 vision[7] = _dataGatheringService.closestPlayer.damage;
+                //get player x location
+                vision[8] = _dataGatheringService.closestPlayer.location.X;
+                //get player y location
+                vision[9] = _dataGatheringService.closestPlayer.location.Y;
+            }
+            if (_dataGatheringService.closestMonster == null)
+            {
+                vision[10] = 0;
+                vision[11] = 0;
+                vision[12] = 0;
+                vision[13] = 0;
+            }
+            else
+            {
+                //getplayerhealth
+                vision[10] = (float)_dataGatheringService.closestMonster.health;
+                //get player damage
+                vision[11] = _dataGatheringService.closestMonster.damage;
+                //get player x location
+                vision[12] = _dataGatheringService.closestMonster.location.X;
+                //get player y location
+                vision[13] = _dataGatheringService.closestMonster.location.Y;
             }
             //get player stamina
             //get monster stamina?
@@ -146,26 +171,7 @@ namespace Creature.Creature
             {
                 //Wander action nneds to be split up in directions
                 smartactions.Wander(this, creatureData.Position);
-                if (_dataGatheringService.distanceToClosestPlayer < currDistanceToPlayer)
-                {
-                    score = score + 10;
-                    currDistanceToPlayer = _dataGatheringService.distanceToClosestPlayer;
-                }
-                else if (_dataGatheringService.distanceToClosestPlayer > currDistanceToPlayer)
-                {
-                    score = score - 10;
-                    currDistanceToPlayer = _dataGatheringService.distanceToClosestPlayer;
-                }
-                if(_dataGatheringService.distanceToClosestMonster < currDistanceToMonster)
-                {
-                    score = score + 3;
-                    currDistanceToMonster = _dataGatheringService.distanceToClosestMonster;
-                }
-                else if (_dataGatheringService.distanceToClosestMonster < currDistanceToMonster)
-                {
-                    score = score- 3;
-                    currDistanceToMonster = _dataGatheringService.distanceToClosestMonster;
-                }
+
                 return;
             }
 
@@ -174,13 +180,12 @@ namespace Creature.Creature
                 case 0:
                     //Attack action
                     smartactions.Attack(_dataGatheringService.closestPlayer, this);
-                    
-                    score = +100;
+                    score = +20;
                     break;
                 case 1:
                     //Flee action
                     smartactions.Flee(_dataGatheringService.closestPlayer, this);
-                    score = -10;
+                    score = -8;
                     break;
                 case 2:
                     //UseItem action
@@ -188,12 +193,28 @@ namespace Creature.Creature
                     break;
                 case 3:
                     smartactions.RunToMonster(_dataGatheringService.closestMonster, this);
-                    score = -10;
+                    score = -3;
                     //Run to Monster action
                     break;
                 case 4:
                     //Grab item action
                     score = -10;
+                    break;
+                case 5:
+                    //Move up action
+                    smartactions.WalkUp(this);
+                    break;
+                case 6:
+                    //Move down action
+                    smartactions.WalkDown(this);
+                    break;
+                case 7:
+                    //Move left action
+                    smartactions.WalkLeft(this);
+                    break;
+                case 8:
+                    //Move right action
+                    smartactions.WalkRight(this);
                     break;
             }
 

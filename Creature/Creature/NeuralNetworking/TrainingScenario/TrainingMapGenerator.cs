@@ -86,7 +86,6 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
             Vector2 location = new(_random.Next(0, 29), _random.Next(0, 29));
 
             TrainerAI trainerAI = new TrainerAI(location, "player");
-
             players.Add(trainerAI);
         }
 

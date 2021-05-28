@@ -81,5 +81,29 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
             }
             return null;
         }
+
+        public void CheckNewPosition(SmartMonster smartMonster)
+        {
+            if (distanceToClosestPlayer < smartMonster.currDistanceToPlayer)
+            {
+                smartMonster.score = smartMonster.score + 10;
+                smartMonster.currDistanceToPlayer = distanceToClosestPlayer;
+            }
+            else if (distanceToClosestPlayer > smartMonster.currDistanceToPlayer)
+            {
+                smartMonster.score = smartMonster.score - 10;
+                smartMonster.currDistanceToPlayer = distanceToClosestPlayer;
+            }
+            if (distanceToClosestMonster < smartMonster.currDistanceToMonster)
+            {
+                smartMonster.score = smartMonster.score + 3;
+                smartMonster.currDistanceToMonster = distanceToClosestMonster;
+            }
+            else if (distanceToClosestMonster < smartMonster.currDistanceToMonster)
+            {
+                smartMonster.score = smartMonster.score - 3;
+                smartMonster.currDistanceToMonster = distanceToClosestMonster;
+            }
+        }
     }
 }

@@ -30,7 +30,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                 null,
                 false
             );
-            pop = new Population(200,data);
+            pop = new Population(50,data);
         }
 
         public void RunTestScenarios()
@@ -51,7 +51,6 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                     }
                     timeElapsed++;
                 }
-         //   RunTestScenarios();
         }
     }
 
