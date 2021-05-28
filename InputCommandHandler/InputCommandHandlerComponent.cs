@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Timers;
-using InputCommandHandler.Antlrr;
 using InputCommandHandler.Exceptions;
 using Player.Services;
 using Session;
-using Session.DTO;
 using UserInterface;
 using WebSocketSharp;
+using Agent;
+using InputCommandHandler.Models;
+using Pipeline = InputCommandHandler.Antlrr.Pipeline;
 
 namespace InputCommandHandler
 {
@@ -111,6 +114,55 @@ namespace InputCommandHandler
             {
                 sessionScreen.UpdateInputMessage("That is not a number, please try again!");
             }
+        }
+
+        public void HandleEditorScreenCommands()
+        {
+            // de huidige vraag tonen
+            Questions questions = new Questions();
+            EditorScreen editorScreen = _screenHandler.Screen as EditorScreen;
+
+            List<string> answers = new();
+
+            editorScreen.DrawHeader(questions.WELCOME);
+            
+            int i = 0;
+            while (i < questions.EditorQuestions.Count)
+            {
+                editorScreen.UpdateLastQuestion(questions.EditorQuestions.ElementAt(i));
+
+                var input = Console.ReadLine();
+                Console.WriteLine(input);
+
+                if (input.Equals("break"))
+                {
+                    break;
+                }
+
+                if (questions.EditorAnswers.ElementAt(i).Contains(input))
+                {
+                    answers.Add(input);
+                    i++;
+                    Console.Clear();
+                }
+                else
+                {
+                    editorScreen.PrintWarning("Please fill in an valid answer");
+                } 
+            }
+
+            if (answers.ElementAt(2).Contains("yes"))
+            {
+                Console.WriteLine("BINNEN CUSTOM COMBAT RULE");
+                //customCombatRule();
+            } else if (answers.ElementAt(3).Contains("yes"))
+            {
+                Console.WriteLine("BINNEN CUSTOM EXPLORE RULE");
+                //customExploreRule();
+            }
+            
+            //editorScreen.UpdateLastQuestion("de huidige vraag");
+
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Agent.Mapper;
 using Agent.Models;
 using Agent.Exceptions;
-using InputCommandHandler;
 using Serilog;
 
 namespace Agent.Services
@@ -12,16 +11,12 @@ namespace Agent.Services
     {
         private InlineConfig _inlineConfig;
         private List<Configuration> _agentConfigurations;
-        private InputCommandHandlerComponent _inputCommandHandlerComponent;
-        private ConfigEditor _configEditor;
 
-        public AgentConfigurationService(List<Configuration> agentConfigurations, FileToDictionaryMapper fileToDictionaryMapper, InputCommandHandlerComponent inputCommandHandlerComponent)
+        public AgentConfigurationService(List<Configuration> agentConfigurations, FileToDictionaryMapper fileToDictionaryMapper)
         {
             FileToDictionaryMapper = fileToDictionaryMapper;
             _agentConfigurations = agentConfigurations;
-            _inputCommandHandlerComponent = inputCommandHandlerComponent;
             _inlineConfig = new InlineConfig();
-            _configEditor = new ConfigEditor(_inputCommandHandlerComponent);
             FileHandler = new FileHandler();
             Pipeline = new Pipeline();
   
@@ -30,7 +25,7 @@ namespace Agent.Services
         public override void Configure()
         {
             Console.WriteLine("Please provide a path to your code file or type \'editor\' to set agent rules step by step");
-            var input = _inputCommandHandlerComponent.GetCommand();
+            var input = Console.ReadLine();
 
             if (input.Equals(CANCEL_COMMAND))
             {
@@ -43,11 +38,6 @@ namespace Agent.Services
                 return;
             }
 
-            if (input.Equals(EDITOR_COMMAND))
-            {
-                _configEditor.startEditor();
-            }
-            
             try
             {
                 var content = FileHandler.ImportFile(input);

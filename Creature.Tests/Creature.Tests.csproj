@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Creature\Creature.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Network\Network.csproj" />
+  </ItemGroup>
+
 </Project>

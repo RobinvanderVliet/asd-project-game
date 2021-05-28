@@ -28,6 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
+    <ProjectReference Include="..\InputCommandHandler\InputCommandHandlerComponent.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
 	  <EmbeddedResource Include="Resources\test1.txt" />
 	  <EmbeddedResource Include="Resources\test2.txt" />
 	  <EmbeddedResource Include="Resources\test3.txt" />

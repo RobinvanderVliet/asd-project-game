@@ -1,8 +1,6 @@
-﻿using Agent.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using Agent.Mapper;
 using Agent.Models;
 using Agent.Services;
@@ -25,7 +23,7 @@ namespace Agent.Tests.Services
         public void Setup()
         {
             _mockedRetriever = new();
-            _sut = new NpcConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), _mockedRetriever.Object);
+            _sut = new NpcConfigurationService(new List<Configuration>(), new FileToDictionaryMapper());
             _fileHandlerMock = new Mock<FileHandler>();
             _sut.FileHandler = _fileHandlerMock.Object;
             _pipelineMock = new Mock<Pipeline>();

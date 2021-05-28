@@ -1,9 +1,8 @@
-﻿using Agent.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Agent.Exceptions;
 using Agent.Mapper;
 using Agent.Models;
-using InputCommandHandler;
 using Serilog;
 
 namespace Agent.Services
@@ -11,13 +10,11 @@ namespace Agent.Services
     public class NpcConfigurationService : BaseConfigurationService
     {
         private List<Configuration> _npcConfigurations;
-        private InputCommandHandlerComponent _inputCommandHandlerComponent;
 
-        public NpcConfigurationService(List<Configuration> npcConfigurations, FileToDictionaryMapper fileToDictionaryMapper, InputCommandHandlerComponent inputCommandHandlerComponent)
+        public NpcConfigurationService(List<Configuration> npcConfigurations, FileToDictionaryMapper fileToDictionaryMapper)
         {
             _npcConfigurations = npcConfigurations;
             FileToDictionaryMapper = fileToDictionaryMapper;
-            _inputCommandHandlerComponent = inputCommandHandlerComponent;
             FileHandler = new FileHandler();
             Pipeline = new Pipeline();
         }
@@ -39,13 +36,13 @@ namespace Agent.Services
         {
             //TODO: Seems like duplicate code for now, but must be refactored later to match anticipated feature 'Configure NPC during a game'
             Console.WriteLine("What NPC do you wish to configure?");
-            var npc = _inputCommandHandlerComponent.GetCommand();
+            var npc = Console.ReadLine();
             if (npc.Equals(CANCEL_COMMAND))
             {
                 return;
             }
             Console.WriteLine("Please provide code for the NPC");
-            var code = _inputCommandHandlerComponent.GetCommand();
+            var code = Console.ReadLine();
             try
             {
                 Pipeline.ParseString(code);
