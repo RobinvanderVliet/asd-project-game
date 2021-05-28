@@ -17,6 +17,7 @@ namespace WorldGeneration
             // default chunksize is 8. Can be adjusted in the line above
         }
         
+        [ExcludeFromCodeCoverage]
         public IMap GenerateMap(int chunkSize, int seed)
         {
             // If seed is 0 it becomes random
