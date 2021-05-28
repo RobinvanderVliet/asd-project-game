@@ -49,5 +49,11 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         {
             return _inventorySlot.Equals(other.InventorySlot);
         }
+        
+        [ExcludeFromCodeCoverage]
+        public override int GetHashCode()
+        {
+            return _inventorySlot.GetHashCode();
+        }
     }
 }
