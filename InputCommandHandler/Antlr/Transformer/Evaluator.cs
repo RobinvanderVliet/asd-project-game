@@ -122,11 +122,11 @@ namespace InputCommandHandler.Antlr.Transformer
         {
             if (_agentService.IsActivated())
             {
-                Console.WriteLine("Your agent is now active");
+                Console.WriteLine("Your agent is now inactive.");
                 _agentService.DeActivate();
                 return;
             }
-            Console.WriteLine("Your agent is now inactive");
+            Console.WriteLine("Your agent is now active.");
             _agentService.Activate();
         }
 
