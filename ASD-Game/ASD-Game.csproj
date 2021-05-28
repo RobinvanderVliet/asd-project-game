@@ -13,6 +13,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="4.1.2" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
@@ -21,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DatabaseHandler\DatabaseHandler.csproj" />
+    <ProjectReference Include="..\UserInterface\UserInterface.csproj" />
     <ProjectReference Include="..\WorldGeneration\WorldGeneration.csproj" />
   </ItemGroup>
 
@@ -32,8 +35,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Chat\Chat.csproj" />
-    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
-    <ProjectReference Include="..\Player\Player.csproj" />
+    <ProjectReference Include="..\InputHandling\InputHandling.csproj" />
+    <ProjectReference Include="..\ActionHandling\ActionHandling.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Profiles\" />
     <Folder Include="resource\agent\" />
   </ItemGroup>
 
