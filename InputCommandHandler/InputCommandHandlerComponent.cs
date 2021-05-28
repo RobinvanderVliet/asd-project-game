@@ -38,19 +38,13 @@ namespace InputCommandHandler
             }
             catch (CommandSyntaxException e)
             {
-                if (_screenHandler.Screen is GameScreen)
-                {
                     GameScreen screen = _screenHandler.Screen as GameScreen;
                     screen.AddMessage(e.Message);
-                }
             }
             catch (MoveException e)
             {
-                if (_screenHandler.Screen is GameScreen)
-                {
                     GameScreen screen = _screenHandler.Screen as GameScreen;
                     screen.AddMessage(e.Message);
-                }
             }
         }
 
