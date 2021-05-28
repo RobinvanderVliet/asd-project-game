@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -18,19 +18,6 @@
 
   <ItemGroup>
     <Content Include="Antlr\Grammar\AgentConfiguration.g4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\DataTransfer\DataTransfer.csproj" />
-    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
-    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
-    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
-    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
-    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
-    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
-    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
-    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
-    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
   </ItemGroup>
 
 </Project>

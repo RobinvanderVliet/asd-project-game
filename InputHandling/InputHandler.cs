@@ -159,19 +159,19 @@ namespace InputHandling
             if (answers.ElementAt(2).Contains("yes"))
             {
                 Console.WriteLine("BINNEN CUSTOM COMBAT RULE");
-                //customCombatRuleHandleEditorScreenCommands();
+                answers.Add(customRuleHandleEditorScreenCommands("combat"));
             }
 
             if (answers.ElementAt(3).Contains("yes"))
             {
                 Console.WriteLine("BINNEN CUSTOM EXPLORE RULE");
-                //customExploreRuleHandleEditorScreenCommands();
+                answers.Add(customRuleHandleEditorScreenCommands("explore"));
             }
 
             //naar de volgende scherm gaan!
         }
 
-        private string customCombatRuleHandleEditorScreenCommands()
+        private string customRuleHandleEditorScreenCommands(string type)
         {
             StringBuilder builder = new StringBuilder();
             BaseVariables variables = new();
@@ -180,9 +180,9 @@ namespace InputHandling
 
             string input;
 
-            builder.Append("combat {");
+            builder.Append(type);
 
-            editorScreen.UpdateLastQuestion("this is and example line: When player nearby player then attack" + Environment.NewLine + "press enter to continue...");
+            editorScreen.UpdateLastQuestion("This is and example line: When player nearby player then attack" + Environment.NewLine + "press enter to continue...");
             
             Console.ReadLine();
             Console.Clear();
@@ -194,13 +194,56 @@ namespace InputHandling
                     + Environment.NewLine
                     + "This is and example line: When player nearby player then attack (optional: otherwise flee)"
                     + Environment.NewLine
-                    + "Press help + item, armour, weapon, comparison, consumables, actions, bitcoinItems, comparables");
+                    + "Type Help + armour, weapon, comparison, consumables, actions, bitcoinItems, comparables"
+                    + "Type Stop to stop the custom rules" );
 
                 input = Console.ReadLine();
                 input = input.ToLower();
 
+
+                if (input.Equals("Stop"))
+                {
+                    return string.Empty;
+                }
+
+                if (input.Contains("help"))
+                {
+                    var help = input.Split(" ");
+                    switch (help[1])
+                    {
+                        case "armour":
+                            editorScreen.UpdateLastQuestion(variables.armor.ToString());
+                            break;
+                        case "weapon":
+                            editorScreen.UpdateLastQuestion(variables.weapons.ToString());
+                            break;
+                        case "comparison":
+                            editorScreen.UpdateLastQuestion(variables.comparison.ToString());
+                            break;
+                        case "consumables":
+                            editorScreen.UpdateLastQuestion(variables.consumables.ToString());
+                            break;
+                        case "actions":
+                            editorScreen.UpdateLastQuestion(variables.actions.ToString() + variables.actionReferences.ToString());
+                            break;
+                        case "bitcoinItems":
+                            editorScreen.UpdateLastQuestion(variables.bitcoinItems.ToString());
+                            break;
+                        case "comparables":
+                            editorScreen.UpdateLastQuestion(variables.comparebles.ToString());
+                            break;
+                    }
+                }
+
+                input = Console.ReadLine();
+                input = input.ToLower();
                 var rule = input.Split(" ");
+
                 //basis check hier!
+                if (CheckInput(rule, variables))
+                {
+                    builder.Append(rule.ToString());
+                }
 
                 while (true) { 
                     Console.Clear();
@@ -219,68 +262,73 @@ namespace InputHandling
                 }
             }
 
-            builder.Append("}");
             return builder.ToString();
         }
 
-        private string customExploreRuleHandleEditorScreenCommands()
+        private bool CheckInput(string[] rule, BaseVariables variables)
         {
-            StringBuilder builder = new StringBuilder();
-            BaseVariables variables = new();
-            bool nextLine = true;
-            EditorScreen editorScreen = _screenHandler.Screen as EditorScreen;
-
-            string input = string.Empty;
-
-            builder.Append("explore {");
-
-            editorScreen.UpdateLastQuestion("this is and example line: when player finds item then collect" + Environment.NewLine + "press enter to continue...");
-            
-            Console.ReadLine();
-            Console.Clear();
-
-            if (Console.ReadLine() == "stop")
+            bool correct = false;
+            for (int j = 0; j < rule.Length; j++)
             {
-                return string.Empty;
-            }
-
-            while (nextLine)
-            {
-                editorScreen.UpdateLastQuestion(
-                    "Please enter your own explore rule"
-                    + Environment.NewLine
-                    + "This is and example line: When player finds item then collect"
-                    + Environment.NewLine
-                    + "Type help + item, armour, weapon, comparison, consumables, actions, bitcoinItems, comparables"
-                    + Environment.NewLine
-                    + "Type stop to stop the process");
-
-                        input = Console.ReadLine();
-                input = input.ToLower();
-
-                var rule = input.Split(" ");
-                //basis check hier!
-                
-
-                while (true) { 
-                    Console.Clear();
-                    editorScreen.UpdateLastQuestion("Do you want to add another rule? yes or no");
-                    input = Console.ReadLine();
-                    input = input.ToLower();
-                    if(input.Equals("yes") || input.Equals("no"))
-                    {
-                        break;
-                    }
-                }
-
-                if (input.Equals("no"))
+                switch (j)
                 {
-                    nextLine = false;
+                    case 0: //when
+                        correct = rule[j].Equals("when");
+                        break;
+                    case 1: //left comparable
+                        correct = variables.comparebles.Contains(rule[j]);
+                        break;
+                    case 2: //comparison
+                        correct = variables.comparison.Contains(rule[j]);
+                        break;
+                    case 3: //right comparable
+                        if (variables.comparebles.Contains(rule[j]) ||
+                            variables.ReturnAllItems().Contains(rule[j]) ||
+                            int.TryParse(rule[j], out _))
+                        {
+                            correct = true;
+                        }
+                        break;
+                    case 4: //then
+                        correct = rule[j].Equals("then");
+                        break;
+                    case 5: //action
+                            correct = variables.actions.Contains(rule[j]);
+                        break;
+                    case 6:
+                        //check use
+                        if (variables.ReturnAllItems().Contains(rule[j]))
+                        {
+                            correct = true;
+                        } else
+                        {//otherwise
+                            correct = rule[j].Contains("otherwise");
+                        }
+                        break;
+                    case 7:
+                        //check otherwise
+                        if (rule[j].Contains("otherwise"))
+                        {
+                            correct = true;
+                        }
+                        else
+                        {//action
+                            if(variables.actions.Contains(rule[j])|| variables.actionReferences.Contains(rule[j]))
+                            {
+                                correct = true;
+                            }
+                        }
+                        break;
+                    case 8://action
+                        correct = variables.ReturnAllItems().Contains(rule[j]);
+                        break;
+                }
+                if (!correct)
+                {
+                    break;
                 }
             }
-
-            builder.Append("}");
-            return builder.ToString();
+            return correct;
         }
     }
 }

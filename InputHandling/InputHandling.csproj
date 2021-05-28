@@ -15,6 +15,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Agent\Agent.csproj" />
+        <ProjectReference Include="..\Session\Session.csproj" />
     </ItemGroup>
 
     <ItemGroup>

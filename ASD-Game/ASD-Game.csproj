@@ -39,10 +39,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Agent\Agent.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Profiles\" />
     <Folder Include="resource\agent\" />
   </ItemGroup>

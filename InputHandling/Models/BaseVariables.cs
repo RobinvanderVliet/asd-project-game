@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace InputHandling.Models
 {
@@ -12,7 +13,7 @@ namespace InputHandling.Models
             "item"};
 
         public readonly List<string> comparison = new() { 
-            "greater then", 
+            "greater than", 
             "less than", 
             "nearby", 
             "contains", 
@@ -53,7 +54,7 @@ namespace InputHandling.Models
             "replace"
         };
 
-        private readonly List<string> tiles = new()
+        public readonly List<string> tiles = new()
         {
             "street",
             "grass",
@@ -96,5 +97,11 @@ namespace InputHandling.Models
             "usb-stick",
             "bitcoin-wallet"
         };
+
+        [ExcludeFromCodeCoverage]
+        public List<string> ReturnAllItems()
+        {
+            return new List<string>().Concat(weapons).Concat(armor).Concat(consumables).Concat(bitcoinItems).Concat(tiles).ToList();
+        }
     }
 }
