@@ -54,7 +54,7 @@ namespace ActionHandling
 
             var currentPlayer = _worldService.getCurrentPlayer();
 
-            MoveDTO moveDTO = new(currentPlayer.Guid, currentPlayer.XPosition + x, currentPlayer.YPosition + y);
+            MoveDTO moveDTO = new(currentPlayer.Id, currentPlayer.XPosition + x, currentPlayer.YPosition + y);
 
             SendMoveDTO(moveDTO);
         }

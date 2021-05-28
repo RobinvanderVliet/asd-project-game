@@ -1,8 +1,7 @@
-﻿using Items.Armor.ArmorStats;
-using Player.Model;
-using Player.Model.ItemStats;
+﻿using Items.ArmorStats;
+using Items.ItemStats;
 
-namespace Items.Armor
+namespace Items
 {
     public class Armor : Item
     {

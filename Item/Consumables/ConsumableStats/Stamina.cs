@@ -1,6 +1,6 @@
-namespace Items.Consumable.ConsumableStats
+namespace Items.Consumables.ConsumableStats
 {
-    public enum Health
+    public enum Stamina
     {
         Low = 25,
         Medium = 50,

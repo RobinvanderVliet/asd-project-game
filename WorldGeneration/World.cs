@@ -20,14 +20,14 @@ namespace WorldGeneration
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
         {
-            if (CurrentPlayer.Guid == userId)
+            if (CurrentPlayer.Id == userId)
             {
                 CurrentPlayer.XPosition = newXPosition;
                 CurrentPlayer.YPosition = newYPosition;
             }
             else
             {
-                var player = _players.Find(x => x.Guid == userId);
+                var player = _players.Find(x => x.Id == userId);
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }

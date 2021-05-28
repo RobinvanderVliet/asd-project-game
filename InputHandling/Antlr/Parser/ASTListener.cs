@@ -206,10 +206,10 @@ namespace InputHandling.Antlr.Parser
             {
                 joinSession.AddChild(new Message(context.GetText()));
             }
-            else if (action is StartSession startSession)
-            {
-                startSession.AddChild(new Message(context.GetText()));
-            }
+            // else if (action is StartSession startSession)
+            // {
+            //     startSession.AddChild(new Message(context.GetText()));
+            // }
         }
     }
 }
