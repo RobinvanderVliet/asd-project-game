@@ -1,37 +1,21 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 namespace InputHandling.Antlr.Ast.Actions
 {
-    public class StartSession : Command
+    public class StartSession : Command, IEquatable<StartSession>
     {
-        private Message _message;
-        public Message Message { get => _message; private set => _message = value; }
-
-        public ArrayList GetChildren()
+        [ExcludeFromCodeCoverage]
+        public override bool Equals(object obj)
         {
-            var children = new ArrayList();
-            children.Add(_message);
-            return children;
+            return Equals(obj as StartSession);
         }
 
-        public override ASTNode AddChild(ASTNode child)
+        [ExcludeFromCodeCoverage]
+        public bool Equals(StartSession other)
         {
-            if (child is Message)
-            {
-                _message = (Message)child;
-            }
-
-            return this;
-        }
-
-        public ASTNode RemoveChild(ASTNode child)
-        {
-            if (child is Message && child == _message)
-            {
-                _message = null;
-            }
-
-            return this;
+            return true;
         }
     }
 }
