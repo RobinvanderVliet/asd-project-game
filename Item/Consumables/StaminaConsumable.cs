@@ -1,4 +1,4 @@
-﻿using Items.Consumable.ConsumableStats;
+﻿using Items.Consumables.ConsumableStats;
 
 namespace Items.Consumables
 {

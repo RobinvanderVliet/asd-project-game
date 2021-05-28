@@ -1,6 +1,5 @@
 ﻿using Items;
-using Items.Armor;
-using Items.Weapon;
+using Items.Consumables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,21 +10,21 @@ namespace WorldGeneration
 {
     public class Inventory
     {
-        private List<Item> _consumableItems;
-        public List<Item> ConsumableItemList { get => _consumableItems; set => _consumableItems = value; }
+        private List<Consumable> _consumableItems;
+        public List<Consumable> ConsumableItemList { get => _consumableItems; set => _consumableItems = value; }
 
-        private Item _armor;
-        public Item Armor { get => _armor; set => _armor = value; }
+        private Armor _armor;
+        public Armor Armor { get => _armor; set => _armor = value; }
 
-        private Item _helmet;
-        public Item Helmet { get => _helmet; set => _helmet = value; }
+        private Armor _helmet;
+        public Armor Helmet { get => _helmet; set => _helmet = value; }
 
-        private Item _weapon;
-        public Item Weapon { get => _weapon; set => _weapon = value; }
+        private Weapon _weapon;
+        public Weapon Weapon { get => _weapon; set => _weapon = value; }
 
         public Inventory()
         {
-            _consumableItems = new List<Item>();
+            _consumableItems = new List<Consumable>();
             _helmet = ItemFactory.GetBandana();
             _weapon = ItemFactory.GetKnife();
         }
@@ -35,11 +34,11 @@ namespace WorldGeneration
             return _consumableItems.Find(item => item.ItemName == itemName);
         }
 
-        public void AddConsumableItem(Item item)
+        public void AddConsumableItem(Consumable consumable)
         {
             if (_consumableItems.Count <= 3)
             {
-                _consumableItems.Add(item);
+                _consumableItems.Add(consumable);
             }
             else
             {
@@ -47,9 +46,9 @@ namespace WorldGeneration
             }
         }
 
-        public void RemoveConsumableItem(Item item)
+        public void RemoveConsumableItem(Consumable consumable)
         {
-            _consumableItems.Remove(item);
+            _consumableItems.Remove(consumable);
         }
 
         public void EmptyConsumableItemList()
