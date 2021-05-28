@@ -50,7 +50,7 @@ namespace Agent
         {
             if(_checking == null)
             {
-                _checking = new Checking(_ast);
+                _checking = new Checking();
             }
             //_checking.Check(_ast);
         }

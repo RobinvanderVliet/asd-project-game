@@ -51,14 +51,8 @@ namespace Agent.Antlr.Checker
             "house","gas", "spikes","fire", "health-boost", "stamina-boost",     
             "bitcoin-mining-farm", "chest", "door", "wall"
         };
-
-
-        public Checking(AST ast)
-        {
-            Check(ast.root);
-        }
         
-        private void Check(Node node)
+        public void Check(Node node)
         {
             switch (node)
             {
@@ -100,8 +94,14 @@ namespace Agent.Antlr.Checker
             }
             foreach (Condition condition in node.Conditions)
             {
-                if (condition.OtherwiseClause.Action.Name.Equals(node.Name) ||
-                    condition.WhenClause.Then.Name.Equals(node.Name))
+                if (condition.OtherwiseClause != null)
+                {
+                    if (condition.OtherwiseClause.Action.Name.Equals(node.Name))
+                    {
+                        node.SetError("No recursion allowed!");
+                    }
+                }
+                if (condition.WhenClause.Then.Name.Equals(node.Name))
                 {
                     node.SetError("No recursion allowed!");
                 }
@@ -114,7 +114,7 @@ namespace Agent.Antlr.Checker
             {
                 if (node.Item == null)
                 {
-                    node.SetError("use must be followed by an item!");
+                    node.SetError("Use must be followed by an item!");
                 }
             }
             if (!IsActionReference(node.Name))
@@ -143,6 +143,7 @@ namespace Agent.Antlr.Checker
             {
                 ActionReference otherwiseAction = otherwise.Action;
                 ActionReference thenAction = node.WhenClause.Then;
+                string name = thenAction.Name;
                 if (otherwiseAction.Name.Equals(thenAction.Name))
                 {
                     node.SetError("Otherwise action cant be the same as then action!");
@@ -152,71 +153,74 @@ namespace Agent.Antlr.Checker
 
         private void CheckWhen(When node)
         {
-            CheckComparison(node.Comparison, node.ComparableL, node.ComparableR);
+            if (node.Comparison != null)
+            {
+                CheckComparison(node, node.Comparison, node.ComparableL, node.ComparableR);
+            }
             
         }
 
-        private void CheckComparison(Comparison node, Comparable comparableL, Comparable comparableR)
+        private void CheckComparison(When when, Comparison node, Comparable comparableL, Comparable comparableR)
         {
             switch (node.ComparisonType)
             {
                 case "contains":
                 case "does not contain":
-                    CheckContains(node, comparableL, comparableR);
+                    CheckContains(when, node, comparableL, comparableR);
                     break;
                 case "greater than":
                 case "less than":
                 case "equals":
-                    CheckValueComparison(node, comparableL, comparableR);
+                    CheckValueComparison(when, node, comparableL, comparableR);
                     break;
                 case "nearby":
                 case "finds":
-                    CheckSubjectComparison(node, comparableL, comparableR);
+                    CheckSubjectComparison(when, node, comparableL, comparableR);
                     break;
                 default:
-                    node.SetError("'" + node.ComparisonType + "' does not exist");
+                    when.SetError("'" + node.ComparisonType + "' does not exist");
                     break;
             }
         }
         
-        private void CheckContains(Comparison node,Comparable comparableL, Comparable comparableR)
+        private void CheckContains(When when, Comparison node,Comparable comparableL, Comparable comparableR)
         {
             if (comparableL is not Inventory)
             {
-                node.SetError("Left side of the comparison '" + node.ComparisonType + "' must be inventory!");
+                when.SetError("Left side of the comparison '" + node.ComparisonType + "' must be inventory!");
             }
 
             if (comparableR is not Item)
             {
-                node.SetError("Left side of the comparison '" + node.ComparisonType + "' must be an item!");
+                when.SetError("Right side of the comparison '" + node.ComparisonType + "' must be an item!");
             }
         }
 
-        private void CheckValueComparison(Comparison node,Comparable comparableL, Comparable comparableR)
+        private void CheckValueComparison(When when, Comparison node,Comparable comparableL, Comparable comparableR)
         {
             if (comparableL is not Stat)
             {
-                node.SetError("Left side of the comparison '" + node.ComparisonType + "' must be a stat!");
+                when.SetError("Left side of the comparison '" + node.ComparisonType + "' must be a stat!");
             }
             if (comparableR is not Int)
             {
-                node.SetError("Right side of te comparison'" + node.ComparisonType + "' must be an int value!");
+                when.SetError("Right side of the comparison '" + node.ComparisonType + "' must be an int value!");
             }
         }
 
-        private void CheckSubjectComparison(Comparison node,Comparable comparableL, Comparable comparableR)
+        private void CheckSubjectComparison(When when, Comparison node,Comparable comparableL, Comparable comparableR)
         {
             if (comparableL is not AgentSubject)
             {
-                node.SetError("Left side of the comparison '" + node.ComparisonType + "' must be agent!");
+                when.SetError("Left side of the comparison '" + node.ComparisonType + "' must be agent!");
             }
             if (comparableR is AgentSubject or Inventory)
             {
-                node.SetError("Right side of the comparison '" + node.ComparisonType + "' cant be agent or inventory");
+                when.SetError("Right side of the comparison '" + node.ComparisonType + "' cant be agent or inventory");
             } 
             else if (comparableR is not Subject)
             {
-                node.SetError("Right side of the comparison '" + node.ComparisonType + "' must be a subject!");
+                when.SetError("Right side of the comparison '" + node.ComparisonType + "' must be a subject!");
             }
         }
 
@@ -224,7 +228,7 @@ namespace Agent.Antlr.Checker
         {
             if (!IsTile(node.Name))
             {
-                node.SetError("'" + node.Name + "' is not a valid Tile");
+                node.SetError("'" + node.Name + "' is not a valid tile!");
             }
         }
         
