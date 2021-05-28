@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Diagnostics.CodeAnalysis;
 using System.Timers;
 using InputHandling.Antlr;
 using InputHandling.Exceptions;
-using InputCommandHandler.Exceptions;
-using Player.Services;
+using WebSocketSharp;
+using InputCommandHandler.Models;
 using Session;
 using UserInterface;
-using WebSocketSharp;
-using Agent;
-using InputCommandHandler.Models;
-using Pipeline = InputCommandHandler.Antlrr.Pipeline;
+using System.Text;
+using InputHandling.Models;
 
 namespace InputHandling
 {
@@ -162,18 +159,58 @@ namespace InputHandling
             if (answers.ElementAt(2).Contains("yes"))
             {
                 Console.WriteLine("BINNEN CUSTOM COMBAT RULE");
-                //customCombatRule();
+                //customCombatRuleHandleEditorScreenCommands();
             }
 
             if (answers.ElementAt(3).Contains("yes"))
             {
                 Console.WriteLine("BINNEN CUSTOM EXPLORE RULE");
-                //customExploreRule();
+                //customExploreRuleHandleEditorScreenCommands();
             }
-            
+
             //naar de volgende scherm gaan!
         }
 
-        private void 
+        private string customCombatRuleHandleEditorScreenCommands()
+        {
+            StringBuilder builder = new StringBuilder();
+            BaseVariables variables = new();
+            bool nextLine = true;
+            EditorScreen editorScreen = _screenHandler.Screen as EditorScreen;
+
+            editorScreen.UpdateLastQuestion("this is and example line: When player nearby player then attack" + Environment.NewLine + "press enter to continue...");
+            
+            Console.ReadLine();
+            Console.Clear();
+
+            while (nextLine)
+            {
+                editorScreen.UpdateLastQuestion("when ....." + Environment.NewLine + variables.comparebles.ToString()) ;
+                var input = Console.ReadLine();
+
+                if (variables.consumables.Contains(input)){
+
+                    if (input.Equals("item"))
+                    {
+                        //zoeken welk item?
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        editorScreen.UpdateLastQuestion(input + "........" + Environment.NewLine + variables.comparison.ToString());
+                    }
+                }
+            }
+
+            return builder.ToString();
+        }
+
+        private string customExploreRuleHandleEditorScreenCommands()
+        {
+            StringBuilder builder = new StringBuilder();
+
+
+            return builder.ToString();
+        }
     }
 }

@@ -42,6 +42,10 @@ namespace ASD_project
                         else if (currentScreen is WaitingScreen)
                         {
                         }
+                        else if (currentScreen is EditorScreen)
+                        {
+                            _inputHandler.HandleEditorScreenCommands();
+                        }
                         else if (currentScreen is GameScreen)
                         {
                             _inputHandler.HandleGameScreenCommands();
