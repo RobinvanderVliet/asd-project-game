@@ -1,8 +1,10 @@
 ﻿using Network.DTO;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Network
 {
+    [ExcludeFromCodeCoverage]
     public class PacketDTO
     {
         public PacketHeaderDTO Header { get; set; }
@@ -11,10 +13,10 @@ namespace Network
 
         public override bool Equals(object obj)
         {
-            return obj is PacketDTO dTO &&
-                   EqualityComparer<PacketHeaderDTO>.Default.Equals(Header, dTO.Header) &&
-                   Payload == dTO.Payload &&
-                   EqualityComparer<HandlerResponseDTO>.Default.Equals(HandlerResponse, dTO.HandlerResponse);
+            return obj is PacketDTO DTO &&
+                   EqualityComparer<PacketHeaderDTO>.Default.Equals(Header, DTO.Header) &&
+                   Payload == DTO.Payload &&
+                   EqualityComparer<HandlerResponseDTO>.Default.Equals(HandlerResponse, DTO.HandlerResponse);
         }
     }
 }

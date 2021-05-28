@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace WorldGeneration.Models
 {
+    [ExcludeFromCodeCoverage]
     public static class TileSymbol 
     {
         public const string DOOR = "/";
