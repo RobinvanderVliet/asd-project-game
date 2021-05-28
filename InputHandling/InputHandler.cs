@@ -226,8 +226,60 @@ namespace InputHandling
         private string customExploreRuleHandleEditorScreenCommands()
         {
             StringBuilder builder = new StringBuilder();
+            BaseVariables variables = new();
+            bool nextLine = true;
+            EditorScreen editorScreen = _screenHandler.Screen as EditorScreen;
 
+            string input = string.Empty;
 
+            builder.Append("explore {");
+
+            editorScreen.UpdateLastQuestion("this is and example line: when player finds item then collect" + Environment.NewLine + "press enter to continue...");
+            
+            Console.ReadLine();
+            Console.Clear();
+
+            if (Console.ReadLine() == "stop")
+            {
+                return string.Empty;
+            }
+
+            while (nextLine)
+            {
+                editorScreen.UpdateLastQuestion(
+                    "Please enter your own explore rule"
+                    + Environment.NewLine
+                    + "This is and example line: When player finds item then collect"
+                    + Environment.NewLine
+                    + "Type help + item, armour, weapon, comparison, consumables, actions, bitcoinItems, comparables"
+                    + Environment.NewLine
+                    + "Type stop to stop the process");
+
+                        input = Console.ReadLine();
+                input = input.ToLower();
+
+                var rule = input.Split(" ");
+                //basis check hier!
+                
+
+                while (true) { 
+                    Console.Clear();
+                    editorScreen.UpdateLastQuestion("Do you want to add another rule? yes or no");
+                    input = Console.ReadLine();
+                    input = input.ToLower();
+                    if(input.Equals("yes") || input.Equals("no"))
+                    {
+                        break;
+                    }
+                }
+
+                if (input.Equals("no"))
+                {
+                    nextLine = false;
+                }
+            }
+
+            builder.Append("}");
             return builder.ToString();
         }
     }

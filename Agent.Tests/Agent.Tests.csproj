@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Agent\Agent.csproj" />
+    <ProjectReference Include="..\InputHandling\InputHandling.csproj" />
   </ItemGroup>
 
   <ItemGroup>
