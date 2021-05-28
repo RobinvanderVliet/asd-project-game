@@ -1,6 +1,6 @@
 ﻿using Items.Consumable.ConsumableStats;
 
-namespace Items.Consumable
+namespace Items.Consumables
 {
     public class HealthConsumable : Consumable
     {

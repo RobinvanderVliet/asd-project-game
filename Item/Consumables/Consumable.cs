@@ -1,8 +1,6 @@
-﻿
-using Player.Model;
-using Player.Model.ItemStats;
+﻿using Items.ItemStats;
 
-namespace Items.Consumable
+namespace Items.Consumables
 {
     public class Consumable : Item
     {

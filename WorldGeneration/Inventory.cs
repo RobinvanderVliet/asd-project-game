@@ -26,21 +26,13 @@ namespace WorldGeneration
         public Inventory()
         {
             _consumableItems = new List<Item>();
-            //should make real items
-            _helmet = new Armor();
-            _weapon = new Weapon();
+            _helmet = ItemFactory.GetBandana();
+            _weapon = ItemFactory.GetKnife();
         }
 
         public Item GetConsumableItem(string itemName)
         {
-            foreach (var item in _consumableItems)
-            {
-                if (item.ItemName == itemName)
-                {
-                    return item;
-                }
-            }
-            return null;
+            return _consumableItems.Find(item => item.ItemName == itemName);
         }
 
         public void AddConsumableItem(Item item)
