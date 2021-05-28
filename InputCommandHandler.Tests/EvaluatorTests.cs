@@ -90,12 +90,20 @@ namespace InputCommandHandler.Tests
             //Arrange
             string inventorySlot = "armor";
             var ast = DropAST(inventorySlot);
+            string inventorySlot1 = "helmet";
+            var ast1 = DropAST(inventorySlot1);
+            string inventorySlot2 = "weapon";
+            var ast2 = DropAST(inventorySlot2);
 
             //Act
             _sut.Apply(ast);
+            _sut.Apply(ast1);
+            _sut.Apply(ast2);
 
             //Assert
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem(inventorySlot), Times.Once);
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem(inventorySlot1), Times.Once);
+            _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem(inventorySlot2), Times.Once);
         }
 
         public static AST DropAST(string inventorySlot)
