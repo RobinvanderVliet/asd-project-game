@@ -8,17 +8,17 @@ namespace InputCommandHandler
 {
     public class InputCommandHandlerComponent
     {
-        public void HandleCommands(IPlayerService playerService, ISessionService sessionService)
+        public void HandleCommands(IPlayerService playerService, ISessionService sessionService, IAgentService agentService)
         {
-            SendCommand(GetCommand(), playerService, sessionService);
+            SendCommand(GetCommand(), playerService, sessionService, agentService);
         }
-        private static void SendCommand(string commando, IPlayerService playerService, ISessionService sessionService)
+        private static void SendCommand(string commando, IPlayerService playerService, ISessionService sessionService, IAgentService agentService)
         {
             try
             {
                 var pipeline = new Pipeline();
                 pipeline.ParseCommand(commando);
-                pipeline.Transform(playerService, sessionService);
+                pipeline.Transform(playerService, sessionService, agentService);
             }
             catch (CommandSyntaxException e)
             {

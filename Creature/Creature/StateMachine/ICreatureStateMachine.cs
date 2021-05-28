@@ -15,6 +15,8 @@ namespace Creature.Creature.StateMachine
         /// </summary>
         public void StartStateMachine();
 
+        public void StopStateMachine();
+
         /// <summary>
         /// Fire events on a ICreatureStateMachine.
         /// An event can be 'spotting a player', 'being attacked', etc.

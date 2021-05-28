@@ -11,14 +11,16 @@ namespace InputCommandHandler.Antlr.Transformer
     {
         private readonly IPlayerService _playerService;
         private readonly ISessionService _sessionService;
+        private readonly IAgentService _agentService;
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private String _commando;
 
-        public Evaluator(IPlayerService playerService, ISessionService sessionService)
+        public Evaluator(IPlayerService playerService, ISessionService sessionService, IAgentService agentService)
         {
             _playerService = playerService;
             _sessionService = sessionService;
+            _agentService = agentService;
         }
         public void Apply(AST ast)
         {
@@ -118,7 +120,14 @@ namespace InputCommandHandler.Antlr.Transformer
 
         private void TransformReplace()
         {
-            _playerService.ReplaceByAgent();
+            if (_agentService.IsActivated())
+            {
+                Console.WriteLine("Your agent is now inactive.");
+                _agentService.DeActivate();
+                return;
+            }
+            Console.WriteLine("Your agent is now active.");
+            _agentService.Activate();
         }
 
         private void TransformResume()

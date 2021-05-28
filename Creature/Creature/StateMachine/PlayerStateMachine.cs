@@ -38,10 +38,21 @@ namespace Creature.Creature.StateMachine
         {
             var builder = new StateMachineDefinitionBuilder<CreatureState, CreatureEvent.Event>();
 
-            // TODO: implement statemachine for player
+            CreatureState wanderState = new WanderState(CreatureData);
+            CreatureState followPlayerState = new FollowPlayerState(CreatureData);
 
-            //_passiveStateMachine = builder.Build().CreatePassiveStateMachine();
-            //_passiveStateMachine.Start();
+            // TODO: implement statemachine for player
+            builder.In(wanderState).On(CreatureEvent.Event.SPOTTED_PLAYER).Goto(followPlayerState).Execute<ICreatureData>(new FollowPlayerState(CreatureData).Do);
+
+            builder.WithInitialState(wanderState);
+            
+            _passiveStateMachine = builder.Build().CreatePassiveStateMachine();
+            _passiveStateMachine.Start();
+        }
+
+        public void StopStateMachine()
+        {
+            _passiveStateMachine.Stop();
         }
     }
 }

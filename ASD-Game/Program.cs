@@ -16,6 +16,8 @@ using Network;
 using Player.ActionHandlers;
 using Session;
 using Player.Model;
+using InputCommandHandler;
+using Creature.Services;
 
 namespace ASD_project
 {
@@ -42,6 +44,7 @@ namespace ASD_project
                     services.AddTransient<IMainGame, MainGame>();
                     services.AddScoped<IPlayerService, PlayerService>();
                     services.AddScoped<IPlayerModel, PlayerModel>();
+                    services.AddScoped<IAgentService, AgentService>();
                     services.AddScoped<IInventory, Inventory>();
                     services.AddScoped<IItem, Item>();
                     services.AddScoped<IBitcoin, Bitcoin>();

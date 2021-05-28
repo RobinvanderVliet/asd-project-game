@@ -6,12 +6,22 @@ using InputCommandHandler;
 using Player.Model;
 using Player.Services;
 using System.Collections.Generic;
+using System.Numerics;
+using Agent.Mapper;
+using Agent.Models;
+using Agent.Services;
 using WorldGeneration;
 using Chat;
+using Creature;
+using Creature.Creature.StateMachine;
+using Creature.Creature.StateMachine.CustomRuleSet;
+using Creature.Creature.StateMachine.Data;
 using DataTransfer.DTO.Character;
 using Network;
 using Session;
 using Player.ActionHandlers;
+using Creature.Services;
+using Player = Creature.Player;
 
 namespace ASD_project
 {
@@ -72,13 +82,14 @@ namespace ASD_project
                 Console.WriteLine("Game is gestart");
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
 
-                // AgentConfigurationService agentConfigurationService = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), inputHandler);
-                // agentConfigurationService.Configure();
+                AgentConfigurationService agentConfigurationService = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), inputHandler);
+                agentConfigurationService.CreateConfiguration("monster", SuperUgly.MONSTER_PATH);
 
                 //moet later vervangen worden
                 IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
                 IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _sessionHandler, _moveHandler, _clientController, _worldService);
-
+                IAgentService agentService = new AgentService(agentConfigurationService, playerModel);
+                
                 ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
                 
                 
@@ -107,7 +118,7 @@ namespace ASD_project
                         // {
                         // IPlayerService player = createPlayer(playername);
                         Console.WriteLine("Type input messages below");
-                        inputHandler.HandleCommands(playerService, sessionService);
+                        inputHandler.HandleCommands(playerService, sessionService, agentService);
                   
                 }
             }
