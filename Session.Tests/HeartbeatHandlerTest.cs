@@ -49,7 +49,7 @@ namespace Session.Tests
             public void Test_ReceiveHeartbeat_Fail()
             {
                 //arrange
-                string expected = string.Format("Agents are enabled\r\n", Environment.NewLine); ;
+                string expected = string.Format("Agents are enabled{0}", Environment.NewLine);
                 
                 using (StringWriter sw = new StringWriter())
                 {
