@@ -9,5 +9,4 @@
       <HintPath>..\Session.Tests\bin\Debug\net5.0\Session.dll</HintPath>
     </Reference>
   </ItemGroup>
-
 </Project>

@@ -37,7 +37,7 @@ namespace ASD_project
                     }
                     else if (currentScreen is ConfigurationScreen)
                     {
-                        
+                        _inputHandler.HandleConfigurationScreenCommands();
                     }
                     else if (currentScreen is WaitingScreen)
                     {

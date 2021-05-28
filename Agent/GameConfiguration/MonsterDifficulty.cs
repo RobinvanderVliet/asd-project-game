@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UserInterface.GameConfiguration
+namespace Agent.GameConfiguration
 {
     public enum MonsterDifficulty
     {

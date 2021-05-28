@@ -112,5 +112,14 @@ namespace InputCommandHandler
                 sessionScreen.UpdateInputMessage("That is not a number, please try again!");
             }
         }
+
+        public void HandleConfigurationScreenCommands()
+        {
+            var input = GetCommand();
+            if (input == RETURN_KEYWORD)
+            {
+                _screenHandler.TransitionTo(new StartScreen());
+            }
+        }
     }
 }

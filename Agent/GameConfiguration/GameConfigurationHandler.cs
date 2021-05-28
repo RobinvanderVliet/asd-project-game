@@ -1,36 +1,38 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace UserInterface.GameConfiguration
+namespace Agent.GameConfiguration
 {
-    class GameConfiguration
+    public class GameConfigurationHandler : IGameConfigurationHandler
     {
+        public readonly List<string> ConfigurationHeader;
+        public readonly List<List<string>> ConfigurationChoices;
         private MonsterDifficulty _newMonsterDifficulty;
         private MonsterDifficulty _currentMonsterDifficulty;
 
-        public GameConfiguration(MonsterDifficulty monsterDifficulty)
+        public GameConfigurationHandler()
         {
-            _newMonsterDifficulty = monsterDifficulty;
+            ConfigurationHeader = new List<string>();
+            ConfigurationChoices = new List<List<string>>();
+            _newMonsterDifficulty = MonsterDifficulty.Medium;
             _currentMonsterDifficulty = MonsterDifficulty.Medium;
+            SetGameConfiguration();
         }
 
-        public void AskUserForMonsterDifficulty() 
+        private void SetGameConfiguration()
+        {
+            //Monster difficulty
+            ConfigurationHeader.Add("Welke game moeilijkheidsgraad wilt u?");
+            List<string> newOptions = new List<string>() {"Easy", "Medium", "Hard", "Impossible"};
+            ConfigurationChoices.Add(newOptions);
+        }
+
+        public bool AskUserForMonsterDifficulty(string input)
         {
             try
             {
-                //Change to work with UI when implemented
-                Console.WriteLine("Welke game moeilijkheidsgraad wilt u?");
-                Console.WriteLine("1. Easy");
-                Console.WriteLine("2. Medium");
-                Console.WriteLine("3. Hard");
-                Console.WriteLine("4. Impossible");
-                Console.WriteLine("Voer het nummer van uw keuze in!");
-                string userInput = Console.ReadLine();
-                userInput = userInput.Trim(',', ' ');
-                int userChoice = int.Parse(userInput);
+                input = input.Trim('.', ' ');
+                int userChoice = int.Parse(input);
 
                 switch (userChoice)
                 {
@@ -51,8 +53,9 @@ namespace UserInterface.GameConfiguration
             catch (Exception) 
             {
                 Console.WriteLine("Aub selecteer een van de opties, nummers zijn genoeg");
-                AskUserForMonsterDifficulty();
+                return false;
             }
+            return true;
         }
 
         public void SetDifficulty(MonsterDifficulty monsterDifficulty) 
@@ -67,7 +70,5 @@ namespace UserInterface.GameConfiguration
             return monsterProperty / (int)_currentMonsterDifficulty * (int)_newMonsterDifficulty;
             
         }
-
-
     }
 }
