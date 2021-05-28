@@ -45,7 +45,6 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                     //genetic algorithm
                     pop.NaturalSelection();
                 }
-                timeElapsed++;
             }
         }
     }

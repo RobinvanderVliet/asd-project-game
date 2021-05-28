@@ -63,7 +63,7 @@ namespace Creature.Creature
             throw new NotImplementedException();
         }
 
-        public static void Show()
+        public void Show()
         {
             //maye use this to sperate the training settings
         }
