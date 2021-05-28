@@ -9,7 +9,6 @@ using WebSocketSharp;
 
 namespace InputHandling
 {
-    [ExcludeFromCodeCoverage]
     public class InputHandler : IInputHandler
     {
         private IPipeline _pipeline;
