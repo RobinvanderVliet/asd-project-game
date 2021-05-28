@@ -5,7 +5,7 @@ namespace WorldGeneration
     [ExcludeFromCodeCoverage]
     public class Player : Character
     {
-        public string Guid { get; set; }
+        public string Id { get; set; }
         public int Stamina { get; set; }
         public Inventory Inventory { get; set; }
         public int RadiationLevel { get; set; }
@@ -15,9 +15,9 @@ namespace WorldGeneration
         private const int HEALTHCAP = 100;
         private const int STAMINACAP = 10;
 
-        public Player(string name, int xPosition, int yPosition, string symbol, string guid) : base(name, xPosition, yPosition, symbol)
+        public Player(string name, int xPosition, int yPosition, string symbol, string id) : base(name, xPosition, yPosition, symbol)
         {
-            Guid = guid;
+            Id = id;
             Stamina = STAMINACAP;
             Health = HEALTHCAP;
             Inventory = new();
