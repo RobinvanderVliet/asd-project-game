@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Agent.Mapper;
 using Agent.Models;
-using InputCommandHandler;
+using InputHandling;
 using Serilog;
 
 namespace Agent.Services
@@ -11,13 +11,13 @@ namespace Agent.Services
     public class NpcConfigurationService : BaseConfigurationService
     {
         private List<Configuration> _npcConfigurations;
-        private InputCommandHandlerComponent _inputCommandHandlerComponent;
+        private InputHandler _inputHandler;
 
-        public NpcConfigurationService(List<Configuration> npcConfigurations, FileToDictionaryMapper fileToDictionaryMapper, InputCommandHandlerComponent inputCommandHandlerComponent)
+        public NpcConfigurationService(List<Configuration> npcConfigurations, FileToDictionaryMapper fileToDictionaryMapper, InputHandler inputHandler)
         {
             _npcConfigurations = npcConfigurations;
             FileToDictionaryMapper = fileToDictionaryMapper;
-            _inputCommandHandlerComponent = inputCommandHandlerComponent;
+            _inputHandler = inputHandler;
             FileHandler = new FileHandler();
             Pipeline = new Pipeline();
         }
@@ -39,19 +39,19 @@ namespace Agent.Services
         {
             //TODO: Seems like duplicate code for now, but must be refactored later to match anticipated feature 'Configure NPC during a game'
             Console.WriteLine("What NPC do you wish to configure?");
-            var npc = _inputCommandHandlerComponent.GetCommand();
+            var npc = _inputHandler.GetCommand();
             if (npc.Equals(CANCEL_COMMAND))
             {
                 return;
             }
             Console.WriteLine("Please provide code for the NPC");
-            var code = _inputCommandHandlerComponent.GetCommand();
+            var code = _inputHandler.GetCommand();
             try
             {
                 Pipeline.ParseString(code);
-                //Pipeline.CheckAst();
+                Pipeline.CheckAst();
                 var output = Pipeline.GenerateAst();
-                string fileName = "npc\\" + npc + "-config.cfg";
+                string fileName = "npc/" + npc + "-config.cfg";
                 FileHandler.ExportFile(output, fileName);
             }
             catch (SyntaxErrorException e)

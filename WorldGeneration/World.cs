@@ -1,60 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using DataTransfer.DTO.Character;
 
 namespace WorldGeneration
 {
     public class World
     {
         private Map _map;
-        public MapCharacterDTO CurrentPlayer { get; set; }
-        private IList<MapCharacterDTO> Characters { get; set; }
+        public Player CurrentPlayer { get; set; }
+        private List<Player> _players;
         private readonly int _viewDistance;
 
         public World(int seed, int viewDistance)
         {
-            Characters = new List<MapCharacterDTO>();
-            // AddCharacterToWorld(currentPlayer);
+            _players = new ();
             _map = MapFactory.GenerateMap(seed: seed);
             _viewDistance = viewDistance;
             _map.DeleteMap();
         }
 
-        public void UpdateCharacterPosition(MapCharacterDTO characterPositionDTO)
+        public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
         {
-            if (CurrentPlayer.PlayerGuid == characterPositionDTO.PlayerGuid)
+            if (CurrentPlayer.Id == userId)
             {
-                CurrentPlayer.XPosition = characterPositionDTO.XPosition;
-                CurrentPlayer.YPosition = characterPositionDTO.YPosition;
+                CurrentPlayer.XPosition = newXPosition;
+                CurrentPlayer.YPosition = newYPosition;
             }
-
-            if (Characters.Any(x => x.PlayerGuid.Equals(characterPositionDTO.PlayerGuid)))
+            else
             {
-                Characters.Where(x => x.PlayerGuid.Equals(characterPositionDTO.PlayerGuid)).FirstOrDefault().XPosition = characterPositionDTO.XPosition;
-                Characters.Where(x => x.PlayerGuid.Equals(characterPositionDTO.PlayerGuid)).FirstOrDefault().YPosition = characterPositionDTO.YPosition;                
+                var player = _players.Find(x => x.Id == userId);
+                player.XPosition = newXPosition;
+                player.YPosition = newYPosition;
             }
-
             DisplayWorld();
         }
 
-        public void AddCharacterToWorld(MapCharacterDTO mapCharacterDto, bool isCurrentPlayer)
+        public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
         {
             if (isCurrentPlayer)
             {
-                CurrentPlayer = mapCharacterDto;
+                CurrentPlayer = player;
             }
-            Characters.Add(mapCharacterDto);
+            _players.Add(player);
         }
 
         public void DisplayWorld()
         {
-            if (CurrentPlayer is null || Characters is null)
+            if (CurrentPlayer != null && _players != null)
             {
-                return;
+                Console.Clear();
+                _map.DisplayMap(CurrentPlayer, _viewDistance, new List<Character>(_players));
             }
-            Console.Clear();
-            _map.DisplayMap(CurrentPlayer, _viewDistance, Characters);
+            
         }
 
         public void deleteMap()

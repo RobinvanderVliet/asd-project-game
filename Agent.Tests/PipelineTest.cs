@@ -53,24 +53,25 @@ namespace Agent.Tests
             Assert.IsEmpty(_sut.Errors);
         }
 
-        // [Test]
-        // public void Test_CheckAst()
-        // {
-        //     //Arrange
-        //     AST ast = new AST();
-        //     _sut.Ast = ast;
-        //
-        //     Mock<Antlr.Checker.Checking> mockedChecker = new Mock<Antlr.Checker.Checking>(ast);
-        //     mockedChecker.Setup(x => x.Check(ast)).Verifiable();
-        //
-        //     _sut.Checking = mockedChecker.Object;
-        //
-        //     //Act
-        //     _sut.CheckAst();
-        //
-        //     //Assert
-        //     mockedChecker.Verify(x => x.Check(ast), Times.Once);
-        // }
+        //Deze test moet getest worden zodra de checker is geimplementeerd
+        //[Test]
+        //public void Test_CheckAst()
+        //{
+        //    //Arrange
+        //    AST ast = new AST();
+        //    _sut.Ast = ast;
+
+        //    Mock<Antlr.Checker.Checking> mockedChecker = new Mock<Antlr.Checker.Checking>(ast);
+        //    mockedChecker.Setup(x => x.Check(ast)).Verifiable();
+
+        //    _sut.Checking = mockedChecker.Object;
+
+        //    //Act
+        //    _sut.CheckAst();
+
+        //    //Assert
+        //    mockedChecker.Verify(x => x.Check(ast), Times.Once);
+        //}
 
         [Test]
         public void Test_Pipeline_Exception()
