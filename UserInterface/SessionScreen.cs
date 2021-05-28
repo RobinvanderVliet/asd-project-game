@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Session.DTO;
 
 namespace UserInterface
 {
@@ -22,12 +21,12 @@ namespace UserInterface
             DrawInputBox(INPUT_X, INPUT_Y + _sessions.Count + 1, "Insert session number to join session");
         }
 
-        public void UpdateSessions(SessionDTO sessionDto, string sessionId)
+        public void UpdateSessions(string sessionName, string sessionId)
         {
             bool alreadyInList = _sessions.Any(arr=> arr.First() == sessionId);
             if (!alreadyInList)
             {
-                _sessions.Add(new []{sessionId, sessionDto.Name});
+                _sessions.Add(new []{sessionId, sessionName});
             }
             
             Console.Clear();
