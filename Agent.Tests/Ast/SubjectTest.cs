@@ -64,7 +64,7 @@ namespace Agent.Tests.Ast
             //Act
             var result = node.GetNodeType();
             //Assert
-            Assert.AreEqual("Opponent", result);
+            Assert.AreEqual("Agent", result);
         }
 
         [Test]
