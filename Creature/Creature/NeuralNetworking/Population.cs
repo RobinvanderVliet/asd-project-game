@@ -65,7 +65,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //sets the best SmartMonster globally and for this gen
-        public void SetBestSmartMonster()
+        private void SetBestSmartMonster()
         {
             SmartMonster tempBest = species[0].creatures[0];
             tempBest.gen = gen;
@@ -128,7 +128,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //seperate population into species based on how similar they are to the leaders of each species in the previous gen
-        public void Speciate()
+        private void Speciate()
         {
             foreach (Species s in species)
             {//empty species
@@ -154,7 +154,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //calculates the fitness of all of the SmartMonsters
-        public void CalculateFitness()
+        private void CalculateFitness()
         {
             for (int i = 1; i < pop.Count; i++)
             {
@@ -163,7 +163,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //sorts the SmartMonsters within a species and the species by their fitnesses
-        public void SortSpecies()
+        private void SortSpecies()
         {
             //sort the SmartMonsters within a species
             foreach (Species s in species)
@@ -194,7 +194,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //kills all species which haven't improved in 15 generations
-        public void KillStaleSpecies()
+        private void KillStaleSpecies()
         {
             for (int i = 2; i < species.Count; i++)
             {
@@ -207,7 +207,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //if a species sucks so much that it wont even be allocated 1 child for the next generation then kill it now
-        public void KillBadSpecies()
+        private void KillBadSpecies()
         {
             float averageSum = GetAvgFitnessSum();
 
@@ -222,7 +222,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //returns the sum of each species average fitness
-        public float GetAvgFitnessSum()
+        private float GetAvgFitnessSum()
         {
             float averageSum = 0;
             foreach (Species s in species)
@@ -233,7 +233,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //kill the bottom half of each species
-        public void CullSpecies()
+        private void CullSpecies()
         {
             foreach (Species s in species)
             {
@@ -243,7 +243,7 @@ namespace Creature.Creature.NeuralNetworking
             }
         }
 
-        public void MassExtinction()
+        private void MassExtinction()
         {
             for (int i = 5; i < species.Count; i++)
             {

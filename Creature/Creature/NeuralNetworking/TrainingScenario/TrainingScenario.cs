@@ -1,11 +1,15 @@
 ﻿using Creature.Creature.StateMachine.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace Creature.Creature.NeuralNetworking.TrainingScenario
 {
+    [ExcludeFromCodeCoverage]
     public class TrainingScenario
     {
         public Population pop;
+        public bool runTraining = false;
+        public bool runOnce = false;
 
         private static void Main(string[] args)
         {
@@ -28,11 +32,12 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                 false
             );
             pop = new Population(50, data);
+            runTraining = true;
         }
 
         public void RunTestScenarios()
         {
-            while (true)
+            while (runTraining || runOnce)
             {
                 if (!pop.Done())
                 {
@@ -45,6 +50,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                     //genetic algorithm
                     pop.NaturalSelection();
                 }
+                runOnce = false;
             }
         }
     }

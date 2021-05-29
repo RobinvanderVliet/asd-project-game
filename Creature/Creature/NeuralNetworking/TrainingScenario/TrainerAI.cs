@@ -16,7 +16,6 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
         private readonly DataGatheringService dataGatheringService;
         private SmartMonster _target;
 
-        [ExcludeFromCodeCoverage]
         public TrainerAI(Vector2 loc, string type)
         {
             this.damage = random.Next(5, 10);
@@ -38,7 +37,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
             }
         }
 
-        public bool Adjecent(SmartMonster smartMonster)
+        private bool Adjecent(SmartMonster smartMonster)
         {
             TrainerAI _monsterTarget;
             if (type.Equals("player"))
@@ -75,7 +74,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         private void Walk()
         {
-            if (location.X < 28 && location.Y < 28 && location.X > 2 && location.Y > 2)
+            if (location.X <= 29 && location.Y <= 29 && location.X >= 0 && location.Y >= 0)
             {
                 int direction = random.Next(1, 2);
                 if (direction < 2)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace Creature.Creature.NeuralNetworking.TrainingScenario
@@ -50,7 +51,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
         {
             if (Vector2.Distance(location, smartMonster.creatureData.Position) < 2)
             {
-                return SmartMonster;
+                return smartMonster;
             }
             else
             {
@@ -58,12 +59,8 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public TrainerAI ScanMapMonsterAI(Vector2 location, SmartMonster smartMonster)
-        {
-            return SetClosestPlayerForAI(location, smartMonster);
-        }
-
-        private static TrainerAI SetClosestPlayerForAI(Vector2 location, SmartMonster smartMonster)
         {
             foreach (TrainerAI player in smartMonster.trainingMapGenerator.players)
             {

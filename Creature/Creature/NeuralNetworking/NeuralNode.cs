@@ -39,7 +39,7 @@ namespace Creature.Creature.NeuralNetworking
 
         //sigmoid activation function
         [ExcludeFromCodeCoverage]
-        public static float Sigmoid(float x)
+        private static float Sigmoid(float x)
         {
             float k = (float)Math.Exp(x);
             return k / (1.0f + k);

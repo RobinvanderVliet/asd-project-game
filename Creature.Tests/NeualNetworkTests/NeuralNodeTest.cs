@@ -18,6 +18,27 @@ namespace Creature.Tests
         }
 
         [Test]
+        public void Test_Engage()
+        {
+            _sut = new NeuralNode(0);
+            _sut.layer = 0;
+
+            NeuralNode connectedNode = new NeuralNode(1);
+            connectedNode.layer = 1;
+
+            _ConnectionGene = new ConnectionGene(_sut, connectedNode, 1, 1001);
+
+            _sut.outputConnections.Add(_ConnectionGene);
+
+            _sut.Engage();
+
+            float expected = 0.0f;
+            float actual = _sut.outputConnections[0].toNode.inputSum;
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
         public void Test_Engage_Sigmoid()
         {
             _sut = new NeuralNode(0);
