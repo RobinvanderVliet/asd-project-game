@@ -168,7 +168,7 @@ namespace InputHandling
                 answers.Add(CustomRuleHandleEditorScreenCommands("explore"));
             }
 
-            //naar de volgende scherm gaan!
+            //TODO: naar het volgende scherm gaan!
         }
 
         private string CustomRuleHandleEditorScreenCommands(string type)
@@ -201,7 +201,7 @@ namespace InputHandling
                 input = input.ToLower();
 
 
-                if (input.Equals("Stop"))
+                if (input.Equals("stop"))
                 {
                     return string.Empty;
                 }
