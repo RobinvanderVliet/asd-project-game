@@ -8,9 +8,8 @@
             LOST_CREATURE,
             SPOTTED_CREATURE,
             ALMOST_DEAD,
+            OUT_OF_STAMINA,
             FOUND_ITEM,
-            REGAINED_HEALTH_CREATURE_OUT_OF_RANGE,
-            REGAINED_HEALTH_CREATURE_IN_RANGE,
             CREATURE_OUT_OF_RANGE,
             CREATURE_IN_RANGE
         };

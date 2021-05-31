@@ -49,8 +49,8 @@ namespace Creature
             System.Diagnostics.Debug.WriteLine(string.Join(Environment.NewLine, lines));
 
             //PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, npcConfigurationService.GetConfigurations()[0].Settings);
-            PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, listOfDictionaries);
-            AgentData agentData = new AgentData(new Vector2(10, 10), 20, 5, 50, world, listOfDictionaries, false);
+            PlayerData playerData = new PlayerData(new Vector2(5, 5), 100, 5, 10, world, listOfDictionaries);
+            AgentData agentData = new AgentData(new Vector2(10, 10), 100, 100, 5, 50, world, listOfDictionaries, false);
             MonsterData monsterData = new MonsterData(new Vector2(10, 15), 20, 5, 50, world, listOfDictionaries, false);
 
             ICreature player = new Player(playerData);
@@ -60,11 +60,11 @@ namespace Creature
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);
-            //world.SpawnAgent(testAgent);
+            world.SpawnAgent(testAgent);
             //world.SpawnAgent(agent);
 
             // TODO: fix monster statemachine to get this working
-            world.SpawnCreature(monster);
+            //world.SpawnCreature(monster);
 
             world.Render();
 
