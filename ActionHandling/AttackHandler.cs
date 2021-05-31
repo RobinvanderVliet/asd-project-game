@@ -29,7 +29,6 @@ namespace ActionHandling
 
         public void SendAttack(string direction)
         {
-            if (_worldService.getCurrentPlayer().Stamina >= ATTACKSTAMINA) { 
                 Weapon weapon = _worldService.getCurrentPlayer().Inventory.Weapon;
                 int x = 0;
                 int y = 0;
@@ -54,7 +53,6 @@ namespace ActionHandling
                         y = -weapon.GetWeaponDistance();
                         break;
                 }
-
                 var currentPlayer = _worldService.getCurrentPlayer();
                 AttackDTO attackDto = new AttackDTO();
                 attackDto.XPosition = currentPlayer.XPosition + x;
@@ -62,11 +60,6 @@ namespace ActionHandling
                 attackDto.Damage = weapon.GetWeaponDamage();
                 attackDto.PlayerGuid = _clientController.GetOriginId();
                 SendAttackDTO(attackDto);
-            }
-            else
-            {
-                Console.WriteLine("Not enough Stamina for action. Please wait a moment or recharge stamina");
-            }
         }
 
         public void SendAttackDTO(AttackDTO attackDto)
@@ -112,8 +105,16 @@ namespace ActionHandling
                 if (PlayerResult.Any())
                 {
                     attackDto.AttackedPlayerGuid = PlayerResult.FirstOrDefault().PlayerGuid;
-                    InsertDamageToDatabase(attackDto, true);
-                    packet.Payload = JsonConvert.SerializeObject(attackDto);
+                    if(attackDto.Stamina >= ATTACKSTAMINA)
+                    {
+                        InsertDamageToDatabase(attackDto, true);
+                        packet.Payload = JsonConvert.SerializeObject(attackDto);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Insufficient stamina to perform attack action.");
+                    }
+                    
                 }
                 else if (CreatureResult.Any())
                 {
@@ -180,8 +181,6 @@ namespace ActionHandling
             }
         }
             
-        
-
         private void HandleAttack(AttackDTO attackDto)
         {
             if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))

@@ -9,6 +9,8 @@ namespace ActionHandling.DTO
         public int YPosition{ get; set; }
         public int Damage { get; set; }
 
+        public int Stamina { get; set; }
+
         public string PlayerGuid { get; set; }
         public string AttackedPlayerGuid { get; set; }
     }

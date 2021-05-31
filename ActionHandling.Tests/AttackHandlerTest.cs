@@ -49,17 +49,17 @@ namespace ActionHandling.Tests
                 int x = 26;
                 int y = 11;
                 string PlayerGuid = Guid.NewGuid().ToString();
-                string AttackGuid = Guid.NewGuid().ToString();
+                //string AttackGuid = Guid.NewGuid().ToString();
                 Player player = new Player("test", x, y, "#", PlayerGuid);
 
                 _mockedWorldService.Setup(WorldService => WorldService.getCurrentPlayer())
                     .Returns(player);
                 attackDTO = new AttackDTO();
-                attackDTO.XPosition = 10;
-                attackDTO.YPosition = 10;
+                attackDTO.XPosition = 26;
+                attackDTO.YPosition = 11;
                 attackDTO.Damage = 20;
                 attackDTO.PlayerGuid = PlayerGuid;
-                attackDTO.AttackedPlayerGuid = AttackGuid;
+                //attackDTO.AttackedPlayerGuid = AttackGuid;
 
                 _mockedClientController.Setup(ClientController => ClientController.GetOriginId())
                     .Returns(PlayerGuid);
@@ -69,7 +69,7 @@ namespace ActionHandling.Tests
                 //Act ---------
                 _sut.SendAttack(direction);
                 //Assert ---------
-                _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Attack), Times.Once());
+                _mockedClientController.Verify(mock => mock.SendPayload(It.IsAny<String>(), PacketType.Attack), Times.Once());
             }
             //[Test]
             //public void Test_HandlePacket_HandleMoveProperly()
