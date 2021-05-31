@@ -8,6 +8,7 @@ namespace Creature.Creature.StateMachine.Data
     {
         private Vector2 _position;
         private double _health;
+        private double _stamina;
         private int _damage;
         private int _visionRange;
         private IWorld _world;
@@ -29,6 +30,12 @@ namespace Creature.Creature.StateMachine.Data
         {
             get => _health;
             set => _health = value;
+        }
+
+        public double Stamina
+        {
+            get => _stamina;
+            set => _stamina = value;
         }
 
         public int Damage
@@ -60,10 +67,11 @@ namespace Creature.Creature.StateMachine.Data
             set => _following = value;
         }
         
-        public AgentData(Vector2 position, double health, int damage, int visionRange, IWorld world, List<Dictionary<string, string>> agentRuleSet, bool following)
+        public AgentData(Vector2 position, double health, double stamina, int damage, int visionRange, IWorld world, List<Dictionary<string, string>> agentRuleSet, bool following)
         {
             _position = position;
             _health = health;
+            _stamina = stamina;
             _damage = damage;
             _visionRange = visionRange;
             _world = world;
