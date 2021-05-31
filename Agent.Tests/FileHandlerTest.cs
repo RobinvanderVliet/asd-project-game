@@ -23,7 +23,7 @@ namespace Agent.Tests
         {
             //Arrange
             var expected = "combat when player nearby player then attack";
-            var fileLocation = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\import_test_file_1.txt";
+            var fileLocation = _sut.GetBaseDirectory() + "/Resource/import_test_file_1.txt";
             
             //Act
             var result = _sut.ImportFile(fileLocation);
@@ -35,8 +35,7 @@ namespace Agent.Tests
         public void Test_ImportFile_ThrowsFileException1()
         { 
             //Arrange
-            var fileLocation = string.Format(Path.GetFullPath(Path.Combine
-                        (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resources\\ThisFileDoesNotExist.txt";
+            var fileLocation = _sut.GetBaseDirectory() + "Resource/ThisFileDoesNotExist.txt";
 
             //Act
             var exception = Assert.Throws<FileException>(() =>
@@ -50,8 +49,7 @@ namespace Agent.Tests
         public void Test_ImportFile_ThrowsFileException2()
         { 
             //Arrange
-            var fileLocation = string.Format(Path.GetFullPath(Path.Combine
-                (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resources\\AgentTestFileWrongExtension.xml";
+            var fileLocation = _sut.GetBaseDirectory() + "/Resource/AgentTestFileWrongExtension.xml";
 
             //Act
             var exception = Assert.Throws<FileException>(() =>
@@ -65,23 +63,25 @@ namespace Agent.Tests
         public void Test_ExportFile_FileGetsExported()
         {
             //Arrange
-            var expected = "combat=defensive\r\nexplore=random";
-            var fileLocation = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resources\\";
+            var expected = "combat=defensive" + Environment.NewLine + "explore=random";
+            var fileLocation = _sut.GetBaseDirectory() + "/Resource/";
             var fileName = "AgentExportFile.cfg";
             
             //Act
             _sut.ExportFile(expected, fileName);
 
+            var result = _sut.ImportFile(fileLocation + fileName);
+
             //Assert
-            Assert.AreEqual(expected, _sut.ImportFile(fileLocation + fileName));
+            Assert.AreEqual(expected, result);
         }
 
         [Test]
         public void Test_CreateDirectory_DirectoryCreated()
         {
             //Arrange
-            var directory = string.Format(Path.GetFullPath(Path.Combine
-                (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resources\\Agent\\";
+            var directory = _sut.GetBaseDirectory() + "/Resources/Agent/";
+
             if (Directory.Exists(directory))
             {
                 Directory.Delete(directory);
@@ -93,6 +93,5 @@ namespace Agent.Tests
             //Assert
             Assert.True(Directory.Exists(directory));
         }
-        
     }
 }
