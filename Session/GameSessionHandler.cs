@@ -29,10 +29,9 @@ namespace Session
             _sessionHandler = sessionHandler;
         }
 
-        public void SendGameSession(ISessionHandler sessionHandler)
+        public void SendGameSession()
         {
             StartGameDTO startGameDTO = new StartGameDTO();
-            _sessionHandler = sessionHandler;
             if (_sessionHandler.GetSavedGame())
             {
                 Console.WriteLine("this is a saved game.");
@@ -125,7 +124,6 @@ namespace Session
         }
 
 
-        //paniek
         private void HandleStartGameSession(StartGameDTO startGameDTO)
         {
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
@@ -144,19 +142,9 @@ namespace Session
 
                     tmpClientHistory.CreateAsync(tmpObject);
 
-                    _worldService.AddCharacterToWorld(
-                        new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, startGameDTO.GameGuid,
-                            CharacterSymbol.CURRENT_PLAYER), true);
+                    _worldService.AddPlayerToWorld(new WorldGeneration.Player("gerrit", player.Value[0], player.Value[1], CharacterSymbol.CURRENT_PLAYER, player.Key), true);
                 }
                 else
-                {
-                    _worldService.AddCharacterToWorld(
-                        new MapCharacterDTO(player.Value[0], player.Value[1], player.Key, startGameDTO.GameGuid,
-                            CharacterSymbol.ENEMY_PLAYER), false);
-                    // add name to players
-                    _worldService.AddPlayerToWorld(new WorldGeneration.Player("gerrit", player.Value[0], player.Value[1], CharacterSymbol.CURRENT_PLAYER, player.Key), true);
-                } 
-                else 
                 {
                     _worldService.AddPlayerToWorld(new WorldGeneration.Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key), false);
                 }
@@ -164,5 +152,7 @@ namespace Session
 
             _worldService.DisplayWorld();
         }
+
+        
     }
 }

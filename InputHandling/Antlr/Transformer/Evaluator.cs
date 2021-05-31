@@ -1,6 +1,7 @@
 using System;
 using ActionHandling;
 using Chat;
+using InputCommandHandler.Antlr.Ast.Actions;
 using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Exceptions;
@@ -14,16 +15,18 @@ namespace InputHandling.Antlr.Transformer
         private IMoveHandler _moveHandler;
         private IGameSessionHandler _gameSessionHandler;
         private IChatHandler _chatHandler;
+        private IGamesSessionService _gamesSessionService;
         
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private String _commando;
 
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IGamesSessionService gamesSessionService, IChatHandler chatHandler)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
             _gameSessionHandler = gameSessionHandler;
+            _gamesSessionService = gamesSessionService;
             _chatHandler = chatHandler;
         }
         
@@ -154,7 +157,7 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformCreateSession(CreateSession createSession)
         {
-            _sessionHandler.CreateSession(createSession.Message.MessageValue);
+            _sessionHandler.CreateSession(createSession.Message.MessageValue, false, null);
         }
 
         private void TransformJoinSession(JoinSession joinSession)

@@ -31,7 +31,7 @@
 
         public void StartSession()
         {
-            _gameSessionHandler.SendGameSession(_sessionHandler);
+            _gameSessionHandler.SendGameSession();
         }
     }
 }

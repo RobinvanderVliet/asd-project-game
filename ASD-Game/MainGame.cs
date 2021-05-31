@@ -1,6 +1,12 @@
 using System;
+using ActionHandling;
+using Chat;
 using InputHandling;
+using Microsoft.Extensions.Logging;
+using Network;
+using Session;
 using UserInterface;
+using WorldGeneration;
 
 namespace ASD_project
 {
@@ -9,7 +15,6 @@ namespace ASD_project
         public class MainGame : IMainGame
         {
             private readonly ILogger<MainGame> _log;
-            private readonly IInventory _inventory;
             private readonly IChatHandler _chatHandler;
             private readonly ISessionHandler _sessionHandler;
             private readonly IMoveHandler _moveHandler;
@@ -21,12 +26,11 @@ namespace ASD_project
             private IInputHandler _inputHandler;
             private IScreenHandler _screenHandler;
 
-            public MainGame(ILogger<MainGame> log, IInventory inventory, IClientController clientController, IWorldService worldService, 
+            public MainGame(ILogger<MainGame> log, IClientController clientController, IWorldService worldService,
                 IChatHandler chatHandler, ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler
-                , IGamesSessionService gamesSessionService)
+                , IGamesSessionService gamesSessionService, IInputHandler inputHandler, IScreenHandler screenHandler)
             {
                 _log = log;
-                _inventory = inventory;
                 _clientController = clientController;
                 _worldService = worldService;
                 _chatHandler = chatHandler;
@@ -34,10 +38,6 @@ namespace ASD_project
                 _moveHandler = moveHandler;
                 _gameSessionHandler = gameSessionHandler;
                 _gamesSessionService = gamesSessionService;
-
-
-            public MainGame(IInputHandler inputHandler, IScreenHandler screenHandler)
-            {
                 _screenHandler = screenHandler;
                 _inputHandler = inputHandler;
             }
