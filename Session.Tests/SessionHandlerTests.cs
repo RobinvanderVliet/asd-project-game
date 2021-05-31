@@ -38,7 +38,7 @@ namespace Session.Tests
             _mockedClientController = new Mock<IClientController>();
             _mockedScreenHandler = new Mock<IScreenHandler>();
             _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object);
-            _mockedSession = new Mock<Session>();
+            _mockedSession = new Mock<Session>("test");
             _packetDTO = new PacketDTO();
         }
 
@@ -288,7 +288,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
             packetHeaderDTO.OriginID = hostOriginId;
             packetHeaderDTO.SessionID = "sessionId";
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -386,7 +386,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
             packetHeaderDTO.OriginID = "testOriginId";
             packetHeaderDTO.SessionID = "otherSessionId";
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -496,7 +496,7 @@ namespace Session.Tests
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
 
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO
+            PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO
             {
                 OriginID = originId,
                 SessionID = generatedSessionId,
@@ -546,7 +546,7 @@ namespace Session.Tests
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO
+            PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO
             {
                 OriginID = originId,
                 SessionID = generatedSessionId,
@@ -661,7 +661,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.SendHeartbeat);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
             packetHeaderDTO.PacketType = PacketType.Session;
             packetHeaderDTO.Target = "host";
             _packetDTO.Header = packetHeaderDTO;
@@ -673,5 +673,105 @@ namespace Session.Tests
             HandlerResponseDTO expectedResult = new HandlerResponseDTO(SendAction.Ignore, null);
             Assert.AreEqual(expectedResult.Action, actualResult.Action);
         }
+
+        [Test]
+        public void Test_HandleNewBackupHost_Host()
+        {
+            //Arrange
+            PacketDTO packet = new()
+            {
+                Header = new PacketHeaderDTO() {Target = "host"},
+                Payload = ""
+            };
+
+            //Act
+            var result = _sut.HandleNewBackupHost(packet);
+            
+            //Assert
+            Assert.AreEqual(SendAction.SendToClients, result.Action);
+        }
+
+        [Test]
+        public void Test_HandleNewBackupHost_Client_Next()
+        {
+            //Arrange
+            PacketDTO packet = new()
+            {
+                Header = new PacketHeaderDTO() { OriginID = "2", Target = "client" },
+                Payload = ""
+            };
+
+            _sut.SetSession(new Session("test game"));
+            _mockedClientController.Setup(x => x.GetOriginId()).Returns("3");
+
+            _sut.GetAllClients().Add("1");
+            _sut.GetAllClients().Add("2");
+            _sut.GetAllClients().Add("3");
+
+            //Act
+            var result = _sut.HandleNewBackupHost(packet);
+
+            //Assert
+            Assert.AreEqual(result.Action, SendAction.Ignore);
+
+            //Remove all clients for other test
+            _sut.GetAllClients().RemoveRange(0, 3);
+        }
+
+        [Test]
+        public void Test_HandleNewBackupHost_Client_NotNext()
+        {
+            //Arrange
+            PacketDTO packet = new()
+            {
+                Header = new PacketHeaderDTO() {OriginID = "2", Target = "client" },
+                Payload = ""
+            };
+
+            _sut.SetSession(new Session("test game"));
+            _mockedClientController.Setup(x => x.GetOriginId()).Returns("1");
+
+            _sut.GetAllClients().Add("1");
+            _sut.GetAllClients().Add("2");
+            _sut.GetAllClients().Add("3");
+
+            //Act
+            var result = _sut.HandleNewBackupHost(packet);
+
+            //Assert
+            Assert.AreEqual(result.Action, SendAction.Ignore);
+
+            //Remove all clients for other test
+            _sut.GetAllClients().RemoveRange(0, 3);
+        }
+
+        [Test]
+        public void Test_HandlePacket_NewBackupHost()
+        {
+            //Arrange
+            PacketDTO packet = new()
+            {
+                Header = new PacketHeaderDTO() { OriginID = "1", Target = "client" },
+                Payload = JsonConvert.SerializeObject(new SessionDTO() {
+                    SessionType = SessionType.NewBackUpHost,
+                    SessionSeed = 0,
+                    ClientIds = new List<String>(),
+                    Name = ""
+                })
+            };
+
+            //needed for list
+            _sut.SetSession(_mockedSession.Object);
+            _sut.GetAllClients().Add("1");
+            _sut.GetAllClients().Add("2");
+            _sut.GetAllClients().Add("3");
+
+            //Act
+            var result = _sut.HandlePacket(packet);
+
+            //Assert
+            Assert.AreEqual(result.Action, SendAction.Ignore);
+        }
+
     }
 }

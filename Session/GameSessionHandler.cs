@@ -17,6 +17,7 @@ namespace Session
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
     {
         private IClientController _clientController;
+        public IClientController ClientController { get => _clientController; }
         private ISessionHandler _sessionHandler;
         private IWorldService _worldService;
         
@@ -49,7 +50,7 @@ namespace Session
             List<string> allClients = _sessionHandler.GetAllClients();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
             
-            // Needs to be refactored to something random in construction; this was for testing
+            // TODO Needs to be refactored to something random in construction; this was for testing
             int playerX = 26; // spawn position
             int playerY = 11; // spawn position
             foreach (string clientId in allClients)
@@ -103,8 +104,36 @@ namespace Session
                     _worldService.AddPlayerToWorld(new WorldGeneration.Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key), false);
                 }
             }
-            
             _worldService.DisplayWorld();
+
+            if (_clientController.IsBackupHost)
+            {
+                SaveInBackupDatabase(startGameDTO);
+            }
+        }
+
+        private void SaveInBackupDatabase(StartGameDTO startGameDTO)
+        {
+            var dbConnection = new DbConnection();
+
+            //create new backup repositories.
+            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
+            var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
+            var gameRepository = new Repository<GamePOCO>(dbConnection);
+            var gameService = new ServicesDb<GamePOCO>(gameRepository);
+
+            //Game
+            var gamePOCO = new GamePOCO { GameGuid = startGameDTO.GameGuid, PlayerGUIDHost = _sessionHandler.GetAllClients()[0]};
+            gameService.CreateAsync(gamePOCO);
+
+            //Players
+            foreach (KeyValuePair<string, int[]> player in startGameDTO.PlayerLocations)
+            {
+                servicePlayer.CreateAsync(
+                    new PlayerPOCO{ PlayerGuid = player.Key, GameGuid = gamePOCO.GameGuid, XPosition = player.Value[0], YPosition = player.Value[1] }
+                    );
+            }
+            Console.WriteLine("backup goes brrrrrrrrrrrrrrrrrrr");
         }
     }
 }

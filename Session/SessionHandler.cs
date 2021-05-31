@@ -12,6 +12,7 @@ using DatabaseHandler.Services;
 using DatabaseHandler.Repository;
 using UserInterface;
 using Timer = System.Timers.Timer;
+using System.Linq;
 
 namespace Session
 {
@@ -136,6 +137,10 @@ namespace Session
                     {
                         return HandleHeartbeat(packet);
                     }
+                    if (sessionDTO.SessionType == SessionType.NewBackUpHost)
+                    {
+                        return HandleNewBackupHost(packet);
+                    }
                 }
                 if ((packet.Header.Target == "client" || packet.Header.Target == "host" || packet.Header.Target == _clientController.GetOriginId()) 
                     && sessionDTO.SessionType == SessionType.SendPing)
@@ -159,7 +164,25 @@ namespace Session
         
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
-        
+
+        public  HandlerResponseDTO HandleNewBackupHost(PacketDTO packet)
+        {
+            if(packet.Header.Target == "host")
+            {
+                return new HandlerResponseDTO(SendAction.SendToClients, null);
+            } 
+            else
+            {
+                if (!_clientController.IsBackupHost && GetAllClients().ElementAt(GetAllClients().IndexOf(packet.Header.OriginID) + 1).Equals(_clientController.GetOriginId())) {
+                    _clientController.IsBackupHost = true;
+                    PingHostTimer();
+                    Console.WriteLine("I'm Mr. BackupHost! Look at me!");
+                    return new HandlerResponseDTO(SendAction.Ignore, null);
+                }
+                return new HandlerResponseDTO(SendAction.Ignore, null);
+            }
+        }
+
         private HandlerResponseDTO HandleHeartbeat(PacketDTO packet)
         {
             if(_heartbeatHandler != null)
@@ -320,7 +343,7 @@ namespace Session
 
         public void SwapToHost()
         {
-            _clientController.CreateHostController();
+             _clientController.CreateHostController();
             _clientController.IsBackupHost = false;
             
             _senderHeartbeatTimer.Close();
@@ -331,6 +354,14 @@ namespace Session
             heartbeatSenders.Remove(_clientController.GetOriginId());
             
             _heartbeatHandler = new HeartbeatHandler(heartbeatSenders);
+
+            SessionDTO sessionDTO = new SessionDTO
+            {
+                SessionType = SessionType.NewBackUpHost,
+                Name = "you'are our co-captain (back up host) now!"
+            };
+            var jsonObject = JsonConvert.SerializeObject(sessionDTO);
+            _clientController.SendPayload(jsonObject, PacketType.Session);
         }
 
         public Timer getHostPingTimer()
@@ -351,6 +382,11 @@ namespace Session
         public void setHostPingTimer(Timer timer)
         {
             _hostPingTimer = timer;
+        }
+
+        public void SetSession(Session ses)
+        {
+            _session = ses;
         }
     }
 }
