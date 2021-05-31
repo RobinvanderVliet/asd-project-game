@@ -72,25 +72,26 @@ namespace ActionHandling
 
         private HandlerResponseDTO HandleUse(InventoryDTO inventoryDTO, bool handleInDatabase)
         {
-            bool handleInWorld = true;
-            if (handleInDatabase)
+            var player = _worldService.GetPlayer(inventoryDTO.UserId);
+            if(player.Inventory.ConsumableItemList.Count >= inventoryDTO.Index)
             {
-                handleInWorld = HandleUseInDatabase(inventoryDTO.UserId, inventoryDTO.Index);
-            }
+                Consumable itemToUse = player.Inventory.ConsumableItemList.ElementAt(inventoryDTO.Index);
+                player.Inventory.ConsumableItemList.RemoveAt(inventoryDTO.Index);
+                player.UseConsumable(itemToUse);
 
-            if (handleInWorld)
-            {
-                HandleUseInWorld(inventoryDTO.UserId, inventoryDTO.Index);
+                if (handleInDatabase)
+                {
+
+                }
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
             else
             {
                 return new HandlerResponseDTO(SendAction.ReturnToSender, "Could not use item");
             }
-
         }
 
-        private void HandleUseInWorld(string userId, int index)
+        private bool HandleUseInWorld(string userId, int index)
         {
             var player = _worldService.GetPlayer(userId);
             if (player.Inventory.ConsumableItemList.Count >= index)
@@ -98,6 +99,11 @@ namespace ActionHandling
                 Consumable itemToUse = player.Inventory.ConsumableItemList.ElementAt(index);
                 player.Inventory.ConsumableItemList.RemoveAt(index);
                 player.UseConsumable(itemToUse);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
