@@ -14,19 +14,18 @@ namespace UserInterface
         private int _width;
         private int _height;
 
-        private String _userName = "TEMP USERNAME";
-        private String _score = "0";
-        private String _health = "100";
-        private String _stamina = "100";
-        private String _armor = "100";
-        private String _radiationProtectionPoints = "100";
-        private String _helm = "Bandana";
-        private String _body = "Jacket";
-        private String _melee = "Knife";
-        private String _ranged = "AK-47";
-        private String _slotOne = "Bandage";
-        private String _slotTwo = "Suspicious white powder";
-        private String _slotThree = "Medkit";
+        private String _userName = "";
+        private String _score = "";
+        private String _health = "";
+        private String _stamina = "";
+        private String _armor = "";
+        private String _radiationProtectionPoints = "";
+        private String _helm = "";
+        private String _body = "";
+        private String _weapon = "";
+        private String _slotOne = "";
+        private String _slotTwo = "";
+        private String _slotThree = "";
 
         public GameStatScreen(int x, int y, int width, int height)
         {
@@ -88,9 +87,7 @@ namespace UserInterface
             Console.SetCursorPosition(xpos, ypos++);
             Console.Write("Body: " + _body);
             Console.SetCursorPosition(xpos, ypos++);
-            Console.Write("Melee: " + _melee);
-            Console.SetCursorPosition(xpos, ypos++);
-            Console.Write("Ranged: " + _ranged);
+            Console.Write("Weapon: " + _weapon);
             Console.SetCursorPosition(originalCursorX, originalCursorY);
         }
         private void DrawUserInventory()
@@ -111,7 +108,7 @@ namespace UserInterface
         }
         private void ClearUserInfo()
         {
-            int width = (_width / 5) + BORDER_SIZE;
+            int width = (_width / 5);
            
             for (int i = 0; i <= _height - OFFSET_TOP; i++)
             {
@@ -123,7 +120,7 @@ namespace UserInterface
 
         private void ClearUserStats()
         {
-            int width = (_width / 5) + BORDER_SIZE;
+            int width = (_width / 5);
 
             for (int i = 0; i <= _height - OFFSET_TOP; i++)
             {
@@ -134,7 +131,7 @@ namespace UserInterface
 
         private void ClearUserEquipment()
         {
-            int width = (_width / 5) + BORDER_SIZE;
+            int width = (_width / 5);
             int xPos = (_width / 5) * 2 + BORDER_SIZE;
 
             for (int i = 0; i <= _height - OFFSET_TOP; i++)
@@ -146,7 +143,7 @@ namespace UserInterface
 
         private void ClearUserInventory()
         {
-            int width = (_width / 5) + BORDER_SIZE;
+            int width = (_width / 5) * 2;
             int xPos = (_width / 5) * 3 + BORDER_SIZE;
 
             for (int i = 0; i <= _height - OFFSET_TOP; i++)
@@ -154,6 +151,25 @@ namespace UserInterface
                 Console.SetCursorPosition(xPos, _yPosition + OFFSET_TOP + i);
                 Console.Write(new string(' ', width));
             }
+        }
+        public void SetStartValues(string name, string score, string health, string stamina, string armor, string radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree)
+        {
+            _userName = name;
+            _score = score;
+            _health = health;
+            _stamina = stamina;
+            _armor = armor;
+            _radiationProtectionPoints = radiation;
+            _helm = helm;
+            _body = body;
+            _weapon = weapon;
+            _slotOne = slotOne;
+            _slotTwo = slotTwo;
+            _slotThree = slotThree;
+            DrawUserInfo();
+            DrawUserStats();
+            DrawUserEquipment();
+            DrawUserInventory();
         }
 
         public void UpdateStat(string UpdatedStat, string newValue)
@@ -180,9 +196,33 @@ namespace UserInterface
                     _armor = newValue;
                     DrawUserStats();
                     break;
-                case "RadiationLevel":
+                case "Radiation":
                     _radiationProtectionPoints = newValue;
                     DrawUserStats();
+                    break;
+                case "Helm":
+                    _helm = newValue;
+                    DrawUserEquipment();
+                    break;
+                case "Body":
+                    _body = newValue;
+                    DrawUserEquipment();
+                    break;
+                case "Weapon":
+                    _weapon = newValue;
+                    DrawUserEquipment();
+                    break;
+                case "SlotOne":
+                    _slotOne = newValue;
+                    DrawUserInventory();
+                    break;
+                case "SlotTwo":
+                    _slotTwo = newValue;
+                    DrawUserInventory();
+                    break;
+                case "SlotThree":
+                    _slotThree = newValue;
+                    DrawUserInventory();
                     break;
             }
         }
