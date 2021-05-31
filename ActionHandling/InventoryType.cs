@@ -1,4 +1,4 @@
-﻿namespace Player
+﻿namespace ActionHandling
 {
     public enum InventoryType
     {

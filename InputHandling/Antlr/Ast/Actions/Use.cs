@@ -1,4 +1,6 @@
-﻿using System;
+﻿using InputHandling.Antlr.Ast;
+using InputHandling.Antlr.Ast.Actions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -6,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InputCommandHandler.Antlr.Ast.Actions
+namespace InputHandling.Antlr.Ast.Actions
 {
     public class Use : Command, IEquatable<Use>
     {

@@ -94,7 +94,7 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformUse(Use use)
         {
-            _playerService.Use(use.Step.StepValue);
+            _inventoryHandler.UseItem(use.Step.StepValue);
         }
 
         private void TransformMove(Move move)
