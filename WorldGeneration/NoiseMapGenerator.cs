@@ -7,6 +7,7 @@ namespace WorldGeneration
 {
     public class NoiseMapGenerator : INoiseMapGenerator
     {
+        private FastNoiseLite noise;
         public int[,] GenerateAreaMap(int size, int seed)
         {
             var noise = new FastNoiseLite();
@@ -23,12 +24,12 @@ namespace WorldGeneration
 
         public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize, int seed)
         {
-            var noise = new FastNoiseLite();
-            noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
-            noise.SetSeed(seed);
-            noise.SetFrequency(0.03f);
-            noise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
+            if (noise == null)
+            {
+                SetupNoise(seed);
+            }
             var map = new ITile[chunkRowSize * chunkRowSize];
+            // check which edges of the chunk will have roads.
             for (var y = 0; y < chunkRowSize; y++)
             {
                 for (var x = 0; x < chunkRowSize; x++)
@@ -53,6 +54,15 @@ namespace WorldGeneration
                 (< 8) => new StreetTile(x, y),
                 _ => new GasTile(x, y)
             };
+        }
+
+        private void SetupNoise(int seed)
+        {
+            noise = new FastNoiseLite();
+            noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
+            noise.SetSeed(seed);
+            noise.SetFrequency(0.03f);
+            noise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
         }
     }
 }
