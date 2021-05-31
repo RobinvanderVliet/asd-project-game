@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Moq;
 using Network;
@@ -11,6 +12,7 @@ using WorldGeneration;
 
 namespace Session.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class GameSessionHandlerTests
     {
         private GameSessionHandler _sut;

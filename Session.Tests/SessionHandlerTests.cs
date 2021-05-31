@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
+using UserInterface;
 using Timer = System.Timers.Timer;
 
 namespace Session.Tests
@@ -26,6 +27,7 @@ namespace Session.Tests
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;
         private Mock<Session> _mockedSession;
+        private Mock<IScreenHandler> _mockedScreenHandler;
 
         [SetUp]
         public void Setup()
@@ -34,8 +36,9 @@ namespace Session.Tests
             standardOutput.AutoFlush = true;
             Console.SetOut(standardOutput);
             _mockedClientController = new Mock<IClientController>();
-            _mockedSession = new Mock<Session>("test game");
-            _sut = new SessionHandler(_mockedClientController.Object);
+            _mockedScreenHandler = new Mock<IScreenHandler>();
+            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object);
+            _mockedSession = new Mock<Session>();
             _packetDTO = new PacketDTO();
         }
 
@@ -561,7 +564,7 @@ namespace Session.Tests
             HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
 
             _mockedClientController.SetupSequence(x => x.GetOriginId()).Returns(originIdHost);
-            _mockedClientController.SetupSequence(x => x.SessionId).Returns(generatedSessionId);
+
             // Act -------------
             HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
 
