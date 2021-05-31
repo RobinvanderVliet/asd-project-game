@@ -1,5 +1,5 @@
 ﻿
-namespace WorldGeneration.Models.Interfaces
+namespace Player.Model
 {
     public interface ICharacter
     {

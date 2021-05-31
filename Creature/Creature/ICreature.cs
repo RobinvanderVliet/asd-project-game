@@ -1,6 +1,6 @@
 ﻿using Creature.Creature.StateMachine;
 
-namespace Creature
+namespace Creature.Creature
 {
     public interface ICreature
     {

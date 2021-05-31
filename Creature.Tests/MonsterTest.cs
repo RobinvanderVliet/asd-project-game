@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Creature.Creature;
 
 namespace Creature.Tests
 {

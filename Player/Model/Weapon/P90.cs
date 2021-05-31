@@ -1,7 +1,7 @@
 ﻿using Player.Model.ItemStats;
 using Player.Model.Weapon.WeaponStats;
 
-namespace Weapon
+namespace Player.Model.Weapon
 {
     public class P90 : Weapon
     {

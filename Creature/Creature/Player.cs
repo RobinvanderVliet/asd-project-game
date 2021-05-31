@@ -1,7 +1,7 @@
 ﻿using Creature.Creature.StateMachine;
 using Network;
 
-namespace Creature
+namespace Creature.Creature
 {
     public class Player : ICreature
     {

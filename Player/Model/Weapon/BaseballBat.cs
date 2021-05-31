@@ -3,7 +3,7 @@ using Player.Model.Weapon.WeaponStats;
 
 namespace Player.Model.Weapon
 {
-    public class BaseBallBat : global::Weapon.Weapon
+    public class BaseBallBat : global::Player.Model.Weapon.Weapon
     {
         private const string WeaponDescription = "HOMERUN";
 
