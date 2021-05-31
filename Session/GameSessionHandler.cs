@@ -157,11 +157,9 @@ namespace Session
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-        
-                var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
+            var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
                 HandleStartGameSession(startGameDTO);
             
-
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 

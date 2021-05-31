@@ -330,6 +330,8 @@ namespace Session
                                 playerPosition[1] = element.YPosition;
                                 players.Add(element.PlayerGuid, playerPosition);
                             }
+
+                            joinedPlayerDto.PlayerLocations = players;
                             sendExistingPlayer(joinedPlayerDto);
                         }
                     }
