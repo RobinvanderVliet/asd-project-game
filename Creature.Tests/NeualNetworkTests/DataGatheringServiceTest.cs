@@ -11,8 +11,8 @@ namespace Creature.Tests
     [TestFixture]
     internal class DataGatheringServiceTest
     {
-        private DataGatheringService _sut;
-        private SmartMonster _smartMonster;
+        private DataGatheringServiceForTraining _sut;
+        private SmartMonsterForTraining _smartMonster;
         private TrainerAI _player;
 
         [SetUp]
@@ -29,8 +29,8 @@ namespace Creature.Tests
                     false
                 );
             _player = new TrainerAI(new Vector2(16, 16), "player");
-            _smartMonster = new SmartMonster(_MonsterData);
-            _sut = new DataGatheringService();
+            _smartMonster = new SmartMonsterForTraining(_MonsterData);
+            _sut = new DataGatheringServiceForTraining();
         }
 
         [Test]

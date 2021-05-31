@@ -9,8 +9,8 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
         public TrainerAI closestMonster { get; set; }
         public Single distanceToClosestMonster { get; set; }
 
-        public void ScanMap(SmartMonster smartMonster, int visionRange);
+        public void ScanMap(SmartMonsterForTraining smartMonster, int visionRange);
 
-        public void CheckNewPosition(SmartMonster smartMonster);
+        public void CheckNewPosition(SmartMonsterForTraining smartMonster);
     }
 }

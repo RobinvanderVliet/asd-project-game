@@ -6,12 +6,12 @@ namespace Creature.Creature.NeuralNetworking
 {
     public class Species
     {
-        public List<SmartMonster> creatures = new List<SmartMonster>();
+        public List<SmartMonsterForTraining> creatures = new List<SmartMonsterForTraining>();
         public float bestFitness = 0;
         public float averageFitness = 0;
         public int staleness = 0;
         public Genome rep;
-        public SmartMonster champ;
+        public SmartMonsterForTraining champ;
 
         public float excessCoeff = 1;
         public float weightDiffCoeff = 0.5f;
@@ -25,7 +25,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         [ExcludeFromCodeCoverage]
-        public Species(SmartMonster sm)
+        public Species(SmartMonsterForTraining sm)
         {
             creatures.Add(sm);
             bestFitness = sm.fitness;
@@ -34,7 +34,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //add a player to the species
-        public void AddToSpecies(SmartMonster p)
+        public void AddToSpecies(SmartMonsterForTraining p)
         {
             creatures.Add(p);
         }
@@ -106,7 +106,7 @@ namespace Creature.Creature.NeuralNetworking
         //sorts the species by fitness
         public void SortSpecies()
         {
-            List<SmartMonster> temp = new List<SmartMonster>();
+            List<SmartMonsterForTraining> temp = new List<SmartMonsterForTraining>();
 
             //selection short
             for (int i = 0; i < creatures.Count; i++)
@@ -161,9 +161,9 @@ namespace Creature.Creature.NeuralNetworking
 
         //gets baby from the players in this species
         [ExcludeFromCodeCoverage]
-        public SmartMonster GiveMeBaby(List<ConnectionHistory> innovationHistory)
+        public SmartMonsterForTraining GiveMeBaby(List<ConnectionHistory> innovationHistory)
         {
-            SmartMonster baby;
+            SmartMonsterForTraining baby;
             if ((float)random.NextDouble() < 0.25)
             {
                 //25% of the time there is no crossover and the child is simply a clone of a random(ish) player
@@ -174,8 +174,8 @@ namespace Creature.Creature.NeuralNetworking
                 //75% of the time do crossover
 
                 //get 2 random(ish) parents
-                SmartMonster parent1 = SelectPlayer();
-                SmartMonster parent2 = SelectPlayer();
+                SmartMonsterForTraining parent1 = SelectPlayer();
+                SmartMonsterForTraining parent2 = SelectPlayer();
 
                 //the crossover function expects the highest fitness parent to be the object and the lowest as the argument
                 if (parent1.fitness < parent2.fitness)
@@ -192,7 +192,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //selects a player based on it fitness
-        public SmartMonster SelectPlayer()
+        public SmartMonsterForTraining SelectPlayer()
         {
             float fitnessSum = 0;
             for (int i = 0; i < creatures.Count; i++)

@@ -13,8 +13,8 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
         public Vector2 location;
 
         private readonly Random random = new Random();
-        private readonly DataGatheringService dataGatheringService;
-        private SmartMonster _target;
+        private readonly DataGatheringServiceForTraining dataGatheringService;
+        private SmartMonsterForTraining _target;
 
         public TrainerAI(Vector2 loc, string type)
         {
@@ -22,10 +22,10 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
             this.health = random.Next(10, 50);
             this.location = loc;
             this.type = type;
-            this.dataGatheringService = new DataGatheringService();
+            this.dataGatheringService = new DataGatheringServiceForTraining();
         }
 
-        public void update(SmartMonster smartMonster)
+        public void update(SmartMonsterForTraining smartMonster)
         {
             if (Adjecent(smartMonster))
             {
@@ -37,7 +37,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
             }
         }
 
-        private bool Adjecent(SmartMonster smartMonster)
+        private bool Adjecent(SmartMonsterForTraining smartMonster)
         {
             TrainerAI _monsterTarget;
             if (type.Equals("player"))
@@ -60,7 +60,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
             }
         }
 
-        private void Attack(SmartMonster smartMonster)
+        private void Attack(SmartMonsterForTraining smartMonster)
         {
             if (type.Equals("player"))
             {
@@ -74,7 +74,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         private void Walk()
         {
-            if (location.X <= 29 && location.Y <= 29 && location.X >= 0 && location.Y >= 0)
+            if (location.X <= 29 && location.Y <= 29 && location.X >= 1 && location.Y >= 1)
             {
                 int direction = random.Next(1, 2);
                 if (direction < 2)

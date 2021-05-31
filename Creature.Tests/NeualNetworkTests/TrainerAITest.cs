@@ -12,7 +12,7 @@ namespace Creature.Tests
     internal class TrainerAITest
     {
         private TrainerAI _sut;
-        private SmartMonster _smartTestMonster;
+        private SmartMonsterForTraining _smartTestMonster;
 
         [SetUp]
         public void Setup()
@@ -27,7 +27,7 @@ namespace Creature.Tests
                     null,
                     false
                 );
-            _smartTestMonster = new SmartMonster(_MonsterData);
+            _smartTestMonster = new SmartMonsterForTraining(_MonsterData);
         }
 
         [Test]

@@ -3,9 +3,7 @@ using Creature.Creature.NeuralNetworking;
 using Creature.Creature.NeuralNetworking.TrainingScenario;
 using Creature.Creature.StateMachine.Data;
 using Creature.Pathfinder;
-using Moq;
 using NUnit.Framework;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
@@ -15,8 +13,8 @@ namespace Creature.Tests
     [TestFixture]
     internal class SmartCreatureActionsTest
     {
-        private SmartCreatureActions _sut;
-        private SmartMonster _smartTestMonster;
+        private SmartCreatureTrainingActions _sut;
+        private SmartMonsterForTraining _smartTestMonster;
         private TrainingMapGenerator trainingMap;
         private TrainerAI _AI;
         private Node _node;
@@ -37,8 +35,8 @@ namespace Creature.Tests
                     null,
                     false
                 );
-            _smartTestMonster = new SmartMonster(_MonsterData);
-            _sut = new SmartCreatureActions(trainingMap.trainingmap);
+            _smartTestMonster = new SmartMonsterForTraining(_MonsterData);
+            _sut = new SmartCreatureTrainingActions(trainingMap.trainingmap);
             loc = new Vector2(15, 15);
         }
 

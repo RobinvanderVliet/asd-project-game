@@ -7,12 +7,12 @@ namespace Creature.Creature.NeuralNetworking
 {
     public class Population
     {
-        public List<SmartMonster> pop = new List<SmartMonster>();
-        public SmartMonster bestSmartMonster;//the best ever SmartMonster
+        public List<SmartMonsterForTraining> pop = new List<SmartMonsterForTraining>();
+        public SmartMonsterForTraining bestSmartMonster;//the best ever SmartMonster
         public int bestScore = 0;//the score of the best ever SmartMonster
         public int gen;
         public List<ConnectionHistory> innovationHistory = new List<ConnectionHistory>();
-        public List<SmartMonster> genSmartMonsters = new List<SmartMonster>();
+        public List<SmartMonsterForTraining> genSmartMonsters = new List<SmartMonsterForTraining>();
         public List<Species> species = new List<Species>();
 
         public Boolean massExtinctionEvent = false;
@@ -25,7 +25,7 @@ namespace Creature.Creature.NeuralNetworking
         {
             for (int i = 0; i < size; i++)
             {
-                pop.Add(new SmartMonster(creatureData));
+                pop.Add(new SmartMonsterForTraining(creatureData));
                 pop[i].brain.GenerateNetwork();
                 pop[i].brain.Mutate(innovationHistory);
             }
@@ -67,7 +67,7 @@ namespace Creature.Creature.NeuralNetworking
         //sets the best SmartMonster globally and for this gen
         private void SetBestSmartMonster()
         {
-            SmartMonster tempBest = species[0].creatures[0];
+            SmartMonsterForTraining tempBest = species[0].creatures[0];
             tempBest.gen = gen;
 
             //if best this gen is better than the global best score then set the global best as the best this gen
@@ -96,8 +96,10 @@ namespace Creature.Creature.NeuralNetworking
             KillStaleSpecies();//remove species which haven't improved in the last 15(ish) generations
             KillBadSpecies();//kill species which are so bad that they cant reproduce
 
+            Console.WriteLine("gen:" + gen + " score : " + bestScore);
+
             float averageSum = GetAvgFitnessSum();
-            List<SmartMonster> children = new List<SmartMonster>();//the next generation
+            List<SmartMonsterForTraining> children = new List<SmartMonsterForTraining>();//the next generation
             //Console.WriteLine("Species:");
             for (int j = 0; j < species.Count; j++)
             {

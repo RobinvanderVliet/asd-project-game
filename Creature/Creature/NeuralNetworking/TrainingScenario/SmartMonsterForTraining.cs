@@ -8,11 +8,11 @@ using System.Diagnostics.CodeAnalysis;
 namespace Creature.Creature
 {
     [ExcludeFromCodeCoverage]
-    public class SmartMonster : ICreature
+    public class SmartMonsterForTraining : ICreature
     {
         public ICreatureData creatureData;
-        private readonly DataGatheringService _dataGatheringService;
-        public SmartCreatureActions smartactions;
+        private readonly DataGatheringServiceForTraining _dataGatheringService;
+        public SmartCreatureTrainingActions smartactions;
         public TrainingMapGenerator trainingMapGenerator;
 
         public float fitness;
@@ -46,12 +46,12 @@ namespace Creature.Creature
 
         public ICreatureStateMachine CreatureStateMachine => null;
 
-        public SmartMonster(ICreatureData creatureData)
+        public SmartMonsterForTraining(ICreatureData creatureData)
         {
             this.creatureData = creatureData;
             this.trainingMapGenerator = new TrainingMapGenerator();
-            this.smartactions = new SmartCreatureActions(creatureData.World);
-            this._dataGatheringService = new DataGatheringService();
+            this.smartactions = new SmartCreatureTrainingActions(trainingMapGenerator.trainingmap);
+            this._dataGatheringService = new DataGatheringServiceForTraining();
             brain = new Genome(genomeInputs, genomeOutputs);
         }
 
@@ -65,14 +65,26 @@ namespace Creature.Creature
             throw new NotImplementedException();
         }
 
+        public void Show()
+        {
+            //maye use this to sperate the training settings
+        }
+
         public void Update()
         {
             _dataGatheringService.CheckNewPosition(this);
-            if (!dead)
+            if (lifeSpan > 1000)
             {
-                lifeSpan++;
-                Look();
-                Think();
+                dead = true;
+            }
+            lifeSpan++;
+            foreach (TrainerAI monster in trainingMapGenerator.monsters)
+            {
+                monster.update(this);
+            }
+            foreach (TrainerAI player in trainingMapGenerator.players)
+            {
+                player.update(this);
             }
         }
 
@@ -104,13 +116,13 @@ namespace Creature.Creature
             else
             {
                 //getplayerhealth
-                vision[6] = (float)_dataGatheringService.closestPlayer.CreatureStateMachine.CreatureData.Health;
+                vision[6] = (float)_dataGatheringService.closestPlayer.health;
                 //get player damage
-                vision[7] = _dataGatheringService.closestPlayer.CreatureStateMachine.CreatureData.Damage;
+                vision[7] = _dataGatheringService.closestPlayer.damage;
                 //get player x location
-                vision[8] = _dataGatheringService.closestPlayer.CreatureStateMachine.CreatureData.Position.X;
+                vision[8] = _dataGatheringService.closestPlayer.location.X;
                 //get player y location
-                vision[9] = _dataGatheringService.closestPlayer.CreatureStateMachine.CreatureData.Position.Y;
+                vision[9] = _dataGatheringService.closestPlayer.location.Y;
             }
             if (_dataGatheringService.closestMonster == null)
             {
@@ -122,13 +134,13 @@ namespace Creature.Creature
             else
             {
                 //getplayerhealth
-                vision[10] = (float)_dataGatheringService.closestMonster.CreatureStateMachine.CreatureData.Health;
+                vision[10] = (float)_dataGatheringService.closestMonster.health;
                 //get player damage
-                vision[11] = _dataGatheringService.closestMonster.CreatureStateMachine.CreatureData.Damage;
+                vision[11] = _dataGatheringService.closestMonster.damage;
                 //get player x location
-                vision[12] = _dataGatheringService.closestMonster.CreatureStateMachine.CreatureData.Position.X;
+                vision[12] = _dataGatheringService.closestMonster.location.X;
                 //get player y location
-                vision[13] = _dataGatheringService.closestMonster.CreatureStateMachine.CreatureData.Position.Y;
+                vision[13] = _dataGatheringService.closestMonster.location.Y;
             }
             //get player stamina
             //get monster stamina?
@@ -211,6 +223,58 @@ namespace Creature.Creature
                     smartactions.WalkRight(this);
                     break;
             }
+        }
+
+        //returns a clone of this player with the same brain
+        public SmartMonsterForTraining Clone()
+        {
+            SmartMonsterForTraining clone = new SmartMonsterForTraining(creatureData);
+            clone.brain = brain.Clone();
+            clone.fitness = fitness;
+            clone.brain.GenerateNetwork();
+            clone.gen = gen;
+            clone.bestScore = score;
+            return clone;
+        }
+
+        //for Genetic algorithm
+        public void CalculateFitness()
+        {
+            int killPoints = 0;
+            int deathpoints = 0;
+            //Fitness calculation
+            if (EnemysKilled < 0)
+            {
+                killPoints += 1000000 * EnemysKilled;
+            }
+            if (dead)
+            {
+                deathpoints = -100;
+            }
+            fitness =
+                (float)((DamageDealt * 5 - DamageTaken * 2) + (lifeSpan / 300) + HealthHealed + StatsGained + killPoints + deathpoints + score);
+        }
+
+        public SmartMonsterForTraining Crossover(SmartMonsterForTraining parent2)
+        {
+            SmartMonsterForTraining child = new SmartMonsterForTraining(parent2.creatureData);
+            child.brain = brain.Crossover(parent2.brain);
+            child.brain.GenerateNetwork();
+            return child;
+        }
+
+        //since there is some randomness in games sometimes when we want to replay the game we need to remove that randomness
+        //this fuction does that
+        public SmartMonsterForTraining CloneForReplay()
+        {
+            SmartMonsterForTraining clone = new SmartMonsterForTraining(creatureData);
+            clone.brain = brain.Clone();
+            clone.fitness = fitness;
+            clone.brain.GenerateNetwork();
+            clone.gen = gen;
+            clone.bestScore = score;
+            clone.replay = true;
+            return clone;
         }
     }
 }
