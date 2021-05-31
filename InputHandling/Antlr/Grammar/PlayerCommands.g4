@@ -36,8 +36,12 @@ LEFT: 'left';
 WEST: 'west';
 RIGHT: 'right';
 EAST: 'east';
+ARMOR: 'armor';
+HELMET: 'helmet';
+WEAPON: 'weapon';
+SLOT: 'slot';
 
-NUMBER: '0' | [0-9]*;
+NUMBER: '0' | [0-9]+;
 MESSAGE: '"' ~'"'+ '"';
 //MESSAGE: ~[\r\n]+;
 
@@ -46,13 +50,14 @@ MESSAGE: '"' ~'"'+ '"';
 input: command EOF;
 
 step: NUMBER;
+slotdigit: NUMBER;
 message: MESSAGE;
 
 command:
     (MOVE | WALK | GO) SPACE direction (SPACE step)? #move |
     (ATTACK | SLASH | STRIKE) SPACE direction #attack |
     (PICKUP | GET) #pickup |
-    DROP #drop |  
+    DROP SPACE inventorySlot #drop |   
     (EXIT | LEAVE) #exit |
     SAY SPACE message #say |
     SHOUT SPACE message #shout |
@@ -71,3 +76,4 @@ backward: BACKWARD | DOWN | SOUTH;
 left: LEFT | WEST;
 right: RIGHT  | EAST;
 direction: forward | backward | left | right;
+inventorySlot: ARMOR | HELMET | WEAPON | SLOT SPACE slotdigit;
