@@ -18,50 +18,46 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         private void SetClosestMonster(SmartMonster smartMonster, int visionRange)
         {
-            foreach (ICreature monster in smartMonster.trainingMapGenerator.monsters)
-            {
-                Single distance = Vector2.Distance(smartMonster.creatureData.Position, monster.CreatureStateMachine.CreatureData.Position);
-                if (distance < visionRange && distance < distanceToClosestMonster)
-                {
-                    closestMonster = monster;
-                    distanceToClosestMonster = distance;
-                }
-            }
+            //   foreach (ICreature monster in smartMonster.trainingMapGenerator.monsters)
+            //   {
+            //       Single distance = Vector2.Distance(smartMonster.creatureData.Position, monster.CreatureStateMachine.CreatureData.Position);
+            //       if (distance < visionRange && distance < distanceToClosestMonster)
+            //       {
+            //           closestMonster = monster;
+            //           distanceToClosestMonster = distance;
+            //       }
+            //   }
         }
 
         private void SetClosestPlayer(SmartMonster smartMonster, int visionRange)
         {
-            foreach (ICreature player in smartMonster.trainingMapGenerator.players)
-            {
-                Single distance = Vector2.Distance(smartMonster.creatureData.Position, player.CreatureStateMachine.CreatureData.Position);
-                if (distance < visionRange && distance < distanceToClosestPlayer)
-                {
-                    closestPlayer = player;
-                    distanceToClosestPlayer = distance;
-                }
-            }
+            //   foreach (ICreature player in smartMonster.trainingMapGenerator.players)
+            //   {
+            //       Single distance = Vector2.Distance(smartMonster.creatureData.Position, player.CreatureStateMachine.CreatureData.Position);
+            //       if (distance < visionRange && distance < distanceToClosestPlayer)
+            //       {
+            //           closestPlayer = player;
+            //           distanceToClosestPlayer = distance;
+            //       }
+            //   }
         }
 
         public void CheckNewPosition(SmartMonster smartMonster)
         {
             if (distanceToClosestPlayer < smartMonster.currDistanceToPlayer)
             {
-                smartMonster.score = smartMonster.score + 10;
                 smartMonster.currDistanceToPlayer = distanceToClosestPlayer;
             }
             else if (distanceToClosestPlayer > smartMonster.currDistanceToPlayer)
             {
-                smartMonster.score = smartMonster.score - 10;
                 smartMonster.currDistanceToPlayer = distanceToClosestPlayer;
             }
             if (distanceToClosestMonster < smartMonster.currDistanceToMonster)
             {
-                smartMonster.score = smartMonster.score + 3;
                 smartMonster.currDistanceToMonster = distanceToClosestMonster;
             }
             else if (distanceToClosestMonster > smartMonster.currDistanceToMonster)
             {
-                smartMonster.score = smartMonster.score - 3;
                 smartMonster.currDistanceToMonster = distanceToClosestMonster;
             }
         }

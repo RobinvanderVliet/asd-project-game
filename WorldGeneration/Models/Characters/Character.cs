@@ -19,8 +19,5 @@ namespace WorldGeneration
             YPosition = yPosition;
             Symbol = symbol;
         }
-
     }
-
-
 }

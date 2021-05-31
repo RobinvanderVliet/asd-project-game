@@ -13,17 +13,9 @@ namespace Creature.Creature
         public ICreatureData creatureData;
         private readonly DataGatheringService _dataGatheringService;
         public SmartCreatureActions smartactions;
-        public TrainingMapGenerator trainingMapGenerator;
 
-        public float fitness;
         public Genome brain;
         public Boolean replay = false;
-
-        public float unadjestedFitness;
-        public int bestScore = 0;
-
-        public int score;
-        public int gen = 0;
 
         public static readonly int genomeInputs = 14;
         public static readonly int genomeOutputs = 9;
@@ -49,7 +41,6 @@ namespace Creature.Creature
         public SmartMonster(ICreatureData creatureData)
         {
             this.creatureData = creatureData;
-            this.trainingMapGenerator = new TrainingMapGenerator();
             this.smartactions = new SmartCreatureActions(creatureData.World);
             this._dataGatheringService = new DataGatheringService();
             brain = new Genome(genomeInputs, genomeOutputs);
@@ -166,29 +157,24 @@ namespace Creature.Creature
                 case 0:
                     //Attack action
                     smartactions.Attack(_dataGatheringService.closestPlayer, this);
-                    score = +20;
                     break;
 
                 case 1:
                     //Flee action
                     smartactions.Flee(_dataGatheringService.closestPlayer, this);
-                    score = -8;
                     break;
 
                 case 2:
                     //UseItem action
-                    score = -10;
                     break;
 
                 case 3:
                     smartactions.RunToMonster(_dataGatheringService.closestMonster, this);
-                    score = -3;
                     //Run to Monster action
                     break;
 
                 case 4:
                     //Grab item action
-                    score = -10;
                     break;
 
                 case 5:

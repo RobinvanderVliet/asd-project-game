@@ -81,15 +81,6 @@ namespace Creature.Creature.NeuralNetworking
             if (player != null && IsAdjacent(player.CreatureStateMachine.CreatureData.Position, smartmonster.creatureData.Position))
             {
                 player.CreatureStateMachine.CreatureData.Health = player.CreatureStateMachine.CreatureData.Health - smartmonster.creatureData.Damage;
-                smartmonster.DamageDealt = smartmonster.DamageDealt + smartmonster.creatureData.Damage;
-                if (player.CreatureStateMachine.CreatureData.Health < smartmonster.creatureData.Damage)
-                {
-                    smartmonster.EnemysKilled++;
-                }
-            }
-            else
-            {
-                smartmonster.score -= 25;
             }
         }
 
@@ -141,7 +132,6 @@ namespace Creature.Creature.NeuralNetworking
         {
             if (path == null)
             {
-                smartMonster.score--;
             }
         }
 

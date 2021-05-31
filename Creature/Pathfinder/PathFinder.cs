@@ -31,6 +31,7 @@ namespace Creature
                 }
             }
         }
+
         public Stack<Node> FindPath(Vector2 startPosition, Vector2 endPosition)
         {
             Node startNode = new Node(new Vector2((int)startPosition.X, (int)(startPosition.Y)), true);

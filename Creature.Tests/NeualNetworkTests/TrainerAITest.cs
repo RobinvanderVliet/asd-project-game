@@ -47,7 +47,7 @@ namespace Creature.Tests
         [Test]
         public void Test_Update_Walk()
         {
-            Vector2 location = new Vector2(0, 0);
+            Vector2 location = new Vector2(1, 1);
             _sut = new TrainerAI(location, "player");
 
             _sut.update(_smartTestMonster);

@@ -97,6 +97,7 @@ namespace Creature.Creature.NeuralNetworking
             KillBadSpecies();//kill species which are so bad that they cant reproduce
 
             Console.WriteLine("gen:" + gen + " score : " + bestScore);
+            bestSmartMonster.brain.PrintGenome();
 
             float averageSum = GetAvgFitnessSum();
             List<SmartMonsterForTraining> children = new List<SmartMonsterForTraining>();//the next generation

@@ -129,7 +129,6 @@ namespace Creature.Creature.NeuralNetworking
             creatures = temp;
             if (creatures.Count == 0)
             {
-                Console.WriteLine("Dammit");
                 staleness = 200;
                 return;
             }
