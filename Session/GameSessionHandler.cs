@@ -163,34 +163,33 @@ namespace Session
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
-        private void AddPlayerToGameSession(JoinedPlayerDTO joinedPlayerDto)
+        private void AddPlayerToGameSession(StartGameDTO joinedPlayerDto)
         {
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
 
             if (_sessionHandler.GameStarted())
             {
-                if (_clientController.GetOriginId() == joinedPlayerDto.PlayerPoco.PlayerGuid)
+                if (_clientController.GetOriginId() == joinedPlayerDto.ExistingPlayer.PlayerGuid)
                 {
                     _worldService.AddPlayerToWorld(
-                        new WorldGeneration.Player("gerrit", joinedPlayerDto.PlayerPoco.XPosition,
-                            joinedPlayerDto.PlayerPoco.YPosition,
-                            CharacterSymbol.CURRENT_PLAYER, joinedPlayerDto.PlayerPoco.PlayerGuid,
-                            joinedPlayerDto.PlayerPoco.Health,
-                            joinedPlayerDto.PlayerPoco.Stamina), true);
+                        new WorldGeneration.Player("gerrit", joinedPlayerDto.ExistingPlayer.XPosition,
+                            joinedPlayerDto.ExistingPlayer.YPosition,
+                            CharacterSymbol.CURRENT_PLAYER, joinedPlayerDto.ExistingPlayer.PlayerGuid,
+                            joinedPlayerDto.ExistingPlayer.Health,
+                            joinedPlayerDto.ExistingPlayer.Stamina), true);
                 }
             }
 
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
             foreach (var player in joinedPlayerDto.PlayerLocations)
             {
-                if (_clientController.GetOriginId() != joinedPlayerDto.PlayerPoco.PlayerGuid)
+                if (_clientController.GetOriginId() != joinedPlayerDto.ExistingPlayer.PlayerGuid)
                 {
                     _worldService.AddPlayerToWorld(
                         new WorldGeneration.Player("arie", player.Value[0], player.Value[1],
                             CharacterSymbol.ENEMY_PLAYER, player.Key), false);
                 }
             }
-
             _worldService.DisplayWorld();
         }
 
@@ -201,7 +200,7 @@ namespace Session
 
             if (_sessionHandler.GetSavedGame())
             {
-                AddPlayerToWorldSavedGame(startGameDTO.SavedPlayers);
+                AddPlayerToGameSession(startGameDTO);
             }
             else
             {
