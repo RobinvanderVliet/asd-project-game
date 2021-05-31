@@ -8,6 +8,7 @@ using Display;
 using DataTransfer.DTO.Character;
 using DataTransfer.Model.World;
 using DataTransfer.Model.World.Interfaces;
+using Microsoft.Extensions.Primitives;
 using WorldGeneration.Services;
 
 namespace WorldGeneration
@@ -113,6 +114,30 @@ namespace WorldGeneration
                 }
                 _consolePrinter.NextLine();
             }
+        }
+
+        public char[,] GetMapAroundCharacter(MapCharacterDTO centerCharacter, int viewDistance, IList<MapCharacterDTO> allCharacters)
+        {
+            if (viewDistance < 0)
+            {
+                throw new InvalidOperationException("viewDistance smaller than 0.");
+            }
+            
+            var tileArray = new char[viewDistance * 2 + 1, viewDistance * 2 + 1];
+            var centerCharacterXPosition = centerCharacter.XPosition;
+            var centerCharacterYPosition = centerCharacter.YPosition;
+            LoadArea(centerCharacterXPosition, centerCharacterYPosition, viewDistance);
+            
+            for (var y = (centerCharacterYPosition + viewDistance); y > ((centerCharacterYPosition + viewDistance) - (viewDistance * 2) -1); y--)
+            {
+                for (var x = (centerCharacterXPosition - viewDistance); x < ((centerCharacterXPosition - viewDistance) + (viewDistance * 2) + 1); x++)
+                {
+                    var tile = GetLoadedTileByXAndY(x, y);
+                    tileArray[x,y]
+                }
+                _consolePrinter.NextLine();
+            }
+            return tileArray;
         }
         
         private string GetDisplaySymbol(MapCharacterDTO currentPlayer, ITile tile, IList<MapCharacterDTO> characters)
