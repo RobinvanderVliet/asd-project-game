@@ -41,67 +41,44 @@ namespace Session
             {
                 startGameDTO = SetupGameHost();
             }
+
             SendGameSessionDTO(startGameDTO);
         }
 
         private StartGameDTO LoadSave(string gameGuid)
         {
-            var dbConnection = new DbConnection();
+            StartGameDTO startGameDTO = new StartGameDTO();
+            var temp = new DbConnection();
 
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
-            var gameRepository = new Repository<GamePOCO>(dbConnection);
-            var gameService = new ServicesDb<GamePOCO>(gameRepository);
+            var playerRepository = new Repository<PlayerPOCO>(temp);
+            var playerService = new ServicesDb<PlayerPOCO>(playerRepository);
+            var result = playerService.GetAllAsync();
+            result.Wait();
+            var resultsult = result.Result.Where(x => x.GameGuid == _clientController.SessionId);
 
-            var allPlayers = servicePlayer.GetAllAsync();
-            allPlayers.Wait();
-            StartGameDTO startGameDto = new StartGameDTO();
-            startGameDto.SavedPlayers = allPlayers.Result.Where(x => x.GameGuid == gameGuid).ToList();
-
+            startGameDTO.SavedPlayers = new List<PlayerPOCO>();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
 
-            foreach (var element in startGameDto.SavedPlayers)
+            foreach (var player in resultsult)
             {
                 int[] playerPosition = new int[2];
-                playerPosition[0] = element.XPosition;
-                playerPosition[1] = element.YPosition;
-                players.Add(element.PlayerGuid, playerPosition);
+                playerPosition[0] = player.XPosition;
+                playerPosition[1] = player.YPosition;
+
+                players.Add(player.PlayerGuid, playerPosition);
+                startGameDTO.SavedPlayers.Add(player);
             }
-            
-            return startGameDto;
+
+            startGameDTO.PlayerLocations = players;
+        
+
+             return startGameDTO;
         }
 
         public StartGameDTO SetupGameHost()
         {
             StartGameDTO startGameDTO = new StartGameDTO();
-            
-            if (_sessionHandler.GetSavedGame())
-            {
-                var temp = new DbConnection();
        
-                var playerRepository = new Repository<PlayerPOCO>(temp);
-                var playerService = new ServicesDb<PlayerPOCO>(playerRepository);
-                var result = playerService.GetAllAsync();
-                result.Wait();
-                var resultsult = result.Result.Where(x => x.GameGuid == _clientController.SessionId);
-
-                startGameDTO.SavedPlayers = new List<PlayerPOCO>();
-                Dictionary<string, int[]> players = new Dictionary<string, int[]>();
-
-                foreach (var player in resultsult)
-                {
-                    int[] playerPosition = new int[2];
-                    playerPosition[0] = player.XPosition;
-                    playerPosition[1] = player.YPosition;
-                    
-                    players.Add(player.PlayerGuid, playerPosition);
-                    startGameDTO.SavedPlayers.Add(player);
-                 
-                }
-                startGameDTO.PlayerLocations = players;
-            }
-            else
-            {
                 var dbConnection = new DbConnection();
 
                 var playerRepository = new Repository<PlayerPOCO>(dbConnection);
@@ -134,9 +111,7 @@ namespace Session
                 }
                 startGameDTO.GameGuid = _clientController.SessionId;
                 startGameDTO.PlayerLocations = players;
-            }
-
-            return startGameDTO;
+                return startGameDTO;
         }
 
         private void SendGameSessionDTO(StartGameDTO startGameDTO)
