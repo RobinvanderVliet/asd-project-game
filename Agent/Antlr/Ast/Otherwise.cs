@@ -4,10 +4,8 @@ namespace Agent.Antlr.Ast
 {
     public class Otherwise : Node
     {
-        public ActionReference Action { get; set; }
-        
-        public string Value { get; set; }
-        
+        public ActionReference Action;
+
         public override string GetNodeType()
         {
             return "Otherwise";
@@ -31,7 +29,6 @@ namespace Agent.Antlr.Ast
             else {
                 body.Add(node);
             }
-
             return this;
         }
     }

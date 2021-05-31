@@ -15,7 +15,7 @@ namespace Agent.Generator
             try
             {
 
-                Parallel.ForEach(ast.root.GetChildren(), node =>
+                Parallel.ForEach(ast.Root.GetChildren(), node =>
                 {
                     string text = "";
                     text += GenerateConfiguration(node);

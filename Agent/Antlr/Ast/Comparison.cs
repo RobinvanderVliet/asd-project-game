@@ -3,7 +3,7 @@
    
     public class Comparison : Node
     {
-        public string ComparisonType { get; }
+        public readonly string ComparisonType;
         
         public Comparison(string comparisonType)
         {

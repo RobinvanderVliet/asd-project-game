@@ -5,9 +5,8 @@ namespace Agent.Antlr.Ast
 {
     public class ActionReference : Node
     {
-        public Item Item {get; set; }
-        
-        public string Name { get; }
+        public Item Item;
+        public readonly string Name;
         
         public ActionReference(string name)
         {

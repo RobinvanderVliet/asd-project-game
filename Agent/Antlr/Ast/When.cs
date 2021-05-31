@@ -4,10 +4,10 @@ namespace Agent.Antlr.Ast
 {
     public class When : Node
     {
-        public Comparable ComparableL {get; set; }
-        public Comparable ComparableR {get; set; }
-        public Comparison Comparison {get; set; }
-        public ActionReference Then {get; set; }
+        public Comparable ComparableL;
+        public Comparable ComparableR;
+        public Comparison Comparison;
+        public ActionReference Then;
 
         public override string GetNodeType()
         {

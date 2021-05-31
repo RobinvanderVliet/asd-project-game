@@ -5,26 +5,26 @@ namespace Agent.Antlr.Ast
 
     public class AST
     {
-        public Configuration root;
+        public Configuration Root;
 
         public AST( )
         {
-            root = new Configuration();
+            Root = new Configuration();
         }
         public AST(Configuration root)
         {
-            this.root = root;
+            Root = root;
         }
 
         public void SetRoot(Configuration configuration)
         {
-            root = configuration;
+            Root = configuration;
         }
 
         public List<ASTError> GetErrors()
         {
             var errors = new List<ASTError>();
-            CollectErrors(errors, root);
+            CollectErrors(errors, Root);
             return errors;
         }
         private void CollectErrors(List<ASTError> errors, Node node)

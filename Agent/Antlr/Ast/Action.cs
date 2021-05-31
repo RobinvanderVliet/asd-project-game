@@ -4,12 +4,12 @@ namespace Agent.Antlr.Ast
 {
     public class Action : Node
     {
-        public List<Node> Conditions {get ;}
-        public string Name { get;}
+        public readonly List<Node> Conditions;
+        public readonly string Name;
 
         public Action(string name)
         {
-            Conditions = new();
+            Conditions = new List<Node>();
             Name = name;
         }
 

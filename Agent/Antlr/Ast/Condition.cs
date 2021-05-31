@@ -4,10 +4,8 @@ namespace Agent.Antlr.Ast
 {
     public class Condition : Node
     {
-        private When _whenClause;
-        public When WhenClause {get => _whenClause;}
-        private Otherwise _otherwiseClause;
-        public Otherwise OtherwiseClause {get => _otherwiseClause;}
+        public When WhenClause;
+        public Otherwise OtherwiseClause;
         
         public override string GetNodeType()
         {
@@ -17,10 +15,10 @@ namespace Agent.Antlr.Ast
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            if (_whenClause != null)
-                children.Add(_whenClause);
-            if (_otherwiseClause != null)
-                children.Add(_otherwiseClause);
+            if (WhenClause != null)
+                children.Add(WhenClause);
+            if (OtherwiseClause != null)
+                children.Add(OtherwiseClause);
             children.AddRange(body);
 
             return children;
@@ -31,10 +29,10 @@ namespace Agent.Antlr.Ast
             switch (node)
             {
                 case When whenClause:
-                    _whenClause = whenClause;
+                    WhenClause = whenClause;
                     break;
                 case Otherwise otherwiseClause:
-                    _otherwiseClause = otherwiseClause;
+                    OtherwiseClause = otherwiseClause;
                     break;
                 default:
                     body.Add(node);
@@ -49,10 +47,10 @@ namespace Agent.Antlr.Ast
             switch (node)
             {
                 case When:
-                    _whenClause = null;
+                    WhenClause = null;
                     break;
                 case Otherwise:
-                    _otherwiseClause = null;
+                    OtherwiseClause = null;
                     break;
                 default:
                     body.Remove(node);
