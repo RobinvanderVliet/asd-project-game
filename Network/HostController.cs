@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using Network.DTO;
 
@@ -20,11 +19,6 @@ namespace Network
 
         public void ReceivePacket(PacketDTO packet)
         {
-            // Console.WriteLine("----");
-            // Console.WriteLine(packet.Header.SessionID);
-            // Console.WriteLine("----");
-            // Console.WriteLine(_sessionId);
-            // Console.WriteLine("----");
             if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session)
             {
                 HandlePacket(packet);
@@ -33,7 +27,6 @@ namespace Network
 
         private void HandlePacket(PacketDTO packet)
         {
-            // Console.WriteLine("handlepacket");
             HandlerResponseDTO handlerResponse = _client.HandlePacket(packet);
             packet.Header.SessionID = _sessionId;
 

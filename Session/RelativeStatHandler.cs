@@ -3,12 +3,10 @@ using DataTransfer.DTO.Character;
 using Network;
 using Newtonsoft.Json;
 using System.Linq;
-using System.Threading;
 using System.Timers;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
-using DatabaseHandler.Services;
 using Network.DTO;
 using WorldGeneration;
 using WorldGeneration.Models.HazardousTiles;
@@ -19,11 +17,7 @@ namespace Session
 {
     public class RelativeStatHandler : IRelativeStatHandler, IPacketHandler
     {
-        // private int _health;
-        // private int _stamina;
-        // private int _radiationLevel;
         private Player _player;
-        // TimeSpan waitTime = TimeSpan.FromMilliseconds(1000);
 
         private int TIMER = 1000;
         private Timer _staminaTimer;
@@ -38,9 +32,6 @@ namespace Session
             _clientController.SubscribeToPacketType(this, PacketType.RelativeStat);
             _worldService = worldService;
             _player = _worldService.getCurrentPlayer();
-            // _health = _player.Health;
-            // _stamina = _player.Stamina;
-            // _radiationLevel = _player.RadiationLevel;
             CheckStaminaTimer();
             CheckRadiationTimer();
         }
@@ -63,17 +54,11 @@ namespace Session
         
         private void StaminaEvent(object sender, ElapsedEventArgs e)
         {
-            // Console.WriteLine("Mijn stamina" + _player.Stamina);
             if (_player.Stamina < 100)
             {
-                // Console.WriteLine("Mijn staminaaaaaaaaaaaaaaaaaaaaaaaaa" + _player.Stamina);
-
                 var statDto = new RelativeStatDTO();
                 statDto.Stamina = 1;
                 SendStat(statDto);
-                // _player.Stamina = _stamina;
-
-                // Console.WriteLine("Stamina regained! S: " + (_player.Stamina));
             }
         }
         

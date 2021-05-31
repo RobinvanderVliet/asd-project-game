@@ -1,8 +1,6 @@
 ﻿using Network;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using ActionHandling.DTO;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
@@ -54,7 +52,6 @@ namespace ActionHandling
             }
 
             var currentPlayer = _worldService.getCurrentPlayer();
-            // Console.WriteLine("player id: " + currentPlayer.Id);
             MoveDTO moveDTO = new(currentPlayer.Id, currentPlayer.XPosition + x, currentPlayer.YPosition + y);
 
             SendMoveDTO(moveDTO);
@@ -108,8 +105,6 @@ namespace ActionHandling
                     allLocations.Result.Where(x =>
                         x.PlayerGuid == moveDTO.UserId
                     ).Select(x => x.Stamina).FirstOrDefault();
-                
-                // Console.WriteLine("Stamina uit db: " + resultStamina);
 
                 if (result.Any())
                 {
@@ -123,16 +118,9 @@ namespace ActionHandling
                 }
                 else
                 {
-                    
-                    Console.WriteLine("Ik ben: " + _clientController.GetOriginId());
-                    Console.WriteLine(moveDTO.UserId);
-                    Console.WriteLine(moveDTO.XPosition);
-                    Console.WriteLine(moveDTO.YPosition);
                     moveDTO.Stamina = resultStamina - steps;
                     InsertToDatabase(moveDTO);
-                    // Console.WriteLine(packet.Header.OriginID);
-                    // Console.WriteLine(_clientController.GetOriginId());
-                    HandleMove(moveDTO, packet.Header.OriginID == null);
+                    HandleMove(moveDTO);
                     packet.Payload = JsonConvert.SerializeObject(moveDTO);
                 }
             }
@@ -142,14 +130,8 @@ namespace ActionHandling
             }
             else
             {
-                HandleMove(moveDTO, moveDTO.UserId.Equals(_clientController.GetOriginId()));
+                HandleMove(moveDTO);
             }
-            
-            // Console.WriteLine("Ik ben: " + _clientController.GetOriginId());
-            // Console.WriteLine("Binnengekregen ID en stamina");
-            // Console.WriteLine(moveDTO.UserId);
-            // Console.WriteLine(moveDTO.Stamina);
-            // Console.WriteLine("---------");
             
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
@@ -167,15 +149,11 @@ namespace ActionHandling
             playerRepository.UpdateAsync(player);
         }
 
-        private void HandleMove(MoveDTO moveDTO, bool isCurrentPlayer)
+        private void HandleMove(MoveDTO moveDTO)
         {
-            // Console.WriteLine("Stamina in handlemove: " +moveDTO.Stamina);
-            Console.WriteLine("HandleMove");
             _worldService.UpdateCharacterPosition(moveDTO.UserId, moveDTO.XPosition, moveDTO.YPosition);
-            // Console.WriteLine("Ik ben het (Movehandler)");
             var player = _worldService.GetPlayer(moveDTO.UserId);
             player.Stamina = moveDTO.Stamina;
-            Console.WriteLine("-----------------");
             _worldService.DisplayWorld();
         }
     }
