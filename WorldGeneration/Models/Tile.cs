@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Items;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Models
@@ -11,5 +13,6 @@ namespace WorldGeneration.Models
 
         public string Symbol { get; set; }
         public bool IsAccessible { get; set; }
+        public List<Item> ItemsOnTile { get; set; }
     }
 }
