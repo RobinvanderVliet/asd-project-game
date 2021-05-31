@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Agent.Mapper;
 using Agent.Models;
 using Agent.Exceptions;
-using InputCommandHandler;
+using InputHandling;
 using Serilog;
 
 namespace Agent.Services
@@ -12,13 +12,13 @@ namespace Agent.Services
     {
         private InlineConfig _inlineConfig;
         private List<Configuration> _agentConfigurations;
-        private InputCommandHandlerComponent _inputCommandHandlerComponent;
+        private InputHandler _inputHandler;
 
-        public AgentConfigurationService(List<Configuration> agentConfigurations, FileToDictionaryMapper fileToDictionaryMapper, InputCommandHandlerComponent inputCommandHandlerComponent)
+        public AgentConfigurationService(List<Configuration> agentConfigurations, FileToDictionaryMapper fileToDictionaryMapper, InputHandler inputHandler)
         {
             FileToDictionaryMapper = fileToDictionaryMapper;
             _agentConfigurations = agentConfigurations;
-            _inputCommandHandlerComponent = inputCommandHandlerComponent;
+            _inputHandler = inputHandler;
             _inlineConfig = new InlineConfig();
             FileHandler = new FileHandler();
             Pipeline = new Pipeline();
@@ -27,7 +27,7 @@ namespace Agent.Services
         public override void Configure()
         {
             Console.WriteLine("Please provide a path to your code file");
-            var input = _inputCommandHandlerComponent.GetCommand();
+            var input = _inputHandler.GetCommand();
 
             if (input.Equals(CANCEL_COMMAND))
             {
@@ -47,7 +47,7 @@ namespace Agent.Services
                 Pipeline.CheckAst();
                 var output = Pipeline.GenerateAst();
 
-                string fileName = "agent\\agent-config.cfg";
+                string fileName = "agent/agent-config.cfg";
                 FileHandler.ExportFile(output, fileName);
             }
             catch (SyntaxErrorException e)
