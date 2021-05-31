@@ -172,11 +172,9 @@ namespace ActionHandling
             // Console.WriteLine("Stamina in handlemove: " +moveDTO.Stamina);
             Console.WriteLine("HandleMove");
             _worldService.UpdateCharacterPosition(moveDTO.UserId, moveDTO.XPosition, moveDTO.YPosition);
-            if (isCurrentPlayer)
-            {
-                // Console.WriteLine("Ik ben het (Movehandler)");
-                _worldService.UpdateCharacterStamina(moveDTO.Stamina);
-            }
+            // Console.WriteLine("Ik ben het (Movehandler)");
+            var player = _worldService.GetPlayer(moveDTO.UserId);
+            player.Stamina = moveDTO.Stamina;
             Console.WriteLine("-----------------");
             _worldService.DisplayWorld();
         }

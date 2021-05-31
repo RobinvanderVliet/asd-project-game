@@ -120,97 +120,29 @@ namespace Session
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var relativeStatDTO = JsonConvert.DeserializeObject<RelativeStatDTO>(packet.Payload);
-            Console.WriteLine("f3");
-            if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
+            bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
+
+            var player = _worldService.GetPlayer(relativeStatDTO.Id);
+            if(player.Stamina < Player.STAMINACAP)
             {
-                Console.WriteLine("f2");
-                var dbConnection = new DbConnection();
-
-                var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-                var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
-                
-                // Thread.Sleep(1000);
-                
-                var playerStats = servicePlayer.GetAllAsync().Result.Where(x =>
-                    x.PlayerGuid == relativeStatDTO.Id
-                );
-                
-                var incomingPlayerStamina = playerStats.Select(x => x.Stamina).FirstOrDefault();
-
-                if (incomingPlayerStamina < 100)
+                player.AddStamina(relativeStatDTO.Stamina);
+                Console.WriteLine(relativeStatDTO.Id + " gained stamina: " + player.Stamina);
+                if (handleInDatabase)
                 {
-                    var incomingPlayername = playerStats.Select(x => x.PlayerName).FirstOrDefault();
-                    // var incomingPlayerHealth = playerStats.Select(x => x.Health).FirstOrDefault();
-                    var incomingPlayerXPosition = playerStats.Select(x => x.XPosition).FirstOrDefault();
-                    var incomingPlayerYPosition = playerStats.Select(x => x.YPosition).FirstOrDefault();
-                    var incomingPlayerId = playerStats.Select(x => x.PlayerGuid).FirstOrDefault();
-                    string incomingPlayerSymbol;
+                    var dbConnection = new DbConnection();
+                    var playerRepository = new Repository<PlayerPOCO>(dbConnection);
 
-                    if (relativeStatDTO.Id.Equals(_clientController.GetOriginId()))
-                    {
-                        incomingPlayerSymbol = "#";
-                    }
-                    else
-                    {
-                        incomingPlayerSymbol = "E";
-                    }
-                    Console.WriteLine("f");
-                    Player incomingPlayer = new Player(incomingPlayername, incomingPlayerXPosition, incomingPlayerYPosition, incomingPlayerSymbol, incomingPlayerId);
-                
-                    incomingPlayer.Health = relativeStatDTO.Health + playerStats.Select(x => x.Health).FirstOrDefault();
-                    incomingPlayer.Stamina = relativeStatDTO.Stamina + incomingPlayerStamina;
-                    incomingPlayer.RadiationLevel = relativeStatDTO.RadiationLevel + playerStats.Select(x => x.RadiationLevel).FirstOrDefault();
-                    
-                    InsertToDatabase(incomingPlayer);
-                    HandleStat(incomingPlayer);
-                    
-                    Console.WriteLine(relativeStatDTO.Id + " gained stamina: " + incomingPlayer.Stamina);
+                    PlayerPOCO playerPOCO = playerRepository.GetAllAsync().Result.FirstOrDefault(poco => poco.PlayerGuid == player.Id);
+                    playerPOCO.Stamina = player.Stamina;
+                    playerRepository.UpdateAsync(playerPOCO);
                 }
+                return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
-            else if (relativeStatDTO.Id.Equals(_clientController.GetOriginId()))
+            else
             {
-                // Console.WriteLine("Binnengekregen stamina in client " + relativeStatDTO.Stamina);
-                // Console.WriteLine("Oude stamina " + _player.Stamina);
-                _player.Health += relativeStatDTO.Health;
-                _player.Stamina += relativeStatDTO.Stamina;
-                // Console.WriteLine("Actuele stamina " + _player.Stamina);
-                _player.RadiationLevel += relativeStatDTO.RadiationLevel;
-                
-                //new
-                HandleStat(_player);
-            }
-
-            return new HandlerResponseDTO(SendAction.SendToClients, null);
-        }
-        
-        private void InsertToDatabase(Player player)
-        {
-            var dbConnection = new DbConnection();
-
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
-
-            // var destination = _mapper.Map<PlayerPOCO>(statDTO);
-            var dbplayer = playerRepository.GetAllAsync().Result.FirstOrDefault(player1 => player1.PlayerGuid == player.Id);
-            dbplayer.Health = player.Health;
-            dbplayer.Stamina = player.Stamina;
-            dbplayer.RadiationLevel = player.RadiationLevel;
-            // Console.WriteLine("InsertDatabase stamina: " + dbplayer.Stamina);
-            playerRepository.UpdateAsync(dbplayer);
-            
-            // if (servicePlayer.UpdateAsync(destination).Result == 1)
-            // {
-            //     //TODO: check if successful or not
-            // }
-        }
-
-        private void HandleStat(Player player)
-        {
-            _worldService.UpdateCharacterStamina(player.Stamina);
-            if (player.Id.Equals(_clientController.GetOriginId()))
-            {
-                _player = player;
+                return new HandlerResponseDTO(SendAction.ReturnToSender, "Stamina already max");
             }
         }
+
     }
 }

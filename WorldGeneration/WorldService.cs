@@ -51,6 +51,11 @@ namespace WorldGeneration
             return _world.CurrentPlayer;
         }
 
+        public Player GetPlayer(string userId)
+        {
+            return _world.GetPlayer(userId);
+        }
+
         public ITile GetTile(int x, int y)
         {
             return _world.GetLoadedTileByXAndY(x, y);

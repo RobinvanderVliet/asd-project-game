@@ -20,6 +20,11 @@ namespace WorldGeneration
             _map.DeleteMap();
         }
 
+        public Player GetPlayer(string id)
+        {
+            return _players.Find(x => x.Id == id);
+        }
+
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
         {
             if (CurrentPlayer.Id == userId)

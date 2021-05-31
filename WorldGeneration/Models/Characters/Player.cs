@@ -12,8 +12,8 @@ namespace WorldGeneration
         public int Team { get; set; }
 
         //random default values for health&stamina for now
-        private const int HEALTHCAP = 100;
-        private const int STAMINACAP = 100;
+        public const int HEALTHCAP = 100;
+        public const int STAMINACAP = 100;
 
         public Player(string name, int xPosition, int yPosition, string symbol, string id) : base(name, xPosition, yPosition, symbol)
         {
@@ -23,6 +23,16 @@ namespace WorldGeneration
             Inventory = new();
             RadiationLevel = 0;
             Team = 0;
+        }
+
+
+        public void AddStamina(int amount)
+        {
+            Stamina += amount;
+            if (Stamina > STAMINACAP)
+            {
+                Stamina = STAMINACAP;
+            }
         }
     }
 }
