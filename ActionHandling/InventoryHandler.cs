@@ -49,7 +49,7 @@ namespace ActionHandling
                 output = inventoryItem.ToString();
             }
             
-            Console.WriteLine();
+            Console.WriteLine(output);
 
         }
 
