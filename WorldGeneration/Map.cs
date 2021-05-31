@@ -128,12 +128,12 @@ namespace WorldGeneration
             var centerCharacterYPosition = centerCharacter.YPosition;
             LoadArea(centerCharacterXPosition, centerCharacterYPosition, viewDistance);
             
-            for (var y = (centerCharacterYPosition + viewDistance); y > ((centerCharacterYPosition + viewDistance) - (viewDistance * 2) -1); y--)
+            for (var y = 0; y > viewDistance * 2 -1; y--)
             {
-                for (var x = (centerCharacterXPosition - viewDistance); x < ((centerCharacterXPosition - viewDistance) + (viewDistance * 2) + 1); x++)
+                for (var x = 0; x < viewDistance * 2 + 1; x++)
                 {
-                    var tile = GetLoadedTileByXAndY(x, y);
-                    tileArray[x,y]
+                    var tile = GetLoadedTileByXAndY(x + (centerCharacterXPosition - viewDistance), y + (centerCharacterYPosition + viewDistance));
+                    tileArray[x, y] = GetDisplaySymbol(centerCharacter, tile, allCharacters).ToCharArray()[0];
                 }
                 _consolePrinter.NextLine();
             }
