@@ -304,8 +304,7 @@ namespace Session
                     {
                         return new HandlerResponseDTO(SendAction.ReturnToSender, "Not allowed to join saved game");
                     }
-                    return new HandlerResponseDTO(SendAction.ReturnToSender, "Not allowed to join saved game");
-
+                    return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
                 }
                 else
                 {
