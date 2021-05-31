@@ -26,6 +26,46 @@ namespace ActionHandling
             string searchResult = _worldService.SearchCurrentTile();
         }
 
+        public void DropItem(string inventorySlot)
+        {
+            switch (inventorySlot)
+            {
+                case "armor":
+                    Console.WriteLine("Case Armor");
+                    //Drop armor on current tile
+                    _worldService.getCurrentPlayer().Inventory.Armor = null;
+                    break;
+                case "helmet":
+                    Console.WriteLine("Case Helmet");
+                    //Drop armor on current tile
+                    _worldService.getCurrentPlayer().Inventory.Helmet = null;
+                    break;
+                case "weapon":
+                    Console.WriteLine("Case Weapon");
+                    //Drop armor on current tile
+                    _worldService.getCurrentPlayer().Inventory.Weapon = null;
+                    break;
+                case "1":
+                    Console.WriteLine("Case Item slot 1");
+                    //Drop armor on current tile
+                    _worldService.getCurrentPlayer().Inventory.RemoveConsumableItem(null);
+                    break;
+                case "2":
+                    Console.WriteLine("Case Item slot 2");
+                    //Drop armor on current tile
+                    _worldService.getCurrentPlayer().Inventory.RemoveConsumableItem(null);
+                    break;
+                case "3":
+                    Console.WriteLine("Case Item slot 3");
+                    //Drop armor on current tile
+                    _worldService.getCurrentPlayer().Inventory.RemoveConsumableItem(null);
+                    break;
+                default:
+                    Console.WriteLine("Unknown inventory slot");
+                    break;
+            }
+        }
+
 
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
