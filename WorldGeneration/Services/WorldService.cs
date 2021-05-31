@@ -6,7 +6,8 @@ namespace WorldGeneration
 {
     public class WorldService : IWorldService
     {
-        private World _world;
+        private World _world { get; set; }
+
 
         public void UpdateCharacterPosition(MapCharacterDTO mapCharacterDTO)
         {
@@ -36,6 +37,11 @@ namespace WorldGeneration
         public MapCharacterDTO getCurrentCharacterPositions()
         {
             return _world.CurrentPlayer;
+        }
+
+        public World GetWorld()
+        {
+            return _world;
         }
     }
 }
