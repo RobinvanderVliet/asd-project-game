@@ -59,35 +59,33 @@ namespace Session
                 var statDto = new RelativeStatDTO();
                 statDto.Stamina = 1;
                 SendStat(statDto);
+                Console.WriteLine("Gained Stamina! S: " + _player.Stamina);
             }
         }
         
         private void RadiationEvent(object sender, ElapsedEventArgs e)
         {
-            // ITile tile = _worldService.GetTile(
-            //     _worldService.getCurrentPlayer().XPosition, 
-            //     _worldService.getCurrentPlayer().YPosition);
-            //
-            // if (tile is GasTile || true)
-            // {
-            //     var statDto = new RelativeStatDTO();
-            //     statDto.Id = _worldService.getCurrentPlayer().Id;
-            //
-            //     if (_player.RadiationLevel > 0)
-            //     {
-            //         statDto.RadiationLevel = -1;
-            //     }
-            //     else if (_player.Health > 0)
-            //     {
-            //         statDto.Health = -1;
-            //     }
-            //
-            //     SendStat(statDto);
-            //     _player.RadiationLevel = _radiationLevel;
-            //     _player.Health = _health;
-            //
-            //     Console.WriteLine("Radiation damage! H: " + _player.Health + " | R: " + _player.RadiationLevel);
-            // }
+            ITile tile = _worldService.GetTile(
+                _worldService.getCurrentPlayer().XPosition, 
+                _worldService.getCurrentPlayer().YPosition);
+            
+            if (tile is GasTile)
+            {
+                var statDto = new RelativeStatDTO();
+            
+                if (_player.RadiationLevel > 0)
+                {
+                    statDto.RadiationLevel = -1;
+                }
+                else if (_player.Health > 0)
+                {
+                    statDto.Health = -1;
+                }
+            
+                SendStat(statDto);
+            
+                Console.WriteLine("Radiation damage! H: " + _player.Health + " | R: " + _player.RadiationLevel);
+            }
         }
 
         public void SendStat(RelativeStatDTO statDTO)
@@ -108,24 +106,49 @@ namespace Session
             bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
 
             var player = _worldService.GetPlayer(relativeStatDTO.Id);
-            if(player.Stamina < Player.STAMINACAP)
+            if(player.Stamina < Player.STAMINACAP && relativeStatDTO.Stamina != 0)
             {
                 player.AddStamina(relativeStatDTO.Stamina);
-                Console.WriteLine(relativeStatDTO.Id + " gained stamina: " + player.Stamina);
-                if (handleInDatabase)
-                {
-                    var dbConnection = new DbConnection();
-                    var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-
-                    PlayerPOCO playerPOCO = playerRepository.GetAllAsync().Result.FirstOrDefault(poco => poco.PlayerGuid == player.Id);
-                    playerPOCO.Stamina = player.Stamina;
-                    playerRepository.UpdateAsync(playerPOCO);
-                }
+                InsertToDatabase(relativeStatDTO, handleInDatabase, player);
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
-            else
+            if(player.RadiationLevel > 0 && relativeStatDTO.RadiationLevel != 0)
             {
-                return new HandlerResponseDTO(SendAction.ReturnToSender, "Stamina already max");
+                player.AddRadiationLevel(relativeStatDTO.RadiationLevel);
+                InsertToDatabase(relativeStatDTO, handleInDatabase, player);
+                return new HandlerResponseDTO(SendAction.SendToClients, null);
+            }
+            if(player.Health > 0 && relativeStatDTO.Health != 0)
+            {
+                player.AddHealth(relativeStatDTO.Health);
+                InsertToDatabase(relativeStatDTO, handleInDatabase, player);
+                return new HandlerResponseDTO(SendAction.SendToClients, null);
+            }
+            
+            return new HandlerResponseDTO(SendAction.ReturnToSender, null);
+        }
+    
+        private void InsertToDatabase(RelativeStatDTO relativeStatDTO, bool handleInDatabase, Player player)
+        {
+            if (handleInDatabase)
+            {
+                var dbConnection = new DbConnection();
+                var playerRepository = new Repository<PlayerPOCO>(dbConnection);
+
+                PlayerPOCO playerPOCO = playerRepository.GetAllAsync().Result.FirstOrDefault(poco => poco.PlayerGuid == player.Id);
+                if (relativeStatDTO.Stamina != 0)
+                {
+                    playerPOCO.Stamina = player.Stamina;
+                } 
+                else if (relativeStatDTO.RadiationLevel != 0)
+                {
+                    playerPOCO.RadiationLevel = player.RadiationLevel;
+                } 
+                else if (relativeStatDTO.Health != 0)
+                {
+                    playerPOCO.Health = player.Health;
+                }
+                playerRepository.UpdateAsync(playerPOCO);
             }
         }
 
