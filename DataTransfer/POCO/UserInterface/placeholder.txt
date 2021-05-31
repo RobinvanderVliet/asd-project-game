@@ -1,1 +1,2 @@
-https://bitbucket.aimsites.nl/projects/VDFZEH/repos/asd-project-game/pull-requests/87/diff#DataTransfer/DataTransfer.csproj
+DO NOT DELETE unless the map will never be used.
+If the map will never be used, DELETE THE MAP NOT THE PLACEHOLDER!https://bitbucket.aimsites.nl/projects/VDFZEH/repos/asd-project-game/pull-requests/87/diff#DataTransfer/DataTransfer.csproj

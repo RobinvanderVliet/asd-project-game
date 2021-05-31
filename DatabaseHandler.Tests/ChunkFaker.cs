@@ -1,5 +1,5 @@
 using AutoBogus;
-using WorldGeneration.Models;
+using DataTransfer.Model.World;
 
 namespace DatabaseHandler.Tests
 {

@@ -19,10 +19,11 @@ namespace DatabaseHandler.Repository
         private readonly ILogger<Repository<T>> _log;
 
         [ExcludeFromCodeCoverage]
-        public Repository(IDbConnection connection, string collection = null)
+        public Repository(string collection = null)
         {
-            _collection = collection ?? typeof(T).Name;
+            IDbConnection connection = new DbConnection();
             _db = connection.GetConnectionAsync();
+            _collection = collection ?? typeof(T).Name;
             _log = new NullLogger<Repository<T>>();
         }
 
@@ -34,18 +35,15 @@ namespace DatabaseHandler.Repository
         }
 
         [ExcludeFromCodeCoverage]
-        public async Task<T> ReadAsync(T obj)
-        {
-            var chunk = await _db.GetCollection<T>(_collection)
-                .FindOneAsync(c => c.Equals(obj));
-            return chunk;
-        }
-
-        [ExcludeFromCodeCoverage]
         public async Task<int> UpdateAsync(T obj)
         {
             var results = await _db.GetCollection<T>(_collection).UpdateAsync(obj);
-            return results ? 1 : throw new InvalidOperationException($"Object op type {typeof(T)} does not exist in database.");
+            
+            if (results)
+            {
+                return 1;
+            }
+            throw new InvalidOperationException($"Object op type {typeof(T)} does not exist in database.");
         }
 
         [ExcludeFromCodeCoverage]
@@ -75,7 +73,5 @@ namespace DatabaseHandler.Repository
             var result = await _db.GetCollection<PlayerPoco>(_collection).Query().ToListAsync();
             return result; 
         }
-
-     
     }
 }

@@ -1,22 +1,10 @@
-﻿using System.Diagnostics.Eventing.Reader;
-using DataTransfer.DTO.Character;
-using DataTransfer.DTO.Player;
-using Network;
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DatabaseHandler;
-using DatabaseHandler.Poco;
-using DatabaseHandler.Repository;
-using DatabaseHandler.Services;
+﻿using DataTransfer.DTO.Character;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Player.DTO;
 using WorldGeneration;
 using Player.Model;
-using Player.Services;
-using Session.DTO;
 
 namespace Player.ActionHandlers
 {
@@ -24,9 +12,9 @@ namespace Player.ActionHandlers
     {
         private IClientController _clientController;
         private IPlayerModel _currentPlayer;
-        private string Game;
-        private string playerGuid; 
-        private Dictionary<string, int[]> _PlayerLocations  {get; set;}
+        private string _game;
+        private string _playerGuid; 
+        // private Dictionary<string, int[]> _PlayerLocations  {get; set;}
         private IWorldService _worldService;
 
         public MoveHandler(IClientController clientController, IWorldService worldService)
@@ -157,13 +145,9 @@ namespace Player.ActionHandlers
                 
        private void HandleMove(MapCharacterDTO playerPosition) // hiervan move DTO maken
        {
-           Console.WriteLine("in de move actie");
            _worldService.UpdateCharacterPosition(playerPosition);
            _worldService.DisplayWorld();
            
-           // worldService.updateArraylistposition(player, x, y);
-           
-           // aanroepen daadwerkelijke functie voor aanpassen x en y in wereld (dus in arraylist)
            //_player.ChangePositionOfAPlayer(player);
            // als host dan in globale db aanpassen voor die speler (hostcontoller (HandlePacket))
            

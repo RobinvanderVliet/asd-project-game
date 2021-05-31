@@ -16,7 +16,7 @@ namespace Session
         private string _sessionId;
         public string SessionId { get => _sessionId; set => _sessionId = value; }
 
-        public Boolean InSession = false;
+        public bool InSession = false;
         
         private List<string> _joinedClients = new();
 
