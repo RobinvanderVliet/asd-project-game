@@ -93,7 +93,7 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
 
-        public void DisplayMap(MapCharacterDTO currentPlayer, int viewDistance, IList<MapCharacterDTO> characters)
+        public void DisplayMap(Player currentPlayer, int viewDistance, List<Character> characters)
         {
             if (viewDistance < 0)
             {
@@ -138,31 +138,17 @@ namespace WorldGeneration
             return tileArray;
         }
         
-        private string GetDisplaySymbol(MapCharacterDTO currentPlayer, ITile tile, IList<MapCharacterDTO> characters)
+        private string GetDisplaySymbol(ITile tile, List<Character> characters)
         {
-            bool currentPlayerOnTile = IsPlayerOnTile(tile, currentPlayer);
-            if (currentPlayerOnTile)
+            var characterOnTile = characters.Find(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
+            if(characterOnTile != null)
             {
-                return currentPlayer.Symbol;
-            }
-            foreach (var characterOnTile in characters.Where(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition))
-            {
-                if (characterOnTile.Symbol == CharacterSymbol.FRIENDLY_PLAYER)
-                {
-                    if (characterOnTile.Team != currentPlayer.Team || characterOnTile.Team == 0)
-                    {
-                        return CharacterSymbol.ENEMY_PLAYER;
-                    }
-                    return CharacterSymbol.FRIENDLY_PLAYER;
-                }
                 return characterOnTile.Symbol;
             }
-            return tile.Symbol;
-        }
-
-        private bool IsPlayerOnTile(ITile tile, MapCharacterDTO player)
-        {
-            return tile.XPosition == player.XPosition && tile.YPosition == player.YPosition - 1;
+            else
+            {
+                return tile.Symbol;
+            }
         }
 
         private Chunk GenerateNewChunk(int chunkX, int chunkY)

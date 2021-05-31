@@ -39,7 +39,7 @@ namespace Chat
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var chatDTO = JsonConvert.DeserializeObject<ChatDTO>(packet.Payload);
-
+           
             switch (chatDTO.ChatType)
             {
                 case ChatType.Say:

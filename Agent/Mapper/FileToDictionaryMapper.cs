@@ -6,12 +6,13 @@ namespace Agent.Mapper
 {
     public class FileToDictionaryMapper
     {
+        public FileHandler FileHandler;
         public Dictionary<string, string> MapFileToConfiguration(string filepath)
         {
-            FileHandler fileHandler = new FileHandler();
+            FileHandler = new FileHandler();
             Dictionary<string, string> configuration = new  Dictionary<string, string>();
                     
-            string content = fileHandler.ImportFile(filepath);
+            string content = FileHandler.ImportFile(filepath);
                     
             var splitContent = content.Split(Environment.NewLine);
                     

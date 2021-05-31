@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace DatabaseHandler.Repository
 {
-    [ExcludeFromCodeCoverage]
     public class Repository<T> : IRepository<T>
     {
         private readonly string _collection;
@@ -25,7 +24,6 @@ namespace DatabaseHandler.Repository
             _log = new NullLogger<Repository<T>>();
         }
 
-        [ExcludeFromCodeCoverage]
         public async Task<BsonValue> CreateAsync(T obj)
         {
             var result = await _db.GetCollection<T>(_collection).InsertAsync(obj);
@@ -33,6 +31,13 @@ namespace DatabaseHandler.Repository
         }
 
         [ExcludeFromCodeCoverage]
+        public async Task<T> ReadAsync(T obj)
+        {
+            var chunk = await _db.GetCollection<T>(_collection)
+                .FindOneAsync(c => c.Equals(obj));
+            return chunk;
+        }
+
         public async Task<int> UpdateAsync(T obj)
         {
             var results = await _db.GetCollection<T>(_collection).UpdateAsync(obj);
@@ -44,7 +49,6 @@ namespace DatabaseHandler.Repository
             throw new InvalidOperationException($"Object op type {typeof(T)} does not exist in database.");
         }
 
-        [ExcludeFromCodeCoverage]
         public async Task<int> DeleteAsync(T obj)
         {
             var results = await _db.GetCollection<T>(_collection)
@@ -52,18 +56,34 @@ namespace DatabaseHandler.Repository
             return results;
         }
 
-        [ExcludeFromCodeCoverage]
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            var chunks = await _db.GetCollection<T>(_collection).Query().ToListAsync();
-            return chunks;
+            var result = await _db.GetCollection<T>(_collection).Query().ToListAsync();
+            return result;
         }
 
-        [ExcludeFromCodeCoverage]
         public async Task<int> DeleteAllAsync()
         {
             var result = await _db.GetCollection<T>(_collection).DeleteAllAsync();
             return result;
         }
     }
+
+        public async Task<IEnumerable<PlayerPOCO>> GetAllPOCO()
+        {
+            var result = await _db.GetCollection<PlayerPOCO>(_collection).Query().ToListAsync();
+            return result; 
+        }
+        
+        public async Task<Boolean> UpdateAsyncPlayer(string playerGUID, int newPosX, int newPosY)
+        {
+            var results =  _db.GetCollection<PlayerPOCO>(_collection);
+
+            var col = results.FindOneAsync(x => x.PlayerGuid.Equals(playerGUID));
+            col.Result.XPosition = newPosX;
+            col.Result.YPosition = newPosY;
+
+           return await results.UpdateAsync(col.Result);
+        }
+   }
 }
