@@ -1,8 +1,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using DataTransfer.Model.World.Interfaces;
-using DataTransfer.Model.World.LootableTiles;
 using NUnit.Framework;
+using WorldGeneration.Models.Interfaces;
+using WorldGeneration.Models.LootableTiles;
 
 namespace WorldGeneration.Tests
 {

@@ -1,17 +1,16 @@
-﻿using DataTransfer.Model.World.Interfaces;
+﻿using WorldGeneration.Models.Interfaces;
 
-namespace DataTransfer.Model.World.TerrainTiles
+namespace WorldGeneration.Models.TerrainTiles
 {
-    public class GrassTile : ITerrainTile
+    public class DirtTile : ITerrainTile
     {
-        
         public bool IsAccessible { get; set; }
         public string Symbol { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
-        public GrassTile(int x, int y)
+        public DirtTile(int x, int y)
         {
-            Symbol = TileSymbol.GRASS;
+            Symbol = TileSymbol.DIRT;
             IsAccessible = true;
             XPosition = x;
             YPosition = y;

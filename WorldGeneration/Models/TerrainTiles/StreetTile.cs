@@ -1,6 +1,6 @@
-﻿using DataTransfer.Model.World.Interfaces;
+﻿using WorldGeneration.Models.Interfaces;
 
-namespace DataTransfer.Model.World.TerrainTiles
+namespace WorldGeneration.Models.TerrainTiles
 {
     public class StreetTile : ITerrainTile
     {

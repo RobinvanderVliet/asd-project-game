@@ -1,27 +1,37 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using DatabaseHandler.Services;
-using DataTransfer.Model.World;
+using Display;
+using WorldGeneration.Models;
 
 namespace WorldGeneration
 {
-    public abstract class MapFactory
+    public class MapFactory: IMapFactory
+
     {
-        public static Map GenerateMap(int chunkSize = 8, int seed = -1123581321)
+        [ExcludeFromCodeCoverage]
+        
+        public IMap GenerateMap(int seed = 0)
         {
+            return GenerateMap(8, seed);
             // default chunksize is 8. Can be adjusted in the line above
-            
-            // seed can be null, if it is it becomes random. But because of how c# works you can't set a default null, so this workaround exists.
-            if (seed == -1123581321)
+        }
+        
+        [ExcludeFromCodeCoverage]
+        public IMap GenerateMap(int chunkSize, int seed)
+        {
+            // If seed is 0 it becomes random
+            if (seed == 0)
             {
-                seed = new Random().Next(1, 999999);
-            }           
-            return new Map(new NoiseMapGenerator(), chunkSize, seed, new DatabaseService<Chunk>());
+                seed = GenerateSeed();
+            }
+
+            return new Map(new NoiseMapGenerator(), chunkSize, seed, new ConsolePrinter(), new DatabaseService<Chunk>());
         }
 
-        public static int GenerateSeed()
+        public int GenerateSeed()
         {
-            var randomSeed = new Random().Next(1, 999999);
-            return randomSeed;
+            return new Random().Next(1, 9999999);
         }
     }
 }

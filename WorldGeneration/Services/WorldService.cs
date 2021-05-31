@@ -25,12 +25,12 @@ namespace WorldGeneration
         
         public void DeleteMap()
         {
-            _world.deleteMap();
+            _world.DeleteMap();
         }
 
         public void GenerateWorld(int seed)
         {
-            _world = new World(seed, 6);
+            _world = new World(seed, 6, new MapFactory());
         }
 
         public MapCharacterDTO getCurrentCharacterPositions()
