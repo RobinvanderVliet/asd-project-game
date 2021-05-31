@@ -1,3 +1,5 @@
+using System;
+
 namespace WorldGeneration
 {
     public class WorldService : IWorldService
@@ -34,11 +36,18 @@ namespace WorldGeneration
             return _world.CurrentPlayer;
         }
 
-        public void SearchCurrentTile()
+        public string SearchCurrentTile()
         {
-            var currentTile = _world.GetCurrentTile();
-            //haal items van currentTile en print die.
-            throw new NotImplementedException();
+            var itemsOnCurrentTile = _world.GetCurrentTile().ItemsOnTile;
+
+            string result = "The following items are on the current tile:" + Environment.NewLine;
+            int index = 1;
+            foreach (var item in itemsOnCurrentTile)
+            {
+                result += $"{index}. {item.ItemName}{Environment.NewLine}";
+                index += 1;
+            }
+            return result;
         }
     }
 }

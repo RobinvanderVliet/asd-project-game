@@ -14,17 +14,20 @@ namespace InputHandling.Antlr.Transformer
         private IMoveHandler _moveHandler;
         private IGameSessionHandler _gameSessionHandler;
         private IChatHandler _chatHandler;
-        
+        private IInventoryHandler _inventoryHandler;
+
+
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private String _commando;
 
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IInventoryHandler inventoryHandler)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
             _gameSessionHandler = gameSessionHandler;
             _chatHandler = chatHandler;
+            _inventoryHandler = inventoryHandler;
         }
         public void Apply(AST ast)
         {
@@ -167,7 +170,7 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformSearch()
         {
-            _playerService.Search();
+            _inventoryHandler.Search();
         }
 
     }
