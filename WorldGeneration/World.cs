@@ -37,11 +37,10 @@ namespace WorldGeneration
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
         {
-            
-            
+            var inWorld = _players.Where(x => x.Id == player.Id);
+
             if (isCurrentPlayer)
             {
-                var inWorld = _players.Where(x => x.Id == player.Id);
                 if (inWorld.Any())
                 {
                     CurrentPlayer = inWorld.FirstOrDefault();
@@ -52,7 +51,16 @@ namespace WorldGeneration
                 }
                 
             }
-            _players.Add(player);
+
+            if (inWorld.Any())
+            {
+                _players.Add(inWorld.FirstOrDefault());
+            }
+            else
+            {
+                _players.Add(player);
+
+            }
         }
 
         public void DisplayWorld()
