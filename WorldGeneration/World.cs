@@ -13,7 +13,7 @@ namespace WorldGeneration
 
         public World(int seed, int viewDistance)
         {
-            _players = new ();
+            _players = new();
             _map = MapFactory.GenerateMap(seed: seed);
             _viewDistance = viewDistance;
             _map.DeleteMap();
@@ -32,6 +32,7 @@ namespace WorldGeneration
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
+
             DisplayWorld();
         }
 
@@ -43,15 +44,18 @@ namespace WorldGeneration
                 if (inWorld.Any())
                 {
                     CurrentPlayer = player;
-
                 }
                 else
                 {
                     _players.Add(player);
+                }
+            }
+            else
+            {
+                _players.Add(player);
 
-                }
-                }
-            _players.Add(player);
+            }
+
         }
 
         public void DisplayWorld()
@@ -61,7 +65,6 @@ namespace WorldGeneration
                 Console.Clear();
                 _map.DisplayMap(CurrentPlayer, _viewDistance, new List<Character>(_players));
             }
-            
         }
 
         public void deleteMap()
@@ -70,4 +73,3 @@ namespace WorldGeneration
         }
     }
 }
-     
