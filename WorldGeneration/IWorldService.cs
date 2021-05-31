@@ -8,6 +8,7 @@
         public void DeleteMap();
         public void GenerateWorld(int seed);
         public string SearchCurrentTile();
-        public Player getCurrentPlayer();
+        public Player GetCurrentPlayer();
+        public Player GetPlayer(string userId);
     }
 }
