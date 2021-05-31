@@ -159,19 +159,19 @@ namespace InputHandling
             if (answers.ElementAt(2).Contains("yes"))
             {
                 Console.WriteLine("BINNEN CUSTOM COMBAT RULE");
-                answers.Add(customRuleHandleEditorScreenCommands("combat"));
+                answers.Add(CustomRuleHandleEditorScreenCommands("combat"));
             }
 
             if (answers.ElementAt(3).Contains("yes"))
             {
                 Console.WriteLine("BINNEN CUSTOM EXPLORE RULE");
-                answers.Add(customRuleHandleEditorScreenCommands("explore"));
+                answers.Add(CustomRuleHandleEditorScreenCommands("explore"));
             }
 
             //naar de volgende scherm gaan!
         }
 
-        private string customRuleHandleEditorScreenCommands(string type)
+        private string CustomRuleHandleEditorScreenCommands(string type)
         {
             StringBuilder builder = new StringBuilder();
             BaseVariables variables = new();
