@@ -14,7 +14,8 @@ namespace Items
 
         public override string ToString()
         {
-            string inspect = Description + $"{Environment.NewLine}Type: {Type.ToString()}";
+            string inspect = Description;
+            inspect += $"{Environment.NewLine}Type: {Type.ToString()}";
             inspect += $"{Environment.NewLine}Rarity: {Rarity.ToString()}";
             inspect += $"{Environment.NewLine}Damage: {Damage.ToString()}";
             inspect += $"{Environment.NewLine}Attack speed: {Speed.ToString()}";

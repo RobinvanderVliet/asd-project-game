@@ -15,7 +15,8 @@ namespace Items.Consumables
         
         public override string ToString()
         {
-            string inspect = Description + $"{Environment.NewLine}Name: {ItemName}";
+            string inspect = Description;
+            inspect += $"{Environment.NewLine}Name: {ItemName}";
             inspect += $"{Environment.NewLine}Rarity: {Rarity.ToString()}";
 
             if (this is StaminaConsumable consumableStamina)

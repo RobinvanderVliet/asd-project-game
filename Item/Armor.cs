@@ -12,7 +12,8 @@ namespace Items
         
         public override string ToString()
         {
-            string inspect = Description + $"{Environment.NewLine}Name: {ItemName}";
+            string inspect = Description;
+            inspect += $"{Environment.NewLine}Name: {ItemName}";
             inspect += $"{Environment.NewLine}APP gain: {ArmorProtectionPoints}";
             inspect += $"{Environment.NewLine}Rarity: {Rarity.ToString()}";
             if (this is HazardProtectedArmor armor)
