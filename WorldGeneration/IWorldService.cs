@@ -1,4 +1,6 @@
-﻿namespace WorldGeneration
+﻿using Items;
+
+namespace WorldGeneration
 {
     public interface IWorldService
     {
@@ -8,6 +10,7 @@
         public void DeleteMap();
         public void GenerateWorld(int seed);
         public string SearchCurrentTile();
+        public string DropItemOnTile(Item Item);
         public Player getCurrentPlayer();
     }
 }

@@ -29,7 +29,7 @@ namespace WorldGeneration
             _weapon = ItemFactory.GetKnife();
         }
 
-        public Item GetConsumableItem(string itemName)
+        public Consumable GetConsumableItem(string itemName)
         {
             return _consumableItems.Find(item => item.ItemName == itemName);
         }

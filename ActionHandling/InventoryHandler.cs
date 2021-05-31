@@ -32,33 +32,23 @@ namespace ActionHandling
             {
                 case "armor":
                     Console.WriteLine("Case Armor");
-                    //Drop armor on current tile
+                    _worldService.DropItemOnTile(_worldService.getCurrentPlayer().Inventory.Armor);
                     _worldService.getCurrentPlayer().Inventory.Armor = null;
                     break;
                 case "helmet":
                     Console.WriteLine("Case Helmet");
-                    //Drop armor on current tile
+                    _worldService.DropItemOnTile(_worldService.getCurrentPlayer().Inventory.Helmet);
                     _worldService.getCurrentPlayer().Inventory.Helmet = null;
                     break;
                 case "weapon":
                     Console.WriteLine("Case Weapon");
-                    //Drop armor on current tile
+                    _worldService.DropItemOnTile(_worldService.getCurrentPlayer().Inventory.Weapon);
                     _worldService.getCurrentPlayer().Inventory.Weapon = null;
                     break;
-                case "1":
-                    Console.WriteLine("Case Item slot 1");
-                    //Drop armor on current tile
-                    _worldService.getCurrentPlayer().Inventory.RemoveConsumableItem(null);
-                    break;
-                case "2":
-                    Console.WriteLine("Case Item slot 2");
-                    //Drop armor on current tile
-                    _worldService.getCurrentPlayer().Inventory.RemoveConsumableItem(null);
-                    break;
-                case "3":
-                    Console.WriteLine("Case Item slot 3");
-                    //Drop armor on current tile
-                    _worldService.getCurrentPlayer().Inventory.RemoveConsumableItem(null);
+                case "item":
+                    Console.WriteLine("Case Consumable Item");
+                    _worldService.DropItemOnTile(_worldService.getCurrentPlayer().Inventory.GetConsumableItem(inventorySlot));
+                    _worldService.getCurrentPlayer().Inventory.RemoveConsumableItem(_worldService.getCurrentPlayer().Inventory.GetConsumableItem(inventorySlot));
                     break;
                 default:
                     Console.WriteLine("Unknown inventory slot");

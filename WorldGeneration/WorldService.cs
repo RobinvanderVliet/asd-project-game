@@ -1,3 +1,4 @@
+using Items;
 using System;
 
 namespace WorldGeneration
@@ -48,6 +49,11 @@ namespace WorldGeneration
                 index += 1;
             }
             return result;
+        }
+
+        public void DropItemOnTile(Item item)
+        {
+            //Drop item on tile
         }
     }
 }
