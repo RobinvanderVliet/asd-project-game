@@ -1,6 +1,6 @@
 using System;
 
-namespace InputCommandHandler.Exceptions
+namespace InputHandling.Exceptions
 {
     public class SlotException : Exception
     {

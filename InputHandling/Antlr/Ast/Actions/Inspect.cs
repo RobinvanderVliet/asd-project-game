@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
-namespace InputCommandHandler.Antlr.Ast.Actions
+namespace InputHandling.Antlr.Ast.Actions
 {
     public class Inspect: Command
     {

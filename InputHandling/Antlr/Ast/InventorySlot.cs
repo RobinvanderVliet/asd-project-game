@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace InputCommandHandler.Antlr.Ast
+namespace InputHandling.Antlr.Ast
 {
     public class InventorySlot : ASTNode
     {

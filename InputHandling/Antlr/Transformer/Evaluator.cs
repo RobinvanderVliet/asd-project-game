@@ -170,7 +170,8 @@ namespace InputHandling.Antlr.Transformer
             string slot = inspect.InventorySlot.InventorySlotValue;
             if (slot == "armor" | slot == "weapon" | slot == "helmet" | slot == "slot 1" | slot == "slot 2" | slot == "slot 3")
             {
-                _playerService.InspectItem(inspect.InventorySlot.InventorySlotValue);
+                //_inventoryHandler.InspectItem(inspect.InventorySlot.InventorySlotValue);
+                // TODO: Replace by _inventoryHandler
             }
             else
             {
