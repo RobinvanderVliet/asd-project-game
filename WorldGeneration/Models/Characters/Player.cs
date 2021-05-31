@@ -15,11 +15,11 @@ namespace WorldGeneration
         private const int HEALTHCAP = 100;
         private const int STAMINACAP = 10;
 
-        public Player(string name, int xPosition, int yPosition, string symbol, string id) : base(name, xPosition, yPosition, symbol)
+        public Player(string name, int xPosition, int yPosition, string symbol, string id, int health = HEALTHCAP, int stamina = STAMINACAP) : base(name, xPosition, yPosition, symbol)
         {
             Id = id;
-            Stamina = STAMINACAP;
-            Health = HEALTHCAP;
+            Stamina = stamina;
+            Health = health;
             Inventory = new();
             RadiationLevel = 0;
             Team = 0;

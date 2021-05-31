@@ -128,25 +128,52 @@ namespace Session
         {
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
 
-            // add name to players
-            foreach (var player in startGameDTO.PlayerLocations)
+            if (_sessionHandler.GetSavedGame() && _clientController.IsHost())
             {
-                if (_clientController.GetOriginId() == player.Key)
+                var temp = new DbConnection();
+
+                var playerRepository = new Repository<PlayerPOCO>(temp);
+                var playerService = new ServicesDb<PlayerPOCO>(playerRepository);
+                var result = playerService.GetAllAsync();
+                result.Wait();
+                var resultsult = result.Result.Where(x => x.GameGuid == startGameDTO.GameGuid);
+
+                startGameDTO.SavedPlayers = new List<PlayerPOCO>();
+
+                foreach (var player in resultsult)
                 {
-                    var tmp = new DbConnection();
+                    startGameDTO.SavedPlayers.Add(player);
 
-                    var clientHistoryRepository = new Repository<ClientHistoryPoco>(tmp);
-                    var tmpClientHistory = new ServicesDb<ClientHistoryPoco>(clientHistoryRepository);
-
-                    var tmpObject = new ClientHistoryPoco() {PlayerId = player.Key, GameId = startGameDTO.GameGuid};
-
-                    tmpClientHistory.CreateAsync(tmpObject);
-
-                    _worldService.AddPlayerToWorld(new WorldGeneration.Player("gerrit", player.Value[0], player.Value[1], CharacterSymbol.CURRENT_PLAYER, player.Key), true);
+                    if (_clientController.GetOriginId() == player.PlayerGuid)
+                    {
+                        _worldService.AddPlayerToWorld(new WorldGeneration.Player("gerrit", player.XPosition, player.YPosition, CharacterSymbol.CURRENT_PLAYER, player.PlayerGuid, player.Health, player.Stamina), true);
+                    }
+                    else
+                    {
+                        _worldService.AddPlayerToWorld(new WorldGeneration.Player("arie", player.XPosition, player.YPosition, CharacterSymbol.ENEMY_PLAYER, player.PlayerGuid, player.Health, player.Stamina), false);
+                    }
                 }
-                else
+            } else
+            {
+                foreach (var player in startGameDTO.PlayerLocations)
                 {
-                    _worldService.AddPlayerToWorld(new WorldGeneration.Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key), false);
+                    if (_clientController.GetOriginId() == player.Key)
+                    {
+                        var tmp = new DbConnection();
+
+                        var clientHistoryRepository = new Repository<ClientHistoryPoco>(tmp);
+                        var tmpClientHistory = new ServicesDb<ClientHistoryPoco>(clientHistoryRepository);
+
+                        var tmpObject = new ClientHistoryPoco() { PlayerId = player.Key, GameId = startGameDTO.GameGuid };
+
+                        tmpClientHistory.CreateAsync(tmpObject);
+
+                        _worldService.AddPlayerToWorld(new WorldGeneration.Player("gerrit", player.Value[0], player.Value[1], CharacterSymbol.CURRENT_PLAYER, player.Key), true);
+                    }
+                    else
+                    {
+                        _worldService.AddPlayerToWorld(new WorldGeneration.Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key), false);
+                    }
                 }
             }
 
