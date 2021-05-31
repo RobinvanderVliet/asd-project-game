@@ -7,6 +7,7 @@
         public void DisplayWorld();
         public void DeleteMap();
         public void GenerateWorld(int seed);
+        public void SearchCurrentTile();
         public Player getCurrentPlayer();
     }
 }

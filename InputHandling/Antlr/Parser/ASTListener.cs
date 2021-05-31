@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Antlr4.Runtime.Misc;
 using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Antlr.Grammar;
@@ -176,6 +177,16 @@ namespace InputHandling.Antlr.Parser
         {
             Inspect inspect = (Inspect) _currentContainer.Peek();
             inspect.AddChild(new InventorySlot(Convert.ToString(context.GetText())));
+        }
+
+        public override void EnterSearch(PlayerCommandsParser.SearchContext context)
+        {
+            _currentContainer.Push(new Search());
+        }
+
+        public override void ExitSearch(PlayerCommandsParser.SearchContext context)
+        {
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterDirection(PlayerCommandsParser.DirectionContext context)
