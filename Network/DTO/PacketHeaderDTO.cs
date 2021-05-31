@@ -1,5 +1,8 @@
-﻿namespace Network
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Network
 {
+    [ExcludeFromCodeCoverage]
     public class PacketHeaderDTO
     {
         public string Target { get; set; }
@@ -9,11 +12,11 @@
 
         public override bool Equals(object obj)
         {
-            return obj is PacketHeaderDTO dTO &&
-                   Target == dTO.Target &&
-                   OriginID == dTO.OriginID &&
-                   SessionID == dTO.SessionID &&
-                   PacketType == dTO.PacketType;
+            return obj is PacketHeaderDTO DTO &&
+                   Target == DTO.Target &&
+                   OriginID == DTO.OriginID &&
+                   SessionID == DTO.SessionID &&
+                   PacketType == DTO.PacketType;
         }
     }
 }

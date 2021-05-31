@@ -20,17 +20,17 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do(ICreatureData creatureData)
         {
-            PathFinder pathFinder = new PathFinder(_creatureData.World.Nodes);
-            ICreatureData playerData = creatureData;
-
-            Stack<Node> newPath = pathFinder.FindPath(_creatureData.Position, playerData.Position);
-
-            if (!(newPath.Peek().position.X == playerData.Position.X && newPath.Peek().position.Y == playerData.Position.Y))
-            {
-                float newPositionX = newPath.Peek().position.X;
-                float newPositionY = newPath.Peek().position.Y;
-                _creatureData.Position = new Vector2(newPositionX, newPositionY);
-            }
+            // PathFinder pathFinder = new PathFinder(_creatureData.World.Nodes);
+            // ICreatureData playerData = creatureData;
+            //
+            // Stack<Node> newPath = pathFinder.FindPath(_creatureData.Position, playerData.Position);
+            //
+            // if (!(newPath.Peek().Position.X == playerData.Position.X && newPath.Peek().Position.Y == playerData.Position.Y))
+            // {
+            //     float newPositionX = newPath.Peek().Position.X;
+            //     float newPositionY = newPath.Peek().Position.Y;
+            //     _creatureData.Position = new Vector2(newPositionX, newPositionY);
+            //}
         }
     }
 }

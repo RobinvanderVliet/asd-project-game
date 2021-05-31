@@ -5,19 +5,20 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Agent.Mapper;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace Agent.Tests.Mapper
 {
     [ExcludeFromCodeCoverage]
     public class FileToDictionaryMapperTest
     {
-        private FileToDictionaryMapper _mapper;
+        private FileToDictionaryMapper _sut;
+        private FileHandler _handler;
 
         [SetUp]
         public void Setup()
         {
-            _mapper = new FileToDictionaryMapper();
+            _sut = new FileToDictionaryMapper();
+            _handler = new FileHandler();
 
         }
 
@@ -29,10 +30,10 @@ namespace Agent.Tests.Mapper
             expectedDictionary.Add("aggressiveness", "high");
             expectedDictionary.Add("explore", "random");
             expectedDictionary.Add("combat", "offensive");
-            var filepath = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest.txt";
+            var filepath = _handler.GetBaseDirectory() + "/Resource/npcFileTest.txt";
             
             //Act
-            var actualDictionary = _mapper.MapFileToConfiguration(filepath);
+            var actualDictionary = _sut.MapFileToConfiguration(filepath);
 
             //Assert
             Assert.AreEqual(expectedDictionary, actualDictionary);
@@ -45,11 +46,10 @@ namespace Agent.Tests.Mapper
         public void Test_MapFileToConfiguration_Unsuccessful()
         {
             //Arrange
-            var filepath = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest_2.txt";
+            var filepath = _handler.GetBaseDirectory() + "/Resource/npcFileTest_2.txt";
             
-            //Act
-            //Assert
-            Assert.Throws<SyntaxErrorException>(() => _mapper.MapFileToConfiguration(filepath));
+            //Act & Assert
+            Assert.Throws<SyntaxErrorException>(() => _sut.MapFileToConfiguration(filepath));
 
         }
     }

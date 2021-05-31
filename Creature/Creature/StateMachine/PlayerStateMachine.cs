@@ -6,12 +6,12 @@ using Creature.Creature.StateMachine.State;
 
 namespace Creature.Creature.StateMachine
 {
-    class PlayerStateMachine : ICreatureStateMachine
+    public class PlayerStateMachine : ICreatureStateMachine
     {
         private PassiveStateMachine<CreatureState, CreatureEvent.Event> _passiveStateMachine;
-        private PlayerData _playerData;
+        private ICreatureData _playerData;
 
-        public PlayerStateMachine(PlayerData playerData)
+        public PlayerStateMachine(ICreatureData playerData)
         {
             _playerData = playerData;
         }

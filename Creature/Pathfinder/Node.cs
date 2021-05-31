@@ -1,41 +1,72 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace Creature.Pathfinder
 {
-    public class Node
+    public class Node : IComparable<Node>
     {
-        public const int nodeSize = 1;
-        public Node parent;
-        public Vector2 position;
-        public Vector2 Center
+        private Node _parent;
+        private Vector2 _position;
+        private float _distanceToTarget;
+        private float _cost;
+        private float _weight;
+        private bool _isWalkable;
+
+        public Node Parent
         {
-            get
-            {
-                return new Vector2(position.X + nodeSize / 2, position.Y + nodeSize / 2);
-            }
+            get => _parent;
+            set => _parent = value;
         }
-        public float distanceToTarget;
-        public float cost;
-        public float weight;
+        public Vector2 Position
+        {
+            get => _position;
+            set => _position = value;
+        }
+        public float DistanceToTarget
+        {
+            get => _distanceToTarget;
+            set => _distanceToTarget = value;
+        }
+        public float Cost
+        {
+            get => _cost;
+            set => _cost = value;
+        }
+        public float Weight
+        {
+            get => _weight;
+            set => _weight = value;
+        }
         public float FScore
         {
             get
             {
-                if (distanceToTarget != -1 && cost != -1)
-                    return distanceToTarget + cost;
-                else
-                    return -1;
+                if (DistanceToTarget != -1 && Cost != -1)
+                    return DistanceToTarget + Cost;
+                return -1;
             }
         }
-        public bool isWalkable;
+        public bool IsWalkable
+        {
+            get => _isWalkable;
+            set => _isWalkable = value;
+        }
+        
         public Node(Vector2 pos, bool isWalkable, float weight = 1)
         {
-            this.parent = null;
-            this.position = pos;
-            this.distanceToTarget = -1;
-            this.cost = 1;
-            this.weight = weight;
-            this.isWalkable = isWalkable;
+            _parent = null;
+            _position = pos;
+            _distanceToTarget = -1;
+            _cost = 1;
+            _isWalkable = isWalkable;
+            _weight = weight;
         }
+
+        public int CompareTo(Node rhs)
+        {
+            double otherFScore = rhs.FScore;
+            return FScore < otherFScore ? -1 : FScore > otherFScore ? 1 : 0;
+        }
+
     }
 }

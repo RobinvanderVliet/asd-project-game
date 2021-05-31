@@ -5,16 +5,16 @@ namespace Creature
 {
     public class Monster : ICreature
     {
-        private MonsterStateMachine _monsterStateMachine;
+        private ICreatureStateMachine _monsterStateMachine;
 
         public ICreatureStateMachine CreatureStateMachine
         {
             get => _monsterStateMachine;
         }
-
-        public Monster(MonsterData monsterData)
+        
+        public Monster(ICreatureStateMachine monsterStateMachine)
         {
-            _monsterStateMachine = new(monsterData);
+            _monsterStateMachine = monsterStateMachine;
             _monsterStateMachine.StartStateMachine();
         }
 

@@ -1,16 +1,18 @@
-﻿using Creature.World;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+
 using System.Numerics;
 
 namespace Creature.Creature.StateMachine.Data
 {
+    [ExcludeFromCodeCoverage]
     public class MonsterData : ICreatureData
     {
         private Vector2 _position;
         private double _health;
         private int _damage;
         private int _visionRange;
-        private IWorld _world;
+
         private List<Dictionary<string, string>> _ruleSet;
         private bool _following;
 
@@ -39,12 +41,7 @@ namespace Creature.Creature.StateMachine.Data
             get => _visionRange;
             set => _visionRange = value;
         }
-
-        public IWorld World
-        {
-            get => _world;
-            set => _world = value;
-        }
+        
 
         public List<Dictionary<string, string>> RuleSet
         {
@@ -57,13 +54,12 @@ namespace Creature.Creature.StateMachine.Data
             set => _following = value;
         }
 
-        public MonsterData(Vector2 position, double health, int damage, int visionRange, IWorld world, List<Dictionary<string, string>> ruleSet, bool following)
+        public MonsterData(Vector2 position, double health, int damage, int visionRange, List<Dictionary<string, string>> ruleSet, bool following)
         {
             _position = position;
             _health = health;
             _damage = damage;
             _visionRange = visionRange;
-            _world = world;
             _ruleSet = ruleSet;
             _following = following;
         }

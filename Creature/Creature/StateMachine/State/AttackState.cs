@@ -21,8 +21,6 @@ namespace Creature.Creature.StateMachine.State
             playerData.Health -= playerData.Damage;
 
             Console.WriteLine("Player health: " + playerData.Health);
-
-           // throw new NotImplementedException();
         }
     }
 }

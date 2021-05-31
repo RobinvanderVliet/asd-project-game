@@ -13,6 +13,7 @@ namespace Network
         private Dictionary<PacketType, IPacketHandler> _subscribers = new();
         private bool _isBackupHost;
         public bool IsBackupHost { get => _isBackupHost; set => _isBackupHost = value; }
+        public string SessionId { get => _sessionId; }
 
         public ClientController(INetworkComponent networkComponent)
         {
@@ -56,7 +57,7 @@ namespace Network
 
         public void SendPayload(string payload, PacketType packetType)
         {
-            if (String.IsNullOrEmpty(payload))
+            if (string.IsNullOrEmpty(payload))
             {
                 throw new Exception("Payload is empty.");
             }
@@ -88,6 +89,9 @@ namespace Network
             _hostController = hostController;
         }
 
-        
+        public bool IsHost()
+        {
+            return _hostController != null;
+        }
     }
 }

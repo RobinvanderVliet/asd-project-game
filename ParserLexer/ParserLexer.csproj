@@ -11,8 +11,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\DataTransfer\DataTransfer.csproj" />
-  </ItemGroup>
-
 </Project>

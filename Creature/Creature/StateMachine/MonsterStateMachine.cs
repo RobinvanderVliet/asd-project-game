@@ -10,7 +10,7 @@ namespace Creature.Creature.StateMachine
     class MonsterStateMachine : ICreatureStateMachine
     {
         private PassiveStateMachine<CreatureState, CreatureEvent.Event> _passiveStateMachine;
-        private MonsterData _monsterData;
+        private ICreatureData _monsterData;
 
         private CreatureState _followPlayerState;
         private CreatureState _wanderState;
@@ -18,7 +18,7 @@ namespace Creature.Creature.StateMachine
         private CreatureState _attackPlayerState;
         private CreatureState _fleeFromCreatureState;
 
-        public MonsterStateMachine(MonsterData monsterData)
+        public MonsterStateMachine(ICreatureData monsterData)
         {
             _monsterData = monsterData;
         }

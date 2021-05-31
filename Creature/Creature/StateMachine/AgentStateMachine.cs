@@ -9,9 +9,9 @@ namespace Creature.Creature.StateMachine
     public class AgentStateMachine : ICreatureStateMachine
     {
         private PassiveStateMachine<CreatureState, CreatureEvent.Event> _passiveStateMachine;
-        private AgentData _agentData;
+        private ICreatureData _agentData;
 
-        public AgentStateMachine(AgentData agentData)
+        public AgentStateMachine(ICreatureData agentData)
         {
             _agentData = agentData;
         }

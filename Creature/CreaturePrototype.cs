@@ -1,7 +1,4 @@
-﻿using Agent.Mapper;
-using Agent.Services;
-using Agent.Models;
-using Creature.Creature.StateMachine.Data;
+﻿using Creature.Creature.StateMachine.Data;
 using Creature.World;
 using System;
 using System.Collections.Generic;
@@ -15,16 +12,14 @@ namespace Creature
     [ExcludeFromCodeCoverage]
     class CreaturePrototype
     {
-
-        private static ICreature testAgent;
         static void Main(string[] args)
         {
             IWorld world = new DefaultWorld(25);
 
-            NpcConfigurationService npcConfigurationService = new NpcConfigurationService(new List<NpcConfiguration>(), new FileToDictionaryMapper());
-            npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
-            npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
-            npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
+            // NpcConfigurationService npcConfigurationService = new NpcConfigurationService(new List<NpcConfiguration>(), new FileToDictionaryMapper()); //broke
+            // npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
+            // npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
+            // npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
 
             List<Dictionary<string, string>> listOfDictionaries = new List<Dictionary<string, string>>()
             {
@@ -49,20 +44,23 @@ namespace Creature
             System.Diagnostics.Debug.WriteLine(string.Join(Environment.NewLine, lines));
 
             //PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, npcConfigurationService.GetConfigurations()[0].Settings);
-            PlayerData playerData = new PlayerData(new Vector2(5, 5), 100, 5, 10, world, listOfDictionaries);
-            AgentData agentData = new AgentData(new Vector2(10, 10), 100, 100, 5, 50, world, listOfDictionaries, false);
-            MonsterData monsterData = new MonsterData(new Vector2(10, 15), 20, 5, 50, world, listOfDictionaries, false);
+            ICreatureData playerData = new PlayerData(new Vector2(5, 5), 100, 5, 10, listOfDictionaries);
+            ICreatureData agentData = new AgentData(new Vector2(10, 10), 100, 100, 5, 50, listOfDictionaries, false);
+            ICreatureData monsterData = new MonsterData(new Vector2(10, 15), 20, 5, 50,listOfDictionaries, false);
 
-            ICreature player = new Player(playerData);
-            testAgent = new Agent(agentData);
-            ICreature agent = new Agent(agentData);
-            ICreature monster = new Monster(monsterData);
+            
+            ICreatureStateMachine monsterStateMachine = new MonsterStateMachine(monsterData);
+            ICreature monster = new Monster(monsterStateMachine);
+
+            ICreatureStateMachine playerStateMachine = new PlayerStateMachine(playerData);
+            ICreature player = new Player(playerStateMachine);
+            
+            ICreatureStateMachine agentStateMachine = new AgentStateMachine(monsterData);
+            ICreature agent = new Monster(agentStateMachine);
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);
-            world.SpawnAgent(testAgent);
-            //world.SpawnAgent(agent);
-
+            world.SpawnAgent(agent);
             // TODO: fix monster statemachine to get this working
             //world.SpawnCreature(monster);
 
@@ -93,18 +91,9 @@ namespace Creature
                 case "d":
                     player.Position = new Vector2(player.Position.X + 1, player.Position.Y);
                     break;
-                case "attack":
-                    testAgent.ApplyDamage(player.Damage);
-                    break;
                 default:
                     break;
             }
         }
-
-        private void setTestAgent(ICreature agent)
-        {
-            testAgent = agent;
-        }
-        
     }
 }
