@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using WorldGeneration.Models;
+using WorldGeneration.Models.Enums;
 using WorldGeneration.Models.Interfaces;
 using WorldGeneration.Models.TerrainTiles;
 
@@ -8,13 +11,30 @@ namespace WorldGeneration
     public static class RoadPresetFactory
     {
         // Provides a set of preset road "templates" that connect the correct sides.
+        private static Hashtable _singletonRoadPresets;
         
-        /*public static List<> GetRoadPresets (int chunksize)
+        public static ITile[] GetRoadPreset (int chunksize, CompassDirections directions)
         {
-            List<Chunk> roadpresets = new List<Chunk>();
-            roadpresets[0] = NoRoads(chunksize);
+            if (_singletonRoadPresets == null)
+            {
+                _singletonRoadPresets = GenerateRoadPresets(chunksize);
+            }
+            ITile[] result = _singletonRoadPresets[directions] as ITile[];
+            return result;
+        }
+
+        static Hashtable GenerateRoadPresets(int chunksize)
+        {
+            Hashtable roadpresets = new Hashtable();
+            roadpresets.Add(CompassDirections.NoRoads, NoRoads(chunksize));
+            roadpresets.Add(CompassDirections.EastOnly, EastOnly(chunksize));
+            roadpresets.Add(CompassDirections.WestOnly, WestOnly(chunksize));
+            roadpresets.Add(CompassDirections.NorthOnly, NorthOnly(chunksize));
+            roadpresets.Add(CompassDirections.SouthOnly, SouthOnly(chunksize));
+            roadpresets.Add(CompassDirections.NorthToSouth, NorthToSouth(chunksize));
+            roadpresets.Add(CompassDirections.EastToWest, EastToWest(chunksize));
             return roadpresets;
-        }*/
+        }
 
         private static ITile[] NoRoads(int chunksize)
         {
