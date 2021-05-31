@@ -28,5 +28,10 @@ namespace UserInterface
             Console.SetCursorPosition(2, 6);
             Console.WriteLine(warning);
         }
+
+        public virtual void ClearScreen()
+        {
+            Console.Clear();
+        }
     }
 }

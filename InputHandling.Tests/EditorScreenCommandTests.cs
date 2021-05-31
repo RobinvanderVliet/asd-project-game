@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using ActionHandling;
 using Chat;
 using InputHandling.Antlr;
@@ -33,21 +34,20 @@ namespace InputHandling.Tests
         public void Test_HandleStopCommandEditorScreen()
         {
             //Arrange
-            EditorScreen editorScreen = new EditorScreen();
-            StringReader textReaderContinue = new StringReader("");
-            StringReader textReaderActualTest = new StringReader("stop");
-            StringReader textReader3 = new StringReader("");
+
+            var mockEditor = new Mock<EditorScreen>();
+            _mockedScreenHandler.Object.Screen = mockEditor.Object;
             
-            
-            //editorScreen.UpdateLastQuestion()
-            var mockEditor = new Mock<EditorScreen>().Object;
-            _mockedScreenHandler.Object.Screen = mockEditor;
-            Console.SetIn(textReaderContinue);
-            Console.SetIn(textReaderActualTest);
-            Console.SetIn(textReader3);
+            var input = new StringBuilder();
+            //vul hier je input in, per readline een nieuwe appendline
+            input.AppendLine("").AppendLine("hallo");
 
             //Act
-            _sut.customRuleHandleEditorScreenCommands("combat");
+            using (TextReader txt = new StringReader(input.ToString()))
+            {
+                Console.SetIn(txt);
+                _sut.CustomRuleHandleEditorScreenCommands("combat");
+            }
             
             
             //Assert

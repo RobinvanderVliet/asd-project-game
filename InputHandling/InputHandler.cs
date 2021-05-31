@@ -136,7 +136,7 @@ namespace InputHandling
             {
                 editorScreen.UpdateLastQuestion(questions.EditorQuestions.ElementAt(i));
 
-                var input = Console.ReadLine();
+                var input = GetCommand();
                 Console.WriteLine(input);
 
                 if (input.Equals("break"))
@@ -170,8 +170,7 @@ namespace InputHandling
 
             //TODO: naar het volgende scherm gaan!
         }
-
-        private string CustomRuleHandleEditorScreenCommands(string type)
+        public string CustomRuleHandleEditorScreenCommands(string type)
         {
             StringBuilder builder = new StringBuilder();
             BaseVariables variables = new();
@@ -185,7 +184,7 @@ namespace InputHandling
             editorScreen.UpdateLastQuestion("This is and example line: When player nearby player then attack" + Environment.NewLine + "press enter to continue...");
             
             Console.ReadLine();
-            Console.Clear();
+            editorScreen.ClearScreen();
 
             while (nextLine)
             {
@@ -197,7 +196,7 @@ namespace InputHandling
                     + "Type Help + armour, weapon, comparison, consumables, actions, bitcoinItems, comparables"
                     + "Type Stop to stop the custom rules" );
 
-                input = Console.ReadLine();
+                input = GetCommand();
                 input = input.ToLower();
 
 
@@ -235,7 +234,7 @@ namespace InputHandling
                     }
                 }
 
-                input = Console.ReadLine();
+                input = GetCommand();
                 input = input.ToLower();
                 var rule = input.Split(" ");
 
@@ -245,10 +244,10 @@ namespace InputHandling
                     builder.Append(rule.ToString());
                 }
 
-                while (true) { 
-                    Console.Clear();
+                while (true) {
+                    editorScreen.ClearScreen();
                     editorScreen.UpdateLastQuestion("Do you want to add another rule? yes or no");
-                    input = Console.ReadLine();
+                    input = GetCommand();
                     input = input.ToLower();
                     if(input.Equals("yes") || input.Equals("no"))
                     {
