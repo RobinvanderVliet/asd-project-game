@@ -194,10 +194,18 @@ namespace WorldGeneration
 
         private static ITile[] NorthToEast(int chunksize)
         {
-            // First, if there is an even number of tiles in a chunk, we need two rows of roads. Otherwise, we'll only use one.
             ITile[] roadmap = new ITile[chunksize * chunksize];
             if (chunksize % 2 == 0)
             {
+                int halfwayinthechunk = ((chunksize /2)-1) * chunksize;
+                for (int i = halfwayinthechunk + (chunksize/2); i < halfwayinthechunk + chunksize; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = halfwayinthechunk + chunksize + (chunksize/2); i < halfwayinthechunk + (chunksize*2); i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
                 for (int i = (chunksize/2)-1; i < (chunksize* chunksize)/2; i += chunksize)
                 {
                     roadmap[i] = new StreetTile(0,0);
@@ -206,6 +214,11 @@ namespace WorldGeneration
             }
             else
             {
+                int halfwayinthechunk = ((chunksize -1) / 2) * chunksize;
+                for (int i = halfwayinthechunk + ((chunksize -1)/2); i < halfwayinthechunk + chunksize  ; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
                 for (int i = (chunksize-1)/2; i < (chunksize*chunksize)/2; i += chunksize)
                 {
                     roadmap[i] = new StreetTile(0,0);
@@ -217,19 +230,45 @@ namespace WorldGeneration
         
         private static ITile[] NorthToWest(int chunksize)
         {
+            ITile[] roadmap = new ITile[chunksize * chunksize];
+            if (chunksize % 2 == 0)
+            {
+                int halfwayinthechunk = ((chunksize /2)-1) * chunksize;
+                for (int i = halfwayinthechunk; i < halfwayinthechunk + (chunksize/2) ; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = halfwayinthechunk + chunksize; i < halfwayinthechunk + chunksize + (chunksize/2) ; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = (chunksize/2)-1; i < (chunksize* chunksize)/2; i += chunksize)
+                {
+                    roadmap[i] = new StreetTile(0,0);
+                    roadmap[i + 1] = new StreetTile(0, 0);
+                }
+            }
+            else
+            {
+                int halfwayinthechunk = ((chunksize -1) / 2) * chunksize;
+                for (int i = halfwayinthechunk; i < halfwayinthechunk + ((chunksize +1)/2) ; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = (chunksize-1)/2; i < (chunksize*chunksize)/2; i += chunksize)
+                {
+                    roadmap[i] = new StreetTile(0,0);
+                }
+            }
             
+            return roadmap;
         }
         
         private static ITile[] EastToWest (int chunksize)
         {
-            // First, if there is an even number of tiles in a chunk, we need two rows of roads. Otherwise, we'll only use one.
             ITile[] roadmap = new ITile[chunksize * chunksize];
             if (chunksize % 2 == 0)
-            { 
-                // Example using chunksize of 8:
-                // half of chunksize = 4;
-                // 3 * 8 = 24. Because we start at 0, this is the first tile of the fourth row.
-                // fill the next two rows.
+            {
                 int halfwayinthechunk = ((chunksize /2)-1) * chunksize;
                 for (int i = halfwayinthechunk; i < halfwayinthechunk + (chunksize*2) ; i++)
                 {
@@ -238,11 +277,6 @@ namespace WorldGeneration
             }
             else
             {
-                // Simple example using chunksize of 9:
-                // half of chunksize = 4;
-                // 4 * 9 = 36. This is the first tile of the fifth row.
-                // Turn all the tiles on that row into street tiles. Again the x and y are placeholders that will be overwritten.
-                
                 int halfwayinthechunk = ((chunksize -1) / 2) * chunksize;
                 for (int i = halfwayinthechunk; i < halfwayinthechunk + chunksize ; i++)
                 {
@@ -255,32 +289,207 @@ namespace WorldGeneration
         
         private static ITile[] EastToSouth(int chunksize)
         {
-            
+            ITile[] roadmap = new ITile[chunksize * chunksize];
+            if (chunksize % 2 == 0)
+            {
+                int halfwayinthechunk = ((chunksize /2)-1) * chunksize;
+                for (int i = halfwayinthechunk + (chunksize/2); i < halfwayinthechunk + chunksize; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = halfwayinthechunk + chunksize + (chunksize/2); i < halfwayinthechunk + (chunksize*2); i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = (chunksize * chunksize/2) + (chunksize/2)-1; i < ((chunksize*chunksize)-1); i += chunksize)
+                {
+                    roadmap[i] = new StreetTile(0,0);
+                    roadmap[i + 1] = new StreetTile(0, 0);
+                }
+            }
+            else
+            {
+                int halfwayinthechunk = ((chunksize -1) / 2) * chunksize;
+                for (int i = halfwayinthechunk + ((chunksize -1)/2); i < halfwayinthechunk + chunksize  ; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = (chunksize * chunksize/2) + ((chunksize-1)/2); i < (chunksize*chunksize)-1; i += chunksize)
+                {
+                    roadmap[i] = new StreetTile(0,0);
+                }
+            }
+            return roadmap;
         }
 
         private static ITile[] WestToSouth(int chunksize)
         {
-            
+            // First, if there is an even number of tiles in a chunk, we need two rows of roads. Otherwise, we'll only use one.
+            ITile[] roadmap = new ITile[chunksize * chunksize];
+            if (chunksize % 2 == 0)
+            {
+                int halfwayinthechunk = ((chunksize /2)-1) * chunksize;
+                for (int i = halfwayinthechunk; i < halfwayinthechunk + (chunksize/2) ; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = halfwayinthechunk + chunksize; i < halfwayinthechunk + chunksize + (chunksize/2) ; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = (chunksize * chunksize/2) + (chunksize/2)-1; i < ((chunksize*chunksize)-1); i += chunksize)
+                {
+                    roadmap[i] = new StreetTile(0,0);
+                    roadmap[i + 1] = new StreetTile(0, 0);
+                }
+            }
+            else
+            {
+                int halfwayinthechunk = ((chunksize -1) / 2) * chunksize;
+                for (int i = halfwayinthechunk; i < halfwayinthechunk + ((chunksize +1)/2) ; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = (chunksize * chunksize/2) + ((chunksize-1)/2); i < (chunksize*chunksize)-1; i += chunksize)
+                {
+                    roadmap[i] = new StreetTile(0,0);
+                }
+            }
+            return roadmap;
         }
         
         private static ITile[] AllButNorth(int chunksize)
         {
+            ITile[] roadmap = new ITile[chunksize * chunksize];
+            if (chunksize % 2 == 0)
+            {
+                int halfwayinthechunk = ((chunksize /2)-1) * chunksize;
+                for (int i = halfwayinthechunk; i < halfwayinthechunk + (chunksize*2) ; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = (chunksize * chunksize/2) + (chunksize/2)-1; i < ((chunksize*chunksize)-1); i += chunksize)
+                {
+                    roadmap[i] = new StreetTile(0,0);
+                    roadmap[i + 1] = new StreetTile(0, 0);
+                }
+            }
+            else
+            {
+                int halfwayinthechunk = ((chunksize -1) / 2) * chunksize;
+                for (int i = halfwayinthechunk; i < halfwayinthechunk + chunksize ; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = (chunksize * chunksize/2) + ((chunksize-1)/2); i < (chunksize*chunksize)-1; i += chunksize)
+                {
+                    roadmap[i] = new StreetTile(0,0);
+                }
+            }
             
+            return roadmap;
         }
         
         private static ITile[] AllButSouth(int chunksize)
         {
+            ITile[] roadmap = new ITile[chunksize * chunksize];
+            if (chunksize % 2 == 0)
+            {
+                int halfwayinthechunk = ((chunksize /2)-1) * chunksize;
+                for (int i = halfwayinthechunk; i < halfwayinthechunk + (chunksize*2) ; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = (chunksize/2)-1; i < (chunksize* chunksize)/2; i += chunksize)
+                {
+                    roadmap[i] = new StreetTile(0,0);
+                    roadmap[i + 1] = new StreetTile(0, 0);
+                }
+            }
+            else
+            {
+                int halfwayinthechunk = ((chunksize -1) / 2) * chunksize;
+                for (int i = halfwayinthechunk; i < halfwayinthechunk + chunksize ; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = (chunksize-1)/2; i < (chunksize*chunksize)/2; i += chunksize)
+                {
+                    roadmap[i] = new StreetTile(0,0);
+                }
+            }
             
+            return roadmap;
         }
         
         private static ITile[] AllButEast(int chunksize)
         {
-            
+            ITile[] roadmap = new ITile[chunksize * chunksize];
+            if (chunksize % 2 == 0)
+            {
+                int halfwayinthechunk = ((chunksize /2)-1) * chunksize;
+                for (int i = halfwayinthechunk; i < halfwayinthechunk + (chunksize/2) ; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = halfwayinthechunk + chunksize; i < halfwayinthechunk + chunksize + (chunksize/2) ; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = (chunksize/2)-1; i < (chunksize* chunksize)-1; i += chunksize)
+                {
+                    roadmap[i] = new StreetTile(0,0);
+                    roadmap[i + 1] = new StreetTile(0, 0);
+                }
+            }
+            else
+            {
+                int halfwayinthechunk = ((chunksize -1) / 2) * chunksize;
+                for (int i = halfwayinthechunk; i < halfwayinthechunk + ((chunksize +1)/2) ; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = (chunksize-1)/2; i < (chunksize*chunksize)-1; i += chunksize)
+                {
+                    roadmap[i] = new StreetTile(0,0);
+                }
+            }
+            return roadmap;
         }
         
         private static ITile[] AllButWest(int chunksize)
         {
-            
+            ITile[] roadmap = new ITile[chunksize * chunksize];
+            if (chunksize % 2 == 0)
+            {
+                int halfwayinthechunk = ((chunksize /2)-1) * chunksize;
+                for (int i = halfwayinthechunk + (chunksize/2); i < halfwayinthechunk + chunksize; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = halfwayinthechunk + chunksize + (chunksize/2); i < halfwayinthechunk + (chunksize*2); i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = (chunksize/2)-1; i < (chunksize* chunksize)-1; i += chunksize)
+                {
+                    roadmap[i] = new StreetTile(0,0);
+                    roadmap[i + 1] = new StreetTile(0, 0);
+                }
+            }
+            else
+            {
+                int halfwayinthechunk = ((chunksize -1) / 2) * chunksize;
+                for (int i = halfwayinthechunk + ((chunksize -1)/2); i < halfwayinthechunk + chunksize  ; i++)
+                {
+                    roadmap[i] = new StreetTile(0, 0);
+                }
+                for (int i = (chunksize-1)/2; i < (chunksize*chunksize)-1; i += chunksize)
+                {
+                    roadmap[i] = new StreetTile(0,0);
+                }
+            }
+            return roadmap;
         }
 
         private static ITile[] AllRoads (int chunksize)
