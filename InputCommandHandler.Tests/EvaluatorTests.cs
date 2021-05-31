@@ -328,6 +328,15 @@ namespace InputCommandHandler.Tests
             //Assert
             _mockedPlayerService.Verify(mockedPlayer => mockedPlayer.InspectItem(inventorySlot), Times.Once);
         }
+        
+        [Test]
+        public void Test_Inspect_ThrowsExceptionWithSlotDigit42()
+        {
+            //arrange
+            var ast = InspectAST("slot 42");
+            //act & assert
+            Assert.Throws<SlotException>(() => _sut.Apply(ast));
+        }
 
         public static AST InspectAST(string inventorySlot)
         {
