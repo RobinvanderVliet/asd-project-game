@@ -1,4 +1,4 @@
-namespace DataTransfer.Model.World
+namespace WorldGeneration.Models
 {
     public static class CharacterSymbol
     {

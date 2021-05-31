@@ -4,9 +4,9 @@ using System.Linq;
 using DatabaseHandler.Services;
 using Display;
 using DataTransfer.DTO.Character;
-using DataTransfer.Model.World;
-using DataTransfer.Model.World.Interfaces;
 using WorldGeneration.Helper;
+using WorldGeneration.Models;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
 {

@@ -1,5 +1,4 @@
 ﻿using System;
-using DataTransfer.Model.World;
 using Player.Exceptions;
 using WorldGeneration.Models;
 

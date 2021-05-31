@@ -1,4 +1,4 @@
-﻿namespace DataTransfer.Model.World.Interfaces
+﻿namespace WorldGeneration.Models.Interfaces
 {
     public interface ITile
     {

@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
-using DataTransfer.Model.World;
 using Moq;
 using NUnit.Framework;
 

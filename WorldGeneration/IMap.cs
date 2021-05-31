@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using DataTransfer.DTO.Character;
-using DataTransfer.Model.World.Interfaces;
 
 namespace WorldGeneration
 {

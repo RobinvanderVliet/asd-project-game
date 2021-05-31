@@ -1,6 +1,6 @@
 ﻿using System;
-using DataTransfer.Model.World;
-using DataTransfer.Model.World.Interfaces;
+using WorldGeneration.Models;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Helper
 {

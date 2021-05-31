@@ -1,8 +1,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using DatabaseHandler.Services;
-using DataTransfer.Model.World;
 using Display;
+using WorldGeneration.Models;
 
 namespace WorldGeneration
 {

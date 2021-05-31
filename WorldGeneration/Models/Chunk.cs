@@ -1,7 +1,7 @@
 using System;
-using DataTransfer.Model.World.Interfaces;
+using WorldGeneration.Models.Interfaces;
 
-namespace DataTransfer.Model.World
+namespace WorldGeneration.Models
 {
     public class Chunk : IEquatable<Chunk>
     {

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using DatabaseHandler.Services;
 using DataTransfer.DTO.Character;
-using DataTransfer.Model.World;
-using DataTransfer.Model.World.Interfaces;
-using DataTransfer.Model.World.TerrainTiles;
 using Display;
 using NUnit.Framework;
 using Moq;
+using WorldGeneration.Models;
+using WorldGeneration.Models.Interfaces;
+using WorldGeneration.Models.TerrainTiles;
 using Range = Moq.Range;
 
 //using WorldGeneration.DatabaseFunctions;
