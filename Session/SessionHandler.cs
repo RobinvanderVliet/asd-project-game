@@ -231,7 +231,21 @@ namespace Session
             {
                 if (_screenHandler.Screen is SessionScreen screen)
                 {
-                    screen.UpdateWithNewSession(new[] {packet.Header.SessionID, sessionDTO.Name, sessionDTO.Clients.First()[1], sessionDTO.Clients.Count.ToString()});
+                    var hostName = String.Empty;
+                    var amountOfPlayers = "0";
+                    if (sessionDTO.Clients != null && sessionDTO.Clients.Count > 0)
+                    {
+                        hostName = sessionDTO.Clients.First()[1];
+                        amountOfPlayers = sessionDTO.Clients.Count.ToString();
+                    }
+                    else
+                    {
+                        // TODO: remove after/during integration
+                        hostName = "Unnamed player";
+                        amountOfPlayers = "1";
+                    }
+                    
+                    screen.UpdateWithNewSession(new[] {packet.Header.SessionID, sessionDTO.Name, hostName, amountOfPlayers});
                 }
             }
             else
