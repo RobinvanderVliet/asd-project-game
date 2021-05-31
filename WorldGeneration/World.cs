@@ -43,7 +43,7 @@ namespace WorldGeneration
                 var inWorld = _players.Where(x => x.Id == player.Id);
                 if (inWorld.Any())
                 {
-                    CurrentPlayer = player;
+                    CurrentPlayer = inWorld.FirstOrDefault();
                 }
                 else
                 {
