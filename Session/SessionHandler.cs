@@ -73,8 +73,16 @@ namespace Session
                 sessionDTO.SessionSeed = receivedSessionDTO.SessionSeed;
                 sendSessionDTO(sessionDTO);
                 joinSession = true;
-            }
+                
+                var db = new DbConnection();
+                var historyRepository = new Repository<ClientHistoryPoco>(db);
+                var historyService = new ServicesDb<ClientHistoryPoco>(historyRepository);
 
+                var savedGames = historyService.GetAllAsync();
+                savedGames.Wait();
+                var resultSavedGames = savedGames.Result.Where(x => x.GameId == sessionId);
+                _session.SavedGame = resultSavedGames.Any();
+                }
             return joinSession;
         }
 
