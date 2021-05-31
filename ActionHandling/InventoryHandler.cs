@@ -30,29 +30,17 @@ namespace ActionHandling
         public void InspectItem(string slot)
         {
             var inventory = _worldService.getCurrentPlayer().Inventory;
-            Item inventoryItem = null;
             
-            switch (slot)
+            Item inventoryItem = slot switch
             {
-                case "helmet":
-                    inventoryItem = inventory.Helmet;
-                    break;
-                case "armor":
-                    inventoryItem = inventory.Armor;
-                    break;
-                case "weapon":
-                    inventoryItem = inventory.Weapon;
-                    break;
-                case "slot 1":
-                    inventoryItem = inventory.ConsumableItemList[0];
-                    break;
-                case "slot 2":
-                    inventoryItem = inventory.ConsumableItemList[1];
-                    break;
-                case "slot 3":
-                    inventoryItem = inventory.ConsumableItemList[2];
-                    break;
-            }
+                "helmet" => inventory.Helmet,
+                "armor" => inventory.Armor,
+                "weapon" => inventory.Weapon,
+                "slot 1" => inventory.ConsumableItemList[0],
+                "slot 2" => inventory.ConsumableItemList[1],
+                "slot 3" => inventory.ConsumableItemList[2],
+                _ => null
+            };
 
             if (inventoryItem != null)
             {
