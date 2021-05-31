@@ -195,5 +195,35 @@ namespace InputHandling.Tests
             startSession.AddChild(new StartSession());
             return new AST(startSession);
         }
+
+        [Test]
+        public void Test_Apply_HandleDropActionIsCalled()
+        {
+            //Arrange
+            string inventorySlot = "armor";
+            var ast = DropAST(inventorySlot);
+            string inventorySlot1 = "helmet";
+            var ast1 = DropAST(inventorySlot1);
+            string inventorySlot2 = "weapon";
+            var ast2 = DropAST(inventorySlot2);
+
+            //Act
+            _sut.Apply(ast);
+            _sut.Apply(ast1);
+            _sut.Apply(ast2);
+
+            //Assert
+            //_mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem(inventorySlot), Times.Once);
+            //_mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem(inventorySlot1), Times.Once);
+            //_mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem(inventorySlot2), Times.Once);
+        }
+
+        public static AST DropAST(string inventorySlot)
+        {
+            Input drop = new Input();
+            drop.AddChild(new Drop()
+                .AddChild(new InventorySlot(inventorySlot)));
+            return new AST(drop);
+        }
     }
 }
