@@ -13,10 +13,10 @@ namespace Agent.Services
         private List<Configuration> _npcConfigurations;
         private InputHandler _inputHandler;
 
-        public NpcConfigurationService(List<Configuration> npcConfigurations, FileToDictionaryMapper fileToDictionaryMapper, InputHandler inputHandler)
+        public NpcConfigurationService(List<Configuration> npcConfigurations, FileToSettingListMapper fileToSettingListMapper, InputHandler inputHandler)
         {
             _npcConfigurations = npcConfigurations;
-            FileToDictionaryMapper = fileToDictionaryMapper;
+            FileToSettingListMapper = fileToSettingListMapper;
             _inputHandler = inputHandler;
             FileHandler = new FileHandler();
             Pipeline = new Pipeline();
@@ -26,7 +26,7 @@ namespace Agent.Services
         {
             var npcConfiguration = new NpcConfiguration();
             npcConfiguration.NpcName = npcName;
-            npcConfiguration.Settings = FileToDictionaryMapper.MapFileToConfiguration(filepath);
+            npcConfiguration.Settings = FileToSettingListMapper.MapFileToConfiguration(filepath);
             _npcConfigurations.Add(npcConfiguration);
         }
 

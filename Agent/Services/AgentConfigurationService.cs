@@ -14,9 +14,9 @@ namespace Agent.Services
         private List<Configuration> _agentConfigurations;
         private InputHandler _inputHandler;
 
-        public AgentConfigurationService(List<Configuration> agentConfigurations, FileToDictionaryMapper fileToDictionaryMapper, InputHandler inputHandler)
+        public AgentConfigurationService(List<Configuration> agentConfigurations, FileToSettingListMapper fileToSettingListMapper, InputHandler inputHandler)
         {
-            FileToDictionaryMapper = fileToDictionaryMapper;
+            FileToSettingListMapper = fileToSettingListMapper;
             _agentConfigurations = agentConfigurations;
             _inputHandler = inputHandler;
             _inlineConfig = new InlineConfig();
@@ -74,7 +74,7 @@ namespace Agent.Services
         {
             var agentConfiguration = new AgentConfiguration();
             agentConfiguration.AgentName = agentName;
-            agentConfiguration.Settings = FileToDictionaryMapper.MapFileToConfiguration(filepath);
+            agentConfiguration.Settings = FileToSettingListMapper.MapFileToConfiguration(filepath);
             _agentConfigurations.Add(agentConfiguration);
         }
         
