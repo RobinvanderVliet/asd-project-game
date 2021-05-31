@@ -311,12 +311,11 @@ namespace Session
 
                         if (GameStarted())
                         {
-                            JoinedPlayerDTO joinedPlayerDto = new JoinedPlayerDTO();
-                            joinedPlayerDto.PlayerPoco = result;
+                            StartGameDTO joinedPlayerDto = new StartGameDTO();
+                            joinedPlayerDto.ExistingPlayer = result;
 
                             var playerLocations = allPlayerId.Result.Where(x => x.GameGuid == _session.SessionId);
                             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
-
 
                             foreach (var element in playerLocations)
                             {
@@ -329,9 +328,7 @@ namespace Session
                             joinedPlayerDto.PlayerLocations = players;
                             
                             return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(joinedPlayerDto));
-                            
-                        }
-                     
+                            }
                     }
                     else
                     {

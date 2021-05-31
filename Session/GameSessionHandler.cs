@@ -157,16 +157,10 @@ namespace Session
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-            if (packet.Header.PacketType == PacketType.Session)
-            {
-                var joinedPlayerPoco = JsonConvert.DeserializeObject<JoinedPlayerDTO>(packet.Payload);
-                AddPlayerToGameSession(joinedPlayerPoco);
-            }
-            else if (packet.Header.PacketType == PacketType.GameSession)
-            {
+        
                 var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
                 HandleStartGameSession(startGameDTO);
-            }
+            
 
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
