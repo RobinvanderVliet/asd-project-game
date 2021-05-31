@@ -108,7 +108,7 @@ namespace Session
             var servicePlayer = ReturnPlayerService();
             
             var gamePOCO = new GamePOCO
-                {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
+                {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId(), Seed = _sessionHandler.GetSessionSeed()};
             gameService.CreateAsync(gamePOCO);
 
             List<string> allClients = _sessionHandler.GetAllClients();

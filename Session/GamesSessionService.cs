@@ -11,7 +11,6 @@ namespace Session
     {
         private readonly IGameSessionHandler _gameSessionHandler;
         private readonly ISessionHandler _sessionHandler;
-        private int seed;
 
         public GamesSessionService(IGameSessionHandler gameSessionHandler, ISessionHandler sessionHandler)
         {
@@ -42,10 +41,8 @@ namespace Session
                 {
                     p.PlayerGUIDHost,
                     p.GameGuid,
-                    p.Seed
                 };
 
-            seed = joinedTables.Select(x => x.Seed).FirstOrDefault();
 
             foreach (var element in joinedTables)
             {
@@ -55,9 +52,21 @@ namespace Session
 
         public void LoadGame(string value)
         {
-            // vanaf hier naar GameHandler
+            var tmp = new DbConnection();
+
+            var clientHistoryRepository = new Repository<ClientHistoryPoco>(tmp);
+            var clientHistory = new ServicesDb<ClientHistoryPoco>(clientHistoryRepository);
+            var gameRepository = new Repository<GamePOCO>(tmp);
+            var gameService = new ServicesDb<GamePOCO>(gameRepository);
+
+            var allGames = gameService.GetAllAsync();
+            allGames.Wait();
+
             Console.WriteLine("load game with name: ");
             var gameName = Console.ReadLine();
+            var seed = allGames.Result.Where(x => x.GameGuid == value).Select(x => x.Seed).FirstOrDefault();
+            
+            
             _sessionHandler.CreateSession(gameName, true, value, seed);
         }
 
