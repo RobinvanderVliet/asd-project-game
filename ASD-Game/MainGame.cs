@@ -1,5 +1,5 @@
-using InputCommandHandler;
-using Player.Services;
+using System;
+using InputHandling;
 using UserInterface;
 
 namespace ASD_project
@@ -8,42 +8,51 @@ namespace ASD_project
     {
         public class MainGame : IMainGame
         {
-            private IInputCommandHandlerComponent _inputHandler;
+            private const bool DEBUG_INTERFACE = true; //TODO: remove when UI is complete, obviously
+            private IInputHandler _inputHandler;
             private IScreenHandler _screenHandler;
-            private IPlayerService _playerService;
 
-            public MainGame(IInputCommandHandlerComponent inputHandler, IScreenHandler screenHandler, IPlayerService playerService)
+            public MainGame(IInputHandler inputHandler, IScreenHandler screenHandler)
             {
                 _screenHandler = screenHandler;
                 _inputHandler = inputHandler;
-                _playerService = playerService;
             }
+
             public void Run()
             {
-                _playerService.SetupPlayer();
-                _screenHandler.TransitionTo(new GameScreen());
 
-                while (true)
+                if (!DEBUG_INTERFACE)
                 {
-                    var currentScreen = _screenHandler.Screen;
+                    _screenHandler.TransitionTo(new StartScreen());
+                    while (true)
+                    {
+                        var currentScreen = _screenHandler.Screen;
 
-                    if (currentScreen is StartScreen)
-                    {
-                        _inputHandler.HandleStartScreenCommands();
+                        if (currentScreen is StartScreen)
+                        {
+                            _inputHandler.HandleStartScreenCommands();
+                        }
+                        else if (currentScreen is SessionScreen)
+                        {
+                            _inputHandler.HandleSessionScreenCommands();
+                        }
+                        else if (currentScreen is ConfigurationScreen)
+                        {
+                        }
+                        else if (currentScreen is WaitingScreen)
+                        {
+                        }
+                        else if (currentScreen is GameScreen)
+                        {
+                            _inputHandler.HandleGameScreenCommands();
+                        }
                     }
-                    else if (currentScreen is SessionScreen)
+                }
+                else
+                {
+                    while (true)
                     {
-                        _inputHandler.HandleSessionScreenCommands();
-                    }
-                    else if (currentScreen is ConfigurationScreen)
-                    {
-                        
-                    }
-                    else if (currentScreen is WaitingScreen)
-                    {
-                    }
-                    else if (currentScreen is GameScreen)
-                    {
+                        Console.WriteLine("Type input messages below");
                         _inputHandler.HandleGameScreenCommands();
                     }
                 }
