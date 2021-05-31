@@ -157,7 +157,7 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformCreateSession(CreateSession createSession)
         {
-            _sessionHandler.CreateSession(createSession.Message.MessageValue, false, null);
+            _sessionHandler.CreateSession(createSession.Message.MessageValue, false, null, null);
         }
 
         private void TransformJoinSession(JoinSession joinSession)

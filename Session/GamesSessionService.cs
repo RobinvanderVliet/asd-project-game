@@ -11,6 +11,7 @@ namespace Session
     {
         private readonly IGameSessionHandler _gameSessionHandler;
         private readonly ISessionHandler _sessionHandler;
+        private int seed;
 
         public GamesSessionService(IGameSessionHandler gameSessionHandler, ISessionHandler sessionHandler)
         {
@@ -40,8 +41,11 @@ namespace Session
                 select new
                 {
                     p.PlayerGUIDHost,
-                    p.GameGuid
+                    p.GameGuid,
+                    p.Seed
                 };
+
+            seed = joinedTables.Select(x => x.Seed).FirstOrDefault();
 
             foreach (var element in joinedTables)
             {
@@ -54,7 +58,7 @@ namespace Session
             // vanaf hier naar GameHandler
             Console.WriteLine("load game with name: ");
             var gameName = Console.ReadLine();
-            _sessionHandler.CreateSession(gameName, true, value);
+            _sessionHandler.CreateSession(gameName, true, value, seed);
         }
 
         public void StartGame()

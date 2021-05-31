@@ -47,6 +47,7 @@ namespace Session
         private StartGameDTO LoadSave()
         {
             StartGameDTO startGameDTO = new StartGameDTO();
+            
 
             var playerService = ReturnPlayerService();
             var allPlayers = playerService.GetAllAsync();
@@ -62,6 +63,7 @@ namespace Session
         {
             startGameDTO.SavedPlayers = new List<PlayerPOCO>();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
+            _sessionHandler.GetSessionSeed();
 
             foreach (var player in allPlayersInGame)
             {

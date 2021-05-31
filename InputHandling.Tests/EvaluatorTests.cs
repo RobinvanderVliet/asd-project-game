@@ -143,7 +143,7 @@ namespace InputHandling.Tests
             _sut.Apply(ast);
         
             // Assert
-            _mockedSessionHandler.Verify(mockedSession => mockedSession.CreateSession(sessionName, false, null), Times.Once);
+            _mockedSessionHandler.Verify(mockedSession => mockedSession.CreateSession(sessionName, false, null, null), Times.Once);
         }
     
         private static AST CreateSessionAst(string sessionName)

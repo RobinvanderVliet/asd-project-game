@@ -100,7 +100,8 @@ namespace Session
             SendHeartbeat();
         }
 
-        public bool CreateSession(string sessionName, bool savedGame, string? sessionId)
+
+        public bool CreateSession(string sessionName, bool savedGame, string sessionId, int? seed)
         {
             _session = new Session(sessionName);
             _session.SessionId = sessionId;
@@ -114,7 +115,16 @@ namespace Session
             }
 
             _session.AddClient(_clientController.GetOriginId());
-            _session.SessionSeed = MapFactory.GenerateSeed();
+
+            if (_session.SavedGame)
+            {
+             _session.SessionSeed = seed.Value; 
+               
+            }
+            else
+            {
+                _session.SessionSeed = MapFactory.GenerateSeed();
+            }
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
