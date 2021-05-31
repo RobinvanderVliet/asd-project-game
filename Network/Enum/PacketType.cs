@@ -5,7 +5,8 @@
         Chat,
         Move,
         Session,
-        GameSession
+        GameSession,
+        Inventory,
         
     }
 }
