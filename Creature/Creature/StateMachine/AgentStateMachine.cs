@@ -43,18 +43,18 @@ namespace Creature.Creature.StateMachine
             CreatureState fleeState = new FleeState(CreatureData);
 
             // Wandering
-            builder.In(followPlayerState).On(CreatureEvent.Event.LOST_PLAYER).Goto(wanderState);
+            builder.In(followPlayerState).On(CreatureEvent.Event.LOST_CREATURE).Goto(wanderState);
 
             // Follow player
-            builder.In(wanderState).On(CreatureEvent.Event.SPOTTED_PLAYER).Goto(followPlayerState).Execute<ICreatureData>(new FollowCreatureState(CreatureData).Do);
-            builder.In(followPlayerState).On(CreatureEvent.Event.SPOTTED_PLAYER).Goto(followPlayerState).Execute<ICreatureData>(new FollowCreatureState(CreatureData).Do);
-            builder.In(useConsumableState).On(CreatureEvent.Event.REGAINED_HEALTH_PLAYER_OUT_OF_RANGE).Goto(followPlayerState).Execute<ICreatureData>(new FollowCreatureState(CreatureData).Do);
-            builder.In(attackPlayerState).On(CreatureEvent.Event.PLAYER_OUT_OF_RANGE).Goto(followPlayerState).Execute<ICreatureData>(new FollowCreatureState(CreatureData).Do);
+            builder.In(wanderState).On(CreatureEvent.Event.SPOTTED_CREATURE).Goto(followPlayerState).Execute<ICreatureData>(new FollowCreatureState(CreatureData).Do);
+            builder.In(followPlayerState).On(CreatureEvent.Event.SPOTTED_CREATURE).Goto(followPlayerState).Execute<ICreatureData>(new FollowCreatureState(CreatureData).Do);
+            builder.In(useConsumableState).On(CreatureEvent.Event.REGAINED_HEALTH_CREATURE_OUT_OF_RANGE).Goto(followPlayerState).Execute<ICreatureData>(new FollowCreatureState(CreatureData).Do);
+            builder.In(attackPlayerState).On(CreatureEvent.Event.CREATURE_OUT_OF_RANGE).Goto(followPlayerState).Execute<ICreatureData>(new FollowCreatureState(CreatureData).Do);
 
             // Attack player
-            builder.In(followPlayerState).On(CreatureEvent.Event.PLAYER_IN_RANGE).Goto(attackPlayerState).Execute<ICreatureData>(new AttackState(CreatureData).Do);
-            builder.In(attackPlayerState).On(CreatureEvent.Event.PLAYER_IN_RANGE).Execute<ICreatureData>(new AttackState(CreatureData).Do);
-            builder.In(useConsumableState).On(CreatureEvent.Event.REGAINED_HEALTH_PLAYER_IN_RANGE).Goto(attackPlayerState).Execute<ICreatureData>(new AttackState(CreatureData).Do);
+            builder.In(followPlayerState).On(CreatureEvent.Event.CREATURE_IN_RANGE).Goto(attackPlayerState).Execute<ICreatureData>(new AttackState(CreatureData).Do);
+            builder.In(attackPlayerState).On(CreatureEvent.Event.CREATURE_IN_RANGE).Execute<ICreatureData>(new AttackState(CreatureData).Do);
+            builder.In(useConsumableState).On(CreatureEvent.Event.REGAINED_HEALTH_CREATURE_IN_RANGE).Goto(attackPlayerState).Execute<ICreatureData>(new AttackState(CreatureData).Do);
 
             // Use potion
             builder.In(fleeState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);

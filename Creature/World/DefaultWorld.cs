@@ -63,37 +63,36 @@ namespace Creature.World
             foreach (ICreature creature in _creatures)
             {
                 ICreature player = _players[0];
-                int attackRange = 1;
+                int attackRange = 3;
                 int visionRange = creature.CreatureStateMachine.CreatureData.VisionRange;
 
                 // TODO: implement this using List<Setting>
-                // if (creature.CreatureStateMachine.CreatureData.RuleSet["combat"] == "offensive")
-                // {
-                //     visionRange += 6;
-                // }
+                //foreach (var block in creature.CreatureStateMachine.CreatureData.RuleSet)
+                //{
+                //    if (block.ContainsKey("combat") && block["combat"] == "offensive")
+                //    {
+                //        visionRange += 6;
+                //        attackRange += 3;
+                //    }
+                //}
 
                 if (Vector2.DistanceSquared(creature.CreatureStateMachine.CreatureData.Position, player.CreatureStateMachine.CreatureData.Position) <= visionRange)
                 {
-                    creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.SPOTTED_PLAYER, player.CreatureStateMachine.CreatureData);
-
                     Vector2 monsterPosition = creature.CreatureStateMachine.CreatureData.Position;
                     Vector2 playerPosition = player.CreatureStateMachine.CreatureData.Position;
 
-                    if ((monsterPosition.X + attackRange) == playerPosition.X && (monsterPosition.Y == playerPosition.Y)
-                        || (monsterPosition.X - attackRange) == playerPosition.X && (monsterPosition.Y == playerPosition.Y)
-                        || (monsterPosition.Y + attackRange) == playerPosition.Y && (monsterPosition.X == playerPosition.X)
-                        || (monsterPosition.Y - attackRange) == playerPosition.Y && (monsterPosition.X == playerPosition.X))
+                    if (Vector2.Distance(creature.CreatureStateMachine.CreatureData.Position, player.CreatureStateMachine.CreatureData.Position) <= attackRange)
                     {
-                        creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.PLAYER_IN_RANGE, player.CreatureStateMachine.CreatureData);
+                        creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.CREATURE_IN_RANGE, player.CreatureStateMachine.CreatureData);
                     }
                     else
                     {
-                        creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.PLAYER_OUT_OF_RANGE, player.CreatureStateMachine.CreatureData);
+                        creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.SPOTTED_CREATURE, player.CreatureStateMachine.CreatureData);
                     }
                 }
                 else
                 {
-                    creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.LOST_PLAYER, player.CreatureStateMachine.CreatureData);
+                    creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.LOST_CREATURE, player.CreatureStateMachine.CreatureData);
                 }
             }
 

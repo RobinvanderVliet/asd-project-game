@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Creature.Creature.StateMachine;
+using System.Linq;
 
 namespace Creature
 {
@@ -24,34 +25,46 @@ namespace Creature
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
             npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
-            
-            var settings = new List<Setting>();
-            settings.Add(new Setting("combat_engage_inventory_comparable", "inventory"));
-            settings.Add(new Setting("combat_engage_inventory_treshold", "knife"));
-            settings.Add(new Setting("combat_engage_inventory_comparison", "contains"));
-            settings.Add(new Setting("combat_engage_inventory_comparison_true", "use knife"));
-            settings.Add(new Setting("explore_engage_inventory_comparison_true", "use knife"));
-            settings.Add(new Setting("explore_engage_inventory_comparison_truea", "use knsife"));
-            settings.Add(new Setting("explore_engadsge_inventory_comparison_truea", "use kdsnsife"));
-            settings.Add(new Setting("combat_engadsge_inventory_comparison_truea", "use kdsnsife"));
-            settings.Add(new Setting("combat_eangadsge_inventory_comparison_truea", "use kdsnsifae"));
 
-            PlayerData playerData = new PlayerData(new Vector2(5, 5), 100, 90, 10, world, new List<Setting>());
-            AgentData agentData = new AgentData(new Vector2(10, 10), 100, 1, 10, world, new List<Setting>(), false);
-            MonsterData monsterData = new MonsterData(new Vector2(10, 15), 20, 5, 50, world, new List<Setting>(), false);
+            List<Dictionary<string, string>> listOfDictionaries = new List<Dictionary<string, string>>()
+            {
+                new Dictionary<string, string>()
+                {
+                    {"combat_default_monster_comparable","monster"},
+                    {"combat_default_monster_threshold","player"},
+                    {"combat_default_monster_comparison","sees"},
+                    {"combat_default_monster_comparison_true","follow"},
+                    {"combat_default_monster_comparison_false","flee"}
+                },
+                new Dictionary<string,string>()
+                {
+                    {"combat_default_monster_comparable","monster"},
+                    {"combat_default_monster_threshold","player"},
+                    {"combat_default_monster_comparison","nearby"},
+                    {"combat_default_monster_comparison_true","attack"}
+                }
+            };
+
+            var lines = listOfDictionaries[0].Select(kvp => kvp.Key + ": " + kvp.Value.ToString());
+            System.Diagnostics.Debug.WriteLine(string.Join(Environment.NewLine, lines));
+
+            //PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, npcConfigurationService.GetConfigurations()[0].Settings);
+            PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, listOfDictionaries);
+            AgentData agentData = new AgentData(new Vector2(10, 10), 20, 5, 50, world, listOfDictionaries, false);
+            MonsterData monsterData = new MonsterData(new Vector2(10, 15), 20, 5, 50, world, listOfDictionaries, false);
 
             ICreature player = new Player(playerData);
             testAgent = new Agent(agentData);
-            //ICreature agent = new Agent(agentData);
-            //ICreature monster = new Monster(monsterData);
+            ICreature agent = new Agent(agentData);
+            ICreature monster = new Monster(monsterData);
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);
-            world.SpawnAgent(testAgent);
+            //world.SpawnAgent(testAgent);
             //world.SpawnAgent(agent);
 
             // TODO: fix monster statemachine to get this working
-            // world.SpawnCreature(monster);
+            world.SpawnCreature(monster);
 
             world.Render();
 

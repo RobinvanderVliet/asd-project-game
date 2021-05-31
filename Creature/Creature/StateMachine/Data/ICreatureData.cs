@@ -12,6 +12,6 @@ namespace Creature.Creature.StateMachine.Data
         int Damage { get; set; }
         double Health { get; set; }
         IWorld World { get; set; }
-        List<Setting> RuleSet { get; }
+        List<Dictionary<string, string>> RuleSet { get; }
     }
 }
