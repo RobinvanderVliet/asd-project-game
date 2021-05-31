@@ -116,7 +116,7 @@ namespace Session
 
             _session.AddClient(_clientController.GetOriginId());
 
-            if (_session.SavedGame)
+            if (seed != null)
             {
              _session.SessionSeed = seed.Value; 
                
@@ -199,7 +199,6 @@ namespace Session
                     return addRequestedSessions(packet);
                 }
             }
-
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 

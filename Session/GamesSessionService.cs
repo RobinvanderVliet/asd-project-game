@@ -50,12 +50,18 @@ namespace Session
             }
         }
 
+        private ServicesDb<GamePOCO> GetGameService()
+        {
+            var tmp = new DbConnection();
+            var gameRepository = new Repository<GamePOCO>(tmp);
+            var gameService = new ServicesDb<GamePOCO>(gameRepository);
+
+            return gameService;
+        }
+
         public void LoadGame(string value)
         {
             var tmp = new DbConnection();
-
-            var clientHistoryRepository = new Repository<ClientHistoryPoco>(tmp);
-            var clientHistory = new ServicesDb<ClientHistoryPoco>(clientHistoryRepository);
             var gameRepository = new Repository<GamePOCO>(tmp);
             var gameService = new ServicesDb<GamePOCO>(gameRepository);
 
@@ -65,8 +71,6 @@ namespace Session
             Console.WriteLine("load game with name: ");
             var gameName = Console.ReadLine();
             var seed = allGames.Result.Where(x => x.GameGuid == value).Select(x => x.Seed).FirstOrDefault();
-            
-            
             _sessionHandler.CreateSession(gameName, true, value, seed);
         }
 
