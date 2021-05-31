@@ -25,8 +25,8 @@ namespace Creature.Creature.NeuralNetworking
         {
             var random = new Random();
             float rand2 = (float)random.NextDouble();
-            if (rand2 < 0.1)
-            {//10% of the time completely change the weight
+            if (rand2 < 0.3)
+            {//30% of the time completely change the weight
                 weight = random.Next(-1, 1);
             }
             else
