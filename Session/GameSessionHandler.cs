@@ -180,8 +180,6 @@ namespace Session
                             joinedPlayerDto.ExistingPlayer.Stamina), true);
                 }
             
-
-            _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
             foreach (var player in joinedPlayerDto.PlayerLocations)
             {
                 if (_clientController.GetOriginId() != joinedPlayerDto.ExistingPlayer.PlayerGuid)
