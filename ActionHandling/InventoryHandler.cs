@@ -30,6 +30,7 @@ namespace ActionHandling
         public void InspectItem(string slot)
         {
             var inventory = _worldService.getCurrentPlayer().Inventory;
+            string output = "No item in this inventory slot";
             
             Item inventoryItem = slot switch
             {
@@ -41,15 +42,15 @@ namespace ActionHandling
                 "slot 3" => inventory.ConsumableItemList[2],
                 _ => null
             };
-
+            
+            
             if (inventoryItem != null)
             {
-                Console.WriteLine(inventoryItem.ToString());
+                output = inventoryItem.ToString();
             }
-            else
-            {
-                Console.WriteLine("No item in this inventory slot");
-            }
+            
+            Console.WriteLine();
+
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
