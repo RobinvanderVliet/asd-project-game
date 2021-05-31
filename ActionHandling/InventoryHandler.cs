@@ -24,6 +24,7 @@ namespace ActionHandling
         public void Search()
         {
             string searchResult = _worldService.SearchCurrentTile();
+            Console.WriteLine(searchResult);
         }
 
 
