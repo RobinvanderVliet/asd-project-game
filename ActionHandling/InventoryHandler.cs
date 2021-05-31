@@ -1,4 +1,8 @@
 ﻿using ActionHandling.DTO;
+using DatabaseHandler;
+using DatabaseHandler.POCO;
+using DatabaseHandler.Repository;
+using DatabaseHandler.Services;
 using Items.Consumables;
 using Network;
 using Network.DTO;
@@ -47,7 +51,6 @@ namespace ActionHandling
             var inventoryDTO = JsonConvert.DeserializeObject<InventoryDTO>(packet.Payload);
             bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
 
-
             switch (inventoryDTO.InventoryType)
             {
                 case InventoryType.Use:
@@ -75,41 +78,36 @@ namespace ActionHandling
             var player = _worldService.GetPlayer(inventoryDTO.UserId);
             if(player.Inventory.ConsumableItemList.Count >= inventoryDTO.Index)
             {
-                Consumable itemToUse = player.Inventory.ConsumableItemList.ElementAt(inventoryDTO.Index);
-                player.Inventory.ConsumableItemList.RemoveAt(inventoryDTO.Index);
+                Consumable itemToUse = player.Inventory.ConsumableItemList.ElementAt(inventoryDTO.Index-1);
+                player.Inventory.ConsumableItemList.RemoveAt(inventoryDTO.Index-1);
                 player.UseConsumable(itemToUse);
 
                 if (handleInDatabase)
                 {
+                    var dbConnection = new DbConnection();
 
+                    var playerRepository = new Repository<PlayerPOCO>(dbConnection);
+
+                    var playerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
+
+                    PlayerItemPOCO playerItemPOCO = new() {PlayerGUID = inventoryDTO.UserId, ItemName = itemToUse.ItemName };
+                    playerItemRepository.DeleteAsync(playerItemPOCO);
+
+                    PlayerPOCO playerPOCO = playerRepository.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == inventoryDTO.UserId);
+                    playerPOCO.Health = player.Health;
+                    //add stamina to playerPOCO
+                    playerRepository.UpdateAsync(playerPOCO);
                 }
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
             else
             {
-                return new HandlerResponseDTO(SendAction.ReturnToSender, "Could not use item");
+                if(inventoryDTO.UserId == _clientController.GetOriginId())
+                {
+                    Console.WriteLine("Could not find item");
+                }
+                return new HandlerResponseDTO(SendAction.ReturnToSender, "Could not find item");
             }
-        }
-
-        private bool HandleUseInWorld(string userId, int index)
-        {
-            var player = _worldService.GetPlayer(userId);
-            if (player.Inventory.ConsumableItemList.Count >= index)
-            {
-                Consumable itemToUse = player.Inventory.ConsumableItemList.ElementAt(index);
-                player.Inventory.ConsumableItemList.RemoveAt(index);
-                player.UseConsumable(itemToUse);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        private bool HandleUseInDatabase(string userId, int index)
-        {
-            throw new NotImplementedException();
         }
 
         public void PickupItem(int index)
