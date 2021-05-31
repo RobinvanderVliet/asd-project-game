@@ -17,6 +17,8 @@ namespace Session
 {
     public class SessionHandler : IPacketHandler, ISessionHandler
     {
+        private const bool DEBUG_INTERFACE = true; //TODO: remove when UI is complete, obviously
+        
         private IClientController _clientController;
         private Session _session;
         private IHeartbeatHandler _heartbeatHandler;
@@ -95,7 +97,13 @@ namespace Session
             _session.InSession = true;
 
             _heartbeatHandler = new HeartbeatHandler();
-            Console.WriteLine("Created session with the name: " + _session.Name);
+
+            if (_screenHandler.Screen is GameScreen)
+            {
+                GameScreen screen = _screenHandler.Screen as GameScreen;
+                screen.AddMessage("Created session with the name: " + _session.Name);
+            }
+                
 
             return _session.InSession;
         }
@@ -223,14 +231,19 @@ namespace Session
             _availableSessions.TryAdd(packet.Header.SessionID, packet);
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
 
-            if (_screenHandler.Screen is SessionScreen)
+            if (!DEBUG_INTERFACE) // Remove when UI is completed
             {
-                SessionScreen screen = _screenHandler.Screen as SessionScreen;
-                screen.UpdateSessions(sessionDTO, packet.Header.SessionID);
+                if (_screenHandler.Screen is SessionScreen)
+                {
+                    SessionScreen screen = _screenHandler.Screen as SessionScreen;
+                    screen.UpdateSessions(sessionDTO.Name, packet.Header.SessionID);
+                }
             }
-
-            // Console.WriteLine(
-            //     packet.Header.SessionID + " Name: " + sessionDTO.Name + " Seed: " + sessionDTO.SessionSeed);
+            else
+            {
+                Console.WriteLine(
+                    packet.Header.SessionID + " Name: " + sessionDTO.Name + " Seed: " + sessionDTO.SessionSeed);   
+            }
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
         
@@ -317,9 +330,7 @@ namespace Session
             _clientController.IsBackupHost = false;
             
             _senderHeartbeatTimer.Close();
-            
-            Console.WriteLine("Look at me, I'm the captain (Host) now!");
-            
+
             List<string> heartbeatSenders = new List<string>(_session.GetAllClients());
             heartbeatSenders.Remove(_clientController.GetOriginId());
             
