@@ -25,7 +25,6 @@ namespace Session
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
-            _clientController.SubscribeToPacketType(this, PacketType.Session);
             _worldService = worldService;
             _sessionHandler = sessionHandler;
         }
@@ -160,7 +159,6 @@ namespace Session
         {
             if (packet.Header.PacketType == PacketType.Session)
             {
-                Console.WriteLine("pakketje session");
                 var joinedPlayerPoco = JsonConvert.DeserializeObject<JoinedPlayerDTO>(packet.Payload);
                 AddPlayerToGameSession(joinedPlayerPoco);
             }
