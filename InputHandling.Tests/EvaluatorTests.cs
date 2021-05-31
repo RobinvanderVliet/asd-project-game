@@ -207,8 +207,7 @@ namespace InputHandling.Tests
             _sut.Apply(ast);
             
             //Assert
-            //_mockedPlayerService.Verify(mockedPlayer => mockedPlayer.InspectItem(inventorySlot), Times.Once);
-            // TODO: Replace by _inventoryHandler
+            _mockedInventoryHandler.Verify(mockedInventory => mockedInventory.InspectItem(inventorySlot), Times.Once);
         }
         
         [Test]

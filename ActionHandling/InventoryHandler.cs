@@ -26,7 +26,10 @@ namespace ActionHandling
             string searchResult = _worldService.SearchCurrentTile();
         }
 
-
+        public void InspectItem(string slot)
+        {
+            throw new NotImplementedException("TODO");
+        }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
