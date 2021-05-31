@@ -42,6 +42,7 @@ namespace ASD_project
                     services.AddTransient<IMainGame, MainGame>();
                     services.AddScoped<INetworkComponent, NetworkComponent>();
                     services.AddScoped<IClientController, ClientController>();
+                    services.AddScoped<IInventoryHandler, InventoryHandler>();
                     services.AddScoped<IChatHandler, ChatHandler>();
                     services.AddScoped<ISessionHandler, SessionHandler>();
                     services.AddScoped<IMoveHandler, MoveHandler>();

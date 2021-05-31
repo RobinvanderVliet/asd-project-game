@@ -14,17 +14,20 @@ namespace InputHandling.Antlr.Transformer
         private IMoveHandler _moveHandler;
         private IGameSessionHandler _gameSessionHandler;
         private IChatHandler _chatHandler;
-        
+        private IInventoryHandler _inventoryHandler;
+
+
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private String _commando;
 
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IInventoryHandler inventoryHandler)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
             _gameSessionHandler = gameSessionHandler;
             _chatHandler = chatHandler;
+            _inventoryHandler = inventoryHandler;
         }
         public void Apply(AST ast)
         {
@@ -82,6 +85,9 @@ namespace InputHandling.Antlr.Transformer
                         break;
                     case Inspect:
                         TransformInspect((Inspect)nodeBody[i]);
+                        break;
+                    case Search:
+                        TransformSearch();
                         break;
                 }
         }
@@ -164,7 +170,7 @@ namespace InputHandling.Antlr.Transformer
         {
             _gameSessionHandler.SendGameSession();
         }
-        
+
         private void TransformInspect(Inspect inspect)
         {
             string slot = inspect.InventorySlot.InventorySlotValue;
@@ -177,6 +183,11 @@ namespace InputHandling.Antlr.Transformer
             {
                 throw new SlotException($"The slot you provided {slot} is not valid.");
             }
+        }
+
+        private void TransformSearch()
+        {
+            _inventoryHandler.Search();
         }
     }
 }

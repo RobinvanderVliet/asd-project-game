@@ -1,3 +1,5 @@
+using System;
+
 namespace WorldGeneration
 {
     public class WorldService : IWorldService
@@ -32,6 +34,20 @@ namespace WorldGeneration
         public Player getCurrentPlayer()
         {
             return _world.CurrentPlayer;
+        }
+
+        public string SearchCurrentTile()
+        {
+            var itemsOnCurrentTile = _world.GetCurrentTile().ItemsOnTile;
+
+            string result = "The following items are on the current tile:" + Environment.NewLine;
+            int index = 1;
+            foreach (var item in itemsOnCurrentTile)
+            {
+                result += $"{index}. {item.ItemName}{Environment.NewLine}";
+                index += 1;
+            }
+            return result;
         }
     }
 }
