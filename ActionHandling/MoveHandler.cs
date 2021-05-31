@@ -52,7 +52,7 @@ namespace ActionHandling
                     break;
             }
 
-            var currentPlayer = _worldService.getCurrentPlayer();
+            var currentPlayer = _worldService.GetCurrentPlayer();
 
             MoveDTO moveDTO = new(currentPlayer.Id, currentPlayer.XPosition + x, currentPlayer.YPosition + y);
 

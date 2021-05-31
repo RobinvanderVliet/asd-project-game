@@ -1,4 +1,5 @@
 ﻿using ActionHandling.DTO;
+using Items.Consumables;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
@@ -91,7 +92,13 @@ namespace ActionHandling
 
         private void HandleUseInWorld(string userId, int index)
         {
-            throw new NotImplementedException();
+            var player = _worldService.GetPlayer(userId);
+            if (player.Inventory.ConsumableItemList.Count >= index)
+            {
+                Consumable itemToUse = player.Inventory.ConsumableItemList.ElementAt(index);
+                player.Inventory.ConsumableItemList.RemoveAt(index);
+                player.UseConsumable(itemToUse);
+            }
         }
 
         private bool HandleUseInDatabase(string userId, int index)
