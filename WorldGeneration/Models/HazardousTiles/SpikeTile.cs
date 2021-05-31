@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Items;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using WorldGeneration.Models.Interfaces;
 
@@ -11,8 +13,12 @@ namespace WorldGeneration.Models.HazardousTiles
         public string Symbol { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
+        public List<Item> ItemsOnTile { get; set; }
+
+
         public SpikeTile(int x, int y)
         {
+            ItemsOnTile = new();
             Symbol = TileSymbol.SPIKE;
             IsAccessible = true;
             XPosition = x;
@@ -21,6 +27,7 @@ namespace WorldGeneration.Models.HazardousTiles
         }
 
         public int Damage { get; set; }
+        
 
         public int GetDamage(int time)
         {

@@ -1,4 +1,6 @@
-using System.Diagnostics.CodeAnalysis;
+// should be deleted
+
+/*using System.Diagnostics.CodeAnalysis;
 using Moq;
 using NUnit.Framework;
 using Player.Exceptions;
@@ -314,4 +316,4 @@ namespace Player.Tests
             _mockedRadiationLevel.Verify(mockedRadiationLevel => mockedRadiationLevel.Level, Times.Once);
         }
     }
-}
+}*/
