@@ -9,6 +9,7 @@ using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using WorldGeneration;
 using ActionHandling;
+using Agent.GameConfiguration;
 using Chat;
 using InputHandling;
 using InputHandling.Antlr;
@@ -54,6 +55,7 @@ namespace ASD_project
                     services.AddScoped<IInputHandler, InputHandler>();
                     services.AddScoped<IPipeline, Pipeline>();
                     services.AddScoped<IEvaluator, Evaluator>();
+                    services.AddScoped<IGameConfigurationHandler, GameConfigurationHandler>();
                 })
                 .UseSerilog()
                 .Build();

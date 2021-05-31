@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Timers;
+using Agent.GameConfiguration;
 using InputHandling.Antlr;
 using InputHandling.Exceptions;
 using Session;
@@ -14,20 +15,22 @@ namespace InputHandling
         private IPipeline _pipeline;
         private ISessionHandler _sessionHandler;
         private IScreenHandler _screenHandler;
+        private IGameConfigurationHandler _gameConfigurationHandler;
         private static Timer aTimer;
         private const string RETURN_KEYWORD = "return";
 
-        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler)
+        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler, IGameConfigurationHandler gameConfigurationHandler)
         {
             _pipeline = pipeline;
             _sessionHandler = sessionHandler;
             _screenHandler = screenHandler;
+            _gameConfigurationHandler = gameConfigurationHandler;
         }
 
-        public InputHandler()
-        {
-
-        }
+        // public InputHandler()
+        // {
+        //
+        // }
 
         public void HandleGameScreenCommands()
         {
@@ -123,6 +126,11 @@ namespace InputHandling
             if (input == RETURN_KEYWORD)
             {
                 _screenHandler.TransitionTo(new StartScreen());
+                _gameConfigurationHandler.SetGameConfiguration();
+            }
+            else
+            {
+                _gameConfigurationHandler.HandleAnswer(input);
             }
         }
     }

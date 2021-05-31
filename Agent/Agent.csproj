@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\InputHandling\InputHandling.csproj" />
+    <ProjectReference Include="..\UserInterface\UserInterface.csproj" />
   </ItemGroup>
 
 </Project>
