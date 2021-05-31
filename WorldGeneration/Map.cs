@@ -109,7 +109,7 @@ namespace WorldGeneration
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
                 {
                     var tile = GetLoadedTileByXAndY(x, y);
-                    _consolePrinter.PrintText($" {GetDisplaySymbol(currentPlayer, tile, characters)}");
+                    _consolePrinter.PrintText($"  {GetDisplaySymbol(currentPlayer, tile, characters)}");
                 }
                 _consolePrinter.NextLine();
             }
