@@ -3,6 +3,7 @@ using DatabaseHandler.POCO;
 
 namespace Session.DTO
 {
+    [ExcludeFromCodeCoverage]
     public class StartGameDTO
     {
         public string GameGuid { get; set; }

@@ -1,17 +1,6 @@
-using Microsoft.Extensions.Logging;
 using System;
-using InputCommandHandler;
-using Player.Model;
-using Player.Services;
-using System.Collections.Generic;
-using Agent.Mapper;
-using Agent.Models;
-using Agent.Services;
-using WorldGeneration;
-using Chat;
-using Network;
-using Session;
-using Player.ActionHandlers;
+using InputHandling;
+using UserInterface;
 
 namespace ASD_project
 {
@@ -28,6 +17,9 @@ namespace ASD_project
             private readonly IClientController _clientController;
             private readonly IWorldService _worldService;
             private readonly IGamesSessionService _gamesSessionService;
+            private const bool DEBUG_INTERFACE = true; //TODO: remove when UI is complete, obviously
+            private IInputHandler _inputHandler;
+            private IScreenHandler _screenHandler;
 
             public MainGame(ILogger<MainGame> log, IInventory inventory, IClientController clientController, IWorldService worldService, 
                 IChatHandler chatHandler, ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler
@@ -42,27 +34,51 @@ namespace ASD_project
                 _moveHandler = moveHandler;
                 _gameSessionHandler = gameSessionHandler;
                 _gamesSessionService = gamesSessionService;
+
+
+            public MainGame(IInputHandler inputHandler, IScreenHandler screenHandler)
+            {
+                _screenHandler = screenHandler;
+                _inputHandler = inputHandler;
             }
 
             public void Run()
             {
-                Console.WriteLine("Game is gestart");
-                InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
 
-                // TODO: Remove from this method, a command needs to be made
-                // AgentConfigurationService agentConfigurationService = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), inputHandler);
-                // agentConfigurationService.Configure();
-                
-                //moet later vervangen worden
-                IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _moveHandler, _clientController, _worldService);
-
-                ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
-                // moet vervangen worden met variabele: isRun
-                while (true) 
+                if (!DEBUG_INTERFACE)
                 {
-                    Console.WriteLine("Type input messages below");
-                    inputHandler.HandleCommands(playerService, sessionService, _gamesSessionService);
+                    _screenHandler.TransitionTo(new StartScreen());
+                    while (true)
+                    {
+                        var currentScreen = _screenHandler.Screen;
+
+                        if (currentScreen is StartScreen)
+                        {
+                            _inputHandler.HandleStartScreenCommands();
+                        }
+                        else if (currentScreen is SessionScreen)
+                        {
+                            _inputHandler.HandleSessionScreenCommands();
+                        }
+                        else if (currentScreen is ConfigurationScreen)
+                        {
+                        }
+                        else if (currentScreen is WaitingScreen)
+                        {
+                        }
+                        else if (currentScreen is GameScreen)
+                        {
+                            _inputHandler.HandleGameScreenCommands();
+                        }
+                    }
+                }
+                else
+                {
+                    while (true)
+                    {
+                        Console.WriteLine("Type input messages below");
+                        _inputHandler.HandleGameScreenCommands();
+                    }
                 }
             }
         }

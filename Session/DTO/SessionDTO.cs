@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Session.DTO
 {
+    [ExcludeFromCodeCoverage]
     public class SessionDTO
     {
         public SessionType SessionType { get; set; }
