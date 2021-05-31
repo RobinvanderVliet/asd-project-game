@@ -9,16 +9,14 @@ using NUnit.Framework;
 namespace Agent.Tests.Mapper
 {
     [ExcludeFromCodeCoverage]
-    public class FileToDictionaryMapperTest
+    public class FileToSettingListMapperTest
     {
         private FileToSettingListMapper _sut;
-        private FileHandler _handler;
 
         [SetUp]
         public void Setup()
         {
             _sut = new FileToSettingListMapper();
-            _handler = new FileHandler();
 
         }
 
@@ -26,27 +24,24 @@ namespace Agent.Tests.Mapper
         public void Test_MapFileToConfiguration_Successful()
         {
             //Arrange
-            Dictionary<string, string> expectedDictionary = new Dictionary<string, string>();
-            expectedDictionary.Add("aggressiveness", "high");
-            expectedDictionary.Add("explore", "random");
-            expectedDictionary.Add("combat", "offensive");
-            var filepath = _handler.GetBaseDirectory() + "/Resource/npcFileTest.txt";
+            List<Setting> expected = new List<Setting>();
+            expected.Add(new Setting("aggressiveness", "high"));
+            expected.Add(new Setting("explore", "random"));
+            expected.Add(new Setting("combat", "offensive"));
+            var filepath = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest.txt";
             
             //Act
-            var actualDictionary = _sut.MapFileToConfiguration(filepath);
+            var actual = _sut.MapFileToConfiguration(filepath);
 
             //Assert
-            Assert.AreEqual(expectedDictionary, actualDictionary);
-            Assert.AreEqual(expectedDictionary["explore"], actualDictionary["explore"]);
-
-
+            Assert.AreEqual(expected, actual);
         }
         
         [Test]
         public void Test_MapFileToConfiguration_Unsuccessful()
         {
             //Arrange
-            var filepath = _handler.GetBaseDirectory() + "/Resource/npcFileTest_2.txt";
+            var filepath = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest_2.txt";
             
             //Act & Assert
             Assert.Throws<SyntaxErrorException>(() => _sut.MapFileToConfiguration(filepath));
