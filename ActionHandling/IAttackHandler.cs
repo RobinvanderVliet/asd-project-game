@@ -1,4 +1,4 @@
-﻿namespace Player.ActionHandlers
+﻿namespace ActionHandling
 {
     public interface IAttackHandler
     {

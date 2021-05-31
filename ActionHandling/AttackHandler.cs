@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Castle.Core.Internal;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
@@ -12,13 +11,14 @@ using Newtonsoft.Json;
 using Player.DTO;
 using WorldGeneration;
 
-namespace Player.ActionHandlers
+namespace ActionHandling
 {
     public class AttackHandler : IAttackHandler, IPacketHandler
     {
         private IClientController _clientController;
         private string _playerGuid;
         private IWorldService _worldService;
+        const int STAMINA = 10;
 
         public AttackHandler(IClientController clientController, IWorldService worldService)
         {
@@ -71,39 +71,7 @@ namespace Player.ActionHandlers
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-            Console.WriteLine("ik kom hier als client");
             AttackDTO attackDto = JsonConvert.DeserializeObject<AttackDTO>(packet.Payload);
-
-            // if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
-            // {
-            //     var dbConnection = new DbConnection();
-            //
-            //     var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            //     try
-            //     {
-            //         var player = playerRepository.GetAllAsync().Result.FirstOrDefault(player =>
-            //             player.XPosition == attackDto.XPosition && player.YPosition == attackDto.YPosition &&
-            //             player.GameGuid.Equals(_clientController.SessionId));
-            //         attackDto.AttackedPlayerGuid = player.PlayerGuid;
-            //         player.Health -= attackDto.Damage;
-            //         playerRepository.UpdateAsync(player);
-            //         //HandleAttack(attackDto);
-            //     }
-            //     catch (Exception e)
-            //     {
-            //         HandleAttack(attackDto);
-            //         return new HandlerResponseDTO(SendAction.ReturnToSender, "There is no enemy to attack");
-            //     }
-            // }
-            // else if (packet.Header.Target.Equals(_clientController.GetOriginId()))
-            // {
-            //     Console.WriteLine(packet.HandlerResponse.ResultMessage);
-            // }
-            // else
-            // {
-            //     HandleAttack(attackDto);
-            // }
-            // return new HandlerResponseDTO(SendAction.SendToClients, null);
 
             if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
             {
@@ -112,25 +80,31 @@ namespace Player.ActionHandlers
                 var playerRepository = new Repository<PlayerPOCO>(dbConnection);
                 var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
 
-                var allLocations = servicePlayer.GetAllAsync();
+                var allPlayers = servicePlayer.GetAllAsync();
 
-                allLocations.Wait();
+                allPlayers.Wait();
 
                 var result =
-                    allLocations.Result.Where(x =>
+                    allPlayers.Result.Where(x =>
                         x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition &&
                         x.GameGuid == _clientController.SessionId);
+
+                InsertStaminaToDatabase(attackDto);
 
                 if (result.Any())
                 {
                     attackDto.AttackedPlayerGuid = result.FirstOrDefault().PlayerGuid;
-                    InsertToDatabase(attackDto);
-                    HandleAttack(attackDto);
+                    InsertDamageToDatabase(attackDto);
                     packet.Payload = JsonConvert.SerializeObject(attackDto);
                 }
                 else
                 {
-                    HandleAttack(attackDto);
+                    if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
+                    {
+                        HandleAttack(attackDto);
+                        Console.WriteLine("There is no enemy to attack");
+                    }
+
                     return new HandlerResponseDTO(SendAction.ReturnToSender,
                         "There is no enemy to attack");
                 }
@@ -139,39 +113,43 @@ namespace Player.ActionHandlers
             {
                 Console.WriteLine(packet.HandlerResponse.ResultMessage);
             }
-            else
-            {
-                HandleAttack(attackDto);
-            }
 
+            HandleAttack(attackDto);
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
-        private void InsertToDatabase(AttackDTO attackDto)
+        private void InsertStaminaToDatabase(AttackDTO attackDto)
+        {
+            var dbConnection = new DbConnection();
+            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
+            var player = playerRepository.GetAllAsync().Result
+                .FirstOrDefault(player => player.PlayerGuid == attackDto.PlayerGuid);
+            player.Stamina -= STAMINA;
+            playerRepository.UpdateAsync(player);
+        }
+
+        private void InsertDamageToDatabase(AttackDTO attackDto)
         {
             var dbConnection = new DbConnection();
 
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var player = playerRepository.GetAllAsync().Result
-                .FirstOrDefault(player => player.PlayerGuid == attackDto.AttackedPlayerGuid);
-
-            player.Health -= attackDto.Damage;
-            playerRepository.UpdateAsync(player);
+            var attackedPlayerRepository = new Repository<PlayerPOCO>(dbConnection);
+            var attackedPlayer = attackedPlayerRepository.GetAllAsync().Result
+                .FirstOrDefault(attackedPlayer => attackedPlayer.PlayerGuid == attackDto.AttackedPlayerGuid);
+            attackedPlayer.Health -= attackDto.Damage;
+            attackedPlayerRepository.UpdateAsync(attackedPlayer);
         }
 
         private void HandleAttack(AttackDTO attackDto)
         {
-            Console.WriteLine(_clientController.GetOriginId());
             if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
             {
-                int stamina = 10;
-                Console.WriteLine("Your stamina got lowered with "+stamina+".");
-                _worldService.getCurrentPlayer().Stamina -= stamina; // later aanpassen met variabel stamina
+                Console.WriteLine("Your stamina got lowered with " + STAMINA + ".");
+                _worldService.getCurrentPlayer().Stamina -= STAMINA;
             }
 
             if (_clientController.GetOriginId().Equals(attackDto.AttackedPlayerGuid))
             {
-                Console.WriteLine("You took "+ attackDto.Damage +" damage.");
+                Console.WriteLine("You took " + attackDto.Damage + " damage.");
                 _worldService.getCurrentPlayer().Health -= attackDto.Damage;
             }
         }
