@@ -49,42 +49,34 @@ namespace Session
 
         public bool JoinSession(string sessionId)
         {
+
             var joinSession = false;
 
-            if (!_availableSessions.TryGetValue(sessionId, out PacketDTO packetDTO))
-            {
-                Console.WriteLine("Could not find game!");
-            }
-            else
-            {
-                SendHeartbeatTimer();
-
-                SessionDTO receivedSessionDTO =
-                    JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
-                _session = new Session(receivedSessionDTO.Name);
-
-                _session.SessionId = sessionId;
-                _clientController.SetSessionId(sessionId);
-                Console.WriteLine("Trying to join game with name: " + _session.Name);
-
-                SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
-                sessionDTO.ClientIds = new List<string>();
-                sessionDTO.ClientIds.Add(_clientController.GetOriginId());
-                sessionDTO.SessionSeed = receivedSessionDTO.SessionSeed;
-                sendSessionDTO(sessionDTO);
-                joinSession = true;
-                
-                var db = new DbConnection();
-                var historyRepository = new Repository<ClientHistoryPoco>(db);
-                var historyService = new ServicesDb<ClientHistoryPoco>(historyRepository);
-
-                var savedGames = historyService.GetAllAsync();
-                savedGames.Wait();
-                var resultSavedGames = savedGames.Result.Where(x => x.GameId == sessionId);
-                _session.SavedGame = resultSavedGames.Any();
+                if (!_availableSessions.TryGetValue(sessionId, out PacketDTO packetDTO))
+                {
+                    Console.WriteLine("Could not find game!");
                 }
-            return joinSession;
-        }
+                else
+                {
+                    SendHeartbeatTimer();
+
+                    SessionDTO receivedSessionDTO =
+                        JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
+                    _session = new Session(receivedSessionDTO.Name);
+
+                    _session.SessionId = sessionId;
+                    _clientController.SetSessionId(sessionId);
+                    Console.WriteLine("Trying to join game with name: " + _session.Name);
+
+                    SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
+                    sessionDTO.ClientIds = new List<string>();
+                    sessionDTO.ClientIds.Add(_clientController.GetOriginId());
+                    sessionDTO.SessionSeed = receivedSessionDTO.SessionSeed;
+                    sendSessionDTO(sessionDTO);
+                    joinSession = true;
+                }
+                return joinSession;
+            }
 
         private void SendHeartbeatTimer()
         {
@@ -293,7 +285,7 @@ namespace Session
 
             if (packet.Header.Target == "host")
             {
-                if (_session.SavedGame)
+                if (_session.SavedGame || _session.GameStarted)
                 {
                     // check if id komt overeen
                     var clientId = sessionDTO.ClientIds[0];
@@ -316,10 +308,11 @@ namespace Session
                         sessionDTO.ClientIds = new List<string>();
 
                         sessionDTO.SessionSeed = _session.SessionSeed;
+                     
                     }
                     else
                     {
-                        return new HandlerResponseDTO(SendAction.ReturnToSender, "Not allowed to join saved game");
+                        return new HandlerResponseDTO(SendAction.ReturnToSender, "Not allowed to join saved or running game");
                     }
                     return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
                 }
@@ -447,6 +440,16 @@ namespace Session
         public string GetSavedGameName()
         {
             return _session.Name;
+        }
+
+        public bool GameStarted()
+        {
+            return _session.GameStarted;
+        }
+
+        public void SetGameStarted(bool startSessie)
+        {
+            _session.GameStarted = startSessie;
         }
     }
 }

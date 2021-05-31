@@ -25,6 +25,7 @@ namespace Session
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
+            _clientController.SubscribeToPacketType(this, PacketType.Session);
             _worldService = worldService;
             _sessionHandler = sessionHandler;
         }
@@ -40,7 +41,7 @@ namespace Session
             {
                 startGameDTO = SetupGameHost();
             }
-
+            _sessionHandler.SetGameStarted(true);
             SendGameSessionDTO(startGameDTO);
         }
 
@@ -151,8 +152,15 @@ namespace Session
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-            var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
-            HandleStartGameSession(startGameDTO);
+            if (packet.Header.PacketType == PacketType.Session)
+            {
+                Console.WriteLine("pakketje session");
+            } else if (packet.Header.PacketType == PacketType.GameSession)
+            {
+                var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
+                HandleStartGameSession(startGameDTO);
+            }
+       
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 

@@ -15,5 +15,10 @@ namespace Session
         public bool GetSavedGame();
 
         public string GetSavedGameName();
+
+        public bool GameStarted();
+
+        public void SetGameStarted(bool startSessie);
+
     }
 }
