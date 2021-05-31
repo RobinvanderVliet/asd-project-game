@@ -195,17 +195,19 @@ namespace ActionHandling
                 int AfterDamage = 0;
                 int ArmorPoints = _worldService.getCurrentPlayer().Inventory.Armor.ArmorProtectionPoints;
                 int HelmetPoints = _worldService.getCurrentPlayer().Inventory.Helmet.ArmorProtectionPoints;
-                if (ArmorPoints+HelmetPoints >= attackDto.Damage && ArmorPoints > 0) {
+                if (ArmorPoints+HelmetPoints >= attackDto.Damage && ArmorPoints > 0) { //Eerst wordt Damage van armor afgehaald, vervolgens van de helm en tot slot van de speler.
                     if (ArmorPoints - attackDto.Damage <= 0)
                     {
                         Console.WriteLine("Your armor piece has been destroyed!");
                         AfterDamage = attackDto.Damage - ArmorPoints;
                         //Actually delete Armor from inventory
+                        //_worldService.getCurrentPlayer().Inventory.Armor = null; ZOIETS?
                         if (HelmetPoints - AfterDamage <= 0)
                         {
                             Console.WriteLine("Your helmet has been destroyed!");
                             AfterDamage = AfterDamage - HelmetPoints;
                             //actually delete helmet from inventory
+                            //_worldService.getCurrentPlayer().Inventory.Helmet = null; ZOIETS?
                             _worldService.getCurrentPlayer().Health -= AfterDamage;
                         }
                         else
@@ -221,7 +223,6 @@ namespace ActionHandling
                 }
                 else
                 {
-                    //Console.WriteLine("Both your armor pieces have been destroyed in a single attack!");
                     //if exist destroy both armor
                     _worldService.getCurrentPlayer().Health -= attackDto.Damage + ArmorPoints + HelmetPoints;
                 }
