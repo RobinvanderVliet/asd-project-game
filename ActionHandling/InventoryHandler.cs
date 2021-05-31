@@ -45,10 +45,21 @@ namespace ActionHandling
                     _worldService.DropItemOnTile(_worldService.getCurrentPlayer().Inventory.Weapon);
                     _worldService.getCurrentPlayer().Inventory.Weapon = null;
                     break;
-                case "item":
-                    Console.WriteLine("Case Consumable Item");
+                case "slot 1":
+                    Console.WriteLine("Case Consumable Item in slot 1");
+                    _worldService.DropItemOnTile(_worldService.getCurrentPlayer().Inventory.ConsumableItemList[1]);
+                    _worldService.getCurrentPlayer().Inventory.RemoveConsumableItem(_worldService.getCurrentPlayer().Inventory.ConsumableItemList[1] = null);
+                    break;
+                case "slot 2":
+                    Console.WriteLine("Case Consumable Item in slot 2");
                     _worldService.DropItemOnTile(_worldService.getCurrentPlayer().Inventory.GetConsumableItem(inventorySlot));
-                    _worldService.getCurrentPlayer().Inventory.RemoveConsumableItem(_worldService.getCurrentPlayer().Inventory.GetConsumableItem(inventorySlot));
+                    _worldService.DropItemOnTile(_worldService.getCurrentPlayer().Inventory.ConsumableItemList[2]);
+                    _worldService.getCurrentPlayer().Inventory.RemoveConsumableItem(_worldService.getCurrentPlayer().Inventory.ConsumableItemList[2] = null);
+                    break;
+                case "slot 3":
+                    Console.WriteLine("Case Consumable Item in slot 3");
+                    _worldService.DropItemOnTile(_worldService.getCurrentPlayer().Inventory.ConsumableItemList[3]);
+                    _worldService.getCurrentPlayer().Inventory.RemoveConsumableItem(_worldService.getCurrentPlayer().Inventory.ConsumableItemList[3] = null);
                     break;
                 default:
                     Console.WriteLine("Unknown inventory slot");
