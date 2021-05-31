@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace WorldGeneration
 {
@@ -37,30 +36,11 @@ namespace WorldGeneration
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
         {
-            var inWorld = _players.Where(x => x.Id == player.Id);
-
             if (isCurrentPlayer)
             {
-                if (inWorld.Any())
-                {
-                    CurrentPlayer = inWorld.FirstOrDefault();
-                }
-                else
-                {
-                    CurrentPlayer = player;
-                }
-                
+                CurrentPlayer = player;
             }
-
-            if (inWorld.Any())
-            {
-                _players.Add(inWorld.FirstOrDefault());
-            }
-            else
-            {
-                _players.Add(player);
-
-            }
+            _players.Add(player);
         }
 
         public void DisplayWorld()
