@@ -325,9 +325,7 @@ namespace Session
             }
             else
             {
-               
-
-                SessionDTO sessionDTOClients =
+               SessionDTO sessionDTOClients =
                     JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
                 _session.EmptyClients();
 
