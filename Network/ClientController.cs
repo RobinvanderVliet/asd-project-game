@@ -72,6 +72,7 @@ namespace Network
             if (_hostController != null)
             {
                 _hostController.ReceivePacket(packet);
+                Console.WriteLine("test ralifakfj");
             }
             else
             {

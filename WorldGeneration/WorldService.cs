@@ -11,11 +11,6 @@ namespace WorldGeneration
             _world.UpdateCharacterPosition(userId, newXPosition, newYPosition);
         }
 
-        public void UpdatePlayer(Player player)
-        {
-            _world.CurrentPlayer = player;
-        }
-
         public void UpdateCharacterHealth(int health)
         {
             _world.UpdateCharacterHealth(health);

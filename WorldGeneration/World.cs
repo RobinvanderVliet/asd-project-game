@@ -33,7 +33,7 @@ namespace WorldGeneration
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
-            DisplayWorld();
+            // DisplayWorld();
         }
         
         public void UpdateCharacterHealth(int health)

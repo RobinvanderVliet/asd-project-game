@@ -173,6 +173,7 @@ namespace Session
             if (!_hostActive)
             {
                 _hostInactiveCounter++;
+                // Console.WriteLine("HostInactive: " + _hostInactiveCounter);
                 if (_hostInactiveCounter >= 5)
                 {
                     _hostPingTimer.Dispose();

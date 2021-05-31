@@ -5,7 +5,6 @@ namespace WorldGeneration
     public interface IWorldService
     {
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition);
-        public void UpdatePlayer(Player player);
         public void UpdateCharacterHealth(int health);
         public void UpdateCharacterStamina(int stamina);
         public void UpdateCharacterRadiationLevel(int radiationLevel);
