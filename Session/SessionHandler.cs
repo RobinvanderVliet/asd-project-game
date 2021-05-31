@@ -146,6 +146,12 @@ namespace Session
             _clientController.SendPayload(payload, PacketType.Session);
         }
 
+        public void sendExistingPlayer(StartGameDTO startGameDTO)
+        {
+            var payload = JsonConvert.SerializeObject(startGameDTO);
+            _clientController.SendPayload(payload, PacketType.GameSession);
+        }
+
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
@@ -324,11 +330,8 @@ namespace Session
                                 playerPosition[1] = element.YPosition;
                                 players.Add(element.PlayerGuid, playerPosition);
                             }
-
-                            joinedPlayerDto.PlayerLocations = players;
-                            
-                            return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(joinedPlayerDto));
-                            }
+                            sendExistingPlayer(joinedPlayerDto);
+                        }
                     }
                     else
                     {
