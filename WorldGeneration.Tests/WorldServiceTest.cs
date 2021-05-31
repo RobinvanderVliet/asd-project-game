@@ -29,29 +29,6 @@ namespace WorldGeneration.Tests
             //Act ---------
             //Assert ---------
         }
-        
-        [Test]
-        public void Test_GenerateSeed_GeneratesARandomSeed() 
-        {
-            //Arrange ---------
-            //Act ---------
-            //Assert ---------
-        }
-        
-        [Test]
-        public void Test_GenerateSeed_GeneratesARandomSeed() 
-        {
-            //Arrange ---------
-            //Act ---------
-            //Assert ---------
-        }
-        
-        [Test]
-        public void Test_GenerateSeed_GeneratesARandomSeed() 
-        {
-            //Arrange ---------
-            //Act ---------
-            //Assert ---------
-        }
+
     }
 }
