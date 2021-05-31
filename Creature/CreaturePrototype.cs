@@ -60,11 +60,11 @@ namespace Creature
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);
-            //world.SpawnAgent(testAgent);
+            world.SpawnAgent(testAgent);
             //world.SpawnAgent(agent);
 
             // TODO: fix monster statemachine to get this working
-            world.SpawnCreature(monster);
+            //world.SpawnCreature(monster);
 
             world.Render();
 
