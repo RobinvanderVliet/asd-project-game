@@ -9,6 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ActionHandling.DTO;
 using WorldGeneration;
 
 namespace ActionHandling.Tests
@@ -40,12 +41,11 @@ namespace ActionHandling.Tests
             [Test]
             public void Test_SendMove_SendsTheMessageAndPacketTypeToClientController()
             {
-                _mockedPlayer
-                Player player = new Player("John", 10, 10, "Nee");
-                _mockedWorldService.Setup(WorldService => WorldService.getCurrentPlayer())
-                .Returns(player);
                 string playerGuid = new Guid().ToString();
                 string AttackGuid = new Guid().ToString();
+                Player player = new Player("John", 10, 10, "Nee", playerGuid);
+                _mockedWorldService.Setup(WorldService => WorldService.getCurrentPlayer())
+                .Returns(player);
                 attackDTO = new AttackDTO();
                 attackDTO.XPosition = 10;
                 attackDTO.YPosition = 10;

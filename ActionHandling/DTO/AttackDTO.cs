@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Player.DTO
+namespace ActionHandling.DTO
 {
     [ExcludeFromCodeCoverage]
     public class AttackDTO

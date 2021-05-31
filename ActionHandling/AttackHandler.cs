@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using ActionHandling.DTO;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
@@ -8,7 +9,6 @@ using Items;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
-using Player.DTO;
 using WorldGeneration;
 
 namespace ActionHandling
