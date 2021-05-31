@@ -68,22 +68,4 @@ namespace DatabaseHandler.Repository
             return result;
         }
     }
-
-        public async Task<IEnumerable<PlayerPOCO>> GetAllPOCO()
-        {
-            var result = await _db.GetCollection<PlayerPOCO>(_collection).Query().ToListAsync();
-            return result; 
-        }
-        
-        public async Task<Boolean> UpdateAsyncPlayer(string playerGUID, int newPosX, int newPosY)
-        {
-            var results =  _db.GetCollection<PlayerPOCO>(_collection);
-
-            var col = results.FindOneAsync(x => x.PlayerGuid.Equals(playerGUID));
-            col.Result.XPosition = newPosX;
-            col.Result.YPosition = newPosY;
-
-           return await results.UpdateAsync(col.Result);
-        }
-   }
 }

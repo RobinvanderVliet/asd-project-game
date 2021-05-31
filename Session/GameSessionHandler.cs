@@ -36,12 +36,8 @@ namespace Session
 
         public StartGameDTO SetupGameHost()
         {
-            var dbConnection = new DbConnection();
-
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
-            var gameRepository = new Repository<GamePOCO>(dbConnection);
-            var gameService = new ServicesDb<GamePOCO>(gameRepository);
+            var servicePlayer = new DatabaseService<PlayerPOCO>();
+            var gameService = new DatabaseService<GamePOCO>();
 
             var gamePOCO = new GamePOCO {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
             gameService.CreateAsync(gamePOCO);

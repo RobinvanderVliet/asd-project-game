@@ -114,11 +114,11 @@ namespace Session
             var tmp = new DBConnection();
             tmp.SetForeignKeys();
 
-            var tmpServicePlayer = new DatabaseService<PlayerPoco>();
-            var tmpServiceGame = new DatabaseService<GamePoco>();
+            var tmpServicePlayer = new DatabaseService<PlayerPOCO>();
+            var tmpServiceGame = new DatabaseService<GamePOCO>();
 
             Guid gameGuid = Guid.NewGuid();
-            var tmpObject = new GamePoco {GameGUID = gameGuid};
+            var tmpObject = new GamePOCO {GameGUID = gameGuid};
             tmpServiceGame.CreateAsync(tmpObject);
 
 
