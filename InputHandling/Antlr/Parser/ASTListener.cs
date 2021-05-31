@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using Antlr4.Runtime.Misc;
-using InputCommandHandler.Antlr.Ast;
-using InputCommandHandler.Antlr.Ast.Actions;
-using InputCommandHandler.Antlr.Grammar;
+using InputHandling.Antlr.Ast;
+using InputHandling.Antlr.Ast.Actions;
+using InputHandling.Antlr.Grammar;
 
 namespace InputHandling.Antlr.Parser
 {

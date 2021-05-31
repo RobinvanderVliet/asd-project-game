@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataTransfer.DTO.Character;
 using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
