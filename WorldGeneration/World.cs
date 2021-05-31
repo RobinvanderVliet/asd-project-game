@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace WorldGeneration
 {
@@ -13,7 +12,7 @@ namespace WorldGeneration
 
         public World(int seed, int viewDistance)
         {
-            _players = new();
+            _players = new ();
             _map = MapFactory.GenerateMap(seed: seed);
             _viewDistance = viewDistance;
             _map.DeleteMap();
@@ -32,7 +31,6 @@ namespace WorldGeneration
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
-
             DisplayWorld();
         }
 
@@ -40,22 +38,9 @@ namespace WorldGeneration
         {
             if (isCurrentPlayer)
             {
-                var inWorld = _players.Where(x => x.Id == player.Id);
-                if (inWorld.Any())
-                {
-                    CurrentPlayer = inWorld.FirstOrDefault();
-                }
-                else
-                {
-                    _players.Add(player);
-                }
+                CurrentPlayer = player;
             }
-            else
-            {
-                _players.Add(player);
-
-            }
-
+            _players.Add(player);
         }
 
         public void DisplayWorld()
@@ -65,6 +50,7 @@ namespace WorldGeneration
                 Console.Clear();
                 _map.DisplayMap(CurrentPlayer, _viewDistance, new List<Character>(_players));
             }
+            
         }
 
         public void deleteMap()
@@ -73,3 +59,4 @@ namespace WorldGeneration
         }
     }
 }
+     
