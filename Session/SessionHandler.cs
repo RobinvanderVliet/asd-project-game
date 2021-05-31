@@ -179,7 +179,7 @@ namespace Session
                     Console.WriteLine("I'm Mr. BackupHost! Look at me!");
                     return new HandlerResponseDTO(SendAction.Ignore, null);
                 }
-                return null;
+                return new HandlerResponseDTO(SendAction.Ignore, null);
             }
         }
 

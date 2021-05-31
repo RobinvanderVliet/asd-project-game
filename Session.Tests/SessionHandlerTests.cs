@@ -38,7 +38,7 @@ namespace Session.Tests
             _mockedClientController = new Mock<IClientController>();
             _mockedScreenHandler = new Mock<IScreenHandler>();
             _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object);
-            _mockedSession = new Mock<Session>();
+            _mockedSession = new Mock<Session>("test");
             _packetDTO = new PacketDTO();
         }
 
@@ -739,7 +739,7 @@ namespace Session.Tests
             var result = _sut.HandleNewBackupHost(packet);
 
             //Assert
-            Assert.AreSame(result, null);
+            Assert.AreEqual(result.Action, SendAction.Ignore);
 
             //Remove all clients for other test
             _sut.GetAllClients().RemoveRange(0, 3);
@@ -770,7 +770,7 @@ namespace Session.Tests
             var result = _sut.HandlePacket(packet);
 
             //Assert
-            Assert.AreSame(result, null);
+            Assert.AreEqual(result.Action, SendAction.Ignore);
         }
 
     }
