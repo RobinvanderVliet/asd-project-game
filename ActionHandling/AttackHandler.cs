@@ -18,7 +18,7 @@ namespace ActionHandling
         private IClientController _clientController;
         private string _playerGuid;
         private IWorldService _worldService;
-        const int STAMINA = 10;
+        const int ATTACKSTAMINA = 10;
 
         public AttackHandler(IClientController clientController, IWorldService worldService)
         {
@@ -29,38 +29,44 @@ namespace ActionHandling
 
         public void SendAttack(string direction)
         {
-            Weapon weapon = _worldService.getCurrentPlayer().Inventory.Weapon;
-            int x = 0;
-            int y = 0;
-            switch (direction)
-            {
-                case "right":
-                case "east":
-                    x = weapon.GetWeaponDistance();
-                    break;
-                case "left":
-                case "west":
-                    x = -weapon.GetWeaponDistance();
-                    break;
-                case "forward":
-                case "up":
-                case "north":
-                    y = +weapon.GetWeaponDistance();
-                    break;
-                case "backward":
-                case "down":
-                case "south":
-                    y = -weapon.GetWeaponDistance();
-                    break;
-            }
+            if (_worldService.getCurrentPlayer().Stamina >= ATTACKSTAMINA) { 
+                Weapon weapon = _worldService.getCurrentPlayer().Inventory.Weapon;
+                int x = 0;
+                int y = 0;
+                switch (direction)
+                {
+                    case "right":
+                    case "east":
+                        x = weapon.GetWeaponDistance();
+                        break;
+                    case "left":
+                    case "west":
+                        x = -weapon.GetWeaponDistance();
+                        break;
+                    case "forward":
+                    case "up":
+                    case "north":
+                        y = +weapon.GetWeaponDistance();
+                        break;
+                    case "backward":
+                    case "down":
+                    case "south":
+                        y = -weapon.GetWeaponDistance();
+                        break;
+                }
 
-            var currentPlayer = _worldService.getCurrentPlayer();
-            AttackDTO attackDto = new AttackDTO();
-            attackDto.XPosition = currentPlayer.XPosition + x;
-            attackDto.YPosition = currentPlayer.YPosition + y;
-            attackDto.Damage = weapon.GetWeaponDamage();
-            attackDto.PlayerGuid = _clientController.GetOriginId();
-            SendAttackDTO(attackDto);
+                var currentPlayer = _worldService.getCurrentPlayer();
+                AttackDTO attackDto = new AttackDTO();
+                attackDto.XPosition = currentPlayer.XPosition + x;
+                attackDto.YPosition = currentPlayer.YPosition + y;
+                attackDto.Damage = weapon.GetWeaponDamage();
+                attackDto.PlayerGuid = _clientController.GetOriginId();
+                SendAttackDTO(attackDto);
+            }
+            else
+            {
+                Console.WriteLine("Not enough Stamina for action. Please wait a moment or recharge stamina");
+            }
         }
 
         public void SendAttackDTO(AttackDTO attackDto)
@@ -84,17 +90,35 @@ namespace ActionHandling
 
                 allPlayers.Wait();
 
-                var result =
+                var PlayerResult =
                     allPlayers.Result.Where(x =>
+                        x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition &&
+                        x.GameGuid == _clientController.SessionId);
+
+                var creatureRepository = new Repository<CreaturePOCO>(dbConnection);
+                var serviceCreature = new ServicesDb<CreaturePOCO>(creatureRepository);
+
+                var allCreatures = serviceCreature.GetAllAsync();
+
+                allCreatures.Wait();
+
+                var CreatureResult =
+                    allCreatures.Result.Where(x =>
                         x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition &&
                         x.GameGuid == _clientController.SessionId);
 
                 InsertStaminaToDatabase(attackDto);
 
-                if (result.Any())
+                if (PlayerResult.Any())
                 {
-                    attackDto.AttackedPlayerGuid = result.FirstOrDefault().PlayerGuid;
-                    InsertDamageToDatabase(attackDto);
+                    attackDto.AttackedPlayerGuid = PlayerResult.FirstOrDefault().PlayerGuid;
+                    InsertDamageToDatabase(attackDto, true);
+                    packet.Payload = JsonConvert.SerializeObject(attackDto);
+                }
+                else if (CreatureResult.Any())
+                {
+                    attackDto.AttackedPlayerGuid = CreatureResult.FirstOrDefault().CreatureGuid;
+                    InsertDamageToDatabase(attackDto, false);
                     packet.Payload = JsonConvert.SerializeObject(attackDto);
                 }
                 else
@@ -124,33 +148,56 @@ namespace ActionHandling
             var playerRepository = new Repository<PlayerPOCO>(dbConnection);
             var player = playerRepository.GetAllAsync().Result
                 .FirstOrDefault(player => player.PlayerGuid == attackDto.PlayerGuid);
-            player.Stamina -= STAMINA;
+            player.Stamina -= ATTACKSTAMINA;
             playerRepository.UpdateAsync(player);
         }
 
-        private void InsertDamageToDatabase(AttackDTO attackDto)
+        private void InsertDamageToDatabase(AttackDTO attackDto, Boolean isPlayer)
         {
-            var dbConnection = new DbConnection();
+            if (isPlayer)
+            {
+                var dbConnection = new DbConnection();
 
-            var attackedPlayerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var attackedPlayer = attackedPlayerRepository.GetAllAsync().Result
-                .FirstOrDefault(attackedPlayer => attackedPlayer.PlayerGuid == attackDto.AttackedPlayerGuid);
-            attackedPlayer.Health -= attackDto.Damage;
-            attackedPlayerRepository.UpdateAsync(attackedPlayer);
+                var attackedPlayerRepository = new Repository<PlayerPOCO>(dbConnection);
+                var attackedPlayer = attackedPlayerRepository.GetAllAsync().Result
+                    .FirstOrDefault(attackedPlayer => attackedPlayer.PlayerGuid == attackDto.AttackedPlayerGuid);
+                attackedPlayer.Health -= attackDto.Damage;
+                attackedPlayerRepository.UpdateAsync(attackedPlayer);
+            }
+            else
+            {
+                var dbConnection = new DbConnection();
+
+                var attackedCreatureRepository = new Repository<CreaturePOCO>(dbConnection);
+                var attackedCreature = attackedCreatureRepository.GetAllAsync().Result
+                    .FirstOrDefault(attackedCreature => attackedCreature.CreatureGuid == attackDto.AttackedPlayerGuid);
+                attackedCreature.Health -= attackDto.Damage;
+                attackedCreatureRepository.UpdateAsync(attackedCreature);
+                if(attackedCreature.Health <= 0)
+                {
+                    Console.WriteLine("RIP"); //TODO implement death of creature
+                }
+            }
         }
+            
+        
 
         private void HandleAttack(AttackDTO attackDto)
         {
             if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
             {
-                Console.WriteLine("Your stamina got lowered with " + STAMINA + ".");
-                _worldService.getCurrentPlayer().Stamina -= STAMINA;
+                Console.WriteLine("Your stamina got lowered with " + ATTACKSTAMINA + ".");
+                _worldService.getCurrentPlayer().Stamina -= ATTACKSTAMINA;
             }
 
             if (_clientController.GetOriginId().Equals(attackDto.AttackedPlayerGuid))
             {
                 Console.WriteLine("You took " + attackDto.Damage + " damage.");
                 _worldService.getCurrentPlayer().Health -= attackDto.Damage;
+                if(_worldService.getCurrentPlayer().Health <= 0)
+                {
+                    Console.WriteLine("isded"); //TODO implement death of Player. Boolean isDead in DB?
+                }
             }
         }
     }
