@@ -15,11 +15,11 @@ namespace UserInterface
         private int _height;
 
         private String _userName = "TEMP USERNAME";
-        private int _score = 0;
-        private int _hp = 100;
-        private int _stamina = 100;
-        private int _armor = 100;
-        private int _radiationProtectionPoints = 100;
+        private String _score = "0";
+        private String _health = "100";
+        private String _stamina = "100";
+        private String _armor = "100";
+        private String _radiationProtectionPoints = "100";
         private String _helm = "Bandana";
         private String _body = "Jacket";
         private String _melee = "Knife";
@@ -50,26 +50,37 @@ namespace UserInterface
         }
         private void DrawUserInfo()
         {
-            Console.SetCursorPosition(2, _yPosition + 1);
+            int originalCursorX = Console.CursorLeft;
+            int originalCursorY = Console.CursorTop;
+            ClearUserInfo();
+            Console.SetCursorPosition(OFFSET_LEFT, _yPosition + 1);
             Console.Write(_userName);
-            Console.SetCursorPosition(2, _yPosition + 2);
+            Console.SetCursorPosition(OFFSET_LEFT, _yPosition + 2);
             Console.Write("Score: " + _score);
+            Console.SetCursorPosition(originalCursorX, originalCursorY);
         }
         private void DrawUserStats()
         {
+            int originalCursorX = Console.CursorLeft;
+            int originalCursorY = Console.CursorTop;
+            ClearUserStats();
             int xpos = (_width / 5) + BORDER_SIZE;
             int ypos = _yPosition + 1;
             Console.SetCursorPosition(xpos, ypos++);
-            Console.Write("HP: " + _hp);
+            Console.Write("Health: " + _health);
             Console.SetCursorPosition(xpos, ypos++);
             Console.Write("Stamina: " + _stamina);
             Console.SetCursorPosition(xpos, ypos++);
             Console.Write("Armor: " + _armor);
             Console.SetCursorPosition(xpos, ypos++);
             Console.Write("RPP: " + _radiationProtectionPoints);
+            Console.SetCursorPosition(originalCursorX, originalCursorY);
         }
         private void DrawUserEquipment()
         {
+            int originalCursorX = Console.CursorLeft;
+            int originalCursorY = Console.CursorTop;
+            ClearUserEquipment();
             int xpos = (_width / 5) * 2 + BORDER_SIZE;
             int ypos = _yPosition + 1;
             Console.SetCursorPosition(xpos, ypos++);
@@ -80,9 +91,13 @@ namespace UserInterface
             Console.Write("Melee: " + _melee);
             Console.SetCursorPosition(xpos, ypos++);
             Console.Write("Ranged: " + _ranged);
+            Console.SetCursorPosition(originalCursorX, originalCursorY);
         }
         private void DrawUserInventory()
         {
+            int originalCursorX = Console.CursorLeft;
+            int originalCursorY = Console.CursorTop;
+            ClearUserInventory();
             int xpos = (_width / 5) * 3 + BORDER_SIZE;
             int ypos = _yPosition + 1;
             Console.SetCursorPosition(xpos, ypos++);
@@ -91,7 +106,86 @@ namespace UserInterface
             Console.Write("Slot 2: " + _slotTwo);
             Console.SetCursorPosition(xpos, ypos++);
             Console.Write("Slot 3: " + _slotThree);
+            Console.SetCursorPosition(originalCursorX, originalCursorY);
 
         }
+        private void ClearUserInfo()
+        {
+            int width = (_width / 5) + BORDER_SIZE;
+           
+            for (int i = 0; i <= _height - OFFSET_TOP; i++)
+            {
+                Console.SetCursorPosition(OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
+                Console.Write(new string(' ', width));
+            }
+
+        }
+
+        private void ClearUserStats()
+        {
+            int width = (_width / 5) + BORDER_SIZE;
+
+            for (int i = 0; i <= _height - OFFSET_TOP; i++)
+            {
+                Console.SetCursorPosition(width, _yPosition + OFFSET_TOP + i);
+                Console.Write(new string(' ', width));
+            }
+        }
+
+        private void ClearUserEquipment()
+        {
+            int width = (_width / 5) + BORDER_SIZE;
+            int xPos = (_width / 5) * 2 + BORDER_SIZE;
+
+            for (int i = 0; i <= _height - OFFSET_TOP; i++)
+            {
+                Console.SetCursorPosition(xPos, _yPosition + OFFSET_TOP + i);
+                Console.Write(new string(' ', width));
+            }
+        }
+
+        private void ClearUserInventory()
+        {
+            int width = (_width / 5) + BORDER_SIZE;
+            int xPos = (_width / 5) * 3 + BORDER_SIZE;
+
+            for (int i = 0; i <= _height - OFFSET_TOP; i++)
+            {
+                Console.SetCursorPosition(xPos, _yPosition + OFFSET_TOP + i);
+                Console.Write(new string(' ', width));
+            }
+        }
+
+        public void UpdateStat(string UpdatedStat, string newValue)
+        {
+            switch (UpdatedStat)
+            {
+                case "Name":
+                    _userName = newValue;
+                    DrawUserInfo();
+                    break;
+                case "Score":
+                    _score = newValue;
+                    DrawUserInfo();
+                    break;
+                case "Health":
+                    _health = newValue;
+                    DrawUserStats();
+                    break;
+                case "Stamina":
+                    _stamina = newValue;
+                    DrawUserStats();
+                    break;
+                case "Armor":
+                    _armor = newValue;
+                    DrawUserStats();
+                    break;
+                case "RadiationLevel":
+                    _radiationProtectionPoints = newValue;
+                    DrawUserStats();
+                    break;
+            }
+        }
+        
     }
 }
