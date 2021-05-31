@@ -1,20 +1,16 @@
-using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
+using NUnit.Framework;
 
 namespace UserInterface.Tests
 {
     [ExcludeFromCodeCoverage]
-    public class Tests
+    public class StartScreenTest
     {
+        private StartScreen _sut;
         [SetUp]
         public void Setup()
         {
-        }
-
-        [Test]
-        public void Test1()
-        {
-            Assert.Pass();
+            _sut = new StartScreen();
         }
     }
 }

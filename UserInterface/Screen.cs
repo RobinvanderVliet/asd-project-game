@@ -71,10 +71,12 @@ namespace UserInterface
             Console.Write(new string(' ', SCREEN_WIDTH - BORDER_SIZE));
             Console.SetCursorPosition(x + OFFSET_LEFT, y + OFFSET_TOP);
             Console.Write(message);
+            Console.SetCursorPosition(x + OFFSET_LEFT / 2, y + BORDER_SIZE);
+            Console.Write(" ");
             Console.SetCursorPosition(x + OFFSET_LEFT, y + BORDER_SIZE);
             Console.Write(">");
-            Console.Write(new string(' ', SCREEN_WIDTH - BORDER_SIZE - Console.CursorLeft));
-            Console.SetCursorPosition(x + 4, y + 2);
+            Console.Write(new string(' ', SCREEN_WIDTH - BORDER_SIZE / 2 - Console.CursorLeft));
+            Console.SetCursorPosition(x + OFFSET_LEFT * 2, y + OFFSET_TOP * 2);
         }
     }
 }

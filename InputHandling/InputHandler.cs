@@ -14,8 +14,8 @@ namespace InputHandling
         private IPipeline _pipeline;
         private ISessionHandler _sessionHandler;
         private IScreenHandler _screenHandler;
-        private static Timer aTimer;
         private const string RETURN_KEYWORD = "return";
+        private string _enteredSessionName;
 
         public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler)
         {
@@ -54,7 +54,7 @@ namespace InputHandling
         {
             return Console.ReadLine();
         }
-        
+
         public void HandleStartScreenCommands()
         {
             var input = GetCommand();
@@ -88,32 +88,38 @@ namespace InputHandling
 
         public void HandleSessionScreenCommands()
         {
-            var input = GetCommand();
-            int sessionNumber = 0;
-            int.TryParse(input, out sessionNumber);
-            SessionScreen sessionScreen = _screenHandler.Screen as SessionScreen;
 
+            SessionScreen sessionScreen = _screenHandler.Screen as SessionScreen;
+            var input = GetCommand();
+            
             if (input == RETURN_KEYWORD)
             {
                 _screenHandler.TransitionTo(new StartScreen());
+                return;
             }
-            else if (sessionNumber > 0)
-            {
-                string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
+            
+            var inputParts = input.Split(" ");
 
+            if (inputParts.Length != 2)
+            {
+                sessionScreen.UpdateInputMessage("Provide both a session number and username (example: 1 Gerrit)");
+            }
+            else
+            {
+                int sessionNumber = 0;
+                int.TryParse(input[0].ToString(), out sessionNumber);
+
+                string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
+        
                 if (sessionId.IsNullOrEmpty())
                 {
                     sessionScreen.UpdateInputMessage("Not a valid session, try again!");
                 }
                 else
                 {
-                    SendCommand("join_session \"" + sessionId + "\"");
-                    _screenHandler.TransitionTo(new ConfigurationScreen()); // maybe a waiting screen in stead?   
+                    SendCommand("join_session \"" + sessionId + "\" \"" + inputParts[1] + "\"");
+                    _screenHandler.TransitionTo(new ConfigurationScreen()); 
                 }
-            }
-            else
-            {
-                sessionScreen.UpdateInputMessage("That is not a number, please try again!");
             }
         }
     }
