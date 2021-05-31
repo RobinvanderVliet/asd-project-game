@@ -38,50 +38,61 @@ namespace ActionHandling.Tests
                 
 
             }
+            [TestCase("up")]
+            [TestCase("down")]
+            [TestCase("left")]
+            [TestCase("right")]
             [Test]
-            public void Test_SendMove_SendsTheMessageAndPacketTypeToClientController()
+            public void Test_SendAttack_SendsTheMessageAndPacketTypeToClientController(String direction)
             {
-                string playerGuid = new Guid().ToString();
-                string AttackGuid = new Guid().ToString();
-                Player player = new Player("John", 10, 10, "Nee", playerGuid);
+                //Arrange
+                int x = 26;
+                int y = 11;
+                string PlayerGuid = Guid.NewGuid().ToString();
+                string AttackGuid = Guid.NewGuid().ToString();
+                Player player = new Player("test", x, y, "#", PlayerGuid);
+
                 _mockedWorldService.Setup(WorldService => WorldService.getCurrentPlayer())
-                .Returns(player);
+                    .Returns(player);
                 attackDTO = new AttackDTO();
                 attackDTO.XPosition = 10;
                 attackDTO.YPosition = 10;
                 attackDTO.Damage = 20;
-                attackDTO.PlayerGuid = playerGuid;
+                attackDTO.PlayerGuid = PlayerGuid;
                 attackDTO.AttackedPlayerGuid = AttackGuid;
-                //Arrange ---------
+
+                _mockedClientController.Setup(ClientController => ClientController.GetOriginId())
+                    .Returns(PlayerGuid);
                 var payload = JsonConvert.SerializeObject(attackDTO);
+
                 _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Attack));
                 //Act ---------
-                _sut.SendAttack("left");
+                _sut.SendAttack(direction);
                 //Assert ---------
                 _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Attack), Times.Once());
             }
-            // [Test]
-            // public void Test_HandlePacket_HandleMoveProperly()
-            // {
-            //     //Arrange ---------
-            //     string playerGuid = new Guid().ToString();
-            //     string GameGuid = new Guid().ToString();
-            //     //Arrange ---------
-            //     _mapCharacterDTO = new MapCharacterDTO(10,10, playerGuid, GameGuid);
-            //     _moveDTO = new MoveDTO(_mapCharacterDTO);
-            //     var payload = JsonConvert.SerializeObject(_moveDTO);
-            //     _packetDTO.Payload = payload;
-            //     _packetDTO.Header.Target = playerGuid;
-            //     //_mockedNetworkComponent.
-            //     {
-            //         //Act ---------
-            //         HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
-            //
-            //         //Assert ---------
-            //         HandlerResponseDTO ExpectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
-            //         Assert.AreEqual(ExpectedResult, actualResult);
-            //     }                 
-            // }
+            //[Test]
+            //public void Test_HandlePacket_HandleMoveProperly()
+            //{
+            //    //Arrange ---------
+            //    string playerGuid = new Guid().ToString();
+            //    string GameGuid = new Guid().ToString();
+            //    //Arrange ---------
+            //    _mapCharacterDTO = new MapCharacterDTO(10, 10, playerGuid, GameGuid);
+            //    _moveDTO = new MoveDTO(_mapCharacterDTO);
+            //    var payload = JsonConvert.SerializeObject(_moveDTO);
+            //    _packetDTO.Payload = payload;
+            //    _packetDTO.Header.Target = playerGuid;
+            //    //_mockedNetworkComponent.
+            //    {
+            //        //Act ---------
+            //        HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
+
+            //        //Assert ---------
+            //        HandlerResponseDTO ExpectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
+            //        Assert.AreEqual(ExpectedResult, actualResult);
+            //    }
+            //}
         }
     }
 }

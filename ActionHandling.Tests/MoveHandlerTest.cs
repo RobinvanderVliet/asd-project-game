@@ -34,7 +34,7 @@ namespace ActionHandling.Tests
             int x = 26;
             int y = 11;
             
-            WorldGeneration.Player player = new WorldGeneration.Player("test", x, y, "#", "test2");
+            Player player = new Player("test", x, y, "#", "test2");
             
             _mockedWorldService.Setup(mock => mock.getCurrentPlayer()).Returns(player);
             _mockedClientController.Setup(mock => mock.SendPayload(It.IsAny<string>(), PacketType.Move));
