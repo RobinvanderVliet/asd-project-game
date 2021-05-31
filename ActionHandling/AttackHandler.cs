@@ -191,8 +191,40 @@ namespace ActionHandling
 
             if (_clientController.GetOriginId().Equals(attackDto.AttackedPlayerGuid))
             {
-                Console.WriteLine("You took " + attackDto.Damage + " damage.");
-                _worldService.getCurrentPlayer().Health -= attackDto.Damage;
+                Console.WriteLine("You took a total of: " + attackDto.Damage + " damage.");
+                int AfterDamage = 0;
+                int ArmorPoints = _worldService.getCurrentPlayer().Inventory.Armor.ArmorProtectionPoints;
+                int HelmetPoints = _worldService.getCurrentPlayer().Inventory.Helmet.ArmorProtectionPoints;
+                if (ArmorPoints+HelmetPoints >= attackDto.Damage && ArmorPoints > 0) {
+                    if (ArmorPoints - attackDto.Damage <= 0)
+                    {
+                        Console.WriteLine("Your armor piece has been destroyed!");
+                        AfterDamage = attackDto.Damage - ArmorPoints;
+                        //Actually delete Armor from inventory
+                        if (HelmetPoints - AfterDamage <= 0)
+                        {
+                            Console.WriteLine("Your helmet has been destroyed!");
+                            AfterDamage = AfterDamage - HelmetPoints;
+                            //actually delete helmet from inventory
+                            _worldService.getCurrentPlayer().Health -= AfterDamage;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Your Helmet took" + attackDto.Damage + " damage.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Your armor took " + attackDto.Damage +" damage.");
+                        ArmorPoints -= attackDto.Damage;
+                    }
+                }
+                else
+                {
+                    //Console.WriteLine("Both your armor pieces have been destroyed in a single attack!");
+                    //if exist destroy both armor
+                    _worldService.getCurrentPlayer().Health -= attackDto.Damage + ArmorPoints + HelmetPoints;
+                }
                 if(_worldService.getCurrentPlayer().Health <= 0)
                 {
                     Console.WriteLine("isded"); //TODO implement death of Player. Boolean isDead in DB?
