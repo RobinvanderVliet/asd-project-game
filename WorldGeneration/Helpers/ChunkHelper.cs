@@ -1,22 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DataTransfer.Model.World;
 using DataTransfer.Model.World.Interfaces;
 
-namespace WorldGeneration.Services
+namespace WorldGeneration.Helper
 {
-    public class ChunkService
+    public class ChunkHelper
     {
         private readonly Chunk _chunk;
-        public ChunkService(Chunk chunk)
+        public ChunkHelper(Chunk chunk)
         {
             _chunk = chunk;
         }
-        [ExcludeFromCodeCoverage]
         public int[] GetTileCoordinatesInChunk(int indexInArray)
         {
             var x = indexInArray % _chunk.RowSize;
@@ -24,7 +18,7 @@ namespace WorldGeneration.Services
             return new[] { x, y };
         }
 
-        public int GetPositionInTileArrayByWorldCoordinates(int x, int y)
+        private int GetPositionInTileArrayByWorldCoordinates(int x, int y)
         {
 
             var yPos = Math.Abs(y);

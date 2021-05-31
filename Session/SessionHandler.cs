@@ -8,9 +8,8 @@ using System.Timers;
 using Network.DTO;
 using WorldGeneration;
 using DatabaseHandler;
-using DatabaseHandler.Poco;
+using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
-using DatabaseHandler.Repository;
 using Timer = System.Timers.Timer;
 
 namespace Session
@@ -88,7 +87,7 @@ namespace Session
 
         public StartGameDto SetupGameHost()
         {
-            var tmp = new DbConnection();
+            var tmp = new DBConnection();
             tmp.SetForeignKeys();
 
             var tmpServicePlayer = new DatabaseService<PlayerPoco>();

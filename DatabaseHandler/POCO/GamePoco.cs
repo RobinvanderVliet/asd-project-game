@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using LiteDB;
 
-namespace DatabaseHandler.Poco
+namespace DatabaseHandler.POCO
 {
 
 

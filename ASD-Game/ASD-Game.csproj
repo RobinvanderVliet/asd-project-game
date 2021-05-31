@@ -40,12 +40,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="resource\agent\" />
+    <Folder Include="Resource\agent\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="resource\config\agent" />
-    <Folder Include="resource\config\npc" />
+    <Folder Include="Resource\config\agent" />
+    <Folder Include="Resource\config\npc" />
   </ItemGroup>
 
 </Project>

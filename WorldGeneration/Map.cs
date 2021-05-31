@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DatabaseHandler;
-using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using Display;
 using DataTransfer.DTO.Character;
@@ -10,6 +8,7 @@ using DataTransfer.Model.World;
 using DataTransfer.Model.World.Interfaces;
 using Microsoft.Extensions.Primitives;
 using WorldGeneration.Services;
+using WorldGeneration.Helper;
 
 namespace WorldGeneration
 {
@@ -17,21 +16,21 @@ namespace WorldGeneration
     {
         private readonly int _chunkSize;
         private readonly int _seed;
-        private IList<Chunk> _chunks;
-        private IDatabaseService<Chunk> _dbService;
-        private ChunkService _chunkService;
-        private IList<int[]> _chunksWithinLoadingRange;
+        private List<Chunk> _chunks; // NOT readonly, don't listen to the compiler
+        private readonly IDatabaseService<Chunk> _chunkDbService;
+        private ChunkHelper _chunkHelper;
+        private List<int[]> _chunksWithinLoadingRange;
+        private readonly INoiseMapGenerator _noiseMapGenerator;
 
-        private INoiseMapGenerator _noiseMapGenerator;
         private IConsolePrinter _consolePrinter;
 
         public Map(
             INoiseMapGenerator noiseMapGenerator
             , int chunkSize
             , int seed
-            , IDatabaseService<Chunk> dbServices
             , IConsolePrinter consolePrinter
             , IList<Chunk> chunks = null
+            , IDatabaseService<Chunk> chunkDbServices
         )
         {
             if (chunkSize < 1)
@@ -42,20 +41,21 @@ namespace WorldGeneration
             _chunks = chunks ?? new List<Chunk>();
             _seed = seed;
             _noiseMapGenerator = noiseMapGenerator;
-            _dbService = dbServices;
+            _chunkDbService = chunkDbServices;
             _consolePrinter = consolePrinter;
         }
 
         // checks if there are new chunks that have to be loaded
         private void LoadArea(int playerX, int playerY, int viewDistance) {
             _chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
-            foreach (var chunkXY in _chunksWithinLoadingRange)
+            foreach (var chunkItem in _chunksWithinLoadingRange)
             {
-                if (!_chunks.Any(chunk => chunk.X == chunkXY[0] && chunk.Y == chunkXY[1]))
-                { // chunk isn't loaded in local memory yet
+                if (_chunks.Exists(chunk => chunk.X == chunkItem[0] && chunk.Y == chunkItem[1])) continue;
+                {
+                    // chunk isn't loaded in local memory yet
                     var chunk = new Chunk { 
-                        X = chunkXY[0], 
-                        Y = chunkXY[1] 
+                        X = chunkItem[0], 
+                        Y = chunkItem[1] 
                     };
                     var getAllChunksQuery = _dbService.GetAllAsync();
                     getAllChunksQuery.Wait();
@@ -76,8 +76,8 @@ namespace WorldGeneration
         {
             // viewDistance * 2 is to get a full screen
             // , + playerX to get to the right location
-            // , + chunksize to add some loading buffer
-            // , / chunksize to convert tile coordinates to world coordinates
+            // , + chunk size to add some loading buffer
+            // , / chunk size to convert tile coordinates to world coordinates
             // same for the other variables
             var maxX = (playerX + viewDistance * 2 + _chunkSize) / _chunkSize; 
             var minX = (playerX - viewDistance * 2 - _chunkSize) / _chunkSize;
@@ -190,11 +190,10 @@ namespace WorldGeneration
             _dbService.DeleteAllAsync();
         }
         
-        // find a LOADED tile by the coordinates
-        public ITile GetLoadedTileByXAndY(int x, int y)
+        private ITile GetLoadedTileByXAndY(int x, int y)
         {
-            _chunkService = new ChunkService(GetChunkForTileXAndY(x, y));
-            return _chunkService.GetTileByWorldCoordinates(x, y);
+            _chunkHelper = new ChunkHelper(GetChunkForTileXAndY(x, y));
+            return _chunkHelper.GetTileByWorldCoordinates(x, y);
         }
     }
 }
