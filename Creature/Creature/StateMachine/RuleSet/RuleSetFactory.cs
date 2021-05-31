@@ -49,13 +49,17 @@ namespace Creature.Creature.StateMachine
         public static List<RuleSet> GetRuleSetListFromSettingsList(List<Setting> rulesetSettingsList)
         {
             List<RuleSet> rulesetList = new();
-
             RuleSet ruleset = new();
 
             foreach (var currentSetting in rulesetSettingsList)
             {
                 if (currentSetting.Property.EndsWith("comparable"))
                 {
+                    if (!string.IsNullOrEmpty(ruleset.Setting))
+                    {
+                        rulesetList.Add(ruleset);
+                    }
+
                     ruleset = new();
                     ruleset.Setting = currentSetting.Property.Split("_")[0];
                     ruleset.Action = currentSetting.Property.Split("_")[1];
@@ -77,8 +81,6 @@ namespace Creature.Creature.StateMachine
                 {
                     ruleset.ComparisonFalse = currentSetting.Value;
                 }
-
-                rulesetList.Add(ruleset);
             }
 
             return rulesetList;
