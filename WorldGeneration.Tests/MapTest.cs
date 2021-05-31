@@ -87,7 +87,7 @@ namespace WorldGeneration.Tests
             _mapCharacterDTOList.Add(_mapCharacter1DTO);
             _mapCharacterDTOList.Add(_mapCharacter2DTO);
             
-            _sut = new Map(_noiseMapGeneratorMockObject, _chunkSize, _seed, _databaseServiceMockObject, _consolePrinterMockObject);
+            _sut = new Map(_noiseMapGeneratorMockObject, _chunkSize, _seed, _consolePrinterMockObject, _databaseServiceMockObject);
         }
         
         [Test]
@@ -98,7 +98,7 @@ namespace WorldGeneration.Tests
             //Assert ---------
             Assert.DoesNotThrow(() =>
             {
-                var map = new Map(_noiseMapGeneratorMockObject,21,51, _databaseServiceMockObject, _consolePrinterMockObject, _chunks);
+                var map = new Map(_noiseMapGeneratorMockObject,21,51, _consolePrinterMockObject, _databaseServiceMockObject, _chunks);
             });
         }
         
@@ -156,7 +156,7 @@ namespace WorldGeneration.Tests
             //Assert ---------
             Assert.Throws<InvalidOperationException>(() =>
             {
-                var map = new Map(_noiseMapGeneratorMockObject,-21,51, _databaseServiceMockObject, _consolePrinterMockObject, _chunks);
+                var map = new Map(_noiseMapGeneratorMockObject,-21,51, _consolePrinterMockObject, _databaseServiceMockObject, _chunks);
             });
         }
         
@@ -184,15 +184,5 @@ namespace WorldGeneration.Tests
             _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText(" " + _chunks[2].Map[0].Symbol), Times.AtLeast(1));
             _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText(" " + _chunks[3].Map[0].Symbol), Times.AtLeast(1));
         }
-        /*
-        [Test]
-        public void Test_DisplayMap_UsesChunksIfTheyAreFoundInRAMemory() 
-        {
-            //Arrange ---------
-            var map = new Map(_noiseMapGeneratorMockObject,21,51, _databaseServiceMockObject, _consolePrinterMockObject, _chunks);
-            //Act ---------
-            map.DisplayMap(_mapCharacter1DTO,1, _mapCharacterDTOList);
-            //Assert ---------
-        }*/
     }
 }

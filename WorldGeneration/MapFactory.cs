@@ -26,8 +26,7 @@ namespace WorldGeneration
                 seed = GenerateSeed();
             }
 
-            return new Map(new NoiseMapGenerator(), chunkSize, seed, new DatabaseService<Chunk>(),
-                new ConsolePrinter());
+            return new Map(new NoiseMapGenerator(), chunkSize, seed, new ConsolePrinter(), new DatabaseService<Chunk>());
         }
 
         public int GenerateSeed()
