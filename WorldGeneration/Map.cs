@@ -132,7 +132,6 @@ namespace WorldGeneration
                     var tile = GetLoadedTileByXAndY(x + (centerCharacterXPosition - viewDistance), y + (centerCharacterYPosition + viewDistance));
                     tileArray[x, y] = GetDisplaySymbol(tile, allCharacters).ToCharArray()[0];
                 }
-                _consolePrinter.NextLine();
             }
             return tileArray;
         }

@@ -12,6 +12,7 @@
     <ProjectReference Include="..\DatabaseHandler\DatabaseHandler.csproj" />
     <ProjectReference Include="..\Display\Display.csproj" />
     <ProjectReference Include="..\Item\Items.csproj" />
+    <ProjectReference Include="..\UserInterface\UserInterface.csproj" />
   </ItemGroup>
 
 </Project>
