@@ -48,10 +48,12 @@ namespace ActionHandling
                 Console.Out.WriteLine($"Pickup index {index} {item.ItemName}");
                 InventoryDTO inventoryDTO =
                     new InventoryDTO(_clientController.GetOriginId(), InventoryType.Pickup, index);
+                SendInventoryDTO(inventoryDTO);
             }
             catch (ArgumentOutOfRangeException e)
             {
                 Console.WriteLine("Number is not in search list!");
+                throw;
             }
         }
 
@@ -85,23 +87,22 @@ namespace ActionHandling
 
         private HandlerResponseDTO HandlePickup(InventoryDTO inventoryDTO, bool handleInDatabase)
         {
-            // Get the player
-            // Verify if the item can be picked up? Is already checked client side. So optimistic security. 
-                // true => move item fom tile to inventory. 
+            // ✔ Get the player
+            // ✔ Verify if the item can be picked up? Is already checked client side. So optimistic security. 
+                // ✔ true => move item fom tile to inventory. 
                     // if handleDatabase => update the players inventory. update the database?
-                // false => display message that item could not be picked up.
+                // ✔ false => display message that item could not be picked up.
             
             Player player = _worldService.GetPlayer(inventoryDTO.UserId);
-            Item item = _worldService.GetItemsOnCurrentTile().ElementAt(inventoryDTO.Index);
-
-            // TODO: Refactor big if else construction.
-
+            Item item = _worldService.GetItemsOnCurrentTile(player).ElementAt(inventoryDTO.Index);
+            
             if (player.Inventory.AddItem(item))
             {
-                // TODO: Remove item from tile.
+                _worldService.GetItemsOnCurrentTile(player).RemoveAt(inventoryDTO.Index);
+                
                 if (handleInDatabase)
                 {
-                
+                    
                 }
                 
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
