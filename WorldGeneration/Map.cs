@@ -1,78 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DatabaseHandler.Services;
+using Display;
+using WorldGeneration.Helper;
 using WorldGeneration.Models;
 using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
 {
-    public class Map
+    public class Map : IMap
     {
         private readonly int _chunkSize;
         private readonly int _seed;
-        private List<Chunk> _chunks; // NOT readonly, don't listen to the compiler
-        private readonly DatabaseFunctions.Database _db;
-        private List<int[]> _chunksWithinLoadingRange;
+        private IList<Chunk> _chunks; // NOT readonly, don't listen to the compiler
+        private readonly IDatabaseService<Chunk> _chunkDBService;
+        private ChunkHelper _chunkHelper;
+        private IList<int[]> _chunksWithinLoadingRange;
+        private readonly INoiseMapGenerator _noiseMapGenerator;
 
-        private INoiseMapGenerator _noiseMapGenerator;
+        private IConsolePrinter _consolePrinter;
 
         public Map(
             INoiseMapGenerator noiseMapGenerator
-            , DatabaseFunctions.Database db
             , int chunkSize
             , int seed
+            , IConsolePrinter consolePrinter
+            , IDatabaseService<Chunk> chunkDbServices
+            , IList<Chunk> chunks = null
         )
         {
+            if (chunkSize < 1)
+            {
+                throw new InvalidOperationException("Chunksize smaller than 1.");
+            }
             _chunkSize = chunkSize;
-            _db = db;
-            _chunks = new List<Chunk>();
+            _chunks = chunks ?? new List<Chunk>();
             _seed = seed;
             _noiseMapGenerator = noiseMapGenerator;
+            _chunkDBService = chunkDbServices;
+            _consolePrinter = consolePrinter;
         }
 
         // checks if there are new chunks that have to be loaded
-        private void LoadArea(int playerX, int playerY, int viewDistance)
-        {
+        private void LoadArea(int playerX, int playerY, int viewDistance) {
             _chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
-            ForgetUnloadedChunks();
-            foreach (var chunkXY in _chunksWithinLoadingRange)
+            foreach (var chunkCoordinates in _chunksWithinLoadingRange)
             {
-                if (!_chunks.Exists(chunk => chunk.X == chunkXY[0] && chunk.Y == chunkXY[1]))
-                { // chunk isn't loaded in local memory yet
-                    var chunk = _db.GetChunk(chunkXY[0], chunkXY[1]);
-                    _chunks.Add(chunk == null
-                        ? GenerateNewChunk(chunkXY[0], chunkXY[1])
-                        : _db.GetChunk(chunkXY[0], chunkXY[1]));
-                }
-            }
-        }
-
-        // cleanup function to forget chunks out of loading range
-        private void ForgetUnloadedChunks()
-        {
-            /*
-            foreach (var loadedChunk in _chunks)
-            {
-                if (!_chunksWithinLoadingRange.Exists(
-                    chunkWithinLoadingRange =>
-                        chunkWithinLoadingRange[0] == loadedChunk.X
-                        && chunkWithinLoadingRange[1] == loadedChunk.Y))
+                if (_chunks.Any(chunk => chunk.X == chunkCoordinates[0] && chunk.Y == chunkCoordinates[1])) continue;
                 {
-                    if (!_chunks.Remove(loadedChunk))
+                    // chunk isn't loaded in local memory yet
+                    var chunk = new Chunk { 
+                        X = chunkCoordinates[0], 
+                        Y = chunkCoordinates[1] 
+                    };
+                    var getAllChunksQuery = _chunkDBService.GetAllAsync();
+                    getAllChunksQuery.Wait();
+                    var results = getAllChunksQuery.Result.FirstOrDefault(c => c.X == chunkCoordinates[0] && c.Y == chunkCoordinates[1]);
+                    if (results == null)
                     {
-                        throw new Exception("Failed to remove chunk from loaded chunks");
+                        _chunks.Add(GenerateNewChunk(chunkCoordinates[0], chunkCoordinates[1]));
+                    }
+                    else
+                    {
+                        _chunks.Add(results);
                     }
                 }
             }
-            */
         }
 
         private List<int[]> CalculateChunksToLoad(int playerX, int playerY, int viewDistance)
         {
             // viewDistance * 2 is to get a full screen
             // , + playerX to get to the right location
-            // , + chunksize to add some loading buffer
-            // , / chunksize to convert tile coordinates to world coordinates
+            // , + chunk size to add some loading buffer
+            // , / chunk size to convert tile coordinates to world coordinates
             // same for the other variables
             var maxX = (playerX + viewDistance * 2 + _chunkSize) / _chunkSize; 
             var minX = (playerX - viewDistance * 2 - _chunkSize) / _chunkSize;
@@ -90,8 +92,13 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
 
-        public void DisplayMap(Player currentPlayer, int viewDistance, List<Character> characters)
+        public void DisplayMap(Player currentPlayer, int viewDistance, List<Player> characters)
         {
+            if (viewDistance < 0)
+            {
+                throw new InvalidOperationException("viewDistance smaller than 0.");
+            }
+            
             var playerX = currentPlayer.XPosition;
             var playerY = currentPlayer.YPosition;
             LoadArea(playerX, playerY, viewDistance);
@@ -100,15 +107,38 @@ namespace WorldGeneration
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
                 {
                     var tile = GetLoadedTileByXAndY(x, y);
-                    Console.Write($" {GetDisplaySymbol(tile, characters)}");
+                    _consolePrinter.PrintText($"  {GetDisplaySymbol(tile, characters)}");
                 }
-                Console.WriteLine("");
+                _consolePrinter.NextLine();
             }
         }
-        
-        private string GetDisplaySymbol(ITile tile, List<Character> characters)
+
+        public char[,] GetMapAroundCharacter(Player centerCharacter, int viewDistance, List<Player> allCharacters)
         {
-            var characterOnTile = characters.Find(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
+            if (viewDistance < 0)
+            {
+                throw new InvalidOperationException("viewDistance smaller than 0.");
+            }
+            
+            var tileArray = new char[viewDistance * 2 + 1, viewDistance * 2 + 1];
+            var centerCharacterXPosition = centerCharacter.XPosition;
+            var centerCharacterYPosition = centerCharacter.YPosition;
+            LoadArea(centerCharacterXPosition, centerCharacterYPosition, viewDistance);
+            
+            for (var y = tileArray.GetLength(0) - 1; y >= 0; y--)
+            {
+                for (var x = 0; x < tileArray.GetLength(1); x++)
+                {
+                    var tile = GetLoadedTileByXAndY(x + (centerCharacterXPosition - viewDistance), (centerCharacterYPosition + viewDistance) - y);
+                    tileArray[y, x] = GetDisplaySymbol(tile, allCharacters).ToCharArray()[0];
+                }
+            }
+            return tileArray;
+        }
+        
+        private string GetDisplaySymbol(ITile tile, List<Player> characters)
+        {
+            var characterOnTile = characters.FirstOrDefault(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
             if(characterOnTile != null)
             {
                 return characterOnTile.Symbol;
@@ -122,7 +152,7 @@ namespace WorldGeneration
         private Chunk GenerateNewChunk(int chunkX, int chunkY)
         {
             var chunk = _noiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize, _seed);
-            _db.InsertChunkIntoDatabase(chunk);
+            _chunkDBService.CreateAsync(chunk);
             return chunk;
         }
 
@@ -133,24 +163,19 @@ namespace WorldGeneration
                 && chunk.X * _chunkSize > x - _chunkSize 
                 && chunk.Y * _chunkSize >= y &&
                 chunk.Y * _chunkSize < y + _chunkSize);
-            
-            if (chunk == null)
-            {
-                throw new Exception("Tried to find a chunk that has not been loaded");
-            }
             return chunk;
         }
         
         public void DeleteMap()
         {
-            _db.DeleteTileMap();
+            _chunks.Clear();
+            _chunkDBService.DeleteAllAsync();
         }
         
-        // find a LOADED tile by the coordinates
-        public ITile GetLoadedTileByXAndY(int x, int y)
+        private ITile GetLoadedTileByXAndY(int x, int y)
         {
-            var tile = GetChunkForTileXAndY(x, y).GetTileByWorldCoordinates(x, y);
-            return tile;
+            _chunkHelper = new ChunkHelper(GetChunkForTileXAndY(x, y));
+            return _chunkHelper.GetTileByWorldCoordinates(x, y);
         }
     }
 }

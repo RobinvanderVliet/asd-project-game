@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using LiteDB;
 
@@ -7,7 +8,7 @@ namespace DatabaseHandler.POCO
     public class GamePOCO
     {
         [BsonId]
-        public string GameGuid { get; set; }
+        public string GameGUID { get; set; }
         public string PlayerGUIDHost { get; set; }
         public int Seed { get; set; }
     }

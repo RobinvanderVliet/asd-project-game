@@ -19,5 +19,11 @@ namespace UserInterface
         {
             _screen.DrawScreen();
         }
+
+        public void UpdateWorld(char[,] map)
+        {
+            var gameScreen = Screen as GameScreen;
+            gameScreen.UpdateWorld(map);
+        }
     }
 }

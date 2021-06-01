@@ -43,13 +43,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Resource\agent\" />
     <Folder Include="Profiles\" />
-    <Folder Include="resource\agent\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="resource\config\agent" />
-    <Folder Include="resource\config\npc" />
+    <Folder Include="Resource\config\agent" />
+    <Folder Include="Resource\config\npc" />
   </ItemGroup>
 
 </Project>
