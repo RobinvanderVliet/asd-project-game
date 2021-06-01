@@ -60,7 +60,7 @@ namespace Session
 
                 _session.SessionId = sessionId;
                 _clientController.SetSessionId(sessionId);
-                Console.WriteLine("Trying to join game with name: " + _session.Name);
+                //Console.WriteLine("Trying to join game with name: " + _session.Name);
 
                 SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
                 sessionDTO.Clients = new List<string[]>();
@@ -98,7 +98,11 @@ namespace Session
             _session.InSession = true;
 
             _heartbeatHandler = new HeartbeatHandler();
-            Console.WriteLine("Created session with the name: " + _session.Name);
+
+            //if (_screenHandler.Screen is LobbyScreen screen)
+            //{
+            //    screen.UpdateLobbyScreen(_session.GetAllClients());
+            //}
 
             return _session.InSession;
         }
@@ -262,7 +266,12 @@ namespace Session
             
             if (packet.Header.Target == "host")
             {
-                Console.WriteLine(sessionDTO.Clients[0][1] + " Has joined your session: ");
+                //Console.WriteLine(sessionDTO.Clients[0][1] + " Has joined your session: ");
+                if (_screenHandler.Screen is LobbyScreen screen)
+                {
+                    screen.UpdateLobbyScreen(sessionDTO.Clients);
+                }
+
                 _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
                 sessionDTO.Clients = new List<string[]>();
 
@@ -281,12 +290,17 @@ namespace Session
                 _session.EmptyClients();
                 
                 _session.SessionSeed = sessionDTOClients.SessionSeed;
-                
-                Console.WriteLine("Players in your session:");
+
+                //Console.WriteLine("Players in your session:");
                 foreach (string[] client in sessionDTOClients.Clients)
                 {
                     _session.AddClient(client[0], client[1]);
-                    Console.WriteLine(client[0] + " " + client[1]);
+                    //Console.WriteLine(client[0] + " " + client[1]);
+                }
+
+                if (_screenHandler.Screen is LobbyScreen screen)
+                {
+                    screen.UpdateLobbyScreen(sessionDTOClients.Clients);
                 }
 
                 if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost) {
@@ -294,7 +308,6 @@ namespace Session
                     {
                         _clientController.IsBackupHost = true;
                         PingHostTimer();
-                        Console.WriteLine("You have been marked as the backup host");
                     }
                 }
                 return new HandlerResponseDTO(SendAction.Ignore, null);

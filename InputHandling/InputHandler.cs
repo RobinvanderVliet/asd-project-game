@@ -17,6 +17,8 @@ namespace InputHandling
         private const string RETURN_KEYWORD = "return";
         private string _enteredSessionName;
 
+        public string START_COMMAND = "start_session";
+
         public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler)
         {
             _pipeline = pipeline;
@@ -117,10 +119,38 @@ namespace InputHandling
                 }
                 else
                 {
+                    _screenHandler.TransitionTo(new LobbyScreen());
                     SendCommand("join_session \"" + sessionId + "\" \"" + inputParts[1] + "\"");
-                    _screenHandler.TransitionTo(new ConfigurationScreen()); 
                 }
             }
+        }
+
+        public void HandleLobbyScreenCommands()
+        {
+            var input = GetCommand();
+
+            if (input == RETURN_KEYWORD)
+            {
+                _screenHandler.TransitionTo(new StartScreen());
+                return;
+            }
+
+            //TODO add if to check if you are the host
+            if (input == START_COMMAND) 
+            {
+                SendCommand(START_COMMAND);
+                _screenHandler.TransitionTo(new GameScreen());
+            }
+
+            if (input.Contains("SAY"))
+            {
+                SendCommand(input);
+            }
+            else if (input.Contains("SHOUT")) 
+            {
+                SendCommand(input);
+            }
+
         }
     }
 }

@@ -43,6 +43,11 @@ namespace ASD_project
                         {
                             _inputHandler.HandleGameScreenCommands();
                         }
+                        else if (currentScreen is LobbyScreen) 
+                        {
+                            _inputHandler.HandleLobbyScreenCommands();
+                        }
+
                     }
                 }
                 else
