@@ -217,5 +217,15 @@ namespace InputHandling.Antlr.Parser
         {
             _ast.Root.AddChild((MonsterDifficulty) _currentContainer.Pop());
         }
+
+        public override void EnterItemfrequency(PlayerCommandsParser.ItemfrequencyContext context)
+        {
+            _currentContainer.Push(new ItemFrequency(context.children[2].GetText()));
+        }
+
+        public override void ExitItemfrequency(PlayerCommandsParser.ItemfrequencyContext context)
+        {
+            _ast.Root.AddChild((ItemFrequency) _currentContainer.Pop());
+        }
     }
 }

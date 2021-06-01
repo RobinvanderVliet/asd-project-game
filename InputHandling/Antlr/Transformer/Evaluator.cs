@@ -7,6 +7,7 @@ using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Exceptions;
 using Network;
 using Session;
+using ItemFrequency = InputHandling.Antlr.Ast.Actions.ItemFrequency;
 using MonsterDifficulty = InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
 namespace InputHandling.Antlr.Transformer
@@ -89,6 +90,9 @@ namespace InputHandling.Antlr.Transformer
                         break;
                     case MonsterDifficulty:
                         TransformMonsterDifficulty((MonsterDifficulty)nodeBody[i]);
+                        break;
+                    case ItemFrequency:
+                        TransformItemFrequency((ItemFrequency)nodeBody[i]);
                         break;
                 }
         }
@@ -174,11 +178,12 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformMonsterDifficulty(MonsterDifficulty monster)
         {
-            if (_clientController.IsHost())
+            if (!_clientController.IsHost())
             {
                 return;
             }
-            switch (monster.Difficulty) 
+
+            switch (monster.Difficulty)
             {
                 case "easy":
                     _configurationHandler.SetDifficulty(Agent.GameConfiguration.MonsterDifficulty.Easy);
@@ -193,6 +198,26 @@ namespace InputHandling.Antlr.Transformer
                     _configurationHandler.SetDifficulty(Agent.GameConfiguration.MonsterDifficulty.Impossible);
                     break;
             }
+        }
+
+        private void TransformItemFrequency(ItemFrequency monster)
+            {
+                if (!_clientController.IsHost())
+                {
+                    return;
+                }
+                switch (monster.Frequency) 
+                {
+                    case "low":
+                        _configurationHandler.SetFrequency(Agent.GameConfiguration.ItemFrequency.Low);
+                        break;
+                    case "medium":
+                        _configurationHandler.SetFrequency(Agent.GameConfiguration.ItemFrequency.Medium);
+                        break;
+                    case "high":
+                        _configurationHandler.SetFrequency(Agent.GameConfiguration.ItemFrequency.High);
+                        break;
+                }
         }
     }
 }

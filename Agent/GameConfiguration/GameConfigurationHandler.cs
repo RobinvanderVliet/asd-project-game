@@ -85,6 +85,11 @@ namespace Agent.GameConfiguration
             _newMonsterDifficulty = monsterDifficulty;
         }
 
+        public void SetFrequency(ItemFrequency itemFrequency)
+        {
+            //TODO
+        }
+
         //Moet aangeroepen worden tijdens creatie monsters en bij aanpas command
         public int AdjustMonsterValue(int monsterProperty) 
         {

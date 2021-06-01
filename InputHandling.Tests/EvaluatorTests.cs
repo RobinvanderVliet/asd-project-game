@@ -10,6 +10,7 @@ using Moq;
 using Network;
 using NUnit.Framework;
 using Session;
+using ItemFrequency = InputHandling.Antlr.Ast.Actions.ItemFrequency;
 using MonsterDifficulty = InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
 namespace InputHandling.Tests
@@ -260,6 +261,63 @@ namespace InputHandling.Tests
                     return Agent.GameConfiguration.MonsterDifficulty.Impossible;
             }
             return Agent.GameConfiguration.MonsterDifficulty.Easy;
+        }
+        
+        [TestCase("low")]
+        [TestCase("medium")]
+        [TestCase("high")]
+        [Test]
+        public void Test_Apply_HandleItemFrequencyHost(string frequency)
+        {
+            // Arrange
+            var ast = ItemFrequencyAst(frequency);
+            _mockedClientController.Setup(x => x.IsHost()).Returns(true);
+        
+            // Act
+            _sut.Apply(ast);
+        
+            // Assert
+            _mockedClientController.Verify(mock => mock.IsHost(), Times.Once);
+            _mockedGameConfigurationHandler.Verify(mock => mock.SetFrequency(GetFrequency(frequency)), Times.Once);
+        }
+        
+        [TestCase("low")]
+        [TestCase("medium")]
+        [TestCase("high")]
+        [Test]
+        public void Test_Apply_HandleItemFrequencyNotHost(string frequency)
+        {
+            // Arrange
+            var ast = ItemFrequencyAst(frequency);
+            _mockedClientController.Setup(x => x.IsHost()).Returns(false);
+        
+            // Act
+            _sut.Apply(ast);
+        
+            // Assert
+            _mockedClientController.Verify(mock => mock.IsHost(), Times.Once);
+            _mockedGameConfigurationHandler.Verify(mock => mock.SetFrequency(It.IsAny<Agent.GameConfiguration.ItemFrequency>()), Times.Never);
+        }
+    
+        private static AST ItemFrequencyAst(string frequency)
+        {
+            Input monster = new Input();
+            monster.AddChild(new ItemFrequency(frequency));
+            return new AST(monster);
+        }
+
+        private Agent.GameConfiguration.ItemFrequency GetFrequency(string frequency)
+        {
+            switch (frequency)
+            {
+                case "low":
+                    return Agent.GameConfiguration.ItemFrequency.Low;
+                case "medium":
+                    return Agent.GameConfiguration.ItemFrequency.Medium;
+                case "high":
+                    return Agent.GameConfiguration.ItemFrequency.High;
+            }
+            return Agent.GameConfiguration.ItemFrequency.Low;
         }
         
     }

@@ -9,5 +9,7 @@ namespace Agent.GameConfiguration
         void SetGameConfiguration();
 
         void SetDifficulty(MonsterDifficulty monsterDifficulty);
+
+        void SetFrequency(ItemFrequency itemFrequency);
     }
 }

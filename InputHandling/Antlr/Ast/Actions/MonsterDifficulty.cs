@@ -2,7 +2,7 @@
 {
     public class MonsterDifficulty : Command
     {
-        public string Difficulty;
+        public readonly string Difficulty;
 
         public MonsterDifficulty(string difficulty)
         {
