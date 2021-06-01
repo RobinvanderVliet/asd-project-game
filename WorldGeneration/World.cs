@@ -65,6 +65,22 @@ namespace WorldGeneration
         {
             _map.DeleteMap();
         }
+
+        public void SetCurrentPlayerClient(string playerId)
+        {
+            //maybe not needed. 
+        }
+
+        public void SetCurrentPlayerHost(string playerId)
+        {
+            foreach (var element in _players)
+            {
+                if (element.Id == playerId)
+                {
+                    CurrentPlayer = element;
+                }
+            }
+        }
     }
 }
      
