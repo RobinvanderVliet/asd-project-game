@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using WorldGeneration.Models.TerrainTiles;
 
 namespace WorldGeneration.Tests
 {
+    [ExcludeFromCodeCoverage] 
     [TestFixture]
     public class ChunkHelperTest
     {
@@ -32,7 +34,7 @@ namespace WorldGeneration.Tests
 
         }
 
-        [Test]
+        
         public void Test_GetPositionInTileArrayByWorldCoordinates()
         {
             int x = 1;

@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Models
 {
+    [ExcludeFromCodeCoverage]
     public class Chunk : IEquatable<Chunk>
     {
         public int X { get; set; }
