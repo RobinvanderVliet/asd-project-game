@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using LiteDB;
 
@@ -7,7 +6,7 @@ namespace DatabaseHandler.POCO
     [ExcludeFromCodeCoverage]
     public class PlayerPOCO
     {
-        public GamePOCO GameGuid { get; set; }
+        public string GameGuid { get; set; }
         [BsonId]
         public string PlayerGuid { get; set; }
         public string PlayerName { get; set; }

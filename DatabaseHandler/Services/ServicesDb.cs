@@ -12,8 +12,6 @@ namespace DatabaseHandler.Services
     {
         private readonly ILogger<ServicesDb<T>> _log;
         private readonly IRepository<T> _repository;
-        
-        
 
         public ServicesDb(IRepository<T> repository)
         {
@@ -21,8 +19,6 @@ namespace DatabaseHandler.Services
             _repository = repository;
             _log = new NullLogger<ServicesDb<T>>();
         }
-        
-        
 
         public Task<BsonValue> CreateAsync(T obj)
         {

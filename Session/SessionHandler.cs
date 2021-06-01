@@ -305,7 +305,7 @@ namespace Session
                     var allPlayerId = servicePlayer.GetAllAsync();
                     allPlayerId.Wait();
                     var result =
-                        allPlayerId.Result.Where(x => x.GameGuid.GameGuid == _session.SessionId && x.PlayerGuid == clientId).FirstOrDefault();
+                        allPlayerId.Result.Where(x => x.GameGuid == _session.SessionId && x.PlayerGuid == clientId).FirstOrDefault();
 
                     if (result != null)
                     {

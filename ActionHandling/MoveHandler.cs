@@ -88,7 +88,7 @@ namespace ActionHandling
                 var result =
                     allLocations.Result.Where(x =>
                         x.XPosition == newPosPlayerX && x.YPosition == newPosPlayerY &&
-                        x.GameGuid.GameGuid == _clientController.SessionId);
+                        x.GameGuid == _clientController.SessionId);
 
                 if (result.Any())
                 {
