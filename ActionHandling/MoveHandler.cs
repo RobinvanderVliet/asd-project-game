@@ -78,20 +78,18 @@ namespace ActionHandling
                 var playerRepository = new Repository<PlayerPOCO>(dbConnection);
                 var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
                 
-                // Thread.Sleep(1500);
-                
                 var allLocations = servicePlayer.GetAllAsync();
 
                 allLocations.Wait();
 
-                int newPosPlayerX = moveDTO.XPosition;
-                int newPosPlayerY = moveDTO.YPosition;
+                var newPosPlayerX = moveDTO.XPosition;
+                var newPosPlayerY = moveDTO.YPosition;
                 
-                int oldPosPlayerX =
+                var oldPosPlayerX =
                     allLocations.Result.Where(x =>
                         x.PlayerGuid == moveDTO.UserId
                     ).Select(x => x.XPosition).FirstOrDefault();
-                int oldPosPlayerY =
+                var oldPosPlayerY =
                     allLocations.Result.Where(x =>
                         x.PlayerGuid == moveDTO.UserId
                     ).Select(x => x.YPosition).FirstOrDefault();
