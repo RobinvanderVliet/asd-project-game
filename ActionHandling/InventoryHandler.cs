@@ -111,12 +111,6 @@ namespace ActionHandling
                 return new HandlerResponseDTO(SendAction.ReturnToSender, "Could not pickup item");
             }
         }
-        
-        // Returns true if the given slot is occupied.
-        private bool SlotOccupied(Item item)
-        {
-            return item != null;
-        }
 
         private HandlerResponseDTO HandleDrop(InventoryDTO inventoryDTO, bool handleInDatabase)
         {
