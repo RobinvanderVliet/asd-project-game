@@ -54,6 +54,27 @@ namespace ActionHandling.Tests
         }
 
         [Test]
+        public void Test_Use_SendsInventoryDTO()
+        {
+            //arrange
+            int index = 1;
+            string originId = "origin1";
+
+
+
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
+
+            InventoryDTO inventoryDTO = new(originId, InventoryType.Use, index);
+            var payload = JsonConvert.SerializeObject(inventoryDTO);
+
+            //act
+            _sut.UseItem(index);
+
+            //assert
+            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Inventory), Times.Once);
+        }
+
+        [Test]
         public void Test_HandlePacket_HandlesUsePacketSuccesOnHost()
         {
             //arrange
