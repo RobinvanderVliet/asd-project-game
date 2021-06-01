@@ -216,8 +216,7 @@ namespace Session
                         joinedPlayerDto.ExistingPlayer.Health,
                         joinedPlayerDto.ExistingPlayer.Stamina), false);
             }
-         
-            _worldService.DisplayWorld();
+         _worldService.DisplayWorld();
         }
 
 
