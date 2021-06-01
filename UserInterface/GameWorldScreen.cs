@@ -50,6 +50,7 @@ namespace UserInterface
         {
             int originalCursorX = Console.CursorLeft;
             int originalCursorY = Console.CursorTop;
+            ClearWorld();
             for (int i = 0; i < _map.GetLength(0); i++)
             {
                 Console.SetCursorPosition(_xPosition + 1, _yPosition + OFFSET_TOP + i);
@@ -63,6 +64,15 @@ namespace UserInterface
                 }
             }
             Console.SetCursorPosition(originalCursorX, originalCursorY);
+        }
+
+        private void ClearWorld()
+        {
+            for (int i = 0; i <= _height - OFFSET_TOP; i++)
+            {
+                Console.SetCursorPosition(_xPosition + OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
+                Console.Write(new string(' ', _width - 1));
+            }
         }
         
 
