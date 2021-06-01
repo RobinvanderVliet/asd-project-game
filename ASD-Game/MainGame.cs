@@ -8,7 +8,7 @@ namespace ASD_project
     {
         public class MainGame : IMainGame
         {
-            private const bool DEBUG_INTERFACE = true; //TODO: remove when UI is complete, obviously
+            private const bool DEBUG_INTERFACE = false; //TODO: remove when UI is complete, obviously
             private IInputHandler _inputHandler;
             private IScreenHandler _screenHandler;
 
@@ -38,9 +38,7 @@ namespace ASD_project
                         }
                         else if (currentScreen is ConfigurationScreen)
                         {
-                        }
-                        else if (currentScreen is WaitingScreen)
-                        {
+                            _inputHandler.HandleGameScreenCommands();
                         }
                         else if (currentScreen is GameScreen)
                         {

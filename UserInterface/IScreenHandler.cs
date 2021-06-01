@@ -11,3 +11,5 @@ namespace UserInterface
         public void ShowMessages(Queue<string> messages);
     }
 }
+        public ConsoleHelper ConsoleHelper { get; set; }
+        public string GetScreenInput();
