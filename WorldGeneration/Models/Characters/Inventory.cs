@@ -1,10 +1,7 @@
-﻿using Items;
+﻿using System.Collections.Generic;
+using Items;
+using Items.ArmorStats;
 using Items.Consumables;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WorldGeneration
 {
@@ -34,16 +31,57 @@ namespace WorldGeneration
             return _consumableItems.Find(item => item.ItemName == itemName);
         }
 
-        public void AddConsumableItem(Consumable consumable)
+        public bool AddConsumableItem(Consumable consumable)
         {
             if (_consumableItems.Count <= 3)
             {
                 _consumableItems.Add(consumable);
+                return true;
             }
             else
             {
                 System.Console.WriteLine("You already have 3 consumable items in your inventory!");
+                return false;
             }
+        }
+
+        /// <summary>
+        /// Returns false if item could not be added. True otherwise.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public bool AddItem(Item item)
+        {
+            if (item is Weapon weapon)
+            {
+                if (_weapon != null) return false;
+                _weapon = weapon;
+                return true;
+            }
+
+            if (item is Armor armor)
+            {
+                if (armor.ArmorPartType == ArmorPartType.Body)
+                {
+                    if (_armor != null) return false;
+                    _armor = armor;
+                    return true;
+                }
+
+                if (armor.ArmorPartType == ArmorPartType.Helmet)
+                {
+                    if (_helmet != null) return false;
+                    _helmet = armor;
+                    return true;
+                }
+            }
+
+            if (item is Consumable consumable)
+            {
+                return AddConsumableItem(consumable);
+            }
+
+            return false;
         }
 
         public void RemoveConsumableItem(Consumable consumable)
