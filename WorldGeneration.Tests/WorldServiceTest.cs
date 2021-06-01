@@ -30,18 +30,7 @@ namespace WorldGeneration.Tests
             //Initialisation of mocks
 
         }
-        
-        [Test]
-        public void Test_GenerateWorldWithSeed() 
-        {
-            //Arrange ---------
-            int seed = 42;
-            //Act ---------
-            _sut.GenerateWorld(seed);
-            //Assert ---------
-            Assert.That(_sut.GetWorld().Map.GetMapSeed().Equals(seed));
-        }
-        
+
         [Test]
         public void Test_GetCurrentPlayer() 
         {

@@ -56,11 +56,6 @@ namespace WorldGeneration
         {
             Map.DeleteMap();
         }
-
-        public int GetMapSeed()
-        {
-            return Map.GetMapSeed();
-        }
     }
 }
      

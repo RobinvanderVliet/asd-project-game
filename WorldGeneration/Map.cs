@@ -176,10 +176,5 @@ namespace WorldGeneration
             return _chunkHelper.GetTileByWorldCoordinates(x, y);
         }
 
-        public int GetMapSeed()
-        {
-            return _seed;
-        }
-
     }
 }
