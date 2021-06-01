@@ -44,11 +44,8 @@ namespace WorldGeneration
         //TODO Player score
         public void UpdatePlayerStatScreen()
         {
-            if (_screenHandler.Screen is GameScreen)
-            {
                 Player player = getCurrentPlayer();
-                GameScreen screen = _screenHandler.Screen as GameScreen;
-                screen.SetStatValues(
+                _screenHandler.SetStatValues(
                     player.Name,
                     0,
                     player.Health,
@@ -61,8 +58,7 @@ namespace WorldGeneration
                     player.Inventory.ConsumableItemList.Count >= 1 ? player.Inventory.ConsumableItemList[0].ItemName: "Empty",
                     player.Inventory.ConsumableItemList.Count >= 2 ? player.Inventory.ConsumableItemList[1].ItemName: "Empty",
                     player.Inventory.ConsumableItemList.Count == 3 ? player.Inventory.ConsumableItemList[2].ItemName: "Empty"
-                    );
-            }
+                    );        
         }
     }
 }

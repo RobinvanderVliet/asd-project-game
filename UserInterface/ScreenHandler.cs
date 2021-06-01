@@ -19,5 +19,14 @@ namespace UserInterface
         {
             _screen.DrawScreen();
         }
+
+        public void SetStatValues(string name, int score, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree)
+        {
+            if (_screen is GameScreen)
+            {
+                GameScreen gameScreen = _screen as GameScreen;
+                gameScreen.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree);
+            }
+        }
     }
 }
