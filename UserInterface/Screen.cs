@@ -75,6 +75,14 @@ namespace UserInterface
             Console.Write(">");
             Console.Write(new string(' ', SCREEN_WIDTH - BORDER_SIZE - Console.CursorLeft));
             Console.SetCursorPosition(x + 4, y + 2);
+            int unusedLines = Console.WindowHeight - (y + INPUT_HEIGHT + BORDER_SIZE);
+            for (int i = 0; i <= unusedLines; i++)
+            {
+                Console.SetCursorPosition(0, y + INPUT_HEIGHT + BORDER_SIZE + i);
+                Console.Write(new string(' ', Console.WindowWidth));
+            }
+            Console.SetCursorPosition(0, 0);
+            Console.SetCursorPosition(x + 4, y + 2);
         }
     }
 }
