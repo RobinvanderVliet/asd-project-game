@@ -16,6 +16,7 @@ namespace InputHandling.Tests
         private Mock<IScreenHandler> _mockedScreenHandler;
         private Mock<ISessionHandler> _mockedSessionHandler;
         private Mock<StartScreen> _mockedStartScreen;
+        private Mock<SessionScreen> _mockedSessionScreen;
         
         [SetUp]
         public void SetUp()
@@ -25,8 +26,21 @@ namespace InputHandling.Tests
             _mockedScreenHandler = new Mock<IScreenHandler>();
             _mockedSessionHandler = new Mock<ISessionHandler>();
             _mockedStartScreen = new Mock<StartScreen>();
+            _mockedSessionScreen = new Mock<SessionScreen>();
             _mockedScreenHandler.Object.ConsoleHelper = new Mock<ConsoleHelper>().Object;
             _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedScreenHandler.Object);
+        }
+
+        [Test]
+        public void Test_HandleGameScreenCommands_SendsCommand()
+        {
+            //Arrange
+            var command = "move forward";
+            _mockedScreenHandler.Setup(mock => mock.GetScreenInput()).Returns(command);
+            //Act
+            _sut.HandleGameScreenCommands();
+            //Assert
+            _mockedPipeline.Verify(mock => mock.ParseCommand(command));
         }
         
         [Test]
@@ -36,7 +50,7 @@ namespace InputHandling.Tests
         [TestCase("4")]
         [TestCase("5")]
         [TestCase("Error")]
-        public void Test_HandleStartScreenCommands_Calls(string input)
+        public void Test_HandleStartScreenCommands_HandlesInput(string input)
         {
             //Arrange
             _mockedScreenHandler.Setup(mock => mock.GetScreenInput()).Returns(input);
@@ -70,6 +84,46 @@ namespace InputHandling.Tests
             else
             {
                 _mockedStartScreen.Verify(mock => mock.UpdateInputMessage("Not a valid option, try again!"), Times.Once);
+            }
+        }
+
+        [TestCase("1 Gerrit")]
+        [TestCase("2 Gerrit")]
+        [TestCase("2")]
+        [TestCase("return")]
+        public void Test_HandleSessionScreenCommands_HandlesInput(string input)
+        {
+            //Arrange
+            var testId = "testId";
+            var username = "Gerrit";
+            _mockedScreenHandler.Setup(mock => mock.GetScreenInput()).Returns(input);
+            _mockedScreenHandler.Setup(mock => mock.Screen).Returns(_mockedSessionScreen.Object);
+            _mockedSessionScreen.Setup(mock => mock.GetSessionIdByVisualNumber(0)).Returns(testId);
+            _mockedSessionScreen.Setup(mock => mock.GetSessionIdByVisualNumber(1)).Returns("");
+            _mockedSessionScreen.Setup(mock => mock.UpdateInputMessage(It.IsAny<string>()));
+            
+            //Act
+            _sut.HandleSessionScreenCommands();
+            
+            //Assert
+            if (input.Equals("return"))
+            {
+                _mockedScreenHandler.Verify(mock => mock.TransitionTo(It.IsAny<StartScreen>()), Times.Once);
+            }
+            else
+            {
+                if (input.Equals("1 Gerrit"))
+                {
+                    _mockedPipeline.Verify(mock => mock.ParseCommand("join_session \""+testId+"\" " + "\"" + username + "\""));
+                }
+                else if (input.Equals("2"))
+                {
+                    _mockedSessionScreen.Verify(mock=> mock.UpdateInputMessage("Provide both a session number and username (example: 1 Gerrit)"));
+                }
+                else
+                {
+                    _mockedSessionScreen.Verify(mock=> mock.UpdateInputMessage("Not a valid session, try again!"));
+                }
             }
         }
     }

@@ -54,7 +54,7 @@ namespace UserInterface
             return "There are currently " + _sessionsInfoList.Count + " sessions you can join";
         }
 
-        public string GetSessionIdByVisualNumber(int sessionNumber)
+        public virtual string GetSessionIdByVisualNumber(int sessionNumber)
         {
             if(_sessionsInfoList.ElementAtOrDefault(sessionNumber) != null)
             {
@@ -64,7 +64,7 @@ namespace UserInterface
             return null;
         }
 
-        public void UpdateInputMessage(string message)
+        public virtual void UpdateInputMessage(string message)
         {
             DrawInputBox(INPUT_X, INPUT_Y + _sessionsInfoList.Count, message);
         }
