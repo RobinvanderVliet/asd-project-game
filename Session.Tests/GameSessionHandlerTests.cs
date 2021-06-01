@@ -62,7 +62,6 @@ namespace Session.Tests
             var GUID = new Guid("16346707-31d3-4566-b87d-a0b45803b7ab");
 
             StartGameDTO startGameDto = new StartGameDTO();
-            startGameDto.GameGuid = GUID.ToString();
             startGameDto.PlayerLocations = players;
             
             // Act ---------
@@ -105,7 +104,7 @@ namespace Session.Tests
             
             StartGameDTO gameDto = new StartGameDTO();
             gameDto.PlayerLocations = players;
-            gameDto.GameGuid = Guid.NewGuid().ToString();
+           // gameDto.GameGuid = Guid.NewGuid().ToString();
 
             var payload = JsonConvert.SerializeObject(gameDto);
             _packetDTO.Payload = payload;
