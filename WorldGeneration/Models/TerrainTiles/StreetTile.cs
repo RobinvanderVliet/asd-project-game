@@ -13,6 +13,7 @@ namespace WorldGeneration.Models.TerrainTiles
         public string Symbol { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
+        public int StaminaCost { get; set; }
         public List<Item> ItemsOnTile { get; set; }
 
         public StreetTile(int x, int y)
@@ -21,6 +22,7 @@ namespace WorldGeneration.Models.TerrainTiles
             IsAccessible = true;
             XPosition = x;
             YPosition = y;
+            StaminaCost = 1;
         }
     }
 }
