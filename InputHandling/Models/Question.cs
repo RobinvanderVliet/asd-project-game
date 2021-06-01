@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml;
+using System.Diagnostics.CodeAnalysis;
 
 namespace InputCommandHandler.Models
 {
+    [ExcludeFromCodeCoverage]
     public class Questions
     {
         public readonly string WELCOME = "Welcome to the ingame agent configurator!";

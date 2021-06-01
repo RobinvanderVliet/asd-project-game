@@ -24,9 +24,14 @@ namespace UserInterface
             _screen.DrawScreen();
         }
 
-        public string GetScreenInput()
+        public virtual string GetScreenInput()
         {
             return _consoleHelper.ReadLine();
+        }
+
+        public virtual void SetScreenInput(string input)
+        {
+            _consoleHelper.WriteLine(input);
         }
     }
 }

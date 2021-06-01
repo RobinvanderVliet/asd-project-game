@@ -5,16 +5,18 @@ namespace UserInterface
 {
     public class EditorScreen : Screen
     {
- 
+        private const int X_START = 0;
+        private const int X_VALUE = 2;
+        private const int Y_VALUE = 4;
         private string _displayedQuestions;
-        
+
         public override void DrawScreen()
         {
             DrawHeader("Editor!");
-            DrawBox(0, 3, SCREEN_WIDTH - BORDER_SIZE, 4);
-            Console.SetCursorPosition(2, 4);
-            Console.WriteLine(_displayedQuestions);
-            DrawInputBox(0, 10, "Enter an answer");
+            DrawBox(X_START, 3, SCREEN_WIDTH - BORDER_SIZE, Y_VALUE);
+            _screenHandler.ConsoleHelper.SetCursor(X_VALUE, Y_VALUE);
+            _screenHandler.ConsoleHelper.WriteLine(_displayedQuestions);
+            DrawInputBox(X_START, 10, "Enter an answer");
         }
 
         public void UpdateLastQuestion(string question)
@@ -25,13 +27,13 @@ namespace UserInterface
 
         public void PrintWarning(string warning)
         {
-            Console.SetCursorPosition(2, 6);
-            Console.WriteLine(warning);
+            _screenHandler.ConsoleHelper.SetCursor(2, 6);
+            _screenHandler.ConsoleHelper.WriteLine(warning);
         }
 
         public virtual void ClearScreen()
         {
-            Console.Clear();
+            _screenHandler.ConsoleHelper.ClearConsole();
         }
     }
 }

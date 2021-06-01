@@ -143,8 +143,8 @@ namespace InputHandling
             {
                 editorScreen.UpdateLastQuestion(questions.EditorQuestions.ElementAt(i));
 
-                var input = GetCommand();
-                Console.WriteLine(input);
+                var input = _screenHandler.GetScreenInput();
+                _screenHandler.SetScreenInput(input);
 
                 if (input.Equals("break"))
                 {
@@ -165,13 +165,13 @@ namespace InputHandling
 
             if (answers.ElementAt(2).Contains("yes"))
             {
-                Console.WriteLine("BINNEN CUSTOM COMBAT RULE");
+                _screenHandler.SetScreenInput("BINNEN CUSTOM COMBAT RULE");
                 answers.Add(CustomRuleHandleEditorScreenCommands("combat"));
             }
 
             if (answers.ElementAt(3).Contains("yes"))
             {
-                Console.WriteLine("BINNEN CUSTOM EXPLORE RULE");
+                _screenHandler.SetScreenInput("BINNEN CUSTOM EXPLORE RULE");
                 answers.Add(CustomRuleHandleEditorScreenCommands("explore"));
             }
 
@@ -189,8 +189,8 @@ namespace InputHandling
             builder.Append(type);
 
             editorScreen.UpdateLastQuestion("This is and example line: When player nearby player then attack" + Environment.NewLine + "press enter to continue...");
-            
-            Console.ReadLine();
+
+            _screenHandler.GetScreenInput();
             editorScreen.ClearScreen();
 
             while (nextLine)
@@ -203,7 +203,7 @@ namespace InputHandling
                     + "Type Help + armour, weapon, comparison, consumables, actions, bitcoinItems, comparables"
                     + "Type Stop to stop the custom rules" );
 
-                input = GetCommand();
+                input = _screenHandler.GetScreenInput();
                 input = input.ToLower();
 
 
@@ -241,7 +241,7 @@ namespace InputHandling
                     }
                 }
 
-                input = GetCommand();
+                input = _screenHandler.GetScreenInput();
                 input = input.ToLower();
                 var rule = input.Split(" ");
 

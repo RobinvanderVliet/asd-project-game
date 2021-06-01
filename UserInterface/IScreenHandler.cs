@@ -7,5 +7,6 @@ namespace UserInterface
         void TransitionTo(Screen screen);
         void DisplayScreen();
         public string GetScreenInput();
+        public void SetScreenInput(string input);
     }
 }
