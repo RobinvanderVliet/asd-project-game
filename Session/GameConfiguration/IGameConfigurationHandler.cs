@@ -7,5 +7,7 @@ namespace Session.GameConfiguration
         void HandleAnswer(string input);
 
         void SetGameConfiguration();
+
+        void SetDifficulty(MonsterDifficulty monsterDifficulty, string sessionId);
     }
 }

@@ -10,6 +10,7 @@ using WorldGeneration;
 using DatabaseHandler;
 using DatabaseHandler.Services;
 using DatabaseHandler.Repository;
+using Session.GameConfiguration;
 using UserInterface;
 using Timer = System.Timers.Timer;
 
@@ -30,11 +31,13 @@ namespace Session
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
         private IScreenHandler _screenHandler;
-        public SessionHandler(IClientController clientController, IScreenHandler screenHandler)
+        private IGameConfigurationHandler _gameConfigurationHandler;
+        public SessionHandler(IClientController clientController, IScreenHandler screenHandler, IGameConfigurationHandler gameConfigurationHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Session);
             _screenHandler = screenHandler;
+            _gameConfigurationHandler = gameConfigurationHandler;
         }
         
         public List<string> GetAllClients()
@@ -157,6 +160,20 @@ namespace Session
                 }
             }
         
+            return new HandlerResponseDTO(SendAction.Ignore, null);
+        }
+
+        private HandlerResponseDTO  HandleSetMonsterDifficulty(PacketDTO packetDto)
+        {
+            if (_clientController.IsHost() || _clientController.IsBackupHost)
+            {
+                //get difficulty from packet
+                _gameConfigurationHandler.SetDifficulty(MonsterDifficulty.Easy,_clientController.SessionId);
+            }
+            if (_clientController.IsHost())
+            {
+                return new HandlerResponseDTO(SendAction.SendToClients, null);
+            }
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
         
