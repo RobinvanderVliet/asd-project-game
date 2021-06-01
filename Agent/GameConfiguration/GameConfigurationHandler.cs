@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UserInterface;
 
+
 namespace Agent.GameConfiguration
 {
     public class GameConfigurationHandler : IGameConfigurationHandler

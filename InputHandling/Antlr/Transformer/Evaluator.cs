@@ -1,10 +1,13 @@
 using System;
 using ActionHandling;
+using Agent.GameConfiguration;
 using Chat;
 using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Exceptions;
+using Network;
 using Session;
+using MonsterDifficulty = InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
 namespace InputHandling.Antlr.Transformer
 {
@@ -14,17 +17,21 @@ namespace InputHandling.Antlr.Transformer
         private IMoveHandler _moveHandler;
         private IGameSessionHandler _gameSessionHandler;
         private IChatHandler _chatHandler;
+        private IGameConfigurationHandler _configurationHandler;
+        private IClientController _clientController;
         
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private String _commando;
 
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IGameConfigurationHandler configurationHandler, IClientController clientController)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
             _gameSessionHandler = gameSessionHandler;
             _chatHandler = chatHandler;
+            _configurationHandler = configurationHandler;
+            _clientController = clientController;
         }
         public void Apply(AST ast)
         {
@@ -79,6 +86,9 @@ namespace InputHandling.Antlr.Transformer
                         break;
                     case StartSession:
                         TransformStartSession((StartSession)nodeBody[i]);
+                        break;
+                    case MonsterDifficulty:
+                        TransformMonsterDifficulty((MonsterDifficulty)nodeBody[i]);
                         break;
                 }
         }
@@ -161,6 +171,28 @@ namespace InputHandling.Antlr.Transformer
         {
             _gameSessionHandler.SendGameSession();
         }
-        
+
+        private void TransformMonsterDifficulty(MonsterDifficulty monster)
+        {
+            if (_clientController.IsHost())
+            {
+                return;
+            }
+            switch (monster.Difficulty) 
+            {
+                case "easy":
+                    _configurationHandler.SetDifficulty(Agent.GameConfiguration.MonsterDifficulty.Easy);
+                    break;
+                case "medium":
+                    _configurationHandler.SetDifficulty(Agent.GameConfiguration.MonsterDifficulty.Medium);
+                    break;
+                case "hard":
+                    _configurationHandler.SetDifficulty(Agent.GameConfiguration.MonsterDifficulty.Hard);
+                    break;
+                case "impossible":
+                    _configurationHandler.SetDifficulty(Agent.GameConfiguration.MonsterDifficulty.Impossible);
+                    break;
+            }
+        }
     }
 }

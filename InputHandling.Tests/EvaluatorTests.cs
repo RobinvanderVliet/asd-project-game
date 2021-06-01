@@ -1,13 +1,16 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using ActionHandling;
+using Agent.GameConfiguration;
 using Chat;
 using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Antlr.Transformer;
 using InputHandling.Exceptions;
 using Moq;
+using Network;
 using NUnit.Framework;
 using Session;
+using MonsterDifficulty = InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
 namespace InputHandling.Tests
 {
@@ -19,6 +22,8 @@ namespace InputHandling.Tests
         private Mock<IMoveHandler> _mockedMoveHandler;
         private Mock<IGameSessionHandler> _mockedGameSessionHandler;
         private Mock<IChatHandler> _mockedChatHandler;
+        private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
+        private Mock<IClientController> _mockedClientController;
     
         [SetUp]
         public void Setup()
@@ -27,7 +32,9 @@ namespace InputHandling.Tests
             _mockedMoveHandler = new Mock<IMoveHandler>();
             _mockedGameSessionHandler = new Mock<IGameSessionHandler>();
             _mockedChatHandler = new Mock<IChatHandler>();
-            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object);
+            _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
+            _mockedClientController = new Mock<IClientController>();
+            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedGameConfigurationHandler.Object, _mockedClientController.Object);
         }
     
         [Test]
@@ -193,5 +200,67 @@ namespace InputHandling.Tests
             startSession.AddChild(new StartSession());
             return new AST(startSession);
         }
+        
+        [TestCase("easy")]
+        [TestCase("medium")]
+        [TestCase("hard")]
+        [TestCase("impossible")]
+        [Test]
+        public void Test_Apply_HandleMonsterDifficultyHost(string difficulty)
+        {
+            // Arrange
+            var ast = MonsterDifficultyAst(difficulty);
+            _mockedClientController.Setup(x => x.IsHost()).Returns(true);
+        
+            // Act
+            _sut.Apply(ast);
+        
+            // Assert
+            _mockedClientController.Verify(mock => mock.IsHost(), Times.Once);
+            _mockedGameConfigurationHandler.Verify(mock => mock.SetDifficulty(GetDifficulty(difficulty)), Times.Once);
+        }
+        
+        [TestCase("easy")]
+        [TestCase("medium")]
+        [TestCase("hard")]
+        [TestCase("impossible")]
+        [Test]
+        public void Test_Apply_HandleMonsterDifficultyNotHost(string difficulty)
+        {
+            // Arrange
+            var ast = MonsterDifficultyAst(difficulty);
+            _mockedClientController.Setup(x => x.IsHost()).Returns(false);
+        
+            // Act
+            _sut.Apply(ast);
+        
+            // Assert
+            _mockedClientController.Verify(mock => mock.IsHost(), Times.Once);
+            _mockedGameConfigurationHandler.Verify(mock => mock.SetDifficulty(It.IsAny<Agent.GameConfiguration.MonsterDifficulty>()), Times.Never);
+        }
+    
+        private static AST MonsterDifficultyAst(string difficulty)
+        {
+            Input monster = new Input();
+            monster.AddChild(new MonsterDifficulty(difficulty));
+            return new AST(monster);
+        }
+
+        private Agent.GameConfiguration.MonsterDifficulty GetDifficulty(string difficulty)
+        {
+            switch (difficulty)
+            {
+                case "easy":
+                    return Agent.GameConfiguration.MonsterDifficulty.Easy;
+                case "medium":
+                    return Agent.GameConfiguration.MonsterDifficulty.Medium;
+                case "hard":
+                    return Agent.GameConfiguration.MonsterDifficulty.Hard;
+                case "impossible":
+                    return Agent.GameConfiguration.MonsterDifficulty.Impossible;
+            }
+            return Agent.GameConfiguration.MonsterDifficulty.Easy;
+        }
+        
     }
 }

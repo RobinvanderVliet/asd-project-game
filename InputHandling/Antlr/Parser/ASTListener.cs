@@ -207,5 +207,15 @@ namespace InputHandling.Antlr.Parser
                 joinSession.AddChild(new Message(context.GetText()));
             }
         }
+
+        public override void EnterMonsterdifficulty(PlayerCommandsParser.MonsterdifficultyContext context)
+        {
+            _currentContainer.Push(new MonsterDifficulty(context.children[2].GetText()));
+        }
+
+        public override void ExitMonsterdifficulty(PlayerCommandsParser.MonsterdifficultyContext context)
+        {
+            _ast.Root.AddChild((MonsterDifficulty) _currentContainer.Pop());
+        }
     }
 }

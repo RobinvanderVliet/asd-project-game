@@ -7,5 +7,7 @@ namespace Agent.GameConfiguration
         void HandleAnswer(string input);
 
         void SetGameConfiguration();
+
+        void SetDifficulty(MonsterDifficulty monsterDifficulty);
     }
 }
