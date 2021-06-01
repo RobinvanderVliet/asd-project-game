@@ -24,43 +24,57 @@ namespace ASD_project
         //Setup logger and injection
         static void Main(string[] args)
         {
-            var builder = new ConfigurationBuilder();
-            BuildConfig(builder);
-
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(builder.Build())
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .CreateLogger();
-
-            Log.Logger.Information("Application starting");
-
-            //Example of dependency injection with GreetingService
-            var host = Host.CreateDefaultBuilder()
-                .ConfigureServices((context, services) =>
-                {
-                    services.AddTransient<IMainGame, MainGame>();
-                    services.AddScoped<INetworkComponent, NetworkComponent>();
-                    services.AddScoped<IClientController, ClientController>();
-                    services.AddScoped<IChatHandler, ChatHandler>();
-                    services.AddScoped<ISessionHandler, SessionHandler>();
-                    services.AddScoped<IMoveHandler, MoveHandler>();
-                    services.AddScoped<IWorldService, WorldService>();
-                    services.AddScoped<IGameSessionHandler, GameSessionHandler>();
-                    services.AddSingleton<IDbConnection, DbConnection>();
-                    services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-                    services.AddScoped(typeof(IServicesDb<>), typeof(ServicesDb<>));
-                    services.AddScoped<IScreenHandler, ScreenHandler>();
-                    services.AddScoped<IInputHandler, InputHandler>();
-                    services.AddScoped<IPipeline, Pipeline>();
-                    services.AddScoped<IEvaluator, Evaluator>();
-                })
-                .UseSerilog()
-                .Build();
+            // var builder = new ConfigurationBuilder();
+            // BuildConfig(builder);
+            //
+            // Log.Logger = new LoggerConfiguration()
+            //     .ReadFrom.Configuration(builder.Build())
+            //     .Enrich.FromLogContext()
+            //     .WriteTo.Console()
+            //     .CreateLogger();
+            //
+            // Log.Logger.Information("Application starting");
+            //
+            // //Example of dependency injection with GreetingService
+            // var host = Host.CreateDefaultBuilder()
+            //     .ConfigureServices((context, services) =>
+            //     {
+            //         services.AddTransient<IMainGame, MainGame>();
+            //         services.AddScoped<INetworkComponent, NetworkComponent>();
+            //         services.AddScoped<IClientController, ClientController>();
+            //         services.AddScoped<IChatHandler, ChatHandler>();
+            //         services.AddScoped<ISessionHandler, SessionHandler>();
+            //         services.AddScoped<IMoveHandler, MoveHandler>();
+            //         services.AddScoped<IWorldService, WorldService>();
+            //         services.AddScoped<IGameSessionHandler, GameSessionHandler>();
+            //         services.AddSingleton<IDbConnection, DbConnection>();
+            //         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            //         services.AddScoped(typeof(IServicesDb<>), typeof(ServicesDb<>));
+            //         services.AddScoped<IScreenHandler, ScreenHandler>();
+            //         services.AddScoped<IInputHandler, InputHandler>();
+            //         services.AddScoped<IPipeline, Pipeline>();
+            //         services.AddScoped<IEvaluator, Evaluator>();
+            //     })
+            //     .UseSerilog()
+            //     .Build();
+            //
+            //
+            // var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);
+            // svc.Run();
             
-
-            var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);
-            svc.Run();
+            INetworkComponent networkComponent = new NetworkComponent();
+            IWorldService worldService = new WorldService();
+            IScreenHandler screenHandler = new ScreenHandler();
+            IClientController clientController = new ClientController(networkComponent);
+            IChatHandler chatHandler = new ChatHandler(clientController);
+            ISessionHandler sessionHandler = new SessionHandler(clientController, screenHandler);
+            IMoveHandler moveHandler = new MoveHandler(clientController, worldService);
+            IGameSessionHandler gameSessionHandler = new GameSessionHandler(clientController, worldService, sessionHandler);
+            IEvaluator evaluator = new Evaluator(sessionHandler, moveHandler, gameSessionHandler, chatHandler);
+            IPipeline pipeline = new Pipeline(evaluator);
+            MainGame mainGame = new MainGame(new InputHandler(pipeline, sessionHandler, screenHandler), new ScreenHandler());
+            
+            mainGame.Run();
         }
 
         static void BuildConfig(IConfigurationBuilder builder) 

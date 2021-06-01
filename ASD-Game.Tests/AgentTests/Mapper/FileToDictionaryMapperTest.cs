@@ -30,7 +30,7 @@ namespace Agent.Tests.Mapper
             expectedDictionary.Add("aggressiveness", "high");
             expectedDictionary.Add("explore", "random");
             expectedDictionary.Add("combat", "offensive");
-            var filepath = _handler.GetBaseDirectory() + "/Resource/npcFileTest.txt";
+            var filepath = _handler.GetBaseDirectory() + "/AgentTests/Resource/npcFileTest.txt";
             
             //Act
             var actualDictionary = _sut.MapFileToConfiguration(filepath);
@@ -46,7 +46,7 @@ namespace Agent.Tests.Mapper
         public void Test_MapFileToConfiguration_Unsuccessful()
         {
             //Arrange
-            var filepath = _handler.GetBaseDirectory() + "/Resource/npcFileTest_2.txt";
+            var filepath = _handler.GetBaseDirectory() + "/AgentTests/Resource/npcFileTest_2.txt";
             
             //Act & Assert
             Assert.Throws<SyntaxErrorException>(() => _sut.MapFileToConfiguration(filepath));
