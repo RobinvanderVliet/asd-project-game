@@ -106,7 +106,7 @@ namespace Session
             bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
 
             var player = _worldService.GetPlayer(relativeStatDTO.Id);
-            if(player.Stamina < Player.STAMINACAP && relativeStatDTO.Stamina != 0)
+            if(player.Stamina < Player.STAMINA_MAX && relativeStatDTO.Stamina != 0)
             {
                 player.AddStamina(relativeStatDTO.Stamina);
                 InsertToDatabase(relativeStatDTO, handleInDatabase, player);
