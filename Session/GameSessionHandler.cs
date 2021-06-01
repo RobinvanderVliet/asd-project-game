@@ -121,7 +121,7 @@ namespace Session
 
             players = SetupPositionsNewPlayers(allClients, gamePOCO, servicePlayer);
 
-            startGameDTO.GameGuid.GameGuid = _clientController.SessionId;
+            startGameDTO.GameGuid = gamePOCO;
             startGameDTO.PlayerLocations = players;
 
             return startGameDTO;
