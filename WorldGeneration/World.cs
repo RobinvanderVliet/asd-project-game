@@ -8,6 +8,7 @@ namespace WorldGeneration
         private Map _map;
         public Player CurrentPlayer { get; set; }
         private List<Player> _players;
+        private string currentIdPlayer = null; 
         private readonly int _viewDistance;
 
         public World(int seed, int viewDistance)
@@ -24,26 +25,37 @@ namespace WorldGeneration
             {
                 foreach (var element in _players)
                 {
-                    if (element.Id.Equals(userId))
+                    if (element.Id.Equals(userId) && element.Id.Equals(currentIdPlayer))
                     {
                         CurrentPlayer = element;
+                        CurrentPlayer.XPosition = newXPosition;
+                        CurrentPlayer.YPosition = newYPosition;
+                    }
+                    else
+                    {
+                        var player = _players.Find(x => x.Id == userId);
+                        player.XPosition = newXPosition;
+                        player.YPosition = newYPosition;
                     }
                 }
             }
-        
-
-            Console.WriteLine(CurrentPlayer);
-            if (CurrentPlayer.Id.Equals(userId))
-            {
-                CurrentPlayer.XPosition = newXPosition;
-                CurrentPlayer.YPosition = newYPosition;
-            }
             else
             {
-                var player = _players.Find(x => x.Id == userId);
-                player.XPosition = newXPosition;
-                player.YPosition = newYPosition;
+                Console.WriteLine(CurrentPlayer);
+                if (CurrentPlayer.Id.Equals(userId))
+                {
+                    CurrentPlayer.XPosition = newXPosition;
+                    CurrentPlayer.YPosition = newYPosition;
+                }
+                else
+                {
+                    var player = _players.Find(x => x.Id == userId);
+                    player.XPosition = newXPosition;
+                    player.YPosition = newYPosition;
+                }
             }
+        
+           
             DisplayWorld();
         }
 
@@ -52,6 +64,7 @@ namespace WorldGeneration
             if (isCurrentPlayer)
             {
                 CurrentPlayer = player;
+                currentIdPlayer = player.Id;
             }
             _players.Add(player);
         }
@@ -61,6 +74,7 @@ namespace WorldGeneration
             if (isCurrentPlayer)
             {
                 CurrentPlayer = player;
+                currentIdPlayer = player.Id;
             }
             _players.Add(player);
         }
