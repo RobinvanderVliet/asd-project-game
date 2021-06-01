@@ -51,11 +51,10 @@ namespace Session
         {
             StartGameDTO startGameDTO = new StartGameDTO();
 
-
             var playerService = ReturnPlayerService();
             var allPlayers = playerService.GetAllAsync();
             allPlayers.Wait();
-            var allPlayersInGame = allPlayers.Result.Where(x => x.GameGuid == _clientController.SessionId);
+            var allPlayersInGame = allPlayers.Result.Where(x => x.GameGuid.GameGuid == _clientController.SessionId);
 
             startGameDTO = SetLoadedGameInfo(startGameDTO, allPlayersInGame);
 
@@ -135,6 +134,7 @@ namespace Session
             int playerX = 26; // spawn position
             int playerY = 11; // spawn position
 
+
             foreach (string clientId in allClients)
             {
                 int[] playerPosition = new int[2];
@@ -142,7 +142,7 @@ namespace Session
                 playerPosition[1] = playerY;
                 players.Add(clientId, playerPosition);
                 var tmpPlayer = new PlayerPOCO
-                    {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
+                    {PlayerGuid = clientId, GameGuid = gamePOCO, XPosition = playerX, YPosition = playerY};
                 servicePlayer.CreateAsync(tmpPlayer);
 
                 playerX += 2; // spawn position + 2 each client
