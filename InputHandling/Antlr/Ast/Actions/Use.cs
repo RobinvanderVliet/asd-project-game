@@ -1,12 +1,6 @@
-﻿using InputHandling.Antlr.Ast;
-using InputHandling.Antlr.Ast.Actions;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InputHandling.Antlr.Ast.Actions
 {
@@ -48,7 +42,7 @@ namespace InputHandling.Antlr.Ast.Actions
         [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
-            return Equals(obj as Move);
+            return Equals(obj as Use);
         }
 
         [ExcludeFromCodeCoverage]
