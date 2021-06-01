@@ -20,6 +20,18 @@ namespace WorldGeneration
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
         {
+            if (CurrentPlayer == null)
+            {
+                foreach (var element in _players)
+                {
+                    if (element.Id.Equals(userId))
+                    {
+                        CurrentPlayer = element;
+                    }
+                }
+            }
+        
+
             Console.WriteLine(CurrentPlayer);
             if (CurrentPlayer.Id.Equals(userId))
             {

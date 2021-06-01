@@ -150,9 +150,7 @@ namespace Session
                 playerX += 2; // spawn position + 2 each client
                 playerY += 2; // spawn position + 2 each client
             }
-
-    
-
+  
             return players;
         }
 
@@ -172,8 +170,6 @@ namespace Session
 
         private void AddPlayerToGameSession(StartGameDTO joinedPlayerDto)
         {
-            _worldService.DisplayWorld();
-
             if (_clientController.GetOriginId() == joinedPlayerDto.ExistingPlayer.PlayerGuid)
             {
                 var player = new WorldGeneration.Player("gerrit", joinedPlayerDto.ExistingPlayer.XPosition,
