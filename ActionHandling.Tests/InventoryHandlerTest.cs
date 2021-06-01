@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using ActionHandling.DTO;
@@ -91,16 +92,13 @@ namespace ActionHandling.Tests
         }
 
         [Test]
-        public void Test_HandlePacket_HandlesPickupPacketSuccessOnHost()
+        [TestCaseSource(typeof(PickupCases))]
+        public void Test_HandlePacket_HandlesPickupPacketSuccessOnHost(InventoryDTO inventoryDTO, HandlerResponseDTO expectedHandlerResponseDTO, bool fillInventory)
         {
             // Arrange
-            const bool IS_HOST = true;
-            const string ORIGIN_ID = "origin1";
             const string USER_ID = "userid";
-            const int INDEX = 1;
-            const int COMPENSATED_INDEX = 0;
-            
-            InventoryDTO inventoryDTO = new(USER_ID, InventoryType.Pickup, COMPENSATED_INDEX);
+
+            // InventoryDTO inventoryDTO = ;
             string payload = JsonConvert.SerializeObject(inventoryDTO);
             PacketDTO packetDTO = new();
             packetDTO.Payload = payload;
@@ -108,7 +106,7 @@ namespace ActionHandling.Tests
             packetHeaderDTO.Target = "host";
             packetDTO.Header = packetHeaderDTO;
             
-            HandlerResponseDTO expectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
+            // HandlerResponseDTO expectedHandlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients, null);
 
             Player player = new Player("henk", 0, 0, "#", USER_ID);
             IList<Item> items = new List<Item>();
@@ -121,7 +119,7 @@ namespace ActionHandling.Tests
             HandlerResponseDTO handlerResponseDTO = _sut.HandlePacket(packetDTO);
 
             // Assert
-            Assert.AreEqual(expectedResult, handlerResponseDTO);
+            Assert.AreEqual(expectedHandlerResponseDTO, handlerResponseDTO);
         }
 
         [Test]
