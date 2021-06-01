@@ -8,7 +8,7 @@ namespace WorldGeneration
 {
     public class NoiseMapGenerator : INoiseMapGenerator
     {
-        private FastNoiseLite noise;
+        private FastNoiseLite _noise;
         public int[,] GenerateAreaMap(int size, int seed)
         {
             var noise = new FastNoiseLite();
@@ -25,29 +25,31 @@ namespace WorldGeneration
 
         public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize, int seed)
         {
-            if (noise == null)
+            if (_noise == null)
             {
                 SetupNoise(seed);
             }
+            
             // check which edges of the chunk will have roads.
-            CompassDirections compassDirection = GetCompassDirection(chunkX, chunkY);
+            CompassDirections compassDirection = GetCompassDirections(chunkX, chunkY);
             
             // Create a map that has the roads, but these roads are missing coordinates.
-            var map = RoadPresetFactory.GetRoadPreset(chunkRowSize, compassDirection);
-            
+            // var roadmap = RoadPresetFactory.GetRoadPreset(chunkRowSize, compassDirection);
+            var map = new ITile[chunkRowSize * chunkRowSize];
+            var roadmap = RoadPresetFactory.GetRoadPreset(chunkRowSize, CompassDirections.NorthToSouth);
             for (var y = 0; y < chunkRowSize; y++)
             {
                 for (var x = 0; x < chunkRowSize; x++)
                 {
-                    if (map[y * chunkRowSize + x].GetType() == typeof(StreetTile))
+                    if (roadmap[y * chunkRowSize + x] != null)
                     {
-                        map[y * chunkRowSize + x] = new StreetTile(x, y);
+                       map[y * chunkRowSize + x] = new StreetTile(x, y);
                     }
                     else
                     {
-                        // IF in roadmap, add road, ELSE continue below.
+                        // If there isn't a tile here yet, give it one.
                         map[y * chunkRowSize + x] = GetTileFromNoise(
-                            noise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize)
+                            _noise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize)
                             , x + chunkRowSize * chunkX
                             , chunkRowSize * chunkY - chunkRowSize + y);
                     }
@@ -56,7 +58,7 @@ namespace WorldGeneration
             return new Chunk(chunkX, chunkY, map, chunkRowSize);
         }
 
-        private CompassDirections GetCompassDirection (int chunkX, int chunkY)
+        private CompassDirections GetCompassDirections (int chunkX, int chunkY)
         {
             // Step 1: generate four binaries based on the compass directions.
             // These use the coordinate of the current chunk and the adjacent chunk, so when the calculation is repeated in the adjacent chunk it will result in the same result.
@@ -86,7 +88,7 @@ namespace WorldGeneration
 
         private int GetBinaryForRoads(int combinedcoordinates)
         {
-           float noiseresult = noise.GetNoise(combinedcoordinates, combinedcoordinates);
+           float noiseresult = _noise.GetNoise(combinedcoordinates, combinedcoordinates);
            return (int) (noiseresult % 2);
         }
 
@@ -99,18 +101,18 @@ namespace WorldGeneration
                 (< -4) => new DirtTile(x, y),
                 (< 2) => new GrassTile(x, y),
                 (< 3) => new SpikeTile(x, y),
-                (< 8) => new StreetTile(x, y),
+                (< 8) => new DirtTile(x, y), // Replaces this with DirtTile because we don't want randomly generated street tiles.
                 _ => new GasTile(x, y)
             };
         }
 
         private void SetupNoise(int seed)
         {
-            noise = new FastNoiseLite();
-            noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
-            noise.SetSeed(seed);
-            noise.SetFrequency(0.03f);
-            noise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
+            _noise = new FastNoiseLite();
+            _noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
+            _noise.SetSeed(seed);
+            _noise.SetFrequency(0.03f);
+            _noise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
         }
     }
 }
