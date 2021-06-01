@@ -1,5 +1,5 @@
 ﻿using Network;
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ActionHandling.DTO;
@@ -92,7 +92,8 @@ namespace ActionHandling
 
                 if (result.Any())
                 {
-                    return new HandlerResponseDTO(SendAction.ReturnToSender, "Can't move to new position something is in the way");
+                    return new HandlerResponseDTO(SendAction.ReturnToSender,
+                        "Can't move to new position something is in the way");
                 }
                 else
                 {
@@ -108,7 +109,7 @@ namespace ActionHandling
             {
                 HandleMove(moveDTO);
             }
-            
+
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
@@ -117,11 +118,14 @@ namespace ActionHandling
             var dbConnection = new DbConnection();
 
             var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var player = playerRepository.GetAllAsync().Result.Where(x => x.GameGuid == _clientController.SessionId).FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId);
+            var player = playerRepository.GetAllAsync();
+            player.Wait();
+            var selectedPlayer = player.Result.FirstOrDefault(x =>
+                x.GameGuid == _clientController.SessionId && x.PlayerGuid == moveDTO.UserId);
 
-            player.XPosition = moveDTO.XPosition;
-            player.YPosition = moveDTO.YPosition;
-            playerRepository.UpdateAsync(player);
+            selectedPlayer.XPosition = moveDTO.XPosition;
+            selectedPlayer.YPosition = moveDTO.YPosition;
+            playerRepository.UpdateAsync(selectedPlayer);
         }
 
         private void HandleMove(MoveDTO moveDTO)

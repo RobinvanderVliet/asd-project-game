@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
@@ -143,7 +144,9 @@ namespace Session
 
                 var tmpPlayer = new PlayerPOCO
                     {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY, GameGUIDAndPlayerGuid = gamePOCO.GameGuid + clientId};
-       
+
+                var insert = servicePlayer.CreateAsync(tmpPlayer);
+                insert.Wait();
 
                 playerX += 2; // spawn position + 2 each client
                 playerY += 2; // spawn position + 2 each client
