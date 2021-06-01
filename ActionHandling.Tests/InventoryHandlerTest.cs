@@ -111,6 +111,12 @@ namespace ActionHandling.Tests
             Player player = new Player("henk", 0, 0, "#", USER_ID);
             IList<Item> items = new List<Item>();
             items.Add(ItemFactory.GetBandage());
+            if (fillInventory)
+            {
+                player.Inventory.AddConsumableItem(ItemFactory.GetBandage());
+                player.Inventory.AddConsumableItem(ItemFactory.GetBandage());
+                player.Inventory.AddConsumableItem(ItemFactory.GetBandage());
+            }
 
             _mockedWorldService.Setup(mock => mock.GetPlayer(USER_ID)).Returns(player);
             _mockedWorldService.Setup(mock => mock.GetItemsOnCurrentTile(player)).Returns(items);
@@ -120,6 +126,31 @@ namespace ActionHandling.Tests
 
             // Assert
             Assert.AreEqual(expectedHandlerResponseDTO, handlerResponseDTO);
+        }
+        
+        class PickupCases : IEnumerable
+        {
+            public IEnumerator GetEnumerator()
+            {
+                yield return new object[]
+                {
+                    new InventoryDTO("userid", InventoryType.Pickup, 0),
+                    new HandlerResponseDTO(SendAction.SendToClients, null),
+                    false
+                };
+                yield return new object[]
+                {
+                    new InventoryDTO("userid", InventoryType.Pickup, 100),
+                    new HandlerResponseDTO(SendAction.ReturnToSender, "Number is not in search list!"),
+                    false
+                };
+                yield return new object[]
+                {
+                    new InventoryDTO("userid", InventoryType.Pickup, 0),
+                    new HandlerResponseDTO(SendAction.ReturnToSender, "Could not pickup item"),
+                    true
+                };
+            }
         }
 
         [Test]
