@@ -82,7 +82,7 @@ namespace WorldGeneration
             }
         }
 
-        public void SetCurrentPlayerHost(string playerId, string clientId)
+        public void SetCurrentPlayerHost(string playerId)
         {
             foreach (var element in _players)
             {
