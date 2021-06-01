@@ -91,6 +91,40 @@ namespace ActionHandling.Tests
         }
 
         [Test]
+        public void Test_HandlePacket_HandlesPickupPacketSuccessOnHost()
+        {
+            // Arrange
+            const bool IS_HOST = true;
+            const string ORIGIN_ID = "origin1";
+            const string USER_ID = "userid";
+            const int INDEX = 1;
+            const int COMPENSATED_INDEX = 0;
+            
+            InventoryDTO inventoryDTO = new(USER_ID, InventoryType.Pickup, COMPENSATED_INDEX);
+            string payload = JsonConvert.SerializeObject(inventoryDTO);
+            PacketDTO packetDTO = new();
+            packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            packetHeaderDTO.Target = "host";
+            packetDTO.Header = packetHeaderDTO;
+            
+            HandlerResponseDTO expectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
+
+            Player player = new Player("henk", 0, 0, "#", USER_ID);
+            IList<Item> items = new List<Item>();
+            items.Add(ItemFactory.GetBandage());
+
+            _mockedWorldService.Setup(mock => mock.GetPlayer(USER_ID)).Returns(player);
+            _mockedWorldService.Setup(mock => mock.GetItemsOnCurrentTile(player)).Returns(items);
+            
+            // Act
+            HandlerResponseDTO handlerResponseDTO = _sut.HandlePacket(packetDTO);
+
+            // Assert
+            Assert.AreEqual(expectedResult, handlerResponseDTO);
+        }
+
+        [Test]
         public void Test_HandlePacket_HandlesUsePacketSuccesOnHost()
         {
             //arrange
