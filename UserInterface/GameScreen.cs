@@ -41,7 +41,7 @@ namespace UserInterface
             DrawInputBox(INPUT_X, INPUT_Y, "Insert an option");
         } 
 
-        public void AddMessage(string message)
+        public virtual void AddMessage(string message)
         {
             if (_screenHandler.Screen is GameScreen)
             {

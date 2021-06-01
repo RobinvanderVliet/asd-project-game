@@ -60,7 +60,7 @@ namespace Chat
             if (_screenHandler.Screen is GameScreen)
             {
                 GameScreen screen = _screenHandler.Screen as GameScreen;
-                screen.AddMessage($"{originId} shouted: {message}");
+                screen.AddMessage($"{originId} said: {message}");
             }
         }
 
