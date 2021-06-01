@@ -64,8 +64,7 @@ namespace Session.Tests
             StartGameDTO startGameDto = new StartGameDTO();
             startGameDto.GameGuid = GUID.ToString();
             startGameDto.PlayerLocations = players;
-
-
+            
             // Act ---------
             _sut.SendGameSession();
 
