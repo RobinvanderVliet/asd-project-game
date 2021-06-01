@@ -1,0 +1,9 @@
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\b\ParserLexer\Debug\net5.0\ParserLexer.deps.json
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\b\ParserLexer\Debug\net5.0\ParserLexer.dll
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\b\ParserLexer\Debug\net5.0\ref\ParserLexer.dll
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\ParserLexer\Debug\net5.0\ParserLexer.GeneratedMSBuildEditorConfig.editorconfig
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\ParserLexer\Debug\net5.0\ParserLexer.AssemblyInfoInputs.cache
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\ParserLexer\Debug\net5.0\ParserLexer.AssemblyInfo.cs
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\ParserLexer\Debug\net5.0\ParserLexer.csproj.CopyComplete
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\ParserLexer\Debug\net5.0\ParserLexer.dll
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\ParserLexer\Debug\net5.0\ref\ParserLexer.dll

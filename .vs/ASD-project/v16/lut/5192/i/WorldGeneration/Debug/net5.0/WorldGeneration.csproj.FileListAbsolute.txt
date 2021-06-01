@@ -1,0 +1,3 @@
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\WorldGeneration\Debug\net5.0\WorldGeneration.GeneratedMSBuildEditorConfig.editorconfig
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\WorldGeneration\Debug\net5.0\WorldGeneration.AssemblyInfoInputs.cache
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\WorldGeneration\Debug\net5.0\WorldGeneration.AssemblyInfo.cs

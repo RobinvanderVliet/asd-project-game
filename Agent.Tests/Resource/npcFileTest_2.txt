@@ -1,6 +1,0 @@
-﻿aggressiveness = high
-explore = random
-combat = offensive
-
-
-combat = weeop

@@ -1,0 +1,10 @@
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\b\Chat\Debug\net5.0\Chat.deps.json
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\b\Chat\Debug\net5.0\Chat.dll
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\b\Chat\Debug\net5.0\ref\Chat.dll
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Chat\Debug\net5.0\Chat.csprojAssemblyReference.cache
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Chat\Debug\net5.0\Chat.GeneratedMSBuildEditorConfig.editorconfig
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Chat\Debug\net5.0\Chat.AssemblyInfoInputs.cache
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Chat\Debug\net5.0\Chat.AssemblyInfo.cs
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Chat\Debug\net5.0\Chat.csproj.CopyComplete
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Chat\Debug\net5.0\Chat.dll
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Chat\Debug\net5.0\ref\Chat.dll

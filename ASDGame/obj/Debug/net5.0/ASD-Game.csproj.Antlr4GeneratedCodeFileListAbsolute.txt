@@ -1,0 +1,12 @@
+C:\Users\arnold\source\repos\Test\Test\obj\Debug\net5.0\AgentConfigurationLexer.cs
+C:\Users\arnold\source\repos\Test\Test\obj\Debug\net5.0\AgentConfigurationParser.cs
+C:\Users\arnold\source\repos\Test\Test\obj\Debug\net5.0\AgentConfigurationListener.cs
+C:\Users\arnold\source\repos\Test\Test\obj\Debug\net5.0\AgentConfigurationBaseListener.cs
+C:\Users\arnold\source\repos\Test\Test\obj\Debug\net5.0\AgentConfigurationVisitor.cs
+C:\Users\arnold\source\repos\Test\Test\obj\Debug\net5.0\AgentConfigurationBaseVisitor.cs
+C:\Users\arnold\source\repos\Test\Test\obj\Debug\net5.0\PlayerCommandsLexer.cs
+C:\Users\arnold\source\repos\Test\Test\obj\Debug\net5.0\PlayerCommandsParser.cs
+C:\Users\arnold\source\repos\Test\Test\obj\Debug\net5.0\PlayerCommandsListener.cs
+C:\Users\arnold\source\repos\Test\Test\obj\Debug\net5.0\PlayerCommandsBaseListener.cs
+C:\Users\arnold\source\repos\Test\Test\obj\Debug\net5.0\PlayerCommandsVisitor.cs
+C:\Users\arnold\source\repos\Test\Test\obj\Debug\net5.0\PlayerCommandsBaseVisitor.cs

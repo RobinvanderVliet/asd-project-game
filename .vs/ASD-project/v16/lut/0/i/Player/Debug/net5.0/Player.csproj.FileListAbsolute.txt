@@ -1,0 +1,9 @@
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\b\Player\Debug\net5.0\Player.deps.json
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\b\Player\Debug\net5.0\Player.dll
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\b\Player\Debug\net5.0\ref\Player.dll
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Player\Debug\net5.0\Player.GeneratedMSBuildEditorConfig.editorconfig
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Player\Debug\net5.0\Player.AssemblyInfoInputs.cache
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Player\Debug\net5.0\Player.AssemblyInfo.cs
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Player\Debug\net5.0\Player.csproj.CopyComplete
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Player\Debug\net5.0\Player.dll
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Player\Debug\net5.0\ref\Player.dll

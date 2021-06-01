@@ -1,0 +1,13 @@
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\b\Creature\Debug\net5.0\Creature.exe
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\b\Creature\Debug\net5.0\Creature.deps.json
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\b\Creature\Debug\net5.0\Creature.runtimeconfig.json
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\b\Creature\Debug\net5.0\Creature.runtimeconfig.dev.json
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\b\Creature\Debug\net5.0\Creature.dll
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\b\Creature\Debug\net5.0\ref\Creature.dll
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Creature\Debug\net5.0\Creature.GeneratedMSBuildEditorConfig.editorconfig
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Creature\Debug\net5.0\Creature.AssemblyInfoInputs.cache
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Creature\Debug\net5.0\Creature.AssemblyInfo.cs
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Creature\Debug\net5.0\Creature.csproj.CopyComplete
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Creature\Debug\net5.0\Creature.dll
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Creature\Debug\net5.0\ref\Creature.dll
+F:\Documents\asd-project-game\.vs\ASD-project\v16\lut\0\i\Creature\Debug\net5.0\Creature.genruntimeconfig.cache
