@@ -8,6 +8,7 @@ using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
+using Session.GameConfiguration;
 using WorldGeneration;
 using WorldGeneration.Models;
 
@@ -19,13 +20,15 @@ namespace Session
         private IClientController _clientController;
         private ISessionHandler _sessionHandler;
         private IWorldService _worldService;
+        private IGameConfigurationHandler _gameConfigurationHandler;
         
-        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler)
+        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IGameConfigurationHandler gameConfigurationHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
             _worldService = worldService;
             _sessionHandler = sessionHandler;
+            _gameConfigurationHandler = gameConfigurationHandler;
         }
         
         public void SendGameSession()
@@ -42,7 +45,18 @@ namespace Session
             var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
             var gameRepository = new Repository<GamePOCO>(dbConnection);
             var gameService = new ServicesDb<GamePOCO>(gameRepository);
+            var gameConfigurationRepository = new Repository<GameConfigurationPOCO>(dbConnection);
+            var gameServiceConfiguration = new ServicesDb<GameConfigurationPOCO>(gameConfigurationRepository);
 
+            var gameConfigurationPOCO = new GameConfigurationPOCO
+            {
+                GameGUID = _clientController.SessionId,
+                NPCDifficultyCurrent = (int) _gameConfigurationHandler.CurrentMonsterDifficulty,
+                NPCDifficultyNew = (int) _gameConfigurationHandler.NewMonsterDifficulty
+                //Todo: Add item spawn rate, pls Martijn
+            };
+            gameServiceConfiguration.CreateAsync(gameConfigurationPOCO);
+            
             var gamePOCO = new GamePOCO {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
             gameService.CreateAsync(gamePOCO);
   

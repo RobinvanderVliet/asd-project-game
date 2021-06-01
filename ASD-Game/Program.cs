@@ -9,13 +9,13 @@ using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using WorldGeneration;
 using ActionHandling;
-using Agent.GameConfiguration;
 using Chat;
 using InputHandling;
 using InputHandling.Antlr;
 using InputHandling.Antlr.Transformer;
 using Network;
 using Session;
+using Session.GameConfiguration;
 using UserInterface;
 
 namespace ASD_project

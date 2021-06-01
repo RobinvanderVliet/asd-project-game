@@ -22,7 +22,7 @@ namespace UserInterface
             {
                 "Yes", "No"
             };
-            inputText = "Vul je keuze in";
+            inputText = "Choose an option";
             DrawScreen();
         }
         public override void DrawScreen()
