@@ -19,7 +19,8 @@ namespace InputHandling.Tests
         private Mock<IMoveHandler> _mockedMoveHandler;
         private Mock<IGameSessionHandler> _mockedGameSessionHandler;
         private Mock<IChatHandler> _mockedChatHandler;
-    
+        private Mock<IInventoryHandler> _mockedInventoryHandler;
+
         [SetUp]
         public void Setup()
         {
@@ -27,7 +28,8 @@ namespace InputHandling.Tests
             _mockedMoveHandler = new Mock<IMoveHandler>();
             _mockedGameSessionHandler = new Mock<IGameSessionHandler>();
             _mockedChatHandler = new Mock<IChatHandler>();
-            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object);
+            _mockedInventoryHandler = new Mock<IInventoryHandler>();
+            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedInventoryHandler.Object);
         }
     
         [Test]
@@ -123,13 +125,33 @@ namespace InputHandling.Tests
             _mockedSessionHandler.Verify(mockedSession => mockedSession.RequestSessions(), Times.Once);
         }
     
+        private static AST SearchAst()
+        {
+            Input search = new Input();
+            search.AddChild(new Search());
+            return new AST(search);
+        }
+
+        [Test]
+        public void Test_Apply_SearchActionIsCalled()
+        {
+            // Arrange
+            var ast = SearchAst();
+
+            // Act
+            _sut.Apply(ast);
+
+            // Assert
+            _mockedInventoryHandler.Verify(mock => mock.Search(), Times.Once);
+        }
+
         private static AST RequestSessionsAst()
         {
             Input requestSessions = new Input();
             requestSessions.AddChild(new RequestSessions());
             return new AST(requestSessions);
         }
-    
+
         [Test]
         public void Test_Apply_HandleCreateSessionActionIsCalled()
         {

@@ -1,4 +1,5 @@
-﻿using Items.WeaponStats;
+﻿using Items.Consumables;
+using Items.WeaponStats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,16 @@ namespace Items
             armorBuilder.SetRarity(ItemStats.Rarity.Common);
             armorBuilder.SetArmorProtectionPoints(1);
             return armorBuilder.GetItem();
+        }
+
+        public static Consumable GetBandage()
+        {
+            ConsumableBuilder builder = new(Consumables.ConsumableStats.ConsumableType.Health);
+            builder.SetName("Bandage");
+            builder.SetDescription("Let me patch you together");
+            builder.SetHealth(Consumables.ConsumableStats.Health.Low);
+            builder.SetRarity(ItemStats.Rarity.Common);
+            return builder.GetItem();
         }
     }
 }

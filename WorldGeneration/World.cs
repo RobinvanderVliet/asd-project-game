@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
 {
@@ -53,9 +55,19 @@ namespace WorldGeneration
             
         }
 
+        public Player GetPlayer(string id)
+        {
+            return _players.Find(x => x.Id == id);
+        }
+
         public void deleteMap()
         {
             _map.DeleteMap();
+        }
+
+        public ITile GetCurrentTile()
+        {
+            return _map.GetLoadedTileByXAndY(CurrentPlayer.XPosition, CurrentPlayer.YPosition);
         }
     }
 }

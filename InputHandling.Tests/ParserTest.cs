@@ -84,6 +84,16 @@ namespace InputHandling.Tests
             return new AST(say);
         }
 
+        public static AST UseCommand(int index)
+        {
+            Input use = new Input();
+
+            use.AddChild(new Use()
+                .AddChild(new Step(index)));
+
+            return new AST(use);
+        }
+
         public static AST ShoutCommand(string message)
         {
             Input shout = new Input();
@@ -119,6 +129,15 @@ namespace InputHandling.Tests
             resume.AddChild(new Resume());
 
             return new AST(resume);
+        }
+        
+        public static AST SearchCommand()
+        {
+            Input search = new Input();
+
+            search.AddChild(new Search());
+
+            return new AST(search);
         }
 
         [Test]
@@ -225,6 +244,18 @@ namespace InputHandling.Tests
         }
 
         [Test]
+        public void Test_AstListener_CreatesUseAstWithIndex()
+        {
+            //act
+            int index = 3;
+            AST exp = UseCommand(index);
+            //arrange
+            AST sut = SetupParser("use 3");
+            //assert
+            Assert.AreEqual(exp, sut);
+        }
+
+        [Test]
         public void Test_AstListener_CreatesShoutAstWithMessage()
         {
             //act
@@ -267,7 +298,18 @@ namespace InputHandling.Tests
             //assert
             Assert.AreEqual(exp, sut);
         }
-        
+
+        [Test]
+        public void Test_AstListener_CreatesSearchAst()
+        {
+            //act
+            AST exp = SearchCommand();
+            //arrange
+            AST sut = SetupParser("search");
+            //assert
+            Assert.AreEqual(exp, sut);
+        }
+
         [Test]
         public void Test_AstListener_CreatesMoveAstWithForward2Steps()
         {
