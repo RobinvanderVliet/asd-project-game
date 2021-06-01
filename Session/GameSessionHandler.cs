@@ -121,7 +121,7 @@ namespace Session
 
             players = SetupPositionsNewPlayers(allClients, gamePOCO, servicePlayer);
 
-            startGameDTO.GameGuid = _clientController.SessionId;
+            startGameDTO.GameGuid.GameGuid = _clientController.SessionId;
             startGameDTO.PlayerLocations = players;
 
             return startGameDTO;
@@ -227,7 +227,7 @@ namespace Session
 
                     var clientHistoryRepository = new Repository<ClientHistoryPoco>(tmp);
                     var tmpClientHistory = new ServicesDb<ClientHistoryPoco>(clientHistoryRepository);
-                    var tmpObject = new ClientHistoryPoco() {PlayerId = player.Key, GameId = startGameDTO.GameGuid};
+                    var tmpObject = new ClientHistoryPoco() {PlayerId = player.Key, GameId = startGameDTO.GameGuid.GameGuid};
                     tmpClientHistory.CreateAsync(tmpObject);
 
                     _worldService.AddPlayerToWorld(
