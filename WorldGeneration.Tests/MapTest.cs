@@ -178,10 +178,10 @@ namespace WorldGeneration.Tests
             //Act ---------
             _sut.DisplayMap(_mapCharacter1DTO,2, _mapCharacterDTOList);
             //Assert ---------
-            _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText(" " + _chunks[0].Map[0].Symbol), Times.AtLeast(1));
-            _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText(" " + _chunks[1].Map[0].Symbol), Times.AtLeast(1));
-            _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText(" " + _chunks[2].Map[0].Symbol), Times.AtLeast(1));
-            _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText(" " + _chunks[3].Map[0].Symbol), Times.AtLeast(1));
+            _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText("  " + _chunks[0].Map[0].Symbol), Times.AtLeast(1));
+            _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText("  " + _chunks[1].Map[0].Symbol), Times.AtLeast(1));
+            _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText("  " + _chunks[2].Map[0].Symbol), Times.AtLeast(1));
+            _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText("  " + _chunks[3].Map[0].Symbol), Times.AtLeast(1));
         }
     }
 }

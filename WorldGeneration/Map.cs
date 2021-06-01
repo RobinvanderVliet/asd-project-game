@@ -139,7 +139,7 @@ namespace WorldGeneration
         
         private string GetDisplaySymbol(ITile tile, List<Player> characters)
         {
-            var characterOnTile = characters.First(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
+            var characterOnTile = characters.FirstOrDefault(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
             if(characterOnTile != null)
             {
                 return characterOnTile.Symbol;
