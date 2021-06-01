@@ -25,7 +25,12 @@ namespace WorldGeneration
                 var chestTile = new ChestTile();
                 chestTile.ItemsOnTile.Add(ItemFactory.GetKnife());
 
-                var randomTile = (int) ((chunk.RowSize * chunk.RowSize - 1) * _noise.GetNoise(chunk.X, chunk.Y));
+                var noiseresult = _noise.GetNoise(chunk.X, chunk.Y);
+                var randomTile = (int) ((chunk.RowSize * chunk.RowSize - 1) * noiseresult );
+                if (randomTile < 0)
+                {
+                    randomTile = randomTile * -1;
+                }
                 chestTile.XPosition = chunk.Map[randomTile].XPosition;
                 chestTile.YPosition = chunk.Map[randomTile].YPosition;
                 chunk.Map[randomTile] = chestTile;
