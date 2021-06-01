@@ -14,7 +14,7 @@ namespace WorldGeneration.Tests
         //Declaration and initialisation of constant variables
  
         //Declaration of variables
-        private NoiseMapGenerator sut;
+        private NoiseMapGenerator _sut;
         private int _coordinateX;
         private int _coordinateY;
  
@@ -26,12 +26,12 @@ namespace WorldGeneration.Tests
         public void Setup()
         {
             //Initialisation of variables
-            sut = new NoiseMapGenerator(0);
+            _sut = new NoiseMapGenerator(0);
             //Initialisation of mocks
             _mockedNoise = new Mock<IFastNoise>();
             _mockedNoiseObject = _mockedNoise.Object;
             
-            sut.SetNoise(_mockedNoiseObject);
+            _sut.SetNoise(_mockedNoiseObject);
         }
         
         
@@ -44,7 +44,7 @@ namespace WorldGeneration.Tests
             float _noise = (float) -0.81;
 
             //Act ---------
-            var result = sut.GetTileFromNoise(_noise, _coordinateX, _coordinateY);
+            var result = _sut.GetTileFromNoise(_noise, _coordinateX, _coordinateY);
             
             //Assert ---------
             Assert.IsInstanceOf<WaterTile>(result);
@@ -59,7 +59,7 @@ namespace WorldGeneration.Tests
             float _noise = (float) -0.41;
 
             //Act ---------
-            var result = sut.GetTileFromNoise(_noise, _coordinateX, _coordinateY);
+            var result = _sut.GetTileFromNoise(_noise, _coordinateX, _coordinateY);
             
             //Assert ---------
             Assert.IsInstanceOf<DirtTile>(result);
@@ -74,7 +74,7 @@ namespace WorldGeneration.Tests
             float _noise = (float) 0.1;
 
             //Act ---------
-            var result = sut.GetTileFromNoise(_noise, _coordinateX, _coordinateY);
+            var result = _sut.GetTileFromNoise(_noise, _coordinateX, _coordinateY);
             
             //Assert ---------
             Assert.IsInstanceOf<GrassTile>(result);
@@ -89,7 +89,7 @@ namespace WorldGeneration.Tests
             float _noise = (float) 0.24;
 
             //Act ---------
-            var result = sut.GetTileFromNoise(_noise, _coordinateX, _coordinateY);
+            var result = _sut.GetTileFromNoise(_noise, _coordinateX, _coordinateY);
             
             //Assert ---------
             Assert.IsInstanceOf<SpikeTile>(result);
@@ -104,7 +104,7 @@ namespace WorldGeneration.Tests
             float _noise = (float) 0.44;
 
             //Act ---------
-            var result = sut.GetTileFromNoise(_noise, _coordinateX, _coordinateY);
+            var result = _sut.GetTileFromNoise(_noise, _coordinateX, _coordinateY);
             
             //Assert ---------
             Assert.IsInstanceOf<StreetTile>(result);
@@ -120,7 +120,7 @@ namespace WorldGeneration.Tests
             float _noise = (float) 1;
 
             //Act ---------
-            var result = sut.GetTileFromNoise(_noise, _coordinateX, _coordinateY);
+            var result = _sut.GetTileFromNoise(_noise, _coordinateX, _coordinateY);
             
             //Assert ---------
             Assert.IsInstanceOf<GasTile>(result);
@@ -135,12 +135,68 @@ namespace WorldGeneration.Tests
             float _noise = (float) 0;
 
             //Act ---------
-            var result = sut.GetTileFromNoise(_noise, _coordinateX, _coordinateY);
+            var result = _sut.GetTileFromNoise(_noise, _coordinateX, _coordinateY);
             
             //Assert ---------
             Assert.IsInstanceOf<GrassTile>(result);
         }
+                
+        [Test]
+        public void Test_Function_GenerateCorrectMapSizeChunk() 
+        {
+            //Arrange ---------
+            int chunkrowsize = 3;
+            _mockedNoise.Setup(noise => noise.GetNoise(_coordinateX, _coordinateY)).Returns(0).Verifiable();
+            
+            //Act ---------
+            var result = _sut.GenerateChunk(_coordinateX, _coordinateY, chunkrowsize);
+            
+            //Assert ---------
+            Assert.AreEqual(chunkrowsize * chunkrowsize,result.Map.Length);
+        }
         
+        [Test]
+        public void Test_Function_GenerateCorrectXCoordinatesChunk() 
+        {
+            //Arrange ---------
+            int chunkrowsize = 3;
+            _mockedNoise.Setup(noise => noise.GetNoise(_coordinateX, _coordinateY)).Returns(0).Verifiable();
+            
+            //Act ---------
+            var result = _sut.GenerateChunk(_coordinateX, _coordinateY, chunkrowsize);
+            
+            //Assert ---------
+            Assert.AreEqual(_coordinateX, result.X);
+        }
+        
+        [Test]
+        public void Test_Function_GenerateCorrectYCoordinatesChunk() 
+        {
+            //Arrange ---------
+            int chunkrowsize = 3;
+            _mockedNoise.Setup(noise => noise.GetNoise(_coordinateX, _coordinateY)).Returns(0).Verifiable();
+            
+            //Act ---------
+            var result = _sut.GenerateChunk(_coordinateX, _coordinateY, chunkrowsize);
+            
+            //Assert ---------
+            Assert.AreEqual(_coordinateY, result.Y);
+        }
+        
+        [Test]
+        public void Test_Function_GenerateCorrectChunkSizeCoordinatesChunk() 
+        {
+            //Arrange ---------
+            int chunkrowsize = 3;
+            _mockedNoise.Setup(noise => noise.GetNoise(_coordinateX, _coordinateY)).Returns(0).Verifiable();
+            
+            //Act ---------
+            var result = _sut.GenerateChunk(_coordinateX, _coordinateY, chunkrowsize);
+            
+            //Assert ---------
+            Assert.AreEqual(chunkrowsize, result.RowSize);
+        }
+
         [Test]
         public void Test_Function_DoesThing() 
         {

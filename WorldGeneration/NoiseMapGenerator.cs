@@ -1,4 +1,5 @@
-﻿using WorldGeneration.Models;
+﻿using System.Diagnostics.CodeAnalysis;
+using WorldGeneration.Models;
 using WorldGeneration.Models.HazardousTiles;
 using WorldGeneration.Models.Interfaces;
 using WorldGeneration.Models.TerrainTiles;
@@ -9,6 +10,7 @@ namespace WorldGeneration
     {
         private IFastNoise _noise;
 
+        [ExcludeFromCodeCoverage]
         public NoiseMapGenerator(int seed)
         {
             _noise = new FastNoiseLite();
