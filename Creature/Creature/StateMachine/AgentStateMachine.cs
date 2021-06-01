@@ -45,7 +45,7 @@ namespace Creature.Creature.StateMachine
             CreatureState fleeFromCreatureState = new FleeFromCreatureState();
             
             // Idle
-            builder.In(wanderState).On(CreatureEvent.Event.IDLE).Goto(idleState).Execute<ICreatureData>(wanderState.SetCreatureData);
+            builder.In(wanderState).On(CreatureEvent.Event.IDLE).Goto(idleState).Execute<ICreatureData>(wanderState.SetCreatureData); //IF not using CreatureDate then remove execute.
             // Wandering
             builder.In(followCreatureState).On(CreatureEvent.Event.LOST_CREATURE).Goto(wanderState).Execute<ICreatureData>(wanderState.SetCreatureData);
             builder.In(fleeFromCreatureState).On(CreatureEvent.Event.LOST_CREATURE).Goto(wanderState).Execute<ICreatureData>(wanderState.SetCreatureData);
@@ -68,7 +68,7 @@ namespace Creature.Creature.StateMachine
             builder.In(attackState).On(CreatureEvent.Event.CREATURE_IN_RANGE).Execute<ICreatureData>(attackState.SetCreatureData);
             builder.In(attackState).On(CreatureEvent.Event.OUT_OF_STAMINA).Execute<ICreatureData>(attackState.SetCreatureData);
             // Flee From creature
-            builder.In(attackState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(fleeFromCreatureState).Execute<ICreatureData>(fleeFromCreatureState.SetCreatureData);
+            builder.In(attackState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(fleeFromCreatureState).Execute<ICreatureData>(fleeFromCreatureState.SetCreatureData); //TODO add SetTarget();
 
             builder.WithInitialState(wanderState);
 
