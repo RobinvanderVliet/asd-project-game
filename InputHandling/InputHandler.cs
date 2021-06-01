@@ -232,11 +232,11 @@ namespace InputHandling
                             editorScreen.UpdateLastQuestion(variables.comparebles.ToString());
                             break;
                     }
+                    input = GetCommand();
                 }
 
-                input = GetCommand();
                 input = input.ToLower();
-                var rule = input.Split(" ");
+                var rule = input.Split(" ").ToList();
 
                 //basis check hier!
                 if (CheckInput(rule, variables))
@@ -251,6 +251,7 @@ namespace InputHandling
                     input = input.ToLower();
                     if(input.Equals("yes") || input.Equals("no"))
                     {
+                        editorScreen.ClearScreen();
                         break;
                     }
                 }
@@ -264,69 +265,48 @@ namespace InputHandling
             return builder.ToString();
         }
 
-        private bool CheckInput(string[] rule, BaseVariables variables)
+        private bool CheckInput(List<string> rule, BaseVariables variables)
         {
             bool correct = false;
-            for (int j = 0; j < rule.Length; j++)
-            {
-                switch (j)
-                {
-                    case 0: //when
-                        correct = rule[j].Equals("when");
-                        break;
-                    case 1: //left comparable
-                        correct = variables.comparebles.Contains(rule[j]);
-                        break;
-                    case 2: //comparison
-                        correct = variables.comparison.Contains(rule[j]);
-                        break;
-                    case 3: //right comparable
-                        if (variables.comparebles.Contains(rule[j]) ||
-                            variables.ReturnAllItems().Contains(rule[j]) ||
-                            int.TryParse(rule[j], out _))
-                        {
-                            correct = true;
-                        }
-                        break;
-                    case 4: //then
-                        correct = rule[j].Equals("then");
-                        break;
-                    case 5: //action
-                            correct = variables.actions.Contains(rule[j]);
-                        break;
-                    case 6:
-                        //check use
-                        if (variables.ReturnAllItems().Contains(rule[j]))
-                        {
-                            correct = true;
-                        } else
-                        {//otherwise
-                            correct = rule[j].Contains("otherwise");
-                        }
-                        break;
-                    case 7:
-                        //check otherwise
-                        if (rule[j].Contains("otherwise"))
-                        {
-                            correct = true;
-                        }
-                        else
-                        {//action
-                            if(variables.actions.Contains(rule[j])|| variables.actionReferences.Contains(rule[j]))
-                            {
-                                correct = true;
-                            }
-                        }
-                        break;
-                    case 8://action
-                        correct = variables.ReturnAllItems().Contains(rule[j]);
-                        break;
-                }
-                if (!correct)
-                {
-                    break;
-                }
-            }
+            //basic rules
+            //contains all two base words
+            List<string> baseWords = new () { "when", "then"};
+            correct = (rule.Intersect(baseWords).Count() == 2);
+            if (!correct) { return correct; }
+
+            //check positions of the base words
+            correct = rule.IndexOf(baseWords[0]) == 0 && rule.IndexOf(baseWords[1]) == 4;
+            if (!correct) { return correct; }
+
+            //contains exactly 1 comparison type
+            correct = (rule.Intersect(variables.comparison).Count() >= 1);
+            if (!correct) { return correct; }
+            correct = rule.IndexOf(variables.comparison.FirstOrDefault(x => x.Equals(rule[2]))) == 2;
+            if (!correct) { return correct; }
+
+            //check otherwise
+            correct = rule.IndexOf("otherwise") == 6 || rule.IndexOf("otherwise") == 7 || rule.IndexOf("otherwise") < 0;
+            if (!correct) { return correct; }
+
+            //advanced rules
+            correct = (rule.Intersect(variables.actionReferences).Any());
+            if (correct && rule.Contains("use")) { correct = rule.Intersect(variables.ReturnAllItems()).Any(); }
+            if (!correct) { return correct; }
+
+            //check first variable is of type comparebles
+            correct = variables.comparebles.Contains(rule[1]);
+            if (!correct) { return correct; }
+
+            //check second variable is of type item or interger
+            correct = rule.IndexOf(variables.ReturnAllItems().FirstOrDefault(x => x.Equals(rule[3]))) == 3 || 
+                int.TryParse(rule[3], out _) || 
+                rule.FindLastIndex(x => x.Equals(variables.comparebles.FirstOrDefault(x => x.Equals(rule[3])))) == 3;
+            if (!correct) { return correct; }
+
+            //check is use count matches item count
+            correct = rule.Where(x => x.Equals("use")).Count() == variables.ReturnAllItems().Intersect(rule).Count();
+            if (!correct) { return correct; }
+
             return correct;
         }
     }
