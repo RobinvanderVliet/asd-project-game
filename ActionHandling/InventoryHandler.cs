@@ -41,7 +41,16 @@ namespace ActionHandling
         public void PickupItem(int index)
         {
             IList<Item> items = _worldService.GetItemsOnCurrentTile();
-            throw new NotImplementedException();
+
+            try
+            {
+                Item item = items[index - 1];
+                Console.Out.WriteLine($"Pickup index {index} {item.ItemName}");
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine("Number is not in search list!");
+            }
         }
 
         public void DropItem(int index)
