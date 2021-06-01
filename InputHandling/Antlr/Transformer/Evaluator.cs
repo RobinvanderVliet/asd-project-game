@@ -113,7 +113,7 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformPickup(Pickup pickup)
         {
-            // TODO: Call InventoryHandler method
+            _inventoryHandler.PickupItem(pickup.Item.StepValue);
         }
 
         private void TransformDrop(Drop drop)

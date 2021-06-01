@@ -1,17 +1,13 @@
-﻿using ActionHandling.DTO;
+﻿using System;
+using System.Linq;
+using ActionHandling.DTO;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
-using DatabaseHandler.Services;
 using Items.Consumables;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WorldGeneration;
 
 namespace ActionHandling
@@ -38,6 +34,16 @@ namespace ActionHandling
         {
             string searchResult = _worldService.SearchCurrentTile();
             Console.WriteLine(searchResult);
+        }
+        
+        public void PickupItem(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DropItem(int index)
+        {
+            throw new NotImplementedException();
         }
 
         private void SendInventoryDTO(InventoryDTO inventoryDTO)
@@ -108,16 +114,6 @@ namespace ActionHandling
                 }
                 return new HandlerResponseDTO(SendAction.ReturnToSender, "Could not find item");
             }
-        }
-
-        public void PickupItem(int index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DropItem(int index)
-        {
-            throw new NotImplementedException();
         }
     }
 }
