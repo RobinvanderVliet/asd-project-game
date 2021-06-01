@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Items;
 
 namespace WorldGeneration
 {
@@ -30,7 +32,7 @@ namespace WorldGeneration
         {
             _world = new World(seed, 6);
         }
-
+        
         public Player GetCurrentPlayer()
         {
             return _world.CurrentPlayer;
@@ -41,9 +43,14 @@ namespace WorldGeneration
             return _world.GetPlayer(userId);
         }
 
+        public IList<Item> GetItemsOnCurrentTile()
+        {
+            return _world.GetCurrentTile().ItemsOnTile;
+        }
+        
         public string SearchCurrentTile()
         {
-            var itemsOnCurrentTile = _world.GetCurrentTile().ItemsOnTile;
+            var itemsOnCurrentTile = GetItemsOnCurrentTile();
 
             string result = "The following items are on the current tile:" + Environment.NewLine;
             int index = 1;
@@ -54,7 +61,5 @@ namespace WorldGeneration
             }
             return result;
         }
-
-
     }
 }
