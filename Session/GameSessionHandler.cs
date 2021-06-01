@@ -197,7 +197,6 @@ namespace Session
             }
             else
             {
-
                 _worldService.SetCurrentPlayerHost(_clientController.GetOriginId());
                 // foreach (var player in joinedPlayerDto.PlayerLocations)
                 // {

@@ -41,7 +41,7 @@ namespace WorldGeneration
 
         public void SetCurrentPlayerHost(string playerId)
         {
-            _world.SetCurrentPlayerHost(playerId);
+            _world.SetCurrentPlayerClient(playerId);
         }
 
         public void SetCurrentPlayerClient(string playerId)
