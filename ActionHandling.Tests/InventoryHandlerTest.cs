@@ -94,13 +94,58 @@ namespace ActionHandling.Tests
 
 
             //assert
-            PlayerItemPOCO playerItemPOCO = new() { PlayerGUID = originId, ItemName = item.ItemName }; 
             playerPOCO.Health += 25;
             Assert.IsTrue(player.Inventory.ConsumableItemList.Count == 0);
             Assert.IsTrue(player.Health == 75);
             Assert.AreEqual(expectedResult, result);
             _mockedPlayerServicesDb.Verify(mock => mock.UpdateAsync(playerPOCO), Times.Once);
-            _mockedPlayerItemServicesDb.Verify(mock => mock.DeleteAsync(playerItemPOCO), Times.Once);
+            _mockedPlayerItemServicesDb.Verify(mock => mock.DeleteAsync(It.IsAny<PlayerItemPOCO>()), Times.Once);
+        }
+
+        [Test]
+        public void Test_HandlePacket_HandlesUsePacketFailsOnHost()
+        {
+            //arrange
+            bool isHost = true;
+            string originId = "origin1";
+            int index = 1;
+
+            InventoryDTO inventoryDTO = new(originId, InventoryType.Use, index);
+
+            var payload = JsonConvert.SerializeObject(inventoryDTO);
+            PacketDTO packetDTO = new();
+            packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            packetHeaderDTO.Target = "host";
+            packetDTO.Header = packetHeaderDTO;
+
+            Player player = new("arie", 0, 0, "#", originId);
+            player.Health = 50;
+            var item = ItemFactory.GetBandage();
+
+            PlayerPOCO playerPOCO = new() { PlayerGuid = originId, Health = 50 };
+            List<PlayerPOCO> playerPOCOList = new();
+            playerPOCOList.Add(playerPOCO);
+            IEnumerable<PlayerPOCO> en = playerPOCOList;
+            var task = Task.FromResult(en);
+
+
+            _mockedWorldService.Setup(mock => mock.GetPlayer(originId)).Returns(player);
+            _mockedClientController.Setup(mock => mock.IsHost()).Returns(isHost);
+            _mockedPlayerServicesDb.Setup(mock => mock.GetAllAsync()).Returns(task);
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
+
+            var expectedResult = new HandlerResponseDTO(SendAction.ReturnToSender, "Could not find item");
+
+            //act
+            var result = _sut.HandlePacket(packetDTO);
+
+            //assert
+            Assert.IsTrue(player.Inventory.ConsumableItemList.Count == 0);
+            Assert.IsTrue(player.Health == 50);
+            Assert.AreEqual(expectedResult, result);
+            _mockedPlayerServicesDb.Verify(mock => mock.UpdateAsync(playerPOCO), Times.Never);
+            _mockedPlayerItemServicesDb.Verify(mock => mock.DeleteAsync(It.IsAny<PlayerItemPOCO>()), Times.Never);
         }
     }
 }

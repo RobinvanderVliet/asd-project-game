@@ -63,7 +63,7 @@ namespace Session
                 var tmpPlayer = new PlayerPOCO
                     {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
                 servicePlayer.CreateAsync(tmpPlayer);
-                addItemsToPlayer(playerItemRepository, clientId);
+                addItemsToPlayer(playerItemRepository, clientId, gamePOCO.GameGuid);
 
                 playerX += 2; // spawn position + 2 each client
                 playerY += 2; // spawn position + 2 each client
@@ -76,16 +76,16 @@ namespace Session
             return startGameDTO;
         }
 
-        private void addItemsToPlayer(Repository<PlayerItemPOCO> repo, string playerId)
+        private void addItemsToPlayer(Repository<PlayerItemPOCO> repo, string playerId, string gameId)
         {
-            PlayerItemPOCO poco = new() {PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName };
-            repo.CreateAsync(poco);
+            PlayerItemPOCO poco = new() {PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGuid = gameId };
+            _ = repo.CreateAsync(poco);
 
-            poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetKnife().ItemName };
-            repo.CreateAsync(poco);
+            poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetKnife().ItemName, GameGuid = gameId };
+            _ = repo.CreateAsync(poco);
 
-            poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetBandage().ItemName };
-            repo.CreateAsync(poco);
+            poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetBandage().ItemName, GameGuid = gameId };
+            _ = repo.CreateAsync(poco);
         }
         
         private void SendGameSessionDTO(StartGameDTO startGameDTO)
