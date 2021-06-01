@@ -8,6 +8,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
     public class TrainingScenario
     {
         public Population pop;
+        public Genome bestGene;
         public bool runTraining = false;
         public bool runOnce = false;
 
@@ -63,6 +64,10 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                     //all dead
                     //genetic algorithm
                     pop.NaturalSelection();
+                    if (pop.bestScore >= 500)
+                    {
+                        bestGene = pop.bestSmartMonster.brain;
+                    }
                 }
                 runOnce = false;
             }

@@ -38,12 +38,12 @@ namespace Creature.Creature
 
         public ICreatureStateMachine CreatureStateMachine => null;
 
-        public SmartMonster(ICreatureData creatureData)
+        public SmartMonster(ICreatureData creatureData, Genome brain)
         {
             this.creatureData = creatureData;
             this.smartactions = new SmartCreatureActions(creatureData.World);
             this._dataGatheringService = new DataGatheringService();
-            brain = new Genome(genomeInputs, genomeOutputs);
+            this.brain = brain;
         }
 
         public void ApplyDamage(double amount)
