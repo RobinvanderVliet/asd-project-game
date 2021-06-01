@@ -47,6 +47,11 @@ namespace WorldGeneration
         {
             return _world.GetCurrentTile().ItemsOnTile;
         }
+
+        public IList<Item> GetItemsOnCurrentTile(Player player)
+        {
+            return _world.GetTileForPlayer(player).ItemsOnTile;
+        }
         
         public string SearchCurrentTile()
         {
