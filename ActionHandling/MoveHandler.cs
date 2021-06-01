@@ -120,12 +120,17 @@ namespace ActionHandling
             var playerRepository = new Repository<PlayerPOCO>(dbConnection);
             var player = playerRepository.GetAllAsync();
             player.Wait();
-            var selectedPlayer = player.Result.FirstOrDefault(x =>
-                x.GameGuid == _clientController.SessionId && x.PlayerGuid == moveDTO.UserId);
+            PlayerPOCO selectedPlayer = player.Result.Where(x => x.GameGuid == _clientController.SessionId && x.PlayerGuid == moveDTO.UserId).First();
+            Console.WriteLine(selectedPlayer);
 
             selectedPlayer.XPosition = moveDTO.XPosition;
             selectedPlayer.YPosition = moveDTO.YPosition;
-            playerRepository.UpdateAsync(selectedPlayer);
+            var  insert = playerRepository.UpdateAsync(selectedPlayer);
+            insert.Wait();
+            var help = playerRepository.GetAllAsync();
+            help.Wait();
+            Console.WriteLine("ghf");
+
         }
 
         private void HandleMove(MoveDTO moveDTO)

@@ -6,7 +6,7 @@ namespace DatabaseHandler.POCO
     [ExcludeFromCodeCoverage]
     public class PlayerPOCO
     {
-        public string GameGuid { get; set; }
+     public string GameGuid { get; set; }
         public string PlayerGuid { get; set; }
         [BsonId]
         public string GameGUIDAndPlayerGuid { get; set; }

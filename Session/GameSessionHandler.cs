@@ -223,6 +223,8 @@ namespace Session
 
         private void AddPlayersToNewGame(StartGameDTO startGameDTO)
         {
+            _worldService.DisplayWorld();
+
             foreach (var player in startGameDTO.PlayerLocations)
             {
                 if (_clientController.GetOriginId() == player.Key)
@@ -252,6 +254,8 @@ namespace Session
 
         private void AddPlayerToWorldSavedGame(List<PlayerPOCO> savedPlayers)
         {
+            _worldService.DisplayWorld();
+
             foreach (var player in savedPlayers)
             {
                 if (_clientController.GetOriginId() == player.PlayerGuid)
