@@ -1,18 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <OutputType>Exe</OutputType>
-    <StartupObject>Creature.Creature.NeuralNetworking.TrainingScenario.TrainingScenario</StartupObject>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Appccelerate.StateMachine" Version="5.1.0" />
-    <PackageReference Include="MathNet.Numerics" Version="4.15.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Appccelerate.StateMachine" Version="5.1.0" />
+		<PackageReference Include="MathNet.Numerics" Version="4.15.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Agent\Agent.csproj" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<ProjectReference Include="..\Agent\Agent.csproj" />
+	</ItemGroup>
 </Project>

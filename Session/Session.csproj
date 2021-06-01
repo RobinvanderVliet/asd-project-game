@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Creature\Creature.csproj" />
     <ProjectReference Include="..\DatabaseHandler\DatabaseHandler.csproj" />
     <ProjectReference Include="..\Network\Network.csproj" />
     <ProjectReference Include="..\UserInterface\UserInterface.csproj" />

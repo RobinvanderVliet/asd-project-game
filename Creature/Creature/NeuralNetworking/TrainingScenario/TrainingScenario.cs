@@ -11,12 +11,10 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
         public bool runTraining = false;
         public bool runOnce = false;
 
-        private static void Main(string[] args)
+        public TrainingScenario()
         {
-            TrainingScenario scenario = new TrainingScenario();
-            scenario.SetupTraining();
-
-            scenario.RunTestScenarios();
+            SetupTraining();
+            RunTrainingScenarios();
         }
 
         public void SetupTraining()
@@ -35,7 +33,23 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
             runTraining = true;
         }
 
-        public void RunTestScenarios()
+        public void ContinueTraining(Genome gene)
+        {
+            MonsterData data =
+            new MonsterData
+            (
+                new Vector2(14, 14),
+                20,
+                5,
+                200,
+                null,
+                false
+            );
+            pop = new Population(50, data, gene);
+            runTraining = true;
+        }
+
+        public void RunTrainingScenarios()
         {
             while (runTraining || runOnce)
             {

@@ -31,6 +31,17 @@ namespace Creature.Creature.NeuralNetworking
             }
         }
 
+        //constructor for new host
+        public Population(int size, ICreatureData creatureData, Genome gene)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                pop.Add(new SmartMonsterForTraining(creatureData));
+                pop[i].brain = gene;
+                pop[i].brain.Mutate(innovationHistory);
+            }
+        }
+
         //update all the SmartMonsters which are alive
         [ExcludeFromCodeCoverage]
         public void UpdateAlive()
@@ -95,9 +106,6 @@ namespace Creature.Creature.NeuralNetworking
             SetBestSmartMonster();//save the best SmartMonster of this gen
             KillStaleSpecies();//remove species which haven't improved in the last 15(ish) generations
             KillBadSpecies();//kill species which are so bad that they cant reproduce
-
-            Console.WriteLine("gen:" + gen + " score : " + bestScore);
-            bestSmartMonster.brain.PrintGenome();
 
             float averageSum = GetAvgFitnessSum();
             List<SmartMonsterForTraining> children = new List<SmartMonsterForTraining>();//the next generation
