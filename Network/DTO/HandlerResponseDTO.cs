@@ -16,9 +16,9 @@ namespace Network.DTO
 
         public override bool Equals(object obj)
         {
-            return obj is HandlerResponseDTO dTO &&
-                   Action == dTO.Action &&
-                   ResultMessage == dTO.ResultMessage;
+            return obj is HandlerResponseDTO DTO &&
+                   Action == DTO.Action &&
+                   ResultMessage == DTO.ResultMessage;
         }
     }
 }

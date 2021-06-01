@@ -1,6 +1,3 @@
-﻿using Agent.Services;
-using Moq;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -8,17 +5,21 @@ using System.IO;
 using Agent.Exceptions;
 using Agent.Mapper;
 using Agent.Models;
-using InputCommandHandler;
+using Agent.Services;
+using InputHandling;
+using Moq;
+using NUnit.Framework;
 
-namespace Agent.Tests
+namespace Agent.Tests.Services
 {
     [ExcludeFromCodeCoverage]
     public class AgentConfigurationServiceTests
     {
         private AgentConfigurationService _sut;
+        private FileHandler _handler; 
         private Mock<FileHandler> _fileHandlerMock;
         private Mock<Pipeline> _pipelineMock;
-        private Mock<InputCommandHandlerComponent> _mockedRetriever;
+        private Mock<InputHandler> _mockedRetriever;
 
         [SetUp]
         public void Setup()
@@ -29,14 +30,14 @@ namespace Agent.Tests
             _sut.FileHandler = _fileHandlerMock.Object;
             _pipelineMock = new Mock<Pipeline>();
             _sut.Pipeline = _pipelineMock.Object;
+            _handler = new FileHandler();
         }
 
         [Test]
         public void Test_Configure_SyntaxError()
         {
             //Arrange
-            var input = string.Format(Path.GetFullPath(Path.Combine
-                        (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\AgentConfigurationTestFileParseException.txt";
+            var input = _handler.GetBaseDirectory() + "/Resource/AgentConfigurationTestFileParseException.txt";
 
             _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
             
@@ -49,31 +50,31 @@ namespace Agent.Tests
             Assert.AreEqual("missing '=' at 'wrong'", _sut.LastError);
         }
         
-        [Test]
-        public void Test_Configure_CatchesSemanticError()
-        {
-            //Arrange
-            var input = string.Format(Path.GetFullPath(Path.Combine
-                (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resources\\AgentTestFileWrongExtension.txt";
-            var error = "Semantic error";
+        // Deze test moet getest worden als er een checker is
+        //[Test]
+        //public void Test_Configure_CatchesSemanticError()
+        //{
+        //    //Arrange
+        //    var input = handler.GetBaseDirectory() + "Resources/AgentTestFileWrongExtension.txt";
+
+        //    var error = "Semantic error";
             
-            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
-            _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("explore=high");
-            _pipelineMock.Setup(x => x.CheckAst()).Throws(new SemanticErrorException(error));
+        //    _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
+        //    _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("explore=high");
+        //    _pipelineMock.Setup(x => x.CheckAst()).Throws(new SemanticErrorException(error));
 
-            //Act
-            _sut.Configure();
+        //    //Act
+        //    _sut.Configure();
 
-            //Assert
-            Assert.AreEqual(error, _sut.LastError);
-        }
+        //    //Assert
+        //    Assert.AreEqual(error, _sut.LastError);
+        //}
         
         [Test]
         public void Test_Configure_FileError()
         {
             //Arrange
-            var input = string.Format(Path.GetFullPath(Path.Combine
-                (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resources\\AgentTestFileWrongExtension.txt";
+            var input = _handler.GetBaseDirectory() + "/Resources/AgentTestFileWrongExtension.txt";
             var error = "File not found";
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Throws(new FileException(error));
             _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
@@ -89,8 +90,7 @@ namespace Agent.Tests
         public void Test_Configure_SavesFileInAgentFolder()
         {
             //Arrange
-            var input = string.Format(Path.GetFullPath(Path.Combine
-                (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resources\\AgentConfigurationTestFile.txt";
+            var input = _handler.GetBaseDirectory() + "/Resources/AgentConfigurationTestFile.txt";
             _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input);
             
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("aggressiveness=high");
@@ -106,9 +106,7 @@ namespace Agent.Tests
         public void Test_CreateNewAgentConfiguration_WithNewAgent()
         {
             //Arrange
-            var filepath =
-                string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) +
-                "resource\\agent_test.cfg";
+            var filepath = _handler.GetBaseDirectory() + "/Resource/agent_test.cfg";
 
             //Act
             _sut.CreateConfiguration("Agent", filepath);

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DatabaseHandler.Services;
 using Display;
-using DataTransfer.DTO.Character;
 using WorldGeneration.Helper;
 using WorldGeneration.Models;
 using WorldGeneration.Models.Interfaces;
@@ -93,7 +92,7 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
 
-        public void DisplayMap(MapCharacterDTO currentPlayer, int viewDistance, IList<MapCharacterDTO> characters)
+        public void DisplayMap(Player currentPlayer, int viewDistance, List<Player> characters)
         {
             if (viewDistance < 0)
             {
@@ -108,13 +107,13 @@ namespace WorldGeneration
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
                 {
                     var tile = GetLoadedTileByXAndY(x, y);
-                    _consolePrinter.PrintText($"  {GetDisplaySymbol(currentPlayer, tile, characters)}");
+                    _consolePrinter.PrintText($"  {GetDisplaySymbol(tile, characters)}");
                 }
                 _consolePrinter.NextLine();
             }
         }
 
-        public char[,] GetMapAroundCharacter(MapCharacterDTO centerCharacter, int viewDistance, IList<MapCharacterDTO> allCharacters)
+        public char[,] GetMapAroundCharacter(Player centerCharacter, int viewDistance, List<Player> allCharacters)
         {
             if (viewDistance < 0)
             {
@@ -131,38 +130,24 @@ namespace WorldGeneration
                 for (var x = 0; x < viewDistance * 2 + 1; x++)
                 {
                     var tile = GetLoadedTileByXAndY(x + (centerCharacterXPosition - viewDistance), y + (centerCharacterYPosition + viewDistance));
-                    tileArray[x, y] = GetDisplaySymbol(centerCharacter, tile, allCharacters).ToCharArray()[0];
+                    tileArray[x, y] = GetDisplaySymbol(tile, allCharacters).ToCharArray()[0];
                 }
                 _consolePrinter.NextLine();
             }
             return tileArray;
         }
         
-        private string GetDisplaySymbol(MapCharacterDTO currentPlayer, ITile tile, IList<MapCharacterDTO> characters)
+        private string GetDisplaySymbol(ITile tile, List<Player> characters)
         {
-            bool currentPlayerOnTile = IsPlayerOnTile(tile, currentPlayer);
-            if (currentPlayerOnTile)
+            var characterOnTile = characters.FirstOrDefault(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
+            if(characterOnTile != null)
             {
-                return currentPlayer.Symbol;
-            }
-            foreach (var characterOnTile in characters.Where(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition))
-            {
-                if (characterOnTile.Symbol == CharacterSymbol.FRIENDLY_PLAYER)
-                {
-                    if (characterOnTile.Team != currentPlayer.Team || characterOnTile.Team == 0)
-                    {
-                        return CharacterSymbol.ENEMY_PLAYER;
-                    }
-                    return CharacterSymbol.FRIENDLY_PLAYER;
-                }
                 return characterOnTile.Symbol;
             }
-            return tile.Symbol;
-        }
-
-        private bool IsPlayerOnTile(ITile tile, MapCharacterDTO player)
-        {
-            return tile.XPosition == player.XPosition && tile.YPosition == player.YPosition - 1;
+            else
+            {
+                return tile.Symbol;
+            }
         }
 
         private Chunk GenerateNewChunk(int chunkX, int chunkY)
