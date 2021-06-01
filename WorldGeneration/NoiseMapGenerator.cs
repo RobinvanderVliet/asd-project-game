@@ -9,27 +9,17 @@ namespace WorldGeneration
     {
         private IFastNoise _noise;
 
-        public NoiseMapGenerator()
+        public NoiseMapGenerator(int seed)
         {
             _noise = new FastNoiseLite();
             _noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
             _noise.SetFrequency(0.015f);
             _noise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
+            _noise.SetSeed(seed);
         }
 
-        public int[,] GenerateAreaMap(int size, int seed)
+        public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize)
         {
-            _noise.SetSeed(seed);
-            var noiseData = new int[size, size];
-            for (var y = 0; y < size; y++)
-            for (var x = 0; x < size; x++)
-                noiseData[x, y] = (int) _noise.GetNoise(x, y);
-            return noiseData;
-        }
-
-        public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize, int seed)
-        {
-            _noise.SetSeed(seed);
             var map = new ITile[chunkRowSize * chunkRowSize];
             for (var y = 0; y < chunkRowSize; y++)
             {

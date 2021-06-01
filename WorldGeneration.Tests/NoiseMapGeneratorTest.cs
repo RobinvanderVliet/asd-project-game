@@ -26,7 +26,7 @@ namespace WorldGeneration.Tests
         public void Setup()
         {
             //Initialisation of variables
-            sut = new NoiseMapGenerator();
+            sut = new NoiseMapGenerator(0);
             //Initialisation of mocks
             _mockedNoise = new Mock<IFastNoise>();
             _mockedNoiseObject = _mockedNoise.Object;
