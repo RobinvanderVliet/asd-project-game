@@ -24,8 +24,7 @@ namespace UserInterface
 
         public override void DrawScreen()
         {
-            DrawChatBox();
-            DrawMessages();
+            DrawChatBox();          
         }
 
         private void DrawChatBox()
@@ -33,21 +32,19 @@ namespace UserInterface
             DrawBox(_xPosition, _yPosition, _width, _height);
         }
 
-        private void DrawMessages()
+        private void DrawMessages(Queue<string> messageQueue)
         {
             int originalCursorX = Console.CursorLeft;
             int originalCursorY = Console.CursorTop;
-            Queue<string> tempMessages = new Queue<string>();
             ClearMessages();
-            int messageCount = messages.Count;
+            int messageCount = messageQueue.Count;
             for (int i = 0; i < messageCount; i++)
             {
-                string message = messages.Dequeue();
+                string message = messageQueue.Peek();
                 Console.SetCursorPosition(_xPosition + OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
                 Console.Write(message);
-                tempMessages.Enqueue(message);
+                messageQueue.Dequeue();
             }
-            messages = tempMessages;
             Console.SetCursorPosition(originalCursorX, originalCursorY);
         }
 
@@ -60,7 +57,7 @@ namespace UserInterface
             }
         }
 
-        public void AddMessage(string message)
+/*        public void AddMessage(string message)
         {   
             if (message.Length >= _width - BORDER_SIZE)
             {
@@ -96,6 +93,50 @@ namespace UserInterface
                 messages.Dequeue();
             }
             DrawMessages();
+        }*/
+
+        public void ShowMessages(Queue<string> messages)
+        {
+            Queue<string> messageQueue = new Queue<string>();
+            int messageCount = messages.Count;
+            for (int i = 0; i < messageCount; i++)
+            {
+                string message = messages.Dequeue();
+                if (message.Length >= _width - BORDER_SIZE)
+                {
+                    int chunkSize = _width - BORDER_SIZE;
+                    int stringLength = message.Length;
+                    int maxSize = chunkSize * _height;
+                    if (stringLength > maxSize)
+                    {
+                        message = message.Substring(0, maxSize - 3) + "...";
+                        stringLength = maxSize;
+                    }
+
+                    for (int j = 0; j < stringLength; j += chunkSize)
+                    {
+                        if (j + chunkSize > stringLength)
+                        {
+                            chunkSize = stringLength - j;
+                        }
+                        messageQueue.Enqueue(message.Substring(j, chunkSize));
+
+                        if (messageQueue.Count > _height)
+                        {
+                            messageQueue.Dequeue();
+                        }
+                    }
+                }
+                else
+                {
+                    messageQueue.Enqueue(message);
+                }
+                if (messageQueue.Count > _height)
+                {
+                    messageQueue.Dequeue();
+                }
+            }
+            DrawMessages(messageQueue);
         }
     }
 }

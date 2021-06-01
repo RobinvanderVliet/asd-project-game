@@ -98,11 +98,11 @@ namespace Session
 
             _heartbeatHandler = new HeartbeatHandler();
 
-            if (_screenHandler.Screen is GameScreen)
+            /*if (_screenHandler.Screen is GameScreen)
             {
                 GameScreen screen = _screenHandler.Screen as GameScreen;
                 screen.AddMessage("Created session with the name: " + _session.Name);
-            }
+            }*/
                 
 
             return _session.InSession;

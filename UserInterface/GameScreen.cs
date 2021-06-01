@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace UserInterface
 {
@@ -20,7 +21,7 @@ namespace UserInterface
 
         private const int WORLD_X = CHAT_WIDTH + BORDER_SIZE;
         private const int WORLD_Y = STAT_HEIGHT + BORDER_SIZE;
-        
+
         private const int WORLD_HEIGHT = 13;
         private const int WORLD_WITH = 25;
         private const int INPUT_X = HEADER_X;
@@ -39,15 +40,13 @@ namespace UserInterface
             _gameChatScreen.DrawScreen();
             _gameWorldScreen.DrawScreen();
             DrawInputBox(INPUT_X, INPUT_Y, "Insert an option");
-        } 
-
-        public virtual void AddMessage(string message)
-        {
-            if (_screenHandler.Screen is GameScreen)
-            {
-                _gameChatScreen.AddMessage(message);
-                DrawInputBox(INPUT_X, INPUT_Y, "Insert an option");
-            }
         }
+
+        public virtual void ShowMessages(Queue<string> messages)
+        {
+            _gameChatScreen.ShowMessages(messages);
+            DrawInputBox(INPUT_X, INPUT_Y, "Insert an option");
+        }
+    
     }
 }

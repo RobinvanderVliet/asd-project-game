@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace UserInterface
 {
@@ -18,6 +19,15 @@ namespace UserInterface
         public void DisplayScreen()
         {
             _screen.DrawScreen();
+        }
+
+        public void ShowMessages(Queue<string> messages)
+        {
+            if(_screen is GameScreen)
+            {
+                var gameScreen = Screen as GameScreen;
+                gameScreen.ShowMessages(messages);
+            }
         }
     }
 }

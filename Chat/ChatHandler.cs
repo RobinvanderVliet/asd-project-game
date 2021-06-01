@@ -57,20 +57,12 @@ namespace Chat
 
         private void HandleSay(string message, string originId)
         {
-            if (_screenHandler.Screen is GameScreen)
-            {
-                GameScreen screen = _screenHandler.Screen as GameScreen;
-                screen.AddMessage($"{originId} said: {message}");
-            }
+                //_screenHandler.AddMessage($"{originId} said: {message}");
         }
 
         private void HandleShout(string message, string originId)
         {
-            if (_screenHandler.Screen is GameScreen)
-            {
-                GameScreen screen = _screenHandler.Screen as GameScreen;
-                screen.AddMessage($"{originId} shouted: {message}");
-            }
+               // _screenHandler.AddMessage($"{originId} shouted: {message}");          
         }
     }
 }
