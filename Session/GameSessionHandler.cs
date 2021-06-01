@@ -172,6 +172,8 @@ namespace Session
 
         private void AddPlayerToGameSession(StartGameDTO joinedPlayerDto)
         {
+            _worldService.DisplayWorld();
+
             if (_clientController.GetOriginId() == joinedPlayerDto.ExistingPlayer.PlayerGuid)
             {
                 _worldService.AddPlayerToWorld(
@@ -180,25 +182,28 @@ namespace Session
                         CharacterSymbol.CURRENT_PLAYER, joinedPlayerDto.ExistingPlayer.PlayerGuid,
                         joinedPlayerDto.ExistingPlayer.Health,
                         joinedPlayerDto.ExistingPlayer.Stamina), true);
+                
+                foreach (var player in joinedPlayerDto.PlayerLocations)
+                {
+                    if (_clientController.GetOriginId() != joinedPlayerDto.ExistingPlayer.PlayerGuid)
+                    {
+                        _worldService.AddPlayerToWorld(
+                            new WorldGeneration.Player("arie", player.Value[0], player.Value[1],
+                                CharacterSymbol.ENEMY_PLAYER, player.Key), false);
+                    }
+                }
+                
             }
             else
             {
-                _worldService.AddPlayerToWorld(
-                    new WorldGeneration.Player("arie", joinedPlayerDto.ExistingPlayer.XPosition,
-                        joinedPlayerDto.ExistingPlayer.YPosition,
-                        CharacterSymbol.CURRENT_PLAYER, joinedPlayerDto.ExistingPlayer.PlayerGuid,
-                        joinedPlayerDto.ExistingPlayer.Health,
-                        joinedPlayerDto.ExistingPlayer.Stamina), false);
+                // _worldService.AddPlayerToWorld(
+                //     new WorldGeneration.Player("arie", joinedPlayerDto.ExistingPlayer.XPosition,
+                //         joinedPlayerDto.ExistingPlayer.YPosition,
+                //         CharacterSymbol.CURRENT_PLAYER, joinedPlayerDto.ExistingPlayer.PlayerGuid,
+                //         joinedPlayerDto.ExistingPlayer.Health,
+                //         joinedPlayerDto.ExistingPlayer.Stamina), false);
             }
-            foreach (var player in joinedPlayerDto.PlayerLocations)
-            {
-                if (_clientController.GetOriginId() != joinedPlayerDto.ExistingPlayer.PlayerGuid)
-                {
-                    _worldService.AddPlayerToWorld(
-                        new WorldGeneration.Player("arie", player.Value[0], player.Value[1],
-                            CharacterSymbol.ENEMY_PLAYER, player.Key), false);
-                }
-            }
+         
             _worldService.DisplayWorld();
         }
 

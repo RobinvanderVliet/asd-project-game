@@ -34,6 +34,14 @@ namespace WorldGeneration
             DisplayWorld();
         }
 
+        public void AddExistingPlayerToWorld(Player player, bool isCurrentPlayer)
+        {
+            if (isCurrentPlayer)
+            {
+                CurrentPlayer = player;
+            }
+        }
+
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
         {
             if (isCurrentPlayer)
