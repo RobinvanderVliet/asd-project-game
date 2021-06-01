@@ -141,7 +141,6 @@ namespace Session
                 players.Add(clientId, playerPosition);
                 Console.WriteLine(clientId);
 
-
                 var tmpPlayer = new PlayerPOCO
                     {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY, GameGUIDAndPlayerGuid = gamePOCO.GameGuid + clientId};
 
@@ -184,7 +183,15 @@ namespace Session
                         joinedPlayerDto.ExistingPlayer.Health,
                         joinedPlayerDto.ExistingPlayer.Stamina), true);
             }
-
+            else
+            {
+                _worldService.AddPlayerToWorld(
+                    new WorldGeneration.Player("arie", joinedPlayerDto.ExistingPlayer.XPosition,
+                        joinedPlayerDto.ExistingPlayer.YPosition,
+                        CharacterSymbol.CURRENT_PLAYER, joinedPlayerDto.ExistingPlayer.PlayerGuid,
+                        joinedPlayerDto.ExistingPlayer.Health,
+                        joinedPlayerDto.ExistingPlayer.Stamina), false);
+            }
 
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
             foreach (var player in joinedPlayerDto.PlayerLocations)
