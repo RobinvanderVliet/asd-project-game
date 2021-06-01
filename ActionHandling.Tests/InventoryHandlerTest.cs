@@ -1,4 +1,7 @@
-﻿using ActionHandling.DTO;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
+using ActionHandling.DTO;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Items;
@@ -7,12 +10,6 @@ using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WorldGeneration;
 
 namespace ActionHandling.Tests
@@ -71,6 +68,25 @@ namespace ActionHandling.Tests
             _sut.UseItem(index);
 
             //assert
+            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Inventory), Times.Once);
+        }
+
+        [Test]
+        public void Test_Pickup_SendsInventoryDTO()
+        {
+            // Arrange
+            const int INDEX = 1;
+            const int COMPENSATED_INDEX = 0;
+            string originId = "origin1";
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
+            
+            InventoryDTO inventoryDTO = new(originId, InventoryType.Pickup, COMPENSATED_INDEX);
+            string payload = JsonConvert.SerializeObject(inventoryDTO);
+            
+            // Act
+            _sut.PickupItem(INDEX);
+            
+            // Assert
             _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Inventory), Times.Once);
         }
 
