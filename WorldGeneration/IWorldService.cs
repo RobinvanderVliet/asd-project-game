@@ -10,5 +10,7 @@
         public void GenerateWorld(int seed);
         public Player getCurrentPlayer();
         public void SetCurrentPlayerHost(string playerId);
+
+        public void SetCurrentPlayerClient(string playerId);
     }
 }

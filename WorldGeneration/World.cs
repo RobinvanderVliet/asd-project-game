@@ -69,7 +69,13 @@ namespace WorldGeneration
 
         public void SetCurrentPlayerClient(string playerId)
         {
-            //maybe not needed. 
+            foreach (var element in _players)
+            {
+                if (element.Id == playerId)
+                {
+                    CurrentPlayer = element;
+                }
+            }
         }
 
         public void SetCurrentPlayerHost(string playerId)
