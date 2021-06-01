@@ -315,25 +315,25 @@ namespace Session
 
                         sessionDTO.SessionSeed = _session.SessionSeed;
 
-                        if (GameStarted())
-                        {
-                            StartGameDTO joinedPlayerDto = new StartGameDTO();
-                            joinedPlayerDto.ExistingPlayer = result;
-
-                            var playerLocations = allPlayerId.Result.Where(x => x.GameGuid == _session.SessionId);
-                            Dictionary<string, int[]> players = new Dictionary<string, int[]>();
-
-                            foreach (var element in playerLocations)
-                            {
-                                int[] playerPosition = new int[2];
-                                playerPosition[0] = element.XPosition;
-                                playerPosition[1] = element.YPosition;
-                                players.Add(element.PlayerGuid, playerPosition);
-                            }
-
-                            joinedPlayerDto.PlayerLocations = players;
-                            sendExistingPlayer(joinedPlayerDto);
-                        }
+                        // if (GameStarted())
+                        // {
+                        //     StartGameDTO joinedPlayerDto = new StartGameDTO();
+                        //     joinedPlayerDto.ExistingPlayer = result;
+                        //
+                        //     var playerLocations = allPlayerId.Result.Where(x => x.GameGuid == _session.SessionId);
+                        //     Dictionary<string, int[]> players = new Dictionary<string, int[]>();
+                        //
+                        //     foreach (var element in playerLocations)
+                        //     {
+                        //         int[] playerPosition = new int[2];
+                        //         playerPosition[0] = element.XPosition;
+                        //         playerPosition[1] = element.YPosition;
+                        //         players.Add(element.PlayerGuid, playerPosition);
+                        //     }
+                        //
+                        //     joinedPlayerDto.PlayerLocations = players;
+                        //     sendExistingPlayer(joinedPlayerDto);
+                        // }
                     }
                     else
                     {
