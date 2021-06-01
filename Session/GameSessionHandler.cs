@@ -172,8 +172,6 @@ namespace Session
 
         private void AddPlayerToGameSession(StartGameDTO joinedPlayerDto)
         {
-            _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
-
             if (_clientController.GetOriginId() == joinedPlayerDto.ExistingPlayer.PlayerGuid)
             {
                 _worldService.AddPlayerToWorld(
@@ -192,8 +190,6 @@ namespace Session
                         joinedPlayerDto.ExistingPlayer.Health,
                         joinedPlayerDto.ExistingPlayer.Stamina), false);
             }
-
-            _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
             foreach (var player in joinedPlayerDto.PlayerLocations)
             {
                 if (_clientController.GetOriginId() != joinedPlayerDto.ExistingPlayer.PlayerGuid)
@@ -203,7 +199,6 @@ namespace Session
                             CharacterSymbol.ENEMY_PLAYER, player.Key), false);
                 }
             }
-
             _worldService.DisplayWorld();
         }
 
@@ -212,7 +207,7 @@ namespace Session
         {
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
 
-            if (_sessionHandler.GameStarted())
+            if (_sessionHandler.GameStarted() && !_sessionHandler.GetSavedGame() || (_sessionHandler.GameStarted() && _sessionHandler.GetSavedGame()))
             {
                 AddPlayerToGameSession(startGameDTO);
             }
