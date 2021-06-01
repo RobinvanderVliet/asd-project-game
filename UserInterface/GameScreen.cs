@@ -54,7 +54,6 @@ namespace UserInterface
         public void ShowMessages(Queue<string> messages)
         {
             _gameChatScreen.ShowMessages(messages);
-            DrawInputBox(INPUT_X, INPUT_Y, "Insert an option");
         }
     }
 }
