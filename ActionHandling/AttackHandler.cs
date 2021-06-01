@@ -29,37 +29,39 @@ namespace ActionHandling
 
         public void SendAttack(string direction)
         {
-                Weapon weapon = _worldService.getCurrentPlayer().Inventory.Weapon;
-                int x = 0;
-                int y = 0;
-                switch (direction)
-                {
-                    case "right":
-                    case "east":
-                        x = weapon.GetWeaponDistance();
-                        break;
-                    case "left":
-                    case "west":
-                        x = -weapon.GetWeaponDistance();
-                        break;
-                    case "forward":
-                    case "up":
-                    case "north":
-                        y = +weapon.GetWeaponDistance();
-                        break;
-                    case "backward":
-                    case "down":
-                    case "south":
-                        y = -weapon.GetWeaponDistance();
-                        break;
-                }
-                var currentPlayer = _worldService.getCurrentPlayer();
-                AttackDTO attackDto = new AttackDTO();
-                attackDto.XPosition = currentPlayer.XPosition + x;
-                attackDto.YPosition = currentPlayer.YPosition + y;
-                attackDto.Damage = weapon.GetWeaponDamage();
-                attackDto.PlayerGuid = _clientController.GetOriginId();
-                SendAttackDTO(attackDto);
+            Weapon weapon = _worldService.getCurrentPlayer().Inventory.Weapon;
+            int x = 0;
+            int y = 0;
+            switch (direction)
+            {
+                case "right":
+                case "east":
+                    x = weapon.GetWeaponDistance();
+                    break;
+                case "left":
+                case "west":
+                    x = -weapon.GetWeaponDistance();
+                    break;
+                case "forward":
+                case "up":
+                case "north":
+                    y = +weapon.GetWeaponDistance();
+                    break;
+                case "backward":
+                case "down":
+                case "south":
+                    y = -weapon.GetWeaponDistance();
+                    break;
+            }
+
+            var currentPlayer = _worldService.getCurrentPlayer();
+            AttackDTO attackDto = new AttackDTO();
+            attackDto.XPosition = currentPlayer.XPosition + x;
+            attackDto.YPosition = currentPlayer.YPosition + y;
+            attackDto.Damage = weapon.GetWeaponDamage();
+            attackDto.Stamina = currentPlayer.Stamina;
+            attackDto.PlayerGuid = _clientController.GetOriginId();
+            SendAttackDTO(attackDto);
         }
 
         public void SendAttackDTO(AttackDTO attackDto)
@@ -105,7 +107,7 @@ namespace ActionHandling
                 if (PlayerResult.Any())
                 {
                     attackDto.AttackedPlayerGuid = PlayerResult.FirstOrDefault().PlayerGuid;
-                    if(attackDto.Stamina >= ATTACKSTAMINA)
+                    if (attackDto.Stamina >= ATTACKSTAMINA)
                     {
                         InsertDamageToDatabase(attackDto, true);
                         packet.Payload = JsonConvert.SerializeObject(attackDto);
@@ -114,7 +116,6 @@ namespace ActionHandling
                     {
                         Console.WriteLine("Insufficient stamina to perform attack action.");
                     }
-                    
                 }
                 else if (CreatureResult.Any())
                 {
@@ -174,59 +175,71 @@ namespace ActionHandling
                     .FirstOrDefault(attackedCreature => attackedCreature.CreatureGuid == attackDto.AttackedPlayerGuid);
                 attackedCreature.Health -= attackDto.Damage;
                 attackedCreatureRepository.UpdateAsync(attackedCreature);
-                if(attackedCreature.Health <= 0)
+                if (attackedCreature.Health <= 0)
                 {
                     Console.WriteLine("RIP"); //TODO implement death of creature
                 }
             }
         }
-            
+
         private void HandleAttack(AttackDTO attackDto)
         {
             if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
             {
                 Console.WriteLine("Your stamina got lowered with " + ATTACKSTAMINA + ".");
                 _worldService.getCurrentPlayer().Stamina -= ATTACKSTAMINA;
+                Console.WriteLine("stamina: " + _worldService.getCurrentPlayer().Stamina);
             }
 
             if (_clientController.GetOriginId().Equals(attackDto.AttackedPlayerGuid))
             {
                 Console.WriteLine("You took a total of: " + attackDto.Damage + " damage.");
-                int AfterDamage = 0;
-                int ArmorPoints = _worldService.getCurrentPlayer().Inventory.Armor.ArmorProtectionPoints;
-                int HelmetPoints = _worldService.getCurrentPlayer().Inventory.Helmet.ArmorProtectionPoints;
-                if (ArmorPoints+HelmetPoints >= attackDto.Damage && ArmorPoints > 0) { //Eerst wordt Damage van armor afgehaald, vervolgens van de helm en tot slot van de speler.
-                    if (ArmorPoints - attackDto.Damage <= 0)
-                    {
-                        Console.WriteLine("Your armor piece has been destroyed!");
-                        AfterDamage = attackDto.Damage - ArmorPoints;
-                        //Actually delete Armor from inventory
-                        //_worldService.getCurrentPlayer().Inventory.Armor = null; ZOIETS?
-                        if (HelmetPoints - AfterDamage <= 0)
-                        {
-                            Console.WriteLine("Your helmet has been destroyed!");
-                            AfterDamage = AfterDamage - HelmetPoints;
-                            //actually delete helmet from inventory
-                            //_worldService.getCurrentPlayer().Inventory.Helmet = null; ZOIETS?
-                            _worldService.getCurrentPlayer().Health -= AfterDamage;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Your Helmet took" + attackDto.Damage + " damage.");
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Your armor took " + attackDto.Damage +" damage.");
-                        ArmorPoints -= attackDto.Damage;
-                    }
+                int ArmorPoints = 0;
+                int HelmetPoints = 0;
+                if (_worldService.getCurrentPlayer().Inventory.Armor != null)
+                {
+                    ArmorPoints = _worldService.getCurrentPlayer().Inventory.Armor.ArmorProtectionPoints;
+                }
+
+                if (_worldService.getCurrentPlayer().Inventory.Helmet != null)
+                {
+                    HelmetPoints = _worldService.getCurrentPlayer().Inventory.Helmet.ArmorProtectionPoints;
+                }
+
+                //Eerst wordt Damage van de helm afgehaald, vervolgens van de body armor en tot slot van de speler.
+                if (HelmetPoints - attackDto.Damage <= 0 && HelmetPoints != 0)
+                {
+                    Console.WriteLine("Your helmet has been destroyed!");
+                    attackDto.Damage -= HelmetPoints;
+                    _worldService.getCurrentPlayer().Inventory.Helmet = null;
+                }
+                else if (HelmetPoints != 0)
+                {
+                    Console.WriteLine("Your Helmet took " + attackDto.Damage + " damage.");
+                    attackDto.Damage = 0;
+                    _worldService.getCurrentPlayer().Inventory.Helmet.ArmorProtectionPoints -= attackDto.Damage;
+                }
+
+                if (ArmorPoints - attackDto.Damage <= 0 && ArmorPoints != 0)
+                {
+                    Console.WriteLine("Your armor piece has been destroyed!");
+                    attackDto.Damage -= ArmorPoints;
+                    _worldService.getCurrentPlayer().Inventory.Armor = null;
+                    _worldService.getCurrentPlayer().Health -= attackDto.Damage;
+                    Console.WriteLine("Your health took " + attackDto.Damage + " damage.");
+                }
+                else if (ArmorPoints != 0)
+                {
+                    Console.WriteLine("Your armor took " + attackDto.Damage + " damage.");
+                    _worldService.getCurrentPlayer().Inventory.Armor.ArmorProtectionPoints -= attackDto.Damage;
                 }
                 else
                 {
-                    //if exist destroy both armor
-                    _worldService.getCurrentPlayer().Health -= attackDto.Damage + ArmorPoints + HelmetPoints;
+                    Console.WriteLine("Your health took " + attackDto.Damage + " damage.");
+                    _worldService.getCurrentPlayer().Health -= attackDto.Damage;
                 }
-                if(_worldService.getCurrentPlayer().Health <= 0)
+
+                if (_worldService.getCurrentPlayer().Health <= 0)
                 {
                     Console.WriteLine("isded"); //TODO implement death of Player. Boolean isDead in DB?
                 }
