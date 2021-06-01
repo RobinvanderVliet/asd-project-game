@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using ActionHandling.DTO;
 using DatabaseHandler;
@@ -47,21 +46,10 @@ namespace ActionHandling
         {
             // Compensate for index starting at 0.
             index -= 1;
-            IList<Item> items = _worldService.GetItemsOnCurrentTile();
 
-            try
-            {
-                // TODO: Do checking on host.
-                Item item = items[index];
-                Console.Out.WriteLine($"Pickup item {item.ItemName}");
-                InventoryDTO inventoryDTO =
-                    new InventoryDTO(_clientController.GetOriginId(), InventoryType.Pickup, index);
-                SendInventoryDTO(inventoryDTO);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                Console.WriteLine("Number is not in search list!");
-            }
+            InventoryDTO inventoryDTO =
+                new InventoryDTO(_clientController.GetOriginId(), InventoryType.Pickup, index);
+            SendInventoryDTO(inventoryDTO);
         }
 
         public void DropItem(int index)
@@ -95,7 +83,16 @@ namespace ActionHandling
         private HandlerResponseDTO HandlePickup(InventoryDTO inventoryDTO, bool handleInDatabase)
         {
             Player player = _worldService.GetPlayer(inventoryDTO.UserId);
-            Item item = _worldService.GetItemsOnCurrentTile(player).ElementAt(inventoryDTO.Index);
+            Item item;
+            
+            try
+            {
+                item = _worldService.GetItemsOnCurrentTile(player).ElementAt(inventoryDTO.Index);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return new HandlerResponseDTO(SendAction.ReturnToSender, "Number is not in search list!");
+            }
             
             if (player.Inventory.AddItem(item))
             {
