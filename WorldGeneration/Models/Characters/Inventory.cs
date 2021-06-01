@@ -33,7 +33,7 @@ namespace WorldGeneration
 
         public bool AddConsumableItem(Consumable consumable)
         {
-            if (_consumableItems.Count <= 3)
+            if (_consumableItems.Count < 3)
             {
                 _consumableItems.Add(consumable);
                 return true;
