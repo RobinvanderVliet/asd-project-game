@@ -18,7 +18,7 @@ namespace InputHandling
         private IPipeline _pipeline;
         private ISessionHandler _sessionHandler;
         private IScreenHandler _screenHandler;
-        private static Timer  _timer;
+        private static Timer _timer;
         private const string RETURN_KEYWORD = "return";
         private string _enteredSessionName;
 
@@ -31,13 +31,13 @@ namespace InputHandling
 
         public InputHandler()
         {
-
         }
 
         public void HandleGameScreenCommands()
         {
             SendCommand(GetCommand());
         }
+
         private void SendCommand(string commando)
         {
             try
@@ -59,13 +59,13 @@ namespace InputHandling
         {
             return _screenHandler.GetScreenInput();
         }
-        
+
         public void HandleStartScreenCommands()
         {
             var input = GetCommand();
             var option = 0;
             int.TryParse(input, out option);
-            
+
             switch (option)
             {
                 case 1:
@@ -93,16 +93,15 @@ namespace InputHandling
 
         public void HandleSessionScreenCommands()
         {
-
             SessionScreen sessionScreen = _screenHandler.Screen as SessionScreen;
             var input = GetCommand();
-            
+
             if (input == RETURN_KEYWORD)
             {
                 _screenHandler.TransitionTo(new StartScreen());
                 return;
             }
-            
+
             var inputParts = input.Split(" ");
 
             if (inputParts.Length != 2)
@@ -115,7 +114,7 @@ namespace InputHandling
                 int.TryParse(input[0].ToString(), out sessionNumber);
 
                 string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
-        
+
                 if (sessionId.IsNullOrEmpty())
                 {
                     sessionScreen.UpdateInputMessage("Not a valid session, try again!");
@@ -123,7 +122,7 @@ namespace InputHandling
                 else
                 {
                     SendCommand("join_session \"" + sessionId + "\" \"" + inputParts[1] + "\"");
-                    _screenHandler.TransitionTo(new ConfigurationScreen()); 
+                    _screenHandler.TransitionTo(new ConfigurationScreen());
                 }
             }
         }
@@ -137,7 +136,7 @@ namespace InputHandling
             List<string> answers = new();
 
             editorScreen.DrawHeader(questions.WELCOME);
-            
+
             int i = 0;
             while (i < questions.EditorQuestions.Count)
             {
@@ -160,7 +159,7 @@ namespace InputHandling
                 else
                 {
                     editorScreen.PrintWarning("Please fill in an valid answer");
-                } 
+                }
             }
 
             if (answers.ElementAt(2).Contains("yes"))
@@ -177,6 +176,7 @@ namespace InputHandling
 
             //TODO: naar het volgende scherm gaan!
         }
+
         public string CustomRuleHandleEditorScreenCommands(string type)
         {
             StringBuilder builder = new StringBuilder();
@@ -188,7 +188,8 @@ namespace InputHandling
 
             builder.Append(type);
 
-            editorScreen.UpdateLastQuestion("This is and example line: When player nearby player then attack" + Environment.NewLine + "press enter to continue...");
+            editorScreen.UpdateLastQuestion("This is and example line: When player nearby player then attack" +
+                                            Environment.NewLine + "press enter to continue...");
 
             _screenHandler.GetScreenInput();
             editorScreen.ClearScreen();
@@ -196,12 +197,12 @@ namespace InputHandling
             while (nextLine)
             {
                 editorScreen.UpdateLastQuestion(
-                    "Please enter your own combat rule" 
+                    "Please enter your own combat rule"
                     + Environment.NewLine
                     + "This is and example line: When player nearby player then attack (optional: otherwise flee)"
                     + Environment.NewLine
                     + "Type Help + armour, weapon, comparison, consumables, actions, bitcoinItems, comparables"
-                    + "Type Stop to stop the custom rules" );
+                    + "Type Stop to stop the custom rules");
 
                 input = _screenHandler.GetScreenInput();
                 input = input.ToLower();
@@ -230,7 +231,8 @@ namespace InputHandling
                             editorScreen.UpdateLastQuestion(variables.consumables.ToString());
                             break;
                         case "actions":
-                            editorScreen.UpdateLastQuestion(variables.actions.ToString() + variables.actionReferences.ToString());
+                            editorScreen.UpdateLastQuestion(variables.actions.ToString() +
+                                                            variables.actionReferences.ToString());
                             break;
                         case "bitcoinItems":
                             editorScreen.UpdateLastQuestion(variables.bitcoinItems.ToString());
@@ -239,25 +241,28 @@ namespace InputHandling
                             editorScreen.UpdateLastQuestion(variables.comparebles.ToString());
                             break;
                     }
+
+                    input = _screenHandler.GetScreenInput();
+                    input.ToLower();
                 }
 
-                input = _screenHandler.GetScreenInput();
-                input = input.ToLower();
-                var rule = input.Split(" ");
+                var rule = input.Split(" ").ToList();
 
                 //basis check hier!
                 if (CheckInput(rule, variables))
                 {
-                    builder.Append(rule.ToString());
+                    builder.Append(input);
                 }
 
-                while (true) {
+                while (true)
+                {
                     editorScreen.ClearScreen();
                     editorScreen.UpdateLastQuestion("Do you want to add another rule? yes or no");
                     input = GetCommand();
                     input = input.ToLower();
-                    if(input.Equals("yes") || input.Equals("no"))
+                    if (input.Equals("yes") || input.Equals("no"))
                     {
+                        editorScreen.ClearScreen();
                         break;
                     }
                 }
@@ -271,69 +276,81 @@ namespace InputHandling
             return builder.ToString();
         }
 
-        private bool CheckInput(string[] rule, BaseVariables variables)
+        private bool CheckInput(List<string> rule, BaseVariables variables)
         {
             bool correct = false;
-            for (int j = 0; j < rule.Length; j++)
+            //basic rules
+            //contains all two base words
+            List<string> baseWords = new() {"when", "then"};
+            correct = (rule.Intersect(baseWords).Count() == 2);
+            if (!correct)
             {
-                switch (j)
-                {
-                    case 0: //when
-                        correct = rule[j].Equals("when");
-                        break;
-                    case 1: //left comparable
-                        correct = variables.comparebles.Contains(rule[j]);
-                        break;
-                    case 2: //comparison
-                        correct = variables.comparison.Contains(rule[j]);
-                        break;
-                    case 3: //right comparable
-                        if (variables.comparebles.Contains(rule[j]) ||
-                            variables.ReturnAllItems().Contains(rule[j]) ||
-                            int.TryParse(rule[j], out _))
-                        {
-                            correct = true;
-                        }
-                        break;
-                    case 4: //then
-                        correct = rule[j].Equals("then");
-                        break;
-                    case 5: //action
-                            correct = variables.actions.Contains(rule[j]);
-                        break;
-                    case 6:
-                        //check use
-                        if (variables.ReturnAllItems().Contains(rule[j]))
-                        {
-                            correct = true;
-                        } else
-                        {//otherwise
-                            correct = rule[j].Contains("otherwise");
-                        }
-                        break;
-                    case 7:
-                        //check otherwise
-                        if (rule[j].Contains("otherwise"))
-                        {
-                            correct = true;
-                        }
-                        else
-                        {//action
-                            if(variables.actions.Contains(rule[j])|| variables.actionReferences.Contains(rule[j]))
-                            {
-                                correct = true;
-                            }
-                        }
-                        break;
-                    case 8://action
-                        correct = variables.ReturnAllItems().Contains(rule[j]);
-                        break;
-                }
-                if (!correct)
-                {
-                    break;
-                }
+                return correct;
             }
+
+            //check positions of the base words
+            correct = rule.IndexOf(baseWords[0]) == 0 && rule.IndexOf(baseWords[1]) == 4;
+            if (!correct)
+            {
+                return correct;
+            }
+
+            //contains exactly 1 comparison type
+            correct = (rule.Intersect(variables.comparison).Count() >= 1);
+            if (!correct)
+            {
+                return correct;
+            }
+
+            correct = rule.IndexOf(variables.comparison.FirstOrDefault(x => x.Equals(rule[2]))) == 2;
+            if (!correct)
+            {
+                return correct;
+            }
+
+            //check otherwise
+            correct = rule.IndexOf("otherwise") == 6 || rule.IndexOf("otherwise") == 7 || rule.IndexOf("otherwise") < 0;
+            if (!correct)
+            {
+                return correct;
+            }
+
+            //advanced rules
+            correct = (rule.Intersect(variables.actionReferences).Any());
+            if (correct && rule.Contains("use"))
+            {
+                correct = rule.Intersect(variables.ReturnAllItems()).Any();
+            }
+
+            if (!correct)
+            {
+                return correct;
+            }
+
+            //check first variable is of type comparebles
+            correct = variables.comparebles.Contains(rule[1]);
+            if (!correct)
+            {
+                return correct;
+            }
+
+            //check second variable is of type item or interger
+            correct = rule.IndexOf(variables.ReturnAllItems().FirstOrDefault(x => x.Equals(rule[3]))) == 3 ||
+                      int.TryParse(rule[3], out _) ||
+                      rule.FindLastIndex(x => x.Equals(variables.comparebles.FirstOrDefault(x => x.Equals(rule[3])))) ==
+                      3;
+            if (!correct)
+            {
+                return correct;
+            }
+
+            //check is use count matches item count
+            correct = rule.Where(x => x.Equals("use")).Count() == variables.ReturnAllItems().Intersect(rule).Count();
+            if (!correct)
+            {
+                return correct;
+            }
+
             return correct;
         }
     }
