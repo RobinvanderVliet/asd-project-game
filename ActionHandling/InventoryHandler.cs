@@ -8,24 +8,26 @@ using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WorldGeneration;
 
 namespace ActionHandling
 {
     public class InventoryHandler : IPacketHandler, IInventoryHandler
     {
-        private IClientController _clientController;
-        private IWorldService _worldService;
+        private readonly IClientController _clientController;
+        private readonly IWorldService _worldService;
+        private readonly IServicesDb<PlayerPOCO> _playerServicesDB;
+        private readonly IServicesDb<PlayerItemPOCO> _playerItemServicesDB;
 
-        public InventoryHandler(IClientController clientController, IWorldService worldService)
+
+        public InventoryHandler(IClientController clientController, IWorldService worldService, IServicesDb<PlayerPOCO> playerServicesDB, IServicesDb<PlayerItemPOCO> playerItemServicesDB)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Inventory);
             _worldService = worldService;
+            _playerServicesDB = playerServicesDB;
+            _playerItemServicesDB = playerItemServicesDB;
         }
 
         public void UseItem(int index)
@@ -84,19 +86,15 @@ namespace ActionHandling
 
                 if (handleInDatabase)
                 {
-                    var dbConnection = new DbConnection();
-
-                    var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-
-                    var playerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
-
                     PlayerItemPOCO playerItemPOCO = new() {PlayerGUID = inventoryDTO.UserId, ItemName = itemToUse.ItemName };
-                    playerItemRepository.DeleteAsync(playerItemPOCO);
+                    _ = _playerItemServicesDB.DeleteAsync(playerItemPOCO);
 
-                    PlayerPOCO playerPOCO = playerRepository.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == inventoryDTO.UserId);
+                    var result = _playerServicesDB.GetAllAsync().Result;
+                    PlayerPOCO playerPOCO = result.FirstOrDefault(player => player.PlayerGuid == inventoryDTO.UserId);
+                    
                     playerPOCO.Health = player.Health;
                     //add stamina to playerPOCO
-                    playerRepository.UpdateAsync(playerPOCO);
+                    _ = _playerServicesDB.UpdateAsync(playerPOCO);
                 }
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
