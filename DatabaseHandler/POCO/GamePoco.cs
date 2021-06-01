@@ -4,16 +4,12 @@ using LiteDB;
 
 namespace DatabaseHandler.POCO
 {
-
-
     [ExcludeFromCodeCoverage]
-    public class GamePoco
+    public class GamePOCO
     {
         [BsonId]
-        public Guid GameGUID { get; set; }
-        [BsonId]
-        public Guid PlayerGUIDHost { get; set; }
+        public string GameGUID { get; set; }
+        public string PlayerGUIDHost { get; set; }
         public int Seed { get; set; }
-
     }
 }

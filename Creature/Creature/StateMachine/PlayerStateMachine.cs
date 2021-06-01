@@ -7,7 +7,7 @@ using Creature.Creature.StateMachine.State;
 
 namespace Creature.Creature.StateMachine
 {
-    class PlayerStateMachine : ICreatureStateMachine
+    public class PlayerStateMachine : ICreatureStateMachine
     {
         private RuleSet _ruleset;
         private PassiveStateMachine<CreatureState, CreatureEvent.Event> _passiveStateMachine;

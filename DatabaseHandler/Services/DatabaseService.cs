@@ -44,9 +44,7 @@ namespace DatabaseHandler.Services
                 throw;
             }
         }
-
-
-
+        
         public Task<int> DeleteAsync(T obj)
         {
             try

@@ -3,7 +3,7 @@ using Agent.Antlr.Ast.Comparables;
 using Agent.Antlr.Ast.Comparables.Subjects;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Agent.Tests.parser
+namespace Agent.Tests.Parser
 {
    
     [ExcludeFromCodeCoverage]

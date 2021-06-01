@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections;
+using System.Diagnostics.CodeAnalysis;
+
+namespace InputHandling.Antlr.Ast.Actions
+{
+    public class StartSession : Command, IEquatable<StartSession>
+    {
+        [ExcludeFromCodeCoverage]
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as StartSession);
+        }
+
+        [ExcludeFromCodeCoverage]
+        public bool Equals(StartSession other)
+        {
+            return true;
+        }
+    }
+}

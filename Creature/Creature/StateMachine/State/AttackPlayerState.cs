@@ -17,7 +17,7 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do(ICreatureData creatureData)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }

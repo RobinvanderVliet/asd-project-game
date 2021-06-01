@@ -7,10 +7,8 @@ using WorldGeneration.Models;
 namespace WorldGeneration
 {
     public class MapFactory: IMapFactory
-
     {
         [ExcludeFromCodeCoverage]
-        
         public IMap GenerateMap(int seed = 0)
         {
             return GenerateMap(8, seed);
