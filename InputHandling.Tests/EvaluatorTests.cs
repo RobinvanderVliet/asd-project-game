@@ -247,21 +247,14 @@ namespace InputHandling.Tests
             return new AST(monster);
         }
 
-        private Agent.GameConfiguration.MonsterDifficulty GetDifficulty(string difficulty)
+        private static Agent.GameConfiguration.MonsterDifficulty GetDifficulty(string difficulty) => difficulty switch
         {
-            switch (difficulty)
-            {
-                case "easy":
-                    return Agent.GameConfiguration.MonsterDifficulty.Easy;
-                case "medium":
-                    return Agent.GameConfiguration.MonsterDifficulty.Medium;
-                case "hard":
-                    return Agent.GameConfiguration.MonsterDifficulty.Hard;
-                case "impossible":
-                    return Agent.GameConfiguration.MonsterDifficulty.Impossible;
-            }
-            return Agent.GameConfiguration.MonsterDifficulty.Easy;
-        }
+            "easy" => Agent.GameConfiguration.MonsterDifficulty.Easy,
+            "medium" => Agent.GameConfiguration.MonsterDifficulty.Medium,
+            "hard" => Agent.GameConfiguration.MonsterDifficulty.Hard,
+            "impossible" => Agent.GameConfiguration.MonsterDifficulty.Impossible,
+            _ => Agent.GameConfiguration.MonsterDifficulty.Easy
+        };
         
         [TestCase("low")]
         [TestCase("medium")]
@@ -306,19 +299,13 @@ namespace InputHandling.Tests
             return new AST(monster);
         }
 
-        private Agent.GameConfiguration.ItemFrequency GetFrequency(string frequency)
+        private static Agent.GameConfiguration.ItemFrequency GetFrequency(string frequency) => frequency switch
         {
-            switch (frequency)
-            {
-                case "low":
-                    return Agent.GameConfiguration.ItemFrequency.Low;
-                case "medium":
-                    return Agent.GameConfiguration.ItemFrequency.Medium;
-                case "high":
-                    return Agent.GameConfiguration.ItemFrequency.High;
-            }
-            return Agent.GameConfiguration.ItemFrequency.Low;
-        }
-        
+            "low" => Agent.GameConfiguration.ItemFrequency.Low,
+            "medium" => Agent.GameConfiguration.ItemFrequency.Medium,
+            "high" => Agent.GameConfiguration.ItemFrequency.High,
+            _ => Agent.GameConfiguration.ItemFrequency.Low
+        };
+
     }
 }

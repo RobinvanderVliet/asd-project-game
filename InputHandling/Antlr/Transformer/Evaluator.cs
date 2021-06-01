@@ -201,23 +201,24 @@ namespace InputHandling.Antlr.Transformer
         }
 
         private void TransformItemFrequency(ItemFrequency monster)
+        {
+            if (!_clientController.IsHost())
             {
-                if (!_clientController.IsHost())
-                {
-                    return;
-                }
-                switch (monster.Frequency) 
-                {
-                    case "low":
-                        _configurationHandler.SetFrequency(Agent.GameConfiguration.ItemFrequency.Low);
-                        break;
-                    case "medium":
-                        _configurationHandler.SetFrequency(Agent.GameConfiguration.ItemFrequency.Medium);
-                        break;
-                    case "high":
-                        _configurationHandler.SetFrequency(Agent.GameConfiguration.ItemFrequency.High);
-                        break;
-                }
+                return;
+            }
+            
+            switch (monster.Frequency) 
+            {
+                case "low":
+                    _configurationHandler.SetFrequency(Agent.GameConfiguration.ItemFrequency.Low);
+                    break;
+                case "medium":
+                    _configurationHandler.SetFrequency(Agent.GameConfiguration.ItemFrequency.Medium);
+                    break;
+                case "high":
+                    _configurationHandler.SetFrequency(Agent.GameConfiguration.ItemFrequency.High);
+                    break;
+            }
         }
     }
 }
