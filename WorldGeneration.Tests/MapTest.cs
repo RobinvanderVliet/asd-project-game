@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using DatabaseHandler.Services;
-using DataTransfer.DTO.Character;
 using Display;
 using NUnit.Framework;
 using Moq;
@@ -25,9 +24,9 @@ namespace WorldGeneration.Tests
         //Declaration of variables
         private int _seed;
         private int _chunkSize;
-        private List<MapCharacterDTO> _mapCharacterDTOList;
-        private MapCharacterDTO _mapCharacter1DTO;
-        private MapCharacterDTO _mapCharacter2DTO;
+        private List<Player> _mapCharacterDTOList;
+        private Player _mapCharacter1DTO;
+        private Player _mapCharacter2DTO;
         private IList<Chunk> _chunks;
         private Map _sut;
         
@@ -80,10 +79,10 @@ namespace WorldGeneration.Tests
             _consolePrinterMockObject = _consolePrinterMock.Object;
             
 
-            _mapCharacter1DTO = new MapCharacterDTO(0, 0, "naam1", "d", CharacterSymbol.FRIENDLY_PLAYER);
-            _mapCharacter2DTO = new MapCharacterDTO(0, 0, "naam2", "a", CharacterSymbol.FRIENDLY_PLAYER);
+            _mapCharacter1DTO = new Player("naam1", 0, 0, CharacterSymbol.FRIENDLY_PLAYER, "a");
+            _mapCharacter2DTO = new Player("naam2", 0, 0, CharacterSymbol.FRIENDLY_PLAYER, "b");
             
-            _mapCharacterDTOList = new List<MapCharacterDTO>();
+            _mapCharacterDTOList = new List<Player>();
             _mapCharacterDTOList.Add(_mapCharacter1DTO);
             _mapCharacterDTOList.Add(_mapCharacter2DTO);
             

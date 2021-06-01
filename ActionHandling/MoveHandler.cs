@@ -86,7 +86,7 @@ namespace ActionHandling
                 var result =
                     allLocations.Result.Where(x =>
                         x.XPosition == newPosPlayerX && x.YPosition == newPosPlayerY &&
-                        x.GameGuid == _clientController.SessionId);
+                        x.GameGUID == _clientController.SessionId);
 
                 if (result.Any())
                 {
@@ -113,7 +113,7 @@ namespace ActionHandling
         private void InsertToDatabase(MoveDTO moveDTO)
         {
             var playerRepository = new DatabaseService<PlayerPOCO>();
-            var player = playerRepository.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId);
+            var player = playerRepository.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGUID == moveDTO.UserId);
 
             player.XPosition = moveDTO.XPosition;
             player.YPosition = moveDTO.YPosition;

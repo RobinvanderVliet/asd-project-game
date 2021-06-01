@@ -8,7 +8,6 @@ using System.Timers;
 using Network.DTO;
 using WorldGeneration;
 using DatabaseHandler;
-using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using DatabaseHandler.Repository;
 using UserInterface;
@@ -92,7 +91,7 @@ namespace Session
             _session = new Session(sessionName);
             _session.GenerateSessionId();
             _session.AddClient(_clientController.GetOriginId());
-            _session.SessionSeed = new MapFactory().GenerateSeed();
+            _session.SessionSeed =  new MapFactory().GenerateSeed();
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
@@ -110,45 +109,6 @@ namespace Session
         }
         
         public void SendHeartbeat()
-        {
-            var tmp = new DBConnection();
-            tmp.SetForeignKeys();
-
-            var tmpServicePlayer = new DatabaseService<PlayerPOCO>();
-            var tmpServiceGame = new DatabaseService<GamePOCO>();
-
-            Guid gameGuid = Guid.NewGuid();
-            var tmpObject = new GamePOCO {GameGUID = gameGuid};
-            tmpServiceGame.CreateAsync(tmpObject);
-
-
-            List<string> allClients = _session.GetAllClients();
-            Dictionary<string, int[]> players = new Dictionary<string, int[]>();
-
-            int playerX = 26; // spawn position
-            int playerY = 11; // spawn position
-            foreach (string element in allClients)
-            {
-                int[] playerPosition = new int[2];
-                playerPosition[0] = playerX;
-                playerPosition[1] = playerY;
-                players.Add(element, playerPosition);
-                var tmpPlayer = new PlayerPoco
-                    {PlayerGUID = element, GameGUID = gameGuid, PositionX = playerX, PositionY = playerY};
-                tmpServicePlayer.CreateAsync(tmpPlayer);
-
-                playerX+=2; // spawn position + 2 each client
-                playerY+=2; // spawn position + 2 each client
-            }
-
-            StartGameDto startGameDto = new StartGameDto();
-            startGameDto.GameGuid = gameGuid.ToString();
-            startGameDto.PlayerLocations = players;
-
-            return startGameDto;
-        }
-        
-            public void SendHeartbeat()
         {
             SessionDTO sessionDTO = new SessionDTO(SessionType.SendHeartbeat);
             sendSessionDTO(sessionDTO);
