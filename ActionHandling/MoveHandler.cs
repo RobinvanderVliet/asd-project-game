@@ -1,5 +1,6 @@
 ﻿using Network;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using ActionHandling.DTO;
 using DatabaseHandler;
@@ -9,6 +10,7 @@ using DatabaseHandler.Services;
 using Network.DTO;
 using Newtonsoft.Json;
 using WorldGeneration;
+using WorldGeneration.Models.Interfaces;
 
 
 namespace ActionHandling
@@ -94,7 +96,8 @@ namespace ActionHandling
                         x.PlayerGuid == moveDTO.UserId
                     ).Select(x => x.YPosition).FirstOrDefault();
 
-                var steps = Math.Abs(newPosPlayerX - oldPosPlayerX) + Math.Abs(newPosPlayerY - oldPosPlayerY);
+                var stamina = GetStaminaCostForTiles(
+                    GetTilesBetweenPositions(oldPosPlayerX, oldPosPlayerY, newPosPlayerX, newPosPlayerY));
 
                 var result =
                     allLocations.Result.Where(x =>
@@ -111,14 +114,14 @@ namespace ActionHandling
                     Console.WriteLine("Can't move to new position something is in the way");
                     return new HandlerResponseDTO(SendAction.ReturnToSender, "Can't move to new position something is in the way");
                 }
-                else if (resultStamina < steps)
+                else if (resultStamina < stamina)
                 {
                     Console.WriteLine("You do not have enough stamina to move!");
                     return new HandlerResponseDTO(SendAction.ReturnToSender, "You do not have enough stamina to move!");
                 }
                 else
                 {
-                    moveDTO.Stamina = resultStamina - steps;
+                    moveDTO.Stamina = resultStamina - stamina;
                     InsertToDatabase(moveDTO);
                     HandleMove(moveDTO);
                     packet.Payload = JsonConvert.SerializeObject(moveDTO);
@@ -155,6 +158,40 @@ namespace ActionHandling
             var player = _worldService.GetPlayer(moveDTO.UserId);
             player.Stamina = moveDTO.Stamina;
             _worldService.DisplayWorld();
+        }
+
+        private List<ITile> GetTilesBetweenPositions(int x1, int y1, int x2, int y2)
+        {
+            var tiles = new List<ITile>();
+ 
+            if (x1 == x2)
+            {
+                for (var i = Math.Min(y1, y2); i < Math.Max(y1, y2); i++)
+                {
+                    tiles.Add(_worldService.GetTile(x1, i));
+                }
+            }
+            else
+            {
+                for (var i = Math.Min(x1, x2); i < Math.Max(x1, x2); i++)
+                {
+                    tiles.Add(_worldService.GetTile(i, y1));
+                }
+            }
+
+            return tiles;
+        }
+
+        private int GetStaminaCostForTiles(List<ITile> tiles)
+        {
+            var staminaCosts = 0;
+
+            foreach (var tile in tiles)
+            {
+                staminaCosts += tile.StaminaCost;
+            }
+
+            return staminaCosts;
         }
     }
 }
