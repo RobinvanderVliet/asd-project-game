@@ -148,38 +148,58 @@ namespace ActionHandling
                 var attackedPlayer = attackedPlayerRepository.GetAllAsync().Result
                     .FirstOrDefault(attackedPlayer => attackedPlayer.PlayerGuid == attackDto.AttackedPlayerGuid);
 
-                if(_worldService.getCurrentPlayer().Inventory.Armor != null && _worldService.getCurrentPlayer().Inventory.Armor.ArmorPartType == Items.ArmorStats.ArmorPartType.Helmet)
+                var attackedPlayerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
+                PlayerItemPOCO attackedPlayerItem;
+
+                if (_worldService.getCurrentPlayer().Inventory.Helmet != null)
                 {
                     var attackedPlayerHelmet = _worldService.getCurrentPlayer().Inventory.Helmet;
-                }
-                if (_worldService.getCurrentPlayer().Inventory.Armor != null && _worldService.getCurrentPlayer().Inventory.Armor.ArmorPartType == Items.ArmorStats.ArmorPartType.Body)
-                {
+                    var helmetPoints = attackedPlayerHelmet.ArmorProtectionPoints;
 
-                }
-                else
-                {
+                    attackedPlayerItem = attackedPlayerItemRepository.GetAllAsync().Result
+                        .FirstOrDefault(attackedPlayerItem => attackedPlayerItem.PlayerGUID == attackDto.PlayerGuid &&
+                                                              attackedPlayerItem.ItemName ==
+                                                              attackedPlayerHelmet.ItemName);
 
-                }
-
-
-
-
-
-                var attackedPlayerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
-                var attackedPlayerItem = attackedPlayerItemRepository.GetAllAsync().Result
-                    .FirstOrDefault(attackedPlayerItem => attackedPlayerItem.PlayerGUID == attackDto.AttackedPlayerGuid && attackedPlayerItem.ArmorPartType == "Helmet");
-                if (attackedPlayerItem.ArmorPoints != 0) //helm
-                {
-                    attackedPlayerItem.ArmorPoints -= attackDto.Damage;
-                    if(attackedPlayerItem.ArmorPoints <= 0)
+                    if (helmetPoints - attackDto.Damage <= 0 && helmetPoints != 0)
                     {
+                        attackDto.Damage -= attackedPlayerItem.ArmorPoints;
                         attackedPlayerItemRepository.DeleteAsync(attackedPlayerItem);
+                    }
+                    else
+                    {
+                        attackedPlayerItem.ArmorPoints -= attackDto.Damage;
+                        attackedPlayerItemRepository.UpdateAsync(attackedPlayerItem);
                     }
                 }
 
-                attackedPlayer.Health -= attackDto.Damage;
-                
-                attackedPlayerRepository.UpdateAsync(attackedPlayer);
+                if (_worldService.getCurrentPlayer().Inventory.Armor != null)
+                {
+                    var attackedPlayerBodyArmor = _worldService.getCurrentPlayer().Inventory.Armor;
+                    var bodyArmorPoints = attackedPlayerBodyArmor.ArmorProtectionPoints;
+                    attackedPlayerItem = attackedPlayerItemRepository.GetAllAsync().Result
+                        .FirstOrDefault(attackedPlayerItem => attackedPlayerItem.PlayerGUID == attackDto.PlayerGuid &&
+                                                              attackedPlayerItem.ItemName ==
+                                                              attackedPlayerBodyArmor.ItemName);
+                    if (bodyArmorPoints - attackDto.Damage <= 0 && bodyArmorPoints != 0)
+                    {
+                        attackDto.Damage -= attackedPlayerItem.ArmorPoints;
+                        attackedPlayerItemRepository.DeleteAsync(attackedPlayerItem);
+                    }
+                    else
+                    {
+                        attackedPlayerItem.ArmorPoints -= attackDto.Damage;
+                        attackedPlayerItemRepository.UpdateAsync(attackedPlayerItem);
+                        
+                        attackedPlayer.Health -= attackDto.Damage;
+                        attackedPlayerRepository.UpdateAsync(attackedPlayer);
+                    }
+                }
+                else
+                {
+                    attackedPlayer.Health -= attackDto.Damage;
+                    attackedPlayerRepository.UpdateAsync(attackedPlayer);
+                }
             }
             else
             {
@@ -190,6 +210,7 @@ namespace ActionHandling
                     .FirstOrDefault(attackedCreature => attackedCreature.CreatureGuid == attackDto.AttackedPlayerGuid);
                 attackedCreature.Health -= attackDto.Damage;
                 attackedCreatureRepository.UpdateAsync(attackedCreature);
+
                 if (attackedCreature.Health <= 0)
                 {
                     Console.WriteLine("RIP"); //TODO implement death of creature
