@@ -28,9 +28,18 @@ namespace WorldGeneration
                     if (element.Id.Equals(userId) && element.Id.Equals(currentIdPlayer))
                     {
                         CurrentPlayer = element;
+        
+                    }
+                    else
+                    {
+                        var player = _players.Find(x => x.Id == userId);
+                        player.XPosition = newXPosition;
+                        player.YPosition = newYPosition;
                     }
                 }
-
+            }
+            else
+            {
                 Console.WriteLine(CurrentPlayer);
                 if (CurrentPlayer.Id.Equals(userId))
                 {
