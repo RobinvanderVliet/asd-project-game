@@ -6,7 +6,6 @@ using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
 using Items;
-using Items.ArmorStats;
 using Items.Consumables;
 using Network;
 using Network.DTO;
@@ -95,53 +94,23 @@ namespace ActionHandling
             Player player = _worldService.GetPlayer(inventoryDTO.UserId);
             Item item = _worldService.GetItemsOnCurrentTile().ElementAt(inventoryDTO.Index);
 
-            if (item is Weapon weapon)
-            {
-                if (SlotOccupied(player.Inventory.Weapon))
-                {
-                    return new HandlerResponseDTO(SendAction.ReturnToSender, "Could not pickup item");
-                }
-                player.Inventory.Weapon = weapon;
-            } else if (item is Armor armor)
-            {
-                switch (armor.ArmorPartType)
-                {
-                    case ArmorPartType.Body:
-                    {
-                        if (SlotOccupied(player.Inventory.Armor))
-                        {
-                            return new HandlerResponseDTO(SendAction.ReturnToSender, "Could not pickup item");
-                        }
-                        player.Inventory.Armor = armor;
-                        break;
-                    }
-                    case ArmorPartType.Helmet:
-                    {
-                        if (SlotOccupied(player.Inventory.Helmet))
-                        {
-                            return new HandlerResponseDTO(SendAction.ReturnToSender, "Could not pickup item");
-                        }
-                        player.Inventory.Helmet = armor;
-                        break;
-                    }
-                    default:
-                        return new HandlerResponseDTO(SendAction.ReturnToSender, "Could not pickup item");
-                }
-            } else if (item is Consumable consumable)
-            {
-                player.Inventory.AddConsumableItem(consumable);
-            }
-            
-            // TODO: Remove item from tile.
+            // TODO: Refactor big if else construction.
 
-            if (handleInDatabase)
+            if (player.Inventory.AddItem(item))
             {
+                // TODO: Remove item from tile.
+                if (handleInDatabase)
+                {
                 
+                }
+                
+                return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
-            
-            return new HandlerResponseDTO(SendAction.SendToClients, null);
+            else
+            {
+                return new HandlerResponseDTO(SendAction.ReturnToSender, "Could not pickup item");
+            }
         }
-
         
         // Returns true if the given slot is occupied.
         private bool SlotOccupied(Item item)
