@@ -7,14 +7,23 @@ namespace Messages
         private MessageModel _messages; 
         //add screenhandler 
 
+        public MessageService()
+        {
+            _messages = new();
+        }
+
         public void AddMessage(string message)
         {
             _messages.addMessage(message);
-            //refresh screenHandler
+            DisplayMessages();
         }
 
-        // function that calls _messages.GetLatestMessages(20) and sends it to screenHandler
+        public void DisplayMessages()
+        {
+            var latestMessages = _messages.GetLatestMessages(20);
 
-
+            //should be replace by _screenHandler.displayMessages(latestMessages)
+            Console.WriteLine(latestMessages.Peek());
+        }
     }
 }
