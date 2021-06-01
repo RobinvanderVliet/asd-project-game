@@ -34,26 +34,26 @@ namespace UserInterface
 
         private void DrawMessages(Queue<string> messageQueue)
         {
-            int originalCursorX = Console.CursorLeft;
-            int originalCursorY = Console.CursorTop;
+            int originalCursorX = _screenHandler.ConsoleHelper.GetCursorLeft();
+            int originalCursorY = _screenHandler.ConsoleHelper.GetCursorTop();
             ClearMessages();
             int messageCount = messageQueue.Count;
             for (int i = 0; i < messageCount; i++)
             {
                 string message = messageQueue.Peek();
-                Console.SetCursorPosition(_xPosition + OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
-                Console.Write(message);
+                _screenHandler.ConsoleHelper.SetCursor(_xPosition + OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
+                _screenHandler.ConsoleHelper.Write(message);
                 messageQueue.Dequeue();
             }
-            Console.SetCursorPosition(originalCursorX, originalCursorY);
+            _screenHandler.ConsoleHelper.SetCursor(originalCursorX, originalCursorY);
         }
 
         private void ClearMessages()
         {
             for (int i = 0; i <= _height - OFFSET_TOP; i++)
             {
-                Console.SetCursorPosition(_xPosition + OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
-                Console.Write(new string(' ', _width - BORDER_SIZE));
+                _screenHandler.ConsoleHelper.SetCursor(_xPosition + OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
+                _screenHandler.ConsoleHelper.Write(new string(' ', _width - BORDER_SIZE));
             }
         }
 

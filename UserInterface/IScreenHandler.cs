@@ -7,9 +7,9 @@ namespace UserInterface
         public Screen Screen { get; set; }
         void TransitionTo(Screen screen);
         void DisplayScreen();
-
+        public ConsoleHelper ConsoleHelper { get; set; }
+        public string GetScreenInput();
         public void ShowMessages(Queue<string> messages);
     }
 }
-        public ConsoleHelper ConsoleHelper { get; set; }
-        public string GetScreenInput();
+       

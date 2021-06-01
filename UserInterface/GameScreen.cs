@@ -32,21 +32,24 @@ namespace UserInterface
             _gameStatScreen = new GameStatScreen(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
             _gameChatScreen = new GameChatScreen(CHAT_X, CHAT_Y, CHAT_WIDTH, CHAT_HEIGHT);
             _gameWorldScreen = new GameWorldScreen(WORLD_X, WORLD_Y, WORLD_WITH, WORLD_HEIGHT);
+
         }
 
         public override void DrawScreen()
         {
+            _gameStatScreen.SetScreen(_screenHandler);
+            _gameChatScreen.SetScreen(_screenHandler);
+            _gameWorldScreen.SetScreen(_screenHandler);
             _gameStatScreen.DrawScreen();
             _gameChatScreen.DrawScreen();
             _gameWorldScreen.DrawScreen();
             DrawInputBox(INPUT_X, INPUT_Y, "Insert an option");
         }
 
-        public virtual void ShowMessages(Queue<string> messages)
+        public void ShowMessages(Queue<string> messages)
         {
             _gameChatScreen.ShowMessages(messages);
             DrawInputBox(INPUT_X, INPUT_Y, "Insert an option");
         }
-    
     }
 }
