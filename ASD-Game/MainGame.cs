@@ -20,7 +20,6 @@ namespace ASD_project
 
             public void Run()
             {
-
                 if (!DEBUG_INTERFACE)
                 {
                     _screenHandler.TransitionTo(new StartScreen());
@@ -38,9 +37,7 @@ namespace ASD_project
                         }
                         else if (currentScreen is ConfigurationScreen)
                         {
-                        }
-                        else if (currentScreen is WaitingScreen)
-                        {
+                            _inputHandler.HandleGameScreenCommands();
                         }
                         else if (currentScreen is EditorScreen)
                         {

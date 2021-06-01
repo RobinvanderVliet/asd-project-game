@@ -207,5 +207,19 @@ namespace InputHandling.Antlr.Parser
                 joinSession.AddChild(new Message(context.GetText()));
             }
         }
+
+        public override void EnterUsername(PlayerCommandsParser.UsernameContext context)
+        {
+            var action = _currentContainer.Peek();
+            
+            if (action is JoinSession joinSession)
+            {
+                joinSession.AddChild(new Username(context.GetText()));
+            }
+            else if (action is CreateSession createSession)
+            {
+                createSession.AddChild(new Username(context.GetText()));
+            }
+        }
     }
 }
