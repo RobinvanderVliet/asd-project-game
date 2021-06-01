@@ -172,7 +172,6 @@ namespace Session
 
         private void AddPlayerToGameSession(StartGameDTO joinedPlayerDto)
         {
-            _worldService.DisplayWorld();
 
             if (_clientController.GetOriginId() == joinedPlayerDto.ExistingPlayer.PlayerGuid)
             {
