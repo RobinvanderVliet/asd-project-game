@@ -156,21 +156,26 @@ namespace ActionHandling
                     var attackedPlayerHelmet = _worldService.getCurrentPlayer().Inventory.Helmet;
                     var helmetPoints = attackedPlayerHelmet.ArmorProtectionPoints;
 
-                    var attt = attackedPlayerItemRepository.GetAllAsync();
-                   var attackedPlayerItem = attackedPlayerItemRepository.GetAllAsync().Result
-                        .FirstOrDefault(attackedPlayerItem => attackedPlayerItem.PlayerGUID == attackDto.PlayerGuid &&
-                                                              attackedPlayerItem.ItemName ==
-                                                              attackedPlayerHelmet.ItemName);
+                    var attackedPlayerItem = attackedPlayerItemRepository.GetAllAsync();
+                    attackedPlayerItem.Wait();
+                    var results = attackedPlayerItem.Result
+                        .FirstOrDefault(attackedPlayerItem =>
+                            attackedPlayerItem.PlayerGUID == attackDto.PlayerGuid &&
+                            attackedPlayerItem.ItemName ==
+                            attackedPlayerHelmet.ItemName);
 
                     if (helmetPoints - attackDto.Damage <= 0 && helmetPoints != 0)
                     {
-                        attackDto.Damage -= attackedPlayerItem.ArmorPoints;
-                        attackedPlayerItemRepository.DeleteAsync(attackedPlayerItem);
+                        attackDto.Damage -= results.ArmorPoints;
+                        var delete = attackedPlayerItemRepository.DeleteAsync(results); // dit gaat nog fout
+                        delete.Wait();
+                        var a = attackedPlayerItemRepository.GetAllAsync(); // voor debug
+                        a.Wait(); // voor debug
                     }
                     else
                     {
-                        attackedPlayerItem.ArmorPoints -= attackDto.Damage;
-                        attackedPlayerItemRepository.UpdateAsync(attackedPlayerItem);
+                        results.ArmorPoints -= attackDto.Damage;
+                        attackedPlayerItemRepository.UpdateAsync(results);
                     }
                 }
 
@@ -178,19 +183,21 @@ namespace ActionHandling
                 {
                     var attackedPlayerBodyArmor = _worldService.getCurrentPlayer().Inventory.Armor;
                     var bodyArmorPoints = attackedPlayerBodyArmor.ArmorProtectionPoints;
-                    var attackedPlayerItem = attackedPlayerItemRepository.GetAllAsync().Result
+                    var attackedPlayerItem = attackedPlayerItemRepository.GetAllAsync();
+                    attackedPlayerItem.Wait();
+                    var results= attackedPlayerItem.Result
                         .FirstOrDefault(attackedPlayerItem => attackedPlayerItem.PlayerGUID == attackDto.PlayerGuid &&
                                                               attackedPlayerItem.ItemName ==
                                                               attackedPlayerBodyArmor.ItemName);
                     if (bodyArmorPoints - attackDto.Damage <= 0 && bodyArmorPoints != 0)
                     {
-                        attackedPlayerItemRepository.DeleteAsync(attackedPlayerItem);
+                        attackedPlayerItemRepository.DeleteAsync(results);
                     }
                     else
                     {
-                        attackedPlayerItem.ArmorPoints -= attackDto.Damage;
-                        attackedPlayerItemRepository.UpdateAsync(attackedPlayerItem);
-                        
+                        results.ArmorPoints -= attackDto.Damage;
+                        attackedPlayerItemRepository.UpdateAsync(results);
+
                         attackedPlayer.Health -= attackDto.Damage;
                         attackedPlayerRepository.UpdateAsync(attackedPlayer);
                     }

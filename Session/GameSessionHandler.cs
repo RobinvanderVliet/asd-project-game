@@ -66,15 +66,16 @@ namespace Session
                 var tmpPlayer = new PlayerPOCO
                     {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
                 servicePlayer.CreateAsync(tmpPlayer);
-                var playerBodyArmor = new PlayerItemPOCO()
+                var playerHelmet = new PlayerItemPOCO()
                 {
-                    PlayerGUID = clientId, ItemName = ItemFactory.GetBandana().ItemName, ArmorPoints = ItemFactory.GetBandana().ArmorProtectionPoints, ArmorPartType = ItemFactory.GetBandana().ArmorPartType
+                   GameGUID = gamePOCO.GameGuid, PlayerGUID = clientId, ItemName = ItemFactory.GetBandana().ItemName, ArmorPoints = ItemFactory.GetBandana().ArmorProtectionPoints, ArmorPartType = ItemFactory.GetBandana().ArmorPartType
                 };
-                var playerHelmet = new PlayerItemPOCO(){
-                    PlayerGUID = clientId, ItemName = ItemFactory.GetKnife().ItemName, Damage = (int) ItemFactory.GetKnife().Damage
+                var playerWeapon = new PlayerItemPOCO(){
+                    GameGUID = gamePOCO.GameGuid, PlayerGUID = clientId, ItemName = ItemFactory.GetKnife().ItemName, Damage = (int) ItemFactory.GetKnife().Damage
                 };
-                playerItemService.CreateAsync(playerBodyArmor);
                 playerItemService.CreateAsync(playerHelmet);
+                playerItemService.CreateAsync(playerWeapon);
+                
                 
 
                 playerX += 2; // spawn position + 2 each client

@@ -19,7 +19,7 @@ namespace ActionHandling.Tests
 
         [ExcludeFromCodeCoverage]
         [TestFixture]
-        public class MoveHandlerTests
+        public class AttackHandlerTests
         {
             //Declaration and initialisation of constant variables
             //Declaration of variables
@@ -42,6 +42,7 @@ namespace ActionHandling.Tests
             [TestCase("down")]
             [TestCase("left")]
             [TestCase("right")]
+            
             [Test]
             public void Test_SendAttack_SendsTheMessageAndPacketTypeToClientController(String direction)
             {

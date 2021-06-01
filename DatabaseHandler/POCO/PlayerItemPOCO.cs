@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Items.ArmorStats;
 using Items.WeaponStats;
 using LiteDB;
@@ -10,7 +11,9 @@ namespace DatabaseHandler.POCO
     {
         public string PlayerGUID { get; set; }
 
-        [BsonId]
+        public string GameGUID { get; set; }
+
+        [BsonId] public string ItemGUID = Guid.NewGuid().ToString();
         public string ItemName { get; set; }
 
         public string ItemType { get; set; }
