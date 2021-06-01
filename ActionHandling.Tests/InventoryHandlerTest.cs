@@ -10,6 +10,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -146,6 +147,139 @@ namespace ActionHandling.Tests
             Assert.AreEqual(expectedResult, result);
             _mockedPlayerServicesDb.Verify(mock => mock.UpdateAsync(playerPOCO), Times.Never);
             _mockedPlayerItemServicesDb.Verify(mock => mock.DeleteAsync(It.IsAny<PlayerItemPOCO>()), Times.Never);
+        }
+        
+        [Test]
+        public void Test_Inspect_CallsWorldService()
+        {
+            //arrange
+            Player result = new(null, 0, 0, null, null);
+
+            _mockedWorldService.Setup(mock => mock.GetCurrentPlayer()).Returns(result);
+
+            //act
+            _sut.InspectItem("helmet");
+
+            //assert
+            _mockedWorldService.Verify(mock => mock.GetCurrentPlayer(), Times.Once);
+        }
+        
+        [Test]
+        [Ignore("Not yet integrated with UI")]
+        public void Test_Inspect_CallsUIWithExpMessage()
+        {
+            //arrange
+            Player result = new(null, 0, 0, null, null);
+            _mockedWorldService.Setup(mock => mock.GetCurrentPlayer()).Returns(result);
+            string exp = $"Default headwear, plain but good looking{Environment.NewLine}Name: Bandana{Environment.NewLine}APP gain: 1{Environment.NewLine}Rarity: Common{Environment.NewLine}";
+        
+            //act
+            _sut.InspectItem("helmet");
+        
+            //assert
+            //_mockedUI.Verify(mock => mock.AddMessage(exp), Times.Once);
+        }
+
+        [Test]
+        public void Test_Inspect_OutputsDescriptionHelmetSlot()
+        {
+            //arrange
+            Player result = new(null, 0, 0, null, null);
+            _mockedWorldService.Setup(mock => mock.GetCurrentPlayer()).Returns(result);
+            string exp = $"Default headwear, plain but good looking{Environment.NewLine}Name: Bandana{Environment.NewLine}APP gain: 1{Environment.NewLine}Rarity: Common{Environment.NewLine}";
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+                //act
+                _sut.InspectItem("helmet");
+                //assert
+                Assert.AreEqual(exp, sw.ToString());
+            }
+        }
+        
+        [Test]
+        public void Test_Inspect_OutputsDescriptionWeaponSlot()
+        {
+            //arrange
+            Player result = new(null, 0, 0, null, null);
+            _mockedWorldService.Setup(mock => mock.GetCurrentPlayer()).Returns(result);
+            string exp = $"That ain't a knoife, this is a knoife{Environment.NewLine}Type: Melee{Environment.NewLine}Rarity: Common{Environment.NewLine}Damage: Low{Environment.NewLine}Attack speed: Slow{Environment.NewLine}";
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+                //act
+                _sut.InspectItem("weapon");
+                //assert
+                Assert.AreEqual(exp, sw.ToString());
+            }
+        }
+        
+        [Test]
+        public void Test_Inspect_OutputsMessageOnEmptyArmorSlot()
+        {
+            //arrange
+            Player result = new(null, 0, 0, null, null);
+            _mockedWorldService.Setup(mock => mock.GetCurrentPlayer()).Returns(result);
+            string exp = $"No item in this inventory slot{Environment.NewLine}";
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+                //act
+                _sut.InspectItem("armor");
+                //assert
+                Assert.AreEqual(exp, sw.ToString());
+            }
+        }
+        
+        [Test]
+        public void Test_Inspect_OutputsMessageOnEmptySlot1()
+        {
+            //arrange
+            Player result = new(null, 0, 0, null, null);
+            _mockedWorldService.Setup(mock => mock.GetCurrentPlayer()).Returns(result);
+            string exp = $"No item in this inventory slot{Environment.NewLine}";
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+                //act
+                _sut.InspectItem("slot 1");
+                //assert
+                Assert.AreEqual(exp, sw.ToString());
+            }
+        }
+        
+        [Test]
+        public void Test_Inspect_OutputsMessageOnEmptySlot2()
+        {
+            //arrange
+            Player result = new(null, 0, 0, null, null);
+            _mockedWorldService.Setup(mock => mock.GetCurrentPlayer()).Returns(result);
+            string exp = $"No item in this inventory slot{Environment.NewLine}";
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+                //act
+                _sut.InspectItem("slot 2");
+                //assert
+                Assert.AreEqual(exp, sw.ToString());
+            }
+        }
+        
+        [Test]
+        public void Test_Inspect_OutputsMessageOnEmptySlot3()
+        {
+            //arrange
+            Player result = new(null, 0, 0, null, null);
+            _mockedWorldService.Setup(mock => mock.GetCurrentPlayer()).Returns(result);
+            string exp = $"No item in this inventory slot{Environment.NewLine}";
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+                //act
+                _sut.InspectItem("slot 3");
+                //assert
+                Assert.AreEqual(exp, sw.ToString());
+            }
         }
     }
 }

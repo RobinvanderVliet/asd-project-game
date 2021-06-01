@@ -53,26 +53,29 @@ namespace ActionHandling
 
         public void InspectItem(string slot)
         {
-            var inventory = _worldService.getCurrentPlayer().Inventory;
+            var inventory = _worldService.GetCurrentPlayer().Inventory;
             string output = "No item in this inventory slot";
 
-            Item inventoryItem = slot switch
+            try
             {
-                "helmet" => inventory.Helmet,
-                "armor" => inventory.Armor,
-                "weapon" => inventory.Weapon,
-                "slot 1" => inventory.ConsumableItemList[0],
-                "slot 2" => inventory.ConsumableItemList[1],
-                "slot 3" => inventory.ConsumableItemList[2],
-                _ => null
-            };
-
-
-            if (inventoryItem != null)
-            {
-                output = inventoryItem.ToString();
+                Item inventoryItem = slot switch
+                {
+                    "helmet" => inventory.Helmet,
+                    "armor" => inventory.Armor,
+                    "weapon" => inventory.Weapon,
+                    "slot 1" => inventory.ConsumableItemList[0],
+                    "slot 2" => inventory.ConsumableItemList[1],
+                    "slot 3" => inventory.ConsumableItemList[2],
+                    _ => null
+                };
+                
+                if (inventoryItem != null)
+                {
+                    output = inventoryItem.ToString();
+                }
             }
-
+            catch (ArgumentOutOfRangeException e) {}
+            
             Console.WriteLine(output);
         }
 
