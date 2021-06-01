@@ -8,6 +8,7 @@ namespace Creature.Creature.StateMachine.State
         
         public override void Do()
         {
+            //TODO implement logic
             throw new NotImplementedException();
         }
     }

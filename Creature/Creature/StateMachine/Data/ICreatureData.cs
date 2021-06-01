@@ -11,6 +11,7 @@ namespace Creature.Creature.StateMachine.Data
         int VisionRange { get; set; }
         int Damage { get; set; }
         double Health { get; set; }
+        double Stamina { get; set; }
         List<Dictionary<string, string>> RuleSet { get; }
     }
 }
