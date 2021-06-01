@@ -33,6 +33,8 @@ namespace WorldGeneration
                 player.YPosition = newYPosition;
             }
             DisplayWorld();
+            var mapAroundPlayer = _map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, _players);
+            
         }
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
