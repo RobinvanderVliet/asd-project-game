@@ -34,11 +34,10 @@ namespace WorldGeneration
             }
             else
             {
-                var player = _players.Find(x => x.Id == userId);
+                var player = GetPlayer(userId);
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
-            // DisplayWorld();
         }
         
         public void UpdateCharacterHealth(int health)
