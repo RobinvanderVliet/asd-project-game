@@ -74,7 +74,7 @@ namespace UserInterface
             for (int i = 0; i <= _height - OFFSET_TOP; i++)
             {
                 Console.SetCursorPosition(OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
-                Console.Write(new string(' ', _width));
+                Console.Write(new string(' ', _width - BORDER_SIZE));
             }
         }
         

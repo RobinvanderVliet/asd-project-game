@@ -35,6 +35,7 @@ namespace UserInterface
 
         public override void DrawScreen()
         {
+            Console.ForegroundColor = ConsoleColor.Green;
             _gameStatScreen.DrawScreen();
             _gameChatScreen.DrawScreen();
             _gameWorldScreen.DrawScreen();

@@ -24,7 +24,7 @@ namespace WorldGeneration
 
         public void DisplayWorld()
         {
-            _world.DisplayWorld();
+            //_world.DisplayWorld();
         }
         
         public void DeleteMap()
@@ -53,14 +53,14 @@ namespace WorldGeneration
                     0,
                     player.Health,
                     player.Stamina,
-                    player.Inventory.Armor.ArmorProtectionPoints + player.Inventory.Helmet.ArmorProtectionPoints,
+                    player.Inventory.Armor?.ArmorProtectionPoints ?? 0 + player.Inventory.Helmet?.ArmorProtectionPoints ?? 0,
                     player.RadiationLevel,
-                    player.Inventory.Helmet.ItemName,
-                    player.Inventory.Armor.ItemName,
-                    player.Inventory.Weapon.ItemName,
-                    player.Inventory.ConsumableItemList[0].ItemName,
-                    player.Inventory.ConsumableItemList[1].ItemName,
-                    player.Inventory.ConsumableItemList[2].ItemName
+                    player.Inventory.Helmet?.ItemName ?? "Empty",
+                    player.Inventory.Armor?.ItemName ?? "Empty",
+                    player.Inventory.Weapon?.ItemName ?? "Empty",
+                    player.Inventory.ConsumableItemList.Count >= 1 ? player.Inventory.ConsumableItemList[0].ItemName: "Empty",
+                    player.Inventory.ConsumableItemList.Count >= 2 ? player.Inventory.ConsumableItemList[1].ItemName: "Empty",
+                    player.Inventory.ConsumableItemList.Count == 3 ? player.Inventory.ConsumableItemList[2].ItemName: "Empty"
                     );
             }
         }
