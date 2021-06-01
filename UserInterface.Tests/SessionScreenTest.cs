@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Moq;
 using NUnit.Framework;
 
 namespace UserInterface.Tests
@@ -8,10 +9,18 @@ namespace UserInterface.Tests
     public class SessionScreenTest
     {
         private SessionScreen _sut;
+        private Mock<ScreenHandler> _mockedScreenHandler;
+        private Mock<ConsoleHelper> _mockedConsoleHelper;
+        
         [SetUp]
         public void Setup()
         {
             _sut = new SessionScreen();
+            _mockedScreenHandler = new Mock<ScreenHandler>();
+            _mockedConsoleHelper = new Mock<ConsoleHelper>();
+            var screenHandler = _mockedScreenHandler.Object;
+            screenHandler.ConsoleHelper = _mockedConsoleHelper.Object;
+            _sut.SetScreen(screenHandler);
         }
 
         [Test]
@@ -24,7 +33,7 @@ namespace UserInterface.Tests
             _sut.UpdateWithNewSession(sessionInfo);
             
             //Assert
-            Assert.True(_sut.SessionInfoList.Count == 1);
+            _mockedConsoleHelper.Verify(mock => mock.Write("(1) " + sessionInfo[1] + " | Created by: " + sessionInfo[2] + " | Players: " + sessionInfo[3] + "/8"), Times.Once);
         }
 
         [Test]
@@ -41,6 +50,33 @@ namespace UserInterface.Tests
             
             //Assert
             Assert.AreEqual(sessionId, returnedSessionId);
+        }
+        
+        [Test]
+        public void Test_GetSessionIdByVisualNumber_ReturnsNull()
+        {
+            //Arrange
+            var sessionsInfoList = new List<string[]>();
+            _sut.SessionInfoList = sessionsInfoList;
+            
+            //Act
+            var returnedSessionId = _sut.GetSessionIdByVisualNumber(0);
+            
+            //Assert
+            Assert.AreEqual(null, returnedSessionId);
+        }
+        
+        [Test] 
+        public void Test_DrawScreen_DrawsScreen()
+        {
+            //Arrange
+            var headerText = "There are currently 0 sessions you can join";
+
+            //Act
+            _sut.DrawScreen();
+            
+            //Assert
+            _mockedConsoleHelper.Verify(mock => mock.Write(headerText), Times.Once);
         }
     }
 }

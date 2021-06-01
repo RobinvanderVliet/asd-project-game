@@ -17,7 +17,6 @@ namespace UserInterface
         private List<string[]> _sessionsInfoList = new();
         public List<string[]> SessionInfoList
         {
-            get => _sessionsInfoList;
             set => _sessionsInfoList = value;
         }
         public override void DrawScreen()
@@ -39,12 +38,12 @@ namespace UserInterface
             foreach (var session in _sessionsInfoList)
             {
                 int position = _sessionsInfoList.IndexOf(session);
-                Console.SetCursorPosition(SESSIONS_X + 1, SESSIONS_Y + position);
-                Console.SetCursorPosition(SESSIONS_X + BORDER_SIZE / 2, SESSIONS_Y + OFFSET_TOP + position);
-                Console.Write(" ");
-                Console.SetCursorPosition(SESSIONS_X + OFFSET_LEFT, SESSIONS_Y + OFFSET_TOP + position);
-                Console.Write("(" + (position + 1) + ") " + session[1] + " | Created by: " + session[2] + " | Players: " + session[3] + "/8");
-                Console.Write(new string(' ', SCREEN_WIDTH - Console.CursorLeft - BORDER_SIZE / 2));
+                _screenHandler.ConsoleHelper.SetCursor(SESSIONS_X + 1, SESSIONS_Y + position);
+                _screenHandler.ConsoleHelper.SetCursor(SESSIONS_X + BORDER_SIZE / 2, SESSIONS_Y + OFFSET_TOP + position);
+                _screenHandler.ConsoleHelper.Write(" ");
+                _screenHandler.ConsoleHelper.SetCursor(SESSIONS_X + OFFSET_LEFT, SESSIONS_Y + OFFSET_TOP + position);
+                _screenHandler.ConsoleHelper.Write("(" + (position + 1) + ") " + session[1] + " | Created by: " + session[2] + " | Players: " + session[3] + "/8");
+                _screenHandler.ConsoleHelper.Write(new string(' ', SCREEN_WIDTH - _screenHandler.ConsoleHelper.GetCursorLeft() - BORDER_SIZE / 2));
             }
             
             DrawBox(SESSIONS_X, SESSIONS_Y, SESSIONS_WIDTH, _sessionsInfoList.Count);
