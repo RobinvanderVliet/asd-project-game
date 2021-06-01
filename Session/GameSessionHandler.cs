@@ -210,7 +210,6 @@ namespace Session
                     joinedPlayerDto.ExistingPlayer.Health,
                     joinedPlayerDto.ExistingPlayer.Stamina);
                     
-
                 _worldService.AddPlayerToWorld(player, false);
 
                 // foreach (var player in joinedPlayerDto.PlayerLocations)
@@ -226,7 +225,6 @@ namespace Session
                 //     }
                 // }
             }
-         _worldService.DisplayWorld();
         }
 
 
