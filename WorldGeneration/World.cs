@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace WorldGeneration
 {
-    public class World
+    public class World : IWorld
     {
-        private IMap _map;
+        public IMap Map { get; set; }
         public Player CurrentPlayer { get; set; }
         private List<Player> _players;
         private readonly int _viewDistance;
@@ -14,7 +14,7 @@ namespace WorldGeneration
         public World(int seed, int viewDistance, IMapFactory mapFactory)
         {
             _players = new ();
-            _map = mapFactory.GenerateMap(seed);
+            Map = mapFactory.GenerateMap(seed);
             _viewDistance = viewDistance;
             DeleteMap();
         }
@@ -48,13 +48,18 @@ namespace WorldGeneration
         {
             if (CurrentPlayer != null && _players != null)
             {
-                _map.DisplayMap(CurrentPlayer, _viewDistance, _players);
+                Map.DisplayMap(CurrentPlayer, _viewDistance, _players);
             }
         }
 
         public void DeleteMap()
         {
-            _map.DeleteMap();
+            Map.DeleteMap();
+        }
+
+        public int GetMapSeed()
+        {
+            return Map.GetMapSeed();
         }
     }
 }

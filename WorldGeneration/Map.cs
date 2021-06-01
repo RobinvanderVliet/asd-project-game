@@ -12,7 +12,7 @@ namespace WorldGeneration
     public class Map : IMap
     {
         private readonly int _chunkSize;
-        private readonly int _seed;
+        private int _seed;
         private IList<Chunk> _chunks; // NOT readonly, don't listen to the compiler
         private readonly IDatabaseService<Chunk> _chunkDBService;
         private ChunkHelper _chunkHelper;
@@ -178,5 +178,11 @@ namespace WorldGeneration
             _chunkHelper = new ChunkHelper(GetChunkForTileXAndY(x, y));
             return _chunkHelper.GetTileByWorldCoordinates(x, y);
         }
+
+        public int GetMapSeed()
+        {
+            return _seed;
+        }
+
     }
 }

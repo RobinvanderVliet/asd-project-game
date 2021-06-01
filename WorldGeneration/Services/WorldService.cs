@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace WorldGeneration
 {
+    [ExcludeFromCodeCoverage]
     public class WorldService : IWorldService
     {
         private World _world { get; set; }
