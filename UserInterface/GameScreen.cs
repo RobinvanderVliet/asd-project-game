@@ -45,6 +45,11 @@ namespace UserInterface
             _gameWorldScreen.DrawScreen();
             DrawInputBox(INPUT_X, INPUT_Y, "Insert an option");
         }
+        
+        public void RedrawInputBox()
+        {
+            DrawInputBox(INPUT_X, INPUT_Y, "Insert an option");
+        }
 
         public void ShowMessages(Queue<string> messages)
         {

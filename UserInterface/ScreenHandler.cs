@@ -38,5 +38,14 @@ namespace UserInterface
         {
             return _consoleHelper.ReadLine();
         }
+
+        public void RedrawGameInputBox()
+        {
+            if (_screen is GameScreen)
+            {
+                var gameScreen = Screen as GameScreen;
+                gameScreen.RedrawInputBox();
+            }
+        }
     }
 }

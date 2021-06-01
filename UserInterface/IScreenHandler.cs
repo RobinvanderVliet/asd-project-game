@@ -10,6 +10,7 @@ namespace UserInterface
         public ConsoleHelper ConsoleHelper { get; set; }
         public string GetScreenInput();
         public void ShowMessages(Queue<string> messages);
+        public void RedrawGameInputBox();
     }
 }
        

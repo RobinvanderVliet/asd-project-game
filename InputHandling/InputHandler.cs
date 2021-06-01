@@ -32,6 +32,7 @@ namespace InputHandling
         public void HandleGameScreenCommands()
         {
             SendCommand(GetCommand());
+            _screenHandler.RedrawGameInputBox();
         }
         private void SendCommand(string commando)
         {
