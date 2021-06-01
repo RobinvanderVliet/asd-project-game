@@ -40,20 +40,21 @@ namespace ActionHandling
         
         public void PickupItem(int index)
         {
+            // Compensate for index starting at 0.
+            index -= 1;
             IList<Item> items = _worldService.GetItemsOnCurrentTile();
 
             try
             {
-                Item item = items[index - 1];
+                Item item = items[index];
                 Console.Out.WriteLine($"Pickup index {index} {item.ItemName}");
                 InventoryDTO inventoryDTO =
                     new InventoryDTO(_clientController.GetOriginId(), InventoryType.Pickup, index);
                 SendInventoryDTO(inventoryDTO);
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (ArgumentOutOfRangeException)
             {
                 Console.WriteLine("Number is not in search list!");
-                throw;
             }
         }
 
@@ -94,6 +95,7 @@ namespace ActionHandling
                 // ✔ false => display message that item could not be picked up.
             
             Player player = _worldService.GetPlayer(inventoryDTO.UserId);
+            player.Inventory.Weapon = null; // TODO: Remove
             Item item = _worldService.GetItemsOnCurrentTile(player).ElementAt(inventoryDTO.Index);
             
             if (player.Inventory.AddItem(item))
