@@ -47,7 +47,7 @@ namespace ActionHandling
             try
             {
                 Item item = items[index];
-                Console.Out.WriteLine($"Pickup index {index} {item.ItemName}");
+                Console.Out.WriteLine($"Pickup item {item.ItemName}");
                 InventoryDTO inventoryDTO =
                     new InventoryDTO(_clientController.GetOriginId(), InventoryType.Pickup, index);
                 SendInventoryDTO(inventoryDTO);
@@ -88,14 +88,7 @@ namespace ActionHandling
 
         private HandlerResponseDTO HandlePickup(InventoryDTO inventoryDTO, bool handleInDatabase)
         {
-            // ✔ Get the player
-            // ✔ Verify if the item can be picked up? Is already checked client side. So optimistic security. 
-                // ✔ true => move item fom tile to inventory. 
-                    // if handleDatabase => update the players inventory. update the database?
-                // ✔ false => display message that item could not be picked up.
-            
             Player player = _worldService.GetPlayer(inventoryDTO.UserId);
-            player.Inventory.Weapon = null; // TODO: Remove
             Item item = _worldService.GetItemsOnCurrentTile(player).ElementAt(inventoryDTO.Index);
             
             if (player.Inventory.AddItem(item))
@@ -104,7 +97,11 @@ namespace ActionHandling
                 
                 if (handleInDatabase)
                 {
-                    
+                    DbConnection dbConnection = new DbConnection();
+                    var playerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
+
+                    PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO() {PlayerGUID = inventoryDTO.UserId, ItemName = item.ItemName};
+                    playerItemRepository.CreateAsync(playerItemPOCO);
                 }
                 
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
