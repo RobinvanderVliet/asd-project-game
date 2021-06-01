@@ -1,5 +1,8 @@
-﻿namespace Network
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Network
 {
+    [ExcludeFromCodeCoverage]
     public class PacketHeaderDTO
     {
         public string Target { get; set; }
