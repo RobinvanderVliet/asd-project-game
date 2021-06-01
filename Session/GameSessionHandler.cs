@@ -196,6 +196,19 @@ namespace Session
             }
             else
             {
+                foreach (var player in joinedPlayerDto.PlayerLocations)
+                {
+                    if (_clientController.GetOriginId() == player.Key)
+                    {
+                        _worldService.AddPlayerToWorld(
+                            new WorldGeneration.Player("gerrit", joinedPlayerDto.ExistingPlayer.XPosition,
+                                joinedPlayerDto.ExistingPlayer.YPosition,
+                                CharacterSymbol.CURRENT_PLAYER, joinedPlayerDto.ExistingPlayer.PlayerGuid,
+                                joinedPlayerDto.ExistingPlayer.Health,
+                                joinedPlayerDto.ExistingPlayer.Stamina), true);
+                    }
+                }
+
                 _worldService.AddPlayerToWorld(
                     new WorldGeneration.Player("gerrit", joinedPlayerDto.ExistingPlayer.XPosition,
                         joinedPlayerDto.ExistingPlayer.YPosition,
