@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace WorldGeneration
 {
     public class WorldService : IWorldService
@@ -32,6 +34,11 @@ namespace WorldGeneration
         public Player getCurrentPlayer()
         {
             return _world.CurrentPlayer;
+        }
+
+        public List<Player> getAllPlayers()
+        {
+            return _world._players;
         }
     }
 }

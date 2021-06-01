@@ -10,5 +10,13 @@ namespace DatabaseHandler.POCO
 
         [BsonId]
         public string ItemName { get; set; }
+
+        public string ItemType { get; set; }
+
+        public string ArmorPartType { get; set; }
+
+        public int ArmorPoints { get; set; }
     }
 }
+
+// Armor -> Armorparttype -> body of helmet

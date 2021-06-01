@@ -76,37 +76,21 @@ namespace ActionHandling
 
             if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
             {
-                var dbConnection = new DbConnection();
-
-                var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-                var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
-
-                var allPlayers = servicePlayer.GetAllAsync();
-
-                allPlayers.Wait();
-
+                var allPlayers = _worldService.getAllPlayers();
                 var PlayerResult =
-                    allPlayers.Result.Where(x =>
-                        x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition &&
-                        x.GameGuid == _clientController.SessionId);
+                    allPlayers.Where(x =>
+                        x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition);
 
-                var creatureRepository = new Repository<CreaturePOCO>(dbConnection);
-                var serviceCreature = new ServicesDb<CreaturePOCO>(creatureRepository);
-
-                var allCreatures = serviceCreature.GetAllAsync();
-
-                allCreatures.Wait();
-
-                var CreatureResult =
-                    allCreatures.Result.Where(x =>
-                        x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition &&
-                        x.GameGuid == _clientController.SessionId);
+                //var CreatureResult =
+                //    allCreatures.Where(x =>
+                //        x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition &&
+                //        x.GameGuid == _clientController.SessionId);
 
                 InsertStaminaToDatabase(attackDto);
 
                 if (PlayerResult.Any())
                 {
-                    attackDto.AttackedPlayerGuid = PlayerResult.FirstOrDefault().PlayerGuid;
+                    attackDto.AttackedPlayerGuid = PlayerResult.FirstOrDefault().Id;
                     if (attackDto.Stamina >= ATTACKSTAMINA)
                     {
                         InsertDamageToDatabase(attackDto, true);
@@ -117,12 +101,12 @@ namespace ActionHandling
                         Console.WriteLine("Insufficient stamina to perform attack action.");
                     }
                 }
-                else if (CreatureResult.Any())
-                {
-                    attackDto.AttackedPlayerGuid = CreatureResult.FirstOrDefault().CreatureGuid;
-                    InsertDamageToDatabase(attackDto, false);
-                    packet.Payload = JsonConvert.SerializeObject(attackDto);
-                }
+                //else if (CreatureResult.Any())
+                //{
+                //    attackDto.AttackedPlayerGuid = CreatureResult.FirstOrDefault().CreatureGuid;
+                //    InsertDamageToDatabase(attackDto, false);
+                //    packet.Payload = JsonConvert.SerializeObject(attackDto);
+                //}
                 else
                 {
                     if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
@@ -154,7 +138,7 @@ namespace ActionHandling
             playerRepository.UpdateAsync(player);
         }
 
-        private void InsertDamageToDatabase(AttackDTO attackDto, Boolean isPlayer)
+        private void InsertDamageToDatabase(AttackDTO attackDto, Boolean isPlayer) // both armor and health damage
         {
             if (isPlayer)
             {
@@ -163,7 +147,38 @@ namespace ActionHandling
                 var attackedPlayerRepository = new Repository<PlayerPOCO>(dbConnection);
                 var attackedPlayer = attackedPlayerRepository.GetAllAsync().Result
                     .FirstOrDefault(attackedPlayer => attackedPlayer.PlayerGuid == attackDto.AttackedPlayerGuid);
+
+                if(_worldService.getCurrentPlayer().Inventory.Armor != null && _worldService.getCurrentPlayer().Inventory.Armor.ArmorPartType == Items.ArmorStats.ArmorPartType.Helmet)
+                {
+                    var attackedPlayerHelmet = _worldService.getCurrentPlayer().Inventory.Helmet;
+                }
+                if (_worldService.getCurrentPlayer().Inventory.Armor != null && _worldService.getCurrentPlayer().Inventory.Armor.ArmorPartType == Items.ArmorStats.ArmorPartType.Body)
+                {
+
+                }
+                else
+                {
+
+                }
+
+
+
+
+
+                var attackedPlayerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
+                var attackedPlayerItem = attackedPlayerItemRepository.GetAllAsync().Result
+                    .FirstOrDefault(attackedPlayerItem => attackedPlayerItem.PlayerGUID == attackDto.AttackedPlayerGuid && attackedPlayerItem.ArmorPartType == "Helmet");
+                if (attackedPlayerItem.ArmorPoints != 0) //helm
+                {
+                    attackedPlayerItem.ArmorPoints -= attackDto.Damage;
+                    if(attackedPlayerItem.ArmorPoints <= 0)
+                    {
+                        attackedPlayerItemRepository.DeleteAsync(attackedPlayerItem);
+                    }
+                }
+
                 attackedPlayer.Health -= attackDto.Damage;
+                
                 attackedPlayerRepository.UpdateAsync(attackedPlayer);
             }
             else

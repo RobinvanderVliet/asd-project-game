@@ -7,7 +7,7 @@ namespace WorldGeneration
     {
         private Map _map;
         public Player CurrentPlayer { get; set; }
-        private List<Player> _players;
+        public List<Player> _players { get; set; }
         private readonly int _viewDistance;
 
         public World(int seed, int viewDistance)

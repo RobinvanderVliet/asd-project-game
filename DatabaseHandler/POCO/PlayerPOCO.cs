@@ -15,5 +15,6 @@ namespace DatabaseHandler.POCO
         public int Stamina { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
+
     }
 }

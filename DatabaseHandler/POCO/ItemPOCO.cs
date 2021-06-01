@@ -10,6 +10,7 @@ namespace DatabaseHandler.POCO
         [BsonId]
         public string ItemName { get; set; }
         public int ItemType { get; set; }
+        public int ArmorPoints { get; set; }
 
     }
 }
