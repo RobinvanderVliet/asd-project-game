@@ -6,5 +6,6 @@ namespace UserInterface
         public ConsoleHelper ConsoleHelper { get; set; }
         void TransitionTo(Screen screen);
         void DisplayScreen();
+        public string GetScreenInput();
     }
 }

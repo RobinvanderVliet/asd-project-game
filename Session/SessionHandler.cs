@@ -37,6 +37,11 @@ namespace Session
             _clientController.SubscribeToPacketType(this, PacketType.Session);
             _screenHandler = screenHandler;
         }
+
+        public SessionHandler()
+        {
+            
+        }
         
         public List<string[]> GetAllClients()
         {

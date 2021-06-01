@@ -43,7 +43,7 @@ namespace UserInterface
             }
         }
 
-        public void UpdateInputMessage(string message)
+        public virtual void UpdateInputMessage(string message)
         {
             DrawInputBox(INPUT_X, INPUT_Y + _options.Count, message);
         }

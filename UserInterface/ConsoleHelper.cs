@@ -35,5 +35,10 @@ namespace UserInterface
         {
             return Console.CursorTop;
         }
+
+        public virtual string ReadLine()
+        {
+            return Console.ReadLine();
+        }
     }
 }

@@ -23,5 +23,10 @@ namespace UserInterface
         {
             _screen.DrawScreen();
         }
+
+        public string GetScreenInput()
+        {
+            return _consoleHelper.ReadLine();
+        }
     }
 }

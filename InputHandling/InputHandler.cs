@@ -52,9 +52,9 @@ namespace InputHandling
 
         public virtual string GetCommand()
         {
-            return Console.ReadLine();
+            return _screenHandler.GetScreenInput();
         }
-
+        
         public void HandleStartScreenCommands()
         {
             var input = GetCommand();
@@ -77,7 +77,7 @@ namespace InputHandling
                     _screenHandler.TransitionTo(new EditorScreen());
                     break;
                 case 5:
-                    Environment.Exit(0);
+                    SendCommand("exit");
                     break;
                 default:
                     StartScreen startScreen = _screenHandler.Screen as StartScreen;
