@@ -41,6 +41,7 @@ namespace WorldGeneration
             {
                 CurrentPlayer = player;
             }
+            _players.Add(player);
         }
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
@@ -71,20 +72,24 @@ namespace WorldGeneration
         {
             foreach (var element in _players)
             {
-                if (element.Id == playerId)
+                if (element.Id.Equals(playerId))
                 {
                     CurrentPlayer = element;
+                    _players.Add(element);
+
                 }
+
             }
         }
 
-        public void SetCurrentPlayerHost(string playerId)
+        public void SetCurrentPlayerHost(string playerId, string clientId)
         {
             foreach (var element in _players)
             {
-                if (element.Id == playerId)
+                if (element.Id.Equals(playerId))
                 {
                     CurrentPlayer = element;
+                    _players.Add(element);
                 }
             }
         }

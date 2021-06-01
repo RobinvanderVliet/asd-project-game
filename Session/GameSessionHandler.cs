@@ -198,6 +198,8 @@ namespace Session
             else
             {
                 _worldService.SetCurrentPlayerHost(_clientController.GetOriginId());
+                _worldService.SetCurrentPlayerClient(joinedPlayerDto.ExistingPlayer.PlayerGuid);
+
                 // foreach (var player in joinedPlayerDto.PlayerLocations)
                 // {
                 //     if (_clientController.GetOriginId() == player.Key)
