@@ -19,9 +19,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="AgentTests\Resources\test1.txt" />
-      <EmbeddedResource Include="AgentTests\Resources\test2.txt" />
-      <EmbeddedResource Include="AgentTests\Resources\test3.txt" />
+      <EmbeddedResource Include="AgentTests\Resource\test1.txt" />
+      <EmbeddedResource Include="AgentTests\Resource\test2.txt" />
+      <EmbeddedResource Include="AgentTests\Resource\test3.txt" />
     </ItemGroup>
 
     <ItemGroup>

@@ -5,11 +5,6 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASD-Game", "ASD-Game\ASD-Game.csproj", "{A1D30E5D-DE84-44DB-A33C-0B977661150B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E7F5D569-DB03-435D-9E5F-0868DB478AA4}"
-	ProjectSection(SolutionItems) = preProject
-		Chat\Chat.cs = Chat\Chat.cs
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASD-Game.Tests", "ASD-Game.Tests\ASD-Game.Tests.csproj", "{5E549047-F485-4E50-B646-1EF85E18F360}"
 EndProject
 Global
