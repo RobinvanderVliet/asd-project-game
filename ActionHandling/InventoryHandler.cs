@@ -5,12 +5,12 @@ using ActionHandling.DTO;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
+using DatabaseHandler.Services;
 using Items;
 using Items.Consumables;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
-using DatabaseHandler.Services;
 using WorldGeneration;
 
 namespace ActionHandling
@@ -51,6 +51,7 @@ namespace ActionHandling
 
             try
             {
+                // TODO: Do checking on host.
                 Item item = items[index];
                 Console.Out.WriteLine($"Pickup item {item.ItemName}");
                 InventoryDTO inventoryDTO =
@@ -105,7 +106,7 @@ namespace ActionHandling
                     DbConnection dbConnection = new DbConnection();
                     var playerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
 
-                    PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO() {PlayerGUID = inventoryDTO.UserId, ItemName = item.ItemName};
+                    PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO {PlayerGUID = inventoryDTO.UserId, ItemName = item.ItemName};
                     playerItemRepository.CreateAsync(playerItemPOCO);
                 }
                 
