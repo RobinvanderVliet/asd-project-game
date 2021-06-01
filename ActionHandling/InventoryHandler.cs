@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ActionHandling.DTO;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
+using Items;
 using Items.Consumables;
 using Network;
 using Network.DTO;
@@ -38,6 +40,7 @@ namespace ActionHandling
         
         public void PickupItem(int index)
         {
+            IList<Item> items = _worldService.GetItemsOnCurrentTile();
             throw new NotImplementedException();
         }
 
