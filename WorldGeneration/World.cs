@@ -76,9 +76,7 @@ namespace WorldGeneration
                 {
                     CurrentPlayer = element;
                     _players.Add(element);
-
                 }
-
             }
         }
 

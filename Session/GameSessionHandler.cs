@@ -176,7 +176,14 @@ namespace Session
 
             if (_clientController.GetOriginId() == joinedPlayerDto.ExistingPlayer.PlayerGuid)
             {
-                _worldService.SetCurrentPlayerClient(joinedPlayerDto.ExistingPlayer.PlayerGuid);
+                var player = new WorldGeneration.Player("gerrit", joinedPlayerDto.ExistingPlayer.XPosition,
+                    joinedPlayerDto.ExistingPlayer.YPosition,
+                    CharacterSymbol.CURRENT_PLAYER, joinedPlayerDto.ExistingPlayer.PlayerGuid,
+                    joinedPlayerDto.ExistingPlayer.Health,
+                    joinedPlayerDto.ExistingPlayer.Stamina);
+                    
+
+                _worldService.AddPlayerToWorld(player, true);
                 // _worldService.AddPlayerToWorld(
                 //     new WorldGeneration.Player("gerrit", joinedPlayerDto.ExistingPlayer.XPosition,
                 //         joinedPlayerDto.ExistingPlayer.YPosition,
@@ -193,12 +200,18 @@ namespace Session
                 //                 CharacterSymbol.ENEMY_PLAYER, player.Key), false);
                 //     }
                 // }
-                
+
             }
             else
             {
-                _worldService.SetCurrentPlayerHost(_clientController.GetOriginId());
-                _worldService.SetCurrentPlayerClient(joinedPlayerDto.ExistingPlayer.PlayerGuid);
+                var player = new WorldGeneration.Player("gerrit", joinedPlayerDto.ExistingPlayer.XPosition,
+                    joinedPlayerDto.ExistingPlayer.YPosition,
+                    CharacterSymbol.CURRENT_PLAYER, joinedPlayerDto.ExistingPlayer.PlayerGuid,
+                    joinedPlayerDto.ExistingPlayer.Health,
+                    joinedPlayerDto.ExistingPlayer.Stamina);
+                    
+
+                _worldService.AddPlayerToWorld(player, false);
 
                 // foreach (var player in joinedPlayerDto.PlayerLocations)
                 // {
