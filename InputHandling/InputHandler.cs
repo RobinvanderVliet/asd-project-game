@@ -42,11 +42,13 @@ namespace InputHandling
             }
             catch (CommandSyntaxException e)
             {
-                Console.WriteLine(e.Message);
+                    GameScreen screen = _screenHandler.Screen as GameScreen;
+                    screen.AddMessage(e.Message);
             }
             catch (MoveException e)
             {
-                Console.WriteLine(e.Message);
+                    GameScreen screen = _screenHandler.Screen as GameScreen;
+                    screen.AddMessage(e.Message);
             }
         }
 
