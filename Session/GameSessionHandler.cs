@@ -287,8 +287,14 @@ namespace Session
                         new WorldGeneration.Player("gerrit", player.XPosition, player.YPosition,
                             CharacterSymbol.CURRENT_PLAYER, player.PlayerGuid, player.Health, player.Stamina), true);
                 }
-
+                else
+                {
+                    _worldService.AddPlayerToWorld(
+                        new WorldGeneration.Player("arie", player.XPosition, player.YPosition,
+                            CharacterSymbol.ENEMY_PLAYER, player.PlayerGuid, player.Health, player.Stamina), false);
+                }
             }
+
             _worldService.DisplayWorld();
         }
     }
