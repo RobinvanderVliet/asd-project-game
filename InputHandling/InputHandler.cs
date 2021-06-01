@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Timers;
-using Agent.GameConfiguration;
 using InputHandling.Antlr;
 using InputHandling.Exceptions;
 using Session;
+using Session.GameConfiguration;
 using UserInterface;
 using WebSocketSharp;
 

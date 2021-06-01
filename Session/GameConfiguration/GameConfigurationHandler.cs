@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using DatabaseHandler;
+using DatabaseHandler.POCO;
+using DatabaseHandler.Repository;
 using UserInterface;
 
-
-namespace Agent.GameConfiguration
+namespace Session.GameConfiguration
 {
     public class GameConfigurationHandler : IGameConfigurationHandler
     {
@@ -14,8 +17,8 @@ namespace Agent.GameConfiguration
         private readonly IScreenHandler _screenHandler;
         private readonly List<string> _configurationHeader;
         private readonly List<List<string>> _configurationChoices;
-        private MonsterDifficulty _newMonsterDifficulty;
-        private MonsterDifficulty _currentMonsterDifficulty;
+        public MonsterDifficulty NewMonsterDifficulty { get; set; }
+        public MonsterDifficulty CurrentMonsterDifficulty { get; set; }
 
         public GameConfigurationHandler(IScreenHandler screenHandler)
         {
@@ -24,8 +27,8 @@ namespace Agent.GameConfiguration
             _screenHandler = screenHandler;
             _configurationHeader = new List<string>();
             _configurationChoices = new List<List<string>>();
-            _newMonsterDifficulty = MonsterDifficulty.Medium;
-            _currentMonsterDifficulty = MonsterDifficulty.Medium;
+            NewMonsterDifficulty = MonsterDifficulty.Medium;
+            CurrentMonsterDifficulty = MonsterDifficulty.Medium;
         }
 
         public void SetGameConfiguration()
@@ -36,7 +39,7 @@ namespace Agent.GameConfiguration
             List<string> newOptions = new List<string>();
             
             //Monster difficulty
-            _configurationHeader.Add("Difficulty");
+            _configurationHeader.Add("Choose the NPC difficulty");
             newOptions = new List<string>() {"Easy", "Medium", "Hard", "Impossible"};
             _configurationChoices.Add(newOptions);
         }
@@ -51,19 +54,19 @@ namespace Agent.GameConfiguration
                 switch (userChoice)
                 {
                     case 1:
-                        _newMonsterDifficulty = MonsterDifficulty.Easy;
+                        NewMonsterDifficulty = MonsterDifficulty.Easy;
                         _nextScreen = true;
                         break;
                     case 2:
-                        _newMonsterDifficulty = MonsterDifficulty.Medium;
+                        NewMonsterDifficulty = MonsterDifficulty.Medium;
                         _nextScreen = true;
                         break;
                     case 3:
-                        _newMonsterDifficulty = MonsterDifficulty.Hard;
+                        NewMonsterDifficulty = MonsterDifficulty.Hard;
                         _nextScreen = true;
                         break;
                     case 4:
-                        _newMonsterDifficulty = MonsterDifficulty.Impossible;
+                        NewMonsterDifficulty = MonsterDifficulty.Impossible;
                         _nextScreen = true;
                         break;
                     default:
@@ -79,22 +82,22 @@ namespace Agent.GameConfiguration
             }
         }
 
-        public void SetDifficulty(MonsterDifficulty monsterDifficulty) 
+        public void SetDifficulty(MonsterDifficulty monsterDifficulty, string sessionId) 
         {
-            _currentMonsterDifficulty = _newMonsterDifficulty;
-            _newMonsterDifficulty = monsterDifficulty;
-        }
+            var dbConnection = new DbConnection();
 
-        public void SetFrequency(ItemFrequency itemFrequency)
-        {
-            //TODO
+            var gameConfigurationRepository = new Repository<GameConfigurationPOCO>(dbConnection);
+            var gameConfiguration = gameConfigurationRepository.GetAllAsync().Result.FirstOrDefault(configuration => configuration.GameGUID == sessionId);
+
+            gameConfiguration.NPCDifficultyCurrent = gameConfiguration.NPCDifficultyNew;
+            gameConfiguration.NPCDifficultyNew = (int)monsterDifficulty;
+            gameConfigurationRepository.UpdateAsync(gameConfiguration);
         }
 
         //Moet aangeroepen worden tijdens creatie monsters en bij aanpas command
         public int AdjustMonsterValue(int monsterProperty) 
         {
-            return monsterProperty / (int)_currentMonsterDifficulty * (int)_newMonsterDifficulty;
-            
+            return monsterProperty / (int)CurrentMonsterDifficulty * (int)NewMonsterDifficulty;
         }
 
         private void CheckSetupConfiguration(String input)
@@ -153,6 +156,26 @@ namespace Agent.GameConfiguration
                 SetGameConfiguration();
                 //To the next screen!
             }
+        }
+
+        public int OptionCounter 
+        {
+            get { return _optionCounter; }
+        }
+        
+        public bool NextScreen
+        {
+            get { return _nextScreen;  }
+        }
+        
+        public List<string> ConfigurationHeader
+        {
+            get { return _configurationHeader; }
+        }
+        
+        public List<List<string>> ConfigurationChoices
+        {
+            get { return _configurationChoices; }
         }
     }
 }
