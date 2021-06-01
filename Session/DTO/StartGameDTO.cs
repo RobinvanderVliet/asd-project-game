@@ -7,7 +7,7 @@ namespace Session.DTO
     [ExcludeFromCodeCoverage]
     public class StartGameDTO
     {
-        public GamePOCO GameGuid { get; set; }
+        public string GameGuid { get; set; }
         public Dictionary<string, int[]> PlayerLocations  {get; set;}
         public List<PlayerPOCO> SavedPlayers { get; set; }
 

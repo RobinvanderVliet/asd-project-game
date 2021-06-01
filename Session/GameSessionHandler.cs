@@ -119,7 +119,7 @@ namespace Session
 
             players = SetupPositionsNewPlayers(allClients, gamePOCO, servicePlayer);
 
-            startGameDTO.GameGuid = gamePOCO;
+            startGameDTO.GameGuid = gamePOCO.GameGuid;
             startGameDTO.PlayerLocations = players;
 
             return startGameDTO;
@@ -143,15 +143,13 @@ namespace Session
 
                 var tmpPlayer = new PlayerPOCO
                     {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY, GameGUIDAndPlayerGuid = gamePOCO.GameGuid + clientId};
-                var resultWait = servicePlayer.CreateAsync(tmpPlayer);
-                resultWait.Wait();
+       
 
                 playerX += 2; // spawn position + 2 each client
                 playerY += 2; // spawn position + 2 each client
             }
 
-            var help = servicePlayer.GetAllAsync();
-            help.Wait();
+    
 
             return players;
         }
@@ -231,7 +229,7 @@ namespace Session
                     var clientHistoryRepository = new Repository<ClientHistoryPoco>(tmp);
                     var tmpClientHistory = new ServicesDb<ClientHistoryPoco>(clientHistoryRepository);
                     var tmpObject = new ClientHistoryPoco()
-                        {PlayerId = player.Key, GameId = startGameDTO.GameGuid.GameGuid};
+                        {PlayerId = player.Key, GameId = startGameDTO.GameGuid};
                     tmpClientHistory.CreateAsync(tmpObject);
 
                     _worldService.AddPlayerToWorld(
