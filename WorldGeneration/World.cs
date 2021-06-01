@@ -69,10 +69,9 @@ namespace WorldGeneration
         {
             if (CurrentPlayer != null && _players != null)
             {
-                // Console.Clear();
+                Console.Clear();
                 _map.DisplayMap(CurrentPlayer, _viewDistance, new List<Character>(_players));
             }
-            
         }
 
         public void deleteMap()

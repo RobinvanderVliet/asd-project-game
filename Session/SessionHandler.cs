@@ -19,7 +19,6 @@ namespace Session
         private IClientController _clientController;
         private Session _session;
         private IHeartbeatHandler _heartbeatHandler;
-        private RelativeStatHandler test;
         private Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;
         private int _hostInactiveCounter = 0;
@@ -28,6 +27,7 @@ namespace Session
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
         private IScreenHandler _screenHandler;
+
         public SessionHandler(IClientController clientController, IScreenHandler screenHandler)
         {
             _clientController = clientController;
@@ -173,7 +173,7 @@ namespace Session
             if (!_hostActive)
             {
                 _hostInactiveCounter++;
-                // Console.WriteLine("HostInactive: " + _hostInactiveCounter);
+
                 if (_hostInactiveCounter >= 5)
                 {
                     _hostPingTimer.Dispose();
