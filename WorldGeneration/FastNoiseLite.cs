@@ -50,6 +50,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using WorldGeneration.Models.Interfaces;
+
 // Switch between using floats or doubles for input position
 
 //using FNLfloat = System.Double;
@@ -57,7 +59,7 @@ using System.Runtime.CompilerServices;
 namespace WorldGeneration
 {
     [ExcludeFromCodeCoverage]
-    public class FastNoiseLite
+    public class FastNoiseLite : IFastNoise
     {
         public enum CellularDistanceFunction
         {
