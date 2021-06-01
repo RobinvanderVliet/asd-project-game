@@ -117,7 +117,7 @@ namespace ActionHandling
             var dbConnection = new DbConnection();
 
             var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var player = playerRepository.GetAllAsync().Result.Where(x => x.GameGuid.GameGuid == _clientController.SessionId).FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId);
+            var player = playerRepository.GetAllAsync().Result.Where(x => x.GameGuid == _clientController.SessionId).FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId);
 
             player.XPosition = moveDTO.XPosition;
             player.YPosition = moveDTO.YPosition;
