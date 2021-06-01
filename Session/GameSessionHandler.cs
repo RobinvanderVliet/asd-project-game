@@ -199,11 +199,13 @@ namespace Session
         private void HandleStartGameSession(StartGameDTO startGameDTO)
         {
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
-
+            
             if (_sessionHandler.GameStarted())
             {
                 AddPlayerToGameSession(startGameDTO);
-            } else  if (_sessionHandler.GetSavedGame())
+            } else
+            
+            if (_sessionHandler.GetSavedGame())
             {
                 AddPlayerToWorldSavedGame(startGameDTO.SavedPlayers);
             }
@@ -239,6 +241,8 @@ namespace Session
                             CharacterSymbol.ENEMY_PLAYER, player.Key), false);
                 }
             }
+            _worldService.DisplayWorld();
+
         }
 
         private void AddPlayerToWorldSavedGame(List<PlayerPOCO> savedPlayers)
@@ -258,6 +262,9 @@ namespace Session
                             CharacterSymbol.ENEMY_PLAYER, player.PlayerGuid, player.Health, player.Stamina), true);
                 }
             }
+            _worldService.DisplayWorld();
+
         }
+        
     }
 }
