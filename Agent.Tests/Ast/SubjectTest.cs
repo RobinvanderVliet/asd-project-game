@@ -1,9 +1,9 @@
-﻿using Agent.Antlr.Ast.Comparables;
+﻿using System.Diagnostics.CodeAnalysis;
+using Agent.Antlr.Ast.Comparables;
 using Agent.Antlr.Ast.Comparables.Subjects;
 using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
 
-namespace Agent.Tests.ast
+namespace Agent.Tests.Ast
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]

@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using DatabaseHandler.Poco;
 using DatabaseHandler.Repository;
 using LiteDB;
 using Microsoft.Extensions.Logging;
@@ -46,9 +44,7 @@ namespace DatabaseHandler.Services
                 throw;
             }
         }
-
-
-
+        
         public Task<int> DeleteAsync(T obj)
         {
             try

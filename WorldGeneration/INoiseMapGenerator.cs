@@ -1,4 +1,4 @@
-using DataTransfer.Model.World;
+using WorldGeneration.Models;
 
 namespace WorldGeneration
 {

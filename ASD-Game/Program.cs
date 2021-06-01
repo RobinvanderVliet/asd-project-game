@@ -7,15 +7,15 @@ using System.IO;
 using DatabaseHandler;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using WorldGeneration;
-using Player;
+using ActionHandling;
 using Chat;
-using Player.Services;
+using InputHandling;
+using InputHandling.Antlr;
+using InputHandling.Antlr.Transformer;
 using Network;
-using Player.ActionHandlers;
 using Session;
-using Player.Model;
+using UserInterface;
 
 namespace ASD_project
 {
@@ -40,12 +40,6 @@ namespace ASD_project
                 .ConfigureServices((context, services) =>
                 {
                     services.AddTransient<IMainGame, MainGame>();
-                    services.AddScoped<IPlayerService, PlayerService>();
-                    services.AddScoped<IPlayerModel, PlayerModel>();
-                    services.AddScoped<IInventory, Inventory>();
-                    services.AddScoped<IItem, Item>();
-                    services.AddScoped<IBitcoin, Bitcoin>();
-                    services.AddScoped<IRadiationLevel, RadiationLevel>();
                     services.AddScoped<INetworkComponent, NetworkComponent>();
                     services.AddScoped<IClientController, ClientController>();
                     services.AddScoped<IChatHandler, ChatHandler>();
@@ -53,8 +47,12 @@ namespace ASD_project
                     services.AddScoped<IMoveHandler, MoveHandler>();
                     services.AddScoped<IWorldService, WorldService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
-                    services.AddSingleton<IDbConnection, DbConnection>();
+                    services.AddSingleton<IDBConnection, DBConnection>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+                    services.AddScoped<IScreenHandler, ScreenHandler>();
+                    services.AddScoped<IInputHandler, InputHandler>();
+                    services.AddScoped<IPipeline, Pipeline>();
+                    services.AddScoped<IEvaluator, Evaluator>();
                     services.AddScoped(typeof(IDatabaseService<>), typeof(DatabaseService<>));
                 })
                 .UseSerilog()

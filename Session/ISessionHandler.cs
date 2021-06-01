@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Session.DTO;
 
 namespace Session
@@ -8,8 +8,8 @@ namespace Session
         public bool JoinSession(string sessionId);
         public bool CreateSession(string sessionName);
         public void RequestSessions();
-        public void StartSession(string messageValue);
-        public StartGameDto SetupGameHost();
+        public void SendHeartbeat();
         public int GetSessionSeed();
+        public List<string> GetAllClients();
     }
 }

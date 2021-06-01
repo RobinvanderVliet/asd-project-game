@@ -1,16 +1,14 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using DatabaseHandler.Services;
-using DataTransfer.Model.World;
 using Display;
+using WorldGeneration.Models;
 
 namespace WorldGeneration
 {
     public class MapFactory: IMapFactory
-
     {
         [ExcludeFromCodeCoverage]
-        
         public IMap GenerateMap(int seed = 0)
         {
             return GenerateMap(8, seed);
@@ -26,8 +24,7 @@ namespace WorldGeneration
                 seed = GenerateSeed();
             }
 
-            return new Map(new NoiseMapGenerator(), chunkSize, seed, new DatabaseService<Chunk>(),
-                new ConsolePrinter());
+            return new Map(new NoiseMapGenerator(), chunkSize, seed, new ConsolePrinter(), new DatabaseService<Chunk>());
         }
 
         public int GenerateSeed()
