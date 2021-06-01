@@ -5,14 +5,10 @@ namespace Creature.Creature.StateMachine.State
 {
     public class IdleState : CreatureState
     {
-        public IdleState(ICreatureData creatureData) : base(creatureData)
+        public void Do()
         {
-            _creatureData = creatureData;
-        }
-
-        public override void Do(ICreatureData creatureData)
-        {
-            throw new NotImplementedException();
+            //TODO implement State functions
+            // Do Nothing.
         }
     }
 }
