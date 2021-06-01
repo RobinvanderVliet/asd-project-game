@@ -149,14 +149,15 @@ namespace ActionHandling
                     .FirstOrDefault(attackedPlayer => attackedPlayer.PlayerGuid == attackDto.AttackedPlayerGuid);
 
                 var attackedPlayerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
-                PlayerItemPOCO attackedPlayerItem;
+                //PlayerItemPOCO attackedPlayerItem;
 
                 if (_worldService.getCurrentPlayer().Inventory.Helmet != null)
                 {
                     var attackedPlayerHelmet = _worldService.getCurrentPlayer().Inventory.Helmet;
                     var helmetPoints = attackedPlayerHelmet.ArmorProtectionPoints;
 
-                    attackedPlayerItem = attackedPlayerItemRepository.GetAllAsync().Result
+                    var attt = attackedPlayerItemRepository.GetAllAsync();
+                   var attackedPlayerItem = attackedPlayerItemRepository.GetAllAsync().Result
                         .FirstOrDefault(attackedPlayerItem => attackedPlayerItem.PlayerGUID == attackDto.PlayerGuid &&
                                                               attackedPlayerItem.ItemName ==
                                                               attackedPlayerHelmet.ItemName);
@@ -177,13 +178,12 @@ namespace ActionHandling
                 {
                     var attackedPlayerBodyArmor = _worldService.getCurrentPlayer().Inventory.Armor;
                     var bodyArmorPoints = attackedPlayerBodyArmor.ArmorProtectionPoints;
-                    attackedPlayerItem = attackedPlayerItemRepository.GetAllAsync().Result
+                    var attackedPlayerItem = attackedPlayerItemRepository.GetAllAsync().Result
                         .FirstOrDefault(attackedPlayerItem => attackedPlayerItem.PlayerGUID == attackDto.PlayerGuid &&
                                                               attackedPlayerItem.ItemName ==
                                                               attackedPlayerBodyArmor.ItemName);
                     if (bodyArmorPoints - attackDto.Damage <= 0 && bodyArmorPoints != 0)
                     {
-                        attackDto.Damage -= attackedPlayerItem.ArmorPoints;
                         attackedPlayerItemRepository.DeleteAsync(attackedPlayerItem);
                     }
                     else

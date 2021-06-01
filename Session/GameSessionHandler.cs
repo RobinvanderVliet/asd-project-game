@@ -4,6 +4,9 @@ using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
+using Items;
+using Items.ArmorStats;
+using Items.WeaponStats;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
@@ -19,7 +22,7 @@ namespace Session
         private IClientController _clientController;
         private ISessionHandler _sessionHandler;
         private IWorldService _worldService;
-        
+
         public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler)
         {
             _clientController = clientController;
@@ -40,6 +43,8 @@ namespace Session
 
             var playerRepository = new Repository<PlayerPOCO>(dbConnection);
             var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
+            var playerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
+            var playerItemService = new ServicesDb<PlayerItemPOCO>(playerItemRepository);
             var gameRepository = new Repository<GamePOCO>(dbConnection);
             var gameService = new ServicesDb<GamePOCO>(gameRepository);
 
@@ -61,6 +66,16 @@ namespace Session
                 var tmpPlayer = new PlayerPOCO
                     {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
                 servicePlayer.CreateAsync(tmpPlayer);
+                var playerBodyArmor = new PlayerItemPOCO()
+                {
+                    PlayerGUID = clientId, ItemName = ItemFactory.GetBandana().ItemName, ArmorPoints = ItemFactory.GetBandana().ArmorProtectionPoints, ArmorPartType = ItemFactory.GetBandana().ArmorPartType
+                };
+                var playerHelmet = new PlayerItemPOCO(){
+                    PlayerGUID = clientId, ItemName = ItemFactory.GetKnife().ItemName, Damage = (int) ItemFactory.GetKnife().Damage
+                };
+                playerItemService.CreateAsync(playerBodyArmor);
+                playerItemService.CreateAsync(playerHelmet);
+                
 
                 playerX += 2; // spawn position + 2 each client
                 playerY += 2; // spawn position + 2 each client
