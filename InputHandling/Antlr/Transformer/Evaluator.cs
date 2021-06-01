@@ -1,12 +1,14 @@
 using System;
 using ActionHandling;
-using Agent.GameConfiguration;
 using Chat;
 using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Exceptions;
 using Network;
+using Newtonsoft.Json;
 using Session;
+using Session.DTO;
+using Session.GameConfiguration;
 using ItemFrequency = InputHandling.Antlr.Ast.Actions.ItemFrequency;
 using MonsterDifficulty = InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
@@ -18,20 +20,18 @@ namespace InputHandling.Antlr.Transformer
         private IMoveHandler _moveHandler;
         private IGameSessionHandler _gameSessionHandler;
         private IChatHandler _chatHandler;
-        private IGameConfigurationHandler _configurationHandler;
         private IClientController _clientController;
         
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private String _commando;
 
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IGameConfigurationHandler configurationHandler, IClientController clientController)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IClientController clientController)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
             _gameSessionHandler = gameSessionHandler;
             _chatHandler = chatHandler;
-            _configurationHandler = configurationHandler;
             _clientController = clientController;
         }
         public void Apply(AST ast)
@@ -183,42 +183,63 @@ namespace InputHandling.Antlr.Transformer
                 return;
             }
 
+            int difficulty = -1;
             switch (monster.Difficulty)
             {
                 case "easy":
-                    _configurationHandler.SetDifficulty(Agent.GameConfiguration.MonsterDifficulty.Easy);
+                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Easy;
                     break;
                 case "medium":
-                    _configurationHandler.SetDifficulty(Agent.GameConfiguration.MonsterDifficulty.Medium);
+                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Medium;
                     break;
                 case "hard":
-                    _configurationHandler.SetDifficulty(Agent.GameConfiguration.MonsterDifficulty.Hard);
+                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Hard;
                     break;
                 case "impossible":
-                    _configurationHandler.SetDifficulty(Agent.GameConfiguration.MonsterDifficulty.Impossible);
+                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Impossible;
                     break;
             }
+
+            SessionDTO sessionDto = new SessionDTO
+            {
+                SessionType = SessionType.EditMonsterDifficulty,
+                Name = difficulty.ToString()
+            };
+            SendPayload(sessionDto);
         }
 
-        private void TransformItemFrequency(ItemFrequency monster)
+        private void TransformItemFrequency(ItemFrequency itemFrequency)
         {
             if (!_clientController.IsHost())
             {
                 return;
             }
             
-            switch (monster.Frequency) 
+            int frequency = -1;
+            switch (itemFrequency.Frequency)
             {
                 case "low":
-                    _configurationHandler.SetFrequency(Agent.GameConfiguration.ItemFrequency.Low);
+                    frequency = (int) ItemSpawnRate.Low;
                     break;
                 case "medium":
-                    _configurationHandler.SetFrequency(Agent.GameConfiguration.ItemFrequency.Medium);
+                    frequency = (int) ItemSpawnRate.Medium;
                     break;
                 case "high":
-                    _configurationHandler.SetFrequency(Agent.GameConfiguration.ItemFrequency.High);
+                    frequency = (int) ItemSpawnRate.High;
                     break;
             }
+            SessionDTO sessionDto = new SessionDTO
+            {
+                SessionType = SessionType.EditItemFrequency,
+                Name = frequency.ToString()
+            };
+            SendPayload(sessionDto);
+        }
+
+        private void SendPayload(SessionDTO sessionDto)
+        {
+            var jsonObject = JsonConvert.SerializeObject(sessionDto);
+            _clientController.SendPayload(jsonObject, PacketType.Session);
         }
     }
 }

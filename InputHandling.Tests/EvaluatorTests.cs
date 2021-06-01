@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using ActionHandling;
-using Agent.GameConfiguration;
 using Chat;
 using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
@@ -8,8 +7,11 @@ using InputHandling.Antlr.Transformer;
 using InputHandling.Exceptions;
 using Moq;
 using Network;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using Session;
+using Session.DTO;
+using Session.GameConfiguration;
 using ItemFrequency = InputHandling.Antlr.Ast.Actions.ItemFrequency;
 using MonsterDifficulty = InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
@@ -23,7 +25,6 @@ namespace InputHandling.Tests
         private Mock<IMoveHandler> _mockedMoveHandler;
         private Mock<IGameSessionHandler> _mockedGameSessionHandler;
         private Mock<IChatHandler> _mockedChatHandler;
-        private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
         private Mock<IClientController> _mockedClientController;
     
         [SetUp]
@@ -33,9 +34,8 @@ namespace InputHandling.Tests
             _mockedMoveHandler = new Mock<IMoveHandler>();
             _mockedGameSessionHandler = new Mock<IGameSessionHandler>();
             _mockedChatHandler = new Mock<IChatHandler>();
-            _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
             _mockedClientController = new Mock<IClientController>();
-            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedGameConfigurationHandler.Object, _mockedClientController.Object);
+            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedClientController.Object);
         }
     
         [Test]
@@ -212,13 +212,20 @@ namespace InputHandling.Tests
             // Arrange
             var ast = MonsterDifficultyAst(difficulty);
             _mockedClientController.Setup(x => x.IsHost()).Returns(true);
+            _mockedClientController.Setup(x => x.SendPayload(It.IsAny<string>(), It.IsAny<PacketType>()));
         
             // Act
             _sut.Apply(ast);
         
             // Assert
+            SessionDTO sessionDto = new SessionDTO
+            {
+                SessionType = SessionType.EditMonsterDifficulty,
+                Name = GetDifficulty(difficulty).ToString()
+            };
+            var jsonObject = JsonConvert.SerializeObject(sessionDto);
             _mockedClientController.Verify(mock => mock.IsHost(), Times.Once);
-            _mockedGameConfigurationHandler.Verify(mock => mock.SetDifficulty(GetDifficulty(difficulty)), Times.Once);
+            _mockedClientController.Verify(mock => mock.SendPayload(jsonObject, PacketType.Session), Times.Once);
         }
         
         [TestCase("easy")]
@@ -237,7 +244,7 @@ namespace InputHandling.Tests
         
             // Assert
             _mockedClientController.Verify(mock => mock.IsHost(), Times.Once);
-            _mockedGameConfigurationHandler.Verify(mock => mock.SetDifficulty(It.IsAny<Agent.GameConfiguration.MonsterDifficulty>()), Times.Never);
+            _mockedClientController.Verify(mock => mock.SendPayload(It.IsAny<string>(), It.IsAny<PacketType>()), Times.Never);
         }
     
         private static AST MonsterDifficultyAst(string difficulty)
@@ -247,13 +254,12 @@ namespace InputHandling.Tests
             return new AST(monster);
         }
 
-        private static Agent.GameConfiguration.MonsterDifficulty GetDifficulty(string difficulty) => difficulty switch
+        private static int GetDifficulty(string difficulty) => difficulty switch
         {
-            "easy" => Agent.GameConfiguration.MonsterDifficulty.Easy,
-            "medium" => Agent.GameConfiguration.MonsterDifficulty.Medium,
-            "hard" => Agent.GameConfiguration.MonsterDifficulty.Hard,
-            "impossible" => Agent.GameConfiguration.MonsterDifficulty.Impossible,
-            _ => Agent.GameConfiguration.MonsterDifficulty.Easy
+            "easy" => (int)Session.GameConfiguration.MonsterDifficulty.Easy,
+            "medium" => (int)Session.GameConfiguration.MonsterDifficulty.Medium,
+            "hard" => (int)Session.GameConfiguration.MonsterDifficulty.Hard,
+            _ => (int)Session.GameConfiguration.MonsterDifficulty.Impossible
         };
         
         [TestCase("low")]
@@ -270,8 +276,14 @@ namespace InputHandling.Tests
             _sut.Apply(ast);
         
             // Assert
+            SessionDTO sessionDto = new SessionDTO
+            {
+                SessionType = SessionType.EditItemFrequency,
+                Name = GetFrequency(frequency).ToString()
+            };
+            var jsonObject = JsonConvert.SerializeObject(sessionDto);
             _mockedClientController.Verify(mock => mock.IsHost(), Times.Once);
-            _mockedGameConfigurationHandler.Verify(mock => mock.SetFrequency(GetFrequency(frequency)), Times.Once);
+            _mockedClientController.Verify(mock => mock.SendPayload(jsonObject, PacketType.Session), Times.Once);
         }
         
         [TestCase("low")]
@@ -289,7 +301,7 @@ namespace InputHandling.Tests
         
             // Assert
             _mockedClientController.Verify(mock => mock.IsHost(), Times.Once);
-            _mockedGameConfigurationHandler.Verify(mock => mock.SetFrequency(It.IsAny<Agent.GameConfiguration.ItemFrequency>()), Times.Never);
+            _mockedClientController.Verify(mock => mock.SendPayload(It.IsAny<string>(), It.IsAny<PacketType>()), Times.Never);
         }
     
         private static AST ItemFrequencyAst(string frequency)
@@ -299,12 +311,11 @@ namespace InputHandling.Tests
             return new AST(monster);
         }
 
-        private static Agent.GameConfiguration.ItemFrequency GetFrequency(string frequency) => frequency switch
+        private static int GetFrequency(string frequency) => frequency switch
         {
-            "low" => Agent.GameConfiguration.ItemFrequency.Low,
-            "medium" => Agent.GameConfiguration.ItemFrequency.Medium,
-            "high" => Agent.GameConfiguration.ItemFrequency.High,
-            _ => Agent.GameConfiguration.ItemFrequency.Low
+            "low" => (int)ItemSpawnRate.Low,
+            "medium" => (int)ItemSpawnRate.Medium,
+            _ => (int)ItemSpawnRate.High
         };
 
     }

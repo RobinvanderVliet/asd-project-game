@@ -7,6 +7,8 @@ namespace Session
         RequestToJoinSession,
         SendPing,
         ReceivedPingResponse,
-        SendHeartbeat
+        SendHeartbeat,
+        EditMonsterDifficulty,
+        EditItemFrequency
     }
 }

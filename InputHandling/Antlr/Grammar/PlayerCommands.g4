@@ -25,7 +25,7 @@ JOIN_SESSION : 'join_session';
 REQUEST_SESSIONS : 'request_sessions';
 START_SESSION : 'start_session';
 SET_MONSTER_DIFFICULTY : 'monster_difficulty';
-SET_ITEM_FREQUENCY : 'item_frequency';
+SET_ITEM_FREQUENCY : 'item_spawn_rate';
 
 FORWARD: 'forward';
 UP: 'up';
