@@ -127,10 +127,7 @@ namespace ActionHandling
             selectedPlayer.YPosition = moveDTO.YPosition;
             var  insert = playerRepository.UpdateAsync(selectedPlayer);
             insert.Wait();
-            var help = playerRepository.GetAllAsync();
-            help.Wait();
-            Console.WriteLine("ghf");
-
+   
         }
 
         private void HandleMove(MoveDTO moveDTO)
