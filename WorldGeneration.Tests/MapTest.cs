@@ -22,7 +22,6 @@ namespace WorldGeneration.Tests
         //Declaration and initialisation of constant variables
  
         //Declaration of variables
-        private int _seed;
         private int _chunkSize;
         private List<Player> _mapCharacterDTOList;
         private Player _mapCharacter1DTO;
@@ -43,7 +42,6 @@ namespace WorldGeneration.Tests
         public void Setup()
         {
             //Initialisation of variables
-            _seed = 5;
             _chunkSize = 2;
             
             var map1 = new ITile[] {new GrassTile(1,1), new GrassTile(1,2), new GrassTile(1,3), new GrassTile(1,4)};
@@ -59,12 +57,12 @@ namespace WorldGeneration.Tests
 
             //Initialisation of mocks
             _noiseMapGeneratorMock = new Mock<INoiseMapGenerator>();
-            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(0,0, 2, _seed)).Returns(chunk1).Verifiable();
-            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(-1,0, 2, _seed)).Returns(chunk2).Verifiable();
-            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(0,-1, 2, _seed)).Returns(chunk3).Verifiable();
-            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(-1,-1, 2, _seed)).Returns(chunk4).Verifiable();
-            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(It.IsAny<int>(),It.IsAny<int>(), 2, _seed))
-                .Returns((int x, int y, int size, int seed) => new Chunk(x, y, map5, _chunkSize)).Verifiable();
+            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(0,0, 2)).Returns(chunk1).Verifiable();
+            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(-1,0, 2)).Returns(chunk2).Verifiable();
+            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(0,-1, 2)).Returns(chunk3).Verifiable();
+            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(-1,-1, 2)).Returns(chunk4).Verifiable();
+            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(It.IsAny<int>(),It.IsAny<int>(), 2))
+                .Returns((int x, int y, int size) => new Chunk(x, y, map5, _chunkSize)).Verifiable();
             _noiseMapGeneratorMockObject = _noiseMapGeneratorMock.Object;
             
             _databaseServiceMock = new Mock<IDatabaseService<Chunk>>();
@@ -86,7 +84,7 @@ namespace WorldGeneration.Tests
             _mapCharacterDTOList.Add(_mapCharacter1DTO);
             _mapCharacterDTOList.Add(_mapCharacter2DTO);
             
-            _sut = new Map(_noiseMapGeneratorMockObject, _chunkSize, _seed, _consolePrinterMockObject, _databaseServiceMockObject);
+            _sut = new Map(_noiseMapGeneratorMockObject, _chunkSize, _consolePrinterMockObject, _databaseServiceMockObject);
         }
         
         [Test]
@@ -97,7 +95,7 @@ namespace WorldGeneration.Tests
             //Assert ---------
             Assert.DoesNotThrow(() =>
             {
-                var map = new Map(_noiseMapGeneratorMockObject,21,51, _consolePrinterMockObject, _databaseServiceMockObject, _chunks);
+                var map = new Map(_noiseMapGeneratorMockObject,21, _consolePrinterMockObject, _databaseServiceMockObject, _chunks);
             });
         }
         
@@ -155,7 +153,7 @@ namespace WorldGeneration.Tests
             //Assert ---------
             Assert.Throws<InvalidOperationException>(() =>
             {
-                var map = new Map(_noiseMapGeneratorMockObject,-21,51, _consolePrinterMockObject, _databaseServiceMockObject, _chunks);
+                var map = new Map(_noiseMapGeneratorMockObject,-21, _consolePrinterMockObject, _databaseServiceMockObject, _chunks);
             });
         }
         

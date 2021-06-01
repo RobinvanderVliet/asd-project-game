@@ -12,7 +12,6 @@ namespace WorldGeneration
     public class Map : IMap
     {
         private readonly int _chunkSize;
-        private int _seed;
         private IList<Chunk> _chunks; // NOT readonly, don't listen to the compiler
         private readonly IDatabaseService<Chunk> _chunkDBService;
         private ChunkHelper _chunkHelper;
@@ -24,7 +23,6 @@ namespace WorldGeneration
         public Map(
             INoiseMapGenerator noiseMapGenerator
             , int chunkSize
-            , int seed
             , IConsolePrinter consolePrinter
             , IDatabaseService<Chunk> chunkDbServices
             , IList<Chunk> chunks = null
@@ -36,7 +34,6 @@ namespace WorldGeneration
             }
             _chunkSize = chunkSize;
             _chunks = chunks ?? new List<Chunk>();
-            _seed = seed;
             _noiseMapGenerator = noiseMapGenerator;
             _chunkDBService = chunkDbServices;
             _consolePrinter = consolePrinter;
@@ -152,7 +149,7 @@ namespace WorldGeneration
 
         private Chunk GenerateNewChunk(int chunkX, int chunkY)
         {
-            var chunk = _noiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize, _seed);
+            var chunk = _noiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize);
             _chunkDBService.CreateAsync(chunk);
             return chunk;
         }
