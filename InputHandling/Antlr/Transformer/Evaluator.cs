@@ -85,11 +85,19 @@ namespace InputHandling.Antlr.Transformer
                         break;
                     case Inspect:
                         TransformInspect((Inspect)nodeBody[i]);
+                        break;    
+                    case Use:
+                        TransformUse((Use)nodeBody[i]);
                         break;
                     case Search:
                         TransformSearch();
                         break;
                 }
+        }
+
+        private void TransformUse(Use use)
+        {
+            _inventoryHandler.UseItem(use.Step.StepValue);
         }
 
         private void TransformMove(Move move)

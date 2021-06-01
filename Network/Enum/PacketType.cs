@@ -6,7 +6,6 @@
         Move,
         Session,
         GameSession,
-        Inventory,
-        
+        Inventory,        
     }
 }

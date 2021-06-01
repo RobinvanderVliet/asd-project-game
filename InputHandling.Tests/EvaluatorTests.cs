@@ -125,13 +125,33 @@ namespace InputHandling.Tests
             _mockedSessionHandler.Verify(mockedSession => mockedSession.RequestSessions(), Times.Once);
         }
     
+        private static AST SearchAst()
+        {
+            Input search = new Input();
+            search.AddChild(new Search());
+            return new AST(search);
+        }
+
+        [Test]
+        public void Test_Apply_SearchActionIsCalled()
+        {
+            // Arrange
+            var ast = SearchAst();
+
+            // Act
+            _sut.Apply(ast);
+
+            // Assert
+            _mockedInventoryHandler.Verify(mock => mock.Search(), Times.Once);
+        }
+
         private static AST RequestSessionsAst()
         {
             Input requestSessions = new Input();
             requestSessions.AddChild(new RequestSessions());
             return new AST(requestSessions);
         }
-    
+
         [Test]
         public void Test_Apply_HandleCreateSessionActionIsCalled()
         {
