@@ -50,8 +50,11 @@ namespace UserInterface
 
         public void UpdateWorld(char[,] map)
         {
-            var gameScreen = Screen as GameScreen;
-            gameScreen.UpdateWorld(map);
+            if (_screen is GameScreen)
+            {
+                var gameScreen = Screen as GameScreen;
+                gameScreen.UpdateWorld(map);
+            }
         }
 
         public void SetStatValues(string name, int score, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree)

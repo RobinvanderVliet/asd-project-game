@@ -35,7 +35,13 @@ namespace UserInterface
             _gameStatScreen = new GameStatScreen(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
             _gameChatScreen = new GameChatScreen(CHAT_X, CHAT_Y, CHAT_WIDTH, CHAT_HEIGHT);
             _gameWorldScreen = new GameWorldScreen(WORLD_X, WORLD_Y, WORLD_WITDH, WORLD_HEIGHT);
+        }
 
+        public void setScreens(GameStatScreen gameStatScreen, GameChatScreen gameChatScreen, GameWorldScreen gameWorldScreen)
+        {
+            _gameStatScreen = gameStatScreen;
+            _gameChatScreen = gameChatScreen;
+            _gameWorldScreen = gameWorldScreen;
         }
 
         public override void DrawScreen()
@@ -43,7 +49,7 @@ namespace UserInterface
             _gameStatScreen.SetScreen(_screenHandler);
             _gameChatScreen.SetScreen(_screenHandler);
             _gameWorldScreen.SetScreen(_screenHandler);
-            Console.ForegroundColor = ConsoleColor.Green;
+            _screenHandler.ConsoleHelper.SetColorToGreen();
             _gameStatScreen.DrawScreen();
             _gameChatScreen.DrawScreen();
             _gameWorldScreen.DrawScreen();
@@ -62,10 +68,7 @@ namespace UserInterface
 
         public void UpdateWorld(char[,] newMap)
         {
-            if (_screenHandler.Screen is GameScreen)
-            {
-                _gameWorldScreen.UpdateWorld(newMap);
-            }
+            _gameWorldScreen.UpdateWorld(newMap);
         }
 
         public void SetStatValues(string name, int score, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree)

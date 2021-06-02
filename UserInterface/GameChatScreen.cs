@@ -22,6 +22,11 @@ namespace UserInterface
             _height = height;
         }
 
+        public GameChatScreen()
+        {
+
+        }
+
         public override void DrawScreen()
         {
             DrawChatBox();          
@@ -95,7 +100,7 @@ namespace UserInterface
             DrawMessages();
         }*/
 
-        public void ShowMessages(Queue<string> messages)
+        public virtual void ShowMessages(Queue<string> messages)
         {
             Queue<string> messageQueue = new Queue<string>();
             int messageCount = messages.Count;

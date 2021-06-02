@@ -90,7 +90,6 @@ namespace Session
                 {
                     // add name to players
                     _worldService.AddPlayerToWorld(new WorldGeneration.Player("gerrit", player.Value[0], player.Value[1], CharacterSymbol.CURRENT_PLAYER, player.Key), true);
-                    _worldService.UpdatePlayerStatScreen();
                 } 
                 else 
                 {

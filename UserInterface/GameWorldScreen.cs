@@ -21,6 +21,10 @@ namespace UserInterface
             _height = height;
             _map = new char[height, height];
         }
+        public GameWorldScreen()
+        {
+
+        }
 
         public override void DrawScreen()
         {
@@ -62,7 +66,7 @@ namespace UserInterface
         }
         
 
-        public void UpdateWorld(char[,] newMap)
+        public virtual void UpdateWorld(char[,] newMap)
         {
             _map = newMap;
             DrawWorld();
