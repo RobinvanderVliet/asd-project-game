@@ -97,7 +97,7 @@ namespace ActionHandling.Tests
 
         [Test]
         [TestCaseSource(typeof(HandlesPickupPacketCases))]
-        public void Test_HandlePacket_HandlesPickupPacket(InventoryDTO inventoryDTO, HandlerResponseDTO expectedHandlerResponseDTO, bool filledInventory, bool asHost)
+        public void Test_HandlePacket_HandlesPickupPacket(InventoryDTO inventoryDTO, HandlerResponseDTO expectedHandlerResponseDTO, bool filledInventory, bool asHost, Item itemToAdd)
         {
             // Arrange
             string payload = JsonConvert.SerializeObject(inventoryDTO);
@@ -109,12 +109,17 @@ namespace ActionHandling.Tests
 
             Player player = new Player("henk", 0, 0, "#", inventoryDTO.UserId);
             IList<Item> items = new List<Item>();
-            items.Add(ItemFactory.GetBandage());
+            items.Add(itemToAdd);
             if (filledInventory)
             {
                 player.Inventory.AddConsumableItem(ItemFactory.GetBandage());
                 player.Inventory.AddConsumableItem(ItemFactory.GetBandage());
                 player.Inventory.AddConsumableItem(ItemFactory.GetBandage());
+            }
+
+            if (itemToAdd is Armor)
+            {
+                player.Inventory.Helmet = null;
             }
 
             _mockedWorldService.Setup(mock => mock.GetPlayer(inventoryDTO.UserId)).Returns(player);
@@ -146,7 +151,17 @@ namespace ActionHandling.Tests
                     new InventoryDTO("userid", InventoryType.Pickup, 0),
                     new HandlerResponseDTO(SendAction.SendToClients, null),
                     false,
-                    true
+                    true,
+                    ItemFactory.GetBandana()
+                };
+                // Happy path
+                yield return new object[]
+                {
+                    new InventoryDTO("userid", InventoryType.Pickup, 0),
+                    new HandlerResponseDTO(SendAction.SendToClients, null),
+                    false,
+                    true,
+                    ItemFactory.GetBandage()
                 };
                 // Pickup item that is not in search list from client.
                 yield return new object[]
@@ -154,7 +169,8 @@ namespace ActionHandling.Tests
                     new InventoryDTO("userid", InventoryType.Pickup, 100),
                     new HandlerResponseDTO(SendAction.ReturnToSender, "Number is not in search list!"),
                     false,
-                    false
+                    false,
+                    ItemFactory.GetBandage()
                 };
                 // Pickup item that is not in search list on host.
                 yield return new object[]
@@ -162,7 +178,8 @@ namespace ActionHandling.Tests
                     new InventoryDTO("userid", InventoryType.Pickup, 100),
                     new HandlerResponseDTO(SendAction.ReturnToSender, "Number is not in search list!"),
                     false,
-                    true
+                    true,
+                    ItemFactory.GetBandage()
                 };
                 // Pickup consumable item with a full inventory from client.
                 yield return new object[]
@@ -170,7 +187,8 @@ namespace ActionHandling.Tests
                     new InventoryDTO("userid", InventoryType.Pickup, 0),
                     new HandlerResponseDTO(SendAction.ReturnToSender, "You already have 3 consumable items in your inventory!"),
                     true,
-                    false
+                    false,
+                    ItemFactory.GetBandage()
                 };
                 // Pickup consumable item with a full inventory on host.
                 yield return new object[]
@@ -178,7 +196,8 @@ namespace ActionHandling.Tests
                     new InventoryDTO("userid", InventoryType.Pickup, 0),
                     new HandlerResponseDTO(SendAction.ReturnToSender, "You already have 3 consumable items in your inventory!"),
                     true,
-                    true
+                    true,
+                    ItemFactory.GetBandage()
                 };
             }
         }
