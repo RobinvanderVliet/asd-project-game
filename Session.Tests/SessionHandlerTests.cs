@@ -1,3 +1,4 @@
+using Messages;
 using Moq;
 using Network;
 using Network.DTO;
@@ -26,6 +27,7 @@ namespace Session.Tests
 
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;
+        private Mock<IMessageService> _mockedMessageService;
         private Mock<Session> _mockedSession;
         private Mock<IScreenHandler> _mockedScreenHandler;
 
@@ -35,9 +37,10 @@ namespace Session.Tests
             var standardOutput = new StreamWriter(Console.OpenStandardOutput());
             standardOutput.AutoFlush = true;
             Console.SetOut(standardOutput);
-            _mockedClientController = new Mock<IClientController>();
-            _mockedScreenHandler = new Mock<IScreenHandler>();
-            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object);
+            _mockedClientController = new();
+            _mockedMessageService = new();
+            _mockedScreenHandler = new();
+            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object, _mockedMessageService.Object);
             _mockedSession = new Mock<Session>();
             _packetDTO = new PacketDTO();
         }
