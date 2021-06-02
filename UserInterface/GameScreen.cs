@@ -61,10 +61,9 @@ namespace UserInterface
 
         public void UpdateWorld(char[,] newMap)
         {
-            if (_screenHandler.Screen is GameScreen)
-            {
-                _gameWorldScreen.UpdateWorld(newMap);
-            }
+
+            _gameWorldScreen.UpdateWorld(newMap);
+
         }
     }
 }

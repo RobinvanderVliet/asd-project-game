@@ -50,8 +50,11 @@ namespace UserInterface
 
         public void UpdateWorld(char[,] map)
         {
-            var gameScreen = Screen as GameScreen;
-            gameScreen.UpdateWorld(map);
+            if (_screen is GameScreen)
+            {
+                var gameScreen = Screen as GameScreen;
+                gameScreen.UpdateWorld(map);
+            }
         }
     }
 }
