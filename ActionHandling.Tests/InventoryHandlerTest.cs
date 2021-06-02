@@ -236,6 +236,24 @@ namespace ActionHandling.Tests
         }
         
         [Test]
+        public void Test_Inspect_OutputsDescriptionSlots()
+        {
+            //arrange
+            Player result = new(null, 0, 0, null, null);
+            result.Inventory.ConsumableItemList.Add(ItemFactory.GetBandage());
+            _mockedWorldService.Setup(mock => mock.GetCurrentPlayer()).Returns(result);
+            string exp = $"Let me patch you together{Environment.NewLine}Name: Bandage{Environment.NewLine}Rarity: Common{Environment.NewLine}Health gain: Low{Environment.NewLine}";
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+                //act
+                _sut.InspectItem("slot 1");
+                //assert
+                Assert.AreEqual(exp, sw.ToString());
+            }
+        }
+        
+        [Test]
         public void Test_Inspect_OutputsMessageOnEmptySlot1()
         {
             //arrange
