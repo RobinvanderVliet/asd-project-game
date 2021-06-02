@@ -9,7 +9,7 @@ namespace WorldGeneration
         private IMap _map;
         public Player CurrentPlayer;
         private List<Player> _players;
-        private List<Character> _creatures;
+        private List<Creature> _creatures;
         private readonly int _viewDistance;
         private IScreenHandler _screenHandler;
 
@@ -59,7 +59,7 @@ namespace WorldGeneration
         {
             if (CurrentPlayer != null && _players != null && _creatures != null)
             {
-                var characters = (_players).Concat(_creatures).ToList();
+                var characters = ((IEnumerable<Character>)_players).Concat(_creatures).ToList();
                 _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
             }
         }
