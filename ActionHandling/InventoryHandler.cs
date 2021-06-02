@@ -1,19 +1,16 @@
-﻿using ActionHandling.DTO;
-using DatabaseHandler;
+﻿using System;
+using System.Linq;
+using ActionHandling.DTO;
 using DatabaseHandler.POCO;
-using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
+using Items;
 using Items.Consumables;
 using Messages;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
-using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Items;
 using WorldGeneration;
+using WorldGeneration.Exceptions;
 
 namespace ActionHandling
 {
@@ -24,7 +21,6 @@ namespace ActionHandling
         private readonly IMessageService _messageService;
         private readonly IServicesDb<PlayerPOCO> _playerServicesDB;
         private readonly IServicesDb<PlayerItemPOCO> _playerItemServicesDB;
-
 
         public InventoryHandler(IClientController clientController, IWorldService worldService, IServicesDb<PlayerPOCO> playerServicesDB, IServicesDb<PlayerItemPOCO> playerItemServicesDB, IMessageService messageService)
         {
@@ -46,6 +42,21 @@ namespace ActionHandling
         {
             string searchResult = _worldService.SearchCurrentTile();
             _messageService.AddMessage(searchResult);
+        }
+        
+        public void PickupItem(int index)
+        {
+            // Compensate for index starting at 0.
+            index -= 1;
+
+            InventoryDTO inventoryDTO =
+                new InventoryDTO(_clientController.GetOriginId(), InventoryType.Pickup, index);
+            SendInventoryDTO(inventoryDTO);
+        }
+
+        public void DropItem(int index)
+        {
+            throw new NotImplementedException();
         }
 
         private void SendInventoryDTO(InventoryDTO inventoryDTO)
@@ -109,7 +120,44 @@ namespace ActionHandling
 
         private HandlerResponseDTO HandlePickup(InventoryDTO inventoryDTO, bool handleInDatabase)
         {
-            throw new NotImplementedException();
+            Player player = _worldService.GetPlayer(inventoryDTO.UserId);
+            Item item;
+            
+            try
+            {
+                item = _worldService.GetItemsOnCurrentTile(player).ElementAt(inventoryDTO.Index);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                if(inventoryDTO.UserId == _clientController.GetOriginId())
+                {
+                    _messageService.AddMessage("Number is not in search list!");
+                }
+                return new HandlerResponseDTO(SendAction.ReturnToSender, "Number is not in search list!");
+            }
+
+            try
+            {
+                player.Inventory.AddItem(item);
+                
+                _worldService.GetItemsOnCurrentTile(player).RemoveAt(inventoryDTO.Index);
+                
+                if (handleInDatabase)
+                {
+                    PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO {PlayerGUID = inventoryDTO.UserId, ItemName = item.ItemName};
+                    _playerItemServicesDB.CreateAsync(playerItemPOCO);
+                }
+                
+                return new HandlerResponseDTO(SendAction.SendToClients, null);
+            }
+            catch (InventoryFullException e)
+            {
+                if(inventoryDTO.UserId == _clientController.GetOriginId())
+                {
+                    _messageService.AddMessage(e.Message);
+                }
+                return new HandlerResponseDTO(SendAction.ReturnToSender, e.Message);
+            }
         }
 
         private HandlerResponseDTO HandleDrop(InventoryDTO inventoryDTO, bool handleInDatabase)
@@ -148,16 +196,6 @@ namespace ActionHandling
                 }
                 return new HandlerResponseDTO(SendAction.ReturnToSender, "Could not find item");
             }
-        }
-
-        public void PickupItem(int index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DropItem(int index)
-        {
-            throw new NotImplementedException();
         }
     }
 }
