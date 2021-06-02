@@ -12,7 +12,7 @@ namespace Messages
             _messages = new(); 
         }
 
-        public void addMessage(string message)
+        public void AddMessage(string message)
         {
             _messages.Add(message);
         }

@@ -19,10 +19,10 @@ namespace Session
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
 
-        private IClientController _clientController;
+        private readonly IClientController _clientController;
         private IHeartbeatHandler _heartbeatHandler;
-        private IScreenHandler _screenHandler;
-        private IMessageService _messageService;
+        private readonly IScreenHandler _screenHandler;
+        private readonly IMessageService _messageService;
 
         private Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;

@@ -10,9 +10,9 @@ namespace Chat
 {
     public class ChatHandler : IPacketHandler, IChatHandler
     {
-        private IClientController _clientController;
-        private IWorldService _worldService;
-        private IMessageService _messageService;
+        private readonly IClientController _clientController;
+        private readonly IWorldService _worldService;
+        private readonly IMessageService _messageService;
 
 
         public ChatHandler(IClientController clientController, IWorldService worldService, IMessageService messageService)

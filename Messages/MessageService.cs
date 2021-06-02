@@ -14,7 +14,7 @@ namespace Messages
 
         public void AddMessage(string message)
         {
-            _messages.addMessage(message);
+            _messages.AddMessage(message);
             DisplayMessages();
         }
 
