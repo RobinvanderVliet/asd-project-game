@@ -125,13 +125,33 @@ namespace InputHandling.Tests
             _mockedSessionHandler.Verify(mockedSession => mockedSession.RequestSessions(), Times.Once);
         }
     
+        private static AST SearchAst()
+        {
+            Input search = new Input();
+            search.AddChild(new Search());
+            return new AST(search);
+        }
+
+        [Test]
+        public void Test_Apply_SearchActionIsCalled()
+        {
+            // Arrange
+            var ast = SearchAst();
+
+            // Act
+            _sut.Apply(ast);
+
+            // Assert
+            _mockedInventoryHandler.Verify(mock => mock.Search(), Times.Once);
+        }
+
         private static AST RequestSessionsAst()
         {
             Input requestSessions = new Input();
             requestSessions.AddChild(new RequestSessions());
             return new AST(requestSessions);
         }
-    
+
         [Test]
         public void Test_Apply_HandleCreateSessionActionIsCalled()
         {
@@ -195,36 +215,35 @@ namespace InputHandling.Tests
             startSession.AddChild(new StartSession());
             return new AST(startSession);
         }
-        
+
         [Test]
-        public void Test_Apply_InspectItemActionIsCalled()
+        public void Test_Apply_HandleDropActionIsCalled()
         {
             //Arrange
             string inventorySlot = "armor";
-            var ast = InspectAST(inventorySlot);
-            
+            var ast = DropAST(inventorySlot);
+            string inventorySlot1 = "helmet";
+            var ast1 = DropAST(inventorySlot1);
+            string inventorySlot2 = "weapon";
+            var ast2 = DropAST(inventorySlot2);
+
             //Act
             _sut.Apply(ast);
-            
+            _sut.Apply(ast1);
+            _sut.Apply(ast2);
+
             //Assert
-            _mockedInventoryHandler.Verify(mockedInventory => mockedInventory.InspectItem(inventorySlot), Times.Once);
-        }
-        
-        [Test]
-        public void Test_Inspect_ThrowsExceptionWithSlotDigit42()
-        {
-            //arrange
-            var ast = InspectAST("slot 42");
-            //act & assert
-            Assert.Throws<SlotException>(() => _sut.Apply(ast));
+            //_mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem(inventorySlot), Times.Once);
+            //_mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem(inventorySlot1), Times.Once);
+            //_mockedPlayerService.Verify(mockedPlayer => mockedPlayer.DropItem(inventorySlot2), Times.Once);
         }
 
-        public static AST InspectAST(string inventorySlot)
+        public static AST DropAST(string inventorySlot)
         {
-            Input inspect = new Input();
-            inspect.AddChild(new Inspect()
+            Input drop = new Input();
+            drop.AddChild(new Drop()
                 .AddChild(new InventorySlot(inventorySlot)));
-            return new AST(inspect);
+            return new AST(drop);
         }
     }
 }
