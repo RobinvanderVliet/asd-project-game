@@ -56,6 +56,18 @@ namespace WorldGeneration
         DisplayWorld();
         }
 
+        public Player getHostPlayer()
+        {
+            foreach (var element in _players)
+            {
+                if (element.Id.Equals(currentIdPlayer))
+                {
+                    return element;
+                }
+            }
+            return null;
+        }
+
         public void AddExistingPlayerToWorld(Player player, bool isCurrentPlayer)
         {
             if (isCurrentPlayer)

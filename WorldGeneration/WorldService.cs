@@ -36,7 +36,7 @@ namespace WorldGeneration
 
         public Player getCurrentPlayer()
         {
-            return _world.CurrentPlayer;
+            return _world.getHostPlayer();
         }
 
         public void SetCurrentPlayerHost(string playerId)
