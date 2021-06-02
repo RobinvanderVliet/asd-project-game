@@ -1,6 +1,6 @@
-using System.Diagnostics.CodeAnalysis;
 using Agent.Antlr.Ast;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.Ast
 {
@@ -17,8 +17,8 @@ namespace Agent.Tests.Ast
             _otherwise = new Otherwise();
         }
 
-        
-    
+
+
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
@@ -29,7 +29,7 @@ namespace Agent.Tests.Ast
             Assert.AreEqual(result, TYPE);
         }
 
-    
+
         [Test]
         public void Test_AddChild_ActionReference()
         {
@@ -39,13 +39,13 @@ namespace Agent.Tests.Ast
 
             //Act
 
-            var result = ( _otherwise.GetChildren()[0]).GetNodeType();
+            var result = (_otherwise.GetChildren()[0]).GetNodeType();
 
             //Assert
             Assert.AreEqual(result, "ActionReference");
         }
-        
-   
+
+
         [Test]
         public void Test_AddChild_Node()
         {
@@ -55,7 +55,7 @@ namespace Agent.Tests.Ast
 
             //Act
 
-            var result = ( _otherwise.GetChildren()[0]).GetNodeType();
+            var result = (_otherwise.GetChildren()[0]).GetNodeType();
 
             //Assert
             Assert.AreEqual("Node", result);

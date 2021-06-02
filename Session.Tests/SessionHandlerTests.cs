@@ -49,7 +49,8 @@ namespace Session.Tests
             string invalidSessionId = "invalid";
             string userName = "Gerrit";
 
-            using (StringWriter sw = new StringWriter()) {
+            using (StringWriter sw = new StringWriter())
+            {
                 //Act ---------
                 Console.SetOut(sw);
                 _sut.JoinSession(invalidSessionId, userName);
@@ -143,7 +144,7 @@ namespace Session.Tests
 
 
         [Test, Sequential]
-        public void Test_HostPingEvent_SendPingPongReturnedCheck([Range(1,HOSTINACTIVECOUNTER)] int times)
+        public void Test_HostPingEvent_SendPingPongReturnedCheck([Range(1, HOSTINACTIVECOUNTER)] int times)
         {
             // Arrange ---------
             SessionDTO sessionDTO = new SessionDTO(SessionType.SendPing);
@@ -153,7 +154,7 @@ namespace Session.Tests
             _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Session));
 
             _sut.setHostPingTimer(new Timer());
-            
+
             // Act ---------
             for (int i = 0; i < times; i++)
             {
@@ -183,9 +184,9 @@ namespace Session.Tests
             _mockedClientController.Verify(mock => mock.IsBackupHost, Times.Never);
             Assert.IsTrue(_sut.getHostActive());
         }
-        
-        [Test,Sequential]
-        public void Test_HostPingEvent_SendPingNoPongReturnedCheckUnderCount([Range(1,HOSTINACTIVECOUNTER-1)]int times)
+
+        [Test, Sequential]
+        public void Test_HostPingEvent_SendPingNoPongReturnedCheckUnderCount([Range(1, HOSTINACTIVECOUNTER - 1)] int times)
         {
             // Arrange ---------
             SessionDTO sessionDTO = new SessionDTO(SessionType.SendPing);
@@ -193,13 +194,13 @@ namespace Session.Tests
             var payload = JsonConvert.SerializeObject(sessionDTO);
 
             _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Session));
-            
+
             _sut.setHostPingTimer(new Timer());
-            
+
             //Act ---------
             for (int i = 0; i < times; i++)
             {
-                _sut.HostPingEvent(null,null);
+                _sut.HostPingEvent(null, null);
             }
 
             // Assert ---------
@@ -207,7 +208,7 @@ namespace Session.Tests
             _mockedClientController.Verify(mock => mock.CreateHostController(), Times.Never);
             Assert.IsFalse(_sut.getHostActive());
         }
-        
+
         [Test]
         public void Test_HostPingEvent_SendPingNoPongReturnedCheckCountHit()
         {
@@ -245,11 +246,11 @@ namespace Session.Tests
             _sut.JoinSession(sessionId, userName);
             
             _sut.setHostPingTimer(new Timer());
-            
+
             //Act ---------
             for (int i = 0; i < HOSTINACTIVECOUNTER; i++)
             {
-                _sut.HostPingEvent(null,null);
+                _sut.HostPingEvent(null, null);
             }
 
             // Assert ---------
@@ -493,7 +494,8 @@ namespace Session.Tests
             string originIdHost = "testOriginIdHost";
             string userName = "Gerrit";
 
-            SessionDTO sessionDTO = new SessionDTO {
+            SessionDTO sessionDTO = new SessionDTO
+            {
                 SessionType = SessionType.RequestToJoinSession,
                 Clients = new List<string[]>()
             };
@@ -510,8 +512,9 @@ namespace Session.Tests
                 Target = "client"
             };
             _packetDTO.Header = packetHeaderDTO;
-            
-            SessionDTO sessionDTOInHandlerResponse = new SessionDTO {
+
+            SessionDTO sessionDTOInHandlerResponse = new SessionDTO
+            {
                 SessionType = SessionType.RequestToJoinSession,
                 Clients = sessionDTO.Clients
             };
@@ -545,7 +548,8 @@ namespace Session.Tests
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";
 
-            SessionDTO sessionDTO = new SessionDTO {
+            SessionDTO sessionDTO = new SessionDTO
+            {
                 SessionType = SessionType.SendPing,
                 Name = "ping"
             };
@@ -559,13 +563,14 @@ namespace Session.Tests
                 PacketType = PacketType.Session,
                 Target = "host"
             };
-            
+
             _packetDTO.Header = packetHeaderDTO;
-            SessionDTO sessionDTOInHandlerResponse = new SessionDTO {
+            SessionDTO sessionDTOInHandlerResponse = new SessionDTO
+            {
                 SessionType = SessionType.ReceivedPingResponse,
                 Name = "pong"
             };
-            
+
             var jsonObject = JsonConvert.SerializeObject(sessionDTOInHandlerResponse);
             HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
 
@@ -590,21 +595,23 @@ namespace Session.Tests
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";
 
-            SessionDTO sessionDTO = new SessionDTO {
+            SessionDTO sessionDTO = new SessionDTO
+            {
                 SessionType = SessionType.SendPing,
                 Name = "ping"
             };
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO {
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO
+            {
                 OriginID = originId,
                 SessionID = generatedSessionId,
                 PacketType = PacketType.Session,
                 Target = originId
             };
             _packetDTO.Header = packetHeaderDTO;
-            
+
             HandlerResponseDTO expectedHandlerResponse = new HandlerResponseDTO(SendAction.Ignore, null);
             _packetDTO.HandlerResponse = expectedHandlerResponse;
 
@@ -631,22 +638,24 @@ namespace Session.Tests
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";
 
-            SessionDTO sessionDTO = new SessionDTO {
+            SessionDTO sessionDTO = new SessionDTO
+            {
                 SessionType = SessionType.SendPing,
                 Name = "ping"
             };
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            
-            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO {
+
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO
+            {
                 OriginID = originId,
                 SessionID = generatedSessionId,
                 PacketType = PacketType.Session,
                 Target = "client"
             };
             _packetDTO.Header = packetHeaderDTO;
-            
+
             HandlerResponseDTO expectedHandlerResponse = new HandlerResponseDTO(SendAction.Ignore, null);
             _packetDTO.HandlerResponse = expectedHandlerResponse;
 
@@ -659,7 +668,7 @@ namespace Session.Tests
             Assert.AreEqual(expectedHandlerResponse.Action, actualResult.Action);
             Assert.AreEqual(expectedHandlerResponse.ResultMessage, actualResult.ResultMessage);
         }
-        
+
         [Test]
         public void Test_HandlePacket_RequestHeartbeat_Returns_Catch()
         {

@@ -18,5 +18,9 @@ namespace Network
                    Payload == DTO.Payload &&
                    EqualityComparer<HandlerResponseDTO>.Default.Equals(HandlerResponse, DTO.HandlerResponse);
         }
+        public override int GetHashCode()
+        {
+            return Payload.GetHashCode();
+        }
     }
 }

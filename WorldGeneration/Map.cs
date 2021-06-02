@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataTransfer.DTO.Character;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WorldGeneration.Models;
@@ -74,7 +75,7 @@ namespace WorldGeneration
             // , + chunksize to add some loading buffer
             // , / chunksize to convert tile coordinates to world coordinates
             // same for the other variables
-            var maxX = (playerX + viewDistance * 2 + _chunkSize) / _chunkSize; 
+            var maxX = (playerX + viewDistance * 2 + _chunkSize) / _chunkSize;
             var minX = (playerX - viewDistance * 2 - _chunkSize) / _chunkSize;
             var maxY = (playerY + viewDistance * 2 + _chunkSize) / _chunkSize + 1;
             var minY = (playerY - viewDistance * 2 - _chunkSize) / _chunkSize;
@@ -84,7 +85,7 @@ namespace WorldGeneration
             {
                 for (var y = minY; y < maxY; y++)
                 {
-                    chunksWithinLoadingRange.Add(new[] {x, y});
+                    chunksWithinLoadingRange.Add(new[] { x, y });
                 }
             }
             return chunksWithinLoadingRange;
@@ -95,7 +96,7 @@ namespace WorldGeneration
             var playerX = currentPlayer.XPosition;
             var playerY = currentPlayer.YPosition;
             LoadArea(playerX, playerY, viewDistance);
-            for (var y = (playerY + viewDistance); y > ((playerY + viewDistance) - (viewDistance * 2) -1); y--)
+            for (var y = (playerY + viewDistance); y > ((playerY + viewDistance) - (viewDistance * 2) - 1); y--)
             {
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
                 {
@@ -129,23 +130,23 @@ namespace WorldGeneration
         private Chunk GetChunkForTileXAndY(int x, int y)
         {
             var chunk = _chunks.FirstOrDefault(chunk =>
-                chunk.X * _chunkSize <= x 
-                && chunk.X * _chunkSize > x - _chunkSize 
+                chunk.X * _chunkSize <= x
+                && chunk.X * _chunkSize > x - _chunkSize
                 && chunk.Y * _chunkSize >= y &&
                 chunk.Y * _chunkSize < y + _chunkSize);
-            
+
             if (chunk == null)
             {
                 throw new Exception("Tried to find a chunk that has not been loaded");
             }
             return chunk;
         }
-        
+
         public void DeleteMap()
         {
             _db.DeleteTileMap();
         }
-        
+
         // find a LOADED tile by the coordinates
         public ITile GetLoadedTileByXAndY(int x, int y)
         {

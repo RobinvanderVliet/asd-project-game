@@ -27,5 +27,9 @@ namespace InputHandling.Antlr.Ast
         {
             return Equals(obj as Direction);
         }
+        public override int GetHashCode()
+        {
+            return _direction.GetHashCode();
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace Session.DTO
         }
         public SessionDTO()
         {
-          
+
         }
     }
 }

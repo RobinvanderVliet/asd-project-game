@@ -1,9 +1,9 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast;
+﻿using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
 using Agent.Antlr.Ast.Comparables.Subjects;
 using NUnit.Framework;
+using System;
+using System.Diagnostics.CodeAnalysis;
 using Comparable = Agent.Antlr.Ast.Comparable;
 
 namespace Agent.Tests.Ast
@@ -15,24 +15,24 @@ namespace Agent.Tests.Ast
 
         private When _sut;
         private const string TYPE = "When";
-        
+
         [SetUp]
         public void Setup()
         {
             _sut = new When();
         }
-        
+
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
             //Arrange
-            
+
             //Act
             var result = _sut.GetNodeType();
             //Assert
             Assert.AreEqual(result, TYPE);
         }
-        
+
         [Test]
         [TestCase(typeof(Current))]
         [TestCase(typeof(Inventory))]
@@ -45,23 +45,23 @@ namespace Agent.Tests.Ast
         [TestCase(typeof(Stat))]
         [TestCase(typeof(Subject))]
         [TestCase(typeof(Comparable))]
-        public void Test_AddChild_AllComparablesComparableL( Type testCase)
+        public void Test_AddChild_AllComparablesComparableL(Type testCase)
         {
             //Arrange
             var comparable = ComparableTestCase(testCase);
-            
+
             //Act
-            _sut.AddChild( comparable);
+            _sut.AddChild(comparable);
             //Assert
-            
-            Assert.AreEqual( comparable, _sut.GetComparableL());
-            Assert.AreEqual(null,_sut.GetComparableR());
-            Assert.AreEqual(null,_sut.GetComparison());
-            Assert.AreEqual(null,_sut.GetThen());
+
+            Assert.AreEqual(comparable, _sut.GetComparableL());
+            Assert.AreEqual(null, _sut.GetComparableR());
+            Assert.AreEqual(null, _sut.GetComparison());
+            Assert.AreEqual(null, _sut.GetThen());
             Assert.AreEqual(1, _sut.GetChildren().Count);
         }
-        
-     
+
+
         [Test]
         [TestCase(typeof(Current))]
         [TestCase(typeof(Inventory))]
@@ -74,7 +74,7 @@ namespace Agent.Tests.Ast
         [TestCase(typeof(Stat))]
         [TestCase(typeof(Subject))]
         [TestCase(typeof(Comparable))]
-        public void Test_AddChild_AllComparablesComparableR( Type testCase)
+        public void Test_AddChild_AllComparablesComparableR(Type testCase)
         {
             //Arrange
             var comparableL = new Comparable();
@@ -83,14 +83,14 @@ namespace Agent.Tests.Ast
             //Act
             _sut.AddChild(comparableR);
             //Assert
-            
+
             Assert.AreEqual(comparableL, _sut.GetComparableL());
-            Assert.AreEqual(comparableR,_sut.GetComparableR());
-            Assert.AreEqual(null,_sut.GetComparison());
-            Assert.AreEqual(null,_sut.GetThen());
+            Assert.AreEqual(comparableR, _sut.GetComparableR());
+            Assert.AreEqual(null, _sut.GetComparison());
+            Assert.AreEqual(null, _sut.GetThen());
             Assert.AreEqual(2, _sut.GetChildren().Count);
         }
-      
+
         [Test]
         [TestCase(typeof(Current))]
         [TestCase(typeof(Inventory))]
@@ -103,7 +103,7 @@ namespace Agent.Tests.Ast
         [TestCase(typeof(Stat))]
         [TestCase(typeof(Subject))]
         [TestCase(typeof(Comparable))]
-        public void Test_AddChild_AllComparablesComparableExtra( Type testCase)
+        public void Test_AddChild_AllComparablesComparableExtra(Type testCase)
         {
             //Arrange
             var comparableL = new Comparable();
@@ -114,15 +114,15 @@ namespace Agent.Tests.Ast
             //Act
             _sut.AddChild(comparable);
             //Assert
-            
+
             Assert.AreEqual(comparableL, _sut.GetComparableL());
-            Assert.AreEqual(comparableR,_sut.GetComparableR());
-            Assert.AreEqual(null,_sut.GetComparison());
-            Assert.AreEqual(null,_sut.GetThen());
+            Assert.AreEqual(comparableR, _sut.GetComparableR());
+            Assert.AreEqual(null, _sut.GetComparison());
+            Assert.AreEqual(null, _sut.GetThen());
             Assert.AreEqual(3, _sut.GetChildren().Count);
             Assert.AreEqual(comparable, _sut.GetChildren()[2]);
         }
-        
+
         [Test]
         public void Test_AddChild_ActionReference()
         {
@@ -132,13 +132,13 @@ namespace Agent.Tests.Ast
             _sut.AddChild(action);
             //Assert
             Assert.AreEqual(null, _sut.GetComparableL());
-            Assert.AreEqual(null,_sut.GetComparableR());
-            Assert.AreEqual(null,_sut.GetComparison());
-            Assert.AreEqual(action,_sut.GetThen());
+            Assert.AreEqual(null, _sut.GetComparableR());
+            Assert.AreEqual(null, _sut.GetComparison());
+            Assert.AreEqual(action, _sut.GetThen());
             Assert.AreEqual(1, _sut.GetChildren().Count);
         }
-        
-     
+
+
         [Test]
         public void Test_Child_Comparison()
         {
@@ -148,15 +148,15 @@ namespace Agent.Tests.Ast
             _sut.AddChild(comparison);
             //Assert
             Assert.AreEqual(null, _sut.GetComparableL());
-            Assert.AreEqual(null,_sut.GetComparableR());
-            Assert.AreEqual(comparison,_sut.GetComparison());
-            Assert.AreEqual(null,_sut.GetThen());
-            
+            Assert.AreEqual(null, _sut.GetComparableR());
+            Assert.AreEqual(comparison, _sut.GetComparison());
+            Assert.AreEqual(null, _sut.GetThen());
+
             Assert.AreEqual(1, _sut.GetChildren().Count);
         }
-        
-                
-    
+
+
+
         [Test]
         public void Test_AddChild_ExtraNode()
         {
@@ -166,32 +166,35 @@ namespace Agent.Tests.Ast
             _sut.AddChild(extra);
             //Assert
             Assert.AreEqual(null, _sut.GetComparableL());
-            Assert.AreEqual(null,_sut.GetComparableR());
-            Assert.AreEqual(null,_sut.GetComparison());
-            Assert.AreEqual(null,_sut.GetThen());
+            Assert.AreEqual(null, _sut.GetComparableR());
+            Assert.AreEqual(null, _sut.GetComparison());
+            Assert.AreEqual(null, _sut.GetThen());
             Assert.AreEqual(1, _sut.GetChildren().Count);
             Assert.AreEqual(extra, _sut.GetChildren()[0]);
         }
-        
+
         private static Comparable ComparableTestCase(Type testCase)
         {
             Comparable comparable;
-            if (testCase == typeof(Int)){
-                comparable = (Comparable) Activator.CreateInstance(testCase,1);
+            if (testCase == typeof(Int))
+            {
+                comparable = (Comparable)Activator.CreateInstance(testCase, 1);
             }
-            else if (testCase == typeof(Comparable)){
-                comparable = (Comparable) Activator.CreateInstance(testCase);
+            else if (testCase == typeof(Comparable))
+            {
+                comparable = (Comparable)Activator.CreateInstance(testCase);
             }
-            else {
-                comparable = (Comparable) Activator.CreateInstance(testCase, "test");
+            else
+            {
+                comparable = (Comparable)Activator.CreateInstance(testCase, "test");
             }
 
             return comparable;
         }
-        
 
-        
-        
-        
+
+
+
+
     }
 }

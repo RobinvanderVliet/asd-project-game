@@ -1,6 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast;
+﻿using Agent.Antlr.Ast;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.Ast
 {
@@ -17,7 +17,7 @@ namespace Agent.Tests.Ast
             _config = new Configuration();
         }
 
-    
+
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
@@ -28,27 +28,27 @@ namespace Agent.Tests.Ast
             Assert.AreEqual(result, TYPE);
         }
 
-        
+
         [Test]
         public void Test_AddChild()
         {
             //Arrange
-            Rule rule = new Rule(null,null);
+            Rule rule = new Rule(null, null);
             _config.AddChild(rule);
 
             //Act
-            var result = ((Rule) _config.GetChildren()[0])?.GetNodeType();
+            var result = ((Rule)_config.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual(result, "Rule");
         }
 
-     
+
         [Test]
         public void Test_RemoveChild()
         {
             //Arrange
-            Rule rule = new Rule(null,null);
+            Rule rule = new Rule(null, null);
             _config.AddChild(rule);
             _config.RemoveChild(rule);
 

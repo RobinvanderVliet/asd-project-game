@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace InputHandling.Antlr.Ast.Actions
 {
-    public class JoinSession: Command
+    public class JoinSession : Command
     {
         private Message _message;
         private Username _username;
@@ -44,7 +44,7 @@ namespace InputHandling.Antlr.Ast.Actions
 
             return this;
         }
-        
+
         [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
@@ -55,6 +55,10 @@ namespace InputHandling.Antlr.Ast.Actions
         public bool Equals(Drop other)
         {
             return true;
+        }
+        public override int GetHashCode()
+        {
+            return _message.GetHashCode();
         }
     }
 }

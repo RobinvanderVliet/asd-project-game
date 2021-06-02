@@ -1,10 +1,10 @@
-﻿using System;
-using Moq;
-using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast;
+﻿using Agent.Antlr.Ast;
 using Agent.Exceptions;
 using Antlr4.Runtime;
+using Moq;
+using NUnit.Framework;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests
 {
@@ -20,7 +20,7 @@ namespace Agent.Tests
         {
             _sut = new Pipeline();
         }
-        
+
         [Test]
         public void Test_ParseString_HappyPath()
         {

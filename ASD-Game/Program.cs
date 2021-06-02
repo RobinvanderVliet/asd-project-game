@@ -57,13 +57,13 @@ namespace ASD_project
                 })
                 .UseSerilog()
                 .Build();
-            
+
 
             var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);
             svc.Run();
         }
 
-        static void BuildConfig(IConfigurationBuilder builder) 
+        static void BuildConfig(IConfigurationBuilder builder)
         {
             builder.SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
