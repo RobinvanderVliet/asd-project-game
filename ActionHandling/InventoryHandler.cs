@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Items;
 using WorldGeneration;
+using WorldGeneration.Exceptions;
 
 namespace ActionHandling
 {
@@ -46,6 +47,49 @@ namespace ActionHandling
         {
             string searchResult = _worldService.SearchCurrentTile();
             _messageService.AddMessage(searchResult);
+        }
+
+        public void PickupItem(int index)
+        {
+            // Compensate for index starting at 0.
+            index -= 1;
+
+            InventoryDTO inventoryDTO =
+                new InventoryDTO(_clientController.GetOriginId(), InventoryType.Pickup, index);
+            SendInventoryDTO(inventoryDTO);
+        }
+        public void DropItem(string inventorySlot)
+        {
+            int index = 0;
+            switch (inventorySlot)
+            {
+                case "helmet":
+                    index = 0;
+                    break;
+                case "armor":
+                    index = 1;
+                    break;
+                case "weapon":
+                    index = 2;
+                    break;
+                case "slot 1":
+                    index = 3;
+                    break;
+                case "slot 2":
+                    index = 4;
+                    break;
+                case "slot 3":
+                    index = 5;
+                    break;
+                default:
+                    index = 99;
+                    Console.WriteLine("Unknown item slot");
+                    break;
+            }
+
+            InventoryDTO inventoryDTO =
+                new InventoryDTO(_clientController.GetOriginId(), InventoryType.Drop, index);
+            SendInventoryDTO(inventoryDTO);
         }
 
         private void SendInventoryDTO(InventoryDTO inventoryDTO)
@@ -109,7 +153,44 @@ namespace ActionHandling
 
         private HandlerResponseDTO HandlePickup(InventoryDTO inventoryDTO, bool handleInDatabase)
         {
-            throw new NotImplementedException();
+            Player player = _worldService.GetPlayer(inventoryDTO.UserId);
+            Item item;
+
+            try
+            {
+                item = _worldService.GetItemsOnCurrentTile(player).ElementAt(inventoryDTO.Index);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                if (inventoryDTO.UserId == _clientController.GetOriginId())
+                {
+                    _messageService.AddMessage("Number is not in search list!");
+                }
+                return new HandlerResponseDTO(SendAction.ReturnToSender, "Number is not in search list!");
+            }
+
+            try
+            {
+                player.Inventory.AddItem(item);
+
+                _worldService.GetItemsOnCurrentTile(player).RemoveAt(inventoryDTO.Index);
+
+                if (handleInDatabase)
+                {
+                    PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO { PlayerGUID = inventoryDTO.UserId, ItemName = item.ItemName };
+                    _playerItemServicesDB.CreateAsync(playerItemPOCO);
+                }
+
+                return new HandlerResponseDTO(SendAction.SendToClients, null);
+            }
+            catch (InventoryFullException e)
+            {
+                if (inventoryDTO.UserId == _clientController.GetOriginId())
+                {
+                    _messageService.AddMessage(e.Message);
+                }
+                return new HandlerResponseDTO(SendAction.ReturnToSender, e.Message);
+            }
         }
 
         private HandlerResponseDTO HandleDrop(InventoryDTO inventoryDTO, bool handleInDatabase)
@@ -195,45 +276,6 @@ namespace ActionHandling
                 }
                 return new HandlerResponseDTO(SendAction.ReturnToSender, "Could not find item");
             }
-        }
-
-        public void PickupItem(int index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DropItem(string inventorySlot)
-        {
-            int index = 0;
-            switch (inventorySlot)
-            {
-                case "helmet":
-                    index = 0;
-                    break;
-                case "armor":
-                    index = 1;
-                    break;
-                case "weapon":
-                    index = 2;
-                    break;
-                case "slot 1":
-                    index = 3;
-                    break;
-                case "slot 2":
-                    index = 4;
-                    break;
-                case "slot 3":
-                    index = 5;
-                    break;
-                default:
-                    index = 99;
-                    Console.WriteLine("Unknown item slot");
-                    break;
-            }
-
-            InventoryDTO inventoryDTO =
-                new InventoryDTO(_clientController.GetOriginId(), InventoryType.Drop, index);
-            SendInventoryDTO(inventoryDTO);
         }
     }
 }
