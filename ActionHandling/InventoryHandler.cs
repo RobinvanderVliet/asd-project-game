@@ -9,6 +9,11 @@ using Messages;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
+using System;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Items;
 using WorldGeneration;
 
 namespace ActionHandling
@@ -62,6 +67,34 @@ namespace ActionHandling
         {
             var payload = JsonConvert.SerializeObject(inventoryDTO);
             _clientController.SendPayload(payload, PacketType.Inventory);
+        }
+
+        public void InspectItem(string slot)
+        {
+            var inventory = _worldService.GetCurrentPlayer().Inventory;
+            string output = "No item in this inventory slot";
+
+            try
+            {
+                Item inventoryItem = slot switch
+                {
+                    "helmet" => inventory.Helmet,
+                    "armor" => inventory.Armor,
+                    "weapon" => inventory.Weapon,
+                    "slot 1" => inventory.ConsumableItemList[0],
+                    "slot 2" => inventory.ConsumableItemList[1],
+                    "slot 3" => inventory.ConsumableItemList[2],
+                    _ => null
+                };
+                
+                if (inventoryItem != null)
+                {
+                    output = inventoryItem.ToString();
+                }
+            }
+            catch (ArgumentOutOfRangeException e) {}
+            
+            _messageService.AddMessage(output);
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
@@ -142,7 +175,7 @@ namespace ActionHandling
 
                     var result = _playerServicesDB.GetAllAsync().Result;
                     PlayerPOCO playerPOCO = result.FirstOrDefault(player => player.PlayerGuid == inventoryDTO.UserId && player.GameGuid == _clientController.SessionId );
-                    
+
                     playerPOCO.Health = player.Health;
                     //add stamina to playerPOCO
                     _ = _playerServicesDB.UpdateAsync(playerPOCO);

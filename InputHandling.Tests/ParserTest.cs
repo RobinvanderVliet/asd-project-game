@@ -454,7 +454,7 @@ namespace InputHandling.Tests
 
             return new AST(moveForward);
         }
-                
+
         [Test]
         public void Test_AstListener_CreatesRequestSessions()
         {
@@ -524,6 +524,7 @@ namespace InputHandling.Tests
 
             return new AST(joinSession);
         }
+        
         [Test]
         public void Test_AstListener_StartSession()
         {
@@ -544,6 +545,72 @@ namespace InputHandling.Tests
             startSession.AddChild(new StartSession());
 
             return new AST(startSession);
+        }
+        
+        public static AST InspectCommand(string inventorySlot)
+        {
+            Input inspect = new Input();
+
+            inspect.AddChild(new Inspect()
+                .AddChild(new InventorySlot(inventorySlot)));
+            
+            return new AST(inspect);
+        }
+        
+        [Test]
+        public void Test_AstListener_CreatesInspectCommandWithArmor()
+        {
+            // Arrange
+            const string inventorySlot = "armor";
+            AST exp = InspectCommand(inventorySlot);
+            
+            // Act
+            AST sut = SetupParser($"inspect {inventorySlot}");
+
+            // Assert
+            Assert.AreEqual(exp, sut);
+        }
+        
+        [Test]
+        public void Test_AstListener_CreatesInspectCommandWithHelmet()
+        {
+            // Arrange
+            const string inventorySlot = "helmet";
+            AST exp = InspectCommand(inventorySlot);
+            
+            // Act
+            AST sut = SetupParser($"inspect {inventorySlot}");
+
+            // Assert
+            Assert.AreEqual(exp, sut);
+        }
+        
+        [Test]
+        public void Test_AstListener_CreatesInspectCommandWithWeapon()
+        {
+            // Arrange
+            const string inventorySlot = "weapon";
+            AST exp = InspectCommand(inventorySlot);
+            
+            // Act
+            AST sut = SetupParser($"inspect {inventorySlot}");
+
+            // Assert
+            Assert.AreEqual(exp, sut);
+        }
+
+        [Test]
+        public void Test_AstListener_CreatesInspectCommandWithSlot1()
+        {
+            // Arrange
+            const string inventorySlot = "slot 1";
+            AST exp = InspectCommand(inventorySlot);
+
+            // Act
+            AST sut = SetupParser($"inspect {inventorySlot}");
+
+            // Assert
+            Assert.AreEqual(exp, sut);
         }
     }
 }

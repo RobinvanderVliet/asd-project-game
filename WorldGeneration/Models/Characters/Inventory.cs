@@ -2,6 +2,12 @@
 using Items;
 using Items.ArmorStats;
 using Items.Consumables;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using WorldGeneration.Exceptions;
 
 namespace WorldGeneration
 {
@@ -40,7 +46,7 @@ namespace WorldGeneration
             }
             else
             {
-                System.Console.WriteLine("You already have 3 consumable items in your inventory!");
+                throw new InventoryFullException("You already have 3 consumable items in your inventory!");
                 return false;
             }
         }
