@@ -139,10 +139,13 @@ namespace Session
                     {
                         return HandleHeartbeat(packet);
                     }
-
                     if (sessionDTO.SessionType == SessionType.EditMonsterDifficulty)
                     {
                         return HandleMonsterDifficulty(packet);
+                    }
+                    if (sessionDTO.SessionType == SessionType.EditItemSpawnRate)
+                    {
+                        return HandleItemSpawnRate(packet);
                     }
                 }
                 if ((packet.Header.Target == "client" || packet.Header.Target == "host" || packet.Header.Target == _clientController.GetOriginId()) 
@@ -182,6 +185,25 @@ namespace Session
                 SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
                 int difficulty = int.Parse(sessionDTO.Name);
                 _gameConfigurationHandler.SetDifficulty((MonsterDifficulty) difficulty, _clientController.SessionId);
+            }
+            return new HandlerResponseDTO(SendAction.Ignore, null);
+        }
+        private HandlerResponseDTO  HandleItemSpawnRate(PacketDTO packetDto)
+        {
+            if (_clientController.IsHost())
+            {
+                SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.Payload);
+                int spawnrate = int.Parse(sessionDTO.Name);
+                Console.WriteLine(spawnrate);
+                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
+                return new HandlerResponseDTO(SendAction.SendToClients, packetDto.Payload);
+            }
+            if (_clientController.IsBackupHost)
+            {
+                SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
+                int spawnrate = int.Parse(sessionDTO.Name);
+                Console.WriteLine(spawnrate);
+                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
             }
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }

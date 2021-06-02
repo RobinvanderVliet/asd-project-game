@@ -180,7 +180,7 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformMonsterDifficulty(MonsterDifficulty monster)
         {
-            if (!_clientController.IsHost())//Check GameStarted wordt toegevoegd in andere feature
+            if (!_clientController.IsHost())//TODO Check GameStarted wordt toegevoegd in andere feature
             {
                 return;
             }
@@ -212,7 +212,7 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformItemFrequency(ItemFrequency itemFrequency)
         {
-            if (!_clientController.IsHost()) //Check GameStarted wordt toegevoegd in andere feature
+            if (!_clientController.IsHost()) //TODO Check GameStarted wordt toegevoegd in andere feature
             {
                 return;
             }
@@ -230,9 +230,10 @@ namespace InputHandling.Antlr.Transformer
                     frequency = (int) ItemSpawnRate.High;
                     break;
             }
+            Console.WriteLine(frequency);
             SessionDTO sessionDto = new SessionDTO
             {
-                SessionType = SessionType.EditItemFrequency,
+                SessionType = SessionType.EditItemSpawnRate,
                 Name = frequency.ToString()
             };
             SendPayload(sessionDto);

@@ -19,6 +19,7 @@ namespace Session.GameConfiguration
         private readonly List<List<string>> _configurationChoices;
         public MonsterDifficulty NewMonsterDifficulty { get; set; }
         public MonsterDifficulty CurrentMonsterDifficulty { get; set; }
+        public ItemSpawnRate SpawnRate { get; set; }
 
         public GameConfigurationHandler(IScreenHandler screenHandler)
         {
@@ -29,6 +30,7 @@ namespace Session.GameConfiguration
             _configurationChoices = new List<List<string>>();
             NewMonsterDifficulty = MonsterDifficulty.Medium;
             CurrentMonsterDifficulty = MonsterDifficulty.Medium;
+            SpawnRate = ItemSpawnRate.Low;
         }
 
         public void SetGameConfiguration()
@@ -91,6 +93,17 @@ namespace Session.GameConfiguration
 
             gameConfiguration.NPCDifficultyCurrent = gameConfiguration.NPCDifficultyNew;
             gameConfiguration.NPCDifficultyNew = (int)monsterDifficulty;
+            gameConfigurationRepository.UpdateAsync(gameConfiguration);
+        }
+        
+        public void SetSpawnRate(ItemSpawnRate spawnRate, string sessionId) 
+        {
+            var dbConnection = new DbConnection();
+
+            var gameConfigurationRepository = new Repository<GameConfigurationPOCO>(dbConnection);
+            var gameConfiguration = gameConfigurationRepository.GetAllAsync().Result.FirstOrDefault(configuration => configuration.GameGUID == sessionId);
+
+            gameConfiguration.ItemSpawnRate = (int) spawnRate;
             gameConfigurationRepository.UpdateAsync(gameConfiguration);
         }
 

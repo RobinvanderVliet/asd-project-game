@@ -278,7 +278,7 @@ namespace InputHandling.Tests
             // Assert
             SessionDTO sessionDto = new SessionDTO
             {
-                SessionType = SessionType.EditItemFrequency,
+                SessionType = SessionType.EditItemSpawnRate,
                 Name = GetFrequency(frequency).ToString()
             };
             var jsonObject = JsonConvert.SerializeObject(sessionDto);

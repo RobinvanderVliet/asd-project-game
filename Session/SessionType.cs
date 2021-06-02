@@ -9,6 +9,6 @@ namespace Session
         ReceivedPingResponse,
         SendHeartbeat,
         EditMonsterDifficulty,
-        EditItemFrequency
+        EditItemSpawnRate
     }
 }
