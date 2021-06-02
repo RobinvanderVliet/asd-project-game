@@ -144,7 +144,18 @@ namespace ActionHandling
                 
                 if (handleInDatabase)
                 {
-                    PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO {PlayerGUID = inventoryDTO.UserId, ItemName = item.ItemName};
+                    PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO
+                    {
+                        PlayerGUID = inventoryDTO.UserId,
+                        GameGUID = _clientController.SessionId,
+                        ItemName = item.ItemName,
+                    };
+                    
+                    if (item is Armor armor)
+                    {
+                        playerItemPOCO.ArmorPoints = armor.ArmorProtectionPoints;
+                    }
+
                     _playerItemServicesDB.CreateAsync(playerItemPOCO);
                 }
                 
