@@ -31,6 +31,8 @@ namespace Creature.Creature.StateMachine.Data
             set => _health = value;
         }
 
+        public double Stamina { get; set; }
+
         public int Damage
         {
             get => _damage;

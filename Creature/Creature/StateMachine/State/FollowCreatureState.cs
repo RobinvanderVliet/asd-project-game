@@ -8,18 +8,10 @@ namespace Creature.Creature.StateMachine.State
 {
     public class FollowCreatureState : CreatureState
     {
-        public FollowCreatureState(ICreatureData creatureData) : base(creatureData)
-        {
-            _creatureData = creatureData;
-        }
-
+        
         public override void Do()
         {
-            throw new NotImplementedException();
-        }
-
-        public override void Do(ICreatureData creatureData)
-        {
+            //TODO implement State functions
             // PathFinder pathFinder = new PathFinder(_creatureData.World.Nodes);
             // ICreatureData playerData = creatureData;
             //

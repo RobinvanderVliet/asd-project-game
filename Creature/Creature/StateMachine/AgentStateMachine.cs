@@ -36,39 +36,39 @@ namespace Creature.Creature.StateMachine
         {
             var builder = new StateMachineDefinitionBuilder<CreatureState, CreatureEvent.Event>();
 
-            CreatureState idleState = new IdleState(CreatureData);
-            CreatureState wanderState = new WanderState(CreatureData);
-            CreatureState inventoryState = new InventoryState(CreatureData);
-            CreatureState useConsumableState = new UseConsumableState(CreatureData);
-            CreatureState followCreatureState = new FollowCreatureState(CreatureData);
-            CreatureState attackState = new AttackState(CreatureData);
-            CreatureState fleeFromCreatureState = new FleeFromCreatureState(CreatureData);
+            CreatureState idleState = new IdleState();
+            CreatureState wanderState = new WanderState();
+            CreatureState inventoryState = new InventoryState();
+            CreatureState useConsumableState = new UseConsumableState();
+            CreatureState followCreatureState = new FollowCreatureState();
+            CreatureState attackState = new AttackState();
+            CreatureState fleeFromCreatureState = new FleeFromCreatureState();
             
             // Idle
-            builder.In(wanderState).On(CreatureEvent.Event.IDLE).Goto(idleState).Execute<ICreatureData>(new WanderState(CreatureData).Do);
+            builder.In(wanderState).On(CreatureEvent.Event.IDLE).Goto(idleState).Execute<ICreatureData>(wanderState.SetCreatureData); //IF not using CreatureDate then remove execute.
             // Wandering
-            builder.In(followCreatureState).On(CreatureEvent.Event.LOST_CREATURE).Goto(wanderState).Execute<ICreatureData>(new WanderState(CreatureData).Do);
-            builder.In(fleeFromCreatureState).On(CreatureEvent.Event.LOST_CREATURE).Goto(wanderState).Execute<ICreatureData>(new WanderState(CreatureData).Do);
+            builder.In(followCreatureState).On(CreatureEvent.Event.LOST_CREATURE).Goto(wanderState).Execute<ICreatureData>(wanderState.SetCreatureData);
+            builder.In(fleeFromCreatureState).On(CreatureEvent.Event.LOST_CREATURE).Goto(wanderState).Execute<ICreatureData>(wanderState.SetCreatureData);
             // Manage inventory
-            builder.In(wanderState).On(CreatureEvent.Event.FOUND_ITEM).Goto(inventoryState).Execute<ICreatureData>(new InventoryState(CreatureData).Do);
-            builder.In(fleeFromCreatureState).On(CreatureEvent.Event.FOUND_ITEM).Goto(inventoryState).Execute<ICreatureData>(new InventoryState(CreatureData).Do);
-            builder.In(followCreatureState).On(CreatureEvent.Event.FOUND_ITEM).Goto(inventoryState).Execute<ICreatureData>(new InventoryState(CreatureData).Do);
+            builder.In(wanderState).On(CreatureEvent.Event.FOUND_ITEM).Goto(inventoryState).Execute<ICreatureData>(inventoryState.SetCreatureData);
+            builder.In(fleeFromCreatureState).On(CreatureEvent.Event.FOUND_ITEM).Goto(inventoryState).Execute<ICreatureData>(inventoryState.SetCreatureData);
+            builder.In(followCreatureState).On(CreatureEvent.Event.FOUND_ITEM).Goto(inventoryState).Execute<ICreatureData>(inventoryState.SetCreatureData);
             // Use Consumable
-            builder.In(fleeFromCreatureState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
-            builder.In(followCreatureState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
-            builder.In(wanderState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
-            builder.In(fleeFromCreatureState).On(CreatureEvent.Event.OUT_OF_STAMINA).Goto(useConsumableState).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
-            builder.In(followCreatureState).On(CreatureEvent.Event.OUT_OF_STAMINA).Goto(useConsumableState).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
-            builder.In(wanderState).On(CreatureEvent.Event.OUT_OF_STAMINA).Goto(useConsumableState).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
+            builder.In(fleeFromCreatureState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICreatureData>(useConsumableState.SetCreatureData);
+            builder.In(followCreatureState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICreatureData>(useConsumableState.SetCreatureData);
+            builder.In(wanderState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICreatureData>(useConsumableState.SetCreatureData);
+            builder.In(fleeFromCreatureState).On(CreatureEvent.Event.OUT_OF_STAMINA).Goto(useConsumableState).Execute<ICreatureData>(useConsumableState.SetCreatureData);
+            builder.In(followCreatureState).On(CreatureEvent.Event.OUT_OF_STAMINA).Goto(useConsumableState).Execute<ICreatureData>(useConsumableState.SetCreatureData);
+            builder.In(wanderState).On(CreatureEvent.Event.OUT_OF_STAMINA).Goto(useConsumableState).Execute<ICreatureData>(useConsumableState.SetCreatureData);
             // Follow creature
-            builder.In(wanderState).On(CreatureEvent.Event.SPOTTED_CREATURE).Goto(followCreatureState).Execute<ICreatureData>(new FollowCreatureState(CreatureData).Do);
-            builder.In(attackState).On(CreatureEvent.Event.CREATURE_OUT_OF_RANGE).Goto(followCreatureState).Execute<ICreatureData>(new FollowCreatureState(CreatureData).Do);
+            builder.In(wanderState).On(CreatureEvent.Event.SPOTTED_CREATURE).Goto(followCreatureState).Execute<ICreatureData>(followCreatureState.SetCreatureData);
+            builder.In(attackState).On(CreatureEvent.Event.CREATURE_OUT_OF_RANGE).Goto(followCreatureState).Execute<ICreatureData>(followCreatureState.SetCreatureData);
             // Attack creature
-            builder.In(followCreatureState).On(CreatureEvent.Event.CREATURE_IN_RANGE).Goto(attackState).Execute<ICreatureData>(new AttackState(CreatureData).Do);
-            builder.In(attackState).On(CreatureEvent.Event.CREATURE_IN_RANGE).Execute<ICreatureData>(new AttackState(CreatureData).Do);
-            builder.In(attackState).On(CreatureEvent.Event.OUT_OF_STAMINA).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
+            builder.In(followCreatureState).On(CreatureEvent.Event.CREATURE_IN_RANGE).Goto(attackState).Execute<ICreatureData>(attackState.SetCreatureData);
+            builder.In(attackState).On(CreatureEvent.Event.CREATURE_IN_RANGE).Execute<ICreatureData>(attackState.SetCreatureData);
+            builder.In(attackState).On(CreatureEvent.Event.OUT_OF_STAMINA).Execute<ICreatureData>(attackState.SetCreatureData);
             // Flee From creature
-            builder.In(attackState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(fleeFromCreatureState).Execute<ICreatureData>(new FleeFromCreatureState(CreatureData).Do);
+            builder.In(attackState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(fleeFromCreatureState).Execute<ICreatureData>(fleeFromCreatureState.SetCreatureData); //TODO add SetTarget();
 
             builder.WithInitialState(wanderState);
 
