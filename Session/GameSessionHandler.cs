@@ -68,10 +68,10 @@ namespace Session
                 servicePlayer.CreateAsync(tmpPlayer);
                 var playerHelmet = new PlayerItemPOCO()
                 {
-                   GameGUID = gamePOCO.GameGuid, PlayerGUID = clientId, ItemName = ItemFactory.GetBandana().ItemName, ArmorPoints = ItemFactory.GetBandana().ArmorProtectionPoints, ArmorPartType = ItemFactory.GetBandana().ArmorPartType
+                   GameGUID = gamePOCO.GameGuid, PlayerGUID = clientId, ItemName = ItemFactory.GetBandana().ItemName, ArmorPoints = ItemFactory.GetBandana().ArmorProtectionPoints
                 };
                 var playerWeapon = new PlayerItemPOCO(){
-                    GameGUID = gamePOCO.GameGuid, PlayerGUID = clientId, ItemName = ItemFactory.GetKnife().ItemName, Damage = (int) ItemFactory.GetKnife().Damage
+                    GameGUID = gamePOCO.GameGuid, PlayerGUID = clientId, ItemName = ItemFactory.GetKnife().ItemName
                 };
                 playerItemService.CreateAsync(playerHelmet);
                 playerItemService.CreateAsync(playerWeapon);
