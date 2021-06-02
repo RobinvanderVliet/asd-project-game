@@ -1,12 +1,11 @@
-﻿using System;
-using DataTransfer.DTO.Character;
+﻿using DataTransfer.DTO.Character;
 
 namespace WorldGeneration
 {
     public interface IWorldService
     {
         public void UpdateCharacterPosition(MapCharacterDTO mapCharacterDTO);
-        public void AddCharacterToWorld(MapCharacterDTO characterPositionDTO, bool isCurrentPlayer);
+        public void AddCharacterToWorld(MapCharacterDTO mapCharacterDTO, bool isCurrentPlayer);
         public void DisplayWorld();
         public void DeleteMap();
         public void GenerateWorld(int seed);

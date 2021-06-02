@@ -5,7 +5,7 @@ namespace Player.Model
     public interface IPlayerModel
     {
         public string Name { get; set; }
-        
+
         public string PlayerGuid { get; set; }
         public int Health { get; set; }
         public int Stamina { get; set; }
@@ -41,7 +41,7 @@ namespace Player.Model
         public void RemoveBitcoins(int amount);
 
         public int GetAttackDamage();
-        
+
         public void PickupItem();
 
         public void DropItem(string itemName);

@@ -1,7 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast;
+﻿using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
 using Agent.Antlr.Ast.Comparables.Subjects;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.Generator
 {
@@ -14,7 +14,8 @@ namespace Agent.Tests.Generator
 
         public AST GetFixture(string name)
         {
-            switch (name) {
+            switch (name)
+            {
                 case "test1.txt":
                     return GetTestFixture1();
                 case "test2.txt":
@@ -25,8 +26,8 @@ namespace Agent.Tests.Generator
                     return new AST();
             }
         }
-        
-        
+
+
         private AST GetTestFixture1()
         {
             var configuration = new Configuration();
@@ -142,7 +143,7 @@ namespace Agent.Tests.Generator
                     )
                 )
             );
-            
+
             configuration.AddChild((new Setting("explore"))
                 .AddChild((new Condition())
                     .AddChild((new When())
@@ -175,13 +176,13 @@ namespace Agent.Tests.Generator
                     )
                 )
             );
-            
-            
-            
+
+
+
             return new AST(configuration);
         }
-        
-        
-        
+
+
+
     }
 }

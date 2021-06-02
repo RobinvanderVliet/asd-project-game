@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Creature.Pathfinder;
 using NUnit.Framework;
-using Moq;
-using Creature.Pathfinder;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
@@ -46,7 +45,7 @@ namespace Creature.Tests
             // Arrange ---------
             Stack<Node> actualPath = new Stack<Node>();
             actualPath = _sut.FindPath(_startPos, _endPos);
-            
+
             // Act -------------
             int actual = actualPath.Count;
             int expected = 38;

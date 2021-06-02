@@ -20,7 +20,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         {
             if (child is Message)
             {
-                _message = (Message) child;
+                _message = (Message)child;
             }
 
             return this;
@@ -49,6 +49,10 @@ namespace InputCommandHandler.Antlr.Ast.Actions
                 return false;
 
             return _message.Equals(other._message);
+        }
+        public override int GetHashCode()
+        {
+            return _message.GetHashCode();
         }
     }
 }

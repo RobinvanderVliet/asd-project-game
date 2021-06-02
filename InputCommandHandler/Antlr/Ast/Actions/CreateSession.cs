@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace InputCommandHandler.Antlr.Ast.Actions
 {
-    public class CreateSession: Command
+    public class CreateSession : Command
     {
         private Message _message;
         [ExcludeFromCodeCoverage]
@@ -21,7 +21,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         {
             if (child is Message)
             {
-                _message = (Message) child;
+                _message = (Message)child;
             }
 
             return this;
@@ -37,7 +37,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
 
             return this;
         }
-        
+
         [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
@@ -48,6 +48,10 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         public bool Equals(Drop other)
         {
             return true;
+        }
+        public override int GetHashCode()
+        {
+            return _message.GetHashCode();
         }
     }
 }

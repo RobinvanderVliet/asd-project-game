@@ -10,12 +10,12 @@ namespace Agent.Mapper
         public Dictionary<string, string> MapFileToConfiguration(string filepath)
         {
             FileHandler = new FileHandler();
-            Dictionary<string, string> configuration = new  Dictionary<string, string>();
-                    
+            Dictionary<string, string> configuration = new Dictionary<string, string>();
+
             string content = FileHandler.ImportFile(filepath);
-                    
+
             var splitContent = content.Split(Environment.NewLine);
-                    
+
             foreach (var setting in splitContent)
             {
                 if (setting.Equals(""))
@@ -26,7 +26,7 @@ namespace Agent.Mapper
                 var seperatedComponents = setting.Split("=");
                 configuration.Add(seperatedComponents[0].Trim(), seperatedComponents[1].Trim());
             }
-        
+
             return configuration;
         }
     }

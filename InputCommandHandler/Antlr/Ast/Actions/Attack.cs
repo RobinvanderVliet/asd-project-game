@@ -12,7 +12,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         {
             if (child is Direction)
             {
-                _direction = (Direction) child;
+                _direction = (Direction)child;
             }
 
             return this;
@@ -33,6 +33,10 @@ namespace InputCommandHandler.Antlr.Ast.Actions
             }
 
             return _direction.Equals(other._direction);
+        }
+        public override int GetHashCode()
+        {
+            return _direction.GetHashCode();
         }
     }
 }

@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using DatabaseHandler.Repository;
 using LiteDB;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DatabaseHandler.Services
 {
@@ -15,7 +15,7 @@ namespace DatabaseHandler.Services
 
         public ServicesDb(IRepository<T> repository)
         {
-            
+
             _repository = repository;
             _log = new NullLogger<ServicesDb<T>>();
         }
@@ -58,7 +58,7 @@ namespace DatabaseHandler.Services
                 throw;
             }
         }
-        
+
         public Task<int> DeleteAsync(T obj)
         {
             try

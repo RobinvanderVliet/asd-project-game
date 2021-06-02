@@ -1,5 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Antlr4.Runtime;
+﻿using Antlr4.Runtime;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.Parser
 {
@@ -8,7 +8,7 @@ namespace Agent.Tests.Parser
     {
 
         private string message;
-        
+
         override public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine, string msg,
             RecognitionException e)
         {

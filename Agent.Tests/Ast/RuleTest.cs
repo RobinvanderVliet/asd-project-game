@@ -1,6 +1,6 @@
-using System.Diagnostics.CodeAnalysis;
 using Agent.Antlr.Ast;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.Ast
 {
@@ -14,10 +14,10 @@ namespace Agent.Tests.Ast
         [SetUp]
         public void Setup()
         {
-            _rule = new Rule(null,null);
+            _rule = new Rule(null, null);
         }
 
-     
+
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
@@ -28,7 +28,7 @@ namespace Agent.Tests.Ast
             Assert.AreEqual(result, TYPE);
         }
 
-   
+
         [Test]
         public void Test_AddChild_Setting()
         {
@@ -37,13 +37,13 @@ namespace Agent.Tests.Ast
             _rule.AddChild(setting);
 
             //Act
-            
-            var result = ( _rule.GetChildren()[0])?.GetNodeType();
+
+            var result = (_rule.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual(result, "Setting");
         }
-        
+
         [Test]
         public void Test_AddChild_Node()
         {
@@ -54,13 +54,13 @@ namespace Agent.Tests.Ast
             //Act
 
 
-            var result = ( _rule.GetChildren()[0]).GetNodeType();
+            var result = (_rule.GetChildren()[0]).GetNodeType();
 
             //Assert
             Assert.AreEqual(result, "Node");
         }
-        
-    
+
+
         [Test]
         public void Test_RemoveChild_Setting()
         {
@@ -68,16 +68,16 @@ namespace Agent.Tests.Ast
             Setting setting = new Setting(null);
             _rule.AddChild(setting);
             _rule.RemoveChild(setting);
-            
+
 
             //Act
             var result = _rule.GetChildren().Count == 0;
-            
+
             //Assert
-         Assert.True(result);
+            Assert.True(result);
         }
-        
-     
+
+
         [Test]
         public void Test_RemoveChild_Node()
         {
@@ -85,11 +85,11 @@ namespace Agent.Tests.Ast
             var node = new Node();
             _rule.AddChild(node);
             _rule.RemoveChild(node);
-            
+
 
             //Act
             var result = _rule.GetChildren().Count == 0;
-            
+
             //Assert
             Assert.True(result);
         }

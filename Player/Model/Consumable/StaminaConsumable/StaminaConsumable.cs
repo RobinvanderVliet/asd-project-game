@@ -8,7 +8,7 @@ namespace Player.Model.Consumable.StaminaConsumable
 
         public int getStamina()
         {
-            return (int) Stamina;
+            return (int)Stamina;
         }
     }
 }
