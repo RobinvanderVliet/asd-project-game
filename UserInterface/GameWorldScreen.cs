@@ -13,10 +13,6 @@
             _width = width;
             _height = height;
         }
-        public GameWorldScreen()
-        {
-
-        }
 
         public override void DrawScreen()
         {

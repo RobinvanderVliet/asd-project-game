@@ -17,11 +17,6 @@ namespace UserInterface
             _height = height;
         }
 
-        public GameChatScreen()
-        {
-
-        }
-
         public override void DrawScreen()
         {
             DrawChatBox();          

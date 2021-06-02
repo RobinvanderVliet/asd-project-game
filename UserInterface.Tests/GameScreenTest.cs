@@ -115,7 +115,6 @@ namespace UserInterface.Tests
         public void Test_setStatValue_SendsStatsToGameStatScreen()
         {
             //Arrange
-            //Arrange
             string name = "TestName";
             int score = 0;
             int health = 100;

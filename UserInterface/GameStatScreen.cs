@@ -16,11 +16,6 @@
             _height = height;
         }
 
-        public GameStatScreen()
-        {
-
-        }
-
         public override void DrawScreen()
         {
             DrawBox(_xPosition, _yPosition, _width, _height);
