@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Creature.World;
 using System.Numerics;
 
 namespace Creature.Creature.StateMachine.Data
@@ -50,9 +49,7 @@ namespace Creature.Creature.StateMachine.Data
         {
             get => _ruleSet;
         }
-
-        public IWorld World { get; set; }
-
+        
         public bool IsFollowing
         {
             get => _following;

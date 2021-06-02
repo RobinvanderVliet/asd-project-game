@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Creature.World;
 
 namespace Creature.Creature.StateMachine.Data
 {
@@ -13,6 +12,5 @@ namespace Creature.Creature.StateMachine.Data
         int Damage { get; set; }
         double Health { get; set; }
         List<ValueTuple<string, string>> RuleSet { get; }
-        IWorld World { get; set; } //TODO check if used, Otherwise delete ALSO check the classes that implement this.
     }
 }
