@@ -1,10 +1,18 @@
 using System;
 using ActionHandling;
+using Agent.Antlr.Ast;
 using Chat;
 using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Exceptions;
+using Network;
+using Newtonsoft.Json;
 using Session;
+using Session.DTO;
+using Session.GameConfiguration;
+using AST = InputHandling.Antlr.Ast.AST;
+using ItemFrequency = InputHandling.Antlr.Ast.Actions.ItemFrequency;
+using MonsterDifficulty = InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
 namespace InputHandling.Antlr.Transformer
 {
@@ -14,17 +22,19 @@ namespace InputHandling.Antlr.Transformer
         private IMoveHandler _moveHandler;
         private IGameSessionHandler _gameSessionHandler;
         private IChatHandler _chatHandler;
+        private IClientController _clientController;
         
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private String _commando;
 
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IClientController clientController)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
             _gameSessionHandler = gameSessionHandler;
             _chatHandler = chatHandler;
+            _clientController = clientController;
         }
         public void Apply(AST ast)
         {
@@ -79,6 +89,12 @@ namespace InputHandling.Antlr.Transformer
                         break;
                     case StartSession:
                         TransformStartSession((StartSession)nodeBody[i]);
+                        break;
+                    case MonsterDifficulty:
+                        TransformMonsterDifficulty((MonsterDifficulty)nodeBody[i]);
+                        break;
+                    case ItemFrequency:
+                        TransformItemFrequency((ItemFrequency)nodeBody[i]);
                         break;
                 }
         }
@@ -161,6 +177,72 @@ namespace InputHandling.Antlr.Transformer
         {
             _gameSessionHandler.SendGameSession();
         }
-        
+
+        private void TransformMonsterDifficulty(MonsterDifficulty monster)
+        {
+            if (!_clientController.IsHost())//TODO Check GameStarted wordt toegevoegd in andere feature
+            {
+                return;
+            }
+
+            int difficulty = -1;
+            switch (monster.Difficulty)
+            {
+                case "easy":
+                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Easy;
+                    break;
+                case "medium":
+                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Medium;
+                    break;
+                case "hard":
+                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Hard;
+                    break;
+                case "impossible":
+                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Impossible;
+                    break;
+            }
+
+            SessionDTO sessionDto = new SessionDTO
+            {
+                SessionType = SessionType.EditMonsterDifficulty,
+                Name = difficulty.ToString()
+            };
+            SendPayload(sessionDto);
+        }
+
+        private void TransformItemFrequency(ItemFrequency itemFrequency)
+        {
+            if (!_clientController.IsHost()) //TODO Check GameStarted wordt toegevoegd in andere feature
+            {
+                return;
+            }
+            
+            int frequency = -1;
+            switch (itemFrequency.Frequency)
+            {
+                case "low":
+                    frequency = (int) ItemSpawnRate.Low;
+                    break;
+                case "medium":
+                    frequency = (int) ItemSpawnRate.Medium;
+                    break;
+                case "high":
+                    frequency = (int) ItemSpawnRate.High;
+                    break;
+            }
+            Console.WriteLine(frequency);
+            SessionDTO sessionDto = new SessionDTO
+            {
+                SessionType = SessionType.EditItemSpawnRate,
+                Name = frequency.ToString()
+            };
+            SendPayload(sessionDto);
+        }
+
+        private void SendPayload(SessionDTO sessionDto)
+        {
+            var jsonObject = JsonConvert.SerializeObject(sessionDto);
+            _clientController.SendPayload(jsonObject, PacketType.Session);
+        }
     }
 }

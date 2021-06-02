@@ -10,6 +10,7 @@ using WorldGeneration;
 using DatabaseHandler;
 using DatabaseHandler.Services;
 using DatabaseHandler.Repository;
+using Session.GameConfiguration;
 using UserInterface;
 using Timer = System.Timers.Timer;
 
@@ -17,7 +18,7 @@ namespace Session
 {
     public class SessionHandler : IPacketHandler, ISessionHandler
     {
-        private const bool DEBUG_INTERFACE = false; //TODO: remove when UI is complete, obviously
+        private const bool DEBUG_INTERFACE = true; //TODO: remove when UI is complete, obviously
         
         private IClientController _clientController;
         private Session _session;
@@ -30,11 +31,13 @@ namespace Session
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
         private IScreenHandler _screenHandler;
-        public SessionHandler(IClientController clientController, IScreenHandler screenHandler)
+        private IGameConfigurationHandler _gameConfigurationHandler;
+        public SessionHandler(IClientController clientController, IScreenHandler screenHandler, IGameConfigurationHandler gameConfigurationHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Session);
             _screenHandler = screenHandler;
+            _gameConfigurationHandler = gameConfigurationHandler;
         }
         
         public List<string> GetAllClients()
@@ -136,6 +139,14 @@ namespace Session
                     {
                         return HandleHeartbeat(packet);
                     }
+                    if (sessionDTO.SessionType == SessionType.EditMonsterDifficulty)
+                    {
+                        return HandleMonsterDifficulty(packet);
+                    }
+                    if (sessionDTO.SessionType == SessionType.EditItemSpawnRate)
+                    {
+                        return HandleItemSpawnRate(packet);
+                    }
                 }
                 if ((packet.Header.Target == "client" || packet.Header.Target == "host" || packet.Header.Target == _clientController.GetOriginId()) 
                     && sessionDTO.SessionType == SessionType.SendPing)
@@ -157,6 +168,43 @@ namespace Session
                 }
             }
         
+            return new HandlerResponseDTO(SendAction.Ignore, null);
+        }
+
+        private HandlerResponseDTO  HandleMonsterDifficulty(PacketDTO packetDto)
+        {
+            if (_clientController.IsHost())
+            {
+                SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.Payload);
+                int difficulty = int.Parse(sessionDTO.Name);
+                _gameConfigurationHandler.SetDifficulty((MonsterDifficulty) difficulty, _clientController.SessionId);
+                return new HandlerResponseDTO(SendAction.SendToClients, packetDto.Payload);
+            }
+            if (_clientController.IsBackupHost)
+            {
+                SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
+                int difficulty = int.Parse(sessionDTO.Name);
+                _gameConfigurationHandler.SetDifficulty((MonsterDifficulty) difficulty, _clientController.SessionId);
+            }
+            return new HandlerResponseDTO(SendAction.Ignore, null);
+        }
+        private HandlerResponseDTO  HandleItemSpawnRate(PacketDTO packetDto)
+        {
+            if (_clientController.IsHost())
+            {
+                SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.Payload);
+                int spawnrate = int.Parse(sessionDTO.Name);
+                Console.WriteLine(spawnrate);
+                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
+                return new HandlerResponseDTO(SendAction.SendToClients, packetDto.Payload);
+            }
+            if (_clientController.IsBackupHost)
+            {
+                SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
+                int spawnrate = int.Parse(sessionDTO.Name);
+                Console.WriteLine(spawnrate);
+                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
+            }
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
         

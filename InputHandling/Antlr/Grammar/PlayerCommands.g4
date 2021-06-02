@@ -24,6 +24,8 @@ CREATE_SESSION : 'create_session';
 JOIN_SESSION : 'join_session';
 REQUEST_SESSIONS : 'request_sessions';
 START_SESSION : 'start_session';
+SET_MONSTER_DIFFICULTY : 'monster_difficulty';
+SET_ITEM_FREQUENCY : 'item_spawn_rate';
 
 FORWARD: 'forward';
 UP: 'up';
@@ -35,6 +37,13 @@ LEFT: 'left';
 WEST: 'west';
 RIGHT: 'right';
 EAST: 'east';
+EASY: 'easy';
+MEDIUM: 'medium';
+HARD: 'hard';
+IMPOSSIBLE: 'impossible';
+LOW : 'low';
+HIGH : 'high';
+
 
 NUMBER: '0' | [0-9]*;
 MESSAGE: '"' ~'"'+ '"';
@@ -61,7 +70,9 @@ command:
     CREATE_SESSION SPACE message #createSession |
     JOIN_SESSION SPACE message #joinSession |
     REQUEST_SESSIONS #requestSessions |
-    START_SESSION #startSession;
+    START_SESSION #startSession |
+    SET_MONSTER_DIFFICULTY SPACE (EASY | MEDIUM | HARD | IMPOSSIBLE) #monsterdifficulty | 
+    SET_ITEM_FREQUENCY SPACE (LOW | MEDIUM | HIGH) #itemfrequency;
 
 forward: FORWARD | UP | NORTH;
 backward: BACKWARD | DOWN | SOUTH;
