@@ -30,51 +30,53 @@ namespace UserInterface
         
         public void DrawBox(int x, int y, int innerWidth, int innerHeight)
         {
-            Console.SetCursorPosition(x, y);
-            Console.Write(ulCorner);
+            _screenHandler.ConsoleHelper.SetCursor(x, y);
+            _screenHandler.ConsoleHelper.Write(ulCorner);
             for (int i = 0; i < innerWidth; i++)
             {
-                Console.Write(horizontal);
+                _screenHandler.ConsoleHelper.Write(horizontal);
             }
-            Console.Write(urCorner);
+            _screenHandler.ConsoleHelper.Write(urCorner);
             
             for (int i = 0; i < innerHeight; i++)
             {
-                Console.SetCursorPosition(x, i + y + 1);
-                Console.Write(vertical);
+                _screenHandler.ConsoleHelper.SetCursor(x, i + y + 1);
+                _screenHandler.ConsoleHelper.Write(vertical);
                 
-                Console.SetCursorPosition(x + innerWidth + 1, i + y + 1);
-                Console.Write(vertical);
+                _screenHandler.ConsoleHelper.SetCursor(x + innerWidth + 1, i + y + 1);
+                _screenHandler.ConsoleHelper.Write(vertical);
             }
             
-            Console.SetCursorPosition(x, y + innerHeight + 1);
-            Console.Write(llCorner);
+            _screenHandler.ConsoleHelper.SetCursor(x, y + innerHeight + 1);
+            _screenHandler.ConsoleHelper.Write(llCorner);
             for (int i = 0; i < innerWidth; i++)
             {
-                Console.Write(horizontal);
+                _screenHandler.ConsoleHelper.Write(horizontal);
             }
 
-            Console.Write(lrCorner);
+            _screenHandler.ConsoleHelper.Write(lrCorner);
         }
 
         public void DrawHeader(string message)
         {
             DrawBox(HEADER_X, HEADER_Y, HEADER_WIDTH, HEADER_HEIGHT);
             
-            Console.SetCursorPosition(HEADER_X + OFFSET_LEFT, HEADER_Y + OFFSET_TOP);
-            Console.Write(message);
+            _screenHandler.ConsoleHelper.SetCursor(HEADER_X + OFFSET_LEFT, HEADER_Y + OFFSET_TOP);
+            _screenHandler.ConsoleHelper.Write(message);
         }
         public void DrawInputBox(int x, int y, string message)
         {
             DrawBox(x, y, SCREEN_WIDTH - BORDER_SIZE, INPUT_HEIGHT);
-            Console.SetCursorPosition(x + OFFSET_LEFT - OFFSET_TOP, y + OFFSET_TOP);
-            Console.Write(new string(' ', SCREEN_WIDTH - BORDER_SIZE));
-            Console.SetCursorPosition(x + OFFSET_LEFT, y + OFFSET_TOP);
-            Console.Write(message);
-            Console.SetCursorPosition(x + OFFSET_LEFT, y + BORDER_SIZE);
-            Console.Write(">");
-            Console.Write(new string(' ', SCREEN_WIDTH - BORDER_SIZE - Console.CursorLeft));
-            Console.SetCursorPosition(x + 4, y + 2);
+            _screenHandler.ConsoleHelper.SetCursor(x + OFFSET_LEFT - OFFSET_TOP, y + OFFSET_TOP);
+            _screenHandler.ConsoleHelper.Write(new string(' ', SCREEN_WIDTH - BORDER_SIZE));
+            _screenHandler.ConsoleHelper.SetCursor(x + OFFSET_LEFT, y + OFFSET_TOP);
+            _screenHandler.ConsoleHelper.Write(message);
+            _screenHandler.ConsoleHelper.SetCursor(x + OFFSET_LEFT / 2, y + BORDER_SIZE);
+            _screenHandler.ConsoleHelper.Write(" ");
+            _screenHandler.ConsoleHelper.SetCursor(x + OFFSET_LEFT, y + BORDER_SIZE);
+            _screenHandler.ConsoleHelper.Write(">");
+            _screenHandler.ConsoleHelper.Write(new string(' ', SCREEN_WIDTH - BORDER_SIZE / 2 - _screenHandler.ConsoleHelper.GetCursorLeft()));
+            _screenHandler.ConsoleHelper.SetCursor(x + OFFSET_LEFT * 2, y + OFFSET_TOP * 2);
         }
     }
 }

@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>InputHandling</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Content Include="Antlr\Grammar\PlayerCommands.g4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ActionHandling\ActionHandling.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Antlr4" Version="4.6.6">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
+    </ItemGroup>
+
+</Project>

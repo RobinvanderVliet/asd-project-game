@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace UserInterface
 {
     public interface IScreenHandler
@@ -5,5 +7,10 @@ namespace UserInterface
         public Screen Screen { get; set; }
         void TransitionTo(Screen screen);
         void DisplayScreen();
+        public ConsoleHelper ConsoleHelper { get; set; }
+        public string GetScreenInput();
+        public void ShowMessages(Queue<string> messages);
+        public void RedrawGameInputBox();
     }
 }
+       

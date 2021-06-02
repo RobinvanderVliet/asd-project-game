@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Session.DTO;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Timers;
 using Network.DTO;
@@ -17,6 +18,8 @@ namespace Session
 {
     public class SessionHandler : IPacketHandler, ISessionHandler
     {
+        private const bool DEBUG_INTERFACE = false; //TODO: remove when UI is complete, obviously
+        
         private IClientController _clientController;
         private Session _session;
         private IHeartbeatHandler _heartbeatHandler;
@@ -34,13 +37,18 @@ namespace Session
             _clientController.SubscribeToPacketType(this, PacketType.Session);
             _screenHandler = screenHandler;
         }
+
+        public SessionHandler()
+        {
+            
+        }
         
-        public List<string> GetAllClients()
+        public List<string[]> GetAllClients()
         {
            return _session.GetAllClients();
         }
      
-        public bool JoinSession(string sessionId)
+        public bool JoinSession(string sessionId, string userName)
         {
             var joinSession = false;
 
@@ -60,8 +68,8 @@ namespace Session
                 Console.WriteLine("Trying to join game with name: " + _session.Name);
 
                 SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
-                sessionDTO.ClientIds = new List<string>();
-                sessionDTO.ClientIds.Add(_clientController.GetOriginId());
+                sessionDTO.Clients = new List<string[]>();
+                sessionDTO.Clients.Add(new []{_clientController.GetOriginId(), userName});
                 sessionDTO.SessionSeed = receivedSessionDTO.SessionSeed;
                 sendSessionDTO(sessionDTO);
                 joinSession = true;
@@ -84,18 +92,24 @@ namespace Session
             SendHeartbeat();
         }
 
-        public bool CreateSession(string sessionName)
+        public bool CreateSession(string sessionName, string userName)
         {
             _session = new Session(sessionName);
             _session.GenerateSessionId();
-            _session.AddClient(_clientController.GetOriginId());
+            _session.AddClient(_clientController.GetOriginId(), userName);
             _session.SessionSeed = MapFactory.GenerateSeed();
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
 
             _heartbeatHandler = new HeartbeatHandler();
-            Console.WriteLine("Created session with the name: " + _session.Name);
+
+            /*if (_screenHandler.Screen is GameScreen)
+            {
+                GameScreen screen = _screenHandler.Screen as GameScreen;
+                screen.AddMessage("Created session with the name: " + _session.Name);
+            }*/
+                
 
             return _session.InSession;
         }
@@ -214,6 +228,7 @@ namespace Session
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessionsResponse);
             sessionDTO.Name = _session.Name;
             sessionDTO.SessionSeed = _session.SessionSeed;
+            sessionDTO.Clients = _session.GetAllClients();
             var jsonObject = JsonConvert.SerializeObject(sessionDTO);
             return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
         }
@@ -223,14 +238,32 @@ namespace Session
             _availableSessions.TryAdd(packet.Header.SessionID, packet);
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
 
-            if (_screenHandler.Screen is SessionScreen)
+            if (!DEBUG_INTERFACE) // Remove when UI is completed
             {
-                SessionScreen screen = _screenHandler.Screen as SessionScreen;
-                screen.UpdateSessions(sessionDTO, packet.Header.SessionID);
+                if (_screenHandler.Screen is SessionScreen screen)
+                {
+                    var hostName = String.Empty;
+                    var amountOfPlayers = "0";
+                    if (sessionDTO.Clients != null && sessionDTO.Clients.Count > 0)
+                    {
+                        hostName = sessionDTO.Clients.First()[1];
+                        amountOfPlayers = sessionDTO.Clients.Count.ToString();
+                    }
+                    else
+                    {
+                        // TODO: remove after/during integration
+                        hostName = "Unnamed player";
+                        amountOfPlayers = "1";
+                    }
+                    
+                    screen.UpdateWithNewSession(new[] {packet.Header.SessionID, sessionDTO.Name, hostName, amountOfPlayers});
+                }
             }
-
-            // Console.WriteLine(
-            //     packet.Header.SessionID + " Name: " + sessionDTO.Name + " Seed: " + sessionDTO.SessionSeed);
+            else
+            {
+                Console.WriteLine("Id: " + packet.Header.SessionID + " Name: " + sessionDTO.Name + " Host: " + sessionDTO.Clients.First()[1] + " Amount of players: " + sessionDTO.Clients.Count);
+            }
+            
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
         
@@ -240,15 +273,15 @@ namespace Session
             
             if (packet.Header.Target == "host")
             {
-                Console.WriteLine(sessionDTO.ClientIds[0] + " Has joined your session: ");
-                _session.AddClient(sessionDTO.ClientIds[0]);
-                sessionDTO.ClientIds = new List<string>();
+                Console.WriteLine(sessionDTO.Clients[0][1] + " Has joined your session: ");
+                _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
+                sessionDTO.Clients = new List<string[]>();
 
                 sessionDTO.SessionSeed = _session.SessionSeed;
 
-                foreach (string client in _session.GetAllClients())
+                foreach (string[] client in _session.GetAllClients())
                 {
-                    sessionDTO.ClientIds.Add(client);
+                    sessionDTO.Clients.Add(client);
                 }
 
                 return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
@@ -261,14 +294,14 @@ namespace Session
                 _session.SessionSeed = sessionDTOClients.SessionSeed;
                 
                 Console.WriteLine("Players in your session:");
-                foreach (string client in sessionDTOClients.ClientIds)
+                foreach (string[] client in sessionDTOClients.Clients)
                 {
-                    _session.AddClient(client);
-                    Console.WriteLine(client);
+                    _session.AddClient(client[0], client[1]);
+                    Console.WriteLine(client[0] + " " + client[1]);
                 }
 
-                if (sessionDTOClients.ClientIds.Count > 0 && !_clientController.IsBackupHost) {
-                    if (sessionDTOClients.ClientIds[1].Equals(_clientController.GetOriginId()))
+                if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost) {
+                    if (sessionDTOClients.Clients[1][0].Equals(_clientController.GetOriginId()))
                     {
                         _clientController.IsBackupHost = true;
                         PingHostTimer();
@@ -319,8 +352,9 @@ namespace Session
             _senderHeartbeatTimer.Close();
             
             Console.WriteLine("Look at me, I'm the captain (Host) now!");
-            
-            List<string> heartbeatSenders = new List<string>(_session.GetAllClients());
+
+            var clients = _session.GetAllClients().Select(client => client.First()).ToArray();
+            List<string> heartbeatSenders = new List<string>(clients);
             heartbeatSenders.Remove(_clientController.GetOriginId());
             
             _heartbeatHandler = new HeartbeatHandler(heartbeatSenders);
