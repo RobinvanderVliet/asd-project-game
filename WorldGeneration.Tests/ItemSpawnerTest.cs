@@ -44,7 +44,7 @@ namespace WorldGeneration.Tests
         }
 
         [Test]
-        public void Test_Spawn_CreateChestTileOnRandomCoordinateInChunk()
+        public void Test_Spawn_ItemSpawnDoesNotChangeTileType()
         {
             //Arrange ---------
             _mockedNoise.Setup(x => x.GetNoise(_chunk.X, _chunk.Y))
@@ -59,11 +59,11 @@ namespace WorldGeneration.Tests
             sut.Spawn(_chunk);
             
             //Assert ---------
-            Assert.IsInstanceOf<ChestTile>(_chunk.Map[1]);
+            Assert.IsInstanceOf<GrassTile>(_chunk.Map[1]);
         }
 
         [Test]
-        public void Test_Spawn_CheckIfChestIsFilledWithItem()
+        public void Test_Spawn_CheckIfTileHasItem()
         {
             //Arrange ---------
             _mockedNoise.Setup(x => x.GetNoise(_chunk.X, _chunk.Y))

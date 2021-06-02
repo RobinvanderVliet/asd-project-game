@@ -19,7 +19,7 @@ namespace WorldGeneration
         {
             // Determine if an item should be spawned in the chunk. For now this will always be true.
             var noiseresult = _noise.GetNoise(chunk.X, chunk.Y);
-            int numberOfItemSpawns = 0;
+            var numberOfItemSpawns = 0;
 
             switch (noiseresult)
             {
@@ -45,7 +45,7 @@ namespace WorldGeneration
                 var randomTile = (int) ((chunk.RowSize * chunk.RowSize - 1) * noiseresult );
                 if (randomTile < 0)
                 {
-                    randomTile = randomTile * -1;
+                    randomTile *= -1;
                 }
                 chunk.Map[randomTile].ItemsOnTile.Add(ItemFactory.GetKnife());
             }

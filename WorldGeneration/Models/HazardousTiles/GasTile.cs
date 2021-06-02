@@ -21,8 +21,8 @@ namespace WorldGeneration.Models.HazardousTiles
             IsAccessible = true;
             XPosition = x;
             YPosition = y;
-
             Radius = radius;
+            ItemsOnTile = new List<Item>();
         }
 
         private int Radius { get; }
