@@ -149,6 +149,7 @@ namespace ActionHandling
                     .FirstOrDefault(attackedPlayer => attackedPlayer.PlayerGuid == attackDto.AttackedPlayerGuid);
 
                 var attackedPlayerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
+                var attackedPlayerItemService = new ServicesDb<PlayerItemPOCO>(attackedPlayerItemRepository);
                 //PlayerItemPOCO attackedPlayerItem;
 
                 if (_worldService.getCurrentPlayer().Inventory.Helmet != null)
@@ -156,26 +157,27 @@ namespace ActionHandling
                     var attackedPlayerHelmet = _worldService.getCurrentPlayer().Inventory.Helmet;
                     var helmetPoints = attackedPlayerHelmet.ArmorProtectionPoints;
 
-                    var attackedPlayerItem = attackedPlayerItemRepository.GetAllAsync();
+                    var attackedPlayerItem = attackedPlayerItemService.GetAllAsync();
                     attackedPlayerItem.Wait();
                     var results = attackedPlayerItem.Result
-                        .FirstOrDefault(attackedPlayerItem =>
-                            attackedPlayerItem.PlayerGUID == attackDto.PlayerGuid &&
-                            attackedPlayerItem.ItemName ==
-                            attackedPlayerHelmet.ItemName);
+                        .First(playerItem =>
+                            playerItem.PlayerGUID == attackDto.PlayerGuid &&
+                            playerItem.ItemName ==
+                            attackedPlayerHelmet.ItemName && 
+                            playerItem.GameGUID == _clientController.SessionId);
 
                     if (helmetPoints - attackDto.Damage <= 0 && helmetPoints != 0)
                     {
                         attackDto.Damage -= results.ArmorPoints;
-                        var delete = attackedPlayerItemRepository.DeleteAsync(results); // dit gaat nog fout
+                        var delete = attackedPlayerItemService.DeleteAsync(results); // dit gaat nog fout
                         delete.Wait();
-                        var a = attackedPlayerItemRepository.GetAllAsync(); // voor debug
+                        var a = attackedPlayerItemService.GetAllAsync(); // voor debug
                         a.Wait(); // voor debug
                     }
                     else
                     {
                         results.ArmorPoints -= attackDto.Damage;
-                        attackedPlayerItemRepository.UpdateAsync(results);
+                        attackedPlayerItemService.UpdateAsync(results);
                     }
                 }
 
@@ -183,20 +185,21 @@ namespace ActionHandling
                 {
                     var attackedPlayerBodyArmor = _worldService.getCurrentPlayer().Inventory.Armor;
                     var bodyArmorPoints = attackedPlayerBodyArmor.ArmorProtectionPoints;
-                    var attackedPlayerItem = attackedPlayerItemRepository.GetAllAsync();
+                    var attackedPlayerItem = attackedPlayerItemService.GetAllAsync();
                     attackedPlayerItem.Wait();
                     var results= attackedPlayerItem.Result
-                        .FirstOrDefault(attackedPlayerItem => attackedPlayerItem.PlayerGUID == attackDto.PlayerGuid &&
-                                                              attackedPlayerItem.ItemName ==
-                                                              attackedPlayerBodyArmor.ItemName);
+                        .FirstOrDefault(playerItem => playerItem.PlayerGUID == attackDto.PlayerGuid &&
+                                                      playerItem.ItemName ==
+                                                      attackedPlayerBodyArmor.ItemName &&
+                                                      playerItem.GameGUID == _clientController.SessionId);
                     if (bodyArmorPoints - attackDto.Damage <= 0 && bodyArmorPoints != 0)
                     {
-                        attackedPlayerItemRepository.DeleteAsync(results);
+                        attackedPlayerItemService.DeleteAsync(results);
                     }
                     else
                     {
                         results.ArmorPoints -= attackDto.Damage;
-                        attackedPlayerItemRepository.UpdateAsync(results);
+                        attackedPlayerItemService.UpdateAsync(results);
 
                         attackedPlayer.Health -= attackDto.Damage;
                         attackedPlayerRepository.UpdateAsync(attackedPlayer);

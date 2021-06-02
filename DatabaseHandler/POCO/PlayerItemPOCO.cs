@@ -7,7 +7,7 @@ using LiteDB;
 namespace DatabaseHandler.POCO
 {
     [ExcludeFromCodeCoverage]
-    public class PlayerItemPOCO
+    public class PlayerItemPOCO : IEquatable<PlayerItemPOCO>
     {
         public string PlayerGUID { get; set; }
 
@@ -23,5 +23,9 @@ namespace DatabaseHandler.POCO
         public int ArmorPoints { get; set; }
         
         public int Damage { get; set; }
+        public bool Equals(PlayerItemPOCO? other)
+        {
+            return other != null && ItemGUID == other.ItemGUID;
+        }
     }
 }
