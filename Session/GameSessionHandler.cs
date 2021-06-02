@@ -219,9 +219,18 @@ namespace Session
                         {PlayerId = player.Key, GameId = startGameDTO.GameGuid};
                     tmpClientHistory.CreateAsync(tmpObject);
 
-                    _worldService.AddPlayerToWorld(
+                    if (startGameDTO.ExistingPlayer is null)
+                    {
+                        _worldService.AddPlayerToWorld(
                         new WorldGeneration.Player("gerrit", player.Value[0], player.Value[1],
                             CharacterSymbol.CURRENT_PLAYER, player.Key), true);
+                    } else
+                    {
+                        // Has to be merged with feature branche to set old health and stamina etc
+                        _worldService.AddPlayerToWorld(
+                        new WorldGeneration.Player("gerrit", player.Value[0], player.Value[1],
+                            CharacterSymbol.CURRENT_PLAYER, player.Key), true);
+                    }
                 }
                 else
                 {
