@@ -28,6 +28,7 @@ INSPECT : 'inspect';
 USE : 'use';
 SEARCH : 'search';
 
+
 FORWARD: 'forward';
 UP: 'up';
 NORTH: 'north';
@@ -58,8 +59,8 @@ message: MESSAGE;
 command:
     (MOVE | WALK | GO) SPACE direction (SPACE step)? #move |
     (ATTACK | SLASH | STRIKE) SPACE direction #attack |
-    (PICKUP | GET) SPACE step #pickup |  
-    DROP SPACE inventorySlot #drop |   
+    (PICKUP | GET) #pickup |
+    DROP #drop |
     (EXIT | LEAVE) #exit |
     SAY SPACE message #say |
     SHOUT SPACE message #shout |
@@ -70,8 +71,8 @@ command:
     JOIN_SESSION SPACE message #joinSession |
     REQUEST_SESSIONS #requestSessions |
     START_SESSION #startSession |
-    USE SPACE step #use	|
     INSPECT SPACE inventorySlot #inspect |
+    USE SPACE step #use	|
     SEARCH #search;
 
 forward: FORWARD | UP | NORTH;
