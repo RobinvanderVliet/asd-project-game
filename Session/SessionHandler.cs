@@ -387,8 +387,6 @@ namespace Session
 
             }
         }
-    
-
 
         public int GetSessionSeed()
         {

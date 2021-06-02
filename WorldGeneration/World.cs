@@ -8,66 +8,31 @@ namespace WorldGeneration
         private Map _map;
         public Player CurrentPlayer { get; set; }
         private List<Player> _players;
-        private string currentIdPlayer = null;
         private readonly int _viewDistance;
-        private int _seed = 0; 
 
         public World(int seed, int viewDistance)
         {
             _players = new();
             _map = MapFactory.GenerateMap(seed: seed);
-            _seed = seed; 
             _viewDistance = viewDistance;
             _map.DeleteMap();
         }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
         {
-            if (CurrentPlayer == null)
+            if (CurrentPlayer.Id.Equals(userId))
             {
-                foreach (var element in _players)
-                {
-                    if (element.Id.Equals(userId) && element.Id.Equals(currentIdPlayer))
-                    {
-                        CurrentPlayer = element;
-                    }
-                    else
-                    {
-                        var player = _players.Find(x => x.Id == userId);
-                        player.XPosition = newXPosition;
-                        player.YPosition = newYPosition;
-                    }
-                }
+                CurrentPlayer.XPosition = newXPosition;
+                CurrentPlayer.YPosition = newYPosition;
             }
             else
             {
-                Console.WriteLine(CurrentPlayer);
-                if (CurrentPlayer.Id.Equals(userId))
-                {
-                    CurrentPlayer.XPosition = newXPosition;
-                    CurrentPlayer.YPosition = newYPosition;
-                }
-                else
-                {
-                    var player = _players.Find(x => x.Id == userId);
-                    player.XPosition = newXPosition;
-                    player.YPosition = newYPosition;
-                }
+                var player = _players.Find(x => x.Id == userId);
+                player.XPosition = newXPosition;
+                player.YPosition = newYPosition;
             }
             
             DisplayWorld();
-        }
-
-        public Player getHostPlayer()
-        {
-            foreach (var element in _players)
-            {
-                if (element.Id.Equals(currentIdPlayer))
-                {
-                    return element;
-                }
-            }
-            return null;
         }
 
         public void AddExistingPlayerToWorld(Player player, bool isCurrentPlayer)
@@ -75,7 +40,6 @@ namespace WorldGeneration
             if (isCurrentPlayer)
             {
                 CurrentPlayer = player;
-                currentIdPlayer = player.Id;
             }
 
             _players.Add(player);
@@ -86,7 +50,6 @@ namespace WorldGeneration
             if (isCurrentPlayer)
             {
                 CurrentPlayer = player;
-                currentIdPlayer = player.Id;
             }
 
             _players.Add(player);
@@ -94,15 +57,11 @@ namespace WorldGeneration
 
         public void DisplayWorld()
         {
-            Console.Write(_seed);
-
             if (CurrentPlayer != null && _players != null)
             {
                 Console.Clear();
                 
                 _map.DisplayMap(CurrentPlayer, _viewDistance, new List<Character>(_players));
-                Console.Write(_seed);
-
             }
         }
 
@@ -111,28 +70,5 @@ namespace WorldGeneration
             _map.DeleteMap();
         }
 
-        public void SetCurrentPlayerClient(string playerId)
-        {
-            foreach (var element in _players)
-            {
-                if (element.Id.Equals(playerId))
-                {
-                    CurrentPlayer = element;
-                    _players.Add(element);
-                }
-            }
-        }
-
-        public void SetCurrentPlayerHost(string playerId)
-        {
-            foreach (var element in _players)
-            {
-                if (element.Id.Equals(playerId))
-                {
-                    CurrentPlayer = element;
-                    _players.Add(element);
-                }
-            }
-        }
     }
 }
