@@ -9,6 +9,7 @@ using NUnit.Framework;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using Session.DTO;
 using WorldGeneration;
 
 namespace Session.Tests
