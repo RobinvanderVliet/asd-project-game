@@ -52,9 +52,9 @@ namespace WorldGeneration
         public void AddStamina(int amount)
         {
             Stamina += amount;
-            if (Health > STAMINACAP)
+            if (Stamina > STAMINACAP)
             {
-                Health = STAMINACAP;    
+                Stamina = STAMINACAP;    
             }
         }
 

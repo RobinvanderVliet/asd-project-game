@@ -2,6 +2,7 @@
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Items;
+using Messages;
 using Moq;
 using Network;
 using Network.DTO;
@@ -25,6 +26,7 @@ namespace ActionHandling.Tests
         private InventoryHandler _sut;
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
+        private Mock<IMessageService> _mockedMessageService;
         private Mock<IServicesDb<PlayerPOCO>> _mockedPlayerServicesDb;
         private Mock<IServicesDb<PlayerItemPOCO>> _mockedPlayerItemServicesDb;
 
@@ -35,8 +37,9 @@ namespace ActionHandling.Tests
             _mockedWorldService = new();
             _mockedPlayerServicesDb = new();
             _mockedPlayerItemServicesDb = new();
-
-            _sut = new InventoryHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerServicesDb.Object, _mockedPlayerItemServicesDb.Object);
+            _mockedMessageService = new();
+            
+            _sut = new InventoryHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerServicesDb.Object, _mockedPlayerItemServicesDb.Object, _mockedMessageService.Object);
             
             var standardOutput = new StreamWriter(Console.OpenStandardOutput());
             standardOutput.AutoFlush = true;
@@ -56,6 +59,27 @@ namespace ActionHandling.Tests
 
             //assert
             _mockedWorldService.Verify(mock => mock.SearchCurrentTile(), Times.Once);
+        }
+
+        [Test]
+        public void Test_Use_SendsInventoryDTO()
+        {
+            //arrange
+            int index = 1;
+            string originId = "origin1";
+
+
+
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
+
+            InventoryDTO inventoryDTO = new(originId, InventoryType.Use, index);
+            var payload = JsonConvert.SerializeObject(inventoryDTO);
+
+            //act
+            _sut.UseItem(index);
+
+            //assert
+            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Inventory), Times.Once);
         }
 
         [Test]

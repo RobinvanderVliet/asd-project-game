@@ -16,6 +16,7 @@ using InputHandling.Antlr.Transformer;
 using Network;
 using Session;
 using UserInterface;
+using Messages;
 
 namespace ASD_project
 {
@@ -47,6 +48,7 @@ namespace ASD_project
                     services.AddScoped<ISessionHandler, SessionHandler>();
                     services.AddScoped<IMoveHandler, MoveHandler>();
                     services.AddScoped<IWorldService, WorldService>();
+                    services.AddScoped<IMessageService, MessageService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
                     services.AddSingleton<IDbConnection, DbConnection>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
