@@ -31,7 +31,7 @@ namespace WorldGeneration
         }
 
         // checks if there are new chunks that have to be loaded
-        private void LoadArea(int playerX, int playerY, int viewDistance)
+        public void LoadArea(int playerX, int playerY, int viewDistance)
         {
             _chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
             ForgetUnloadedChunks();

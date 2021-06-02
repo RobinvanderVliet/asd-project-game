@@ -45,5 +45,10 @@ namespace WorldGeneration
         {
             return _world.GetLoadedTileByXAndY(x, y);
         }
+
+        public void LoadArea(int playerX, int playerY, int viewDistance)
+        {
+            _world.LoadArea(playerX, playerY, viewDistance);
+        }
     }
 }

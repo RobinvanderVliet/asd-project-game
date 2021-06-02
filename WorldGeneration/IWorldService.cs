@@ -12,5 +12,6 @@ namespace WorldGeneration
         public Player getCurrentPlayer();
         public Player GetPlayer(string id);
         public ITile GetTile(int x, int y);
+        public void LoadArea(int playerX, int playerY, int viewDistance);
     }
 }

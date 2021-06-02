@@ -66,6 +66,11 @@ namespace WorldGeneration
         {
             return _map.GetLoadedTileByXAndY(x, y);
         }
+        
+        public void LoadArea(int playerX, int playerY, int viewDistance)
+        {
+            _map.LoadArea(playerX, playerY, viewDistance);
+        }
     }
 }
      
