@@ -117,7 +117,7 @@ namespace InputHandling
                 }
                 else
                 {
-                    SendCommand("join_session \"" + sessionId + "\" \"" + inputParts[1] + "\"");
+                    SendCommand("join_session \"" + sessionId + "\" \"" + inputParts[1].Replace("\"", "") + "\"");
                     _screenHandler.TransitionTo(new ConfigurationScreen());
                 }
             }

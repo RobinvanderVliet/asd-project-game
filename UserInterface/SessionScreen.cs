@@ -28,6 +28,7 @@ namespace UserInterface
         
         public void UpdateWithNewSession(string[] sessionInfo)
         {
+            _screenHandler.ConsoleHelper.ClearConsole();
             _sessionsInfoList.Add(sessionInfo);
             DrawHeader(GetHeaderText());
             DrawSessionBox();
