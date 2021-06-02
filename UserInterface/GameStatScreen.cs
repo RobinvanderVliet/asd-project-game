@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace UserInterface
+﻿namespace UserInterface
 {
 
-    public class GameStatScreen : Screen
+    public class GameStatScreen : Screen, IGameStatScreen
     {
         private int _xPosition;
         private int _yPosition;
@@ -84,7 +78,7 @@ namespace UserInterface
             }
         }
         
-        public virtual void SetStatValues(string name, int score, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree)
+        public void SetStatValues(string name, int score, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree)
         {
             int originalCursorX = _screenHandler.ConsoleHelper.GetCursorLeft();
             int originalCursorY = _screenHandler.ConsoleHelper.GetCursorTop();

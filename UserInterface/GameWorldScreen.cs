@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace UserInterface
+﻿namespace UserInterface
 {
-    public class GameWorldScreen : Screen
+    public class GameWorldScreen : Screen, IGameWorldScreen
     {
         private int _xPosition;
         private int _yPosition;
@@ -63,7 +57,7 @@ namespace UserInterface
         }
         
 
-        public virtual void UpdateWorld(char[,] newMap)
+        public void UpdateWorld(char[,] newMap)
         {
             DrawWorld(newMap);
         }

@@ -18,9 +18,9 @@ namespace UserInterface.Tests
         private GameScreen _sut;
         private Mock<ScreenHandler> _mockedScreenHandler;
         private Mock<ConsoleHelper> _mockedConsoleHelper;
-        private Mock<GameChatScreen> _mockedGameChatScreen;
-        private Mock<GameStatScreen> _mockedGameStatScreen;
-        private Mock<GameWorldScreen> _mockedGameWorldScreen;
+        private Mock<IGameChatScreen> _mockedGameChatScreen;
+        private Mock<IGameStatScreen> _mockedGameStatScreen;
+        private Mock<IGameWorldScreen> _mockedGameWorldScreen;
 
         [SetUp]
         public void Setup()
@@ -28,9 +28,9 @@ namespace UserInterface.Tests
             _sut = new GameScreen();
             _mockedScreenHandler = new Mock<ScreenHandler>();
             _mockedConsoleHelper = new Mock<ConsoleHelper>();
-            _mockedGameChatScreen = new Mock<GameChatScreen>();
-            _mockedGameStatScreen = new Mock<GameStatScreen>();
-            _mockedGameWorldScreen = new Mock<GameWorldScreen>();
+            _mockedGameChatScreen = new Mock<IGameChatScreen>();
+            _mockedGameStatScreen = new Mock<IGameStatScreen>();
+            _mockedGameWorldScreen = new Mock<IGameWorldScreen>();
             var screenHandler = _mockedScreenHandler.Object;
             screenHandler.ConsoleHelper = _mockedConsoleHelper.Object;
             _sut.SetScreen(screenHandler);

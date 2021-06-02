@@ -5,9 +5,9 @@ namespace UserInterface
 {
     public class GameScreen : Screen
     {
-        private GameStatScreen _gameStatScreen;
-        private GameChatScreen _gameChatScreen;
-        private GameWorldScreen _gameWorldScreen;
+        private IGameStatScreen _gameStatScreen;
+        private IGameChatScreen _gameChatScreen;
+        private IGameWorldScreen _gameWorldScreen;
 
         private const int STAT_X = HEADER_X;
         private const int STAT_Y = HEADER_Y;
@@ -37,7 +37,7 @@ namespace UserInterface
             _gameWorldScreen = new GameWorldScreen(WORLD_X, WORLD_Y, WORLD_WITDH, WORLD_HEIGHT);
         }
 
-        public void setScreens(GameStatScreen gameStatScreen, GameChatScreen gameChatScreen, GameWorldScreen gameWorldScreen)
+        public void setScreens(IGameStatScreen gameStatScreen, IGameChatScreen gameChatScreen, IGameWorldScreen gameWorldScreen)
         {
             _gameStatScreen = gameStatScreen;
             _gameChatScreen = gameChatScreen;
