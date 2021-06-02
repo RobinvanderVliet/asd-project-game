@@ -51,15 +51,12 @@ namespace Session.Tests
             // Arrange ------------
             string invalidSessionId = "invalid";
 
-            using (StringWriter sw = new StringWriter()) {
-                //Act ---------
-                Console.SetOut(sw);
-                _sut.JoinSession(invalidSessionId);
+            //Act ---------
+            _sut.JoinSession(invalidSessionId);
 
-                //Assert ---------
-                string expected = string.Format("Could not find game!{0}", Environment.NewLine);
-                Assert.AreEqual(expected, sw.ToString());
-            }
+            //Assert ---------
+            string expected = "Could not find game!";
+            _mockedMessageService.Verify(mock => mock.AddMessage(expected), Times.Once);
         }
 
         [Test]
