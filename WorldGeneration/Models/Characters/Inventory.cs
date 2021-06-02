@@ -2,11 +2,6 @@
 using Items;
 using Items.ArmorStats;
 using Items.Consumables;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WorldGeneration.Exceptions;
 
 namespace WorldGeneration
@@ -37,17 +32,15 @@ namespace WorldGeneration
             return _consumableItems.Find(item => item.ItemName == itemName);
         }
 
-        public bool AddConsumableItem(Consumable consumable)
+        public void AddConsumableItem(Consumable consumable)
         {
             if (_consumableItems.Count < 3)
             {
                 _consumableItems.Add(consumable);
-                return true;
             }
             else
             {
                 throw new InventoryFullException("You already have 3 consumable items in your inventory!");
-                return false;
             }
         }
 
