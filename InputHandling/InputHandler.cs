@@ -54,9 +54,9 @@ namespace InputHandling
 
         public virtual string GetCommand()
         {
-            return Console.ReadLine();
+            return _screenHandler.GetScreenInput();
         }
-
+        
         public void HandleStartScreenCommands()
         {
             var input = GetCommand();
@@ -79,7 +79,7 @@ namespace InputHandling
                     _screenHandler.TransitionTo(new EditorScreen());
                     break;
                 case 5:
-                    Environment.Exit(0);
+                    SendCommand("exit");
                     break;
                 default:
                     StartScreen startScreen = _screenHandler.Screen as StartScreen;
@@ -119,8 +119,8 @@ namespace InputHandling
                 }
                 else
                 {
-                    _screenHandler.TransitionTo(new LobbyScreen());
-                    SendCommand("join_session \"" + sessionId + "\" \"" + inputParts[1] + "\"");
+                    SendCommand("join_session \"" + sessionId + "\" \"" + inputParts[1].Replace("\"", "") + "\"");
+                    _screenHandler.TransitionTo(new ConfigurationScreen());
                 }
             }
         }

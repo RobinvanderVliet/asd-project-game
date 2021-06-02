@@ -42,11 +42,11 @@ namespace UserInterface
             {
                 _screenHandler.ConsoleHelper.SetCursor(x, i + y + 1);
                 _screenHandler.ConsoleHelper.Write(vertical);
-
+                
                 _screenHandler.ConsoleHelper.SetCursor(x + innerWidth + 1, i + y + 1);
                 _screenHandler.ConsoleHelper.Write(vertical);
             }
-
+            
             _screenHandler.ConsoleHelper.SetCursor(x, y + innerHeight + 1);
             _screenHandler.ConsoleHelper.Write(llCorner);
             for (int i = 0; i < innerWidth; i++)
@@ -60,9 +60,11 @@ namespace UserInterface
         public void DrawHeader(string message)
         {
             DrawBox(HEADER_X, HEADER_Y, HEADER_WIDTH, HEADER_HEIGHT);
-
+            _screenHandler.ConsoleHelper.SetCursor(HEADER_X + OFFSET_LEFT / 2, HEADER_Y + OFFSET_TOP);
+            _screenHandler.ConsoleHelper.Write(" ");
             _screenHandler.ConsoleHelper.SetCursor(HEADER_X + OFFSET_LEFT, HEADER_Y + OFFSET_TOP);
             _screenHandler.ConsoleHelper.Write(message);
+            _screenHandler.ConsoleHelper.Write(new string(' ', SCREEN_WIDTH - BORDER_SIZE / 2 - _screenHandler.ConsoleHelper.GetCursorLeft()));
         }
         public void DrawInputBox(int x, int y, string message)
         {

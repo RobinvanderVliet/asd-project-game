@@ -37,6 +37,11 @@ namespace Session
             _clientController.SubscribeToPacketType(this, PacketType.Session);
             _screenHandler = screenHandler;
         }
+
+        public SessionHandler()
+        {
+            
+        }
         
         public List<string[]> GetAllClients()
         {
@@ -216,7 +221,6 @@ namespace Session
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessionsResponse);
             sessionDTO.Name = _session.Name;
             sessionDTO.SessionSeed = _session.SessionSeed;
-            sessionDTO.Clients = _session.GetAllClients();
             var jsonObject = JsonConvert.SerializeObject(sessionDTO);
             return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
         }
