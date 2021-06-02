@@ -227,24 +227,36 @@ namespace Session
 
         private void HandleStartGameSession(StartGameDTO startGameDTO)
         {
-            if (_clientController.GetOriginId() == startGameDTO.ExistingPlayer.PlayerGuid)
-            {
-                _worldService.GenerateWorld(startGameDTO.Seed);
-            }
+         
+           
             if (_sessionHandler.GameStarted() && !_sessionHandler.GetSavedGame() || (_sessionHandler.GameStarted() && _sessionHandler.GetSavedGame()))
             {
                 AddPlayerToGameSession(startGameDTO);
             }
-            else if (_sessionHandler.GetSavedGame())
+            else if (_sessionHandler.GetSavedGame() && !_sessionHandler.GameStarted())
             {
                 _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
                 AddPlayerToWorldSavedGame(startGameDTO.SavedPlayers);
             }
             else
             {
-                _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
-                AddPlayersToNewGame(startGameDTO);
-            }
+                if (startGameDTO.ExistingPlayer != null)
+                {
+                    if (_clientController.GetOriginId() == startGameDTO.ExistingPlayer.PlayerGuid)
+                    {
+                        _worldService.GenerateWorld(startGameDTO.Seed);
+                        AddPlayersToNewGame(startGameDTO);
+
+                        _worldService.DisplayWorld();
+                    }
+                }
+                else
+                {
+                    _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
+                    AddPlayersToNewGame(startGameDTO);
+                    _worldService.DisplayWorld();
+                }
+               }
 
             _worldService.DisplayWorld();
         }

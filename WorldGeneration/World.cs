@@ -8,13 +8,15 @@ namespace WorldGeneration
         private Map _map;
         public Player CurrentPlayer { get; set; }
         private List<Player> _players;
-        private string currentIdPlayer = null; 
+        private string currentIdPlayer = null;
         private readonly int _viewDistance;
+        private int _seed = 0; 
 
         public World(int seed, int viewDistance)
         {
-            _players = new ();
+            _players = new();
             _map = MapFactory.GenerateMap(seed: seed);
+            _seed = seed; 
             _viewDistance = viewDistance;
             _map.DeleteMap();
         }
@@ -28,7 +30,6 @@ namespace WorldGeneration
                     if (element.Id.Equals(userId) && element.Id.Equals(currentIdPlayer))
                     {
                         CurrentPlayer = element;
-        
                     }
                     else
                     {
@@ -53,7 +54,8 @@ namespace WorldGeneration
                     player.YPosition = newYPosition;
                 }
             }
-        DisplayWorld();
+            
+            DisplayWorld();
         }
 
         public Player getHostPlayer()
@@ -75,6 +77,7 @@ namespace WorldGeneration
                 CurrentPlayer = player;
                 currentIdPlayer = player.Id;
             }
+
             _players.Add(player);
         }
 
@@ -85,17 +88,22 @@ namespace WorldGeneration
                 CurrentPlayer = player;
                 currentIdPlayer = player.Id;
             }
+
             _players.Add(player);
         }
 
         public void DisplayWorld()
         {
+            Console.Write(_seed);
+
             if (CurrentPlayer != null && _players != null)
             {
                 Console.Clear();
+                
                 _map.DisplayMap(CurrentPlayer, _viewDistance, new List<Character>(_players));
+                Console.Write(_seed);
+
             }
-            
         }
 
         public void deleteMap()
@@ -128,4 +136,3 @@ namespace WorldGeneration
         }
     }
 }
-     
