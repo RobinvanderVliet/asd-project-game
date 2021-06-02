@@ -9,6 +9,6 @@ namespace WorldGeneration
 {
     interface IRandomItemGenerator
     {
-        List<Item> GetRandomItems();
+        Item GetRandomItem(float noise);
     }
 }
