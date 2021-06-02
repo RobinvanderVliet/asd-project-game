@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
-using Items;
-using Items.ArmorStats;
+﻿using Items;
 using Items.Consumables;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using WorldGeneration.Exceptions;
 
 namespace WorldGeneration
@@ -41,43 +44,6 @@ namespace WorldGeneration
             else
             {
                 throw new InventoryFullException("You already have 3 consumable items in your inventory!");
-            }
-        }
-
-        /// <summary>
-        /// Returns false if item could not be added. True otherwise.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public void AddItem(Item item)
-        {
-            if (item is Weapon weapon)
-            {
-                if (_weapon != null) throw new InventoryFullException("You already have a weapon!");
-                _weapon = weapon;
-                return;
-            }
-
-            if (item is Armor armor)
-            {
-                if (armor.ArmorPartType == ArmorPartType.Body)
-                {
-                    if (_armor != null) throw new InventoryFullException("You already have body armor!");
-                    _armor = armor;
-                    return;
-                }
-
-                if (armor.ArmorPartType == ArmorPartType.Helmet)
-                {
-                    if (_helmet != null) throw new InventoryFullException("You already have a helmet!");
-                    _helmet = armor;
-                    return;
-                }
-            }
-
-            if (item is Consumable consumable)
-            {
-                AddConsumableItem(consumable);
             }
         }
 
