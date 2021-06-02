@@ -1,4 +1,5 @@
-﻿using Items;
+﻿using System.Collections.Generic;
+using Items;
 
 namespace WorldGeneration
 {
@@ -9,8 +10,10 @@ namespace WorldGeneration
         public void DisplayWorld();
         public void DeleteMap();
         public void GenerateWorld(int seed);
+        public IList<Item> GetItemsOnCurrentTile();
+        public IList<Item> GetItemsOnCurrentTile(Player player);
         public string SearchCurrentTile();
-        public string DropItemOnTile(Item Item);
-        public Player getCurrentPlayer();
+        public Player GetCurrentPlayer();
+        public Player GetPlayer(string userId);
     }
 }

@@ -57,7 +57,7 @@ namespace InputHandling.Antlr.Transformer
                         TransformPause();
                         break;
                     case Pickup:
-                        TransformPickup();
+                        TransformPickup((Pickup)nodeBody[i]);
                         break;
                     case Replace:
                         TransformReplace();
@@ -83,10 +83,18 @@ namespace InputHandling.Antlr.Transformer
                     case StartSession:
                         TransformStartSession((StartSession)nodeBody[i]);
                         break;
+                    case Use:
+                        TransformUse((Use)nodeBody[i]);
+                        break;
                     case Search:
                         TransformSearch();
                         break;
                 }
+        }
+
+        private void TransformUse(Use use)
+        {
+            _inventoryHandler.UseItem(use.Step.StepValue);
         }
 
         private void TransformMove(Move move)
@@ -103,9 +111,9 @@ namespace InputHandling.Antlr.Transformer
             }
         }
 
-        private void TransformPickup()
+        private void TransformPickup(Pickup pickup)
         {
-            // TODO: Call InventoryHandler method
+            _inventoryHandler.PickupItem(pickup.Item.StepValue);
         }
 
         private void TransformDrop(Drop drop)

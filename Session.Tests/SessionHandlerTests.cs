@@ -70,7 +70,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = hostOriginId;
             packetHeaderDTO.SessionID = sessionId;
             packetHeaderDTO.PacketType = PacketType.Session;

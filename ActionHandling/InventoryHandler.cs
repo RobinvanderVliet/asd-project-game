@@ -1,71 +1,156 @@
-﻿using Network;
-using Network.DTO;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ActionHandling.DTO;
+using DatabaseHandler;
+using DatabaseHandler.POCO;
+using DatabaseHandler.Repository;
+using DatabaseHandler.Services;
+using Items;
+using Items.Consumables;
+using Network;
+using Network.DTO;
+using Newtonsoft.Json;
 using WorldGeneration;
 
 namespace ActionHandling
 {
     public class InventoryHandler : IPacketHandler, IInventoryHandler
     {
-        private IClientController _clientController;
-        private IWorldService _worldService;
+        private readonly IClientController _clientController;
+        private readonly IWorldService _worldService;
+        private readonly IServicesDb<PlayerPOCO> _playerServicesDB;
+        private readonly IServicesDb<PlayerItemPOCO> _playerItemServicesDB;
 
-        public InventoryHandler(IClientController clientController, IWorldService worldService)
+        public InventoryHandler(IClientController clientController, IWorldService worldService, IServicesDb<PlayerPOCO> playerServicesDB, IServicesDb<PlayerItemPOCO> playerItemServicesDB)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Inventory);
             _worldService = worldService;
+            _playerServicesDB = playerServicesDB;
+            _playerItemServicesDB = playerItemServicesDB;
+        }
+
+        public void UseItem(int index)
+        {
+            InventoryDTO inventoryDTO = new(_clientController.GetOriginId(), InventoryType.Use, index);
+            SendInventoryDTO(inventoryDTO);
         }
 
         public void Search()
         {
             string searchResult = _worldService.SearchCurrentTile();
+            Console.WriteLine(searchResult);
         }
-
-        public void DropItem(string inventorySlot)
+        
+        public void PickupItem(int index)
         {
-            switch (inventorySlot)
-            {
-                case "armor":
-                    _worldService.DropItemOnTile(_worldService.getCurrentPlayer().Inventory.Armor);
-                    _worldService.getCurrentPlayer().Inventory.Armor = null;
-                    break;
-                case "helmet":
-                    _worldService.DropItemOnTile(_worldService.getCurrentPlayer().Inventory.Helmet);
-                    _worldService.getCurrentPlayer().Inventory.Helmet = null;
-                    break;
-                case "weapon":
-                    _worldService.DropItemOnTile(_worldService.getCurrentPlayer().Inventory.Weapon);
-                    _worldService.getCurrentPlayer().Inventory.Weapon = null;
-                    break;
-                case "slot 1":
-                    _worldService.DropItemOnTile(_worldService.getCurrentPlayer().Inventory.ConsumableItemList[1]);
-                    _worldService.getCurrentPlayer().Inventory.RemoveConsumableItem(_worldService.getCurrentPlayer().Inventory.ConsumableItemList[1] = null);
-                    break;
-                case "slot 2":
-                    _worldService.DropItemOnTile(_worldService.getCurrentPlayer().Inventory.GetConsumableItem(inventorySlot));
-                    _worldService.DropItemOnTile(_worldService.getCurrentPlayer().Inventory.ConsumableItemList[2]);
-                    _worldService.getCurrentPlayer().Inventory.RemoveConsumableItem(_worldService.getCurrentPlayer().Inventory.ConsumableItemList[2] = null);
-                    break;
-                case "slot 3":
-                    _worldService.DropItemOnTile(_worldService.getCurrentPlayer().Inventory.ConsumableItemList[3]);
-                    _worldService.getCurrentPlayer().Inventory.RemoveConsumableItem(_worldService.getCurrentPlayer().Inventory.ConsumableItemList[3] = null);
-                    break;
-                default:
-                    Console.WriteLine("Unknown inventory slot");
-                    break;
-            }
+            // Compensate for index starting at 0.
+            index -= 1;
+
+            InventoryDTO inventoryDTO =
+                new InventoryDTO(_clientController.GetOriginId(), InventoryType.Pickup, index);
+            SendInventoryDTO(inventoryDTO);
         }
 
+        public void DropItem(int index)
+        {
+            throw new NotImplementedException();
+        }
 
+        private void SendInventoryDTO(InventoryDTO inventoryDTO)
+        {
+            var payload = JsonConvert.SerializeObject(inventoryDTO);
+            _clientController.SendPayload(payload, PacketType.Inventory);
+        }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
+            var inventoryDTO = JsonConvert.DeserializeObject<InventoryDTO>(packet.Payload);
+            bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
+
+            switch (inventoryDTO.InventoryType)
+            {
+                case InventoryType.Use:
+                    return HandleUse(inventoryDTO, handleInDatabase);
+                case InventoryType.Drop:
+                    return HandleDrop(inventoryDTO, handleInDatabase);
+                case InventoryType.Pickup:
+                    return HandlePickup(inventoryDTO, handleInDatabase);
+            }
+            return new(SendAction.Ignore, null);
+        }
+
+        private HandlerResponseDTO HandlePickup(InventoryDTO inventoryDTO, bool handleInDatabase)
+        {
+            Player player = _worldService.GetPlayer(inventoryDTO.UserId);
+            Item item;
+            
+            try
+            {
+                item = _worldService.GetItemsOnCurrentTile(player).ElementAt(inventoryDTO.Index);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return new HandlerResponseDTO(SendAction.ReturnToSender, "Number is not in search list!");
+            }
+            
+            if (player.Inventory.AddItem(item))
+            {
+                _worldService.GetItemsOnCurrentTile(player).RemoveAt(inventoryDTO.Index);
+                
+                if (handleInDatabase)
+                {
+                    DbConnection dbConnection = new DbConnection();
+                    var playerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
+
+                    PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO {PlayerGUID = inventoryDTO.UserId, ItemName = item.ItemName};
+                    playerItemRepository.CreateAsync(playerItemPOCO);
+                }
+                
+                return new HandlerResponseDTO(SendAction.SendToClients, null);
+            }
+            else
+            {
+                return new HandlerResponseDTO(SendAction.ReturnToSender, "Could not pickup item");
+            }
+        }
+
+        private HandlerResponseDTO HandleDrop(InventoryDTO inventoryDTO, bool handleInDatabase)
+        {
             throw new NotImplementedException();
+        }
+
+        private HandlerResponseDTO HandleUse(InventoryDTO inventoryDTO, bool handleInDatabase)
+        {
+            var player = _worldService.GetPlayer(inventoryDTO.UserId);
+            if(player.Inventory.ConsumableItemList.Count >= inventoryDTO.Index)
+            {
+                Consumable itemToUse = player.Inventory.ConsumableItemList.ElementAt(inventoryDTO.Index-1);
+                player.Inventory.ConsumableItemList.RemoveAt(inventoryDTO.Index-1);
+                player.UseConsumable(itemToUse);
+
+                if (handleInDatabase)
+                {
+                    PlayerItemPOCO playerItemPOCO = new() {PlayerGUID = inventoryDTO.UserId, ItemName = itemToUse.ItemName, GameGuid = _clientController.SessionId };
+                    _ = _playerItemServicesDB.DeleteAsync(playerItemPOCO);
+
+                    var result = _playerServicesDB.GetAllAsync().Result;
+                    PlayerPOCO playerPOCO = result.FirstOrDefault(player => player.PlayerGuid == inventoryDTO.UserId && player.GameGuid == _clientController.SessionId );
+                    
+                    playerPOCO.Health = player.Health;
+                    //add stamina to playerPOCO
+                    _ = _playerServicesDB.UpdateAsync(playerPOCO);
+                }
+                return new HandlerResponseDTO(SendAction.SendToClients, null);
+            }
+            else
+            {
+                if(inventoryDTO.UserId == _clientController.GetOriginId())
+                {
+                    Console.WriteLine("Could not find item");
+                }
+                return new HandlerResponseDTO(SendAction.ReturnToSender, "Could not find item");
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 using Items;
 using System;
+using System.Collections.Generic;
+using Items;
 
 namespace WorldGeneration
 {
@@ -31,15 +33,30 @@ namespace WorldGeneration
         {
             _world = new World(seed, 6);
         }
-
-        public Player getCurrentPlayer()
+        
+        public Player GetCurrentPlayer()
         {
             return _world.CurrentPlayer;
         }
 
+        public Player GetPlayer(string userId)
+        {
+            return _world.GetPlayer(userId);
+        }
+
+        public IList<Item> GetItemsOnCurrentTile()
+        {
+            return _world.GetCurrentTile().ItemsOnTile;
+        }
+
+        public IList<Item> GetItemsOnCurrentTile(Player player)
+        {
+            return _world.GetTileForPlayer(player).ItemsOnTile;
+        }
+        
         public string SearchCurrentTile()
         {
-            var itemsOnCurrentTile = _world.GetCurrentTile().ItemsOnTile;
+            var itemsOnCurrentTile = GetItemsOnCurrentTile();
 
             string result = "The following items are on the current tile:" + Environment.NewLine;
             int index = 1;
