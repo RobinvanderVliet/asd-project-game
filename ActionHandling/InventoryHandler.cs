@@ -56,31 +56,19 @@ namespace ActionHandling
         }
         public void DropItem(string inventorySlot)
         {
-            int index = 0;
-            switch (inventorySlot)
+            int index = inventorySlot switch
             {
-                case "helmet":
-                    index = 0;
-                    break;
-                case "armor":
-                    index = 1;
-                    break;
-                case "weapon":
-                    index = 2;
-                    break;
-                case "slot 1":
-                    index = 3;
-                    break;
-                case "slot 2":
-                    index = 4;
-                    break;
-                case "slot 3":
-                    index = 5;
-                    break;
-                default:
-                    index = 99;
-                    _messageService.AddMessage("Unknown item slot");
-                    break;
+                "helmet" => 0,
+                "armor" => 1,
+                "weapon" => 2,
+                "slot 1" => 3,
+                "slot 2" => 4,
+                "slot 3" => 5,
+                _ => 99
+            };
+            if (index == 99)
+            {
+                _messageService.AddMessage("Unknown item slot");
             }
 
             InventoryDTO inventoryDTO =
@@ -225,7 +213,15 @@ namespace ActionHandling
                     return new HandlerResponseDTO(SendAction.ReturnToSender, "This is not an item you can drop!");
                     break;
             }
-            _worldService.GetItemsOnCurrentTile().Add(item);
+
+            _worldService.GetItemsOnCurrentTile(player).Add(item);
+
+            if (handleInDatabase)
+            {
+                PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO { PlayerGUID = inventoryDTO.UserId, ItemName = item.ItemName };
+                _playerItemServicesDB.DeleteAsync(playerItemPOCO);
+            }
+
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
