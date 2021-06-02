@@ -12,15 +12,18 @@ namespace WorldGeneration.Models
         public ITile[] Map { get; set; }
         public int RowSize { get; set; }
         
+        public int Seed { get; set; }
+        
         public Chunk()
         {
         }
-        public Chunk(int x, int y, ITile[] map, int rowSize)
+        public Chunk(int x, int y, ITile[] map, int rowSize, int seed)
         {
             X = x;
             Y = y;
             Map = map;
             RowSize = rowSize;
+            Seed = seed;
         }
 
         public bool Equals(Chunk other)

@@ -49,10 +49,10 @@ namespace WorldGeneration.Tests
             var map3 = new ITile[] {new WaterTile(1,1), new WaterTile(1,2), new WaterTile(1,3), new WaterTile(1,4)};
             var map4 = new ITile[] {new DirtTile(1,1), new DirtTile(1,2), new DirtTile(1,3), new DirtTile(1,4)};
             var map5 = new ITile[] {new DirtTile(1,1), new DirtTile(1,2), new DirtTile(1,3), new DirtTile(1,4)};
-            var chunk1 = new Chunk(0, 0, map1, _chunkSize);
-            var chunk2 = new Chunk(-1, 0, map2, _chunkSize);
-            var chunk3 = new Chunk(0, -1, map3, _chunkSize);
-            var chunk4 = new Chunk(-1, -1, map4, _chunkSize);
+            var chunk1 = new Chunk(0, 0, map1, _chunkSize, 0);
+            var chunk2 = new Chunk(-1, 0, map2, _chunkSize, 0);
+            var chunk3 = new Chunk(0, -1, map3, _chunkSize, 0);
+            var chunk4 = new Chunk(-1, -1, map4, _chunkSize, 0);
             _chunks = new List<Chunk>() {chunk1, chunk2, chunk3, chunk4} ;
 
             //Initialisation of mocks
@@ -62,7 +62,7 @@ namespace WorldGeneration.Tests
             _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(0,-1, 2)).Returns(chunk3).Verifiable();
             _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(-1,-1, 2)).Returns(chunk4).Verifiable();
             _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(It.IsAny<int>(),It.IsAny<int>(), 2))
-                .Returns((int x, int y, int size) => new Chunk(x, y, map5, _chunkSize)).Verifiable();
+                .Returns((int x, int y, int size) => new Chunk(x, y, map5, _chunkSize, 0)).Verifiable();
             _noiseMapGeneratorMockObject = _noiseMapGeneratorMock.Object;
             
             _databaseServiceMock = new Mock<IDatabaseService<Chunk>>();

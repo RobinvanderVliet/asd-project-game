@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UserInterface;
 
@@ -32,7 +30,6 @@ namespace WorldGeneration
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
-        
             var creature = _creatures.FirstOrDefault(x => x.Id == id);
             if (creature != null)
             {

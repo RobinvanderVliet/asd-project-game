@@ -9,6 +9,7 @@ namespace WorldGeneration
     public class NoiseMapGenerator : INoiseMapGenerator
     {
         private IFastNoise _noise;
+        private readonly int _seed;
 
         [ExcludeFromCodeCoverage]
         public NoiseMapGenerator(int seed)
@@ -18,6 +19,7 @@ namespace WorldGeneration
             _noise.SetFrequency(0.015f);
             _noise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
             _noise.SetSeed(seed);
+            _seed = seed;
         }
 
         public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize)
@@ -32,7 +34,7 @@ namespace WorldGeneration
                         , chunkRowSize * chunkY - chunkRowSize + y);
                 }
             }
-            return new Chunk(chunkX, chunkY, map, chunkRowSize);
+            return new Chunk(chunkX, chunkY, map, chunkRowSize, _seed);
         }
 
         public ITile GetTileFromNoise(float noise, int x, int y)

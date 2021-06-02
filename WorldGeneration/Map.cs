@@ -52,7 +52,7 @@ namespace WorldGeneration
                     };
                     var getAllChunksQuery = _chunkDBService.GetAllAsync();
                     getAllChunksQuery.Wait();
-                    var results = getAllChunksQuery.Result.FirstOrDefault(c => c.X == chunkCoordinates[0] && c.Y == chunkCoordinates[1] && c.seed);
+                    var results = getAllChunksQuery.Result.FirstOrDefault(c => c.X == chunkCoordinates[0] && c.Y == chunkCoordinates[1] && c.Seed == _seed);
                     if (results == null)
                     {
                         _chunks.Add(GenerateNewChunk(chunkCoordinates[0], chunkCoordinates[1]));
