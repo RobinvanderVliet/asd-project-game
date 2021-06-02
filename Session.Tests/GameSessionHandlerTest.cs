@@ -1,4 +1,8 @@
-﻿using Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using Moq;
 using Network;
 using NUnit.Framework;
 using System;
@@ -9,8 +13,7 @@ using WorldGeneration;
 namespace Session.Tests
 {
     [ExcludeFromCodeCoverage]
-    [TestFixture]
-    public class GameSessionHandlerTest
+    public class GameSessionHandlerTests
     {
         private GameSessionHandler _sut;
 

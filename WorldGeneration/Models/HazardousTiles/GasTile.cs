@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Items;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration.Models.HazardousTiles
@@ -11,6 +13,8 @@ namespace WorldGeneration.Models.HazardousTiles
         public string Symbol { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
+        public List<Item> ItemsOnTile { get; set; }
+
         public GasTile(int x, int y, int radius = 1)
         {
             Symbol = TileSymbol.GAS;

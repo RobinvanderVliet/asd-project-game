@@ -1,7 +1,8 @@
 ﻿using Agent.Exceptions;
 using Agent.Mapper;
 using Agent.Models;
-using InputCommandHandler;
+using Agent.Exceptions;
+using InputHandling;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -12,13 +13,13 @@ namespace Agent.Services
     {
         private InlineConfig _inlineConfig;
         private List<Configuration> _agentConfigurations;
-        private InputCommandHandlerComponent _inputCommandHandlerComponent;
+        private InputHandler _inputHandler;
 
-        public AgentConfigurationService(List<Configuration> agentConfigurations, FileToDictionaryMapper fileToDictionaryMapper, InputCommandHandlerComponent inputCommandHandlerComponent)
+        public AgentConfigurationService(List<Configuration> agentConfigurations, FileToDictionaryMapper fileToDictionaryMapper, InputHandler inputHandler)
         {
             FileToDictionaryMapper = fileToDictionaryMapper;
             _agentConfigurations = agentConfigurations;
-            _inputCommandHandlerComponent = inputCommandHandlerComponent;
+            _inputHandler = inputHandler;
             _inlineConfig = new InlineConfig();
             FileHandler = new FileHandler();
             Pipeline = new Pipeline();
@@ -27,7 +28,7 @@ namespace Agent.Services
         public override void Configure()
         {
             Console.WriteLine("Please provide a path to your code file");
-            var input = _inputCommandHandlerComponent.GetCommand();
+            var input = _inputHandler.GetCommand();
 
             if (input.Equals(CANCEL_COMMAND))
             {
