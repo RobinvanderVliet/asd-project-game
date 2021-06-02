@@ -21,9 +21,10 @@ namespace ActionHandling
         private readonly IMessageService _messageService;
         private readonly IServicesDb<PlayerPOCO> _playerServicesDB;
         private readonly IServicesDb<PlayerItemPOCO> _playerItemServicesDB;
+        private readonly IServicesDb<WorldItemPOCO> _worldItemServicesDB;
 
 
-        public InventoryHandler(IClientController clientController, IWorldService worldService, IServicesDb<PlayerPOCO> playerServicesDB, IServicesDb<PlayerItemPOCO> playerItemServicesDB, IMessageService messageService)
+        public InventoryHandler(IClientController clientController, IWorldService worldService, IServicesDb<PlayerPOCO> playerServicesDB, IServicesDb<PlayerItemPOCO> playerItemServicesDB, IServicesDb<WorldItemPOCO> worldItemServicesDB, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Inventory);
@@ -31,6 +32,7 @@ namespace ActionHandling
             _messageService = messageService;
             _playerServicesDB = playerServicesDB;
             _playerItemServicesDB = playerItemServicesDB;
+            _worldItemServicesDB = worldItemServicesDB;
         }
 
         public void UseItem(int index)
@@ -192,16 +194,20 @@ namespace ActionHandling
         {
             Player player = _worldService.GetPlayer(inventoryDTO.UserId);
 
-            Item item;
+            Item item = null;
+
+            int armorPoints = 0;
 
             switch (inventoryDTO.Index)
             {
                 case 0:
                     item = player.Inventory.Helmet;
+                    armorPoints = (item as Armor).ArmorProtectionPoints;  
                     player.Inventory.Helmet = null;
                     break;
                 case 1:
                     item = player.Inventory.Armor;
+                    armorPoints = (item as Armor).ArmorProtectionPoints;
                     player.Inventory.Armor = null;
                     break;
                 case 2:
@@ -221,27 +227,46 @@ namespace ActionHandling
                     player.Inventory.ConsumableItemList[2] = null;
                     break;
                 default:
-                    return new HandlerResponseDTO(SendAction.ReturnToSender, "This is not an item you can drop!");
                     break;
             }
 
-            if(item != null) 
-            { 
-                _worldService.GetItemsOnCurrentTile(player).Add(item);
-            }
-
-            if (handleInDatabase)
+            if (item != null)
             {
-                PlayerItemPOCO playerItemPOCO = _playerItemServicesDB.GetAllAsync().Result.FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == item.ItemName && playerItem.PlayerGUID == player.Id);
-                _ = _playerItemServicesDB.DeleteAsync(playerItemPOCO);
+                _worldService.GetItemsOnCurrentTile(player).Add(item);
 
-                WorldItemPOCO worldItemPOCO = new WorldItemPOCO()
+                if (handleInDatabase)
                 {
-                    
-                }
-            }
+                    PlayerItemPOCO playerItemPOCO = _playerItemServicesDB.GetAllAsync().Result.FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == item.ItemName && playerItem.PlayerGUID == player.Id);
+                    _ = _playerItemServicesDB.DeleteAsync(playerItemPOCO);
 
-            return new HandlerResponseDTO(SendAction.SendToClients, null);
+                    WorldItemPOCO worldItemPOCO = new WorldItemPOCO()
+                    {
+                        GameGUID = _clientController.SessionId,
+                        ItemName = item.ItemName,
+                        XPosition = player.XPosition,
+                        YPosition = player.YPosition,
+                        ArmorPoints = armorPoints
+                    };
+
+                    _worldItemServicesDB.CreateAsync(worldItemPOCO);
+                }
+
+                if (inventoryDTO.UserId == _clientController.GetOriginId())
+                {
+                    _messageService.AddMessage("You dropped " + item.ItemName);
+                }
+
+                return new HandlerResponseDTO(SendAction.SendToClients, null);
+            } 
+            else
+            {
+                if(inventoryDTO.UserId == _clientController.GetOriginId())
+                {
+                    _messageService.AddMessage("This is not an item you can drop!");
+
+                }
+                return new HandlerResponseDTO(SendAction.ReturnToSender, "This is not an item you can drop!");
+            }
         }
 
         private HandlerResponseDTO HandleUse(InventoryDTO inventoryDTO, bool handleInDatabase)
