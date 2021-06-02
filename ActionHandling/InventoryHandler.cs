@@ -79,7 +79,7 @@ namespace ActionHandling
             }
             catch (ArgumentOutOfRangeException e) {}
             
-            Console.WriteLine(output);
+            _messageService.AddMessage(output);
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
