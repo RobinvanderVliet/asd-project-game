@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Items;
 using WorldGeneration.Models;
 using WorldGeneration.Models.HazardousTiles;
 using WorldGeneration.Models.Interfaces;
@@ -29,12 +31,29 @@ namespace WorldGeneration
             {
                 for (var x = 0; x < chunkRowSize; x++)
                 {
-                    map[y * chunkRowSize + x] = GetTileFromNoise(_noise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize)
+                    map[y * chunkRowSize + x] = CreateTileWithItemFromNoise(_noise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize)
                         , x + chunkRowSize * chunkX
                         , chunkRowSize * chunkY - chunkRowSize + y);
                 }
             }
             return new Chunk(chunkX, chunkY, map, chunkRowSize, _seed);
+        }
+
+        private ITile CreateTileWithItemFromNoise(float noise, int x, int y)
+        {
+            var tile = GetTileFromNoise(noise, x, y);
+            tile.ItemsOnTile.Add(GetItemForTileFromNoise(noise, x, y));
+            return tile;
+        }
+
+        private Item GetItemForTileFromNoise(float noise, int x, int y)
+        {
+            return (noise * 100) switch
+            {
+                (< -99) => ItemFactory.GetMilitaryHelmet(),
+                (< -98) => ItemFactory.GetMilitaryHelmet(),
+                (< -97) => ItemFactory.GetMilitaryHelmet(),
+            };
         }
 
         public ITile GetTileFromNoise(float noise, int x, int y)
