@@ -75,7 +75,6 @@ namespace UserInterface.Tests
         public void Test_ShowMessages_DrawsLongerMessageOnNextLine()
         {
             //Arrange
-            //var messageLong = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc pretium posuere orci in posuere. Integer sit amet imperdiet lacus, sed suscipit dolor. Pellentesque venenatis urna vitae nisl consequat vestibulum. Morbi eu est sagittis, pellentesque elit ut, gravida urna. Pellentesque cursus eget ex ut efficitur. Aliquam in massa quis arcu finibus rutrum. Mauris efficitur nec lacus sit amet porta. Donec tincidunt augue quis gravida mattis. In ultricies et dolor sed dignissim. Quisque dapibus faucibus velit eget vestibulum. Mauris eros dolor, elementum ac sollicitudin sagittis, maximus vitae metus.Sed ac ipsum fringilla, tincidunt enim et, fermentum odio. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla facilisi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla ut diam nec lorem congue congue faucibus a justo. Proin elit lectus, semper at odio non, vulputate fringilla lorem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vehicula nisi vel magna semper laoreet. Phasellus et ex lorem. Nullam sollicitudin leo dui. Maecenas gravida gravida sodales. Quisque fermentum massa eu ante finibus, sed posuere quam feugiat. Nunc eget dapibus diam, vel dignissim magna. Sed cursus eleifend urna ut sodales. Mauris volutpat ipsum quam, sit amet laoreet est tristique ut. Integer hendrerit congue malesuada.Nulla magna neque, eleifend quis ex ac, condimentum tempor arcu. Nunc auctor velit eget erat tempus sodales. Donec tempor scelerisque consequat. Fusce accumsan diam eget sapien aliquam fringilla. Cras interdum mattis libero, vitae iaculis diam. Sed est augue, sollicitudin non nulla sit amet, lobortis sodales est. Ut et semper augue, sed faucibus lorem. Vestibulum eu risus tincidunt, sagittis libero sed, eleifend metus. Pellentesque sit amet congue nisi. Cras sem orci, feugiat eget iaculis non, sagittis quis nisi.Nunc molestie, orci nec accumsan congue, ex justo ullamcorper libero, id euismod magna elit tempor eros. Sed elit lacus, imperdiet sed sem id, vestibulum tincidunt tortor. Suspendisse lacinia rutrum neque, non dapibus orci tincidunt quis. Nunc ac nisl fermentum, aliquet libero nec, aliquet mauris. Proin augue lacus, feugiat in volutpat eget, elementum eu ipsum. Proin dictum ligula fringilla lorem hendrerit vestibulum. Aenean arcu lorem, mattis ut purus in, dictum pellentesque risus. Nunc posuere ultricies mauris, et porta dui finibus auctor. Cras ante enim, facilisis ut dapibus sed, fringilla a metus.";
             string s1 = "";
             string s2 = "";
             for (int i = 0; i < CHAT_WIDTH * 2 - 20; i++)
@@ -98,8 +97,7 @@ namespace UserInterface.Tests
             //Assert
             _mockedConsoleHelper.Verify(mock => mock.Write(s1), Times.Once);
             _mockedConsoleHelper.Verify(mock => mock.Write(s2), Times.Once);
-            //_mockedConsoleHelper.Verify(mock => mock.Write(messageTwo), Times.Once);
-        }
+            }
 
         [Test]
         public void Test_ShowMessages_CutsOfMessageWhenToLong()
