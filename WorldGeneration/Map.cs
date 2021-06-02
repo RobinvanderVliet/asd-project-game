@@ -15,9 +15,7 @@ namespace WorldGeneration
         private IList<Chunk> _chunks; // NOT readonly, don't listen to the compiler
         private readonly IDatabaseService<Chunk> _chunkDBService;
         private ChunkHelper _chunkHelper;
-        private IList<int[]> _chunksWithinLoadingRange;
         private readonly INoiseMapGenerator _noiseMapGenerator;
-
         private IConsolePrinter _consolePrinter;
 
         public Map(
@@ -41,8 +39,8 @@ namespace WorldGeneration
 
         // checks if there are new chunks that have to be loaded
         private void LoadArea(int playerX, int playerY, int viewDistance) {
-            _chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
-            foreach (var chunkCoordinates in _chunksWithinLoadingRange)
+            var chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
+            foreach (var chunkCoordinates in chunksWithinLoadingRange)
             {
                 if (_chunks.Any(chunk => chunk.X == chunkCoordinates[0] && chunk.Y == chunkCoordinates[1])) continue;
                 {
@@ -88,28 +86,7 @@ namespace WorldGeneration
             }
             return chunksWithinLoadingRange;
         }
-
-        public void DisplayMap(Player currentPlayer, int viewDistance, List<Character> characters)
-        {
-            if (viewDistance < 0)
-            {
-                throw new InvalidOperationException("viewDistance smaller than 0.");
-            }
-            
-            var playerX = currentPlayer.XPosition;
-            var playerY = currentPlayer.YPosition;
-            LoadArea(playerX, playerY, viewDistance);
-            for (var y = (playerY + viewDistance); y > ((playerY + viewDistance) - (viewDistance * 2) -1); y--)
-            {
-                for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
-                {
-                    var tile = GetLoadedTileByXAndY(x, y);
-                    _consolePrinter.PrintText($"  {GetDisplaySymbol(tile, characters)}");
-                }
-                _consolePrinter.NextLine();
-            }
-        }
-
+        
         public char[,] GetMapAroundCharacter(Player centerCharacter, int viewDistance, List<Character> allCharacters)
         {
             if (viewDistance < 0)
