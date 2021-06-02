@@ -26,6 +26,7 @@ namespace Session
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
             _worldService = worldService;
             _sessionHandler = sessionHandler;
+            _relativeStatHandler = new RelativeStatHandler(_clientController, _worldService);
         }
         
         public void SendGameSession()
@@ -105,8 +106,9 @@ namespace Session
             }
             
             _worldService.DisplayWorld();
-            
-            _relativeStatHandler = new RelativeStatHandler(_clientController, _worldService);
+
+            _relativeStatHandler.CheckStaminaTimer();
+            _relativeStatHandler.CheckRadiationTimer();
         }
     }
 }

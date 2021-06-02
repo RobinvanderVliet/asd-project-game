@@ -19,7 +19,9 @@ namespace Session
     {
         private Player _player;
 
-        private int TIMER = 1000;
+        private const int STAMINA_TIMER = 1000;
+        private const int RADIATION_TIMER = 1000;
+
         private Timer _staminaTimer;
         private Timer _radiationTimer;
 
@@ -32,21 +34,19 @@ namespace Session
             _clientController.SubscribeToPacketType(this, PacketType.RelativeStat);
             _worldService = worldService;
             _player = _worldService.getCurrentPlayer();
-            CheckStaminaTimer();
-            CheckRadiationTimer();
         }
         
-        private void CheckStaminaTimer()
+        public void CheckStaminaTimer()
         {
-            _staminaTimer = new Timer(TIMER);
+            _staminaTimer = new Timer(STAMINA_TIMER);
             _staminaTimer.AutoReset = true;
             _staminaTimer.Elapsed += StaminaEvent;
             _staminaTimer.Start();
         }
         
-        private void CheckRadiationTimer()
+        public void CheckRadiationTimer()
         {
-            _radiationTimer = new Timer(TIMER);
+            _radiationTimer = new Timer(RADIATION_TIMER);
             _radiationTimer.AutoReset = true;
             _radiationTimer.Elapsed += RadiationEvent;
             _radiationTimer.Start();
@@ -65,7 +65,7 @@ namespace Session
         
         private void RadiationEvent(object sender, ElapsedEventArgs e)
         {
-            ITile tile = _worldService.GetTile(
+            var tile = _worldService.GetTile(
                 _worldService.getCurrentPlayer().XPosition, 
                 _worldService.getCurrentPlayer().YPosition);
             
@@ -151,6 +151,5 @@ namespace Session
                 playerRepository.UpdateAsync(playerPOCO);
             }
         }
-
     }
 }
