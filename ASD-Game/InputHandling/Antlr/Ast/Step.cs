@@ -32,5 +32,9 @@ namespace InputHandling.Antlr.Ast
         {
             return Equals(obj as Step);
         }
+        public override int GetHashCode()
+        {
+            return _step.GetHashCode();
+        }
     }
 }

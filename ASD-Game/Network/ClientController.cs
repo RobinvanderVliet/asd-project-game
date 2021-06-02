@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Network.DTO;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Network.DTO;
 
 namespace Network
 {
@@ -24,7 +24,7 @@ namespace Network
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-            if(packet.Header.SessionID == _sessionId || packet.Header.PacketType == PacketType.Session)
+            if ((packet.Header.SessionID == _sessionId && _sessionId != null) || packet.Header.PacketType == PacketType.Session)
             {
                 return _subscribers.GetValueOrDefault(packet.Header.PacketType).HandlePacket(packet);
             }
@@ -37,7 +37,7 @@ namespace Network
         public void SetSessionId(string sessionId)
         {
             _sessionId = sessionId;
-            if(_hostController != null)
+            if (_hostController != null)
             {
                 _hostController.SetSessionId(sessionId);
             }

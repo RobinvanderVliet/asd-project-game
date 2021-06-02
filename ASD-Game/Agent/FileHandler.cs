@@ -7,7 +7,7 @@ namespace Agent
 {
     public class FileHandler
     {
-        private string[] _allowedTypes = new[] {".txt", ".cfg"};
+        private string[] _allowedTypes = new[] { ".txt", ".cfg" };
 
         public virtual string ImportFile(string filepath)
         {
@@ -58,9 +58,9 @@ namespace Agent
             }
         }
 
-        public string GetBaseDirectory() 
+        public string GetBaseDirectory()
         {
-           return string.Format(Path.GetFullPath(Path.Combine(GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory))));
+            return string.Format(Path.GetFullPath(Path.Combine(GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory))));
         }
 
         private string GoBackToRoot(String path)

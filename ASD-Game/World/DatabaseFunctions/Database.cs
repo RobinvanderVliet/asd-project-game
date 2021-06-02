@@ -1,7 +1,7 @@
+using LiteDB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LiteDB;
 using WorldGeneration.Models;
 
 namespace WorldGeneration.DatabaseFunctions
@@ -42,12 +42,12 @@ namespace WorldGeneration.DatabaseFunctions
                 var queryresults = collection.Query()
                     .Where(chunk => chunk.X.Equals(chunkXValue) && chunk.Y.Equals(chunkYValue))
                     .Select(queryOutput => new
-                        {map = queryOutput.Map, rowSize = queryOutput.RowSize, x = queryOutput.X, y = queryOutput.Y});
+                    { map = queryOutput.Map, rowSize = queryOutput.RowSize, x = queryOutput.X, y = queryOutput.Y });
                 switch (queryresults.Count())
                 {
                     case 0:
                         return null;
-                    case >1:
+                    case > 1:
                         throw new DatabaseException("There were multiple matching chunks found where a single was expected");
                     case 1:
                         return new Chunk(queryresults.First().x, queryresults.First().y, queryresults.First().map,
@@ -72,7 +72,7 @@ namespace WorldGeneration.DatabaseFunctions
                 using var db = new LiteDatabase(_databaseLocation);
                 var results = GetMapCollection(db).Query()
                     .Select(queryOutput => new
-                        {map = queryOutput.Map, rowSize = queryOutput.RowSize, x = queryOutput.X, y = queryOutput.Y})
+                    { map = queryOutput.Map, rowSize = queryOutput.RowSize, x = queryOutput.X, y = queryOutput.Y })
                     .ToList();
 
 
@@ -80,7 +80,7 @@ namespace WorldGeneration.DatabaseFunctions
                 {
                     case 0:
                         throw new DatabaseException("There were no matching chunks found");
-                    case >0:
+                    case > 0:
                         return results.Select(result => new Chunk(result.x, result.y, result.map, result.rowSize))
                             .ToList();
                     default:

@@ -18,5 +18,9 @@ namespace Network
                    SessionID == DTO.SessionID &&
                    PacketType == DTO.PacketType;
         }
+        public override int GetHashCode()
+        {
+            return PacketType.GetHashCode();
+        }
     }
 }

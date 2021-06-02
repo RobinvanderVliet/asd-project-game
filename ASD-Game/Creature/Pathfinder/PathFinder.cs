@@ -45,7 +45,7 @@ namespace Creature
                 {
                     if (adjNode.IsWalkable)
                     {
-                        if (!(openList.Contains(adjNode)) && (!closedList.Contains(adjNode) || currentNode.FScore > adjNode.FScore) )
+                        if (!(openList.Contains(adjNode)) && (!closedList.Contains(adjNode) || currentNode.FScore > adjNode.FScore))
                         {
                             if (closedList.Contains(adjNode) && currentNode.FScore > adjNode.FScore)
                             {

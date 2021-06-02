@@ -1,11 +1,11 @@
 using Network;
+using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Timers;
-using Network.DTO;
 using WorldGeneration;
 using UserInterface;
 using Timer = System.Timers.Timer;
@@ -34,12 +34,12 @@ namespace Session
             _clientController.SubscribeToPacketType(this, PacketType.Session);
             _screenHandler = screenHandler;
         }
-        
+
         public List<string> GetAllClients()
         {
-           return _session.GetAllClients();
+            return _session.GetAllClients();
         }
-     
+
         public bool JoinSession(string sessionId)
         {
             var joinSession = false;
@@ -105,7 +105,7 @@ namespace Session
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             sendSessionDTO(sessionDTO);
         }
-        
+
         public void SendHeartbeat()
         {
             SessionDTO sessionDTO = new SessionDTO(SessionType.SendHeartbeat);
@@ -117,11 +117,11 @@ namespace Session
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _clientController.SendPayload(payload, PacketType.Session);
         }
-         
+
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
-            
+
             if (packet.Header.SessionID == _session?.SessionId)
             {
                 if (packet.Header.Target == "client" || packet.Header.Target == "host")
@@ -135,7 +135,7 @@ namespace Session
                         return HandleHeartbeat(packet);
                     }
                 }
-                if ((packet.Header.Target == "client" || packet.Header.Target == "host" || packet.Header.Target == _clientController.GetOriginId()) 
+                if ((packet.Header.Target == "client" || packet.Header.Target == "host" || packet.Header.Target == _clientController.GetOriginId())
                     && sessionDTO.SessionType == SessionType.SendPing)
                 {
                     return handlePingRequest(packet);
@@ -147,28 +147,28 @@ namespace Session
                     && sessionDTO.SessionType == SessionType.RequestSessions)
                 {
                     return handleRequestSessions();
-                } 
-                if (packet.Header.Target == _clientController.GetOriginId() 
+                }
+                if (packet.Header.Target == _clientController.GetOriginId()
                     && sessionDTO.SessionType == SessionType.RequestSessions)
                 {
                     return addRequestedSessions(packet);
                 }
             }
-        
-            return new HandlerResponseDTO(SendAction.Ignore, null);
-        }
-        
-        private HandlerResponseDTO HandleHeartbeat(PacketDTO packet)
-        {
-            if(_heartbeatHandler != null)
-            {
-                _heartbeatHandler.ReceiveHeartbeat(packet.Header.OriginID);
-            }
-            
+
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
-        private void CheckIfHostActive() 
+        private HandlerResponseDTO HandleHeartbeat(PacketDTO packet)
+        {
+            if (_heartbeatHandler != null)
+            {
+                _heartbeatHandler.ReceiveHeartbeat(packet.Header.OriginID);
+            }
+
+            return new HandlerResponseDTO(SendAction.Ignore, null);
+        }
+
+        private void CheckIfHostActive()
         {
             if (!_hostActive)
             {
@@ -179,7 +179,7 @@ namespace Session
                     _hostPingTimer.Dispose();
                     _hostActive = true;
                     _hostInactiveCounter = 0;
-                    SwapToHost();   
+                    SwapToHost();
                 }
             }
             else
@@ -187,10 +187,11 @@ namespace Session
                 _hostInactiveCounter = 0;
             }
         }
-        
+
         private HandlerResponseDTO handlePingRequest(PacketDTO packet)
         {
-            if (packet.Header.Target.Equals("client")) {
+            if (packet.Header.Target.Equals("client"))
+            {
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
 
@@ -198,15 +199,17 @@ namespace Session
             {
                 _hostActive = true;
             }
-            else {
-                SessionDTO sessionDTO = new SessionDTO {
+            else
+            {
+                SessionDTO sessionDTO = new SessionDTO
+                {
                     SessionType = SessionType.ReceivedPingResponse,
                     Name = "pong"
                 };
                 var jsonObject = JsonConvert.SerializeObject(sessionDTO);
                 return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
             }
-            
+
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
@@ -239,11 +242,11 @@ namespace Session
             }
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
-        
+
         private HandlerResponseDTO addPlayerToSession(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
-            
+
             if (packet.Header.Target == "host")
             {
                 Console.WriteLine(sessionDTO.ClientIds[0] + " Has joined your session: ");
@@ -263,9 +266,9 @@ namespace Session
             {
                 SessionDTO sessionDTOClients = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
                 _session.EmptyClients();
-                
+
                 _session.SessionSeed = sessionDTOClients.SessionSeed;
-                
+
                 Console.WriteLine("Players in your session:");
                 foreach (string client in sessionDTOClients.ClientIds)
                 {
@@ -273,7 +276,8 @@ namespace Session
                     Console.WriteLine(client);
                 }
 
-                if (sessionDTOClients.ClientIds.Count > 0 && !_clientController.IsBackupHost) {
+                if (sessionDTOClients.ClientIds.Count > 0 && !_clientController.IsBackupHost)
+                {
                     if (sessionDTOClients.ClientIds[1].Equals(_clientController.GetOriginId()))
                     {
                         _clientController.IsBackupHost = true;
@@ -284,7 +288,7 @@ namespace Session
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
         }
-        
+
         public int GetSessionSeed()
         {
             return _session.SessionSeed;
@@ -292,7 +296,8 @@ namespace Session
 
         private void SendPing()
         {
-            SessionDTO sessionDTO = new SessionDTO{
+            SessionDTO sessionDTO = new SessionDTO
+            {
                 SessionType = SessionType.SendPing,
                 Name = "ping"
             };
@@ -321,14 +326,14 @@ namespace Session
         {
             _clientController.CreateHostController();
             _clientController.IsBackupHost = false;
-            
+
             _senderHeartbeatTimer.Close();
-            
+
             Console.WriteLine("Look at me, I'm the captain (Host) now!");
-            
+
             List<string> heartbeatSenders = new List<string>(_session.GetAllClients());
             heartbeatSenders.Remove(_clientController.GetOriginId());
-            
+
             _heartbeatHandler = new HeartbeatHandler(heartbeatSenders);
         }
 
@@ -341,7 +346,7 @@ namespace Session
         {
             return _hostActive;
         }
-        
+
         public void setHostActive(bool boolean)
         {
             _hostActive = boolean;

@@ -1,5 +1,5 @@
-using System.Diagnostics.CodeAnalysis;
 using LiteDB;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DatabaseHandler.POCO
 {

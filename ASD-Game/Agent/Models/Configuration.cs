@@ -11,12 +11,12 @@ namespace Agent.Models
             get => _settings;
             set => _settings = value;
         }
-        
+
         public string GetSetting(string setting)
         {
             return _settings[setting];
         }
     }
-    
-    
+
+
 }

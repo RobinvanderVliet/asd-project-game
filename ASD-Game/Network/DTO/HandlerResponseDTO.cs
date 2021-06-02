@@ -7,7 +7,7 @@ namespace Network.DTO
     {
         public SendAction Action { get; set; }
         public string ResultMessage { get; set; }
-    
+
         public HandlerResponseDTO(SendAction action, string resultMessage)
         {
             Action = action;
@@ -19,6 +19,10 @@ namespace Network.DTO
             return obj is HandlerResponseDTO DTO &&
                    Action == DTO.Action &&
                    ResultMessage == DTO.ResultMessage;
+        }
+        public override int GetHashCode()
+        {
+            return Action.GetHashCode();
         }
     }
 }

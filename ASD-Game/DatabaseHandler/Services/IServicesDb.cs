@@ -1,6 +1,6 @@
+using LiteDB;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LiteDB;
 
 namespace DatabaseHandler.Services
 {
