@@ -215,5 +215,36 @@ namespace InputHandling.Tests
             startSession.AddChild(new StartSession());
             return new AST(startSession);
         }
+        
+        [Test]
+        public void Test_Apply_InspectItemActionIsCalled()
+        {
+            //Arrange
+            string inventorySlot = "armor";
+            var ast = InspectAST(inventorySlot);
+            
+            //Act
+            _sut.Apply(ast);
+            
+            //Assert
+            _mockedInventoryHandler.Verify(mockedInventory => mockedInventory.InspectItem(inventorySlot), Times.Once);
+        }
+        
+        [Test]
+        public void Test_Inspect_ThrowsExceptionWithSlotDigit42()
+        {
+            //arrange
+            var ast = InspectAST("slot 42");
+            //act & assert
+            Assert.Throws<SlotException>(() => _sut.Apply(ast));
+        }
+
+        public static AST InspectAST(string inventorySlot)
+        {
+            Input inspect = new Input();
+            inspect.AddChild(new Inspect()
+                .AddChild(new InventorySlot(inventorySlot)));
+            return new AST(inspect);
+        }
     }
 }
