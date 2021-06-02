@@ -26,15 +26,15 @@ namespace ASD_project
         {
             var builder = new ConfigurationBuilder();
             BuildConfig(builder);
-            
+
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(builder.Build())
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .CreateLogger();
-            
+
             Log.Logger.Information("Application starting");
-            
+
             //Example of dependency injection with GreetingService
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
@@ -58,11 +58,12 @@ namespace ASD_project
                 .UseSerilog()
                 .Build();
             
+
             var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);
             svc.Run();
         }
 
-        static void BuildConfig(IConfigurationBuilder builder)
+        static void BuildConfig(IConfigurationBuilder builder) 
         {
             builder.SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
