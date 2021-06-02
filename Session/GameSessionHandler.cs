@@ -51,9 +51,9 @@ namespace Session
             var gameConfigurationPOCO = new GameConfigurationPOCO
             {
                 GameGUID = _clientController.SessionId,
-                NPCDifficultyCurrent = (int) _gameConfigurationHandler.CurrentMonsterDifficulty,
-                NPCDifficultyNew = (int) _gameConfigurationHandler.NewMonsterDifficulty,
-                ItemSpawnRate = (int) _gameConfigurationHandler.SpawnRate
+                NPCDifficultyCurrent = (int) _gameConfigurationHandler.GetCurrentMonsterDifficulty(),
+                NPCDifficultyNew = (int) _gameConfigurationHandler.GetNewMonsterDifficulty(),
+                ItemSpawnRate = (int) _gameConfigurationHandler.GetSpawnRate()
             };
             gameServiceConfiguration.CreateAsync(gameConfigurationPOCO);
             

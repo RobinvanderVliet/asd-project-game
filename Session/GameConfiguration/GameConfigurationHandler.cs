@@ -249,5 +249,20 @@ namespace Session.GameConfiguration
         {
             get { return _configurationChoices; }
         }
+
+        public ItemSpawnRate GetSpawnRate()
+        {
+            return SpawnRate;
+        }
+
+        public MonsterDifficulty GetCurrentMonsterDifficulty()
+        {
+            return CurrentMonsterDifficulty;
+        }
+
+        public MonsterDifficulty GetNewMonsterDifficulty()
+        {
+            return NewMonsterDifficulty;
+        }
     }
 }
