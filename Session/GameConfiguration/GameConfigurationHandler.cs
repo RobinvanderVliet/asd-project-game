@@ -151,7 +151,6 @@ namespace Session.GameConfiguration
             }
             else
             {
-                _configurationScreen.UpdateInputMessage("That's all folks!");
                 _setupConfiguration = false;
                 SetGameConfiguration();
                 //To the next screen!
