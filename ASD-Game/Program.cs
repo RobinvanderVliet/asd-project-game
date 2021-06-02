@@ -57,13 +57,7 @@ namespace ASD_project
                 })
                 .UseSerilog()
                 .Build();
-<<<<<<< HEAD
             
-            
-=======
-
-
->>>>>>> c6a529ce6d61997c2261e780a7f113bb716ffc50
             var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);
             svc.Run();
         }
