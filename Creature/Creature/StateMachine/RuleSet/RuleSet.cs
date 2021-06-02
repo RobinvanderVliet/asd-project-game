@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Creature.Creature.StateMachine
+namespace Creature.Creature.StateMachine.CustomRuleSet
 {
     public class RuleSet
     {

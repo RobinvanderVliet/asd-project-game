@@ -3,7 +3,9 @@ using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
 using Creature.Creature.StateMachine.Data;
 using Creature.Creature.StateMachine.Event;
+using Creature.Creature.StateMachine.CustomRuleSet;
 using Creature.Creature.StateMachine.State;
+using System;
 
 namespace Creature.Creature.StateMachine
 {
@@ -52,47 +54,53 @@ namespace Creature.Creature.StateMachine
             // Wandering
             builder.In(_followPlayerState).On(CreatureEvent.Event.LOST_CREATURE).Goto(_wanderState);
 
-            List<RuleSet> rulesetList = RuleSetFactory.GetRuleSetListFromDictionaryList(CreatureData.RuleSet);
+            List<RuleSet> rulesetList = RuleSetFactory.GetRuleSetListFromSettingsList(CreatureData.RuleSet);
+            List<string> actions = new() { "follow", "flee", "attack" };
+            List<BuilderInfo> builderInfoList = new List<BuilderInfo>();
 
-            CreatureEvent.Event followEvent = CreatureEvent.Event.IDLE;
-            bool followGuard = false;
-
-            RuleSet rule = new RuleSet();
-
-            // Check for each state (in _comparison_true of _false) if they're default or not;
-            // If default, get event
-            // If not default, go to default and get event
-            foreach (RuleSet ruleSet in rulesetList)
+            foreach (var action in actions)
             {
-                //builder.In(GetFirstState(CreatureData)).On(GetEvent(CreatureData)).If(GetGuard(ruleSet)).Execute(GetSecondState(CreatureData);
+                BuilderInfo builderInfo = new BuilderInfo();
+                builderInfo.Action = action;
+                builderInfo.TargetState = GetTargetState(action);
 
-                if (ruleSet.ComparisonTrue == "follow" || ruleSet.ComparisonFalse == "follow")
+                foreach (RuleSet ruleSet in rulesetList)
                 {
-                    if (ruleSet.Action == "default")
+                    if (ruleSet.ComparisonTrue == "follow" || ruleSet.ComparisonFalse == "follow")
                     {
-                        if (ruleSet.ComparisonTrue == "follow")
+                        if (ruleSet.Action == "default")
                         {
-                            followEvent = GetEvent(ruleSet.Comparable, ruleSet.Threshold, ruleSet.Comparison);
-                        }
-                    }
-                    else
-                    {
-                        foreach (RuleSet ruleSet2 in rulesetList)
-                        {
-                            if (ruleSet2.Action == "default" && (ruleSet2.ComparisonTrue == "follow" || ruleSet2.ComparisonFalse == "follow"))
+                            if (ruleSet.ComparisonTrue == "follow")
                             {
-                                followEvent = GetEvent(ruleSet2.Comparable, ruleSet2.Threshold, ruleSet2.Comparison);
-                                rule = ruleSet2;
+                                builderInfo.Event = GetEvent(ruleSet.Comparable, ruleSet.Threshold, ruleSet.Comparison);
+                            }
+                        }
+                        else
+                        {
+                            foreach (RuleSet ruleSet2 in rulesetList)
+                            {
+                                if (ruleSet2.Action == "default" && (ruleSet2.ComparisonTrue == ruleSet.Action || ruleSet2.ComparisonFalse == ruleSet.Action))
+                                {
+                                    builderInfo.Event = GetEvent(ruleSet2.Comparable, ruleSet2.Threshold, ruleSet2.Comparison);
+                                    builderInfo.RuleSet = ruleSet;
+                                }
                             }
                         }
                     }
                 }
             }
 
-            // Test
-            builder.In(_followPlayerState).On(followEvent).
-                If<ICreatureData>((c) => GetGuard(CreatureData, c, rule)).
-                Goto(_attackPlayerState).Execute<ICreatureData>(new AttackState(CreatureData).Do);
+            foreach (BuilderInfo builderInfo in builderInfoList)
+            {
+                foreach (var initialState in builderInfo.InitialStates)
+                {
+                    builder.In(initialState).On(builderInfo.Event).
+                        If<object>((c) => GetGuard(CreatureData, c, builderInfo.RuleSet, builderInfo.Action)).
+                        Goto(builderInfo.TargetState).Execute<ICreatureData>(builderInfo.TargetState.Do);
+                }
+            }
+
+            // TODO?: If action not used in builder info, do default stuff for it like below
 
             // Follow player
             builder.In(_wanderState).On(CreatureEvent.Event.SPOTTED_CREATURE).
@@ -113,7 +121,8 @@ namespace Creature.Creature.StateMachine
             _passiveStateMachine = builder.Build().CreatePassiveStateMachine();
             _passiveStateMachine.Start();
         }
-        public CreatureEvent.Event GetEvent(string comparable, string threshold, string comparison)
+
+        private CreatureEvent.Event GetEvent(string comparable, string threshold, string comparison)
         {
             if ((comparable == "monster" || comparable == "agent") && (threshold == "monster" || threshold == "agent"))
             {
@@ -137,36 +146,21 @@ namespace Creature.Creature.StateMachine
                     return CreatureEvent.Event.FOUND_ITEM;
                 }
             }
+            // TODO: Add more
+
             return CreatureEvent.Event.IDLE;
         }
 
-        public bool GetGuard(ICreatureData comparableData, ICreatureData thresholdData, RuleSet rule)
+        private bool GetGuard(object comparableData, object thresholdData, RuleSet rule, string state)
         {
-            object comparableObject = new();
-            object thresholdObject = new();
-
-            if (rule.Comparable == "agent" || rule.Comparable == "monster")
-            {
-                comparableObject = comparableData;
-            }
-            else if (rule.Threshold == "agent" || rule.Threshold == "monster")
-            {
-                thresholdObject = thresholdData;
-            }
-            else if (rule.Comparable == "health")
-            {
-                comparableObject = comparableData.Health;
-            }
-            else if (rule.Threshold == "health")
-            {
-                thresholdObject = thresholdData.Health;
-            }
+            object comparableObject = GetData(comparableData, rule.Comparable);
+            object thresholdObject = GetData(thresholdData, rule.Threshold);
 
             bool condition = true;
 
             if (rule.Comparison == "less than")
             {
-                condition = ((int)comparableObject < (int)thresholdObject);
+                condition = (int)comparableObject < (int)thresholdObject;
             }
             else if (rule.Comparison == "greater than")
             {
@@ -174,20 +168,65 @@ namespace Creature.Creature.StateMachine
             }
             else if (rule.Comparison == "is equal to")
             {
-                condition = (int)comparableObject == (int)thresholdObject;
+                condition = comparableObject == thresholdObject;
             }
             else if (rule.Comparison == "contains")
             {
-                //return ???
+                // return ?
             }
             else if (rule.Comparison == "does not contain")
             {
-                //return ???
+                // return ?
             }
 
-            // TODO: invert condition value if action gets executed when comparison is false
+            if (rule.ComparisonFalse == state)
+            {
+                condition = !condition;
+            }
 
             return condition;
+        }
+
+        private object GetData(object comparisonData, string comparisonString)
+        {
+            if (comparisonString == "agent" || comparisonString == "monster")
+            {
+                ICreatureData data = (ICreatureData)comparisonData;
+                return data;
+            }
+            else if (comparisonString == "health")
+            {
+                ICreatureData data = (ICreatureData)comparisonData;
+                return data.Health;
+            }
+            else if (int.TryParse(comparisonString, out _))
+            {
+                return comparisonString;
+            }
+            // TODO: Add more
+
+            return comparisonData;
+        }
+
+        private CreatureState GetTargetState(string action)
+        {
+            if (action == "follow")
+            {
+                return new FollowCreatureState(CreatureData);
+            }
+            else if (action == "flee")
+            {
+                return new FleeFromCreatureState(CreatureData);
+            }
+            else if (action == "attack")
+            {
+                return new AttackState(CreatureData);
+            }
+            // TODO: Add more
+            else 
+            {
+                return new IdleState(CreatureData);
+            }
         }
     }
 }

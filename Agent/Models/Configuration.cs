@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Agent.Models
 {
     public abstract class Configuration
     {
-        private Dictionary<string, string> _settings;
+        private List<ValueTuple<string, string>> _settings;
 
-        public Dictionary<string, string> Settings
+        public List<ValueTuple<string, string>> Settings
         {
             get => _settings;
             set => _settings = value;
@@ -14,9 +16,8 @@ namespace Agent.Models
         
         public string GetSetting(string setting)
         {
-            return _settings[setting];
+            return _settings.Where(x => x.Item1 == setting).FirstOrDefault().Item2;
         }
     }
-    
-    
+        
 }

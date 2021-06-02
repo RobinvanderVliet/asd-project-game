@@ -1,59 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using Agent.Models;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace Creature.Creature.StateMachine
+namespace Creature.Creature.StateMachine.CustomRuleSet
 {
     public class RuleSetFactory
     {
-        public static List<RuleSet> GetRuleSetListFromDictionaryList (List<Dictionary<string, string>> rulesetDictionaryList)
-        {
-            List<RuleSet> rulesetList = new();
-
-            foreach (var block in rulesetDictionaryList)
-            {
-                RuleSet ruleset = new();
-
-                ruleset.Setting = block.First().Key.Split("_")[0];
-                ruleset.Action = block.First().Key.Split("_")[1];
-
-                foreach (KeyValuePair<string, string> entry in block)
-                {
-                    if (entry.Key.EndsWith("comparable"))
-                    {
-                        ruleset.Comparable = entry.Value;
-                    }
-                    else if (entry.Key.EndsWith("threshold"))
-                    {
-                        ruleset.Threshold = entry.Value;
-                    }
-                    else if (entry.Key.EndsWith("comparison"))
-                    {
-                        ruleset.Comparison = entry.Value;
-                    }
-                    else if (entry.Key.EndsWith("true"))
-                    {
-                        ruleset.ComparisonTrue = entry.Value;
-                    }
-                    else if (entry.Key.EndsWith("false"))
-                    {
-                        ruleset.ComparisonFalse = entry.Value;
-                    }
-                }
-
-                rulesetList.Add(ruleset);
-            }
-
-            return rulesetList;
-        }
-
-        public static List<RuleSet> GetRuleSetListFromSettingsList(List<Setting> rulesetSettingsList)
+        public static List<RuleSet> GetRuleSetListFromSettingsList(List<ValueTuple<string, string>> rulesetSettingsList)
         {
             List<RuleSet> rulesetList = new();
             RuleSet ruleset = new();
 
             foreach (var currentSetting in rulesetSettingsList)
             {
-                if (currentSetting.Property.EndsWith("comparable"))
+                if (currentSetting.Item1.EndsWith("aggressiveness") ||
+                    currentSetting.Item1.EndsWith("explore") ||
+                    currentSetting.Item1.EndsWith("combat"))
                 {
                     if (!string.IsNullOrEmpty(ruleset.Setting))
                     {
@@ -61,25 +24,36 @@ namespace Creature.Creature.StateMachine
                     }
 
                     ruleset = new();
-                    ruleset.Setting = currentSetting.Property.Split("_")[0];
-                    ruleset.Action = currentSetting.Property.Split("_")[1];
-                    ruleset.Comparable = currentSetting.Value;
+                    ruleset.Setting = currentSetting.Item1;
+                    ruleset.ComparisonTrue = currentSetting.Item2;
                 }
-                else if (currentSetting.Property.EndsWith("threshold"))
+                else if (currentSetting.Item1.EndsWith("comparable"))
                 {
-                    ruleset.Threshold = currentSetting.Value;
+                    if (!string.IsNullOrEmpty(ruleset.Setting))
+                    {
+                        rulesetList.Add(ruleset);
+                    }
+
+                    ruleset = new();
+                    ruleset.Setting = currentSetting.Item1.Split("_")[0];
+                    ruleset.Action = currentSetting.Item1.Split("_")[1];
+                    ruleset.Comparable = currentSetting.Item2;
                 }
-                else if (currentSetting.Property.EndsWith("comparison"))
+                else if (currentSetting.Item1.EndsWith("threshold"))
                 {
-                    ruleset.Comparison = currentSetting.Value;
+                    ruleset.Threshold = currentSetting.Item2;
                 }
-                else if (currentSetting.Property.EndsWith("true"))
+                else if (currentSetting.Item1.EndsWith("comparison"))
                 {
-                    ruleset.ComparisonTrue = currentSetting.Value;
+                    ruleset.Comparison = currentSetting.Item2;
                 }
-                else if (currentSetting.Property.EndsWith("false"))
+                else if (currentSetting.Item1.EndsWith("true"))
                 {
-                    ruleset.ComparisonFalse = currentSetting.Value;
+                    ruleset.ComparisonTrue = currentSetting.Item2;
+                }
+                else if (currentSetting.Item1.EndsWith("false"))
+                {
+                    ruleset.ComparisonFalse = currentSetting.Item2;
                 }
             }
 

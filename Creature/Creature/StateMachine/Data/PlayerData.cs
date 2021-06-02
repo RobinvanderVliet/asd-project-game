@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using System.Numerics;
@@ -12,7 +13,7 @@ namespace Creature.Creature.StateMachine.Data
         private double _health;
         private int _damage;
         private int _visionRange;
-        private List<Dictionary<string, string>> _ruleSet;
+        private List<ValueTuple<string, string>> _ruleSet;
 
         public bool IsAlive { get => _health > 0; }
 
@@ -40,14 +41,12 @@ namespace Creature.Creature.StateMachine.Data
             set => _visionRange = value;
         }
 
-       
-
-        public List<Dictionary<string, string>> RuleSet
+        public List<ValueTuple<string, string>> RuleSet
         {
             get => _ruleSet;
         }
 
-        public PlayerData(Vector2 position, double health, int damage, int visionRange, List<Dictionary<string, string>> ruleSet)
+        public PlayerData(Vector2 position, double health, int damage, int visionRange, List<ValueTuple<string, string>> ruleSet)
         {
             _position = position;
             _health = health;

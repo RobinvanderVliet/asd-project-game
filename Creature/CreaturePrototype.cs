@@ -21,34 +21,24 @@ namespace Creature
             // npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
             // npcConfigurationService.CreateNpcConfiguration("zombie", SuperUgly.MONSTER_PATH);
 
-            List<Dictionary<string, string>> listOfDictionaries = new List<Dictionary<string, string>>()
+            List<ValueTuple<string, string>> listOfDictionaries = new List<ValueTuple<string, string>>()
             {
-                new Dictionary<string, string>()
-                {
-                    {"combat_default_monster_comparable","monster"},
-                    {"combat_default_monster_threshold","player"},
-                    {"combat_default_monster_comparison","sees"},
-                    {"combat_default_monster_comparison_true","follow"},
-                    {"combat_default_monster_comparison_false","flee"}
-                },
-                new Dictionary<string,string>()
-                {
-                    {"combat_default_monster_comparable","monster"},
-                    {"combat_default_monster_threshold","player"},
-                    {"combat_default_monster_comparison","nearby"},
-                    {"combat_default_monster_comparison_true","attack"}
-                }
+                new ValueTuple<string, string>("combat_default_monster_comparable", "monster"),
+                new ValueTuple<string, string>("combat_default_monster_threshold", "player"),
+                new ValueTuple<string, string>("combat_default_monster_comparison", "sees"),
+                new ValueTuple<string, string>("combat_default_monster_comparison_true", "follow"),
+                new ValueTuple<string, string>("combat_default_monster_comparison_false", "flee"),
+                new ValueTuple<string, string>("combat_default_monster_comparable", "monster"),
+                new ValueTuple<string, string>("combat_default_monster_threshold", "player"),
+                new ValueTuple<string, string>("combat_default_monster_comparison", "nearby"),
+                new ValueTuple<string, string>("combat_default_monster_comparison_true", "attack")
             };
-
-            var lines = listOfDictionaries[0].Select(kvp => kvp.Key + ": " + kvp.Value.ToString());
-            System.Diagnostics.Debug.WriteLine(string.Join(Environment.NewLine, lines));
 
             //PlayerData playerData = new PlayerData(new Vector2(5, 5), 20, 5, 10, world, npcConfigurationService.GetConfigurations()[0].Settings);
             ICreatureData playerData = new PlayerData(new Vector2(5, 5), 100, 5, 10, listOfDictionaries);
             ICreatureData agentData = new AgentData(new Vector2(10, 10), 100, 100, 5, 50, listOfDictionaries, false);
             ICreatureData monsterData = new MonsterData(new Vector2(10, 15), 20, 5, 50,listOfDictionaries, false);
 
-            
             ICreatureStateMachine monsterStateMachine = new MonsterStateMachine(monsterData);
             ICreature monster = new Monster(monsterStateMachine);
 
@@ -60,9 +50,9 @@ namespace Creature
 
             world.GenerateWorldNodes();
             world.SpawnPlayer(player);
-            world.SpawnAgent(agent);
+            //world.SpawnAgent(agent);
             // TODO: fix monster statemachine to get this working
-            //world.SpawnCreature(monster);
+            world.SpawnCreature(monster);
 
             world.Render();
 
