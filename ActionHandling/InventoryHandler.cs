@@ -214,13 +214,16 @@ namespace ActionHandling
                     break;
             }
 
-            _worldService.GetItemsOnCurrentTile(player).Add(item);
-
-            if (handleInDatabase)
-            {
-                PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO { PlayerGUID = inventoryDTO.UserId, ItemName = item.ItemName };
-                _playerItemServicesDB.DeleteAsync(playerItemPOCO);
+            if(item != null) 
+            { 
+                _worldService.GetItemsOnCurrentTile(player).Add(item);
             }
+
+            //if (handleInDatabase)
+            //{
+            //PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO { PlayerGUID = inventoryDTO.UserId, ItemName = item.ItemName };
+            //_playerItemServicesDB.DeleteAsync(playerItemPOCO);
+            //}
 
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
