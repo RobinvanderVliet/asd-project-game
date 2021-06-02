@@ -60,11 +60,7 @@ command:
     (MOVE | WALK | GO) SPACE direction (SPACE step)? #move |
     (ATTACK | SLASH | STRIKE) SPACE direction #attack |
     (PICKUP | GET) #pickup |
-<<<<<<< HEAD
     DROP SPACE inventorySlot #drop | 
-=======
-    DROP #drop |
->>>>>>> parent of a6db6d52 (Merge pull request #153 in VDFZEH/asd-project-game from sub-task/VDFZEH-498-coderen-uitvoeren-commando-pickup-item to feature/VDFZEH-483-coderen-commando-use-n)
     (EXIT | LEAVE) #exit |
     SAY SPACE message #say |
     SHOUT SPACE message #shout |
