@@ -112,12 +112,20 @@ namespace ActionHandling
 
                 if (result.Any())
                 {
-                    Console.WriteLine("Can't move to new position something is in the way");
+                    if (packet.Header.OriginID == null)
+                    {
+                        Console.WriteLine("Can't move to new position something is in the way");
+                    }
+
                     return new HandlerResponseDTO(SendAction.ReturnToSender, "Can't move to new position something is in the way");
                 }
                 else if (resultStamina < stamina)
                 {
-                    Console.WriteLine("You do not have enough stamina to move!");
+                    if (packet.Header.OriginID == null)
+                    {
+                        Console.WriteLine("You do not have enough stamina to move!");
+                    }
+
                     return new HandlerResponseDTO(SendAction.ReturnToSender, "You do not have enough stamina to move!");
                 }
                 else
