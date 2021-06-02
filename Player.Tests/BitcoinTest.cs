@@ -1,3 +1,5 @@
+//should be deleted
+/*using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using Player.Model;
 using System.Diagnostics.CodeAnalysis;
@@ -55,4 +57,4 @@ namespace Player.Tests
             Assert.AreEqual(10, _sut.Amount);
         }
     }
-}
+}*/

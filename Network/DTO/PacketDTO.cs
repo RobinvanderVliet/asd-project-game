@@ -1,8 +1,10 @@
 ﻿using Network.DTO;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Network
 {
+    [ExcludeFromCodeCoverage]
     public class PacketDTO
     {
         public PacketHeaderDTO Header { get; set; }

@@ -2,7 +2,7 @@ using Agent.Exceptions;
 using Agent.Mapper;
 using Agent.Models;
 using Agent.Services;
-using InputCommandHandler;
+using InputHandling;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -18,7 +18,7 @@ namespace Agent.Tests.Services
         private FileHandler _handler;
         private Mock<FileHandler> _fileHandlerMock;
         private Mock<Pipeline> _pipelineMock;
-        private Mock<InputCommandHandlerComponent> _mockedRetriever;
+        private Mock<InputHandler> _mockedRetriever;
 
         [SetUp]
         public void Setup()

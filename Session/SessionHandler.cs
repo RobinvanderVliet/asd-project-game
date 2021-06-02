@@ -7,12 +7,18 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Timers;
 using WorldGeneration;
+using DatabaseHandler;
+using DatabaseHandler.Services;
+using DatabaseHandler.Repository;
+using UserInterface;
 using Timer = System.Timers.Timer;
 
 namespace Session
 {
     public class SessionHandler : IPacketHandler, ISessionHandler
     {
+        private const bool DEBUG_INTERFACE = true; //TODO: remove when UI is complete, obviously
+        
         private IClientController _clientController;
         private Session _session;
         private IHeartbeatHandler _heartbeatHandler;
@@ -23,11 +29,12 @@ namespace Session
         private Timer _senderHeartbeatTimer;
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
-
-        public SessionHandler(IClientController clientController)
+        private IScreenHandler _screenHandler;
+        public SessionHandler(IClientController clientController, IScreenHandler screenHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Session);
+            _screenHandler = screenHandler;
         }
 
         public List<string> GetAllClients()
@@ -220,7 +227,20 @@ namespace Session
         {
             _availableSessions.TryAdd(packet.Header.SessionID, packet);
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
-            Console.WriteLine(packet.Header.SessionID + " Name: " + sessionDTO.Name);
+
+            if (!DEBUG_INTERFACE) // Remove when UI is completed
+            {
+                if (_screenHandler.Screen is SessionScreen)
+                {
+                    SessionScreen screen = _screenHandler.Screen as SessionScreen;
+                    screen.UpdateSessions(sessionDTO.Name, packet.Header.SessionID);
+                }
+            }
+            else
+            {
+                Console.WriteLine(
+                    packet.Header.SessionID + " Name: " + sessionDTO.Name + " Seed: " + sessionDTO.SessionSeed);   
+            }
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 

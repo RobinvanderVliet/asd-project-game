@@ -49,7 +49,7 @@ namespace Network
 
         private void Websocket_OnOpen(object sender, EventArgs e)
         {
-            Console.WriteLine("connection open");
+            // Console.WriteLine("connection open");
         }
 
         private void OnMessage(object sender, MessageEventArgs e)
