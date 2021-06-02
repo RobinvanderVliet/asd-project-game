@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DatabaseHandler\DatabaseHandler.csproj" />
+    <ProjectReference Include="..\Messages\Messages.csproj" />
     <ProjectReference Include="..\Network\Network.csproj" />
     <ProjectReference Include="..\UserInterface\UserInterface.csproj" />
   </ItemGroup>
