@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace WorldGeneration
@@ -39,6 +40,17 @@ namespace WorldGeneration
         public List<Player> getAllPlayers()
         {
             return _world._players;
+        }
+
+        public void playerDied(Player currentPlayer)
+        {
+            Console.WriteLine("You died.");
+            currentPlayer.Symbol = "X";
+        }
+
+        public bool isDead(Player player)
+        {
+            return player.Health <= 0;
         }
     }
 }

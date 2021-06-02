@@ -27,6 +27,10 @@ namespace ActionHandling
 
         public void SendMove(string directionValue, int stepsValue)
         {
+            if (_worldService.isDead(_worldService.getCurrentPlayer()))
+            {
+                return;
+            }
             int x = 0;
             int y = 0;
             switch (directionValue)

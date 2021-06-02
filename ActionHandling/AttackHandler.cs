@@ -5,8 +5,6 @@ using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
-using Items;
-using LiteDB;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
@@ -19,7 +17,7 @@ namespace ActionHandling
         private IClientController _clientController;
         private string _playerGuid;
         private IWorldService _worldService;
-        const int ATTACKSTAMINA = 10;
+        private const int ATTACK_STAMINA = 10;
 
         public AttackHandler(IClientController clientController, IWorldService worldService)
         {
@@ -30,7 +28,11 @@ namespace ActionHandling
 
         public void SendAttack(string direction)
         {
-            Weapon weapon = _worldService.getCurrentPlayer().Inventory.Weapon;
+            if (_worldService.isDead(_worldService.getCurrentPlayer()))
+            {
+                return;
+            }
+            var weapon = _worldService.getCurrentPlayer().Inventory.Weapon;
             int x = 0;
             int y = 0;
             switch (direction)
@@ -46,7 +48,7 @@ namespace ActionHandling
                 case "forward":
                 case "up":
                 case "north":
-                    y = +weapon.GetWeaponDistance();
+                    y = weapon.GetWeaponDistance();
                     break;
                 case "backward":
                 case "down":
@@ -92,7 +94,7 @@ namespace ActionHandling
                 if (PlayerResult.Any())
                 {
                     attackDto.AttackedPlayerGuid = PlayerResult.FirstOrDefault().Id;
-                    if (attackDto.Stamina >= ATTACKSTAMINA)
+                    if (attackDto.Stamina >= ATTACK_STAMINA)
                     {
                         InsertDamageToDatabase(attackDto, true);
                         packet.Payload = JsonConvert.SerializeObject(attackDto);
@@ -135,7 +137,7 @@ namespace ActionHandling
             var playerRepository = new Repository<PlayerPOCO>(dbConnection);
             var player = playerRepository.GetAllAsync().Result
                 .FirstOrDefault(player => player.PlayerGuid == attackDto.PlayerGuid);
-            player.Stamina -= ATTACKSTAMINA;
+            player.Stamina -= ATTACK_STAMINA;
             playerRepository.UpdateAsync(player);
         }
 
@@ -145,7 +147,7 @@ namespace ActionHandling
             if (isPlayer)
             {
                 var dbConnection = new DbConnection();
-                
+
                 var attackedPlayerRepository = new Repository<PlayerPOCO>(dbConnection);
                 var attackedPlayer = attackedPlayerRepository.GetAllAsync().Result
                     .FirstOrDefault(attackedPlayer => attackedPlayer.PlayerGuid == attackDto.AttackedPlayerGuid);
@@ -164,7 +166,7 @@ namespace ActionHandling
                         .First(playerItem =>
                             playerItem.PlayerGUID == attackDto.PlayerGuid &&
                             playerItem.ItemName ==
-                            attackedPlayerHelmet.ItemName && 
+                            attackedPlayerHelmet.ItemName &&
                             playerItem.GameGUID == _clientController.SessionId);
 
                     if (helmetPoints - totalDamage <= 0 && helmetPoints != 0)
@@ -187,11 +189,11 @@ namespace ActionHandling
                     var bodyArmorPoints = attackedPlayerBodyArmor.ArmorProtectionPoints;
                     var attackedPlayerItem = attackedPlayerItemService.GetAllAsync();
                     attackedPlayerItem.Wait();
-                    var results= attackedPlayerItem.Result.OrderByDescending(a => a.ArmorPoints)
+                    var results = attackedPlayerItem.Result.OrderByDescending(a => a.ArmorPoints)
                         .First(playerItem => playerItem.PlayerGUID == attackDto.PlayerGuid &&
-                                                      playerItem.ItemName ==
-                                                      attackedPlayerBodyArmor.ItemName &&
-                                                      playerItem.GameGUID == _clientController.SessionId);
+                                             playerItem.ItemName ==
+                                             attackedPlayerBodyArmor.ItemName &&
+                                             playerItem.GameGUID == _clientController.SessionId);
                     if (bodyArmorPoints - totalDamage <= 0 && bodyArmorPoints != 0)
                     {
                         totalDamage -= results.ArmorPoints;
@@ -211,6 +213,10 @@ namespace ActionHandling
                 {
                     attackedPlayer.Health -= totalDamage;
                     attackedPlayerRepository.UpdateAsync(attackedPlayer);
+                    if (attackedPlayer.Health <= 0)
+                    {
+                        
+                    }
                 }
             }
             else
@@ -234,14 +240,14 @@ namespace ActionHandling
         {
             if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
             {
-                Console.WriteLine("Your stamina got lowered with " + ATTACKSTAMINA + ".");
-                _worldService.getCurrentPlayer().Stamina -= ATTACKSTAMINA;
+                Console.WriteLine("Your stamina got lowered with " + ATTACK_STAMINA + ".");
+                _worldService.getCurrentPlayer().Stamina -= ATTACK_STAMINA;
                 Console.WriteLine("stamina: " + _worldService.getCurrentPlayer().Stamina);
             }
 
             if (_clientController.GetOriginId().Equals(attackDto.AttackedPlayerGuid))
             {
-                Console.WriteLine("You took a total of: " + attackDto.Damage + " damage.");
+                Console.WriteLine("You took a total of " + attackDto.Damage + " damage.");
                 int ArmorPoints = 0;
                 int HelmetPoints = 0;
                 if (_worldService.getCurrentPlayer().Inventory.Armor != null)
@@ -289,7 +295,7 @@ namespace ActionHandling
 
                 if (_worldService.getCurrentPlayer().Health <= 0)
                 {
-                    Console.WriteLine("isded"); //TODO implement death of Player. Boolean isDead in DB?
+                    _worldService.playerDied(_worldService.getCurrentPlayer());
                 }
             }
         }

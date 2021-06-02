@@ -11,5 +11,9 @@ namespace WorldGeneration
         public void GenerateWorld(int seed);
         public Player getCurrentPlayer();
         public List<Player> getAllPlayers();
+
+        public void playerDied(Player currentPlayer);
+
+        public bool isDead(Player player);
     }
 }
