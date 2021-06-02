@@ -60,7 +60,7 @@ namespace UserInterface
                 _screenHandler.ConsoleHelper.SetCursor(LOBBY_X + BORDER_SIZE / 2, LOBBY_Y + OFFSET_TOP + position);
                 _screenHandler.ConsoleHelper.Write(" ");
                 _screenHandler.ConsoleHelper.SetCursor(LOBBY_X + OFFSET_LEFT, LOBBY_Y + OFFSET_TOP + position);
-                _screenHandler.ConsoleHelper.Write(client[1]);
+                _screenHandler.ConsoleHelper.Write(position + 1 + ". " + client[1]);
             }
 
             ResetCursor();

@@ -37,7 +37,7 @@ namespace UserInterface.Tests
             _sut.UpdateLobbyScreen(clients);
 
             //Assert
-            _mockedConsoleHelper.Verify(mock => mock.Write(clients.ElementAt(0)[1]), Times.Once);
+            _mockedConsoleHelper.Verify(mock => mock.Write("1. " + clients.ElementAt(0)[1]), Times.Once);
         }
 
         [Test]
