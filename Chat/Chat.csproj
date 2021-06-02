@@ -15,6 +15,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Network\Network.csproj" />
+    <ProjectReference Include="..\UserInterface\UserInterface.csproj" />
   </ItemGroup>
 
 </Project>
