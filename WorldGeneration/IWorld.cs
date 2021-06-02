@@ -11,7 +11,7 @@ namespace WorldGeneration
         void UpdateCharacterPosition(string id, int newXPosition, int newYPosition);
         void AddPlayerToWorld(Player player, bool isCurrentPlayer = false);
         void AddCreatureToWorld(Creature player);
-        void updateWorld();
+        void UpdateMap();
         void DeleteMap();
     }
 }

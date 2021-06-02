@@ -26,7 +26,7 @@ namespace WorldGeneration
 
         public void DisplayWorld()
         {
-            _world.updateWorld();
+            _world.UpdateMap();
         }
         
         public void DeleteMap()

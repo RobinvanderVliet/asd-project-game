@@ -16,13 +16,14 @@ namespace WorldGeneration
         private readonly IDatabaseService<Chunk> _chunkDBService;
         private ChunkHelper _chunkHelper;
         private readonly INoiseMapGenerator _noiseMapGenerator;
-        private IConsolePrinter _consolePrinter;
+        private int _seed;
 
         public Map(
             INoiseMapGenerator noiseMapGenerator
             , int chunkSize
             , IConsolePrinter consolePrinter
             , IDatabaseService<Chunk> chunkDbServices
+            , int seed
             , IList<Chunk> chunks = null
         )
         {
@@ -34,7 +35,7 @@ namespace WorldGeneration
             _chunks = chunks ?? new List<Chunk>();
             _noiseMapGenerator = noiseMapGenerator;
             _chunkDBService = chunkDbServices;
-            _consolePrinter = consolePrinter;
+            _seed = seed;
         }
 
         // checks if there are new chunks that have to be loaded
@@ -51,7 +52,7 @@ namespace WorldGeneration
                     };
                     var getAllChunksQuery = _chunkDBService.GetAllAsync();
                     getAllChunksQuery.Wait();
-                    var results = getAllChunksQuery.Result.FirstOrDefault(c => c.X == chunkCoordinates[0] && c.Y == chunkCoordinates[1]);
+                    var results = getAllChunksQuery.Result.FirstOrDefault(c => c.X == chunkCoordinates[0] && c.Y == chunkCoordinates[1] && c.seed);
                     if (results == null)
                     {
                         _chunks.Add(GenerateNewChunk(chunkCoordinates[0], chunkCoordinates[1]));

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UserInterface;
 
@@ -38,7 +39,7 @@ namespace WorldGeneration
                 creature.XPosition = newXPosition;
                 creature.YPosition = newYPosition;
             }
-            updateWorld();
+            UpdateMap();
         }
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer = false)
@@ -48,16 +49,16 @@ namespace WorldGeneration
                 CurrentPlayer = player;
             }
             _players.Add(player);
-            updateWorld();
+            UpdateMap();
         }
         
         public void AddCreatureToWorld(Creature creature)
         {
             _creatures.Add(creature);
-            updateWorld();
+            UpdateMap();
         }
 
-        public void updateWorld()
+        public void UpdateMap()
         {
             if (CurrentPlayer != null && _players != null && _creatures != null)
             {
