@@ -52,7 +52,7 @@ namespace Session
                 playerPosition[1] = playerY;
                 players.Add(client[0], playerPosition);
                 var tmpPlayer = new PlayerPOCO
-                    {PlayerGUID = clientId, GameGUID = gamePOCO.GameGUID, XPosition = playerX, YPosition = playerY};
+                    {PlayerGUID = client[0], GameGUID = gamePOCO.GameGUID, XPosition = playerX, YPosition = playerY};
                 servicePlayer.CreateAsync(tmpPlayer);
 
                 playerX += 2; // spawn position + 2 each client

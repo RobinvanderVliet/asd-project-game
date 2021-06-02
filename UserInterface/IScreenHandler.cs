@@ -11,7 +11,8 @@ namespace UserInterface
         public string GetScreenInput();
         public void ShowMessages(Queue<string> messages);
         public void RedrawGameInputBox();
+        void UpdateWorld(char[,] map);
     }
 }
        
-        void UpdateWorld(char[,] map);
+        

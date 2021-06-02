@@ -96,7 +96,7 @@ namespace Session
         {
             _session = new Session(sessionName);
             _session.GenerateSessionId();
-            _session.AddClient(_clientController.GetOriginId());
+            _session.AddClient(_clientController.GetOriginId(), userName);
             _session.SessionSeed =  new MapFactory().GenerateSeed();
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
