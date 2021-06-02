@@ -93,7 +93,7 @@ namespace ActionHandling.Tests
 
         [Test]
         [TestCaseSource(typeof(PickupCases))]
-        public void Test_HandlePacket_HandlesPickupPacketSuccessOnHost(InventoryDTO inventoryDTO, HandlerResponseDTO expectedHandlerResponseDTO, bool fillInventory)
+        public void Test_HandlePacket_HandlesPickupPacketSuccessOnHost(InventoryDTO inventoryDTO, HandlerResponseDTO expectedHandlerResponseDTO, bool filledInventory)
         {
             // Arrange
             const string USER_ID = "userid";
@@ -111,7 +111,7 @@ namespace ActionHandling.Tests
             Player player = new Player("henk", 0, 0, "#", USER_ID);
             IList<Item> items = new List<Item>();
             items.Add(ItemFactory.GetBandage());
-            if (fillInventory)
+            if (filledInventory)
             {
                 player.Inventory.AddConsumableItem(ItemFactory.GetBandage());
                 player.Inventory.AddConsumableItem(ItemFactory.GetBandage());
@@ -120,6 +120,7 @@ namespace ActionHandling.Tests
 
             _mockedWorldService.Setup(mock => mock.GetPlayer(USER_ID)).Returns(player);
             _mockedWorldService.Setup(mock => mock.GetItemsOnCurrentTile(player)).Returns(items);
+            _mockedClientController.Setup(mock => mock.IsHost()).Returns(true);
             
             // Act
             HandlerResponseDTO handlerResponseDTO = _sut.HandlePacket(packetDTO);
