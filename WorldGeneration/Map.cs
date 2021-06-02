@@ -12,21 +12,18 @@ namespace WorldGeneration
     public class Map : IMap
     {
         private readonly int _chunkSize;
-        private readonly int _seed;
         private IList<Chunk> _chunks; // NOT readonly, don't listen to the compiler
         private readonly IDatabaseService<Chunk> _chunkDBService;
         private ChunkHelper _chunkHelper;
-        private IList<int[]> _chunksWithinLoadingRange;
         private readonly INoiseMapGenerator _noiseMapGenerator;
-
-        private IConsolePrinter _consolePrinter;
+        private int _seed;
 
         public Map(
             INoiseMapGenerator noiseMapGenerator
             , int chunkSize
-            , int seed
             , IConsolePrinter consolePrinter
             , IDatabaseService<Chunk> chunkDbServices
+            , int seed
             , IList<Chunk> chunks = null
         )
         {
@@ -36,16 +33,15 @@ namespace WorldGeneration
             }
             _chunkSize = chunkSize;
             _chunks = chunks ?? new List<Chunk>();
-            _seed = seed;
             _noiseMapGenerator = noiseMapGenerator;
             _chunkDBService = chunkDbServices;
-            _consolePrinter = consolePrinter;
+            _seed = seed;
         }
 
         // checks if there are new chunks that have to be loaded
         private void LoadArea(int playerX, int playerY, int viewDistance) {
-            _chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
-            foreach (var chunkCoordinates in _chunksWithinLoadingRange)
+            var chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
+            foreach (var chunkCoordinates in chunksWithinLoadingRange)
             {
                 if (_chunks.Any(chunk => chunk.X == chunkCoordinates[0] && chunk.Y == chunkCoordinates[1])) continue;
                 {
@@ -56,7 +52,7 @@ namespace WorldGeneration
                     };
                     var getAllChunksQuery = _chunkDBService.GetAllAsync();
                     getAllChunksQuery.Wait();
-                    var results = getAllChunksQuery.Result.FirstOrDefault(c => c.X == chunkCoordinates[0] && c.Y == chunkCoordinates[1]);
+                    var results = getAllChunksQuery.Result.FirstOrDefault(c => c.X == chunkCoordinates[0] && c.Y == chunkCoordinates[1] && c.Seed == _seed);
                     if (results == null)
                     {
                         _chunks.Add(GenerateNewChunk(chunkCoordinates[0], chunkCoordinates[1]));
@@ -91,29 +87,8 @@ namespace WorldGeneration
             }
             return chunksWithinLoadingRange;
         }
-
-        public void DisplayMap(Player currentPlayer, int viewDistance, List<Player> characters)
-        {
-            if (viewDistance < 0)
-            {
-                throw new InvalidOperationException("viewDistance smaller than 0.");
-            }
-            
-            var playerX = currentPlayer.XPosition;
-            var playerY = currentPlayer.YPosition;
-            LoadArea(playerX, playerY, viewDistance);
-            for (var y = (playerY + viewDistance); y > ((playerY + viewDistance) - (viewDistance * 2) -1); y--)
-            {
-                for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
-                {
-                    var tile = GetLoadedTileByXAndY(x, y);
-                    _consolePrinter.PrintText($"  {GetDisplaySymbol(tile, characters)}");
-                }
-                _consolePrinter.NextLine();
-            }
-        }
-
-        public char[,] GetMapAroundCharacter(Player centerCharacter, int viewDistance, List<Player> allCharacters)
+        
+        public char[,] GetMapAroundCharacter(Player centerCharacter, int viewDistance, List<Character> allCharacters)
         {
             if (viewDistance < 0)
             {
@@ -125,19 +100,18 @@ namespace WorldGeneration
             var centerCharacterYPosition = centerCharacter.YPosition;
             LoadArea(centerCharacterXPosition, centerCharacterYPosition, viewDistance);
             
-            for (var y = 0; y > viewDistance * 2 -1; y--)
+            for (var y = tileArray.GetLength(0) - 1; y >= 0; y--)
             {
-                for (var x = 0; x < viewDistance * 2 + 1; x++)
+                for (var x = 0; x < tileArray.GetLength(1); x++)
                 {
-                    var tile = GetLoadedTileByXAndY(x + (centerCharacterXPosition - viewDistance), y + (centerCharacterYPosition + viewDistance));
-                    tileArray[x, y] = GetDisplaySymbol(tile, allCharacters).ToCharArray()[0];
+                    var tile = GetLoadedTileByXAndY(x + (centerCharacterXPosition - viewDistance), (centerCharacterYPosition + viewDistance) - y);
+                    tileArray[y, x] = GetDisplaySymbol(tile, allCharacters).ToCharArray()[0];
                 }
-                _consolePrinter.NextLine();
             }
             return tileArray;
         }
         
-        private string GetDisplaySymbol(ITile tile, List<Player> characters)
+        private string GetDisplaySymbol(ITile tile, List<Character> characters)
         {
             var characterOnTile = characters.FirstOrDefault(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
             if(characterOnTile != null)
@@ -152,7 +126,7 @@ namespace WorldGeneration
 
         private Chunk GenerateNewChunk(int chunkX, int chunkY)
         {
-            var chunk = _noiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize, _seed);
+            var chunk = _noiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize);
             _chunkDBService.CreateAsync(chunk);
             return chunk;
         }
@@ -178,5 +152,6 @@ namespace WorldGeneration
             _chunkHelper = new ChunkHelper(GetChunkForTileXAndY(x, y));
             return _chunkHelper.GetTileByWorldCoordinates(x, y);
         }
+
     }
 }

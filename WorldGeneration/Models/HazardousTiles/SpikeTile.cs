@@ -23,6 +23,7 @@ namespace WorldGeneration.Models.HazardousTiles
             XPosition = x;
             YPosition = y;
             Damage = new Random().Next(2, 11);
+            ItemsOnTile = new List<Item>();
         }
 
         public int Damage { get; set; }

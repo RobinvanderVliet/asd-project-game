@@ -20,6 +20,7 @@ namespace WorldGeneration.Models.TerrainTiles
             IsAccessible = true;
             XPosition = x;
             YPosition = y;
+            ItemsOnTile = new List<Item>();
         }
     }
 }

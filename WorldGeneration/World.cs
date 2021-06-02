@@ -1,57 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using UserInterface;
 
 namespace WorldGeneration
 {
-    public class World
+    public class World : IWorld
     {
         private IMap _map;
-        public Player CurrentPlayer { get; set; }
+        public Player CurrentPlayer;
         private List<Player> _players;
+        private List<Creature> _creatures;
         private readonly int _viewDistance;
+        private IScreenHandler _screenHandler;
 
-        public World(int seed, int viewDistance, IMapFactory mapFactory)
+        public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler)
         {
             _players = new ();
+            _creatures = new ();
             _map = mapFactory.GenerateMap(seed);
             _viewDistance = viewDistance;
-            DeleteMap();
+            _screenHandler = screenHandler;
         }
 
-        public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
+        public void UpdateCharacterPosition(string id, int newXPosition, int newYPosition)
         {
-            if (CurrentPlayer.Id == userId)
+            var player = _players.FirstOrDefault(x => x.Id == id);
+            if (player != null)
             {
-                CurrentPlayer.XPosition = newXPosition;
-                CurrentPlayer.YPosition = newYPosition;
-            }
-            else
-            {
-                var player = _players.Find(x => x.Id == userId);
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
-            DisplayWorld();
+            var creature = _creatures.FirstOrDefault(x => x.Id == id);
+            if (creature != null)
+            {
+                creature.XPosition = newXPosition;
+                creature.YPosition = newYPosition;
+            }
+            UpdateMap();
         }
 
-        public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
+        public void AddPlayerToWorld(Player player, bool isCurrentPlayer = false)
         {
             if (isCurrentPlayer)
             {
                 CurrentPlayer = player;
             }
             _players.Add(player);
+            UpdateMap();
+        }
+        
+        public void AddCreatureToWorld(Creature creature)
+        {
+            _creatures.Add(creature);
+            UpdateMap();
         }
 
-        public void DisplayWorld()
+        public void UpdateMap()
         {
-            if (CurrentPlayer != null && _players != null)
+            if (CurrentPlayer != null && _players != null && _creatures != null)
             {
-                _map.DisplayMap(CurrentPlayer, _viewDistance, _players);
+                var characters = ((IEnumerable<Character>)_players).Concat(_creatures).ToList();
+                _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
             }
         }
-
+        
         public void DeleteMap()
         {
             _map.DeleteMap();

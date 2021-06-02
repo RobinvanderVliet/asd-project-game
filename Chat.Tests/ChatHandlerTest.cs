@@ -7,6 +7,7 @@ using Chat.DTO;
 using Network.DTO;
 using Newtonsoft.Json;
 using System.IO;
+using UserInterface;
 
 namespace Chat.Tests
 {
@@ -23,12 +24,14 @@ namespace Chat.Tests
 
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;
+        private Mock<IScreenHandler> _mockedScreenHandler;
 
         [SetUp]
         public void Setup()
         {
             _mockedClientController = new Mock<IClientController>();
-            _sut = new ChatHandler(_mockedClientController.Object);
+            _mockedScreenHandler = new Mock<IScreenHandler>();
+            _sut = new ChatHandler(_mockedClientController.Object, _mockedScreenHandler.Object);
             _packetDTO = new PacketDTO();
 
         }
@@ -78,14 +81,18 @@ namespace Chat.Tests
             Assert.AreEqual(ExpectedResult, actualResult);
         }
 
+        //TODO Test fixen
         [Test]
         public void Test_HandlePacket_HandleSayProperly()
         {
             //Arrange ---------
             string message = "Hello World";
             _chatDTO = new ChatDTO(ChatType.Say, message);
+            _chatDTO.OriginId = "TestID";
             var payload = JsonConvert.SerializeObject(_chatDTO);
             _packetDTO.Payload = payload;
+           // _mockedScreenHandler.Setup(mock => mock.Screen as GameScreen).Returns();
+
 
             using (StringWriter sw = new StringWriter())
             {
@@ -98,9 +105,10 @@ namespace Chat.Tests
                 string expected = string.Format(" said: Hello World{0}", Environment.NewLine);
                 Assert.AreEqual(expected, sw.ToString());
                 Assert.AreEqual(ExpectedResult, actualResult);
-            }                 
+            }
         }
 
+        //TODO Test fixen
         [Test]
         public void Test_HandlePacket_HandleShoutProperly()
         {

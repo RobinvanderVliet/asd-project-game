@@ -9,10 +9,10 @@ namespace UserInterface
 
     class GameStatScreen : Screen
     {
-        private const int STAT_X = 0;
-        private const int STAT_Y = 0;
-        private const int STAT_WIDTH = SCREEN_WIDTH - 2;
-        private int _statHeight;
+        private int _xPosition;
+        private int _yPosition;
+        private int _width;
+        private int _height;
 
         private String _userName = "TEMP USERNAME";
         private int _score = 0;
@@ -28,9 +28,12 @@ namespace UserInterface
         private String _slotTwo = "Suspicious white powder";
         private String _slotThree = "Medkit";
 
-        public GameStatScreen(int height)
+        public GameStatScreen(int x, int y, int width, int height)
         {
-            _statHeight = height;
+            _xPosition = x;
+            _yPosition = y;
+            _width = width;
+            _height = height;
         }
         public override void DrawScreen()
         {
@@ -39,7 +42,7 @@ namespace UserInterface
 
         public void DrawStatBox()
         {
-            DrawBox(STAT_X, STAT_Y, STAT_WIDTH, _statHeight);
+            DrawBox(_xPosition, _yPosition, _width, _height);
             DrawUserInfo();
             DrawUserStats();
             DrawUserEquipment();
@@ -47,15 +50,15 @@ namespace UserInterface
         }
         private void DrawUserInfo()
         {
-            Console.SetCursorPosition(2, STAT_Y + 1);
+            Console.SetCursorPosition(2, _yPosition + 1);
             Console.Write(_userName);
-            Console.SetCursorPosition(2, STAT_Y + 2);
+            Console.SetCursorPosition(2, _yPosition + 2);
             Console.Write("Score: " + _score);
         }
         private void DrawUserStats()
         {
-            int xpos = (STAT_WIDTH / 5) + 2;
-            int ypos = STAT_Y + 1;
+            int xpos = (_width / 5) + BORDER_SIZE;
+            int ypos = _yPosition + 1;
             Console.SetCursorPosition(xpos, ypos++);
             Console.Write("HP: " + _hp);
             Console.SetCursorPosition(xpos, ypos++);
@@ -67,8 +70,8 @@ namespace UserInterface
         }
         private void DrawUserEquipment()
         {
-            int xpos = (STAT_WIDTH / 5) * 2 + 2;
-            int ypos = STAT_Y + 1;
+            int xpos = (_width / 5) * 2 + BORDER_SIZE;
+            int ypos = _yPosition + 1;
             Console.SetCursorPosition(xpos, ypos++);
             Console.Write("Helm: " + _helm);
             Console.SetCursorPosition(xpos, ypos++);
@@ -80,8 +83,8 @@ namespace UserInterface
         }
         private void DrawUserInventory()
         {
-            int xpos = (STAT_WIDTH / 5) * 3 + 2;
-            int ypos = STAT_Y + 1;
+            int xpos = (_width / 5) * 3 + BORDER_SIZE;
+            int ypos = _yPosition + 1;
             Console.SetCursorPosition(xpos, ypos++);
             Console.Write("Slot 1: " + _slotOne);
             Console.SetCursorPosition(xpos, ypos++);
@@ -89,11 +92,6 @@ namespace UserInterface
             Console.SetCursorPosition(xpos, ypos++);
             Console.Write("Slot 3: " + _slotThree);
 
-        }
-
-        public int getStatHeight()
-        {
-            return _statHeight;
         }
     }
 }

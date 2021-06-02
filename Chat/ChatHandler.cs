@@ -3,17 +3,20 @@ using Network;
 using Newtonsoft.Json;
 using System;
 using Network.DTO;
+using UserInterface;
 
 namespace Chat
 {
     public class ChatHandler : IPacketHandler, IChatHandler
     {
         private IClientController _clientController;
+        private IScreenHandler _screenHandler;
 
-        public ChatHandler(IClientController clientController)
+        public ChatHandler(IClientController clientController, IScreenHandler screenHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Chat);
+            _screenHandler = screenHandler;
         }
 
         public void SendSay(string message)
@@ -54,12 +57,20 @@ namespace Chat
 
         private void HandleSay(string message, string originId)
         {
-            Console.WriteLine($"{originId} said: {message}");
+            if (_screenHandler.Screen is GameScreen)
+            {
+                GameScreen screen = _screenHandler.Screen as GameScreen;
+                screen.AddMessage($"{originId} shouted: {message}");
+            }
         }
 
         private void HandleShout(string message, string originId)
         {
-            Console.WriteLine($"{originId} shouted: {message}");
+            if (_screenHandler.Screen is GameScreen)
+            {
+                GameScreen screen = _screenHandler.Screen as GameScreen;
+                screen.AddMessage($"{originId} shouted: {message}");
+            }
         }
     }
 }
