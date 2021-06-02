@@ -7,7 +7,7 @@ namespace WorldGeneration
 {
     public class World : IWorld
     {
-        public IMap Map { get; set; }
+        private IMap _map;
         public Player CurrentPlayer { get; set; }
         private List<Player> _players;
         private readonly int _viewDistance;
@@ -16,7 +16,7 @@ namespace WorldGeneration
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler)
         {
             _players = new ();
-            Map = mapFactory.GenerateMap(seed);
+            _map = mapFactory.GenerateMap(seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
             DeleteMap();
@@ -57,7 +57,7 @@ namespace WorldGeneration
 
         public void DeleteMap()
         {
-            Map.DeleteMap();
+            _map.DeleteMap();
         }
 
         private void UpdateMapInConsole()
