@@ -10,7 +10,16 @@ namespace WorldGeneration
         public void DisplayWorld();
         public void DeleteMap();
         public void GenerateWorld(int seed);
+        /// <summary>
+        /// Returns items on title for the player of this instance.
+        /// </summary>
+        /// <returns></returns>
         public IList<Item> GetItemsOnCurrentTile();
+        /// <summary>
+        /// Returns items on tile for the specified player.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
         public IList<Item> GetItemsOnCurrentTile(Player player);
         public string SearchCurrentTile();
         public Player GetCurrentPlayer();
