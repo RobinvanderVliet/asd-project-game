@@ -172,6 +172,7 @@ namespace Session
         {
             if (_clientController.GetOriginId() == joinedPlayerDto.ExistingPlayer.PlayerGuid)
             {
+                _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
                 var player = new WorldGeneration.Player("gerrit", joinedPlayerDto.ExistingPlayer.XPosition,
                     joinedPlayerDto.ExistingPlayer.YPosition,
                     CharacterSymbol.CURRENT_PLAYER, joinedPlayerDto.ExistingPlayer.PlayerGuid,
@@ -226,18 +227,19 @@ namespace Session
 
         private void HandleStartGameSession(StartGameDTO startGameDTO)
         {
-            _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
-
+            
             if (_sessionHandler.GameStarted() && !_sessionHandler.GetSavedGame() || (_sessionHandler.GameStarted() && _sessionHandler.GetSavedGame()))
             {
                 AddPlayerToGameSession(startGameDTO);
             }
             else if (_sessionHandler.GetSavedGame())
             {
+                _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
                 AddPlayerToWorldSavedGame(startGameDTO.SavedPlayers);
             }
             else
             {
+                _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
                 AddPlayersToNewGame(startGameDTO);
             }
 
