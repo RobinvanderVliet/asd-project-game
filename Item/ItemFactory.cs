@@ -1,11 +1,7 @@
 ﻿using Items.Consumables;
 using Items.Consumables.ConsumableStats;
+using Items.ItemStats;
 using Items.WeaponStats;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Items
 {
@@ -17,7 +13,7 @@ namespace Items
             weaponbuilder.SetName("Knife");
             weaponbuilder.SetDescription("That ain't a knoife, this is a knoife");
             weaponbuilder.SetWeaponType(WeaponType.Melee);
-            weaponbuilder.SetRarity(Items.ItemStats.Rarity.Common);
+            weaponbuilder.SetRarity(Rarity.Common);
             weaponbuilder.SetWeaponSpeed(WeaponSpeed.Slow);
             weaponbuilder.SetWeaponDistance(WeaponDistance.Close);
             weaponbuilder.SetDamage(WeaponDamage.Low);
@@ -30,7 +26,7 @@ namespace Items
             weaponbuilder.SetName("Baseball Bat");
             weaponbuilder.SetDescription("I will hit a home run.");
             weaponbuilder.SetWeaponType(WeaponType.Melee);
-            weaponbuilder.SetRarity(Items.ItemStats.Rarity.Uncommon);
+            weaponbuilder.SetRarity(Rarity.Uncommon);
             weaponbuilder.SetWeaponSpeed(WeaponSpeed.Slow);
             weaponbuilder.SetWeaponDistance(WeaponDistance.Close);
             weaponbuilder.SetDamage(WeaponDamage.High);
@@ -43,7 +39,7 @@ namespace Items
             weaponbuilder.SetName("Katana");
             weaponbuilder.SetDescription("Cutting edge technology.");
             weaponbuilder.SetWeaponType(WeaponType.Melee);
-            weaponbuilder.SetRarity(Items.ItemStats.Rarity.Rare);
+            weaponbuilder.SetRarity(Rarity.Rare);
             weaponbuilder.SetWeaponSpeed(WeaponSpeed.Fast);
             weaponbuilder.SetWeaponDistance(WeaponDistance.Close);
             weaponbuilder.SetDamage(WeaponDamage.Medium);
@@ -56,7 +52,7 @@ namespace Items
             weaponbuilder.SetName("Glock");
             weaponbuilder.SetDescription("Ate a glock.");
             weaponbuilder.SetWeaponType(WeaponType.Range);
-            weaponbuilder.SetRarity(Items.ItemStats.Rarity.Uncommon);
+            weaponbuilder.SetRarity(Rarity.Uncommon);
             weaponbuilder.SetWeaponSpeed(WeaponSpeed.Slow);
             weaponbuilder.SetWeaponDistance(WeaponDistance.Medium);
             weaponbuilder.SetDamage(WeaponDamage.Low);
@@ -69,7 +65,7 @@ namespace Items
             weaponbuilder.SetName("P90");
             weaponbuilder.SetDescription("CS:GO players hate him.");
             weaponbuilder.SetWeaponType(WeaponType.Melee);
-            weaponbuilder.SetRarity(Items.ItemStats.Rarity.Common);
+            weaponbuilder.SetRarity(Rarity.Common);
             weaponbuilder.SetWeaponSpeed(WeaponSpeed.Slow);
             weaponbuilder.SetWeaponDistance(WeaponDistance.Close);
             weaponbuilder.SetDamage(WeaponDamage.Low);
@@ -82,7 +78,7 @@ namespace Items
             weaponbuilder.SetName("AK-47");
             weaponbuilder.SetDescription("She was a veiled threat.");
             weaponbuilder.SetWeaponType(WeaponType.Range);
-            weaponbuilder.SetRarity(Items.ItemStats.Rarity.Rare);
+            weaponbuilder.SetRarity(Rarity.Rare);
             weaponbuilder.SetWeaponSpeed(WeaponSpeed.Average);
             weaponbuilder.SetWeaponDistance(WeaponDistance.Far);
             weaponbuilder.SetDamage(WeaponDamage.Low);
@@ -95,7 +91,7 @@ namespace Items
             armorBuilder.SetName("Bandana");
             armorBuilder.SetDescription("Default headwear, plain but good looking");
             armorBuilder.SetArmorPartType(ArmorStats.ArmorPartType.Helmet);
-            armorBuilder.SetRarity(ItemStats.Rarity.Common);
+            armorBuilder.SetRarity(Rarity.Common);
             armorBuilder.SetArmorProtectionPoints(1);
             return armorBuilder.GetItem();
         }
@@ -106,7 +102,7 @@ namespace Items
             armorBuilder.SetName("Flak vest");
             armorBuilder.SetDescription("BOOM, wait i'm fiiiiiiine");
             armorBuilder.SetArmorPartType(ArmorStats.ArmorPartType.Body);
-            armorBuilder.SetRarity(ItemStats.Rarity.Uncommon);
+            armorBuilder.SetRarity(Rarity.Uncommon);
             armorBuilder.SetArmorProtectionPoints(20);
             return armorBuilder.GetItem();
         }
@@ -117,7 +113,7 @@ namespace Items
             armorBuilder.SetName("Hard Hat");
             armorBuilder.SetDescription("Bob the builder, can we fix it.");
             armorBuilder.SetArmorPartType(ArmorStats.ArmorPartType.Helmet);
-            armorBuilder.SetRarity(ItemStats.Rarity.Uncommon);
+            armorBuilder.SetRarity(Rarity.Uncommon);
             armorBuilder.SetArmorProtectionPoints(10);
             return armorBuilder.GetItem();
         }
@@ -128,7 +124,7 @@ namespace Items
             armorBuilder.SetName("Jacket");
             armorBuilder.SetDescription("My new jacket is reversible, as it turns out.");
             armorBuilder.SetArmorPartType(ArmorStats.ArmorPartType.Body);
-            armorBuilder.SetRarity(ItemStats.Rarity.Common);
+            armorBuilder.SetRarity(Rarity.Common);
             armorBuilder.SetArmorProtectionPoints(10);
             return armorBuilder.GetItem();
         }
@@ -139,7 +135,7 @@ namespace Items
             armorBuilder.SetName("Military Helmet");
             armorBuilder.SetDescription("A shell-met!");
             armorBuilder.SetArmorPartType(ArmorStats.ArmorPartType.Helmet);
-            armorBuilder.SetRarity(ItemStats.Rarity.Rare);
+            armorBuilder.SetRarity(Rarity.Rare);
             armorBuilder.SetArmorProtectionPoints(20);
             return armorBuilder.GetItem();
         }
@@ -150,7 +146,7 @@ namespace Items
             armorBuilder.SetName("Tactical Vest");
             armorBuilder.SetDescription("Bullets got nothing on this!");
             armorBuilder.SetArmorPartType(ArmorStats.ArmorPartType.Body);
-            armorBuilder.SetRarity(ItemStats.Rarity.Rare);
+            armorBuilder.SetRarity(Rarity.Rare);
             armorBuilder.SetArmorProtectionPoints(40);
             return armorBuilder.GetItem();
         }
@@ -161,7 +157,7 @@ namespace Items
             armorBuilder.SetName("Hazmat Suit");
             armorBuilder.SetDescription("I look like an employee at a nuclear power plant!");
             armorBuilder.SetArmorPartType(ArmorStats.ArmorPartType.Body);
-            armorBuilder.SetRarity(ItemStats.Rarity.Rare);
+            armorBuilder.SetRarity(Rarity.Rare);
             armorBuilder.SetArmorProtectionPoints(20);
             armorBuilder.SetRadiationProtectionPoints(80);
             armorBuilder.SetStaminaPoints(-20);
@@ -174,7 +170,7 @@ namespace Items
             armorBuilder.SetName("Gas Mask");
             armorBuilder.SetDescription("I can breath now.");
             armorBuilder.SetArmorPartType(ArmorStats.ArmorPartType.Helmet);
-            armorBuilder.SetRarity(ItemStats.Rarity.Uncommon);
+            armorBuilder.SetRarity(Rarity.Uncommon);
             armorBuilder.SetArmorProtectionPoints(20);
             armorBuilder.SetRadiationProtectionPoints(40);
             armorBuilder.SetStaminaPoints(-20);
@@ -186,7 +182,7 @@ namespace Items
             ConsumableBuilder consumableBuilder = new(ConsumableType.HazardProtected);
             consumableBuilder.SetName("Iodine tablets");
             consumableBuilder.SetDescription("What do you call a child with Iodine deficiency? Chld.");
-            consumableBuilder.SetRarity(ItemStats.Rarity.Common);
+            consumableBuilder.SetRarity(Rarity.Common);
             consumableBuilder.SetRpp(20);
             return consumableBuilder.GetItem();
         }
@@ -196,7 +192,7 @@ namespace Items
             ConsumableBuilder consumableBuilder = new(ConsumableType.Health);
             consumableBuilder.SetName("Bandage");
             consumableBuilder.SetDescription("Let me patch you together.");
-            consumableBuilder.SetRarity(ItemStats.Rarity.Common);
+            consumableBuilder.SetRarity(Rarity.Common);
             consumableBuilder.SetHealth(Health.Low);
             return consumableBuilder.GetItem();
         }
@@ -206,7 +202,7 @@ namespace Items
             ConsumableBuilder consumableBuilder = new(ConsumableType.Health);
             consumableBuilder.SetName("Medkit");
             consumableBuilder.SetDescription("Good as new.");
-            consumableBuilder.SetRarity(ItemStats.Rarity.Rare);
+            consumableBuilder.SetRarity(Rarity.Rare);
             consumableBuilder.SetHealth(Health.High);
             return consumableBuilder.GetItem();
         }
@@ -216,7 +212,7 @@ namespace Items
             ConsumableBuilder consumableBuilder = new(ConsumableType.Health);
             consumableBuilder.SetName("Morphine");
             consumableBuilder.SetDescription("Comfortably numb!");
-            consumableBuilder.SetRarity(ItemStats.Rarity.Uncommon);
+            consumableBuilder.SetRarity(Rarity.Uncommon);
             consumableBuilder.SetHealth(Health.Medium);
             return consumableBuilder.GetItem();
         }
@@ -226,7 +222,7 @@ namespace Items
             ConsumableBuilder consumableBuilder = new(ConsumableType.Stamina);
             consumableBuilder.SetName("Big Mac");
             consumableBuilder.SetDescription("What type of computer does Ronald McDonald use?");
-            consumableBuilder.SetRarity(ItemStats.Rarity.Common);
+            consumableBuilder.SetRarity(Rarity.Common);
             consumableBuilder.SetStamina(Stamina.Low);
             return consumableBuilder.GetItem();
         }
@@ -236,7 +232,7 @@ namespace Items
             ConsumableBuilder consumableBuilder = new(ConsumableType.Stamina);
             consumableBuilder.SetName("Monster energy");
             consumableBuilder.SetDescription("WARNING: contains real monsters!");
-            consumableBuilder.SetRarity(ItemStats.Rarity.Uncommon);
+            consumableBuilder.SetRarity(Rarity.Uncommon);
             consumableBuilder.SetStamina(Stamina.Medium);
             return consumableBuilder.GetItem();
         }
@@ -246,7 +242,7 @@ namespace Items
             ConsumableBuilder consumableBuilder = new(ConsumableType.Stamina);
             consumableBuilder.SetName("Suspicious white powder");
             consumableBuilder.SetDescription("Pink fluffy unicorns dancing on rainbows..");
-            consumableBuilder.SetRarity(ItemStats.Rarity.Rare);
+            consumableBuilder.SetRarity(Rarity.Rare);
             consumableBuilder.SetStamina(Stamina.High);
             return consumableBuilder.GetItem();
         }
