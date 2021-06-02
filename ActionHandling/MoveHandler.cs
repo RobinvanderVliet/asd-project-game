@@ -29,8 +29,9 @@ namespace ActionHandling
 
         public void SendMove(string directionValue, int stepsValue)
         {
-            var x = 0;
-            var y = 0;
+            int x = 0;
+            int y = 0;
+
             switch (directionValue)
             {
                 case "right":
