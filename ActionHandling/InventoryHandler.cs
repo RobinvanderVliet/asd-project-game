@@ -116,38 +116,46 @@ namespace ActionHandling
         {
             Player player = _worldService.GetPlayer(inventoryDTO.UserId);
 
+            Item item;
+
             switch (inventoryDTO.Index)
             {
                 case 0:
-                    //Add helmet to current tile
+                    item = player.Inventory.Helmet;
+                    _worldService.GetItemsOnCurrentTile().Add(item);
                     player.Inventory.Helmet = null;
                     break;
                 case 1:
-                    //Add armor to current tile
+                    item = player.Inventory.Armor;
+                    _worldService.GetItemsOnCurrentTile().Add(item);
                     player.Inventory.Armor = null;
                     break;
                 case 2:
-                    //Add weapon to current tile
+                    item = player.Inventory.Weapon;
+                    _worldService.GetItemsOnCurrentTile().Add(item);
                     player.Inventory.Weapon = null;
                     break;
                 case 3:
-                    //Add slot 1 item to current tile
+                    item = player.Inventory.ConsumableItemList[0];
+                    _worldService.GetItemsOnCurrentTile().Add(item);
                     player.Inventory.ConsumableItemList[0] = null;
                     break;
                 case 4:
-                    //Add slot 2 item to current tile
+                    item = player.Inventory.ConsumableItemList[1];
+                    _worldService.GetItemsOnCurrentTile().Add(item);
                     player.Inventory.ConsumableItemList[1] = null;
                     break;
                 case 5:
-                    //Add slot 3 item to current tile
+                    item = player.Inventory.ConsumableItemList[2];
+                    _worldService.GetItemsOnCurrentTile().Add(item);
                     player.Inventory.ConsumableItemList[2] = null;
                     break;
                 default:
                     Console.WriteLine("Unknown slot");
+                    return new HandlerResponseDTO(SendAction.ReturnToSender, "This is not an item you can drop!");
                     break;
             }
-
-            throw new NotImplementedException();
+            return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
         private HandlerResponseDTO HandleUse(InventoryDTO inventoryDTO, bool handleInDatabase)
@@ -212,7 +220,7 @@ namespace ActionHandling
                     index = 5;
                     break;
                 default:
-                    Console.WriteLine("Unknown slot");
+                    Console.WriteLine("Unknown item slot");
                     break;
             }
 

@@ -52,7 +52,7 @@ namespace WorldGeneration
         {
             return _world.GetTileForPlayer(player).ItemsOnTile;
         }
-        
+
         public string SearchCurrentTile()
         {
             var itemsOnCurrentTile = GetItemsOnCurrentTile();
