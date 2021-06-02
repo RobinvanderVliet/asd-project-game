@@ -80,22 +80,22 @@ namespace ActionHandling
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             AttackDTO attackDto = JsonConvert.DeserializeObject<AttackDTO>(packet.Payload);
-            
-            var allPlayers = _worldService.getAllPlayers();
-            var PlayerResult =
-                allPlayers.Where(x =>
-                    x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition);
-            
-            if (PlayerResult.FirstOrDefault().Health <= 0)
-            {
-                if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
-                {
-                    Console.WriteLine("You can't attack this enemy, he is already dead.");
-                    return new HandlerResponseDTO(SendAction.Ignore, null);
-                }
-            }
+
             if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
             {
+                var allPlayers = _worldService.getAllPlayers();
+                var PlayerResult =
+                    allPlayers.Where(x =>
+                        x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition);
+
+                if (PlayerResult.FirstOrDefault().Health <= 0)
+                {
+                    if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
+                    {
+                        Console.WriteLine("You can't attack this enemy, he is already dead.");
+                        return new HandlerResponseDTO(SendAction.Ignore, null);
+                    }
+                }
                 //var CreatureResult =
                 //    allCreatures.Where(x =>
                 //        x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition &&
@@ -105,16 +105,11 @@ namespace ActionHandling
 
                 if (PlayerResult.Any())
                 {
-
                     attackDto.AttackedPlayerGuid = PlayerResult.FirstOrDefault().Id;
                     if (attackDto.Stamina >= ATTACK_STAMINA)
                     {
                         InsertDamageToDatabase(attackDto, true);
                         packet.Payload = JsonConvert.SerializeObject(attackDto);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Insufficient stamina to perform attack action.");
                     }
                 }
                 //else if (CreatureResult.Any())
@@ -252,9 +247,16 @@ namespace ActionHandling
         {
             if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
             {
-                Console.WriteLine("Your stamina got lowered with " + ATTACK_STAMINA + ".");
-                _worldService.getCurrentPlayer().Stamina -= ATTACK_STAMINA;
-                Console.WriteLine("stamina: " + _worldService.getCurrentPlayer().Stamina);
+                if (_worldService.getCurrentPlayer().Stamina < ATTACK_STAMINA)
+                {
+                    Console.WriteLine("You're out of stamina, you can't attack.");
+                }
+                else
+                {
+                    Console.WriteLine("Your stamina got lowered with " + ATTACK_STAMINA + ".");
+                    _worldService.getCurrentPlayer().Stamina -= ATTACK_STAMINA;
+                    Console.WriteLine("stamina: " + _worldService.getCurrentPlayer().Stamina);    
+                }
             }
 
             if (_clientController.GetOriginId().Equals(attackDto.AttackedPlayerGuid))
