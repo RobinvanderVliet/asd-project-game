@@ -92,23 +92,18 @@ namespace ActionHandling.Tests
         }
 
         [Test]
-        [TestCaseSource(typeof(PickupCases))]
-        public void Test_HandlePacket_HandlesPickupPacketSuccessOnHost(InventoryDTO inventoryDTO, HandlerResponseDTO expectedHandlerResponseDTO, bool filledInventory)
+        [TestCaseSource(typeof(HandlesPickupPacketCases))]
+        public void Test_HandlePacket_HandlesPickupPacket(InventoryDTO inventoryDTO, HandlerResponseDTO expectedHandlerResponseDTO, bool filledInventory, bool asHost)
         {
             // Arrange
-            const string USER_ID = "userid";
-
-            // InventoryDTO inventoryDTO = ;
             string payload = JsonConvert.SerializeObject(inventoryDTO);
             PacketDTO packetDTO = new();
             packetDTO.Payload = payload;
             PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.Target = "host";
             packetDTO.Header = packetHeaderDTO;
-            
-            // HandlerResponseDTO expectedHandlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients, null);
 
-            Player player = new Player("henk", 0, 0, "#", USER_ID);
+            Player player = new Player("henk", 0, 0, "#", inventoryDTO.UserId);
             IList<Item> items = new List<Item>();
             items.Add(ItemFactory.GetBandage());
             if (filledInventory)
@@ -118,18 +113,25 @@ namespace ActionHandling.Tests
                 player.Inventory.AddConsumableItem(ItemFactory.GetBandage());
             }
 
-            _mockedWorldService.Setup(mock => mock.GetPlayer(USER_ID)).Returns(player);
+            _mockedWorldService.Setup(mock => mock.GetPlayer(inventoryDTO.UserId)).Returns(player);
             _mockedWorldService.Setup(mock => mock.GetItemsOnCurrentTile(player)).Returns(items);
-            _mockedClientController.Setup(mock => mock.IsHost()).Returns(true);
+            if (asHost)
+            {
+                _mockedClientController.Setup(mock => mock.IsHost()).Returns(true);
+            }
             
             // Act
             HandlerResponseDTO handlerResponseDTO = _sut.HandlePacket(packetDTO);
 
             // Assert
             Assert.AreEqual(expectedHandlerResponseDTO, handlerResponseDTO);
+            if (asHost)
+            {
+                _mockedPlayerItemServicesDb.Verify(mock => mock.CreateAsync(It.IsAny<PlayerItemPOCO>()), Times.Once());
+            }
         }
         
-        class PickupCases : IEnumerable
+        class HandlesPickupPacketCases : IEnumerable
         {
             public IEnumerator GetEnumerator()
             {
@@ -137,19 +139,22 @@ namespace ActionHandling.Tests
                 {
                     new InventoryDTO("userid", InventoryType.Pickup, 0),
                     new HandlerResponseDTO(SendAction.SendToClients, null),
-                    false
+                    false,
+                    true
                 };
                 yield return new object[]
                 {
                     new InventoryDTO("userid", InventoryType.Pickup, 100),
                     new HandlerResponseDTO(SendAction.ReturnToSender, "Number is not in search list!"),
+                    false,
                     false
                 };
                 yield return new object[]
                 {
                     new InventoryDTO("userid", InventoryType.Pickup, 0),
                     new HandlerResponseDTO(SendAction.ReturnToSender, "Could not pickup item"),
-                    true
+                    true,
+                    false
                 };
             }
         }
