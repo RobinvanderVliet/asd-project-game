@@ -11,13 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Antlr\Grammar\AgentConfiguration.g4" />
     <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
     <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.6" PrivateAssets="all" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Antlr\Grammar\AgentConfiguration.g4" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,10 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Include="Antlr\Grammar\PlayerCommands.g4" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\ActionHandling\ActionHandling.csproj" />
     </ItemGroup>
 

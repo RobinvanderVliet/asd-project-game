@@ -37,7 +37,7 @@ namespace Agent.Tests.Services
         public void Test_CreateNewNpcConfiguration_WithNewNpc()
         {
             //Arrange
-            var filepath = _handler.GetBaseDirectory() + "/Resource/npcFileTest.txt";
+            var filepath = _handler.GetBaseDirectory() + "/AgentTests/Resource/npcFileTest.txt";
             
             //Act
             _sut.CreateConfiguration("TestNPCName", filepath);
