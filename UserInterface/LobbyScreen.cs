@@ -24,13 +24,13 @@ namespace UserInterface
         private const string INPUT_MESSAGE = "Insert lobby message or command";
         public override void DrawScreen()
         {
-            DrawBox();
+            DrawLobbyScreen();
         }
 
-        public void DrawBox() 
+        public void DrawLobbyScreen() 
         {
             DrawHeader(GetHeaderText());
-            DrawLobbyScreen();
+            DrawUserBox();
             DrawChatBox();
             UpdateChat(UpdateMessages());
             DrawLobbyInput(INPUT_MESSAGE);
@@ -41,7 +41,7 @@ namespace UserInterface
             DrawBox(CHAT_X, CHAT_Y, CHAT_WIDTH, CHAT_HEIGHT);
         }
 
-        private void DrawLobbyScreen()
+        private void DrawUserBox()
         {
             DrawBox(LOBBY_X, LOBBY_Y, LOBBY_WIDTH, LOBBY_HEIGHT);
         }
@@ -56,11 +56,11 @@ namespace UserInterface
             foreach (string[] client in clients)
             {
                 int position = clients.IndexOf(client);
-                Console.SetCursorPosition(LOBBY_X + 1, LOBBY_Y + position);
-                Console.SetCursorPosition(LOBBY_X + BORDER_SIZE / 2, LOBBY_Y + OFFSET_TOP + position);
-                Console.Write(" ");
-                Console.SetCursorPosition(LOBBY_X + OFFSET_LEFT, LOBBY_Y + OFFSET_TOP + position);
-                Console.Write(client[1]);
+                _screenHandler.ConsoleHelper.SetCursor(LOBBY_X + 1, LOBBY_Y + position);
+                _screenHandler.ConsoleHelper.SetCursor(LOBBY_X + BORDER_SIZE / 2, LOBBY_Y + OFFSET_TOP + position);
+                _screenHandler.ConsoleHelper.Write(" ");
+                _screenHandler.ConsoleHelper.SetCursor(LOBBY_X + OFFSET_LEFT, LOBBY_Y + OFFSET_TOP + position);
+                _screenHandler.ConsoleHelper.Write(client[1]);
             }
 
             ResetCursor();
@@ -68,7 +68,7 @@ namespace UserInterface
 
         public void ResetCursor() 
         {
-            Console.SetCursorPosition(INPUT_X + 4, INPUT_Y + LOBBY_HEIGHT + 2);
+            _screenHandler.ConsoleHelper.SetCursor(INPUT_X + 4, INPUT_Y + LOBBY_HEIGHT + 2);
         }
 
         public void DrawLobbyInput(string message)
@@ -81,11 +81,11 @@ namespace UserInterface
             foreach (ChatMessageDTO message in messages) 
             {
                 int position = messages.IndexOf(message);
-                Console.SetCursorPosition(CHAT_X + 1, CHAT_Y + position);
-                Console.SetCursorPosition(CHAT_X + BORDER_SIZE / 2, CHAT_Y + OFFSET_TOP + position);
-                Console.Write(" ");
-                Console.SetCursorPosition(CHAT_X + OFFSET_LEFT, CHAT_Y + OFFSET_TOP + position);
-                Console.Write(message.UserName + " : " + message.Message);
+                _screenHandler.ConsoleHelper.SetCursor(CHAT_X + 1, CHAT_Y + position);
+                _screenHandler.ConsoleHelper.SetCursor(CHAT_X + BORDER_SIZE / 2, CHAT_Y + OFFSET_TOP + position);
+                _screenHandler.ConsoleHelper.Write(" ");
+                _screenHandler.ConsoleHelper.SetCursor(CHAT_X + OFFSET_LEFT, CHAT_Y + OFFSET_TOP + position);
+                _screenHandler.ConsoleHelper.Write(message.UserName + " : " + message.Message);
             }
         }
 

@@ -6,7 +6,8 @@ namespace UserInterface
     {
         private Screen _screen = null;
         public Screen Screen { get => _screen; set => _screen = value; }
-        
+        private ConsoleHelper _consoleHelper;
+        public ConsoleHelper ConsoleHelper { get => _consoleHelper; set => _consoleHelper = value; }
         public void TransitionTo(Screen screen)
         {
             Console.Clear();
