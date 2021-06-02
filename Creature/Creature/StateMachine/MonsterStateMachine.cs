@@ -54,23 +54,24 @@ namespace Creature.Creature.StateMachine
             // Wandering
             builder.In(_followPlayerState).On(CreatureEvent.Event.LOST_CREATURE).Goto(_wanderState);
 
+            // TODO: Move statemachine builder info outside of statemachine classes
             List<RuleSet> rulesetList = RuleSetFactory.GetRuleSetListFromSettingsList(CreatureData.RuleSet);
             List<string> actions = new() { "follow", "flee", "attack" };
             List<BuilderInfo> builderInfoList = new List<BuilderInfo>();
 
             foreach (var action in actions)
             {
-                BuilderInfo builderInfo = new BuilderInfo();
-                builderInfo.Action = action;
-                builderInfo.TargetState = GetTargetState(action);
-
                 foreach (RuleSet ruleSet in rulesetList)
                 {
-                    if (ruleSet.ComparisonTrue == "follow" || ruleSet.ComparisonFalse == "follow")
+                    if (ruleSet.ComparisonTrue == action || ruleSet.ComparisonFalse == action)
                     {
+                        BuilderInfo builderInfo = new BuilderInfo();
+                        builderInfo.Action = action;
+                        builderInfo.TargetState = GetTargetState(action);
+
                         if (ruleSet.Action == "default")
                         {
-                            if (ruleSet.ComparisonTrue == "follow")
+                            if (ruleSet.ComparisonTrue == action)
                             {
                                 builderInfo.Event = GetEvent(ruleSet.Comparable, ruleSet.Threshold, ruleSet.Comparison);
                             }
@@ -86,9 +87,9 @@ namespace Creature.Creature.StateMachine
                                 }
                             }
                         }
+                        builderInfoList.Add(builderInfo);
                     }
                 }
-                builderInfoList.Add(builderInfo);
             }
 
             foreach (BuilderInfo builderInfo in builderInfoList)
