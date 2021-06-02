@@ -24,7 +24,7 @@ namespace WorldGeneration
             switch (noiseresult)
             {
                 case <-0.8f:
-                    // do not change numberOfItemSpawns.
+                    numberOfItemSpawns = 0;
                     break;
                 case <-0.2f:
                     numberOfItemSpawns = 1;
