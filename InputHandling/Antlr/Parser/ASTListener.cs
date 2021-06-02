@@ -175,8 +175,8 @@ namespace InputHandling.Antlr.Parser
         
         public override void EnterInventorySlot(PlayerCommandsParser.InventorySlotContext context)
         {
-            Inspect inspect = (Inspect) _currentContainer.Peek();
-            inspect.AddChild(new InventorySlot(Convert.ToString(context.GetText())));
+            ASTNode node = (ASTNode)_currentContainer.Peek();
+            node.AddChild(new InventorySlot(Convert.ToString(context.GetText())));
         }
 
         public override void EnterUse(PlayerCommandsParser.UseContext context)

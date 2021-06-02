@@ -114,6 +114,39 @@ namespace ActionHandling
 
         private HandlerResponseDTO HandleDrop(InventoryDTO inventoryDTO, bool handleInDatabase)
         {
+            Player player = _worldService.GetPlayer(inventoryDTO.UserId);
+
+            switch (inventoryDTO.Index)
+            {
+                case 0:
+                    //Add helmet to current tile
+                    player.Inventory.Helmet = null;
+                    break;
+                case 1:
+                    //Add armor to current tile
+                    player.Inventory.Armor = null;
+                    break;
+                case 2:
+                    //Add weapon to current tile
+                    player.Inventory.Weapon = null;
+                    break;
+                case 3:
+                    //Add slot 1 item to current tile
+                    player.Inventory.ConsumableItemList[0] = null;
+                    break;
+                case 4:
+                    //Add slot 2 item to current tile
+                    player.Inventory.ConsumableItemList[1] = null;
+                    break;
+                case 5:
+                    //Add slot 3 item to current tile
+                    player.Inventory.ConsumableItemList[2] = null;
+                    break;
+                default:
+                    Console.WriteLine("Unknown slot");
+                    break;
+            }
+
             throw new NotImplementedException();
         }
 
@@ -155,9 +188,37 @@ namespace ActionHandling
             throw new NotImplementedException();
         }
 
-        public void DropItem(int index)
+        public void DropItem(string inventorySlot)
         {
-            throw new NotImplementedException();
+            int index = 0;
+            switch (inventorySlot)
+            {
+                case "helmet":
+                    index = 0;
+                    break;
+                case "armor":
+                    index = 1;
+                    break;
+                case "weapon":
+                    index = 2;
+                    break;
+                case "slot 1":
+                    index = 3;
+                    break;
+                case "slot 2":
+                    index = 4;
+                    break;
+                case "slot 3":
+                    index = 5;
+                    break;
+                default:
+                    Console.WriteLine("Unknown slot");
+                    break;
+            }
+
+            InventoryDTO inventoryDTO =
+                new InventoryDTO(_clientController.GetOriginId(), InventoryType.Drop, index);
+            SendInventoryDTO(inventoryDTO);
         }
     }
 }
