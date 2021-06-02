@@ -7,17 +7,21 @@ using System.IO;
 using DatabaseHandler;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using WorldGeneration;
-using Player;
+using ActionHandling;
 using Chat;
-using Player.Services;
+using InputHandling;
+using InputHandling.Antlr;
+using InputHandling.Antlr.Transformer;
 using Network;
-using Player.ActionHandlers;
 using Session;
+
 using Player.Model;
 using InputCommandHandler;
 using Creature.Services;
+
+using UserInterface;
+
 
 namespace ASD_project
 {
@@ -28,27 +32,20 @@ namespace ASD_project
         {
             var builder = new ConfigurationBuilder();
             BuildConfig(builder);
-
+            
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(builder.Build())
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .CreateLogger();
-
+            
             Log.Logger.Information("Application starting");
-
+            
             //Example of dependency injection with GreetingService
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
                     services.AddTransient<IMainGame, MainGame>();
-                    services.AddScoped<IPlayerService, PlayerService>();
-                    services.AddScoped<IPlayerModel, PlayerModel>();
-                    services.AddScoped<IAgentService, AgentService>();
-                    services.AddScoped<IInventory, Inventory>();
-                    services.AddScoped<IItem, Item>();
-                    services.AddScoped<IBitcoin, Bitcoin>();
-                    services.AddScoped<IRadiationLevel, RadiationLevel>();
                     services.AddScoped<INetworkComponent, NetworkComponent>();
                     services.AddScoped<IClientController, ClientController>();
                     services.AddScoped<IChatHandler, ChatHandler>();
@@ -59,16 +56,19 @@ namespace ASD_project
                     services.AddSingleton<IDbConnection, DbConnection>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
                     services.AddScoped(typeof(IServicesDb<>), typeof(ServicesDb<>));
+                    services.AddScoped<IScreenHandler, ScreenHandler>();
+                    services.AddScoped<IInputHandler, InputHandler>();
+                    services.AddScoped<IPipeline, Pipeline>();
+                    services.AddScoped<IEvaluator, Evaluator>();
                 })
                 .UseSerilog()
                 .Build();
             
-
             var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);
             svc.Run();
         }
 
-        static void BuildConfig(IConfigurationBuilder builder) 
+        static void BuildConfig(IConfigurationBuilder builder)
         {
             builder.SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
