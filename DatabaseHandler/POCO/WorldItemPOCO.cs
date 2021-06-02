@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using LiteDB;
 
 namespace DatabaseHandler.POCO
@@ -6,10 +7,12 @@ namespace DatabaseHandler.POCO
     [ExcludeFromCodeCoverage]
     public class WorldItemPOCO
     {
-        public string GameGUID { get; set; }
         [BsonId]
-        public string WorldItemGUID { get; set; }
+        public string Id = Guid.NewGuid().ToString();
+        public string GameGUID { get; set; }
         public string ItemName { get; set; }
+        public int XPosition { get; set; }
+        public int YPosition { get; set; }
 
     }
 }
