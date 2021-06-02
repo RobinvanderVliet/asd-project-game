@@ -9,17 +9,16 @@ namespace Creature.Creature.StateMachine
 {
     public class PlayerStateMachine : ICreatureStateMachine
     {
-        private RuleSet _ruleset;
         private PassiveStateMachine<CreatureState, CreatureEvent.Event> _passiveStateMachine;
         private PlayerData _playerData;
 
-        public PlayerStateMachine(PlayerData playerData, RuleSet ruleSet)
+        public PlayerStateMachine(PlayerData playerData)
         {
             _playerData = playerData;
-            _ruleset = ruleSet;
         }
 
-        public ICreatureData CreatureData {
+        public ICreatureData CreatureData
+        {
             get => _playerData;
             set => _playerData = (PlayerData)value;
         }

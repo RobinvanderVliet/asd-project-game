@@ -8,7 +8,7 @@ namespace Player.Model.Consumable.HealthConsumable
 
         public int getHealth()
         {
-            return (int) Health;
+            return (int)Health;
         }
 
     }

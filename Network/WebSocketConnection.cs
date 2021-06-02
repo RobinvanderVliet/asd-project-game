@@ -1,7 +1,7 @@
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using WebSocketSharp;
-using Microsoft.Extensions.Configuration;
 
 namespace Network
 {

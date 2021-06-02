@@ -3,7 +3,7 @@
     public class SessionService : ISessionService
     {
         private ISessionHandler _sessionHandler;
-        private readonly IGameSessionHandler _gameSessionHandler; 
+        private readonly IGameSessionHandler _gameSessionHandler;
         public bool inSession { get; set; }
 
         public bool InGame { get; set; }
@@ -21,9 +21,9 @@
 
         public void JoinSession(string messageValue)
         {
-           inSession = _sessionHandler.JoinSession(messageValue);
+            inSession = _sessionHandler.JoinSession(messageValue);
         }
-        
+
         public void RequestSessions()
         {
             _sessionHandler.RequestSessions();

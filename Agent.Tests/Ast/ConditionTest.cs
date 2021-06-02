@@ -1,6 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast;
+﻿using Agent.Antlr.Ast;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.Ast
 {
@@ -17,7 +17,7 @@ namespace Agent.Tests.Ast
             _condition = new Condition();
         }
 
-     
+
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
@@ -36,14 +36,14 @@ namespace Agent.Tests.Ast
             _condition.AddChild(whenclause);
 
             //Act
-            var result = ((When) _condition.GetChildren()[0])?.GetNodeType();
+            var result = ((When)_condition.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("When", result);
         }
 
-        
-    
+
+
         [Test]
         public void Test_AddChild_Otherwise()
         {
@@ -52,12 +52,12 @@ namespace Agent.Tests.Ast
             _condition.AddChild(otherwiseClause);
 
             //Act
-            var result = ((Otherwise) _condition.GetChildren()[0])?.GetNodeType();
+            var result = ((Otherwise)_condition.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Otherwise", result);
         }
-   
+
         [Test]
         public void Test_AddChild_Node()
         {
@@ -66,12 +66,12 @@ namespace Agent.Tests.Ast
             _condition.AddChild(node);
 
             //Act
-            var result = ( _condition.GetChildren()[0]).GetNodeType();
+            var result = (_condition.GetChildren()[0]).GetNodeType();
 
             //Assert
             Assert.AreEqual(result, "Node");
         }
-     
+
         [Test]
         public void Test_Remove_When()
         {
@@ -87,7 +87,7 @@ namespace Agent.Tests.Ast
             Assert.True(result);
         }
 
-     
+
         [Test]
         public void Test_Remove_Otherwise()
         {
@@ -102,8 +102,8 @@ namespace Agent.Tests.Ast
             //Assert
             Assert.True(result);
         }
-        
-        
+
+
         [Test]
         public void Test_Remove_Node()
         {

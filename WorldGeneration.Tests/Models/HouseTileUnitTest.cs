@@ -1,6 +1,6 @@
+using NUnit.Framework;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using NUnit.Framework;
 using WorldGeneration.Models.BuildingTiles;
 using WorldGeneration.Models.Interfaces;
 
@@ -11,7 +11,7 @@ namespace WorldGeneration.Tests
     {
         private IBuildingTile _tile;
         private string _tileSymbol;
-        
+
         [SetUp]
         public void Setup()
         {
@@ -27,7 +27,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile, Is.InstanceOf<HouseTile>());
         }
-        
+
         [Test]
         public void Test_InstanceOf_BuildingTile()
         {
@@ -36,7 +36,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile, Is.InstanceOf<IBuildingTile>());
         }
-        
+
         [Test]
         public void Test_InstanceOf_Tile()
         {
@@ -45,7 +45,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile, Is.InstanceOf<ITile>());
         }
-        
+
         [Test]
         public void Test_SetX_EqualsTo_5()
         {
@@ -55,7 +55,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile.XPosition, Is.EqualTo(5));
         }
-        
+
         [Test]
         public void Test_SetY_EqualsTo_5()
         {
@@ -65,7 +65,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile.YPosition, Is.EqualTo(5));
         }
-        
+
         [Test]
         public void Test_TileSymbol_EqualsTo_HouseTileSymbol()
         {
@@ -74,7 +74,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
         }
-        
+
         [Test]
         public void Test_DrawBuilding_CanDrawBuilding()
         {
@@ -86,7 +86,7 @@ namespace WorldGeneration.Tests
                 _tile.DrawBuilding();
             });
         }
-        
+
         [Test]
         public void Test_IsAccessible_EqualsTo_True()
         {

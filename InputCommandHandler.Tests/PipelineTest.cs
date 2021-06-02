@@ -1,12 +1,12 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using InputCommandHandler.Antlrr;
-using InputCommandHandler.Antlr.Ast;
+﻿using InputCommandHandler.Antlr.Ast;
 using InputCommandHandler.Antlr.Ast.Actions;
 using InputCommandHandler.Antlr.Transformer;
+using InputCommandHandler.Antlr;
 using InputCommandHandler.Exceptions;
 using Moq;
 using NUnit.Framework;
 using Player.Model;
+using System.Diagnostics.CodeAnalysis;
 
 namespace InputCommandHandler.Tests
 {

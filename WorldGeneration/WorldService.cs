@@ -1,4 +1,3 @@
-using System;
 using DataTransfer.DTO.Character;
 
 namespace WorldGeneration
@@ -21,7 +20,7 @@ namespace WorldGeneration
         {
             _world.DisplayWorld();
         }
-        
+
         public void DeleteMap()
         {
             _world.deleteMap();

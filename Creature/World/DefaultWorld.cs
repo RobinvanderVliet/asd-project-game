@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Creature.Creature;
 
 namespace Creature.World
 {
@@ -15,9 +16,9 @@ namespace Creature.World
         private List<List<Node>> _nodes;
         private int _size;
 
-        public List<ICreature> Creatures => Creatures;
+        public List<ICreature> Creatures => _creatures;
 
-        public List<ICreature> Players => Players;
+        public List<ICreature> Players => _players;
 
         public List<List<Node>> Nodes => _nodes;
         public int Size => _size;
@@ -85,14 +86,15 @@ namespace Creature.World
                 }
             }
 
-            for (int y = _size; y > 0; y--) {
+            for (int y = _size; y > 0; y--)
+            {
                 string line = null;
 
                 for (int x = 0; x < _size; x++)
                 {
                     bool addedLine = false;
                     ICreature player = _players[0];
-                    
+
                     if (player.CreatureStateMachine.CreatureData.Position.X == x && player.CreatureStateMachine.CreatureData.Position.Y == y)
                     {
                         line += "+";

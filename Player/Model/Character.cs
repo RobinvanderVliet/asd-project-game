@@ -1,6 +1,4 @@
-using WorldGeneration.Models.Interfaces;
-
-namespace WorldGeneration.Models
+namespace Player.Model
 {
     public class Character : ICharacter
     {

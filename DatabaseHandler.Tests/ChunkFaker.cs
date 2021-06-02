@@ -1,8 +1,10 @@
 using AutoBogus;
+using System.Diagnostics.CodeAnalysis;
 using WorldGeneration.Models;
 
 namespace DatabaseHandler.Tests
 {
+    [ExcludeFromCodeCoverage]
     public sealed class ChunkFaker : AutoFaker<Chunk>
     {
         public ChunkFaker()

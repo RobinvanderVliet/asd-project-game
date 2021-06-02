@@ -5,7 +5,7 @@
     {
         public Configuration root;
 
-        public AST( )
+        public AST()
         {
             root = new Configuration();
         }

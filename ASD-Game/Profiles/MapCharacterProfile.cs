@@ -10,6 +10,6 @@ namespace ASD_project.Profiles
         {
             CreateMap<MapCharacterDTO, PlayerPOCO>();
         }
-        
+
     }
 }

@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using Player.Model;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Player.Tests
 {
@@ -9,13 +9,13 @@ namespace Player.Tests
     public class InventoryTest
     {
         private Inventory _sut;
-        
+
         [SetUp]
         public void Setup()
         {
             _sut = new Inventory();
         }
-        
+
         [Test]
         public void Test_GetItemList_GetsItemListSuccessfully()
         {
@@ -24,7 +24,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(new List<Item>(), _sut.ItemList);
         }
-        
+
         [Test]
         public void Test_SetItemList_SetsItemListSuccessfully()
         {
@@ -36,7 +36,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(ItemList, _sut.ItemList);
         }
-        
+
         [Test]
         public void Test_GetItem_GetsRightItem()
         {
@@ -47,7 +47,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(item, _sut.GetItem("ItemName"));
         }
-        
+
         [Test]
         public void Test_GetItem_ReturnsNull()
         {
@@ -58,7 +58,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(null, _sut.GetItem("UnexistingItemName"));
         }
-        
+
         [Test]
         public void Test_AddItem_AddsItemSuccessfully()
         {
@@ -69,7 +69,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(item, _sut.GetItem("ItemName"));
         }
-        
+
         [Test]
         public void Test_RemoveItem_RemovesItemSuccessfully()
         {
@@ -81,7 +81,7 @@ namespace Player.Tests
             //assert
             Assert.AreEqual(new List<IItem>(), _sut.ItemList);
         }
-        
+
         [Test]
         public void Test_EmptyInventory_EmptiesInventorySuccessfully()
         {

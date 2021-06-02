@@ -1,14 +1,14 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using Agent.Antlr.Ast;
 using Agent.Antlr.Grammar;
 using Agent.Antlr.Parser;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using NUnit.Framework;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace Agent.Tests.Parser
 {
@@ -28,7 +28,7 @@ namespace Agent.Tests.Parser
             {
                 fileContext = sr.ReadToEnd();
             }
-            
+
 
             AntlrInputStream charStream = new AntlrInputStream(fileContext);
             AgentConfigurationLexer lexer = new AgentConfigurationLexer(charStream);
@@ -39,25 +39,27 @@ namespace Agent.Tests.Parser
             parser.ErrorHandler = new BailErrorStrategy();
 
             var errorListener = new TestErrorHandler();
-            
+
             parser.RemoveErrorListeners();
             parser.AddErrorListener(errorListener);
 
             ASTAgentListener listener = new ASTAgentListener();
 
-            try {
+            try
+            {
                 IParseTree parseTree = parser.configuration();
                 ParseTreeWalker walker = new ParseTreeWalker();
-                walker.Walk(listener,parseTree);
+                walker.Walk(listener, parseTree);
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Assert.Fail(errorListener.ToString());
             }
-            
+
             return listener.GetAST();
-    
+
         }
-        
+
         [Test]
         [TestCase("test1.txt")]
         [TestCase("test2.txt")]

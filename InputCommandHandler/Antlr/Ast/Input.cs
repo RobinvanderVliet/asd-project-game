@@ -25,14 +25,14 @@ namespace InputCommandHandler.Antlr.Ast
         {
             return Equals(obj as Input);
         }
-        
+
         [ExcludeFromCodeCoverage]
         public bool Equals(Input other)
         {
             if (other == null)
                 return false;
 
-            if (_body.Count != other._body.Count) 
+            if (_body.Count != other._body.Count)
                 return false;
 
             for (int i = 0; i < _body.Count; i++)
@@ -44,6 +44,10 @@ namespace InputCommandHandler.Antlr.Ast
             }
             return true;
         }
-        
+        public override int GetHashCode()
+        {
+            return _body.GetHashCode();
+        }
+
     }
 }
