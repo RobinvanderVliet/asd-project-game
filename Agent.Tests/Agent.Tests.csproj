@@ -33,4 +33,8 @@
 	  <EmbeddedResource Include="Resources\test3.txt" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Resource\npcFileTest_2.txt" />
+  </ItemGroup>
+
 </Project>

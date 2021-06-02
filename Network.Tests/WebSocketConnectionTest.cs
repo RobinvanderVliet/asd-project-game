@@ -1,40 +1,70 @@
-// tests not functional
-
-/*using NUnit.Framework;
-using Moq;
-using WebSocketSharp;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading;
+using Newtonsoft.Json;
+using NUnit.Framework;
 
 namespace Network.Tests
 {
+    [ExcludeFromCodeCoverage]
     [TestFixture]
     public class WebSocketConnectionTest
     {
-        private WebSocketConnection _subject;
-        private WebSocket _mockedWebsocket;
-        private Mock<WebSocket> _websocketMock;
+        //Tests in this class are dependent on a working websocket.
+        //Therefore these tests should not be regarded as unit tests but rather as integration tests.
+
+        private WebSocketConnection _receivingSut;
+        private WebSocketConnection _sendingSut;
+        private TestListener _mockedPacketListener;
+        private const string SESSION_ID = "testing";
 
         [SetUp]
         public void Setup()
         {
-            _websocketMock = new Mock<WebSocket>("ws://localhost:9999");
-            _mockedWebsocket = _websocketMock.Object;
-            _subject = new WebSocketConnection(_mockedWebsocket); 
+            _mockedPacketListener = new TestListener();
+            _receivingSut = new WebSocketConnection(_mockedPacketListener);
+            _sendingSut = new WebSocketConnection(_mockedPacketListener);
+            Thread.Sleep(500);
         }
 
+        private class TestListener : IPacketListener
+        {
+            private PacketDTO _packetDTO;
+            
+            public void ReceivePacket(PacketDTO packet)
+            {
+                if (packet.Header.SessionID.Equals(SESSION_ID))
+                {
+                    _packetDTO = packet;
+                }
+            }
 
+            public PacketDTO GetPacketDTO()
+            {
+                return _packetDTO;
+            }
+        }
 
         [Test]
-        public void TestSendCallsSendOnWebsocket()
+        public void Test_Send_IsBeingReceived()
         {
             // Arrange
-            string messageTest = "test";
-            Mock.Get(_mockedWebsocket).Setup(x => x.Send(It.IsAny<string>()));
+            PacketDTO packetToSend = new PacketBuilder()
+                .SetTarget("client")
+                .SetSessionID(SESSION_ID)
+                .SetPayload("testPayload")
+                .SetPacketType(PacketType.Chat)
+                .SetOriginID("originId")
+                .Build();
+            string serializedPacketToSend = JsonConvert.SerializeObject(packetToSend);
+            PacketDTO receivedPacket = null;
 
             // Act
-            _subject.Send(messageTest);
+            _sendingSut.Send(serializedPacketToSend);
+            Thread.Sleep(300);
 
             // Assert
-            Mock.Get(_mockedWebsocket).Verify(x => x.Send(messageTest), Times.Once);
+            receivedPacket = _mockedPacketListener.GetPacketDTO();
+            Assert.AreEqual(packetToSend, receivedPacket);
         }
     }
-}*/
+}

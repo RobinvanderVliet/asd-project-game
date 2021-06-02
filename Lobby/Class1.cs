@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Lobby
+﻿namespace Lobby
 {
     public class Class1
     {

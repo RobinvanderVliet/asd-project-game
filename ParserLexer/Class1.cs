@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ParserLexer
+﻿namespace ParserLexer
 {
     public class Class1
     {

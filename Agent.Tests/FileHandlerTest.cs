@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Agent.Exceptions;
+using NUnit.Framework;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -6,10 +7,9 @@ using System.IO;
 namespace Agent.Tests
 {
     [ExcludeFromCodeCoverage]
-    [TestFixture]
-    public class FileHandlerTest
+    public class FileHandlerTests
     {
-        private static FileHandler _sut;
+        private FileHandler _sut;
 
         [SetUp]
         public void Setup()
@@ -19,40 +19,79 @@ namespace Agent.Tests
         }
 
         [Test]
-        public void Test_Import_CorrectFile()
+        public void Test_ImportFile_FileIsImported()
         {
+            //Arrange
             var expected = "combat when player nearby player then attack";
-            var fileLocation = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\import_test_file_1.txt";
+            var fileLocation = _sut.GetBaseDirectory() + "/Resource/import_test_file_1.txt";
 
+            //Act
             var result = _sut.ImportFile(fileLocation);
 
+            //Assert
             Assert.AreEqual(expected, result);
         }
         [Test]
-        public void Test_Import_WrongFile()
-        { 
-            //Method to 
-            var fileLocation = String.Format(Path.GetFullPath(Path.Combine
-                        (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\import_test_file_1.php";
+        public void Test_ImportFile_ThrowsFileException1()
+        {
+            //Arrange
+            var fileLocation = _sut.GetBaseDirectory() + "Resource/ThisFileDoesNotExist.txt";
 
+            //Act
             var exception = Assert.Throws<FileException>(() =>
                 _sut.ImportFile(fileLocation));
 
-            Assert.AreEqual("File given is not of the correct file type", exception.Message);
+            //Assert
+            Assert.AreEqual("File not found!", exception.Message);
         }
 
         [Test]
-        public void Test_ExportFile()
+        public void Test_ImportFile_ThrowsFileException2()
         {
-            var expected = "combat when player nearby player then attack combat";
+            //Arrange
+            var fileLocation = _sut.GetBaseDirectory() + "/Resource/AgentTestFileWrongExtension.xml";
 
-            _sut.ExportFile("combat when player nearby player then attack combat");
+            //Act
+            var exception = Assert.Throws<FileException>(() =>
+                _sut.ImportFile(fileLocation));
 
-            var fileLocation = String.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\agentFile.cfg";
+            //Assert
+            Assert.AreEqual("The provided file is of an incorrect extension", exception.Message);
+        }
 
-            var actual = File.ReadAllText(fileLocation);
+        [Test]
+        public void Test_ExportFile_FileGetsExported()
+        {
+            //Arrange
+            var expected = "combat=defensive" + Environment.NewLine + "explore=random";
+            var fileLocation = _sut.GetBaseDirectory() + "/Resource/";
+            var fileName = "AgentExportFile.cfg";
 
-            Assert.AreEqual(expected, actual);
+            //Act
+            _sut.ExportFile(expected, fileName);
+
+            var result = _sut.ImportFile(fileLocation + fileName);
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void Test_CreateDirectory_DirectoryCreated()
+        {
+            //Arrange
+            var directory = _sut.GetBaseDirectory() + "/Resources/Agent/";
+
+            if (Directory.Exists(directory))
+            {
+                Directory.Delete(directory);
+            }
+
+            //Act
+            _sut.CreateDirectory(directory + "TestFile.txt");
+
+            //Assert
+            Assert.True(Directory.Exists(directory));
         }
     }
 }

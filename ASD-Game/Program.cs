@@ -1,11 +1,20 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ASD_project.Profiles;
+using Chat;
+using DatabaseHandler;
+using DatabaseHandler.Repository;
+using DatabaseHandler.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Network;
+using Player.ActionHandlers;
+using Player.Model;
+using Player.Services;
 using Serilog;
+using Session;
 using System;
 using System.IO;
 using WorldGeneration;
-using Player;
 
 namespace ASD_project
 {
@@ -29,17 +38,34 @@ namespace ASD_project
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
+                    services.AddAutoMapper(typeof(MapCharacterProfile));
                     services.AddTransient<IMainGame, MainGame>();
+                    services.AddScoped<IPlayerService, PlayerService>();
                     services.AddScoped<IPlayerModel, PlayerModel>();
+                    services.AddScoped<IInventory, Inventory>();
+                    services.AddScoped<IItem, Item>();
+                    services.AddScoped<IBitcoin, Bitcoin>();
+                    services.AddScoped<IRadiationLevel, RadiationLevel>();
+                    services.AddScoped<INetworkComponent, NetworkComponent>();
+                    services.AddScoped<IClientController, ClientController>();
+                    services.AddScoped<IChatHandler, ChatHandler>();
+                    services.AddScoped<ISessionHandler, SessionHandler>();
+                    services.AddScoped<IMoveHandler, MoveHandler>();
+                    services.AddScoped<IWorldService, WorldService>();
+                    services.AddScoped<IGameSessionHandler, GameSessionHandler>();
+                    services.AddSingleton<IDbConnection, DbConnection>();
+                    services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+                    services.AddScoped(typeof(IServicesDb<>), typeof(ServicesDb<>));
                 })
                 .UseSerilog()
                 .Build();
+
 
             var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);
             svc.Run();
         }
 
-        static void BuildConfig(IConfigurationBuilder builder) 
+        static void BuildConfig(IConfigurationBuilder builder)
         {
             builder.SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)

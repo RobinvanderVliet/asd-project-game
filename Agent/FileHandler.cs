@@ -1,83 +1,75 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Agent.Exceptions;
+using System;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Agent
 {
     public class FileHandler
     {
-        public string ImportFile(string filepath)
+        private string[] _allowedTypes = new[] { ".txt", ".cfg" };
+
+        public virtual string ImportFile(string filepath)
         {
-            if (Path.GetExtension(filepath) == ".txt" || Path.GetExtension(filepath) == ".cfg")
+            if (!File.Exists(filepath))
             {
-                if (!File.Exists(filepath))
-                {
-                    throw new FileException("File does not exists");
-                }
-                    
-                using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
-                {
-                    using (StreamReader reader = new StreamReader(fileStream))
-                    {
-                        string fileData = reader.ReadToEnd();
+                throw new FileException("File not found!");
+            }
 
-                        reader.Close();
+            if (!_allowedTypes.Contains(Path.GetExtension(filepath)))
+            {
+                throw new FileException("The provided file is of an incorrect extension");
+            }
 
-                        return fileData;
-                    };
+            using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
+            {
+                using (StreamReader reader = new StreamReader(fileStream))
+                {
+                    string fileData = reader.ReadToEnd();
+
+                    reader.Close();
+
+                    return fileData;
                 }
             }
-            throw new FileException("File given is not of the correct file type");
-            
         }
 
-        public void ExportFile(string content)
+        public virtual void ExportFile(string content, string fileName)
         {
-            //TODO change file name to selected by user
-            string tmpFileName = "agentFile.cfg";
-            string safeFileLocation = String.Format(Path.GetFullPath(Path.Combine
-                        (AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\" + tmpFileName;
+            string safeFileLocation = GetBaseDirectory() + "Resource/" + fileName;
 
-            try
+            CreateDirectory(safeFileLocation);
+
+            using (FileStream fileStream = File.Open(safeFileLocation, FileMode.OpenOrCreate))
             {
-                CreateDirectory(safeFileLocation);
-
-                using (FileStream fileStream = new FileStream(safeFileLocation, FileMode.Create, FileAccess.Write))
+                using (StreamWriter streamWriter = new StreamWriter(fileStream))
                 {
-                    using (StreamWriter streamWriter = new StreamWriter(fileStream))
-                    {
-                        streamWriter.Write(content);
-                    };   
-                };
-            }
-            catch (FileException)
-            {
-                throw;
+                    streamWriter.Write(content);
+                }
             }
         }
+
         public void CreateDirectory(string filepath)
         {
             string directoryName = Path.GetDirectoryName(filepath);
-
-            if (directoryName.Length > 0)
+            if (!Directory.Exists(directoryName))
             {
                 Directory.CreateDirectory(directoryName);
             }
+        }
 
-            if (!File.Exists(filepath))
-            {
-                File.Create(filepath);
-            }
+        public string GetBaseDirectory()
+        {
+            return string.Format(Path.GetFullPath(Path.Combine(GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory))));
+        }
+
+        private string GoBackToRoot(String path)
+        {
+            return Directory.GetParent
+                (Directory.GetParent
+                    (Directory.GetParent
+                        (Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).ToString()).ToString()).ToString()).ToString();
+
         }
     }
-}
-
-[Serializable]
-public class FileException : IOException
-{
-    public FileException() { }
-    public FileException(String massage) : base(String.Format(massage)) { }
 }

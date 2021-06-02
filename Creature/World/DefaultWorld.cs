@@ -1,10 +1,14 @@
-﻿using Creature.Pathfinder;
+﻿using Creature.Creature.StateMachine.Event;
+using Creature.Pathfinder;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Creature.Creature;
 
 namespace Creature.World
 {
+    [ExcludeFromCodeCoverage]
     public class DefaultWorld : IWorld
     {
         private List<ICreature> _creatures;
@@ -12,9 +16,9 @@ namespace Creature.World
         private List<List<Node>> _nodes;
         private int _size;
 
-        public List<ICreature> Creatures => Creatures;
+        public List<ICreature> Creatures => _creatures;
 
-        public List<ICreature> Players => Players;
+        public List<ICreature> Players => _players;
 
         public List<List<Node>> Nodes => _nodes;
         public int Size => _size;
@@ -56,41 +60,52 @@ namespace Creature.World
         {
             foreach (ICreature creature in _creatures)
             {
-                PathFinder pathFinder = new PathFinder(_nodes);
-
                 ICreature player = _players[0];
-                if (Vector2.DistanceSquared(creature.Position, player.Position) < creature.VisionRange)
+                if (Vector2.DistanceSquared(creature.CreatureStateMachine.CreatureData.Position, player.CreatureStateMachine.CreatureData.Position) < creature.CreatureStateMachine.CreatureData.VisionRange)
                 {
-                    Stack<Node> newPath = pathFinder.FindPath(creature.Position, player.Position);
-                    creature.FireEvent(Monster.Event.SPOTTED_PLAYER, player);
-                    creature.Do(newPath);
+                    creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.SPOTTED_PLAYER, player.CreatureStateMachine.CreatureData);
+
+                    Vector2 monsterPosition = creature.CreatureStateMachine.CreatureData.Position;
+                    Vector2 playerPosition = player.CreatureStateMachine.CreatureData.Position;
+
+                    if ((monsterPosition.X + 1f) == playerPosition.X && (monsterPosition.Y == playerPosition.Y)
+                        || (monsterPosition.X - 1f) == playerPosition.X && (monsterPosition.Y == playerPosition.Y)
+                        || (monsterPosition.Y + 1f) == playerPosition.Y && (monsterPosition.X == playerPosition.X)
+                        || (monsterPosition.Y - 1f) == playerPosition.Y && (monsterPosition.X == playerPosition.X))
+                    {
+                        creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.PLAYER_IN_RANGE, player.CreatureStateMachine.CreatureData);
+                    }
+                    else
+                    {
+                        creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.PLAYER_OUT_OF_RANGE, player.CreatureStateMachine.CreatureData);
+                    }
                 }
                 else
                 {
-                    creature.FireEvent(Monster.Event.LOST_PLAYER, player);
+                    creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.LOST_PLAYER, player.CreatureStateMachine.CreatureData);
                 }
             }
 
-            for (int y = _size; y > 0; y--) {
+            for (int y = _size; y > 0; y--)
+            {
                 string line = null;
 
                 for (int x = 0; x < _size; x++)
                 {
                     bool addedLine = false;
                     ICreature player = _players[0];
-                    
-                    if (player.Position.X == x && player.Position.Y == y)
+
+                    if (player.CreatureStateMachine.CreatureData.Position.X == x && player.CreatureStateMachine.CreatureData.Position.Y == y)
                     {
                         line += "+";
                         addedLine = true;
                     }
                     foreach (ICreature creature in _creatures)
                     {
-                        if (creature.Position.X == x && creature.Position.Y == y)
+                        if (creature.CreatureStateMachine.CreatureData.Position.X == x && creature.CreatureStateMachine.CreatureData.Position.Y == y)
                         {
                             line += "|";
                             addedLine = true;
-
                         }
                     }
                     if (!addedLine) line += "-";

@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Creature.Pathfinder;
 using NUnit.Framework;
-using Moq;
-using Creature.Pathfinder;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
@@ -11,12 +10,12 @@ namespace Creature.Tests
     [TestFixture]
     class PathFinderTest
     {
+        private PathFinder _sut;
+
         private List<List<Node>> _nodes;
         private int _boardSize;
         private Vector2 _startPos;
         private Vector2 _endPos;
-        
-        private Mock<PathFinder> _pathfinder;
 
         [SetUp]
         public void Setup()
@@ -37,7 +36,7 @@ namespace Creature.Tests
                 }
                 _nodes.Add(nodePoints);
             }
-            _pathfinder = new Mock<PathFinder>(_nodes) { CallBase = true};
+            _sut = new PathFinder(_nodes);
         }
 
         [Test]
@@ -45,9 +44,8 @@ namespace Creature.Tests
         {
             // Arrange ---------
             Stack<Node> actualPath = new Stack<Node>();
-            Stack<Node> path = new Stack<Node>();
-            actualPath = _pathfinder.Object.FindPath(_startPos, _endPos);
-            
+            actualPath = _sut.FindPath(_startPos, _endPos);
+
             // Act -------------
             int actual = actualPath.Count;
             int expected = 38;

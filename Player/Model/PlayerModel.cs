@@ -1,68 +1,170 @@
-﻿using System;
+﻿using Player.Exceptions;
+using System;
+using WorldGeneration.Models;
 
-namespace Player
+namespace Player.Model
 {
     public class PlayerModel : IPlayerModel
     {
-        //line above is temporary and shows the new position of a player,
-        //assuming it will be defined like that elsewhere. for the sake of NUnit
+        private string _name;
+        public string Name { get => _name; set => _name = value; }
 
-        private const int DEFAULT_STEPS = 0;
-        private int[] currentposition = {26, 11};
+        private string _PlayerGuid;
+        public string PlayerGuid { get => _PlayerGuid; set => _PlayerGuid = value; }
 
-        public int[] GetNewPosition { get; private set; } = new int[2];
+        private int _health;
+        public int Health { get => _health; set => _health = value; }
+        private int _stamina;
+        public int Stamina { get => _stamina; set => _stamina = value; }
 
-        public void HandleDirection(string direction, int steps)
+        // private Tile _currentTile;
+        // public Tile CurrentTile { get => _currentTile; set => _currentTile = value; }
+        private IInventory _inventory;
+        public IInventory Inventory { get => _inventory; set => _inventory = value; }
+        private IBitcoin _bitcoins;
+        public IBitcoin Bitcoins { get => _bitcoins; set => _bitcoins = value; }
+        private IRadiationLevel _radiationLevel;
+        public IRadiationLevel RadiationLevel { get => _radiationLevel; set => _radiationLevel = value; }
+
+        private int _xPosition;
+        private int _yPosition;
+        public int XPosition { get => _xPosition; set => _xPosition = value; }
+        public int YPosition { get => _yPosition; set => _yPosition = value; }
+
+        public string Symbol { get => _symbol; set => _symbol = value; }
+        public ConsoleColor Color { get; set; }
+        public int Team { get; set; }
+        private string _symbol = CharacterSymbol.CURRENT_PLAYER;
+
+        //random default values for health&stamina for now
+        private const int HEALTHCAP = 100;
+        private const int STAMINACAP = 10;
+
+
+        public PlayerModel(string name, IInventory inventory, IBitcoin bitcoins, IRadiationLevel radiationLevel
+        //, Tile tile
+        )
         {
-            var newMovement = new int[2];
-            switch (direction)
+            _name = name;
+            _health = HEALTHCAP;
+            _stamina = STAMINACAP;
+            _inventory = inventory;
+            _bitcoins = bitcoins;
+            _radiationLevel = radiationLevel;
+        }
+
+        public void AddHealth(int amount)
+        {
+            if (_health + amount >= HEALTHCAP)
             {
-                case "right":
-                case "east":
-                    newMovement[0] = steps;
-                    newMovement[1] = DEFAULT_STEPS;
-                    break;
-                case "left":
-                case "west":
-                    newMovement[0] = -steps;
-                    newMovement[1] = DEFAULT_STEPS;
-                    break;
-                case "forward":
-                case "up":
-                case "north":
-                    newMovement[0] = DEFAULT_STEPS;
-                    newMovement[1] = -steps;
-                    break;
-                case "backward":
-                case "down":
-                case "south":
-                    newMovement[0] = DEFAULT_STEPS;
-                    newMovement[1] = steps;
-                    break;
+                _health = HEALTHCAP;
             }
-
-            GetNewPosition = SendNewPosition(newMovement);
-
-            // the next line of code should be changed by sending newPosition to a relevant method
-            WriteCommand(GetNewPosition);
+            else
+            {
+                _health += amount;
+            }
         }
 
-        public int[] SendNewPosition(int[] newMovement)
+        public void RemoveHealth(int amount)
         {
-            var newPlayerPosition = new int[2];
-
-            // getPosition() should be replaced by another method that gets the coordinates of the player
-            for (var i = 0; i <= 1; i++) newPlayerPosition[i] = currentposition[i] + newMovement[i];
-
-            return newPlayerPosition;
+            if (_health - amount <= 0)
+            {
+                _health = 0;
+                //extra code for when a player dies goes here
+            }
+            else
+            {
+                _health -= amount;
+            }
         }
 
-        // !!! METHODS BELOW ARE TEMPORARY, PROTOTYPE ONLY !!!
-        private void WriteCommand(int[] newPosition)
+        public void AddStamina(int amount)
         {
-            // returns the new position
-            currentposition = newPosition;
-            Console.WriteLine("X: " + newPosition[0] + ". Y: " + newPosition[1]);
+            if (_stamina + amount >= STAMINACAP)
+            {
+                _stamina = STAMINACAP;
+            }
+            else
+            {
+                _stamina += amount;
+            }
         }
+
+        public void RemoveStamina(int amount)
+        {
+            if (_stamina - amount <= 0)
+            {
+                _stamina = 0;
+            }
+            else
+            {
+                _stamina -= amount;
+            }
+        }
+
+        public IItem GetItem(string itemName)
+        {
+            return _inventory.GetItem(itemName);
+        }
+
+        public void AddInventoryItem(IItem item)
+        {
+            _inventory.AddItem(item);
+        }
+
+        public void RemoveInventoryItem(IItem item)
+        {
+            _inventory.RemoveItem(item);
+        }
+
+        public void EmptyInventory()
+        {
+            _inventory.EmptyInventory();
+        }
+
+        public void AddBitcoins(int amount)
+        {
+            _bitcoins.AddAmount(amount);
+        }
+
+        public void RemoveBitcoins(int amount)
+        {
+            _bitcoins.RemoveAmount(amount);
+        }
+
+        public int GetAttackDamage()
+        {
+            //random default attack damage for now
+            int dmg = 5 + GetItemDamage();
+            return dmg;
+        }
+
+        private int GetItemDamage()
+        {
+            //things like passive damage items go here
+            return 0;
+        }
+
+        public void PickupItem()
+        {
+            //Item item = currentTile.pickupItem();
+            //addInventoryItem(item);
+            Console.WriteLine("Item opgepakt!");
+        }
+
+        public void DropItem(string itemName)
+        {
+            IItem item = _inventory.GetItem(itemName);
+            if (item != null)
+            {
+                RemoveInventoryItem(item);
+                Console.WriteLine(item.ItemName + " laten vallen.");
+            }
+            else
+            {
+                throw new ItemException("Je hebt geen " + itemName + " item in je inventory!");
+            }
+        }
+
     }
 }

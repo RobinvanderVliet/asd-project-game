@@ -1,148 +1,62 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Creature;
+﻿using Creature.Creature.StateMachine;
+using Creature.Creature.StateMachine.Data;
 using Moq;
-using Creature.World;
-using System.Numerics;
-using Creature.Consumable;
-using Creature.Pathfinder;
+using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
+using Creature.Creature;
 
 namespace Creature.Tests
 {
     [ExcludeFromCodeCoverage]
+    [TestFixture]
     class MonsterTest
     {
         private Monster _sut;
-        private int _damage;
+        private Mock<ICreatureStateMachine> _creatureStateMachineMock;
 
         [SetUp]
         public void Setup()
         {
-            Mock<IWorld> worldMock = new Mock<IWorld>();
-            Vector2 position = new Vector2(10, 10);
-            _damage = 5;
-            int health = 20;
-            int visionRange = 10;
-
-            _sut = new Monster(worldMock.Object, position, _damage, health, visionRange);
+            _creatureStateMachineMock = new Mock<ICreatureStateMachine>();
+            _sut = new Monster(_creatureStateMachineMock.Object);
         }
 
         [Test]
-        public void Test_ApplyDamage_KillsMonster()
+        public void Test_MonsterStateMachine_StartsStateMachine()
+        {
+            // Assert ----------
+            _creatureStateMachineMock.Verify(creatureStateMachine => creatureStateMachine.StartStateMachine());
+        }
+
+        [Test]
+        public void Test_ApplyDamage_DealsDamage()
         {
             // Arrange ---------
+            MonsterData monsterData = new MonsterData(new Vector2(), 50, 10, 10, null, false);
+            _creatureStateMachineMock.Setup(creatureStateMachine => creatureStateMachine.CreatureData)
+                .Returns(monsterData);
 
             // Act -------------
             _sut.ApplyDamage(30);
 
             // Assert ----------
-            Assert.That(_sut.IsAlive == false);
+            Assert.AreEqual(_sut.CreatureStateMachine.CreatureData.Health, 20);
         }
 
         [Test]
-        public void Test_FireEventSpottedPlayer_FollowsPlayer()
+        public void Test_HealAmount_HealsMonster()
         {
             // Arrange ---------
-            Mock<ICreature> playerMock = new Mock<ICreature>();
+            MonsterData monsterData = new MonsterData(new Vector2(), 30, 10, 10, null, false);
+            _creatureStateMachineMock.Setup(creatureStateMachine => creatureStateMachine.CreatureData)
+                .Returns(monsterData);
 
             // Act -------------
-            _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
+            _sut.HealAmount(10);
 
             // Assert ----------
-            Assert.AreEqual(true, _sut.IsFollowing);
-            //Assert.AreEqual(playerMock.Object, _sut.Player);
-        }
-
-        [Test]
-        public void Test_FireEventLostPlayer_DoesNotFollowPlayer()
-        {
-            // Arrange ---------
-            Mock<ICreature> playerMock = new Mock<ICreature>();
-
-            // Act -------------
-            _sut.FireEvent(Monster.Event.LOST_PLAYER, playerMock.Object);
-
-            // Assert ----------
-            Assert.AreEqual(false, _sut.IsFollowing);
-            //Assert.AreEqual(playerMock.Object, _sut.Player);
-        }
-
-        [Test]
-        public void Test_FireEventPlayerInRange_AttacksPlayer()
-        {
-            // Arrange ---------
-            Mock<ICreature> playerMock = new Mock<ICreature>();
-
-            // Act -------------
-            _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
-            _sut.FireEvent(Monster.Event.PLAYER_IN_RANGE, playerMock.Object);
-
-            // Assert ----------
-            playerMock.Verify((playerMock) => playerMock.ApplyDamage(_damage));
-        }
-
-        [Test]
-        public void Test_FireEventSpottedPlayer_DoesNotAttackPlayer()
-        {
-            // Arrange ---------
-            Mock<ICreature> playerMock = new Mock<ICreature>();
-
-            // Act -------------
-            _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
-
-            // Assert ----------
-            playerMock.Verify((playerMock) => playerMock.ApplyDamage(_damage), Times.Never);
-        }
-
-        [Test]
-        public void Test_FireEventAlmostDead_UsesConsumable()
-        {
-            // Arrange ---------
-            Mock<ICreature> playerMock = new Mock<ICreature>();
-            Mock<IConsumable> consumableMock = new Mock<IConsumable>();
-
-            // Act -------------
-            _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
-            _sut.FireEvent(Monster.Event.ALMOST_DEAD, consumableMock.Object);
-
-            // Assert ----------
-            consumableMock.Verify((consumableMock) => consumableMock.Use());
-        }
-
-        [Test]
-        public void Test_HealAmount_DoesNotReviveMonsterWhenDamageTooHigh()
-        {
-            // Arrange ---------
-
-            // Act -------------
-            _sut.ApplyDamage(30);
-            _sut.HealAmount(50);
-
-            // Assert ----------
-            Assert.That(_sut.IsAlive == false);
-        }
-
-        [Test]
-        public void Test_FireEventSpottedPlayer_GetsTopPositionFromPathStack()
-        {
-            // Arrange ---------
-            Mock<ICreature> playerMock = new Mock<ICreature>();
-            Stack<Node> path = new Stack<Node>();
-            path.Push(new Node(new Vector2(1, 1), true));
-            path.Push(new Node(new Vector2(1, 2), true));
-            path.Push(new Node(new Vector2(1, 3), true));
-
-            // Act -------------
-            _sut.FireEvent(Monster.Event.SPOTTED_PLAYER, playerMock.Object);
-            _sut.Do(path);
-
-            // Assert ----------
-            Assert.That(new Vector2(1, 3), Is.EqualTo(_sut.Position));
+            Assert.AreEqual(_sut.CreatureStateMachine.CreatureData.Health, 40);
         }
     }
 }

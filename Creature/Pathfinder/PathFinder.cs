@@ -1,110 +1,114 @@
-﻿using Creature.Pathfinder;
+﻿using Creature.Exceptions;
+using Creature.Pathfinder;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 
 namespace Creature
 {
     public class PathFinder
     {
-        List<List<Node>> _grid;
+        private List<List<Node>> _grid;
+        private int _gridRows;
+        private int _gridCols;
+
         public PathFinder(List<List<Node>> nodes)
         {
             _grid = nodes;
+            _gridRows = _grid[0].Count;
+            _gridCols = _grid.Count;
         }
-        int _gridRows
-        {
-            get
-            {
-                return _grid[0].Count;
-            }
-        }
-        int _gridCols
-        {
-            get
-            {
-                return _grid.Count;
-            }
-        }
+
         public Stack<Node> FindPath(Vector2 startPosition, Vector2 endPosition)
         {
-            Node startNode = new Node(new Vector2((int)(startPosition.X / Node.nodeSize), (int)(startPosition.Y / Node.nodeSize)), true);
-            Node endNode = new Node(new Vector2((int)(endPosition.X / Node.nodeSize), (int)(endPosition.Y / Node.nodeSize)), true);
+            Node startNode = new Node(new Vector2((int)startPosition.X, (int)(startPosition.Y)), true);
+            Node endNode = new Node(new Vector2((int)endPosition.X, (int)(endPosition.Y)), true);
 
-            Stack<Node> path = new Stack<Node>();
-            List<Node> openList = new List<Node>();
+            Stack<Node> pathStack = new Stack<Node>();
+
+            PriorityQueue<Node> openList = new PriorityQueue<Node>();
             List<Node> closedList = new List<Node>();
+
             List<Node> adjacencies;
-            Node current = startNode;
+            Node currentNode = startNode;
 
-            // Add start node to OpenList
-            openList.Add(startNode);
+            openList.Enqueue(currentNode);
 
-            while (openList.Count != 0 && !closedList.Exists(x => x.position == endNode.position))
+            while (openList.Count > 0 && !AreNodesAtSamePosition(openList.Peek(), endNode))
             {
-                current = openList[0];
-                openList.Remove(current);
-                closedList.Add(current);
-                adjacencies = GetAdjacentNodes(current);
+                openList.Dequeue();
+                closedList.Add(currentNode);
 
-                foreach (Node n in adjacencies)
+                adjacencies = GetAdjacentNodes(currentNode);
+
+                foreach (Node adjNode in adjacencies)
                 {
-                    if (!closedList.Contains(n) && n.isWalkable)
+                    if (adjNode.IsWalkable)
                     {
-                        if (!openList.Contains(n))
+                        if (!(openList.Contains(adjNode)) && (!closedList.Contains(adjNode) || currentNode.FScore > adjNode.FScore))
                         {
-                            n.parent = current;
-                            n.distanceToTarget = Math.Abs(n.position.X - endNode.position.X) + Math.Abs(n.position.Y - endNode.position.Y);
-                            n.cost = n.weight + n.parent.cost;
-                            openList.Add(n);
-                            openList = openList.OrderBy(node => node.FScore).ToList<Node>();
+                            if (closedList.Contains(adjNode) && currentNode.FScore > adjNode.FScore)
+                            {
+                                closedList.Remove(adjNode);
+                            }
+                            adjNode.Parent = currentNode;
+                            adjNode.DistanceToTarget = Math.Abs(adjNode.Position.X - endNode.Position.X) + Math.Abs(adjNode.Position.Y - endNode.Position.Y);
+                            adjNode.Cost = adjNode.Weight + adjNode.Parent.Cost;
+                            openList.Enqueue(adjNode);
                         }
                     }
                 }
+                currentNode = openList.Peek();
             }
 
-            // Construct path, if end was not closed return null
-            if (!closedList.Exists(x => x.position == endNode.position))
+            if (!AreNodesAtSamePosition(currentNode, endNode))
             {
-                return null;
+                throw new PathHasNoDestinationException();
+            }
+            else if (AreNodesAtSamePosition(currentNode, startNode))
+            {
+                pathStack.Push(currentNode);
             }
 
-            // If the end was reached, return the path
-            Node temp = closedList[closedList.IndexOf(current)];
-            if (temp == null) return null;
-            do
+            while (!AreNodesAtSamePosition(currentNode, startNode) && currentNode != null)
             {
-                path.Push(temp);
-                temp = temp.parent;
-            } while (temp != startNode && temp != null);
-            return path;
+                pathStack.Push(currentNode);
+                currentNode = currentNode.Parent;
+            }
+
+            return pathStack;
         }
+
+        private bool AreNodesAtSamePosition(Node a, Node b)
+        {
+            return a.Position.X.Equals(b.Position.X) && a.Position.Y.Equals(b.Position.Y);
+        }
+
         private List<Node> GetAdjacentNodes(Node node)
         {
-            List<Node> temp = new List<Node>();
+            List<Node> adjNodes = new List<Node>();
 
-            int row = (int)node.position.Y;
-            int col = (int)node.position.X;
+            int row = (int)node.Position.Y;
+            int col = (int)node.Position.X;
 
             if (row + 1 < _gridRows)
             {
-                temp.Add(_grid[col][row + 1]);
+                adjNodes.Add(_grid[col][row + 1]);
             }
             if (row - 1 >= 0)
             {
-                temp.Add(_grid[col][row - 1]);
+                adjNodes.Add(_grid[col][row - 1]);
             }
             if (col - 1 >= 0)
             {
-                temp.Add(_grid[col - 1][row]);
+                adjNodes.Add(_grid[col - 1][row]);
             }
             if (col + 1 < _gridCols)
             {
-                temp.Add(_grid[col + 1][row]);
+                adjNodes.Add(_grid[col + 1][row]);
             }
 
-            return temp;
+            return adjNodes;
         }
     }
 }

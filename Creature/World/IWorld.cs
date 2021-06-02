@@ -1,10 +1,6 @@
 ﻿using Creature.Pathfinder;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+using Creature.Creature;
 
 namespace Creature.World
 {
