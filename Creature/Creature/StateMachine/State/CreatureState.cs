@@ -12,12 +12,12 @@ namespace Creature.Creature.StateMachine.State
             _creatureData = creatureData;
         }
 
-        public virtual void Do() 
+        public virtual void Do()
         {
             throw new NotImplementedException();
         }
 
-        public virtual void Do(ICreatureData creatureData) 
+        public virtual void Do(ICreatureData creatureData)
         {
             throw new NotImplementedException();
         }

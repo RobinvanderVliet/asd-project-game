@@ -1,19 +1,19 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast;
+﻿using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.Ast
 {
     [ExcludeFromCodeCoverage]
-    
+
     [TestFixture]
     public class ComparableTest
     {
         private Comparable _comparable;
-        
-        
-     
+
+
+
         [Test]
         public void Test_GetNodeTypeComparable_CorrectOutput()
         {
@@ -24,9 +24,9 @@ namespace Agent.Tests.Ast
             //Assert
             Assert.AreEqual("Comparable", result);
         }
-        
-        
-    
+
+
+
         [Test]
         public void Test_GetNodeTypeItem_CorrectOutput()
         {
@@ -37,8 +37,8 @@ namespace Agent.Tests.Ast
             //Assert
             Assert.AreEqual("Item", result);
         }
-        
-    
+
+
         [Test]
         public void Test_GetNodeTypeInt_CorrectOutput()
         {
@@ -49,8 +49,8 @@ namespace Agent.Tests.Ast
             //Assert
             Assert.AreEqual("Int", result);
         }
-        
- 
+
+
         [Test]
         public void Test_GetNodeTypeStat_CorrectOutput()
         {
@@ -61,7 +61,7 @@ namespace Agent.Tests.Ast
             //Assert
             Assert.AreEqual("Stat", result);
         }
-        
+
 
         [Test]
         public void Test_GetNodeTypeSubject_CorrectOutput()

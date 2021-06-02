@@ -1,7 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast;
+﻿using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.Ast
 {
@@ -18,7 +18,7 @@ namespace Agent.Tests.Ast
             _actionReference = new ActionReference("");
         }
 
-    
+
         [Test]
         public void Test_GetNodeType_CorrectOutput()
         {
@@ -28,8 +28,8 @@ namespace Agent.Tests.Ast
             //Assert
             Assert.AreEqual(TYPE, result);
         }
-        
-       
+
+
         [Test]
         public void Test_AddChild_AddSubjectChild()
         {
@@ -38,13 +38,13 @@ namespace Agent.Tests.Ast
             _actionReference.AddChild(subject);
 
             //Act
-            var result = ((Subject) _actionReference.GetChildren()[0])?.GetNodeType();
+            var result = ((Subject)_actionReference.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Subject", result);
         }
-        
-  
+
+
         [Test]
         public void Test_AddChild_AddItemChild()
         {
@@ -53,13 +53,13 @@ namespace Agent.Tests.Ast
             _actionReference.AddChild(item);
 
             //Act
-            var result = ((Item) _actionReference.GetChildren()[0])?.GetNodeType();
+            var result = ((Item)_actionReference.GetChildren()[0])?.GetNodeType();
 
             //Assert
             Assert.AreEqual("Item", result);
         }
-        
-   
+
+
         [Test]
         public void Test_AddChild_AddNodeChild()
         {

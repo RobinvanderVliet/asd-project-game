@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Creature.Pathfinder;
 using NUnit.Framework;
-using Moq;
-using Creature.Pathfinder;
-using System.Numerics;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 
 namespace Creature.Tests
 {

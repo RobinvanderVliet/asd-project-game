@@ -1,7 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast.Comparables;
+﻿using Agent.Antlr.Ast.Comparables;
 using Agent.Antlr.Ast.Comparables.Subjects;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.Ast
 {
@@ -11,7 +11,7 @@ namespace Agent.Tests.Ast
     {
 
         private const string TESTNAME = "test";
-        
+
         [Test]
         public void Test_GetNodeTypeSubject_CorrectOutput()
         {
@@ -22,7 +22,7 @@ namespace Agent.Tests.Ast
             //Assert
             Assert.AreEqual("Subject", result);
         }
-        
+
         [Test]
         public void Test_GetNodeTypeCurrent_CorrectOutput()
         {
@@ -33,7 +33,7 @@ namespace Agent.Tests.Ast
             //Assert
             Assert.AreEqual("Current", result);
         }
-      
+
         [Test]
         public void Test_GetNodeTypeInventory_CorrectOutput()
         {
@@ -88,6 +88,6 @@ namespace Agent.Tests.Ast
             //Assert
             Assert.AreEqual("Tile", result);
         }
-        
+
     }
 }

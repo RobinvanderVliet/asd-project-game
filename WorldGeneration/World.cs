@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataTransfer.DTO.Character;
+using System;
 using System.Collections.Generic;
 
 namespace WorldGeneration
@@ -59,4 +60,4 @@ namespace WorldGeneration
         }
     }
 }
-     
+

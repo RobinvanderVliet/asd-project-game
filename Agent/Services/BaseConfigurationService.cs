@@ -20,7 +20,7 @@ namespace Agent.Services
         protected const string CANCEL_COMMAND = "cancel";
         protected const string LOAD_COMMAND = "load";
         public string LastError = "";
-        
+
         public abstract void CreateConfiguration(string configurationName, string filepath);
 
         public abstract List<Configuration> GetConfigurations();

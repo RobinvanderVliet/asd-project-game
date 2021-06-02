@@ -2,15 +2,15 @@
 
 namespace Agent.Antlr.Ast
 {
-    
+
     public class Setting : Node
     {
-        
+
         private List<Node> _conditions = new List<Node>();
         private List<Node> _actions = new List<Node>();
-        
+
         public string SettingName { get; set; }
-        
+
         public Setting(string settingName)
         {
             SettingName = settingName;
@@ -33,7 +33,7 @@ namespace Agent.Antlr.Ast
 
         public override Node AddChild(Node node)
         {
-            switch (node) 
+            switch (node)
             {
                 case Condition:
                     _conditions.Add(node);
@@ -44,7 +44,7 @@ namespace Agent.Antlr.Ast
                 default:
                     body.Add(node);
                     break;
-                
+
             }
             return this;
         }

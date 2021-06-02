@@ -9,7 +9,7 @@ namespace Agent.Exceptions
     {
         public SyntaxErrorException(string message) : base(message)
         {
-    
+
         }
     }
 }

@@ -28,5 +28,9 @@ namespace InputHandling.Antlr.Ast
 
             return _message == other.MessageValue;
         }
+        public override int GetHashCode()
+        {
+            return _message.GetHashCode();
+        }
     }
 }

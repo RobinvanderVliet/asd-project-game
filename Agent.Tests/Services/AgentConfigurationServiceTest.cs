@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using Agent.Exceptions;
 using Agent.Mapper;
 using Agent.Models;
@@ -9,6 +5,9 @@ using Agent.Services;
 using InputHandling;
 using Moq;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.Services
 {
@@ -16,7 +15,7 @@ namespace Agent.Tests.Services
     public class AgentConfigurationServiceTests
     {
         private AgentConfigurationService _sut;
-        private FileHandler _handler; 
+        private FileHandler _handler;
         private Mock<FileHandler> _fileHandlerMock;
         private Mock<Pipeline> _pipelineMock;
         private Mock<InputHandler> _mockedRetriever;
@@ -40,7 +39,7 @@ namespace Agent.Tests.Services
             var input = _handler.GetBaseDirectory() + "/Resource/AgentConfigurationTestFileParseException.txt";
 
             _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
-            
+
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("wrong:wrong");
 
             //Act
@@ -49,7 +48,7 @@ namespace Agent.Tests.Services
             //Assert
             Assert.AreEqual("missing '=' at 'wrong'", _sut.LastError);
         }
-        
+
         // Deze test moet getest worden als er een checker is
         //[Test]
         //public void Test_Configure_CatchesSemanticError()
@@ -58,7 +57,7 @@ namespace Agent.Tests.Services
         //    var input = handler.GetBaseDirectory() + "Resources/AgentTestFileWrongExtension.txt";
 
         //    var error = "Semantic error";
-            
+
         //    _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
         //    _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("explore=high");
         //    _pipelineMock.Setup(x => x.CheckAst()).Throws(new SemanticErrorException(error));
@@ -69,7 +68,7 @@ namespace Agent.Tests.Services
         //    //Assert
         //    Assert.AreEqual(error, _sut.LastError);
         //}
-        
+
         [Test]
         public void Test_Configure_FileError()
         {
@@ -78,7 +77,7 @@ namespace Agent.Tests.Services
             var error = "File not found";
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Throws(new FileException(error));
             _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
-            
+
             //Act
             _sut.Configure();
 
@@ -92,16 +91,16 @@ namespace Agent.Tests.Services
             //Arrange
             var input = _handler.GetBaseDirectory() + "/Resources/AgentConfigurationTestFile.txt";
             _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input);
-            
+
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("aggressiveness=high");
 
             //Act
             _sut.Configure();
-            
+
             //Assert
-            _fileHandlerMock.Verify( x => x.ExportFile(It.IsAny<String>(), It.IsAny<String>()), Times.Exactly(1));
+            _fileHandlerMock.Verify(x => x.ExportFile(It.IsAny<String>(), It.IsAny<String>()), Times.Exactly(1));
         }
-        
+
         [Test]
         public void Test_CreateNewAgentConfiguration_WithNewAgent()
         {

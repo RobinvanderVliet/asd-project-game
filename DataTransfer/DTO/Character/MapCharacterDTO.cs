@@ -16,13 +16,13 @@ namespace DataTransfer.DTO.Character
         public int Team;
 
         public MapCharacterDTO(
-            int xPosition, 
+            int xPosition,
             int yPosition,
             string playerGuid,
-            string gameGuid, 
-            string symbol = null, 
-            ConsoleColor color = ConsoleColor.White, 
-            ConsoleColor backgroundColor = ConsoleColor.Black, 
+            string gameGuid,
+            string symbol = null,
+            ConsoleColor color = ConsoleColor.White,
+            ConsoleColor backgroundColor = ConsoleColor.Black,
             int team = 0)
         {
             XPosition = xPosition;

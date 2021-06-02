@@ -29,7 +29,7 @@ namespace InputHandling.Antlr.Parser
 
         public override void ExitMove(PlayerCommandsParser.MoveContext context)
         {
-            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterAttack(PlayerCommandsParser.AttackContext context)
@@ -39,7 +39,7 @@ namespace InputHandling.Antlr.Parser
 
         public override void ExitAttack(PlayerCommandsParser.AttackContext context)
         {
-            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterDrop(PlayerCommandsParser.DropContext context)
@@ -49,7 +49,7 @@ namespace InputHandling.Antlr.Parser
 
         public override void ExitDrop(PlayerCommandsParser.DropContext context)
         {
-            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterPickup(PlayerCommandsParser.PickupContext context)
@@ -59,7 +59,7 @@ namespace InputHandling.Antlr.Parser
 
         public override void ExitPickup(PlayerCommandsParser.PickupContext context)
         {
-            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterExit(PlayerCommandsParser.ExitContext context)
@@ -69,7 +69,7 @@ namespace InputHandling.Antlr.Parser
 
         public override void ExitExit(PlayerCommandsParser.ExitContext context)
         {
-            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterSay(PlayerCommandsParser.SayContext context)
@@ -79,7 +79,7 @@ namespace InputHandling.Antlr.Parser
 
         public override void ExitSay(PlayerCommandsParser.SayContext context)
         {
-            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterCreateSession(PlayerCommandsParser.CreateSessionContext context)
@@ -89,7 +89,7 @@ namespace InputHandling.Antlr.Parser
 
         public override void ExitCreateSession(PlayerCommandsParser.CreateSessionContext context)
         {
-            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterJoinSession(PlayerCommandsParser.JoinSessionContext context)
@@ -99,7 +99,7 @@ namespace InputHandling.Antlr.Parser
 
         public override void ExitJoinSession(PlayerCommandsParser.JoinSessionContext context)
         {
-            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterRequestSessions(PlayerCommandsParser.RequestSessionsContext context)
@@ -109,7 +109,7 @@ namespace InputHandling.Antlr.Parser
 
         public override void ExitRequestSessions(PlayerCommandsParser.RequestSessionsContext context)
         {
-            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterStartSession(PlayerCommandsParser.StartSessionContext context)
@@ -129,7 +129,7 @@ namespace InputHandling.Antlr.Parser
 
         public override void ExitShout(PlayerCommandsParser.ShoutContext context)
         {
-            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterReplace(PlayerCommandsParser.ReplaceContext context)
@@ -139,7 +139,7 @@ namespace InputHandling.Antlr.Parser
 
         public override void ExitReplace(PlayerCommandsParser.ReplaceContext context)
         {
-            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterPause(PlayerCommandsParser.PauseContext context)
@@ -149,7 +149,7 @@ namespace InputHandling.Antlr.Parser
 
         public override void ExitPause(PlayerCommandsParser.PauseContext context)
         {
-            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterResume(PlayerCommandsParser.ResumeContext context)
@@ -159,7 +159,7 @@ namespace InputHandling.Antlr.Parser
 
         public override void ExitResume(PlayerCommandsParser.ResumeContext context)
         {
-            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
         public override void EnterDirection(PlayerCommandsParser.DirectionContext context)
@@ -168,19 +168,19 @@ namespace InputHandling.Antlr.Parser
 
             if (action is Move)
             {
-                Move move = (Move) action;
+                Move move = (Move)action;
                 move.AddChild(new Direction(context.GetText()));
             }
             else if (action is Attack)
             {
-                Attack attack = (Attack) action;
+                Attack attack = (Attack)action;
                 attack.AddChild(new Direction(context.GetText()));
             }
         }
 
         public override void EnterStep(PlayerCommandsParser.StepContext context)
         {
-            Move move = (Move) _currentContainer.Peek();
+            Move move = (Move)_currentContainer.Peek();
             move.AddChild(new Step(Convert.ToInt32(context.GetText())));
         }
 
@@ -190,12 +190,12 @@ namespace InputHandling.Antlr.Parser
 
             if (action is Say)
             {
-                Say say = (Say) action;
+                Say say = (Say)action;
                 say.AddChild(new Message(context.GetText()));
             }
             else if (action is Shout)
             {
-                Shout shout = (Shout) action;
+                Shout shout = (Shout)action;
                 shout.AddChild(new Message(context.GetText()));
             }
             else if (action is CreateSession createSession)

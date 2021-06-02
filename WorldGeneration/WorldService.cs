@@ -18,7 +18,7 @@ namespace WorldGeneration
         {
             _world.DisplayWorld();
         }
-        
+
         public void DeleteMap()
         {
             _world.deleteMap();

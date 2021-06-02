@@ -9,7 +9,7 @@ namespace Agent.Exceptions
     {
         public SemanticErrorException(string message) : base(message)
         {
-    
+
         }
     }
 }
