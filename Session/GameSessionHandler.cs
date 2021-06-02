@@ -172,7 +172,7 @@ namespace Session
         {
             if (_clientController.GetOriginId() == joinedPlayerDto.ExistingPlayer.PlayerGuid)
             {
-                _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
+                _worldService.GenerateWorld(joinedPlayerDto.Seed);
                 var player = new WorldGeneration.Player("gerrit", joinedPlayerDto.ExistingPlayer.XPosition,
                     joinedPlayerDto.ExistingPlayer.YPosition,
                     CharacterSymbol.CURRENT_PLAYER, joinedPlayerDto.ExistingPlayer.PlayerGuid,
