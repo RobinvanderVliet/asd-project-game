@@ -319,7 +319,6 @@ namespace Session
                         {
                             StartGameDTO joinedPlayerDto = new StartGameDTO();
                             joinedPlayerDto.ExistingPlayer = result;
-                            joinedPlayerDto.Seed = _session.SessionSeed;
                         
                             var playerLocations = allPlayerId.Result.Where(x => x.GameGuid == _session.SessionId);
                             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
