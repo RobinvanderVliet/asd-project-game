@@ -230,6 +230,10 @@ namespace Session
             
             if (_sessionHandler.GameStarted() && !_sessionHandler.GetSavedGame() || (_sessionHandler.GameStarted() && _sessionHandler.GetSavedGame()))
             {
+                if (_clientController.GetOriginId() == startGameDTO.ExistingPlayer.PlayerGuid)
+                {
+                    _worldService.GenerateWorld(startGameDTO.Seed);
+                }
                 AddPlayerToGameSession(startGameDTO);
             }
             else if (_sessionHandler.GetSavedGame())
