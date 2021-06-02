@@ -45,6 +45,7 @@ MESSAGE: '"' ~'"'+ '"';
 input: command EOF;
 
 step: NUMBER;
+username: MESSAGE;
 message: MESSAGE;
 
 command:
@@ -58,8 +59,8 @@ command:
     REPLACE #replace |
     PAUSE #pause |
     RESUME #resume |
-    CREATE_SESSION SPACE message #createSession |
-    JOIN_SESSION SPACE message #joinSession |
+    CREATE_SESSION SPACE message SPACE username #createSession |
+    JOIN_SESSION SPACE message SPACE username #joinSession |
     REQUEST_SESSIONS #requestSessions |
     START_SESSION #startSession;
 
