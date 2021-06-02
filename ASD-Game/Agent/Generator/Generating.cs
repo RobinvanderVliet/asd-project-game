@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Agent.Antlr.Ast;
+using Agent.Antlr.Ast.Comparables;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Agent.Antlr.Ast;
-using Agent.Antlr.Ast.Comparables;
 using Action = Agent.Antlr.Ast.Action;
 
 namespace Agent.Generator
@@ -23,7 +23,7 @@ namespace Agent.Generator
                     {
                         _stringBuilder += text;
                     }
-                    });
+                });
             }
             catch (Exception e)
             {
@@ -31,7 +31,7 @@ namespace Agent.Generator
             }
             return _stringBuilder;
         }
-        public string GenerateConfiguration(Node parent) 
+        public string GenerateConfiguration(Node parent)
         {
             string text = "";
             if (parent is Rule)
@@ -43,8 +43,8 @@ namespace Agent.Generator
                 if (child is Action)
                 {
                     text += GenerateAction((Action)child, ((Setting)parent).SettingName);
-                } 
-                else 
+                }
+                else
                 {
                     text += GenerateCondition(child, ((Setting)parent).SettingName, "default");
                 }
@@ -57,7 +57,7 @@ namespace Agent.Generator
         }
         private string GenerateCondition(Node parent, string setting, string action)
         {
-            string text = ""; 
+            string text = "";
             foreach (Node child in parent.GetChildren())
             {
                 string subject = GenerateCompareble(((Condition)parent).GetWhenClause().GetComparableL());
@@ -68,26 +68,26 @@ namespace Agent.Generator
         private string GenerateAction(Action parent, string settingName)
         {
             string text = settingName + "_" + parent.Name + "=" + parent.Name + Environment.NewLine;
-            foreach(Node child in parent.GetChildren())
+            foreach (Node child in parent.GetChildren())
             {
                 text += GenerateCondition(child, settingName, parent.Name);
             }
             return text;
         }
-        private string GenerateClause(Node parent, string settingName, string action ,string subject)
+        private string GenerateClause(Node parent, string settingName, string action, string subject)
         {
             string text = "";
             if (parent is When)
             {
-                text += generateWhen(parent, settingName, action, subject ,"true");
-                if(parent.GetChildren().Where(c => c.GetNodeType() == "Otherwise").FirstOrDefault() != null)
+                text += generateWhen(parent, settingName, action, subject, "true");
+                if (parent.GetChildren().Where(c => c.GetNodeType() == "Otherwise").FirstOrDefault() != null)
                 {
-                    text += generateOther(parent.GetChildren().Where(c => c.GetNodeType() == "Otherwise").FirstOrDefault(), settingName, action, subject ,"false");
+                    text += generateOther(parent.GetChildren().Where(c => c.GetNodeType() == "Otherwise").FirstOrDefault(), settingName, action, subject, "false");
                 }
             }
             return text;
         }
-        private string generateWhen(Node parent, string settingName, string action ,string subject ,string status)
+        private string generateWhen(Node parent, string settingName, string action, string subject, string status)
         {
             string text = "";
             for (int i = 0; i < 4; i++)
@@ -110,7 +110,7 @@ namespace Agent.Generator
             }
             return text;
         }
-        private string generateOther(Node parent, string settingName, string action ,string subject ,string status)
+        private string generateOther(Node parent, string settingName, string action, string subject, string status)
         {
             return settingName + "_" + action + "_" + subject + "_" + "comparision" + "_" + status + "=" + ((ActionReference)((Otherwise)parent).GetChildren().FirstOrDefault()).Name + Environment.NewLine;
         }
@@ -133,7 +133,7 @@ namespace Agent.Generator
             {
                 return (((Subject)node).Name);
             }
-            else { return "";}
+            else { return ""; }
         }
     }
 }

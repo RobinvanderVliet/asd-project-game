@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
 using Moq;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.Checker
 {
@@ -31,12 +31,12 @@ namespace Agent.Tests.Checker
 
             //Act
             bool result = _sut.CheckItemAndAllowedStat(item);
-            
+
             //Assert
             Assert.False(result);
 
         }
-        
+
         [Test]
         public void Test_CheckStatCombination_2()
         {
@@ -45,7 +45,7 @@ namespace Agent.Tests.Checker
             Item item = new Item("Weapon");
             Stat stat = new Stat("Health");
             item.AddChild(stat);
-            
+
             When whenNode = new When();
             whenNode.SetComparableL(item);
 
@@ -53,7 +53,7 @@ namespace Agent.Tests.Checker
 
             //Act
             _sut.CheckStatCombination(testNodes);
-            
+
             //Assert
             Assert.AreNotEqual(String.Empty, item.GetError().ToString());
             Assert.AreEqual(new ASTError("There is an invalid combination of item and stat").ToString(), item.GetError().ToString());

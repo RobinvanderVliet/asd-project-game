@@ -1,7 +1,7 @@
 ﻿using Creature.Creature.StateMachine;
 using Network;
 
-namespace Creature
+namespace Creature.Creature
 {
     public class Player : ICreature
     {
@@ -33,7 +33,7 @@ namespace Creature
         {
             _playerStateMachine.StartStateMachine();
         }
-        
+
         private void SendChatMessage(string message)
         {
             _clientController.SendPayload(message, PacketType.Chat);

@@ -108,7 +108,7 @@ namespace ActionHandling
             {
                 HandleMove(moveDTO);
             }
-            
+
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 

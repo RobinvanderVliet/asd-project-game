@@ -2,7 +2,7 @@
 
 namespace Agent.Antlr.Ast
 {
-    
+
     public class Rule : Node
     {
         private List<Node> _settings = new List<Node>();
@@ -10,13 +10,13 @@ namespace Agent.Antlr.Ast
         public string SettingName { get; set; }
         public string Value { get; set; }
 
-        
+
         public Rule(string settingName, string value)
         {
             SettingName = settingName;
             Value = value;
         }
-        
+
         public override string GetNodeType()
         {
             return "Rule";
@@ -44,7 +44,7 @@ namespace Agent.Antlr.Ast
         {
             if (node is Setting setting)
                 _settings.Remove(setting);
-            else 
+            else
                 body.Remove(node);
             return this;
         }

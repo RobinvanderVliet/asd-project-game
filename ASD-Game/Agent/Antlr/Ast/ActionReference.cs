@@ -7,9 +7,9 @@ namespace Agent.Antlr.Ast
     {
         private Subject _subject;
         private Item _item;
-        
+
         public string Name { get; set; }
-        
+
         public ActionReference(string name)
         {
             Name = name;
@@ -29,13 +29,14 @@ namespace Agent.Antlr.Ast
             if (_subject != null)
                 children.Add(_subject);
             children.AddRange(body);
-            
+
             return children;
         }
 
         public override Node AddChild(Node node)
         {
-            switch (node) {
+            switch (node)
+            {
                 case Subject subject:
                     _subject = subject;
                     break;

@@ -9,14 +9,12 @@ namespace Creature.Creature.StateMachine
 {
     class MonsterStateMachine : ICreatureStateMachine
     {
-        private RuleSet _ruleset;
         private PassiveStateMachine<CreatureState, CreatureEvent.Event> _passiveStateMachine;
         private MonsterData _monsterData;
 
-        public MonsterStateMachine(MonsterData monsterData, RuleSet ruleSet)
+        public MonsterStateMachine(MonsterData monsterData)
         {
             _monsterData = monsterData;
-            _ruleset = ruleSet;
         }
 
         public ICreatureData CreatureData
@@ -27,7 +25,7 @@ namespace Creature.Creature.StateMachine
 
         public void FireEvent(CreatureEvent.Event creatureEvent, object argument)
         {
-             _passiveStateMachine.Fire(creatureEvent, argument);
+            _passiveStateMachine.Fire(creatureEvent, argument);
         }
 
         public void FireEvent(CreatureEvent.Event creatureEvent)

@@ -1,11 +1,11 @@
 ﻿
 namespace Agent.Antlr.Ast.Comparables
 {
-   
+
     public class Stat : Comparable
     {
         public string Name { get; set; }
-        
+
         public Stat(string name)
         {
             Name = name;
@@ -15,6 +15,6 @@ namespace Agent.Antlr.Ast.Comparables
         {
             return "Stat";
         }
-        
+
     }
 }
