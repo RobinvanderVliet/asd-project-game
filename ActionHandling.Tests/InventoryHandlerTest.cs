@@ -1,4 +1,9 @@
-﻿using ActionHandling.DTO;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
+using ActionHandling.DTO;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Items;
@@ -8,13 +13,6 @@ using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WorldGeneration;
 
 namespace ActionHandling.Tests
@@ -76,6 +74,113 @@ namespace ActionHandling.Tests
 
             //assert
             _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Inventory), Times.Once);
+        }
+
+        [Test]
+        public void Test_Pickup_SendsInventoryDTO()
+        {
+            // Arrange
+            const int INDEX = 1;
+            const int COMPENSATED_INDEX = 0;
+            string originId = "origin1";
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
+
+            InventoryDTO inventoryDTO = new(originId, InventoryType.Pickup, COMPENSATED_INDEX);
+            string payload = JsonConvert.SerializeObject(inventoryDTO);
+
+            // Act
+            _sut.PickupItem(INDEX);
+
+            // Assert
+            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Inventory), Times.Once);
+        }
+
+        [Test]
+        [TestCaseSource(typeof(HandlesPickupPacketCases))]
+        public void Test_HandlePacket_HandlesPickupPacket(InventoryDTO inventoryDTO, HandlerResponseDTO expectedHandlerResponseDTO, bool filledInventory, bool asHost)
+        {
+            // Arrange
+            string payload = JsonConvert.SerializeObject(inventoryDTO);
+            PacketDTO packetDTO = new();
+            packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            packetHeaderDTO.Target = "host";
+            packetDTO.Header = packetHeaderDTO;
+
+            Player player = new Player("henk", 0, 0, "#", inventoryDTO.UserId);
+            IList<Item> items = new List<Item>();
+            items.Add(ItemFactory.GetBandage());
+            if (filledInventory)
+            {
+                player.Inventory.AddConsumableItem(ItemFactory.GetBandage());
+                player.Inventory.AddConsumableItem(ItemFactory.GetBandage());
+                player.Inventory.AddConsumableItem(ItemFactory.GetBandage());
+            }
+
+            _mockedWorldService.Setup(mock => mock.GetPlayer(inventoryDTO.UserId)).Returns(player);
+            _mockedWorldService.Setup(mock => mock.GetItemsOnCurrentTile(player)).Returns(items);
+            if (asHost)
+            {
+                _mockedClientController.Setup(mock => mock.IsHost()).Returns(true);
+                _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(inventoryDTO.UserId);
+            }
+
+            // Act
+            HandlerResponseDTO handlerResponseDTO = _sut.HandlePacket(packetDTO);
+
+            // Assert
+            Assert.AreEqual(expectedHandlerResponseDTO, handlerResponseDTO);
+            if (handlerResponseDTO.Action == SendAction.SendToClients)
+            {
+                _mockedPlayerItemServicesDb.Verify(mock => mock.CreateAsync(It.IsAny<PlayerItemPOCO>()), Times.Once());
+            }
+        }
+
+        class HandlesPickupPacketCases : IEnumerable
+        {
+            public IEnumerator GetEnumerator()
+            {
+                // Happy path
+                yield return new object[]
+                {
+                    new InventoryDTO("userid", InventoryType.Pickup, 0),
+                    new HandlerResponseDTO(SendAction.SendToClients, null),
+                    false,
+                    true
+                };
+                // Pickup item that is not in search list from client.
+                yield return new object[]
+                {
+                    new InventoryDTO("userid", InventoryType.Pickup, 100),
+                    new HandlerResponseDTO(SendAction.ReturnToSender, "Number is not in search list!"),
+                    false,
+                    false
+                };
+                // Pickup item that is not in search list on host.
+                yield return new object[]
+                {
+                    new InventoryDTO("userid", InventoryType.Pickup, 100),
+                    new HandlerResponseDTO(SendAction.ReturnToSender, "Number is not in search list!"),
+                    false,
+                    true
+                };
+                // Pickup consumable item with a full inventory from client.
+                yield return new object[]
+                {
+                    new InventoryDTO("userid", InventoryType.Pickup, 0),
+                    new HandlerResponseDTO(SendAction.ReturnToSender, "You already have 3 consumable items in your inventory!"),
+                    true,
+                    false
+                };
+                // Pickup consumable item with a full inventory on host.
+                yield return new object[]
+                {
+                    new InventoryDTO("userid", InventoryType.Pickup, 0),
+                    new HandlerResponseDTO(SendAction.ReturnToSender, "You already have 3 consumable items in your inventory!"),
+                    true,
+                    true
+                };
+            }
         }
 
         [Test]
