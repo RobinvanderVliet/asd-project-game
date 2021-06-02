@@ -4,6 +4,7 @@ using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
+using Items;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
@@ -42,6 +43,7 @@ namespace Session
             var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
             var gameRepository = new Repository<GamePOCO>(dbConnection);
             var gameService = new ServicesDb<GamePOCO>(gameRepository);
+            var playerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
 
             var gamePOCO = new GamePOCO {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
             gameService.CreateAsync(gamePOCO);
@@ -61,6 +63,7 @@ namespace Session
                 var tmpPlayer = new PlayerPOCO
                     {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
                 servicePlayer.CreateAsync(tmpPlayer);
+                addItemsToPlayer(playerItemRepository, clientId, gamePOCO.GameGuid);
 
                 playerX += 2; // spawn position + 2 each client
                 playerY += 2; // spawn position + 2 each client
@@ -71,6 +74,18 @@ namespace Session
             startGameDTO.PlayerLocations = players;
 
             return startGameDTO;
+        }
+
+        private void addItemsToPlayer(Repository<PlayerItemPOCO> repo, string playerId, string gameId)
+        {
+            PlayerItemPOCO poco = new() {PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGuid = gameId };
+            _ = repo.CreateAsync(poco);
+
+            poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetKnife().ItemName, GameGuid = gameId };
+            _ = repo.CreateAsync(poco);
+
+            poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetBandage().ItemName, GameGuid = gameId };
+            _ = repo.CreateAsync(poco);
         }
         
         private void SendGameSessionDTO(StartGameDTO startGameDTO)
@@ -96,11 +111,17 @@ namespace Session
                 if (_clientController.GetOriginId() == player.Key) 
                 {
                     // add name to players
-                    _worldService.AddPlayerToWorld(new WorldGeneration.Player("gerrit", player.Value[0], player.Value[1], CharacterSymbol.CURRENT_PLAYER, player.Key), true);
+                    var playerObject = new Player("gerrit", player.Value[0], player.Value[1], CharacterSymbol.CURRENT_PLAYER, player.Key);
+                    // added bandage for testing
+                    playerObject.Inventory.ConsumableItemList.Add(ItemFactory.GetBandage());
+                    _worldService.AddPlayerToWorld(playerObject, true);
                 } 
                 else 
                 {
-                    _worldService.AddPlayerToWorld(new WorldGeneration.Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key), false);
+                    var playerObject = new Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key);
+                    // added bandage for testing
+                    playerObject.Inventory.ConsumableItemList.Add(ItemFactory.GetBandage());
+                    _worldService.AddPlayerToWorld(playerObject, false);
                 }
             }
             

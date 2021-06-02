@@ -83,6 +83,16 @@ namespace InputHandling.Tests
             return new AST(say);
         }
 
+        public static AST UseCommand(int index)
+        {
+            Input use = new Input();
+
+            use.AddChild(new Use()
+                .AddChild(new Step(index)));
+
+            return new AST(use);
+        }
+
         public static AST ShoutCommand(string message)
         {
             Input shout = new Input();
@@ -213,6 +223,18 @@ namespace InputHandling.Tests
             AST exp = SayCommand("\"hello world!\"");
             //arrange
             AST sut = SetupParser("say \"hello world!\"");
+            //assert
+            Assert.AreEqual(exp, sut);
+        }
+
+        [Test]
+        public void Test_AstListener_CreatesUseAstWithIndex()
+        {
+            //act
+            int index = 3;
+            AST exp = UseCommand(index);
+            //arrange
+            AST sut = SetupParser("use 3");
             //assert
             Assert.AreEqual(exp, sut);
         }

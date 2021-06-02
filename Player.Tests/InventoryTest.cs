@@ -19,79 +19,67 @@ namespace Player.Tests
         [Test]
         public void Test_GetItemList_GetsItemListSuccessfully()
         {
-            //arrange
-            //act
-            //assert
-            Assert.AreEqual(new List<Item>(), _sut.ItemList);
+            Assert.AreEqual(new List<Item>(), _sut.ConsumableItemList);
         }
         
         [Test]
         public void Test_SetItemList_SetsItemListSuccessfully()
         {
-            //arrange
             var ItemList = new List<IItem>();
             ItemList.Add(new Item("ItemName", "Description"));
-            _sut.ItemList = ItemList;
-            //act
-            //assert
-            Assert.AreEqual(ItemList, _sut.ItemList);
+            _sut.ConsumableItemList = ItemList;
+            
+            Assert.AreEqual(ItemList, _sut.ConsumableItemList);
         }
         
         [Test]
         public void Test_GetItem_GetsRightItem()
         {
-            //arrange
             Item item = new Item("ItemName", "Description");
-            _sut.ItemList.Add(item);
-            //act
-            //assert
-            Assert.AreEqual(item, _sut.GetItem("ItemName"));
+            _sut.ConsumableItemList.Add(item);
+            
+            Assert.AreEqual(item, _sut.GetConsumableItem("ItemName"));
         }
         
         [Test]
         public void Test_GetItem_ReturnsNull()
         {
-            //arrange
             Item item = new Item("ItemName", "Description");
-            _sut.ItemList.Add(item);
-            //act
-            //assert
-            Assert.AreEqual(null, _sut.GetItem("UnexistingItemName"));
+            _sut.ConsumableItemList.Add(item);
+            
+            Assert.AreEqual(null, _sut.GetConsumableItem("UnexistingItemName"));
         }
         
         [Test]
         public void Test_AddItem_AddsItemSuccessfully()
         {
-            //arrange
             Item item = new Item("ItemName", "Description");
-            //act
-            _sut.AddItem(item);
-            //assert
-            Assert.AreEqual(item, _sut.GetItem("ItemName"));
+            
+            _sut.AddConsumableItem(item);
+            
+            Assert.AreEqual(item, _sut.GetConsumableItem("ItemName"));
         }
         
         [Test]
         public void Test_RemoveItem_RemovesItemSuccessfully()
         {
-            //arrange
             Item item = new Item("ItemName", "Description");
-            _sut.ItemList.Add(item);
-            //act
-            _sut.RemoveItem(item);
-            //assert
-            Assert.AreEqual(new List<IItem>(), _sut.ItemList);
+            _sut.ConsumableItemList.Add(item);
+            
+            _sut.RemoveConsumableItem(item);
+            
+            Assert.AreEqual(new List<IItem>(), _sut.ConsumableItemList);
         }
         
         [Test]
         public void Test_EmptyInventory_EmptiesInventorySuccessfully()
         {
-            //arrange
             Item item = new Item("ItemName", "Description");
-            _sut.AddItem(item);
-            //act
-            _sut.EmptyInventory();
-            //assert
-            Assert.AreEqual(new List<IItem>(), _sut.ItemList);
+            _sut.AddConsumableItem(item);
+            
+            _sut.EmptyConsumableItemList();
+            
+            Assert.AreEqual(new List<IItem>(), _sut.ConsumableItemList);
         }
     }
 }

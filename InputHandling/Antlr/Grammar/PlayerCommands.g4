@@ -25,6 +25,7 @@ JOIN_SESSION : 'join_session';
 REQUEST_SESSIONS : 'request_sessions';
 START_SESSION : 'start_session';
 INSPECT : 'inspect';
+USE : 'use';
 SEARCH : 'search';
 
 
@@ -71,8 +72,8 @@ command:
     REQUEST_SESSIONS #requestSessions |
     START_SESSION #startSession |
     INSPECT SPACE inventorySlot #inspect |
+    USE SPACE step #use	|
     SEARCH #search;
-
 
 forward: FORWARD | UP | NORTH;
 backward: BACKWARD | DOWN | SOUTH;
