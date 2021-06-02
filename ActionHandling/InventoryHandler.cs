@@ -161,7 +161,18 @@ namespace ActionHandling
 
                 if (handleInDatabase)
                 {
-                    PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO { PlayerGUID = inventoryDTO.UserId, ItemName = item.ItemName };
+                    PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO
+                    {
+                        PlayerGUID = inventoryDTO.UserId,
+                        GameGUID = _clientController.SessionId,
+                        ItemName = item.ItemName,
+                    };
+                    
+                    if (item is Armor armor)
+                    {
+                        playerItemPOCO.ArmorPoints = armor.ArmorProtectionPoints;
+                    }
+
                     _playerItemServicesDB.CreateAsync(playerItemPOCO);
                 }
 
@@ -244,7 +255,7 @@ namespace ActionHandling
 
                 if (handleInDatabase)
                 {
-                    PlayerItemPOCO playerItemPOCO = new() {PlayerGUID = inventoryDTO.UserId, ItemName = itemToUse.ItemName, GameGUID = _clientController.SessionId};
+                    PlayerItemPOCO playerItemPOCO = _playerItemServicesDB.GetAllAsync().Result.FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == itemToUse.ItemName && playerItem.PlayerGUID == player.Id);
                     _ = _playerItemServicesDB.DeleteAsync(playerItemPOCO);
 
                     var result = _playerServicesDB.GetAllAsync().Result;
