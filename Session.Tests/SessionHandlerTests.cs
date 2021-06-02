@@ -679,5 +679,72 @@ namespace Session.Tests
             HandlerResponseDTO expectedResult = new HandlerResponseDTO(SendAction.Ignore, null);
             Assert.AreEqual(expectedResult.Action, actualResult.Action);
         }
+
+        [Test]
+        public void Test_AddPlayerToSession_HostTestIfUpdateIsCalled() 
+        {
+            //Arrange
+            //Arrange packet to be recieved
+            PacketDTO packetDTO = new PacketDTO();
+            PacketHeaderDTO header = new PacketHeaderDTO();
+            header.Target = "host";
+            packetDTO.Header = header;
+            SessionDTO sessionDTO = new SessionDTO();
+            sessionDTO.Clients = new List<string[]>();
+            sessionDTO.Clients.Add(new string[] { "1234", "swankie" });
+            packetDTO.Payload = JsonConvert.SerializeObject(sessionDTO);
+            packetDTO.HandlerResponse = new HandlerResponseDTO(SendAction.Ignore, "");
+
+            Session session = new Session("testsession");
+            _sut.setSession(session);
+
+            //Arrange the mock for lobbyscreen
+            Mock<LobbyScreen> lobbyMock = new Mock<LobbyScreen>();
+            _mockedScreenHandler.Setup(mock => mock.Screen).Returns(lobbyMock.Object);
+            lobbyMock.Setup(mock => mock.UpdateLobbyScreen(It.IsAny<List<string[]>>()));
+
+            //Act
+            _sut.addPlayerToSession(packetDTO);
+
+            //Assert
+            lobbyMock.Verify(mock => mock.UpdateLobbyScreen(It.IsAny<List<string[]>>()), Times.Once());
+        }
+
+        [Test]
+        public void Test_AddPlayerToSession_ClientIfUpdateIsCalled()
+        {
+            //Arrange
+            //Arrange packet to be recieved
+            PacketDTO packetDTO = new PacketDTO();
+            PacketHeaderDTO header = new PacketHeaderDTO();
+            header.Target = "client";
+            packetDTO.Header = header;
+            SessionDTO packetSessionDTO = new SessionDTO();
+            packetSessionDTO.Clients = new List<string[]>();
+            packetSessionDTO.Clients.Add(new string[] { "1234", "swankie" });
+            packetDTO.Payload = JsonConvert.SerializeObject(packetSessionDTO);
+
+            //ArrangeHandlerRespone
+            SessionDTO resultMessage = new SessionDTO();
+            resultMessage.Clients = new List<string[]>();
+            resultMessage.Clients.Add(new string[] { "1234", "swankie" });
+            resultMessage.SessionSeed = 1;
+            packetDTO.HandlerResponse = new HandlerResponseDTO(SendAction.Ignore, JsonConvert.SerializeObject(resultMessage));
+
+            Session session = new Session("testsession");
+            _sut.setSession(session);
+
+            //Arrange the mock for lobbyscreen
+            Mock<LobbyScreen> lobbyMock = new Mock<LobbyScreen>();
+            _mockedScreenHandler.Setup(mock => mock.Screen).Returns(lobbyMock.Object);
+            lobbyMock.Setup(mock => mock.UpdateLobbyScreen(It.IsAny<List<string[]>>()));
+            _mockedClientController.Setup(mock => mock.IsBackupHost).Returns(true);
+
+            //Act
+            _sut.addPlayerToSession(packetDTO);
+
+            //Assert
+            lobbyMock.Verify(mock => mock.UpdateLobbyScreen(It.IsAny<List<string[]>>()), Times.Once());
+        }
     }
 }

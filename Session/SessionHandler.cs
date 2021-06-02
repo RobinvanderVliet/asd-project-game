@@ -99,11 +99,6 @@ namespace Session
 
             _heartbeatHandler = new HeartbeatHandler();
 
-            //if (_screenHandler.Screen is LobbyScreen screen)
-            //{
-            //    screen.UpdateLobbyScreen(_session.GetAllClients());
-            //}
-
             return _session.InSession;
         }
 
@@ -260,13 +255,12 @@ namespace Session
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
         
-        private HandlerResponseDTO addPlayerToSession(PacketDTO packet)
+        public HandlerResponseDTO addPlayerToSession(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
             
             if (packet.Header.Target == "host")
             {
-                //Console.WriteLine(sessionDTO.Clients[0][1] + " Has joined your session: ");
                 if (_screenHandler.Screen is LobbyScreen screen)
                 {
                     screen.UpdateLobbyScreen(sessionDTO.Clients);
@@ -291,11 +285,9 @@ namespace Session
                 
                 _session.SessionSeed = sessionDTOClients.SessionSeed;
 
-                //Console.WriteLine("Players in your session:");
                 foreach (string[] client in sessionDTOClients.Clients)
                 {
                     _session.AddClient(client[0], client[1]);
-                    //Console.WriteLine(client[0] + " " + client[1]);
                 }
 
                 if (_screenHandler.Screen is LobbyScreen screen)
@@ -380,6 +372,10 @@ namespace Session
         public void setHostPingTimer(Timer timer)
         {
             _hostPingTimer = timer;
+        }
+        public void setSession(Session session) 
+        {
+            this._session = session;
         }
     }
 }

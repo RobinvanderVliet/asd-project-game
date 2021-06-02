@@ -51,7 +51,7 @@ namespace UserInterface
             return "Welcome to the lobby, people in the lobby:";
         }
 
-        public void UpdateLobbyScreen(List<string[]> clients)
+        public virtual void UpdateLobbyScreen(List<string[]> clients)
         {
             foreach (string[] client in clients)
             {
