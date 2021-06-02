@@ -57,7 +57,7 @@ namespace InputHandling.Antlr.Transformer
                         TransformPause();
                         break;
                     case Pickup:
-                        TransformPickup((Pickup)nodeBody[i]);
+                        TransformPickup();
                         break;
                     case Replace:
                         TransformReplace();
@@ -83,18 +83,13 @@ namespace InputHandling.Antlr.Transformer
                     case StartSession:
                         TransformStartSession((StartSession)nodeBody[i]);
                         break;
-                    case Use:
-                        TransformUse((Use)nodeBody[i]);
+                    case Inspect:
+                        TransformInspect((Inspect)nodeBody[i]);
                         break;
                     case Search:
                         TransformSearch();
                         break;
                 }
-        }
-
-        private void TransformUse(Use use)
-        {
-            _inventoryHandler.UseItem(use.Step.StepValue);
         }
 
         private void TransformMove(Move move)
@@ -111,9 +106,9 @@ namespace InputHandling.Antlr.Transformer
             }
         }
 
-        private void TransformPickup(Pickup pickup)
+        private void TransformPickup()
         {
-            _inventoryHandler.PickupItem(pickup.Item.StepValue);
+            // TODO: Call InventoryHandler method
         }
 
         private void TransformDrop(Drop drop)
@@ -176,10 +171,22 @@ namespace InputHandling.Antlr.Transformer
             _gameSessionHandler.SendGameSession();
         }
 
+        private void TransformInspect(Inspect inspect)
+        {
+            string slot = inspect.InventorySlot.InventorySlotValue;
+            if (slot == "armor" | slot == "weapon" | slot == "helmet" | slot == "slot 1" | slot == "slot 2" | slot == "slot 3")
+            {
+                _inventoryHandler.InspectItem(inspect.InventorySlot.InventorySlotValue);
+            }
+            else
+            {
+                throw new SlotException($"The slot you provided {slot} is not valid.");
+            }
+        }
+
         private void TransformSearch()
         {
             _inventoryHandler.Search();
         }
-
     }
 }
