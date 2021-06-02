@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ActionHandling.DTO;
-using DatabaseHandler;
 using DatabaseHandler.POCO;
-using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using Items;
 using Items.Consumables;
@@ -100,11 +98,8 @@ namespace ActionHandling
                 
                 if (handleInDatabase)
                 {
-                    DbConnection dbConnection = new DbConnection();
-                    var playerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
-
                     PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO {PlayerGUID = inventoryDTO.UserId, ItemName = item.ItemName};
-                    playerItemRepository.CreateAsync(playerItemPOCO);
+                    _playerItemServicesDB.CreateAsync(playerItemPOCO);
                 }
                 
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
