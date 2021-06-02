@@ -9,12 +9,8 @@ using Messages;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
-using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Items;
 using WorldGeneration;
+using WorldGeneration.Exceptions;
 
 namespace ActionHandling
 {
@@ -135,9 +131,11 @@ namespace ActionHandling
             {
                 return new HandlerResponseDTO(SendAction.ReturnToSender, "Number is not in search list!");
             }
-            
-            if (player.Inventory.AddItem(item))
+
+            try
             {
+                player.Inventory.AddItem(item);
+                
                 _worldService.GetItemsOnCurrentTile(player).RemoveAt(inventoryDTO.Index);
                 
                 if (handleInDatabase)
@@ -148,9 +146,9 @@ namespace ActionHandling
                 
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
-            else
+            catch (InventoryFullException e)
             {
-                return new HandlerResponseDTO(SendAction.ReturnToSender, "Could not pickup item");
+                return new HandlerResponseDTO(SendAction.ReturnToSender, e.Message);
             }
         }
 
