@@ -20,7 +20,7 @@ namespace Creature.Creature.StateMachine
         /// An event can be 'spotting a player', 'being attacked', etc.
         /// </summary>
         /// <param name="creatureEvent">Event that occured.</param>
-        /// <param name="argument">Relevant information about this event. For example: the ActionHandling that was spotted.</param>
+        /// <param name="argument">Relevant information about this event. For example: the Player that was spotted.</param>
         public void FireEvent(CreatureEvent.Event creatureEvent, object argument);
 
         /// <summary>
