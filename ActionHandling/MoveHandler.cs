@@ -94,6 +94,8 @@ namespace ActionHandling
                         x.PlayerGuid == moveDTO.UserId
                     ).Select(x => x.YPosition).FirstOrDefault();
 
+                _worldService.LoadArea(newPosPlayerX, newPosPlayerY, 10);
+
                 var stamina = GetStaminaCostForTiles(
                     GetTilesBetweenPositions(oldPosPlayerX, oldPosPlayerY, newPosPlayerX, newPosPlayerY));
 
