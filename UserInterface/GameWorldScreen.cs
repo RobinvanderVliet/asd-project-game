@@ -12,14 +12,12 @@ namespace UserInterface
         private int _yPosition;
         private int _width;
         private int _height;
-        private char[,] _map;
         public GameWorldScreen(int x, int y, int width, int height)
         {
             _xPosition = x;
             _yPosition = y;
             _width = width;
             _height = height;
-            _map = new char[height, height];
         }
         public GameWorldScreen()
         {
@@ -29,25 +27,24 @@ namespace UserInterface
         public override void DrawScreen()
         {
             DrawWorldBox();
-            DrawWorld();
         }
 
         private void DrawWorldBox()
         {
             DrawBox(_xPosition, _yPosition, _width, _height);
         }
-        private void DrawWorld()
+        private void DrawWorld(char[,] newMap)
         {
             int originalCursorX = _screenHandler.ConsoleHelper.GetCursorLeft();
             int originalCursorY = _screenHandler.ConsoleHelper.GetCursorTop();
             ClearWorld();
-            for (int i = 0; i < _map.GetLength(0); i++)
+            for (int i = 0; i < newMap.GetLength(0); i++)
             {
                 _screenHandler.ConsoleHelper.SetCursor(_xPosition + 1, _yPosition + OFFSET_TOP + i);
-                for (int j = 0; j < _map.GetLength(1); j++)
+                for (int j = 0; j < newMap.GetLength(1); j++)
                 {
-                    _screenHandler.ConsoleHelper.Write(_map[i,j].ToString());
-                    if(j < _map.GetLength(1) - 1)
+                    _screenHandler.ConsoleHelper.Write(newMap[i,j].ToString());
+                    if(j < newMap.GetLength(1) - 1)
                     {
                         _screenHandler.ConsoleHelper.Write("  ");
                     }
@@ -68,8 +65,7 @@ namespace UserInterface
 
         public virtual void UpdateWorld(char[,] newMap)
         {
-            _map = newMap;
-            DrawWorld();
+            DrawWorld(newMap);
         }
     }
 }

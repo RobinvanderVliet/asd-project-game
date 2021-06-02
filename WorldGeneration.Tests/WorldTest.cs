@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Moq;
 using NUnit.Framework;
+using UserInterface;
 
 namespace WorldGeneration.Tests
 {
@@ -20,7 +21,7 @@ namespace WorldGeneration.Tests
         private Mock<IMapFactory> _mapFactoryMock;
         private IMap _mapMockObject;
         private Mock<IMap> _mapMock;
-
+        private Mock<IScreenHandler> _mockedScreenHandler;
         private World _sut;
 
 
@@ -40,7 +41,9 @@ namespace WorldGeneration.Tests
             _mapFactoryMock.Setup(mapFactory => mapFactory.GenerateSeed()).Returns(11246).Verifiable();
             _mapFactoryMockObject = _mapFactoryMock.Object;
 
-            _sut = new World(5, 2, _mapFactoryMockObject);
+            _mockedScreenHandler = new Mock<IScreenHandler>();
+
+            _sut = new World(5, 2, _mapFactoryMockObject, _mockedScreenHandler.Object);
         }
         
         [Test]
@@ -52,7 +55,7 @@ namespace WorldGeneration.Tests
             //Assert ---------
             Assert.DoesNotThrow(() =>
             {
-                var world = new World(seed, 55, _mapFactoryMockObject);
+                var world = new World(seed, 55, _mapFactoryMockObject, _mockedScreenHandler.Object);
             });
             _mapFactoryMock.Verify(mapFactory => mapFactory.GenerateMap(seed), Times.AtLeastOnce);
             _mapMock.Verify(map => map.DeleteMap(), Times.Exactly(2));
@@ -69,14 +72,14 @@ namespace WorldGeneration.Tests
         }
         
         [Test]
-        public void Test_DisplayWorld_CallsDisplayMapWhenGivenCharacters() 
+        public void Test_GetMapAroundCharacter_CallsDisplayMapWhenGivenCharacters() 
         {
             //Arrange ---------
             //Act ---------
             _sut.AddPlayerToWorld(_mapCharacterDTOPlayer, true);
             _sut.DisplayWorld();
             //Assert ---------
-            _mapMock.Verify(map => map.DisplayMap(It.IsAny<Player>(), It.IsAny<int>(), It.IsAny<List<Player>>()), Times.Once);
+            _mapMock.Verify(map => map.GetMapAroundCharacter(It.IsAny<Player>(), It.IsAny<int>(), It.IsAny<List<Player>>()), Times.Once);
 
         }
         

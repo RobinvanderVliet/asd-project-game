@@ -1,5 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
+using UserInterface;
+using Moq;
 
 namespace WorldGeneration.Tests
 {
@@ -13,13 +15,15 @@ namespace WorldGeneration.Tests
  
         //Declaration of mocks
         private WorldService _sut;
+        private Mock<IScreenHandler> _mockedScreenHandler;
 
         [SetUp]
         public void Setup()
         {
             //Initialisation of variables
             //Initialisation of mocks
-            _sut = new WorldService();
+            _mockedScreenHandler = new Mock<IScreenHandler>();
+            _sut = new WorldService(_mockedScreenHandler.Object);
         }
         
         [Test]
