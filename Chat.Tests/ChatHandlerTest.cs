@@ -7,6 +7,8 @@ using Chat.DTO;
 using Network.DTO;
 using Newtonsoft.Json;
 using System.IO;
+using WorldGeneration;
+using Messages;
 
 namespace Chat.Tests
 {
@@ -23,12 +25,17 @@ namespace Chat.Tests
 
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;
+        private Mock<IWorldService> _mockedWorldService;
+        private Mock<IMessageService> _mockedMessageService;
 
         [SetUp]
         public void Setup()
         {
-            _mockedClientController = new Mock<IClientController>();
-            _sut = new ChatHandler(_mockedClientController.Object);
+            _mockedClientController = new();
+            _mockedWorldService = new();
+            _mockedMessageService = new();
+
+            _sut = new ChatHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedMessageService.Object);
             _packetDTO = new PacketDTO();
 
         }

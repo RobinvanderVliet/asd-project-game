@@ -5,6 +5,7 @@ using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Items;
 using Items.Consumables;
+using Messages;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
@@ -16,14 +17,16 @@ namespace ActionHandling
     {
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
+        private readonly IMessageService _messageService;
         private readonly IServicesDb<PlayerPOCO> _playerServicesDB;
         private readonly IServicesDb<PlayerItemPOCO> _playerItemServicesDB;
 
-        public InventoryHandler(IClientController clientController, IWorldService worldService, IServicesDb<PlayerPOCO> playerServicesDB, IServicesDb<PlayerItemPOCO> playerItemServicesDB)
+        public InventoryHandler(IClientController clientController, IWorldService worldService, IServicesDb<PlayerPOCO> playerServicesDB, IServicesDb<PlayerItemPOCO> playerItemServicesDB, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Inventory);
             _worldService = worldService;
+            _messageService = messageService;
             _playerServicesDB = playerServicesDB;
             _playerItemServicesDB = playerItemServicesDB;
         }
@@ -37,7 +40,7 @@ namespace ActionHandling
         public void Search()
         {
             string searchResult = _worldService.SearchCurrentTile();
-            Console.WriteLine(searchResult);
+            _messageService.AddMessage(searchResult);
         }
         
         public void PickupItem(int index)
@@ -66,14 +69,22 @@ namespace ActionHandling
             var inventoryDTO = JsonConvert.DeserializeObject<InventoryDTO>(packet.Payload);
             bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
 
-            switch (inventoryDTO.InventoryType)
+
+            if (packet.Header.Target == "host" || packet.Header.Target == "client")
             {
-                case InventoryType.Use:
-                    return HandleUse(inventoryDTO, handleInDatabase);
-                case InventoryType.Drop:
-                    return HandleDrop(inventoryDTO, handleInDatabase);
-                case InventoryType.Pickup:
-                    return HandlePickup(inventoryDTO, handleInDatabase);
+                switch (inventoryDTO.InventoryType)
+                {
+                    case InventoryType.Use:
+                        return HandleUse(inventoryDTO, handleInDatabase);
+                    case InventoryType.Drop:
+                        return HandleDrop(inventoryDTO, handleInDatabase);
+                    case InventoryType.Pickup:
+                        return HandlePickup(inventoryDTO, handleInDatabase);
+                }
+            }
+            else
+            {
+                _messageService.AddMessage(packet.HandlerResponse.ResultMessage);
             }
             return new(SendAction.Ignore, null);
         }
@@ -142,7 +153,7 @@ namespace ActionHandling
             {
                 if(inventoryDTO.UserId == _clientController.GetOriginId())
                 {
-                    Console.WriteLine("Could not find item");
+                    _messageService.AddMessage("Could not find item");
                 }
                 return new HandlerResponseDTO(SendAction.ReturnToSender, "Could not find item");
             }

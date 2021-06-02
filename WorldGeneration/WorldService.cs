@@ -40,7 +40,7 @@ namespace WorldGeneration
 
         public Player GetPlayer(string userId)
         {
-            return _world.GetPlayer(userId);
+            return _world?.GetPlayer(userId);
         }
 
         public IList<Item> GetItemsOnCurrentTile()

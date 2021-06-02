@@ -6,6 +6,7 @@ using ActionHandling.DTO;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Items;
+using Messages;
 using Moq;
 using Network;
 using Network.DTO;
@@ -22,6 +23,7 @@ namespace ActionHandling.Tests
         private InventoryHandler _sut;
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
+        private Mock<IMessageService> _mockedMessageService;
         private Mock<IServicesDb<PlayerPOCO>> _mockedPlayerServicesDb;
         private Mock<IServicesDb<PlayerItemPOCO>> _mockedPlayerItemServicesDb;
 
@@ -32,8 +34,9 @@ namespace ActionHandling.Tests
             _mockedWorldService = new();
             _mockedPlayerServicesDb = new();
             _mockedPlayerItemServicesDb = new();
+            _mockedMessageService = new();
 
-            _sut = new InventoryHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerServicesDb.Object, _mockedPlayerItemServicesDb.Object);
+            _sut = new InventoryHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerServicesDb.Object, _mockedPlayerItemServicesDb.Object, _mockedMessageService.Object);
         }
 
         [Test]

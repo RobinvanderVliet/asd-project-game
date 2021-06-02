@@ -16,8 +16,8 @@ namespace ActionHandling
 {
     public class MoveHandler : IMoveHandler, IPacketHandler
     {
-        private IClientController _clientController;
-        private IWorldService _worldService;
+        private readonly IClientController _clientController;
+        private readonly IWorldService _worldService;
 
         public MoveHandler(IClientController clientController, IWorldService worldService)
         {
