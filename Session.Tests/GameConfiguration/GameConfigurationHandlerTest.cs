@@ -88,18 +88,5 @@ namespace Session.Tests.GameConfiguration
             Assert.AreEqual(difficulty, _sut.NewMonsterDifficulty);
             Assert.AreEqual(true, _sut.NextScreen);
         }
-
-        [Test]
-        public void Test_UpdateMonsterDifficultyDefault()
-        {
-            //Arrange
-            
-
-            //Act
-            _sut.UpdateMonsterDifficulty("0");
-            
-            //Assert
-            Assert.AreEqual(false, _sut.NextScreen);
-        }
     }
 }
