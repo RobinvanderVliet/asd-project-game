@@ -53,6 +53,11 @@ namespace WorldGeneration
         {
             return _world.GetTileForPlayer(player).ItemsOnTile;
         }
+
+        public void DropItemOnCurrentTile(Player player, Item item)
+        {
+            _world.GetTileForPlayer(player).ItemsOnTile.Add(item);
+        }
         
         public string SearchCurrentTile()
         {

@@ -117,7 +117,11 @@ namespace ActionHandling
 
         private HandlerResponseDTO HandleDrop(InventoryDTO inventoryDTO, bool handleInDatabase)
         {
-            throw new NotImplementedException();
+            Player player = _worldService.GetPlayer(inventoryDTO.UserId);
+
+            _worldService.DropItemOnCurrentTile(player, player.Inventory.Helmet);
+
+            return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
         private HandlerResponseDTO HandleUse(InventoryDTO inventoryDTO, bool handleInDatabase)

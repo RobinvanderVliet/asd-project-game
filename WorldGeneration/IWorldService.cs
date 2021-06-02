@@ -12,6 +12,7 @@ namespace WorldGeneration
         public void GenerateWorld(int seed);
         public IList<Item> GetItemsOnCurrentTile();
         public IList<Item> GetItemsOnCurrentTile(Player player);
+        public void DropItemOnCurrentTile(Player player, Item Item);
         public string SearchCurrentTile();
         public Player GetCurrentPlayer();
         public Player GetPlayer(string userId);
