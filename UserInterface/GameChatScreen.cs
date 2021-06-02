@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace UserInterface
 {
-    public class GameChatScreen : Screen
+    public class GameChatScreen : Screen, IGameChatScreen
     {
         private int _xPosition;
         private int _yPosition;

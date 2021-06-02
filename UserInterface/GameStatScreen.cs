@@ -1,32 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace UserInterface
+﻿namespace UserInterface
 {
 
-    class GameStatScreen : Screen
+    public class GameStatScreen : Screen, IGameStatScreen
     {
         private int _xPosition;
         private int _yPosition;
         private int _width;
         private int _height;
-
-        private String _userName = "TEMP USERNAME";
-        private int _score = 0;
-        private int _hp = 100;
-        private int _stamina = 100;
-        private int _armor = 100;
-        private int _radiationProtectionPoints = 100;
-        private String _helm = "Bandana";
-        private String _body = "Jacket";
-        private String _melee = "Knife";
-        private String _ranged = "AK-47";
-        private String _slotOne = "Bandage";
-        private String _slotTwo = "Suspicious white powder";
-        private String _slotThree = "Medkit";
 
         public GameStatScreen(int x, int y, int width, int height)
         {
@@ -35,63 +15,75 @@ namespace UserInterface
             _width = width;
             _height = height;
         }
+
         public override void DrawScreen()
         {
-            DrawStatBox();            
+            DrawBox(_xPosition, _yPosition, _width, _height);
         }
 
-        public void DrawStatBox()
+        private void DrawUserInfo(string userName, int score)
         {
-            DrawBox(_xPosition, _yPosition, _width, _height);
-            DrawUserInfo();
-            DrawUserStats();
-            DrawUserEquipment();
-            DrawUserInventory();
+            _screenHandler.ConsoleHelper.SetCursor(OFFSET_LEFT, _yPosition + 1);
+            _screenHandler.ConsoleHelper.Write(userName);
+            _screenHandler.ConsoleHelper.SetCursor(OFFSET_LEFT, _yPosition + 2);
+            _screenHandler.ConsoleHelper.Write("Score: " + score);
         }
-        private void DrawUserInfo()
-        {
-            Console.SetCursorPosition(2, _yPosition + 1);
-            Console.Write(_userName);
-            Console.SetCursorPosition(2, _yPosition + 2);
-            Console.Write("Score: " + _score);
-        }
-        private void DrawUserStats()
+        private void DrawUserStats(int health, int stamina, int armor, int radiationLevel)
         {
             int xpos = (_width / 5) + BORDER_SIZE;
             int ypos = _yPosition + 1;
-            Console.SetCursorPosition(xpos, ypos++);
-            Console.Write("HP: " + _hp);
-            Console.SetCursorPosition(xpos, ypos++);
-            Console.Write("Stamina: " + _stamina);
-            Console.SetCursorPosition(xpos, ypos++);
-            Console.Write("Armor: " + _armor);
-            Console.SetCursorPosition(xpos, ypos++);
-            Console.Write("RPP: " + _radiationProtectionPoints);
+            _screenHandler.ConsoleHelper.SetCursor(xpos, ypos++);
+            _screenHandler.ConsoleHelper.Write("Health: " + health);
+            _screenHandler.ConsoleHelper.SetCursor(xpos, ypos++);
+            _screenHandler.ConsoleHelper.Write("Stamina: " + stamina);
+            _screenHandler.ConsoleHelper.SetCursor(xpos, ypos++);
+            _screenHandler.ConsoleHelper.Write("Armor: " + armor);
+            _screenHandler.ConsoleHelper.SetCursor(xpos, ypos++);
+            _screenHandler.ConsoleHelper.Write("RPP: " + radiationLevel);
         }
-        private void DrawUserEquipment()
+        private void DrawUserEquipment(string helm, string body, string weapon)
         {
             int xpos = (_width / 5) * 2 + BORDER_SIZE;
             int ypos = _yPosition + 1;
-            Console.SetCursorPosition(xpos, ypos++);
-            Console.Write("Helm: " + _helm);
-            Console.SetCursorPosition(xpos, ypos++);
-            Console.Write("Body: " + _body);
-            Console.SetCursorPosition(xpos, ypos++);
-            Console.Write("Melee: " + _melee);
-            Console.SetCursorPosition(xpos, ypos++);
-            Console.Write("Ranged: " + _ranged);
+            _screenHandler.ConsoleHelper.SetCursor(xpos, ypos++);
+            _screenHandler.ConsoleHelper.Write("Helm: " + helm);
+            _screenHandler.ConsoleHelper.SetCursor(xpos, ypos++);
+            _screenHandler.ConsoleHelper.Write("Body: " + body);
+            _screenHandler.ConsoleHelper.SetCursor(xpos, ypos++);
+            _screenHandler.ConsoleHelper.Write("Weapon: " + weapon);
         }
-        private void DrawUserInventory()
+        private void DrawUserInventory(string slotOne, string slotTwo, string slotThree)
         {
             int xpos = (_width / 5) * 3 + BORDER_SIZE;
             int ypos = _yPosition + 1;
-            Console.SetCursorPosition(xpos, ypos++);
-            Console.Write("Slot 1: " + _slotOne);
-            Console.SetCursorPosition(xpos, ypos++);
-            Console.Write("Slot 2: " + _slotTwo);
-            Console.SetCursorPosition(xpos, ypos++);
-            Console.Write("Slot 3: " + _slotThree);
-
+            _screenHandler.ConsoleHelper.SetCursor(xpos, ypos++);
+            _screenHandler.ConsoleHelper.Write("Slot 1: " + slotOne);
+            _screenHandler.ConsoleHelper.SetCursor(xpos, ypos++);
+            _screenHandler.ConsoleHelper.Write("Slot 2: " + slotTwo);
+            _screenHandler.ConsoleHelper.SetCursor(xpos, ypos++);
+            _screenHandler.ConsoleHelper.Write("Slot 3: " + slotThree);
         }
+
+        private void ClearAllStats()
+        {
+            for (int i = 0; i <= _height - OFFSET_TOP; i++)
+            {
+                _screenHandler.ConsoleHelper.SetCursor(OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
+                _screenHandler.ConsoleHelper.Write(new string(' ', _width - BORDER_SIZE));
+            }
+        }
+        
+        public void SetStatValues(string name, int score, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree)
+        {
+            int originalCursorX = _screenHandler.ConsoleHelper.GetCursorLeft();
+            int originalCursorY = _screenHandler.ConsoleHelper.GetCursorTop();
+            ClearAllStats();
+            DrawUserInfo(name, score);
+            DrawUserStats(health, stamina, armor, radiation);
+            DrawUserEquipment(helm, body, weapon);
+            DrawUserInventory(slotOne, slotTwo, slotThree);
+            _screenHandler.ConsoleHelper.SetCursor(originalCursorX, originalCursorY);
+        }
+        
     }
 }

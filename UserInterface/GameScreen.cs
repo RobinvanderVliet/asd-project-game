@@ -5,9 +5,9 @@ namespace UserInterface
 {
     public class GameScreen : Screen
     {
-        private GameStatScreen _gameStatScreen;
-        private GameChatScreen _gameChatScreen;
-        private GameWorldScreen _gameWorldScreen;
+        private IGameStatScreen _gameStatScreen;
+        private IGameChatScreen _gameChatScreen;
+        private IGameWorldScreen _gameWorldScreen;
 
         private const int STAT_X = HEADER_X;
         private const int STAT_Y = HEADER_Y;
@@ -35,7 +35,13 @@ namespace UserInterface
             _gameStatScreen = new GameStatScreen(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
             _gameChatScreen = new GameChatScreen(CHAT_X, CHAT_Y, CHAT_WIDTH, CHAT_HEIGHT);
             _gameWorldScreen = new GameWorldScreen(WORLD_X, WORLD_Y, WORLD_WITDH, WORLD_HEIGHT);
+        }
 
+        public void setScreens(IGameStatScreen gameStatScreen, IGameChatScreen gameChatScreen, IGameWorldScreen gameWorldScreen)
+        {
+            _gameStatScreen = gameStatScreen;
+            _gameChatScreen = gameChatScreen;
+            _gameWorldScreen = gameWorldScreen;
         }
 
         public override void DrawScreen()
@@ -43,6 +49,7 @@ namespace UserInterface
             _gameStatScreen.SetScreen(_screenHandler);
             _gameChatScreen.SetScreen(_screenHandler);
             _gameWorldScreen.SetScreen(_screenHandler);
+            _screenHandler.ConsoleHelper.SetColorToGreen();
             _gameStatScreen.DrawScreen();
             _gameChatScreen.DrawScreen();
             _gameWorldScreen.DrawScreen();
@@ -61,9 +68,12 @@ namespace UserInterface
 
         public void UpdateWorld(char[,] newMap)
         {
-
             _gameWorldScreen.UpdateWorld(newMap);
-
         }
+
+        public void SetStatValues(string name, int score, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree)
+        {
+            _gameStatScreen.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree);
+        }       
     }
 }
