@@ -19,6 +19,7 @@ namespace WorldGeneration.Models.BuildingTiles
         {
             Symbol = TileSymbol.WALL;
             IsAccessible = false;
+            ItemsOnTile = new List<Item>();
         }
 
         public void DrawBuilding()
