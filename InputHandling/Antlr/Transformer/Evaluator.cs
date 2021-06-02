@@ -1,5 +1,6 @@
 using System;
 using ActionHandling;
+using Agent.Antlr.Ast;
 using Chat;
 using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
@@ -9,6 +10,7 @@ using Newtonsoft.Json;
 using Session;
 using Session.DTO;
 using Session.GameConfiguration;
+using AST = InputHandling.Antlr.Ast.AST;
 using ItemFrequency = InputHandling.Antlr.Ast.Actions.ItemFrequency;
 using MonsterDifficulty = InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
@@ -178,7 +180,7 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformMonsterDifficulty(MonsterDifficulty monster)
         {
-            if (!_clientController.IsHost())
+            if (!_clientController.IsHost())//Check GameStarted wordt toegevoegd in andere feature
             {
                 return;
             }
@@ -210,7 +212,7 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformItemFrequency(ItemFrequency itemFrequency)
         {
-            if (!_clientController.IsHost())
+            if (!_clientController.IsHost()) //Check GameStarted wordt toegevoegd in andere feature
             {
                 return;
             }

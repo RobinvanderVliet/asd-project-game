@@ -18,7 +18,7 @@ namespace Session
 {
     public class SessionHandler : IPacketHandler, ISessionHandler
     {
-        private const bool DEBUG_INTERFACE = false; //TODO: remove when UI is complete, obviously
+        private const bool DEBUG_INTERFACE = true; //TODO: remove when UI is complete, obviously
         
         private IClientController _clientController;
         private Session _session;
@@ -139,6 +139,11 @@ namespace Session
                     {
                         return HandleHeartbeat(packet);
                     }
+
+                    if (sessionDTO.SessionType == SessionType.EditMonsterDifficulty)
+                    {
+                        return HandleMonsterDifficulty(packet);
+                    }
                 }
                 if ((packet.Header.Target == "client" || packet.Header.Target == "host" || packet.Header.Target == _clientController.GetOriginId()) 
                     && sessionDTO.SessionType == SessionType.SendPing)
@@ -163,16 +168,20 @@ namespace Session
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
-        private HandlerResponseDTO  HandleSetMonsterDifficulty(PacketDTO packetDto)
+        private HandlerResponseDTO  HandleMonsterDifficulty(PacketDTO packetDto)
         {
-            if (_clientController.IsHost() || _clientController.IsBackupHost)
-            {
-                //get difficulty from packet
-                _gameConfigurationHandler.SetDifficulty(MonsterDifficulty.Easy,_clientController.SessionId);
-            }
             if (_clientController.IsHost())
             {
-                return new HandlerResponseDTO(SendAction.SendToClients, null);
+                SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.Payload);
+                int difficulty = int.Parse(sessionDTO.Name);
+                _gameConfigurationHandler.SetDifficulty((MonsterDifficulty) difficulty, _clientController.SessionId);
+                return new HandlerResponseDTO(SendAction.SendToClients, packetDto.Payload);
+            }
+            if (_clientController.IsBackupHost)
+            {
+                SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
+                int difficulty = int.Parse(sessionDTO.Name);
+                _gameConfigurationHandler.SetDifficulty((MonsterDifficulty) difficulty, _clientController.SessionId);
             }
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
