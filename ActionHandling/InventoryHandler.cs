@@ -219,11 +219,16 @@ namespace ActionHandling
                 _worldService.GetItemsOnCurrentTile(player).Add(item);
             }
 
-            //if (handleInDatabase)
-            //{
-            //PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO { PlayerGUID = inventoryDTO.UserId, ItemName = item.ItemName };
-            //_playerItemServicesDB.DeleteAsync(playerItemPOCO);
-            //}
+            if (handleInDatabase)
+            {
+                PlayerItemPOCO playerItemPOCO = _playerItemServicesDB.GetAllAsync().Result.FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == item.ItemName && playerItem.PlayerGUID == player.Id);
+                _ = _playerItemServicesDB.DeleteAsync(playerItemPOCO);
+
+                WorldItemPOCO worldItemPOCO = new WorldItemPOCO()
+                {
+                    
+                }
+            }
 
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
