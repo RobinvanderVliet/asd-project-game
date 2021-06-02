@@ -5,7 +5,7 @@ using Creature.Creature.StateMachine.Data;
 using Creature.Creature.StateMachine.Event;
 using Creature.Creature.StateMachine.CustomRuleSet;
 using Creature.Creature.StateMachine.State;
-using System;
+using System.Linq;
 
 namespace Creature.Creature.StateMachine
 {
@@ -65,16 +65,18 @@ namespace Creature.Creature.StateMachine
                 {
                     if (ruleSet.ComparisonTrue == action || ruleSet.ComparisonFalse == action)
                     {
-                        BuilderInfo builderInfo = new BuilderInfo();
+                        BuilderInfo builderInfo = new();
                         builderInfo.Action = action;
                         builderInfo.TargetState = GetTargetState(action);
 
+                        // Temporary
+                        builderInfo.InitialStates = GetInitialStates();
+
                         if (ruleSet.Action == "default")
                         {
-                            if (ruleSet.ComparisonTrue == action)
-                            {
-                                builderInfo.Event = GetEvent(ruleSet.Comparable, ruleSet.Threshold, ruleSet.Comparison);
-                            }
+                            CreatureEvent.Event creatureEvent = GetEvent(ruleSet, action);
+                            builderInfo.Event = creatureEvent;
+                            builderInfo.RuleSets.Add(ruleSet);
                         }
                         else
                         {
@@ -82,11 +84,17 @@ namespace Creature.Creature.StateMachine
                             {
                                 if (ruleSet2.Action == "default" && (ruleSet2.ComparisonTrue == ruleSet.Action || ruleSet2.ComparisonFalse == ruleSet.Action))
                                 {
-                                    builderInfo.Event = GetEvent(ruleSet2.Comparable, ruleSet2.Threshold, ruleSet2.Comparison);
-                                    builderInfo.RuleSet = ruleSet;
+                                    CreatureEvent.Event creatureEvent = GetEvent(ruleSet2, action);
+                                    if (creatureEvent == CreatureEvent.Event.IDLE)
+                                    {
+                                        creatureEvent = GetEvent(ruleSet, action);
+                                    }
+                                    builderInfo.RuleSets.Add(ruleSet);
+                                    builderInfo.RuleSets.Add(ruleSet2);
                                 }
                             }
                         }
+
                         builderInfoList.Add(builderInfo);
                     }
                 }
@@ -97,12 +105,18 @@ namespace Creature.Creature.StateMachine
                 foreach (var initialState in builderInfo.InitialStates)
                 {
                     builder.In(initialState).On(builderInfo.Event).
-                        If<object>((c) => GetGuard(CreatureData, c, builderInfo.RuleSet, builderInfo.Action)).
+                        If<object>((c) => GetGuards(CreatureData, c, builderInfo.RuleSets, builderInfo.Action)).
                         Goto(builderInfo.TargetState).Execute<ICreatureData>(builderInfo.TargetState.SetTargetData);
                 }
             }
 
-            // TODO?: If action not used in builder info, do default stuff for it like below
+            foreach (var action in actions)
+            {
+                if (!builderInfoList.Any(x => x.Action == action))
+                {
+                    // TODO: If action not used in builder info, do default stuff for it like below
+                }
+            }
 
             // Follow player
             builder.In(_wanderState).On(CreatureEvent.Event.SPOTTED_CREATURE).
@@ -124,33 +138,71 @@ namespace Creature.Creature.StateMachine
             _passiveStateMachine.Start();
         }
 
-        private CreatureEvent.Event GetEvent(string comparable, string threshold, string comparison)
+        private List<CreatureState> GetInitialStates()
         {
-            if ((comparable == "monster" || comparable == "agent") && (threshold == "monster" || threshold == "agent"))
+            List<CreatureState> states = new()
             {
-                if (comparison == "sees" || comparison == "finds")
+                _followPlayerState,
+                _wanderState,
+                _useConsumableState,
+                _attackPlayerState,
+                _fleeFromCreatureState
+            };
+            return states;
+        }
+
+        private CreatureEvent.Event GetEvent(RuleSet rule, string state)
+        {
+            if ((rule.Comparable == "monster" || rule.Comparable == "agent") && (rule.Threshold == "monster" || rule.Threshold == "agent"))
+            {
+                if (rule.Comparison == "sees" || rule.Comparison == "finds")
                 {
+                    if (rule.ComparisonFalse == state)
+                    {
+                        return CreatureEvent.Event.IDLE;
+                    }
                     return CreatureEvent.Event.SPOTTED_CREATURE;
                 }
-                else if (comparison == "nearby")
+                else if (rule.Comparison == "nearby")
                 {
+                    if (rule.ComparisonFalse == state)
+                    {
+                        return CreatureEvent.Event.SPOTTED_CREATURE;
+                    }
                     return CreatureEvent.Event.CREATURE_IN_RANGE;
                 }
-                else if (comparison == "lost")
+                else if (rule.Comparison == "lost")
                 {
+                    if (rule.ComparisonFalse == state)
+                    {
+                        return CreatureEvent.Event.SPOTTED_CREATURE;
+                    }
                     return CreatureEvent.Event.LOST_CREATURE;
                 }
             }
-            else if ((comparable == "monster" || comparable == "agent") && threshold == "item")
+            else if ((rule.Comparable == "monster" || rule.Comparable == "agent") && rule.Threshold == "item")
             {
-                if (comparison == "finds")
+                if (rule.Comparison == "finds")
                 {
+                    if (rule.ComparisonFalse == state)
+                    {
+                        return CreatureEvent.Event.IDLE;
+                    }
                     return CreatureEvent.Event.FOUND_ITEM;
                 }
             }
             // TODO: Add more
 
             return CreatureEvent.Event.IDLE;
+        }
+
+        private bool GetGuards(object comparableData, object thresholdData, List<RuleSet> ruleList, string state)
+        {
+            if (ruleList.Any(ruleSet => GetGuard(comparableData, thresholdData, ruleSet, state) == false))
+            {
+                return false;
+            }
+            return true;
         }
 
         private bool GetGuard(object comparableData, object thresholdData, RuleSet rule, string state)
@@ -200,6 +252,16 @@ namespace Creature.Creature.StateMachine
             {
                 ICreatureData data = (ICreatureData)comparisonData;
                 return data.Health;
+            }
+            else if (comparisonString == "stamina")
+            {
+                ICreatureData data = (ICreatureData)comparisonData;
+                // TODO: return data.Stamina;
+            }
+            else if (comparisonString == "inventory")
+            {
+                ICreatureData data = (ICreatureData)comparisonData;
+                // TODO: return data.Inventory;
             }
             else if (int.TryParse(comparisonString, out _))
             {

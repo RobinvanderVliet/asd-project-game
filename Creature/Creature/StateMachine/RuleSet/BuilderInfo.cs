@@ -13,7 +13,7 @@ namespace Creature.Creature.StateMachine.CustomRuleSet
         private string _action;
         private List<CreatureState> _initialSates;
         private CreatureEvent.Event _event;
-        private RuleSet _ruleSet;
+        private List<RuleSet> _ruleSet;
         private CreatureState _targetState;
 
         public string Action
@@ -34,7 +34,7 @@ namespace Creature.Creature.StateMachine.CustomRuleSet
             set => _event = value;
         }
 
-        public RuleSet RuleSet
+        public List<RuleSet> RuleSets
         {
             get => _ruleSet;
             set => _ruleSet = value;
