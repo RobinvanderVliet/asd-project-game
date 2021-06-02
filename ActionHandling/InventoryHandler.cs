@@ -239,7 +239,7 @@ namespace ActionHandling
 
                 if (handleInDatabase)
                 {
-                    PlayerItemPOCO playerItemPOCO = new() {PlayerGUID = inventoryDTO.UserId, ItemName = itemToUse.ItemName, GameGuid = _clientController.SessionId };
+                    PlayerItemPOCO playerItemPOCO = new() {PlayerGUID = inventoryDTO.UserId, ItemName = itemToUse.ItemName, GameGUID = _clientController.SessionId};
                     _ = _playerItemServicesDB.DeleteAsync(playerItemPOCO);
 
                     var result = _playerServicesDB.GetAllAsync().Result;

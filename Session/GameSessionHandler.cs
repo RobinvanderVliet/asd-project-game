@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
@@ -78,14 +77,14 @@ namespace Session
 
         private void AddItemsToPlayer(Repository<PlayerItemPOCO> repo, string playerId, string gameId)
         {
-            PlayerItemPOCO poco = new() {PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGuid = gameId };
+            PlayerItemPOCO poco = new() {PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGUID = gameId };
             _ = repo.CreateAsync(poco);
 
-            poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetKnife().ItemName, GameGuid = gameId };
+            poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetKnife().ItemName, GameGUID = gameId };
             _ = repo.CreateAsync(poco);
 
             //should be deleted, only needed for testing
-            poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetBandage().ItemName, GameGuid = gameId };
+            poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetBandage().ItemName, GameGUID = gameId };
             _ = repo.CreateAsync(poco);
         }
         
