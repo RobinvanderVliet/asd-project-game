@@ -18,14 +18,33 @@ namespace WorldGeneration
         public void Spawn(Chunk chunk)
         {
             // Determine if an item should be spawned in the chunk. For now this will always be true.
+            var noiseresult = _noise.GetNoise(chunk.X, chunk.Y);
+            int numberOfItemSpawns = 0;
 
-            Boolean shouldItemSpawn = true;
-            if (shouldItemSpawn)
+            switch (noiseresult)
+            {
+                case <-0.8f:
+                    // do not change numberOfItemSpawns.
+                    break;
+                case <-0.2f:
+                    numberOfItemSpawns = 1;
+                    break;
+                case <0.4f:
+                    numberOfItemSpawns = 2;
+                    break;
+                case <= 1:
+                    numberOfItemSpawns = 3;
+                    break;
+                default:
+                    numberOfItemSpawns = 0;
+                    break;
+            }
+
+            for (int i = 0; i < numberOfItemSpawns; i++)
             {
                 var chestTile = new ChestTile();
                 chestTile.ItemsOnTile.Add(ItemFactory.GetKnife());
 
-                var noiseresult = _noise.GetNoise(chunk.X, chunk.Y);
                 var randomTile = (int) ((chunk.RowSize * chunk.RowSize - 1) * noiseresult );
                 if (randomTile < 0)
                 {
