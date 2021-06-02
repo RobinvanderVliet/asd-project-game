@@ -39,21 +39,6 @@ namespace WorldGeneration
                 player.YPosition = newYPosition;
             }
         }
-        
-        public void UpdateCharacterHealth(int health)
-        {
-            CurrentPlayer.Health = health;
-        }
-        
-        public void UpdateCharacterStamina(int stamina)
-        {
-            CurrentPlayer.Stamina = stamina;
-        }
-        
-        public void UpdateCharacterRadiationLevel(int radiationLevel)
-        {
-            CurrentPlayer.RadiationLevel = radiationLevel;
-        }
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
         {
