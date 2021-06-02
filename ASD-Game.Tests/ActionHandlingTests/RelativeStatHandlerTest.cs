@@ -1,4 +1,5 @@
-using DataTransfer.DTO.Character;
+using ActionHandling;
+using ActionHandling.DTO;
 using Moq;
 using Network;
 using Newtonsoft.Json;

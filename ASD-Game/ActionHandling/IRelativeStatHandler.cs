@@ -1,6 +1,7 @@
-using DataTransfer.DTO.Character;
 
-namespace Session
+using ActionHandling.DTO;
+
+namespace ActionHandling
 {
     public interface IRelativeStatHandler
     {

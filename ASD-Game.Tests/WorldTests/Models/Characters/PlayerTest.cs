@@ -1,6 +1,7 @@
 using NUnit.Framework;
+using WorldGeneration;
 
-namespace WorldGeneration.Tests.Models.Characters
+namespace World.Tests.Models.Characters
 {
     public class PlayerTest
     {

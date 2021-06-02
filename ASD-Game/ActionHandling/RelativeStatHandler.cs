@@ -1,19 +1,18 @@
 using System;
-using DataTransfer.DTO.Character;
 using Network;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Timers;
+using ActionHandling.DTO;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
 using Network.DTO;
 using WorldGeneration;
 using WorldGeneration.Models.HazardousTiles;
-using WorldGeneration.Models.Interfaces;
 using Timer = System.Timers.Timer;
 
-namespace Session
+namespace ActionHandling
 {
     public class RelativeStatHandler : IRelativeStatHandler, IPacketHandler
     {
