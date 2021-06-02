@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
@@ -12,13 +13,6 @@ using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WorldGeneration;
 
 namespace ActionHandling.Tests
@@ -128,6 +122,7 @@ namespace ActionHandling.Tests
             if (asHost)
             {
                 _mockedClientController.Setup(mock => mock.IsHost()).Returns(true);
+                _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(inventoryDTO.UserId);
             }
             
             // Act
@@ -135,7 +130,7 @@ namespace ActionHandling.Tests
 
             // Assert
             Assert.AreEqual(expectedHandlerResponseDTO, handlerResponseDTO);
-            if (asHost)
+            if (handlerResponseDTO.Action == SendAction.SendToClients)
             {
                 _mockedPlayerItemServicesDb.Verify(mock => mock.CreateAsync(It.IsAny<PlayerItemPOCO>()), Times.Once());
             }
@@ -161,10 +156,24 @@ namespace ActionHandling.Tests
                 };
                 yield return new object[]
                 {
+                    new InventoryDTO("userid", InventoryType.Pickup, 100),
+                    new HandlerResponseDTO(SendAction.ReturnToSender, "Number is not in search list!"),
+                    false,
+                    true
+                };
+                yield return new object[]
+                {
                     new InventoryDTO("userid", InventoryType.Pickup, 0),
-                    new HandlerResponseDTO(SendAction.ReturnToSender, "Could not pickup item"),
+                    new HandlerResponseDTO(SendAction.ReturnToSender, "You already have 3 consumable items in your inventory!"),
                     true,
                     false
+                };
+                yield return new object[]
+                {
+                    new InventoryDTO("userid", InventoryType.Pickup, 0),
+                    new HandlerResponseDTO(SendAction.ReturnToSender, "You already have 3 consumable items in your inventory!"),
+                    true,
+                    true
                 };
             }
         }
