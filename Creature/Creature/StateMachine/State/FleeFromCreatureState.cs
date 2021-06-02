@@ -11,6 +11,12 @@ namespace Creature.Creature.StateMachine.State
     {
         private ICreatureData _target;
         private MoveHandler _moveHandler = new MoveHandler(new ClientController(new NetworkComponent()), new WorldService());
+
+        public FleeFromCreatureState(ICreatureData creatureData)
+        {
+            _creatureData = creatureData;
+        }
+
         public override void Do()
         {
             String direction = "";

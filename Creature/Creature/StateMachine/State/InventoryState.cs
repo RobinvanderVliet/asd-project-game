@@ -7,6 +7,11 @@ namespace Creature.Creature.StateMachine.State
 {
     public class InventoryState : CreatureState
     {
+        public InventoryState(ICreatureData creatureData)
+        {
+            _creatureData = creatureData;
+        }
+
         public override void Do()
         {
             //TODO Implement state functions.
