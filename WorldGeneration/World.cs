@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using UserInterface;
 
 namespace WorldGeneration
 {
     public class World
     {
-        private Map _map;
+        private IMap _map;
         public Player CurrentPlayer { get; set; }
         private List<Player> _players;
         private readonly int _viewDistance;
+        private IScreenHandler _screenHandler;
 
-        public World(int seed, int viewDistance)
+        public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler)
         {
             _players = new ();
-            _map = MapFactory.GenerateMap(seed: seed);
+            _map = mapFactory.GenerateMap(seed);
             _viewDistance = viewDistance;
-            _map.DeleteMap();
+            _screenHandler = screenHandler;
+            DeleteMap();
         }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
@@ -31,7 +35,7 @@ namespace WorldGeneration
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
-            DisplayWorld();
+            UpdateMapInConsole();
         }
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
@@ -47,15 +51,18 @@ namespace WorldGeneration
         {
             if (CurrentPlayer != null && _players != null)
             {
-                Console.Clear();
-                _map.DisplayMap(CurrentPlayer, _viewDistance, new List<Character>(_players));
+                UpdateMapInConsole();
             }
-            
         }
 
-        public void deleteMap()
+        public void DeleteMap()
         {
             _map.DeleteMap();
+        }
+
+        private void UpdateMapInConsole()
+        {
+            _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, _players));
         }
     }
 }

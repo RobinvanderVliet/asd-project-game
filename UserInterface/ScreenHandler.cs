@@ -47,5 +47,14 @@ namespace UserInterface
                 gameScreen.RedrawInputBox();
             }
         }
+
+        public void UpdateWorld(char[,] map)
+        {
+            if (_screen is GameScreen)
+            {
+                var gameScreen = Screen as GameScreen;
+                gameScreen.UpdateWorld(map);
+            }
+        }
     }
 }
