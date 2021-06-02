@@ -29,6 +29,7 @@ namespace ActionHandling
         {
             if (_worldService.isDead(_worldService.getCurrentPlayer()))
             {
+                Console.WriteLine("You can't move, you're dead!");
                 return;
             }
             int x = 0;

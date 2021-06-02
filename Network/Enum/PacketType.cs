@@ -6,7 +6,8 @@
         Move,
         Session,
         GameSession,
-        Attack
+        Attack,
+        Dead
         
     }
 }

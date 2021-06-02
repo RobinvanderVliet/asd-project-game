@@ -48,6 +48,7 @@ namespace ASD_project
                     services.AddScoped<IAttackHandler, AttackHandler>();
                     services.AddScoped<IWorldService, WorldService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
+                    services.AddScoped<IDeadHandler, DeadHandler>();
                     services.AddSingleton<IDbConnection, DbConnection>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
                     services.AddScoped(typeof(IServicesDb<>), typeof(ServicesDb<>));

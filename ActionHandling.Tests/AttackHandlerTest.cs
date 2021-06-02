@@ -29,12 +29,14 @@ namespace ActionHandling.Tests
             private Mock<IClientController> _mockedClientController;
             private Mock<IWorldService> _mockedWorldService;
             private Mock<Player> _mockedPlayer;
+            private Mock<IDeadHandler> _mockedDeadHandler;
             [SetUp]
             public void Setup()
             {
                 _mockedClientController = new Mock<IClientController>();
                 _mockedWorldService = new Mock<IWorldService>();
-                _sut = new AttackHandler(_mockedClientController.Object, _mockedWorldService.Object);
+                _mockedDeadHandler = new Mock<IDeadHandler>();
+                _sut = new AttackHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedDeadHandler.Object);
                 
 
             }

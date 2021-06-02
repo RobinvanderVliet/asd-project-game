@@ -42,10 +42,10 @@ namespace WorldGeneration
             return _world._players;
         }
 
-        public void playerDied(Player currentPlayer)
+        public void playerDied(Player player)
         {
-            Console.WriteLine("You died.");
-            currentPlayer.Symbol = "X";
+            player.Symbol = "X";
+            
         }
 
         public bool isDead(Player player)

@@ -18,20 +18,24 @@ namespace ActionHandling
         private string _playerGuid;
         private IWorldService _worldService;
         private const int ATTACK_STAMINA = 10;
+        private IDeadHandler _deadHandler;
 
-        public AttackHandler(IClientController clientController, IWorldService worldService)
+        public AttackHandler(IClientController clientController, IWorldService worldService, IDeadHandler deadHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Attack);
             _worldService = worldService;
+            _deadHandler = deadHandler;
         }
 
         public void SendAttack(string direction)
         {
             if (_worldService.isDead(_worldService.getCurrentPlayer()))
             {
+                Console.WriteLine("You can't attack, you're dead!");
                 return;
             }
+
             var weapon = _worldService.getCurrentPlayer().Inventory.Weapon;
             int x = 0;
             int y = 0;
@@ -76,14 +80,22 @@ namespace ActionHandling
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             AttackDTO attackDto = JsonConvert.DeserializeObject<AttackDTO>(packet.Payload);
-
+            
+            var allPlayers = _worldService.getAllPlayers();
+            var PlayerResult =
+                allPlayers.Where(x =>
+                    x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition);
+            
+            if (PlayerResult.FirstOrDefault().Health <= 0)
+            {
+                if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
+                {
+                    Console.WriteLine("You can't attack this enemy, he is already dead.");
+                    return new HandlerResponseDTO(SendAction.Ignore, null);
+                }
+            }
             if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
             {
-                var allPlayers = _worldService.getAllPlayers();
-                var PlayerResult =
-                    allPlayers.Where(x =>
-                        x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition);
-
                 //var CreatureResult =
                 //    allCreatures.Where(x =>
                 //        x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition &&
@@ -93,6 +105,7 @@ namespace ActionHandling
 
                 if (PlayerResult.Any())
                 {
+
                     attackDto.AttackedPlayerGuid = PlayerResult.FirstOrDefault().Id;
                     if (attackDto.Stamina >= ATTACK_STAMINA)
                     {
@@ -155,9 +168,12 @@ namespace ActionHandling
                 var attackedPlayerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
                 var attackedPlayerItemService = new ServicesDb<PlayerItemPOCO>(attackedPlayerItemRepository);
 
-                if (_worldService.getCurrentPlayer().Inventory.Helmet != null)
+                var attackedPlayerInArray =
+                    _worldService.getAllPlayers().Where(player => player.Id == attackDto.PlayerGuid).FirstOrDefault();
+
+                if (attackedPlayerInArray.Inventory.Helmet != null)
                 {
-                    var attackedPlayerHelmet = _worldService.getCurrentPlayer().Inventory.Helmet;
+                    var attackedPlayerHelmet = attackedPlayerInArray.Inventory.Helmet;
                     var helmetPoints = attackedPlayerHelmet.ArmorProtectionPoints;
 
                     var attackedPlayerItem = attackedPlayerItemService.GetAllAsync();
@@ -183,9 +199,9 @@ namespace ActionHandling
                     }
                 }
 
-                if (_worldService.getCurrentPlayer().Inventory.Armor != null)
+                if (attackedPlayerInArray.Inventory.Armor != null)
                 {
-                    var attackedPlayerBodyArmor = _worldService.getCurrentPlayer().Inventory.Armor;
+                    var attackedPlayerBodyArmor = attackedPlayerInArray.Inventory.Armor;
                     var bodyArmorPoints = attackedPlayerBodyArmor.ArmorProtectionPoints;
                     var attackedPlayerItem = attackedPlayerItemService.GetAllAsync();
                     attackedPlayerItem.Wait();
@@ -213,10 +229,6 @@ namespace ActionHandling
                 {
                     attackedPlayer.Health -= totalDamage;
                     attackedPlayerRepository.UpdateAsync(attackedPlayer);
-                    if (attackedPlayer.Health <= 0)
-                    {
-                        
-                    }
                 }
             }
             else
@@ -295,7 +307,7 @@ namespace ActionHandling
 
                 if (_worldService.getCurrentPlayer().Health <= 0)
                 {
-                    _worldService.playerDied(_worldService.getCurrentPlayer());
+                    _deadHandler.SendDead(_worldService.getCurrentPlayer());
                 }
             }
         }
