@@ -89,7 +89,7 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
 
-        public void DisplayMap(Player currentPlayer, int viewDistance, List<Player> characters)
+        public void DisplayMap(Player currentPlayer, int viewDistance, List<Character> characters)
         {
             if (viewDistance < 0)
             {
@@ -110,7 +110,7 @@ namespace WorldGeneration
             }
         }
 
-        public char[,] GetMapAroundCharacter(Player centerCharacter, int viewDistance, List<Player> allCharacters)
+        public char[,] GetMapAroundCharacter(Player centerCharacter, int viewDistance, List<Character> allCharacters)
         {
             if (viewDistance < 0)
             {
@@ -133,7 +133,7 @@ namespace WorldGeneration
             return tileArray;
         }
         
-        private string GetDisplaySymbol(ITile tile, List<Player> characters)
+        private string GetDisplaySymbol(ITile tile, List<Character> characters)
         {
             var characterOnTile = characters.FirstOrDefault(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
             if(characterOnTile != null)

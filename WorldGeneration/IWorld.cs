@@ -8,9 +8,10 @@ namespace WorldGeneration
 {
     public interface IWorld
     {
-        void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition);
-        void AddPlayerToWorld(Player player, bool isCurrentPlayer);
-        void DisplayWorld();
+        void UpdateCharacterPosition(string id, int newXPosition, int newYPosition);
+        void AddPlayerToWorld(Player player, bool isCurrentPlayer = false);
+        void AddCreatureToWorld(Creature player);
+        void updateWorld();
         void DeleteMap();
     }
 }
