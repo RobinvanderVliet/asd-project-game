@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
@@ -67,11 +68,6 @@ namespace WorldGeneration
         public ITile GetCurrentTile()
         {
             return _map.GetLoadedTileByXAndY(CurrentPlayer.XPosition, CurrentPlayer.YPosition);
-        }
-
-        public ITile GetTileForPlayer(Player player)
-        {
-            return _map.GetLoadedTileByXAndY(player.XPosition, player.YPosition);
         }
     }
 }

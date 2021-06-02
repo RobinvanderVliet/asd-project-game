@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Items;
 
 namespace WorldGeneration
 {
@@ -32,7 +30,7 @@ namespace WorldGeneration
         {
             _world = new World(seed, 6);
         }
-        
+
         public Player GetCurrentPlayer()
         {
             return _world.CurrentPlayer;
@@ -43,6 +41,7 @@ namespace WorldGeneration
             return _world?.GetPlayer(userId);
         }
 
+<<<<<<< HEAD
         public IList<Item> GetItemsOnCurrentTile()
         {
             return _world.GetCurrentTile().ItemsOnTile;
@@ -53,9 +52,11 @@ namespace WorldGeneration
             return _world.GetTileForPlayer(player).ItemsOnTile;
         }
 
+=======
+>>>>>>> parent of a6db6d52 (Merge pull request #153 in VDFZEH/asd-project-game from sub-task/VDFZEH-498-coderen-uitvoeren-commando-pickup-item to feature/VDFZEH-483-coderen-commando-use-n)
         public string SearchCurrentTile()
         {
-            var itemsOnCurrentTile = GetItemsOnCurrentTile();
+            var itemsOnCurrentTile = _world.GetCurrentTile().ItemsOnTile;
 
             string result = "The following items are on the current tile:" + Environment.NewLine;
             int index = 1;

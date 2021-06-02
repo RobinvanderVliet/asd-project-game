@@ -114,6 +114,7 @@ namespace ActionHandling
 
         private HandlerResponseDTO HandleDrop(InventoryDTO inventoryDTO, bool handleInDatabase)
         {
+<<<<<<< HEAD
             Player player = _worldService.GetPlayer(inventoryDTO.UserId);
 
             Item item;
@@ -162,6 +163,9 @@ namespace ActionHandling
                     break;
             }
             return new HandlerResponseDTO(SendAction.SendToClients, null);
+=======
+            throw new NotImplementedException();
+>>>>>>> parent of a6db6d52 (Merge pull request #153 in VDFZEH/asd-project-game from sub-task/VDFZEH-498-coderen-uitvoeren-commando-pickup-item to feature/VDFZEH-483-coderen-commando-use-n)
         }
 
         private HandlerResponseDTO HandleUse(InventoryDTO inventoryDTO, bool handleInDatabase)
@@ -202,6 +206,7 @@ namespace ActionHandling
             throw new NotImplementedException();
         }
 
+<<<<<<< HEAD
         public void DropItem(string inventorySlot)
         {
             int index = 0;
@@ -234,6 +239,11 @@ namespace ActionHandling
             InventoryDTO inventoryDTO =
                 new InventoryDTO(_clientController.GetOriginId(), InventoryType.Drop, index);
             SendInventoryDTO(inventoryDTO);
+=======
+        public void DropItem(int index)
+        {
+            throw new NotImplementedException();
+>>>>>>> parent of a6db6d52 (Merge pull request #153 in VDFZEH/asd-project-game from sub-task/VDFZEH-498-coderen-uitvoeren-commando-pickup-item to feature/VDFZEH-483-coderen-commando-use-n)
         }
     }
 }
