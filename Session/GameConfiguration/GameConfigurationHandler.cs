@@ -61,11 +61,10 @@ namespace Session.GameConfiguration
 
         public void UpdateMonsterDifficulty(string input)
         {
-            try
+            input = input.Trim('.', ' ');
+            bool parseSuccessful = int.TryParse(input, out int userChoice);
+            if (parseSuccessful)
             {
-                input = input.Trim('.', ' ');
-                int userChoice = int.Parse(input);
-
                 switch (userChoice)
                 {
                     case 1:
@@ -85,25 +84,27 @@ namespace Session.GameConfiguration
                         _nextScreen = true;
                         break;
                     default:
-                        _configurationScreen.UpdateInputMessage("The chosen option does not exist, please choose one of the existing options by typing their corresponding number");
+                        _configurationScreen.UpdateInputMessage(
+                            "The chosen option does not exist, please choose one of the existing options by typing their corresponding number");
                         _nextScreen = false;
                         break;
                 }
             }
-            catch (Exception) 
+            else
             {
-                _configurationScreen.UpdateInputMessage("The chosen option does not exist, please choose one of the existing options by typing their corresponding number");
+                _configurationScreen.UpdateInputMessage(
+                    "The chosen option does not exist, please choose one of the existing options by typing their corresponding number");
                 _nextScreen = false;
             }
         }
-        
+
+
         public void UpdateItemSpawnrate(string input)
         {
-            try
+            input = input.Trim('.', ' ');
+            bool parseSuccessful = int.TryParse(input, out int userChoice);
+            if (parseSuccessful)
             {
-                input = input.Trim('.', ' ');
-                int userChoice = int.Parse(input);
-
                 switch (userChoice)
                 {
                     case 1:
@@ -124,10 +125,11 @@ namespace Session.GameConfiguration
                         break;
                 }
             }
-            catch (Exception) 
+            else 
             {
-                _configurationScreen.UpdateInputMessage("The chosen option does not exist, please choose one of the existing options by typing their corresponding number");
-                _nextScreen = false;
+                _configurationScreen.UpdateInputMessage(
+                    "The chosen option does not exist, please choose one of the existing options by typing their corresponding number");
+                _nextScreen = false; 
             }
         }
 
