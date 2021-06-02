@@ -105,7 +105,7 @@ namespace Creature.Creature.StateMachine
                 foreach (var initialState in builderInfo.InitialStates)
                 {
                     builder.In(initialState).On(builderInfo.Event).
-                        If<object>((c) => GetGuards(CreatureData, c, builderInfo.RuleSets, builderInfo.Action)).
+                        If<object>((targetData) => builderInfo.RuleSets.All(ruleSet => GetGuard(CreatureData, targetData, ruleSet, builderInfo.Action))).
                         Goto(builderInfo.TargetState).Execute<ICreatureData>(builderInfo.TargetState.SetTargetData);
                 }
             }
@@ -194,15 +194,6 @@ namespace Creature.Creature.StateMachine
             // TODO: Add more
 
             return CreatureEvent.Event.IDLE;
-        }
-
-        private bool GetGuards(object comparableData, object thresholdData, List<RuleSet> ruleList, string state)
-        {
-            if (ruleList.Any(ruleSet => GetGuard(comparableData, thresholdData, ruleSet, state) == false))
-            {
-                return false;
-            }
-            return true;
         }
 
         private bool GetGuard(object comparableData, object thresholdData, RuleSet rule, string state)
