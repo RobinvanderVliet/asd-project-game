@@ -88,6 +88,7 @@ namespace Creature.Creature.StateMachine
                         }
                     }
                 }
+                builderInfoList.Add(builderInfo);
             }
 
             foreach (BuilderInfo builderInfo in builderInfoList)
@@ -96,7 +97,7 @@ namespace Creature.Creature.StateMachine
                 {
                     builder.In(initialState).On(builderInfo.Event).
                         If<object>((c) => GetGuard(CreatureData, c, builderInfo.RuleSet, builderInfo.Action)).
-                        Goto(builderInfo.TargetState).Execute<ICreatureData>(builderInfo.TargetState.Do);
+                        Goto(builderInfo.TargetState).Execute<ICreatureData>(builderInfo.TargetState.SetTargetData);
                 }
             }
 
@@ -104,17 +105,17 @@ namespace Creature.Creature.StateMachine
 
             // Follow player
             builder.In(_wanderState).On(CreatureEvent.Event.SPOTTED_CREATURE).
-                Goto(_followPlayerState).Execute<ICreatureData>(new FollowCreatureState(CreatureData).Do);
-            builder.In(_followPlayerState).On(CreatureEvent.Event.SPOTTED_CREATURE).Goto(_followPlayerState).Execute<ICreatureData>(new FollowCreatureState(CreatureData).Do);
-            builder.In(_attackPlayerState).On(CreatureEvent.Event.SPOTTED_CREATURE).Goto(_followPlayerState).Execute<ICreatureData>(new FollowCreatureState(CreatureData).Do);
+                Goto(_followPlayerState).Execute<ICreatureData>(_followPlayerState.SetTargetData);
+            builder.In(_followPlayerState).On(CreatureEvent.Event.SPOTTED_CREATURE).Goto(_followPlayerState).Execute<ICreatureData>(_followPlayerState.SetTargetData);
+            builder.In(_attackPlayerState).On(CreatureEvent.Event.SPOTTED_CREATURE).Goto(_followPlayerState).Execute<ICreatureData>(_followPlayerState.SetTargetData);
 
             // Attack player
-            builder.In(_followPlayerState).On(CreatureEvent.Event.CREATURE_IN_RANGE).Goto(_attackPlayerState).Execute<ICreatureData>(new AttackState(CreatureData).Do);
-            builder.In(_attackPlayerState).On(CreatureEvent.Event.CREATURE_IN_RANGE).Execute<ICreatureData>(new AttackState(CreatureData).Do);
+            builder.In(_followPlayerState).On(CreatureEvent.Event.CREATURE_IN_RANGE).Goto(_attackPlayerState).Execute<ICreatureData>(_attackPlayerState.SetTargetData);
+            builder.In(_attackPlayerState).On(CreatureEvent.Event.CREATURE_IN_RANGE).Execute<ICreatureData>(_attackPlayerState.SetTargetData);
 
             // Use potion
-            builder.In(_attackPlayerState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(_useConsumableState).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
-            builder.In(_followPlayerState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(_useConsumableState).Execute<ICreatureData>(new UseConsumableState(CreatureData).Do);
+            builder.In(_attackPlayerState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(_useConsumableState).Execute<ICreatureData>(_useConsumableState.SetTargetData);
+            builder.In(_followPlayerState).On(CreatureEvent.Event.ALMOST_DEAD).Goto(_useConsumableState).Execute<ICreatureData>(_useConsumableState.SetTargetData);
 
             builder.WithInitialState(_wanderState);
 
