@@ -124,34 +124,40 @@ namespace ActionHandling
                     item = player.Inventory.Helmet;
                     _worldService.GetItemsOnCurrentTile().Add(item);
                     player.Inventory.Helmet = null;
+                    Console.WriteLine("You dropped your helmet");
                     break;
                 case 1:
                     item = player.Inventory.Armor;
                     _worldService.GetItemsOnCurrentTile().Add(item);
                     player.Inventory.Armor = null;
+                    Console.WriteLine("You dropped your armor");
                     break;
                 case 2:
                     item = player.Inventory.Weapon;
                     _worldService.GetItemsOnCurrentTile().Add(item);
                     player.Inventory.Weapon = null;
+                    Console.WriteLine("You dropped your weapon");
                     break;
                 case 3:
                     item = player.Inventory.ConsumableItemList[0];
                     _worldService.GetItemsOnCurrentTile().Add(item);
                     player.Inventory.ConsumableItemList[0] = null;
+                    Console.WriteLine("You dropped your item in slot 1");
                     break;
                 case 4:
                     item = player.Inventory.ConsumableItemList[1];
                     _worldService.GetItemsOnCurrentTile().Add(item);
                     player.Inventory.ConsumableItemList[1] = null;
+                    Console.WriteLine("You dropped your item in slot 2");
                     break;
                 case 5:
                     item = player.Inventory.ConsumableItemList[2];
                     _worldService.GetItemsOnCurrentTile().Add(item);
                     player.Inventory.ConsumableItemList[2] = null;
+                    Console.WriteLine("You dropped your item in slot 3");
                     break;
                 default:
-                    Console.WriteLine("Unknown slot");
+                    Console.WriteLine("Unknown item slot");
                     return new HandlerResponseDTO(SendAction.ReturnToSender, "This is not an item you can drop!");
                     break;
             }
@@ -220,6 +226,7 @@ namespace ActionHandling
                     index = 5;
                     break;
                 default:
+                    index = 99;
                     Console.WriteLine("Unknown item slot");
                     break;
             }
