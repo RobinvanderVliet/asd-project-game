@@ -2,7 +2,7 @@
 {
     public class ASTError
     {
-        private string _message;
+        private readonly string _message;
 
 
         public ASTError(string message)
@@ -11,7 +11,7 @@
         }
 
 
-        override public string ToString()
+        public override string ToString()
         {
             return "ERROR: " + _message;
         }

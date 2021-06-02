@@ -4,12 +4,12 @@ namespace Agent.Antlr.Ast
 {
     public class Action : Node
     {
-        private List<Node> _conditions = new List<Node>();
-
-        public string Name { get; set; }
+        public readonly List<Node> Conditions;
+        public readonly string Name;
 
         public Action(string name)
         {
+            Conditions = new List<Node>();
             Name = name;
         }
 
@@ -22,7 +22,7 @@ namespace Agent.Antlr.Ast
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            children.AddRange(_conditions);
+            children.AddRange(Conditions);
             children.AddRange(body);
             return children;
         }
@@ -30,7 +30,7 @@ namespace Agent.Antlr.Ast
         public override Node AddChild(Node node)
         {
             if (node is Condition condition)
-                _conditions.Add(condition);
+                Conditions.Add(condition);
             else
                 body.Add(node);
 
@@ -40,7 +40,7 @@ namespace Agent.Antlr.Ast
         public override Node RemoveChild(Node node)
         {
             if (node is Condition condition)
-                _conditions.Remove(condition);
+                Conditions.Remove(condition);
             else
                 body.Remove(node);
 

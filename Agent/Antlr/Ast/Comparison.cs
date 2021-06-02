@@ -3,9 +3,8 @@
    
     public class Comparison : Node
     {
-        public string ComparisonType { get; set; }
+        public readonly string ComparisonType;
         
-        //TODO: Create comparisonTypeEnum ,(reactie) voor nu overbodig kan later
         public Comparison(string comparisonType)
         {
             ComparisonType = comparisonType;

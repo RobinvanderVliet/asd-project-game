@@ -4,7 +4,7 @@ namespace Agent.Antlr.Ast.Comparables
     
     public class Subject : Comparable
     {
-        public string Name { get; set; }
+        public readonly string Name;
         
         public Subject(string name)
         {
