@@ -1,3 +1,5 @@
+using WorldGeneration.Models.Interfaces;
+
 namespace WorldGeneration
 {
     public class WorldService : IWorldService
@@ -32,6 +34,21 @@ namespace WorldGeneration
         public Player getCurrentPlayer()
         {
             return _world.CurrentPlayer;
+        }
+
+        public Player GetPlayer(string userId)
+        {
+            return _world.GetPlayer(userId);
+        }
+
+        public ITile GetTile(int x, int y)
+        {
+            return _world.GetLoadedTileByXAndY(x, y);
+        }
+
+        public void LoadArea(int playerX, int playerY, int viewDistance)
+        {
+            _world.LoadArea(playerX, playerY, viewDistance);
         }
     }
 }

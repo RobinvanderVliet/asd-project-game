@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
 {
@@ -18,6 +19,11 @@ namespace WorldGeneration
             _map.DeleteMap();
         }
 
+        public Player GetPlayer(string id)
+        {
+            return _players.Find(x => x.Id == id);
+        }
+
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
         {
             if (CurrentPlayer.Id == userId)
@@ -27,11 +33,10 @@ namespace WorldGeneration
             }
             else
             {
-                var player = _players.Find(x => x.Id == userId);
+                var player = GetPlayer(userId);
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
-            DisplayWorld();
         }
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
@@ -50,12 +55,21 @@ namespace WorldGeneration
                 Console.Clear();
                 _map.DisplayMap(CurrentPlayer, _viewDistance, new List<Character>(_players));
             }
-            
         }
 
         public void deleteMap()
         {
             _map.DeleteMap();
+        }
+
+        public ITile GetLoadedTileByXAndY(int x, int y)
+        {
+            return _map.GetLoadedTileByXAndY(x, y);
+        }
+        
+        public void LoadArea(int playerX, int playerY, int viewDistance)
+        {
+            _map.LoadArea(playerX, playerY, viewDistance);
         }
     }
 }

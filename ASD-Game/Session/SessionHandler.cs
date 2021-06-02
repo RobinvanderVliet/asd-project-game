@@ -7,9 +7,6 @@ using System.Threading;
 using System.Timers;
 using Network.DTO;
 using WorldGeneration;
-using DatabaseHandler;
-using DatabaseHandler.Services;
-using DatabaseHandler.Repository;
 using UserInterface;
 using Timer = System.Timers.Timer;
 
@@ -30,6 +27,7 @@ namespace Session
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
         private IScreenHandler _screenHandler;
+
         public SessionHandler(IClientController clientController, IScreenHandler screenHandler)
         {
             _clientController = clientController;
@@ -175,6 +173,7 @@ namespace Session
             if (!_hostActive)
             {
                 _hostInactiveCounter++;
+
                 if (_hostInactiveCounter >= 5)
                 {
                     _hostPingTimer.Dispose();
