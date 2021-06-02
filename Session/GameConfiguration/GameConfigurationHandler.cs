@@ -20,6 +20,7 @@ namespace Session.GameConfiguration
         public MonsterDifficulty NewMonsterDifficulty { get; set; }
         public MonsterDifficulty CurrentMonsterDifficulty { get; set; }
         public ItemSpawnRate SpawnRate { get; set; }
+        public string Username { get; set; }
 
         public GameConfigurationHandler(IScreenHandler screenHandler)
         {
@@ -35,6 +36,8 @@ namespace Session.GameConfiguration
 
         public void SetGameConfiguration()
         {
+            _configurationChoices.Clear();
+            _configurationHeader.Clear();
             _optionCounter = 0;
             _nextScreen = false;
 
@@ -43,6 +46,16 @@ namespace Session.GameConfiguration
             //Monster difficulty
             _configurationHeader.Add("Choose the NPC difficulty");
             newOptions = new List<string>() {"Easy", "Medium", "Hard", "Impossible"};
+            _configurationChoices.Add(newOptions);
+            
+            //Item Spawnrate
+            _configurationHeader.Add("Choose the item spawnrate");
+            newOptions = new List<string>() {"Low", "Medium", "High"};
+            _configurationChoices.Add(newOptions);
+
+            //Username
+            _configurationHeader.Add("Set your username");
+            newOptions = new List<string>() {"We need to know what to call you", "It can be anything so please keep it civil"};
             _configurationChoices.Add(newOptions);
         }
 
@@ -83,6 +96,40 @@ namespace Session.GameConfiguration
                 _nextScreen = false;
             }
         }
+        
+        public void UpdateItemSpawnrate(string input)
+        {
+            try
+            {
+                input = input.Trim('.', ' ');
+                int userChoice = int.Parse(input);
+
+                switch (userChoice)
+                {
+                    case 1:
+                        SpawnRate = ItemSpawnRate.Low;
+                        _nextScreen = true;
+                        break;
+                    case 2:
+                        SpawnRate = ItemSpawnRate.Medium;
+                        _nextScreen = true;
+                        break;
+                    case 3:
+                        SpawnRate = ItemSpawnRate.High;
+                        _nextScreen = true;
+                        break;
+                    default:
+                        _configurationScreen.UpdateInputMessage("The chosen option does not exist, please choose one of the existing options by typing their corresponding number");
+                        _nextScreen = false;
+                        break;
+                }
+            }
+            catch (Exception) 
+            {
+                _configurationScreen.UpdateInputMessage("The chosen option does not exist, please choose one of the existing options by typing their corresponding number");
+                _nextScreen = false;
+            }
+        }
 
         public void SetDifficulty(MonsterDifficulty monsterDifficulty, string sessionId) 
         {
@@ -106,8 +153,7 @@ namespace Session.GameConfiguration
             gameConfiguration.ItemSpawnRate = (int) spawnRate;
             gameConfigurationRepository.UpdateAsync(gameConfiguration);
         }
-
-        //Moet aangeroepen worden tijdens creatie monsters en bij aanpas command
+        
         public int AdjustMonsterValue(int monsterProperty) 
         {
             return monsterProperty / (int)CurrentMonsterDifficulty * (int)NewMonsterDifficulty;
@@ -122,8 +168,12 @@ namespace Session.GameConfiguration
                 UpdateScreen();
             } else if (input.Equals("2"))
             {
-                _setupConfiguration = false;
-                //Set default config and move on
+                _setupConfiguration = true;
+                SetGameConfiguration();
+                _optionCounter = _configurationChoices.Count - 1;
+                NewMonsterDifficulty = MonsterDifficulty.Medium;
+                SpawnRate = ItemSpawnRate.Medium;
+                UpdateScreen();
             }
             else
             {
@@ -139,6 +189,13 @@ namespace Session.GameConfiguration
                 {
                     case 0:
                         UpdateMonsterDifficulty(input);
+                        break;
+                    case 1:
+                        UpdateItemSpawnrate(input);
+                        break;
+                    case 2:
+                        Username = input;
+                        _nextScreen = true;
                         break;
                 }
             
@@ -166,6 +223,7 @@ namespace Session.GameConfiguration
             {
                 _setupConfiguration = false;
                 SetGameConfiguration();
+                _configurationScreen.UpdateInputMessage("To the lobbbbbbbbybybybybybyyyyyy!!!!!!!!");
                 //To the next screen!
             }
         }

@@ -18,7 +18,7 @@ namespace Session
 {
     public class SessionHandler : IPacketHandler, ISessionHandler
     {
-        private const bool DEBUG_INTERFACE = true; //TODO: remove when UI is complete, obviously
+        private const bool DEBUG_INTERFACE = false; //TODO: remove when UI is complete, obviously
         
         private IClientController _clientController;
         private Session _session;
