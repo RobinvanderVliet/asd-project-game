@@ -47,44 +47,6 @@ namespace WorldGeneration
             }
         }
 
-
-        /// <summary>
-        /// Returns false if item could not be added. True otherwise.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public void AddItem(Item item)
-        {
-            if (item is Weapon weapon)
-            {
-                if (_weapon != null) throw new InventoryFullException("You already have a weapon!");
-                _weapon = weapon;
-                return;
-            }
-
-            if (item is Armor armor)
-            {
-                if (armor.ArmorPartType == ArmorPartType.Body)
-                {
-                    if (_armor != null) throw new InventoryFullException("You already have body armor!");
-                    _armor = armor;
-                    return;
-                }
-
-                if (armor.ArmorPartType == ArmorPartType.Helmet)
-                {
-                    if (_helmet != null) throw new InventoryFullException("You already have a helmet!");
-                    _helmet = armor;
-                    return;
-                }
-            }
-
-            if (item is Consumable consumable)
-            {
-                AddConsumableItem(consumable);
-            }
-        }
-
         public void RemoveConsumableItem(Consumable consumable)
         {
             _consumableItems.Remove(consumable);
