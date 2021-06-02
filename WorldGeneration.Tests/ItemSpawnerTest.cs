@@ -80,6 +80,65 @@ namespace WorldGeneration.Tests
             //Assert ---------
             Assert.IsInstanceOf<Item>(_chunk.Map[1].ItemsOnTile[0]);
         }
+        
+        [Test]
+        public void Test_Spawn_CheckNoiseOutlierNegativeOne()
+        {
+            //Arrange ---------
+            _mockedNoise.Setup(x => x.GetNoise(_chunk.X, _chunk.Y))
+                .Returns(-1f).Verifiable();
+
+            for (int i = 0; i < _chunk.Map.Length; i++)
+            {
+                _chunk.Map[i] = new GrassTile(i, i);
+            }
+
+            //Act ---------
+            sut.Spawn(_chunk);
+
+            //Assert ---------
+            Assert.IsEmpty(_chunk.Map[^1].ItemsOnTile);
+        }
+        
+        [Test]
+        public void Test_Spawn_CheckNoiseOutlierPositiveOne()
+        {
+            //Arrange ---------
+            _mockedNoise.Setup(x => x.GetNoise(_chunk.X, _chunk.Y))
+                .Returns(1f).Verifiable();
+
+            for (int i = 0; i < _chunk.Map.Length; i++)
+            {
+                _chunk.Map[i] = new GrassTile(i, i);
+            }
+
+            //Act ---------
+            sut.Spawn(_chunk);
+
+            //Assert ---------
+            Assert.AreEqual(3, _chunk.Map[^1].ItemsOnTile.Count);
+        }
+        
+        [Test]
+        public void Test_Spawn_CheckNoiseOutlierZero()
+        {
+            //Arrange ---------
+            _mockedNoise.Setup(x => x.GetNoise(_chunk.X, _chunk.Y))
+                .Returns(0f).Verifiable();
+
+            for (int i = 0; i < _chunk.Map.Length; i++)
+            {
+                _chunk.Map[i] = new GrassTile(i, i);
+            }
+
+            //Act ---------
+            sut.Spawn(_chunk);
+
+            //Assert ---------
+            Assert.AreEqual(2, _chunk.Map[0].ItemsOnTile.Count);
+        }
+        
+        
 
 
     }
