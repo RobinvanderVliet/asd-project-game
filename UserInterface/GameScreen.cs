@@ -16,22 +16,25 @@ namespace UserInterface
 
         private const int CHAT_X = HEADER_X;
         private const int CHAT_Y = STAT_HEIGHT + BORDER_SIZE;
-        private const int CHAT_WIDTH = (SCREEN_WIDTH - BORDER_SIZE) - (WORLD_WITH + BORDER_SIZE);
-        private const int CHAT_HEIGHT = 13;
+        private const int CHAT_WIDTH = (SCREEN_WIDTH - BORDER_SIZE) - (WORLD_WITDH + BORDER_SIZE);
+        private const int CHAT_HEIGHT = WORLD_HEIGHT;
 
         private const int WORLD_X = CHAT_WIDTH + BORDER_SIZE;
         private const int WORLD_Y = STAT_HEIGHT + BORDER_SIZE;
 
-        private const int WORLD_HEIGHT = 13;
-        private const int WORLD_WITH = 37;
+        private const int VIEW_DISTANCE = 6;
+        private const int WORLD_WIDTH_BLANK_SPACE = 2;
+        private const int CENTER_LINE = 1;
+        private const int WORLD_HEIGHT = VIEW_DISTANCE * 2 + CENTER_LINE;
+        private const int WORLD_WITDH = (((VIEW_DISTANCE * 2) + CENTER_LINE) * (WORLD_WIDTH_BLANK_SPACE + 1)) - WORLD_WIDTH_BLANK_SPACE;
         private const int INPUT_X = HEADER_X;
-        private const int INPUT_Y = STAT_HEIGHT + CHAT_HEIGHT + (BORDER_SIZE * 2);
+        private const int INPUT_Y = STAT_HEIGHT + WORLD_HEIGHT + (BORDER_SIZE * 2);
 
         public GameScreen()
         {
             _gameStatScreen = new GameStatScreen(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
             _gameChatScreen = new GameChatScreen(CHAT_X, CHAT_Y, CHAT_WIDTH, CHAT_HEIGHT);
-            _gameWorldScreen = new GameWorldScreen(WORLD_X, WORLD_Y, WORLD_WITH, WORLD_HEIGHT);
+            _gameWorldScreen = new GameWorldScreen(WORLD_X, WORLD_Y, WORLD_WITDH, WORLD_HEIGHT);
 
         }
 

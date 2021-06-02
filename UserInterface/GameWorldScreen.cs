@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UserInterface
 {
-    class GameWorldScreen : Screen
+    public class GameWorldScreen : Screen
     {
         private int _xPosition;
         private int _yPosition;
@@ -19,7 +19,7 @@ namespace UserInterface
             _yPosition = y;
             _width = width;
             _height = height;
-            _map = new char[13, 13];
+            _map = new char[height, height];
         }
 
         public override void DrawScreen()
@@ -34,30 +34,30 @@ namespace UserInterface
         }
         private void DrawWorld()
         {
-            int originalCursorX = Console.CursorLeft;
-            int originalCursorY = Console.CursorTop;
+            int originalCursorX = _screenHandler.ConsoleHelper.GetCursorLeft();
+            int originalCursorY = _screenHandler.ConsoleHelper.GetCursorTop();
             ClearWorld();
             for (int i = 0; i < _map.GetLength(0); i++)
             {
-                Console.SetCursorPosition(_xPosition + 1, _yPosition + OFFSET_TOP + i);
+                _screenHandler.ConsoleHelper.SetCursor(_xPosition + 1, _yPosition + OFFSET_TOP + i);
                 for (int j = 0; j < _map.GetLength(1); j++)
                 {
-                    Console.Write(_map[i,j]);
+                    _screenHandler.ConsoleHelper.Write(_map[i,j].ToString());
                     if(j < _map.GetLength(1) - 1)
                     {
-                        Console.Write("  ");
+                        _screenHandler.ConsoleHelper.Write("  ");
                     }
                 }
             }
-            Console.SetCursorPosition(originalCursorX, originalCursorY);
+            _screenHandler.ConsoleHelper.SetCursor(originalCursorX, originalCursorY);
         }
 
         private void ClearWorld()
         {
             for (int i = 0; i <= _height - OFFSET_TOP; i++)
             {
-                Console.SetCursorPosition(_xPosition + OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
-                Console.Write(new string(' ', _width - 1));
+                _screenHandler.ConsoleHelper.SetCursor(_xPosition + OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
+                _screenHandler.ConsoleHelper.Write(new string(' ', _width - 1));
             }
         }
         
