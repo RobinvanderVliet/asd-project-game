@@ -129,6 +129,10 @@ namespace ActionHandling
             }
             catch (ArgumentOutOfRangeException)
             {
+                if(inventoryDTO.UserId == _clientController.GetOriginId())
+                {
+                    _messageService.AddMessage("Number is not in search list!");
+                }
                 return new HandlerResponseDTO(SendAction.ReturnToSender, "Number is not in search list!");
             }
 
@@ -148,6 +152,10 @@ namespace ActionHandling
             }
             catch (InventoryFullException e)
             {
+                if(inventoryDTO.UserId == _clientController.GetOriginId())
+                {
+                    _messageService.AddMessage(e.Message);
+                }
                 return new HandlerResponseDTO(SendAction.ReturnToSender, e.Message);
             }
         }
