@@ -6,6 +6,7 @@ using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using Items;
+using LiteDB;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
@@ -140,17 +141,17 @@ namespace ActionHandling
 
         private void InsertDamageToDatabase(AttackDTO attackDto, Boolean isPlayer) // both armor and health damage
         {
+            int totalDamage = attackDto.Damage;
             if (isPlayer)
             {
                 var dbConnection = new DbConnection();
-
+                
                 var attackedPlayerRepository = new Repository<PlayerPOCO>(dbConnection);
                 var attackedPlayer = attackedPlayerRepository.GetAllAsync().Result
                     .FirstOrDefault(attackedPlayer => attackedPlayer.PlayerGuid == attackDto.AttackedPlayerGuid);
 
                 var attackedPlayerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
                 var attackedPlayerItemService = new ServicesDb<PlayerItemPOCO>(attackedPlayerItemRepository);
-                //PlayerItemPOCO attackedPlayerItem;
 
                 if (_worldService.getCurrentPlayer().Inventory.Helmet != null)
                 {
@@ -159,24 +160,23 @@ namespace ActionHandling
 
                     var attackedPlayerItem = attackedPlayerItemService.GetAllAsync();
                     attackedPlayerItem.Wait();
-                    var results = attackedPlayerItem.Result
+                    var results = attackedPlayerItem.Result.OrderByDescending(a => a.ArmorPoints)
                         .First(playerItem =>
                             playerItem.PlayerGUID == attackDto.PlayerGuid &&
                             playerItem.ItemName ==
                             attackedPlayerHelmet.ItemName && 
                             playerItem.GameGUID == _clientController.SessionId);
 
-                    if (helmetPoints - attackDto.Damage <= 0 && helmetPoints != 0)
+                    if (helmetPoints - totalDamage <= 0 && helmetPoints != 0)
                     {
-                        attackDto.Damage -= results.ArmorPoints;
-                        var delete = attackedPlayerItemService.DeleteAsync(results); // dit gaat nog fout
-                        delete.Wait();
-                        var a = attackedPlayerItemService.GetAllAsync(); // voor debug
-                        a.Wait(); // voor debug
+                        totalDamage -= results.ArmorPoints;
+                        results.ArmorPoints = 0;
+                        attackedPlayerItemService.UpdateAsync(results);
+                        // TODO: Delete playerItemPoco form database (function DeleteAsync)
                     }
                     else
                     {
-                        results.ArmorPoints -= attackDto.Damage;
+                        results.ArmorPoints -= totalDamage;
                         attackedPlayerItemService.UpdateAsync(results);
                     }
                 }
@@ -187,27 +187,29 @@ namespace ActionHandling
                     var bodyArmorPoints = attackedPlayerBodyArmor.ArmorProtectionPoints;
                     var attackedPlayerItem = attackedPlayerItemService.GetAllAsync();
                     attackedPlayerItem.Wait();
-                    var results= attackedPlayerItem.Result
-                        .FirstOrDefault(playerItem => playerItem.PlayerGUID == attackDto.PlayerGuid &&
+                    var results= attackedPlayerItem.Result.OrderByDescending(a => a.ArmorPoints)
+                        .First(playerItem => playerItem.PlayerGUID == attackDto.PlayerGuid &&
                                                       playerItem.ItemName ==
                                                       attackedPlayerBodyArmor.ItemName &&
                                                       playerItem.GameGUID == _clientController.SessionId);
-                    if (bodyArmorPoints - attackDto.Damage <= 0 && bodyArmorPoints != 0)
+                    if (bodyArmorPoints - totalDamage <= 0 && bodyArmorPoints != 0)
                     {
-                        attackedPlayerItemService.DeleteAsync(results);
+                        totalDamage -= results.ArmorPoints;
+                        results.ArmorPoints = 0;
+                        // TODO: Delete playerItemPoco form database (function DeleteAsync)
                     }
                     else
                     {
-                        results.ArmorPoints -= attackDto.Damage;
+                        results.ArmorPoints -= totalDamage;
                         attackedPlayerItemService.UpdateAsync(results);
 
-                        attackedPlayer.Health -= attackDto.Damage;
+                        attackedPlayer.Health -= totalDamage;
                         attackedPlayerRepository.UpdateAsync(attackedPlayer);
                     }
                 }
                 else
                 {
-                    attackedPlayer.Health -= attackDto.Damage;
+                    attackedPlayer.Health -= totalDamage;
                     attackedPlayerRepository.UpdateAsync(attackedPlayer);
                 }
             }
