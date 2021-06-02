@@ -140,6 +140,7 @@ namespace ActionHandling.Tests
         {
             public IEnumerator GetEnumerator()
             {
+                // Happy path
                 yield return new object[]
                 {
                     new InventoryDTO("userid", InventoryType.Pickup, 0),
@@ -147,6 +148,7 @@ namespace ActionHandling.Tests
                     false,
                     true
                 };
+                // Pickup item that is not in search list from client.
                 yield return new object[]
                 {
                     new InventoryDTO("userid", InventoryType.Pickup, 100),
@@ -154,6 +156,7 @@ namespace ActionHandling.Tests
                     false,
                     false
                 };
+                // Pickup item that is not in search list on host.
                 yield return new object[]
                 {
                     new InventoryDTO("userid", InventoryType.Pickup, 100),
@@ -161,6 +164,7 @@ namespace ActionHandling.Tests
                     false,
                     true
                 };
+                // Pickup consumable item with a full inventory from client.
                 yield return new object[]
                 {
                     new InventoryDTO("userid", InventoryType.Pickup, 0),
@@ -168,6 +172,7 @@ namespace ActionHandling.Tests
                     true,
                     false
                 };
+                // Pickup consumable item with a full inventory on host.
                 yield return new object[]
                 {
                     new InventoryDTO("userid", InventoryType.Pickup, 0),
