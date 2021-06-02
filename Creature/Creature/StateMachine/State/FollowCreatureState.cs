@@ -8,7 +8,11 @@ namespace Creature.Creature.StateMachine.State
 {
     public class FollowCreatureState : CreatureState
     {
-        
+        public FollowCreatureState(ICreatureData creatureData)
+        {
+            _creatureData = creatureData;
+        }
+
         public override void Do()
         {
             //TODO implement State functions

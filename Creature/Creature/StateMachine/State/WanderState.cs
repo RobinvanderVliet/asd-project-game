@@ -9,7 +9,12 @@ namespace Creature.Creature.StateMachine.State
     public class WanderState : CreatureState
     {
         private MoveHandler _moveHandler = new MoveHandler(new ClientController(new NetworkComponent()), new WorldService());
-        
+
+        public WanderState(ICreatureData creatureData)
+        {
+            _creatureData = creatureData;
+        }
+
         public override void Do()
         {
             int steps = new Random().Next(10);
