@@ -112,5 +112,21 @@ namespace Session.Tests
                 Assert.AreEqual(expected, sw.ToString());
             }
         }
+        
+        [Test]
+        public void TestIfCreateSessionIsBeingCalledWhenLoadGameSuccess()
+        {
+            // Arrange
+            List<GamePOCO> gameList = new List<GamePOCO>();
+
+            GamePOCO gamePoco = new GamePOCO {GameGuid = "game1", PlayerGUIDHost = "player1", GameName = "gameName1", Seed = 1};
+
+            gameList.Add(gamePoco);
+
+            _mockedDatabaseGameService.Setup(x => x.GetAllAsync()).ReturnsAsync(gameList);
+
+            _mockedSessionHandler.Verify(x => x.CreateSession(gamePoco.GameName, true, gamePoco.GameGuid, gamePoco.Seed));
+        }
+        
     }
 }

@@ -52,18 +52,9 @@ namespace Session
             }
         }
 
-        private DatabaseService<GamePOCO> GetGameService()
-        {
-            var gameService = new DatabaseService<GamePOCO>();
-
-            return gameService;
-        }
-
         public void LoadGame(string value)
         {
-            var gameService = new DatabaseService<GamePOCO>();
-
-            var allGames = gameService.GetAllAsync();
+            var allGames = _gamePocoService.GetAllAsync();
 
             if (allGames.Result.Where(x => x.GameGuid == value).IsNullOrEmpty())
             {
@@ -71,16 +62,11 @@ namespace Session
             }
             else
             {
-                Console.WriteLine("load game with name: ");
-                var gameName = Console.ReadLine();
+                var gameName = allGames.Result.Where(x => x.GameGuid == value).Select(x => x.GameName).First()
+                    .ToString();
                 var seed = allGames.Result.Where(x => x.GameGuid == value).Select(x => x.Seed).FirstOrDefault();
                 _sessionHandler.CreateSession(gameName, true, value, seed);
             }
-        }
-
-        public void StartGame()
-        {
-            throw new NotImplementedException();
         }
     }
 }

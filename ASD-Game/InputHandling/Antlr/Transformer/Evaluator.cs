@@ -87,9 +87,6 @@ namespace InputHandling.Antlr.Transformer
                     case LoadGame:
                         TransformLoadGame((LoadGame)nodeBody[i]);
                         break;
-                    case StartGame:
-                        TransformStartGame((StartGame)nodeBody[i]);
-                        break;
                     case RequestSavedGames:
                         TransformRequestSavedGames((RequestSavedGames)nodeBody[i]);
                         break;
@@ -178,11 +175,6 @@ namespace InputHandling.Antlr.Transformer
         private void TransformLoadGame(LoadGame loadGame)
         {
             _gamesSessionService.LoadGame(loadGame.Message.MessageValue);
-        }
-
-        private void TransformStartGame(StartGame startGame)
-        {
-            _gamesSessionService.StartGame();
         }
 
         private void TransformRequestSavedGames(RequestSavedGames requestSavedGames)
