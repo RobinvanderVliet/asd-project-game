@@ -169,7 +169,6 @@ namespace Session
             {
                 CheckClientExists(startGameDTO);
             }
-
             _worldService.DisplayWorld();
         }
 
