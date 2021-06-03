@@ -53,8 +53,7 @@ namespace Session.Tests
                     p.PlayerGUIDHost,
                     p.GameGuid,
                 };
-
-
+            
             // check e WriteLine overeenkomen met de gevulde tabel
             using (StringWriter sw = new StringWriter())
             {
@@ -63,6 +62,29 @@ namespace Session.Tests
                 sut.RequestSavedGames();
                 string stom = joinedTables.Select(x => x.GameGuid).First().ToString();
                 string expected = string.Format(stom + Environment.NewLine);
+
+                // Assert
+                Assert.AreEqual(expected, sw.ToString());
+            }
+        }
+        
+        [Test]
+        public void TestIfRequestSavedGamesGivesBackAnEmptyList()
+        {
+            // Arrange
+            List<ClientHistoryPoco> clientList = new List<ClientHistoryPoco>();
+            List<GamePOCO> gameList = new List<GamePOCO>(); // niet gebruiken want er zijn geen oude spellen
+            ClientHistoryPoco clientHistoryPoco = new ClientHistoryPoco {GameId = "game1", PlayerId = "player1"};
+            clientList.Add(clientHistoryPoco);
+
+            _mockedDatabaseClientHistory.Setup(x => x.GetAllAsync()).ReturnsAsync(clientList);
+            
+            using (StringWriter sw = new StringWriter())
+            {
+                // Act
+                Console.SetOut(sw);
+                sut.RequestSavedGames();
+                string expected = string.Format("There are no saved games" + Environment.NewLine);
 
                 // Assert
                 Assert.AreEqual(expected, sw.ToString());

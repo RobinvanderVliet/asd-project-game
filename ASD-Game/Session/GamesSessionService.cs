@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Castle.Core.Internal;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
@@ -13,7 +14,8 @@ namespace Session
         private readonly IDatabaseService<ClientHistoryPoco> _clientHistoryService;
         private readonly IDatabaseService<GamePOCO> _gamePocoService;
 
-        public GamesSessionService(ISessionHandler sessionHandler, IDatabaseService<ClientHistoryPoco> clientHistoryService, IDatabaseService<GamePOCO> gamePocoService)
+        public GamesSessionService(ISessionHandler sessionHandler,
+            IDatabaseService<ClientHistoryPoco> clientHistoryService, IDatabaseService<GamePOCO> gamePocoService)
         {
             _sessionHandler = sessionHandler;
             _clientHistoryService = clientHistoryService;
@@ -36,10 +38,16 @@ namespace Session
                     p.GameGuid,
                 };
 
-
-            foreach (var element in joinedTables.Select(x => x.GameGuid))
+            if (joinedTables.IsNullOrEmpty())
             {
-                Console.WriteLine(element);
+                Console.WriteLine("There are no saved games");
+            }
+            else
+            {
+                foreach (var element in joinedTables.Select(x => x.GameGuid))
+                {
+                    Console.WriteLine(element);
+                }
             }
         }
 
