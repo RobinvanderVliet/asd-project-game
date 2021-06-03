@@ -49,10 +49,7 @@ namespace ASD_project.World
                         , chunkRowSize * chunkY - chunkRowSize + y);
                 }
             }
-            
-            var createdChunk = new Chunk(chunkX, chunkY, map, chunkRowSize, _seed); 
-            var modifiedChunk = itemSpawner.Spawn(createdChunk, _itemNoise.GetNoise(chunkX, chunkY));
-            return modifiedChunk;
+            return new Chunk(chunkX, chunkY, map, chunkRowSize, _seed);
         }
 
         private ITile CreateTileWithItemFromNoise(float worldNoise, float itemNoise, int x, int y)
