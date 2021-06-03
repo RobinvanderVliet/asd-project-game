@@ -45,6 +45,11 @@ namespace WorldGeneration
         {
             return _world.GetLoadedTileByXAndY(x, y);
         }
+        
+        public bool CheckIfPlayerOnTile(ITile tile)
+        {
+            return _world.CheckIfPlayerOnTile(tile);
+        }
 
         public void LoadArea(int playerX, int playerY, int viewDistance)
         {

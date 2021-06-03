@@ -52,7 +52,7 @@ namespace WorldGeneration
         {
             if (CurrentPlayer != null && _players != null)
             {
-                Console.Clear();
+                // Console.Clear();
                 _map.DisplayMap(CurrentPlayer, _viewDistance, new List<Character>(_players));
             }
         }
@@ -64,7 +64,20 @@ namespace WorldGeneration
 
         public ITile GetLoadedTileByXAndY(int x, int y)
         {
-            return _map.GetLoadedTileByXAndY(x, y);
+            return _map.GetLoadedTileByXAndY(x, y); //map hier
+        }
+        
+        public bool CheckIfPlayerOnTile(ITile tile)
+        {
+            foreach (var player in _players)
+            {
+                if (player.XPosition == tile.XPosition && player.YPosition == tile.YPosition)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
         
         public void LoadArea(int playerX, int playerY, int viewDistance)

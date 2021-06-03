@@ -12,6 +12,7 @@ namespace WorldGeneration
         public Player getCurrentPlayer();
         public Player GetPlayer(string id);
         public ITile GetTile(int x, int y);
+        public bool CheckIfPlayerOnTile(ITile tile);
         public void LoadArea(int playerX, int playerY, int viewDistance);
     }
 }

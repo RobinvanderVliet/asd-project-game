@@ -45,10 +45,10 @@ namespace ActionHandling
         
         public void CheckRadiationTimer()
         {
-            _radiationTimer = new Timer(RADIATION_TIMER);
-            _radiationTimer.AutoReset = true;
-            _radiationTimer.Elapsed += RadiationEvent;
-            _radiationTimer.Start();
+            // _radiationTimer = new Timer(RADIATION_TIMER);
+            // _radiationTimer.AutoReset = true;
+            // _radiationTimer.Elapsed += RadiationEvent;
+            // _radiationTimer.Start();
         }
         
         private void StaminaEvent(object sender, ElapsedEventArgs e)
@@ -56,7 +56,7 @@ namespace ActionHandling
             if (_player.Stamina < 100)
             {
                 var statDto = new RelativeStatDTO();
-                statDto.Stamina = 1;
+                statDto.Stamina = 100;
                 SendStat(statDto);
                 Console.WriteLine("Gained Stamina! S: " + _player.Stamina);
             }
