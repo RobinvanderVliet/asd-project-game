@@ -21,14 +21,14 @@ namespace Creature.Tests
         {
             _creatureStateMachineMock = new Mock<ICreatureStateMachine>();
             _clientControllerMock = new Mock<IClientController>();
-            _sut = new Creature.Player(_creatureStateMachineMock.Object, _clientControllerMock.Object);
+            _sut = new Creature.Player(_creatureStateMachineMock.Object);
         }
 
         [Test]
         public void Test_ApplyDamage_DealsDamage()
         {
             // Arrange ---------
-            PlayerData playerData = new PlayerData(new Vector2(), 50, 10, 10, null);
+            PlayerData playerData = new PlayerData(new Vector2(), 50, 10, 10);
             _creatureStateMachineMock.Setup(c => c.CreatureData).Returns(playerData);
 
             // Act -------------
@@ -42,7 +42,7 @@ namespace Creature.Tests
         public void Test_HealAmount_HealsPlayer()
         {
             // Arrange ---------
-            PlayerData playerData = new PlayerData(new Vector2(), 30, 10, 10, null);
+            PlayerData playerData = new PlayerData(new Vector2(), 30, 10, 10);
             _creatureStateMachineMock.Setup(c => c.CreatureData).Returns(playerData);
 
             // Act -------------
