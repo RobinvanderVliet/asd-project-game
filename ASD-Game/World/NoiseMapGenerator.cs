@@ -10,6 +10,7 @@ namespace ASD_project.World
     public class NoiseMapGenerator : INoiseMapGenerator
     {
         private IFastNoise _noise;
+        private IFastNoise _itemNoise;
         private readonly int _seed;
         private IItemService _itemService;
 
@@ -23,6 +24,10 @@ namespace ASD_project.World
             _noise.SetSeed(seed);
             _seed = seed;
             _itemService = itemService;
+            _itemNoise = new FastNoiseLite();
+            _itemNoise.SetFrequency(1f);
+            _itemNoise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
+            _itemNoise.SetSeed(seed);
         }
 
         public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize)
@@ -40,7 +45,7 @@ namespace ASD_project.World
             }
             
             var createdChunk = new Chunk(chunkX, chunkY, map, chunkRowSize, _seed); 
-            var modifiedChunk = itemSpawner.Spawn(createdChunk, _noise.GetNoise(chunkX, chunkY));
+            var modifiedChunk = itemSpawner.Spawn(createdChunk, _itemNoise.GetNoise(chunkX, chunkY));
             return modifiedChunk;
         }
 
