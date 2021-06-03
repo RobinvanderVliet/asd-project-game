@@ -27,6 +27,7 @@ namespace ActionHandling.Tests
         private Mock<IMessageService> _mockedMessageService;
         private Mock<IServicesDb<PlayerPOCO>> _mockedPlayerServicesDb;
         private Mock<IServicesDb<PlayerItemPOCO>> _mockedPlayerItemServicesDb;
+        private Mock<IServicesDb<WorldItemPOCO>> _mockedWorldItemServicesDb;
 
         [SetUp]
         public void Setup()
@@ -36,8 +37,9 @@ namespace ActionHandling.Tests
             _mockedPlayerServicesDb = new();
             _mockedPlayerItemServicesDb = new();
             _mockedMessageService = new();
-            
-            _sut = new InventoryHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerServicesDb.Object, _mockedPlayerItemServicesDb.Object, _mockedMessageService.Object);
+            _mockedWorldItemServicesDb = new();
+
+            _sut = new InventoryHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerServicesDb.Object, _mockedPlayerItemServicesDb.Object, _mockedWorldItemServicesDb.Object, _mockedMessageService.Object);
         }
 
         [Test]

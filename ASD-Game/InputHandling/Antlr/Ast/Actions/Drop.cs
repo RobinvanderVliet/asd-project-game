@@ -47,9 +47,5 @@ namespace InputHandling.Antlr.Ast.Actions
         {
             return true;
         }
-        public override int GetHashCode()
-        {
-            return _itemName.GetHashCode();
-        }
     }
 }

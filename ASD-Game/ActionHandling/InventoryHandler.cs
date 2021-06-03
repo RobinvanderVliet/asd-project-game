@@ -2,7 +2,6 @@
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Items.Consumables;
-using Messages;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
@@ -11,6 +10,7 @@ using System.Linq;
 using Items;
 using WorldGeneration;
 using WorldGeneration.Exceptions;
+using Messages;
 
 namespace ActionHandling
 {

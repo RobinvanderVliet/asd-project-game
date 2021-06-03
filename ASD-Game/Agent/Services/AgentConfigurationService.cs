@@ -1,7 +1,6 @@
 ﻿using Agent.Exceptions;
 using Agent.Mapper;
 using Agent.Models;
-using Agent.Exceptions;
 using InputHandling;
 using Serilog;
 using System;

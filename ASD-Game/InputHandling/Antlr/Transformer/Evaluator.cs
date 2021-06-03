@@ -5,7 +5,6 @@ using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Exceptions;
 using Session;
-using System;
 
 namespace InputHandling.Antlr.Transformer
 {
