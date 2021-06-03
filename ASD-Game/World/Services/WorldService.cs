@@ -11,7 +11,6 @@ namespace WorldGeneration
     public class WorldService : IWorldService
     {
         private IScreenHandler _screenHandler;
-        private ISpawnHandler _spawnHandler;
         private IItemService _itemService;
         private World _world;
 
