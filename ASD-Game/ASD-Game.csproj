@@ -60,6 +60,7 @@
       <CustomToolNamespace>InputHandling.Antlr.Grammar</CustomToolNamespace>
     </Antlr4>
   </ItemGroup>
+  
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
