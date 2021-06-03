@@ -205,6 +205,7 @@ namespace ActionHandling
             {
                 case 0:
                     item = player.Inventory.Helmet;
+                    if (item != null)
                     {
                         armorPoints = (item as Armor).ArmorProtectionPoints;
                     }
