@@ -5,7 +5,7 @@ using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Exceptions;
 using Session;
-using System;
+using Creature;
 
 namespace InputHandling.Antlr.Transformer
 {
@@ -15,17 +15,19 @@ namespace InputHandling.Antlr.Transformer
         private IMoveHandler _moveHandler;
         private IGameSessionHandler _gameSessionHandler;
         private IChatHandler _chatHandler;
+        private IAgentHandler _agentHandler;
         
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private String _commando;
         
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IAgentHandler agentHandler)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
             _gameSessionHandler = gameSessionHandler;
             _chatHandler = chatHandler;
+            _agentHandler = agentHandler;
         }
         public void Apply(AST ast)
         {
@@ -125,14 +127,7 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformReplace()
         {
-            if (_agentService.IsActivated())
-            {
-                Console.WriteLine("Your agent is now inactive.");
-                _agentService.DeActivate();
-                return;
-            }
-            Console.WriteLine("Your agent is now active.");
-            _agentService.Activate();
+            _agentHandler.Replace();
         }
 
         private void TransformResume()

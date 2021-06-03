@@ -10,16 +10,12 @@ using DatabaseHandler.Services;
 using WorldGeneration;
 using ActionHandling;
 using Chat;
+using Creature;
 using InputHandling;
 using InputHandling.Antlr;
 using InputHandling.Antlr.Transformer;
 using Network;
 using Session;
-
-using Player.Model;
-using InputCommandHandler;
-using Creature.Services;
-
 using UserInterface;
 
 
@@ -58,6 +54,7 @@ namespace ASD_project
                     services.AddScoped(typeof(IServicesDb<>), typeof(ServicesDb<>));
                     services.AddScoped<IScreenHandler, ScreenHandler>();
                     services.AddScoped<IInputHandler, InputHandler>();
+                    services.AddScoped<IAgentHandler, AgentHandler>();
                     services.AddScoped<IPipeline, Pipeline>();
                     services.AddScoped<IEvaluator, Evaluator>();
                 })

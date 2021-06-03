@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using ActionHandling;
 using Chat;
+using Creature;
 using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Antlr.Transformer;
@@ -19,6 +20,7 @@ namespace InputHandling.Tests
         private Mock<IMoveHandler> _mockedMoveHandler;
         private Mock<IGameSessionHandler> _mockedGameSessionHandler;
         private Mock<IChatHandler> _mockedChatHandler;
+        private Mock<IAgentHandler> _agentHandlerMock;
     
         [SetUp]
         public void Setup()
@@ -27,7 +29,8 @@ namespace InputHandling.Tests
             _mockedMoveHandler = new Mock<IMoveHandler>();
             _mockedGameSessionHandler = new Mock<IGameSessionHandler>();
             _mockedChatHandler = new Mock<IChatHandler>();
-            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object);
+            _agentHandlerMock = new Mock<IAgentHandler>();
+            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _agentHandlerMock.Object);
         }
     
         [Test]
