@@ -6,10 +6,15 @@
 TestResults
 
 ### DotnetCore ###
+# INCLUDE APPSETTINGS
+!/ASD-Game/bin/Debug/net5.0/appsettings.json
+!/ASD-Game.Tests/bin/Debug/net5.0/appsettings.json
+
 # .NET Core build folders
 bin/
 obj/
 .vs/
+
 
 
 # Common node modules locations
