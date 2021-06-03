@@ -205,12 +205,18 @@ namespace ActionHandling
             {
                 case 0:
                     item = player.Inventory.Helmet;
-                    armorPoints = (item as Armor).ArmorProtectionPoints;  
+                    if (item != null)
+                    {
+                        armorPoints = (item as Armor).ArmorProtectionPoints;
+                    }
                     player.Inventory.Helmet = null;
                     break;
                 case 1:
                     item = player.Inventory.Armor;
-                    armorPoints = (item as Armor).ArmorProtectionPoints;
+                    if(item != null)
+                    {
+                        armorPoints = (item as Armor).ArmorProtectionPoints;
+                    }
                     player.Inventory.Armor = null;
                     break;
                 case 2:
@@ -218,16 +224,25 @@ namespace ActionHandling
                     player.Inventory.Weapon = null;
                     break;
                 case 3:
-                    item = player.Inventory.ConsumableItemList[0];
-                    player.Inventory.ConsumableItemList[0] = null;
+                    if(player.Inventory.ConsumableItemList.Count >= 1)
+                    {
+                        item = player.Inventory.ConsumableItemList.ElementAt(0);
+                        player.Inventory.ConsumableItemList.RemoveAt(0);
+                    }              
                     break;
                 case 4:
-                    item = player.Inventory.ConsumableItemList[1];
-                    player.Inventory.ConsumableItemList[1] = null;
+                    if (player.Inventory.ConsumableItemList.Count >= 2)
+                    {
+                        item = player.Inventory.ConsumableItemList.ElementAt(1);
+                        player.Inventory.ConsumableItemList.RemoveAt(1);
+                    }
                     break;
                 case 5:
-                    item = player.Inventory.ConsumableItemList[2];
-                    player.Inventory.ConsumableItemList[2] = null;
+                    if (player.Inventory.ConsumableItemList.Count >= 3)
+                    {
+                        item = player.Inventory.ConsumableItemList.ElementAt(2);
+                        player.Inventory.ConsumableItemList.RemoveAt(2);
+                    }
                     break;
                 default:
                     break;
@@ -235,23 +250,10 @@ namespace ActionHandling
 
             if (item != null)
             {
-                _worldService.GetItemsOnCurrentTile(player).Add(item);
-
                 if (handleInDatabase)
                 {
                     PlayerItemPOCO playerItemPOCO = _playerItemServicesDB.GetAllAsync().Result.FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == item.ItemName && playerItem.PlayerGUID == player.Id);
                     _ = _playerItemServicesDB.DeleteAsync(playerItemPOCO);
-
-                    WorldItemPOCO worldItemPOCO = new WorldItemPOCO()
-                    {
-                        GameGUID = _clientController.SessionId,
-                        ItemName = item.ItemName,
-                        XPosition = player.XPosition,
-                        YPosition = player.YPosition,
-                        ArmorPoints = armorPoints
-                    };
-
-                    _worldItemServicesDB.CreateAsync(worldItemPOCO);
                 }
 
                 if (inventoryDTO.UserId == _clientController.GetOriginId())

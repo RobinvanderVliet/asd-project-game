@@ -28,6 +28,7 @@ namespace ActionHandling.Tests
         private Mock<IServicesDb<PlayerPOCO>> _mockedPlayerServicesDb;
         private Mock<IServicesDb<PlayerItemPOCO>> _mockedPlayerItemServicesDb;
         private Mock<IServicesDb<WorldItemPOCO>> _mockedWorldItemServicesDb;
+        private static string _thisIsNotAnItemYouCanDrop = "This is not an item you can drop!";
 
         [SetUp]
         public void Setup()
@@ -76,6 +77,160 @@ namespace ActionHandling.Tests
 
             //assert
             _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Inventory), Times.Once);
+        }
+
+        [Test]
+        public void Test_DropItem_SendsInventoryDTO()
+        {
+            // Arrange
+            const string ITEM = "helmet";
+            string originId = "origin1";
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
+
+            InventoryDTO inventoryDTO = new(originId, InventoryType.Drop, 0);
+            string payload = JsonConvert.SerializeObject(inventoryDTO);
+
+            // Act
+            _sut.DropItem(ITEM);
+
+            // Assert
+            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Inventory), Times.Once);
+        }
+
+        [Test]
+        public void Test_DropItem_SendsErrorMessage()
+        {
+            // Arrange
+            const string ITEM = "helmet99";
+            string originId = "origin1";
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
+
+            InventoryDTO inventoryDTO = new(originId, InventoryType.Drop, 99);
+            string payload = JsonConvert.SerializeObject(inventoryDTO);
+
+            // Act
+            _sut.DropItem(ITEM);
+
+            // Assert
+            _mockedMessageService.Verify(mock => mock.AddMessage("Unknown item slot"), Times.Once);
+        }
+
+        [Test]
+        [TestCaseSource(typeof(HandlesDropPacketCases))]
+        public void Test_HandlePacket_HandlesDropPacket(PacketDTO packetDTO, InventoryDTO inventoryDTO, string message)
+        {
+            // Arrange
+            string originId = "origin1";
+            PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO();
+            // playerItemPOCO.ItemName = inventoryDTO. TODO: Add correct item name.
+            playerItemPOCO.PlayerGUID = originId;
+            List<PlayerItemPOCO> playerItemPOCOs = new();
+            playerItemPOCOs.Add(playerItemPOCO);
+            IEnumerable<PlayerItemPOCO> enumerable = playerItemPOCOs;
+            
+            _mockedClientController.Setup(mock => mock.IsHost()).Returns(false);
+            _mockedPlayerItemServicesDb.Setup(mock => mock.GetAllAsync()).Returns(Task.FromResult(enumerable));
+
+            _mockedClientController.Setup(mock => mock.IsHost()).Returns(true);
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(inventoryDTO.UserId);
+
+            Player player = new Player("henk", 0, 0, "#", inventoryDTO.UserId);
+            Item item = ItemFactory.GetBandage();
+
+            for(int i = 0; i < 3; i++)
+            {
+                player.Inventory.AddConsumableItem((Items.Consumables.Consumable)item);
+            }
+
+            _mockedWorldService.Setup(mock => mock.GetPlayer(inventoryDTO.UserId)).Returns(player);
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
+
+            // Act
+            _sut.HandlePacket(packetDTO);
+
+            // Assert
+            _mockedMessageService.Verify(mock => mock.AddMessage(message), Times.Once);
+            if (!message.Equals(_thisIsNotAnItemYouCanDrop))
+            {
+                _mockedPlayerItemServicesDb.Verify(mock => mock.DeleteAsync(It.IsAny<PlayerItemPOCO>()), Times.Once);
+            }
+        }
+        
+        class HandlesDropPacketCases : IEnumerable
+        {
+            private string _youDroppedBandage = "You dropped Bandage";
+
+            public IEnumerator GetEnumerator()
+            {
+                string originId = "origin1";
+
+                //Player drops Helmet
+                InventoryDTO inventoryDTO = new(originId, InventoryType.Drop, 0);
+                string payload = JsonConvert.SerializeObject(inventoryDTO);
+
+                PacketDTO packetDTO = new();
+                packetDTO.Payload = payload;
+                PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+                packetHeaderDTO.Target = "host";
+                packetDTO.Header = packetHeaderDTO;
+                yield return new object[] { packetDTO, inventoryDTO, "You dropped Bandana" };
+                
+                //Player drops Knife
+                InventoryDTO inventoryDTO2 = new(originId, InventoryType.Drop, 2);
+                string payload2 = JsonConvert.SerializeObject(inventoryDTO2);
+                
+                PacketDTO packetDTO2 = new();
+                packetDTO2.Payload = payload2;
+                PacketHeaderDTO packetHeaderDTO2 = new PacketHeaderDTO();
+                packetHeaderDTO2.Target = "host";
+                packetDTO2.Header = packetHeaderDTO2;
+                yield return new object[] { packetDTO2, inventoryDTO2, "You dropped Knife" };
+                
+                //Player drops Armor
+                InventoryDTO inventoryDTO3 = new(originId, InventoryType.Drop, 1);
+                string payload3 = JsonConvert.SerializeObject(inventoryDTO3);
+                
+                PacketDTO packetDTO3 = new();
+                packetDTO3.Payload = payload3;
+                PacketHeaderDTO packetHeaderDTO3 = new PacketHeaderDTO();
+                packetHeaderDTO3.Target = "host";
+                packetDTO3.Header = packetHeaderDTO3;
+                yield return new object[] { packetDTO3, inventoryDTO3, _thisIsNotAnItemYouCanDrop };
+                
+                //Player drops Consumable 1
+                InventoryDTO inventoryDTO4 = new(originId, InventoryType.Drop, 3);
+                string payload4 = JsonConvert.SerializeObject(inventoryDTO4);
+                
+                PacketDTO packetDTO4 = new();
+                packetDTO4.Payload = payload4;
+                PacketHeaderDTO packetHeaderDTO4 = new PacketHeaderDTO();
+                packetHeaderDTO4.Target = "host";
+                packetDTO4.Header = packetHeaderDTO4;
+                
+                yield return new object[] { packetDTO4, inventoryDTO4, _youDroppedBandage };
+                
+                //Player drops Consumable 2
+                InventoryDTO inventoryDTO5 = new(originId, InventoryType.Drop, 4);
+                string payload5 = JsonConvert.SerializeObject(inventoryDTO5);
+                
+                PacketDTO packetDTO5 = new();
+                packetDTO5.Payload = payload5;
+                PacketHeaderDTO packetHeaderDTO5 = new PacketHeaderDTO();
+                packetHeaderDTO5.Target = "host";
+                packetDTO5.Header = packetHeaderDTO5;
+                yield return new object[] { packetDTO5, inventoryDTO5, _youDroppedBandage };
+                
+                //Player drops Consumable 3
+                InventoryDTO inventoryDTO6 = new(originId, InventoryType.Drop, 5);
+                string payload6 = JsonConvert.SerializeObject(inventoryDTO6);
+                
+                PacketDTO packetDTO6 = new();
+                packetDTO6.Payload = payload6;
+                PacketHeaderDTO packetHeaderDTO6 = new PacketHeaderDTO();
+                packetHeaderDTO6.Target = "host";
+                packetDTO6.Header = packetHeaderDTO6;
+                yield return new object[] { packetDTO6, inventoryDTO6, _youDroppedBandage };
+            }
         }
 
         [Test]
