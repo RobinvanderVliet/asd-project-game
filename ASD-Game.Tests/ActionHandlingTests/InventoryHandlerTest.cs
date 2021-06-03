@@ -79,6 +79,42 @@ namespace ActionHandling.Tests
         }
 
         [Test]
+        public void Test_Drop_SendsInventoryDTO()
+        {
+            // Arrange
+            const string ITEM = "helmet";
+            string originId = "origin1";
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
+
+            InventoryDTO inventoryDTO = new(originId, InventoryType.Drop, 0);
+            string payload = JsonConvert.SerializeObject(inventoryDTO);
+
+            // Act
+            _sut.DropItem(ITEM);
+
+            // Assert
+            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Inventory), Times.Once);
+        }
+
+        [Test]
+        public void Test_Drop_SendsErrorMessage()
+        {
+            // Arrange
+            const string ITEM = "helmet99";
+            string originId = "origin1";
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
+
+            InventoryDTO inventoryDTO = new(originId, InventoryType.Drop, 99);
+            string payload = JsonConvert.SerializeObject(inventoryDTO);
+
+            // Act
+            _sut.DropItem(ITEM);
+
+            // Assert
+            _mockedMessageService.Verify(mock => mock.AddMessage("Unknown item slot"), Times.Once);
+        }
+
+        [Test]
         public void Test_Pickup_SendsInventoryDTO()
         {
             // Arrange
