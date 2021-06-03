@@ -28,6 +28,7 @@ namespace ActionHandling.Tests
         private Mock<IServicesDb<PlayerPOCO>> _mockedPlayerServicesDb;
         private Mock<IServicesDb<PlayerItemPOCO>> _mockedPlayerItemServicesDb;
         private Mock<IServicesDb<WorldItemPOCO>> _mockedWorldItemServicesDb;
+        private static string _thisIsNotAnItemYouCanDrop = "This is not an item you can drop!";
 
         [SetUp]
         public void Setup()
@@ -121,15 +122,17 @@ namespace ActionHandling.Tests
             // Arrange
             string originId = "origin1";
             PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO();
-            playerItemPOCO.GameGUID = originId;
             // playerItemPOCO.ItemName = inventoryDTO. TODO: Add correct item name.
-            playerItemPOCO.PlayerGUID = inventoryDTO.UserId;
+            playerItemPOCO.PlayerGUID = originId;
             List<PlayerItemPOCO> playerItemPOCOs = new();
             playerItemPOCOs.Add(playerItemPOCO);
             IEnumerable<PlayerItemPOCO> enumerable = playerItemPOCOs;
             
             _mockedClientController.Setup(mock => mock.IsHost()).Returns(false);
             _mockedPlayerItemServicesDb.Setup(mock => mock.GetAllAsync()).Returns(Task.FromResult(enumerable));
+
+            _mockedClientController.Setup(mock => mock.IsHost()).Returns(true);
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(inventoryDTO.UserId);
 
             Player player = new Player("henk", 0, 0, "#", inventoryDTO.UserId);
             Item item = ItemFactory.GetBandage();
@@ -147,15 +150,20 @@ namespace ActionHandling.Tests
 
             // Assert
             _mockedMessageService.Verify(mock => mock.AddMessage(message), Times.Once);
-            _mockedPlayerItemServicesDb.Verify(mock => mock.DeleteAsync(It.IsAny<PlayerItemPOCO>()), Times.Once);
+            if (!message.Equals(_thisIsNotAnItemYouCanDrop))
+            {
+                _mockedPlayerItemServicesDb.Verify(mock => mock.DeleteAsync(It.IsAny<PlayerItemPOCO>()), Times.Once);
+            }
         }
         
         class HandlesDropPacketCases : IEnumerable
         {
+            private string _youDroppedBandage = "You dropped Bandage";
+
             public IEnumerator GetEnumerator()
             {
                 string originId = "origin1";
-                
+
                 //Player drops Helmet
                 InventoryDTO inventoryDTO = new(originId, InventoryType.Drop, 0);
                 string payload = JsonConvert.SerializeObject(inventoryDTO);
@@ -187,7 +195,7 @@ namespace ActionHandling.Tests
                 PacketHeaderDTO packetHeaderDTO3 = new PacketHeaderDTO();
                 packetHeaderDTO3.Target = "host";
                 packetDTO3.Header = packetHeaderDTO3;
-                yield return new object[] { packetDTO3, inventoryDTO3, "This is not an item you can drop!" };
+                yield return new object[] { packetDTO3, inventoryDTO3, _thisIsNotAnItemYouCanDrop };
                 
                 //Player drops Consumable 1
                 InventoryDTO inventoryDTO4 = new(originId, InventoryType.Drop, 3);
@@ -198,7 +206,8 @@ namespace ActionHandling.Tests
                 PacketHeaderDTO packetHeaderDTO4 = new PacketHeaderDTO();
                 packetHeaderDTO4.Target = "host";
                 packetDTO4.Header = packetHeaderDTO4;
-                yield return new object[] { packetDTO4, inventoryDTO4, "You dropped Bandage" };
+                
+                yield return new object[] { packetDTO4, inventoryDTO4, _youDroppedBandage };
                 
                 //Player drops Consumable 2
                 InventoryDTO inventoryDTO5 = new(originId, InventoryType.Drop, 4);
@@ -209,7 +218,7 @@ namespace ActionHandling.Tests
                 PacketHeaderDTO packetHeaderDTO5 = new PacketHeaderDTO();
                 packetHeaderDTO5.Target = "host";
                 packetDTO5.Header = packetHeaderDTO5;
-                yield return new object[] { packetDTO5, inventoryDTO5, "You dropped Bandage" };
+                yield return new object[] { packetDTO5, inventoryDTO5, _youDroppedBandage };
                 
                 //Player drops Consumable 3
                 InventoryDTO inventoryDTO6 = new(originId, InventoryType.Drop, 5);
@@ -220,7 +229,7 @@ namespace ActionHandling.Tests
                 PacketHeaderDTO packetHeaderDTO6 = new PacketHeaderDTO();
                 packetHeaderDTO6.Target = "host";
                 packetDTO6.Header = packetHeaderDTO6;
-                yield return new object[] { packetDTO6, inventoryDTO6, "You dropped Bandage" };
+                yield return new object[] { packetDTO6, inventoryDTO6, _youDroppedBandage };
             }
         }
 
