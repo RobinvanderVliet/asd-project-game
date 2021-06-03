@@ -143,7 +143,6 @@ namespace InputHandling
             //TODO add if to check if you are the host
             if (input == START_COMMAND) 
             {
-                //_screenHandler.TransitionTo(new GameScreen());
                 SendCommand(START_COMMAND);
             }
 
@@ -172,8 +171,8 @@ namespace InputHandling
                 if (configurationCompleted)
                 {
                     _gameConfigurationHandler.SetGameConfiguration();
-                    _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(), _gameConfigurationHandler.GetUsername());
                     _screenHandler.TransitionTo(new LobbyScreen());
+                    _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(), _gameConfigurationHandler.GetUsername());
                 }
             }
         }

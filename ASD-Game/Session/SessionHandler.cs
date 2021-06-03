@@ -104,6 +104,11 @@ namespace Session
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
+            
+            if (_screenHandler.Screen is LobbyScreen screen)
+            {
+                screen.UpdateLobbyScreen(_session.GetAllClients());
+            }
 
             _heartbeatHandler = new HeartbeatHandler();
             return _session.InSession;
