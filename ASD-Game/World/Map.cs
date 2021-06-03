@@ -104,6 +104,8 @@ namespace WorldGeneration
                 }
                 Console.WriteLine("");
             }
+
+            Console.WriteLine(GetLoadedTileByXAndY(currentPlayer.XPosition, currentPlayer.YPosition).Symbol);
         }
         
         private string GetDisplaySymbol(ITile tile, List<Character> characters)
@@ -149,8 +151,7 @@ namespace WorldGeneration
         // find a LOADED tile by the coordinates
         public ITile GetLoadedTileByXAndY(int x, int y)
         {
-            var tile = GetChunkForTileXAndY(x, y).GetTileByWorldCoordinates(x, y);
-            return tile;
+            return GetChunkForTileXAndY(x, y).GetTileByWorldCoordinates(x, y);
         }
     }
 }
