@@ -54,9 +54,9 @@ namespace ASD_project.World.Services
             return _world._items;
         }
 
-        public void AddItemToWorld(ItemSpawnDTO itemSpawnDto)
+        public void AddItemToWorld(ItemSpawnDTO itemSpawnDTO)
         {
-            _world.AddItemToWorld(itemSpawnDto);
+            _world.AddItemToWorld(itemSpawnDTO);
         }
 
         public World GetWorld()

@@ -23,5 +23,10 @@ namespace ASD_project.Items.Services
 
             return tile;
         }
+
+        public ISpawnHandler GetSpawnHandler()
+        {
+            return _spawnHandler;
+        }
     }
 }

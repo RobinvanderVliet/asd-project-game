@@ -27,6 +27,7 @@ namespace ASD_project.World
             _map = mapFactory.GenerateMap(itemService, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
+            itemService.GetSpawnHandler().setItemSpawnDTOs(_items);
         }
 
         public void UpdateCharacterPosition(string id, int newXPosition, int newYPosition)
@@ -67,7 +68,7 @@ namespace ASD_project.World
             if (CurrentPlayer != null && _players != null && _creatures != null)
             {
                 var characters = ((IEnumerable<Character>)_players).Concat(_creatures).ToList();
-                //_screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
+                _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
             }
         }
 
