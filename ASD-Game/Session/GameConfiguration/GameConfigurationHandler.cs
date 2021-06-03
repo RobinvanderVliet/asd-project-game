@@ -221,8 +221,8 @@ namespace Session.GameConfiguration
             else
             {
                 _setupConfiguration = false;
-                SetGameConfiguration();
-                _configurationScreen.UpdateInputMessage("To the lobbbbbbbbybybybybybyyyyyy!!!!!!!!");
+                SetGameConfiguration();              
+                _screenHandler.TransitionTo(new LobbyScreen());
                 //To the next screen!
             }
         }
