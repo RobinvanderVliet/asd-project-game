@@ -699,7 +699,7 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName");
+            _sut.CreateSession("testSessionName", "testHost");
             _mockedClientController.Setup(mock => mock.SessionId).Returns(generatedSessionId);
             _mockedClientController.Setup(mock => mock.IsHost()).Returns(true);
             _mockedClientController.Setup(mock => mock.IsBackupHost).Returns(false);
@@ -745,7 +745,7 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName");
+            _sut.CreateSession("testSessionName", "testHost");
             _mockedClientController.Setup(mock => mock.SessionId).Returns(generatedSessionId);
             _mockedClientController.Setup(mock => mock.IsHost()).Returns(false);
             _mockedClientController.Setup(mock => mock.IsBackupHost).Returns(true);
@@ -793,7 +793,7 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName");
+            _sut.CreateSession("testSessionName", "testHost");
             _mockedClientController.Setup(mock => mock.SessionId).Returns(generatedSessionId);
             _mockedClientController.Setup(mock => mock.IsHost()).Returns(false);
             _mockedClientController.Setup(mock => mock.IsBackupHost).Returns(false);
@@ -838,7 +838,7 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName");
+            _sut.CreateSession("testSessionName", "testHost");
             _mockedClientController.Setup(mock => mock.SessionId).Returns(generatedSessionId);
             _mockedClientController.Setup(mock => mock.IsHost()).Returns(true);
             _mockedClientController.Setup(mock => mock.IsBackupHost).Returns(false);
@@ -884,7 +884,7 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName");
+            _sut.CreateSession("testSessionName", "testHost");
             _mockedClientController.Setup(mock => mock.SessionId).Returns(generatedSessionId);
             _mockedClientController.Setup(mock => mock.IsHost()).Returns(false);
             _mockedClientController.Setup(mock => mock.IsBackupHost).Returns(true);
@@ -932,7 +932,7 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName");
+            _sut.CreateSession("testSessionName", "testHost");
             _mockedClientController.Setup(mock => mock.SessionId).Returns(generatedSessionId);
             _mockedClientController.Setup(mock => mock.IsHost()).Returns(false);
             _mockedClientController.Setup(mock => mock.IsBackupHost).Returns(false);

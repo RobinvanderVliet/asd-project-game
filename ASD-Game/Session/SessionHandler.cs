@@ -175,6 +175,43 @@ namespace Session
 
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
+        
+        private HandlerResponseDTO  HandleMonsterDifficulty(PacketDTO packetDto)
+        {
+            if (_clientController.IsHost())
+            {
+                SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.Payload);
+                int difficulty = int.Parse(sessionDTO.Name);
+                _gameConfigurationHandler.SetDifficulty((MonsterDifficulty) difficulty, _clientController.SessionId);
+                return new HandlerResponseDTO(SendAction.SendToClients, packetDto.Payload);
+            }
+            if (_clientController.IsBackupHost)
+            {
+                SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
+                int difficulty = int.Parse(sessionDTO.Name);
+                _gameConfigurationHandler.SetDifficulty((MonsterDifficulty) difficulty, _clientController.SessionId);
+            }
+            return new HandlerResponseDTO(SendAction.Ignore, null);
+        }
+        private HandlerResponseDTO  HandleItemSpawnRate(PacketDTO packetDto)
+        {
+            if (_clientController.IsHost())
+            {
+                SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.Payload);
+                int spawnrate = int.Parse(sessionDTO.Name);
+                Console.WriteLine(spawnrate);
+                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
+                return new HandlerResponseDTO(SendAction.SendToClients, packetDto.Payload);
+            }
+            if (_clientController.IsBackupHost)
+            {
+                SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
+                int spawnrate = int.Parse(sessionDTO.Name);
+                Console.WriteLine(spawnrate);
+                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
+            }
+            return new HandlerResponseDTO(SendAction.Ignore, null);
+        }
 
         private HandlerResponseDTO HandleHeartbeat(PacketDTO packet)
         {
