@@ -685,5 +685,283 @@ namespace Session.Tests
             HandlerResponseDTO expectedResult = new HandlerResponseDTO(SendAction.Ignore, null);
             Assert.AreEqual(expectedResult.Action, actualResult.Action);
         }
+        
+        [Test]
+        public void Test_HandlePacket_MonsterDifficultyHost()
+        {
+            // Arrange ---------
+            string generatedSessionId = "";
+            _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
+                .Callback<string>(r => generatedSessionId = r);
+            _sut.CreateSession("testSessionName");
+            _mockedClientController.Setup(mock => mock.SessionId).Returns(generatedSessionId);
+            _mockedClientController.Setup(mock => mock.IsHost()).Returns(true);
+            _mockedClientController.Setup(mock => mock.IsBackupHost).Returns(false);
+
+            string originId = "testOriginId";
+            string originIdHost = "testOriginIdHost";
+            MonsterDifficulty difficulty = MonsterDifficulty.Easy;
+
+            SessionDTO sessionDTO = new SessionDTO {
+                SessionType = SessionType.EditMonsterDifficulty,
+                Name = ((int) difficulty).ToString()
+            };
+
+            var payload = JsonConvert.SerializeObject(sessionDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO
+            {
+                OriginID = originId,
+                SessionID = generatedSessionId,
+                PacketType = PacketType.Session,
+                Target = "host"
+            };
+            _packetDTO.Header = packetHeaderDTO;
+            
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients, payload);
+
+            _mockedClientController.SetupSequence(x => x.GetOriginId()).Returns(originIdHost);
+            _mockedGameConfigurationHandler.SetupSequence(x => x.SetDifficulty(It.IsAny<MonsterDifficulty>(), It.IsAny<string>()));
+
+            // Act -------------
+            HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
+
+            // Assert ----------
+            Assert.AreEqual(handlerResponseDTO.ResultMessage, actualResult.ResultMessage);
+            Assert.AreEqual(handlerResponseDTO.Action, actualResult.Action);
+            _mockedGameConfigurationHandler.Verify(x => x.SetDifficulty(difficulty, generatedSessionId), Times.Once());
+        }
+        
+        [Test]
+        public void Test_HandlePacket_MonsterDifficultyBackupHost()
+        {
+            // Arrange ---------
+            string generatedSessionId = "";
+            _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
+                .Callback<string>(r => generatedSessionId = r);
+            _sut.CreateSession("testSessionName");
+            _mockedClientController.Setup(mock => mock.SessionId).Returns(generatedSessionId);
+            _mockedClientController.Setup(mock => mock.IsHost()).Returns(false);
+            _mockedClientController.Setup(mock => mock.IsBackupHost).Returns(true);
+            
+            string originId = "testOriginId";
+            string originIdHost = "testOriginIdHost";
+            MonsterDifficulty difficulty = MonsterDifficulty.Easy;
+
+            SessionDTO sessionDTO = new SessionDTO {
+                SessionType = SessionType.EditMonsterDifficulty,
+                Name = ((int) difficulty).ToString()
+            };
+
+            var payload = JsonConvert.SerializeObject(sessionDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO
+            {
+                OriginID = originId,
+                SessionID = generatedSessionId,
+                PacketType = PacketType.Session,
+                Target = "host"
+            };
+            _packetDTO.Header = packetHeaderDTO;
+            
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients, payload);
+            _packetDTO.HandlerResponse = handlerResponseDTO;
+
+            _mockedClientController.SetupSequence(x => x.GetOriginId()).Returns(originIdHost);
+            _mockedGameConfigurationHandler.SetupSequence(x => x.SetDifficulty(It.IsAny<MonsterDifficulty>(), It.IsAny<string>()));
+
+            HandlerResponseDTO expected = new HandlerResponseDTO(SendAction.Ignore, null);
+            // Act -------------
+            HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
+
+            // Assert ----------;
+            Assert.AreEqual(expected.Action, actualResult.Action);
+            Assert.AreEqual(expected.ResultMessage, actualResult.ResultMessage);
+            _mockedGameConfigurationHandler.Verify(x => x.SetDifficulty(difficulty, generatedSessionId), Times.Once());
+        }
+        
+        [Test]
+        public void Test_HandlePacket_MonsterDifficultyClient()
+        {
+            // Arrange ---------
+            string generatedSessionId = "";
+            _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
+                .Callback<string>(r => generatedSessionId = r);
+            _sut.CreateSession("testSessionName");
+            _mockedClientController.Setup(mock => mock.SessionId).Returns(generatedSessionId);
+            _mockedClientController.Setup(mock => mock.IsHost()).Returns(false);
+            _mockedClientController.Setup(mock => mock.IsBackupHost).Returns(false);
+            
+            string originId = "testOriginId";
+            string originIdHost = "testOriginIdHost";
+            MonsterDifficulty difficulty = MonsterDifficulty.Easy;
+            
+            SessionDTO sessionDTO = new SessionDTO {
+                SessionType = SessionType.EditMonsterDifficulty,
+                Name = ((int) difficulty).ToString()
+            };
+            
+            var payload = JsonConvert.SerializeObject(sessionDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO
+            {
+                OriginID = originId,
+                SessionID = generatedSessionId,
+                PacketType = PacketType.Session,
+                Target = "host"
+            };
+            _packetDTO.Header = packetHeaderDTO;
+
+            _mockedClientController.SetupSequence(x => x.GetOriginId()).Returns(originIdHost);
+            _mockedGameConfigurationHandler.SetupSequence(x => x.SetDifficulty(It.IsAny<MonsterDifficulty>(), It.IsAny<string>()));
+
+            HandlerResponseDTO expected = new HandlerResponseDTO(SendAction.Ignore, null);
+            // Act -------------
+            HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
+
+            // Assert ----------;
+            Assert.AreEqual(expected.Action, actualResult.Action);
+            Assert.AreEqual(expected.ResultMessage, actualResult.ResultMessage);
+            _mockedGameConfigurationHandler.Verify(x => x.SetDifficulty(difficulty, generatedSessionId), Times.Never());
+        }
+        
+        [Test]
+        public void Test_HandlePacket_ItemSpawnRateHost()
+        {
+            // Arrange ---------
+            string generatedSessionId = "";
+            _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
+                .Callback<string>(r => generatedSessionId = r);
+            _sut.CreateSession("testSessionName");
+            _mockedClientController.Setup(mock => mock.SessionId).Returns(generatedSessionId);
+            _mockedClientController.Setup(mock => mock.IsHost()).Returns(true);
+            _mockedClientController.Setup(mock => mock.IsBackupHost).Returns(false);
+
+            string originId = "testOriginId";
+            string originIdHost = "testOriginIdHost";
+            ItemSpawnRate spawnRate = ItemSpawnRate.Low;
+
+            SessionDTO sessionDTO = new SessionDTO {
+                SessionType = SessionType.EditItemSpawnRate,
+                Name = ((int) spawnRate).ToString()
+            };
+
+            var payload = JsonConvert.SerializeObject(sessionDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO
+            {
+                OriginID = originId,
+                SessionID = generatedSessionId,
+                PacketType = PacketType.Session,
+                Target = "host"
+            };
+            _packetDTO.Header = packetHeaderDTO;
+            
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients, payload);
+
+            _mockedClientController.SetupSequence(x => x.GetOriginId()).Returns(originIdHost);
+            _mockedGameConfigurationHandler.SetupSequence(x => x.SetSpawnRate(It.IsAny<ItemSpawnRate>(), It.IsAny<string>()));
+
+            // Act -------------
+            HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
+
+            // Assert ----------
+            Assert.AreEqual(handlerResponseDTO.ResultMessage, actualResult.ResultMessage);
+            Assert.AreEqual(handlerResponseDTO.Action, actualResult.Action);
+            _mockedGameConfigurationHandler.Verify(x => x.SetSpawnRate(spawnRate, generatedSessionId), Times.Once());
+        }
+        
+        [Test]
+        public void Test_HandlePacket_ItemSpawnRateBackupHost()
+        {
+            // Arrange ---------
+            string generatedSessionId = "";
+            _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
+                .Callback<string>(r => generatedSessionId = r);
+            _sut.CreateSession("testSessionName");
+            _mockedClientController.Setup(mock => mock.SessionId).Returns(generatedSessionId);
+            _mockedClientController.Setup(mock => mock.IsHost()).Returns(false);
+            _mockedClientController.Setup(mock => mock.IsBackupHost).Returns(true);
+            
+            string originId = "testOriginId";
+            string originIdHost = "testOriginIdHost";
+            ItemSpawnRate spawnRate = ItemSpawnRate.Low;
+
+            SessionDTO sessionDTO = new SessionDTO {
+                SessionType = SessionType.EditItemSpawnRate,
+                Name = ((int) spawnRate).ToString()
+            };
+
+            var payload = JsonConvert.SerializeObject(sessionDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO
+            {
+                OriginID = originId,
+                SessionID = generatedSessionId,
+                PacketType = PacketType.Session,
+                Target = "host"
+            };
+            _packetDTO.Header = packetHeaderDTO;
+            
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients, payload);
+            _packetDTO.HandlerResponse = handlerResponseDTO;
+
+            _mockedClientController.SetupSequence(x => x.GetOriginId()).Returns(originIdHost);
+            _mockedGameConfigurationHandler.SetupSequence(x => x.SetSpawnRate(It.IsAny<ItemSpawnRate>(), It.IsAny<string>()));
+
+            HandlerResponseDTO expected = new HandlerResponseDTO(SendAction.Ignore, null);
+            // Act -------------
+            HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
+
+            // Assert ----------;
+            Assert.AreEqual(expected.Action, actualResult.Action);
+            Assert.AreEqual(expected.ResultMessage, actualResult.ResultMessage);
+            _mockedGameConfigurationHandler.Verify(x => x.SetSpawnRate(spawnRate, generatedSessionId), Times.Once());
+        }
+        
+        [Test]
+        public void Test_HandlePacket_SpawnRateClient()
+        {
+            // Arrange ---------
+            string generatedSessionId = "";
+            _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
+                .Callback<string>(r => generatedSessionId = r);
+            _sut.CreateSession("testSessionName");
+            _mockedClientController.Setup(mock => mock.SessionId).Returns(generatedSessionId);
+            _mockedClientController.Setup(mock => mock.IsHost()).Returns(false);
+            _mockedClientController.Setup(mock => mock.IsBackupHost).Returns(false);
+            
+            string originId = "testOriginId";
+            string originIdHost = "testOriginIdHost";
+            ItemSpawnRate spawnRate = ItemSpawnRate.Low;
+            
+            SessionDTO sessionDTO = new SessionDTO {
+                SessionType = SessionType.EditItemSpawnRate,
+                Name = ((int) spawnRate).ToString()
+            };
+            
+            var payload = JsonConvert.SerializeObject(sessionDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO
+            {
+                OriginID = originId,
+                SessionID = generatedSessionId,
+                PacketType = PacketType.Session,
+                Target = "host"
+            };
+            _packetDTO.Header = packetHeaderDTO;
+
+            _mockedClientController.SetupSequence(x => x.GetOriginId()).Returns(originIdHost);
+            _mockedGameConfigurationHandler.SetupSequence(x => x.SetSpawnRate(It.IsAny<ItemSpawnRate>(), It.IsAny<string>()));
+
+            HandlerResponseDTO expected = new HandlerResponseDTO(SendAction.Ignore, null);
+            // Act -------------
+            HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
+
+            // Assert ----------;
+            Assert.AreEqual(expected.Action, actualResult.Action);
+            Assert.AreEqual(expected.ResultMessage, actualResult.ResultMessage);
+            _mockedGameConfigurationHandler.Verify(x => x.SetSpawnRate(spawnRate, generatedSessionId), Times.Never());
+        }
     }
 }
