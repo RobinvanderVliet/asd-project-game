@@ -7,7 +7,7 @@ namespace WorldGeneration
     public class RandomItemGenerator
     {
 
-        public Item GetRandomItem(float noise)
+        public static Item GetRandomItem(float noise)
         {
             return (noise * 100) switch
             {

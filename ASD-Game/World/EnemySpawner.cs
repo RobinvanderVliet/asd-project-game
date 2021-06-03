@@ -2,7 +2,7 @@
 
 namespace WorldGeneration
 {
-    public class EnemySpawner : ISpawner
+    public class EnemySpawner
     {
         public void Spawn(Chunk chunk)
         {

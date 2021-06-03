@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Items;
 using UserInterface;
 
 namespace WorldGeneration
@@ -9,6 +10,7 @@ namespace WorldGeneration
         private IMap _map;
         public Player CurrentPlayer;
         private List<Player> _players;
+        private List<Item> _items;
         private List<Creature> _creatures;
         private readonly int _viewDistance;
         private IScreenHandler _screenHandler;

@@ -12,6 +12,7 @@ namespace WorldGeneration
     {
         private IFastNoise _noise;
         private readonly int _seed;
+        private ItemSpawner _itemSpawner;
 
         [ExcludeFromCodeCoverage]
         public NoiseMapGenerator(int seed)
@@ -22,6 +23,7 @@ namespace WorldGeneration
             _noise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
             _noise.SetSeed(seed);
             _seed = seed;
+            _itemSpawner = new ItemSpawner();
         }
 
         public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize)
@@ -41,14 +43,8 @@ namespace WorldGeneration
 
         private ITile CreateTileWithItemFromNoise(float noise, int x, int y)
         {
-            RandomItemGenerator randomItemGenerator = new RandomItemGenerator();
             var tile = GetTileFromNoise(noise, x, y);
-            var item = randomItemGenerator.GetRandomItem(noise);
-            if (item != null)
-            {
-                tile.ItemsOnTile.Add(item);
-            }
-            return tile;
+            return _itemSpawner.PutItemOnTile(tile, noise);
         }
 
         public ITile GetTileFromNoise(float noise, int x, int y)
