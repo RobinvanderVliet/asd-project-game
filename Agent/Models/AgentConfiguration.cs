@@ -1,9 +1,8 @@
-﻿namespace Agent.Models
+namespace Agent.Models
 {
     public class AgentConfiguration : Configuration
     {
         private string _agentName;
-
         public string AgentName
         {
             get => _agentName;

@@ -22,7 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Chat\Chat.csproj" />
     <ProjectReference Include="..\Network\Network.csproj" />
-    <ProjectReference Include="..\Player\Player.csproj" />
+    <ProjectReference Include="..\ActionHandling\ActionHandling.csproj" />
   </ItemGroup>
 
 </Project>

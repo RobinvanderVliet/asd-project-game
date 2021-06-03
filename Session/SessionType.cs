@@ -5,10 +5,10 @@ namespace Session
         RequestSessions,
         RequestSessionsResponse,
         RequestToJoinSession,
-        StartSession,
-        ClientJoinedSession,
         SendPing,
         ReceivedPingResponse,
-        SendHeartbeat
+        SendHeartbeat,
+        EditMonsterDifficulty,
+        EditItemSpawnRate
     }
 }
