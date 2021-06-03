@@ -20,7 +20,7 @@ namespace Session
         private IClientController _clientController;
         private Session _session;
         private IHeartbeatHandler _heartbeatHandler;
-        private TrainingScenario _trainingScenario;
+        public TrainingScenario trainingScenario { get; set; } = new TrainingScenario();
         private Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;
         private int _hostInactiveCounter = 0;
@@ -95,7 +95,11 @@ namespace Session
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
-            _trainingScenario = new TrainingScenario();
+            Thread traingThread = new Thread(
+            trainingScenario.StartTraining
+            );
+            traingThread.Start();
+
             _heartbeatHandler = new HeartbeatHandler();
             Console.WriteLine("Created session with the name: " + _session.Name);
 

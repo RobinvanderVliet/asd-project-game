@@ -9,7 +9,7 @@ namespace WorldGeneration
         private IMap _map;
         public Player CurrentPlayer;
         private List<Player> _players;
-        private List<Creature> _creatures;
+        private List<Character> _creatures;
         private readonly int _viewDistance;
         private IScreenHandler _screenHandler;
 
@@ -49,9 +49,9 @@ namespace WorldGeneration
             UpdateMap();
         }
 
-        public void AddCreatureToWorld(Creature creature)
+        public void AddCreatureToWorld(Character character)
         {
-            _creatures.Add(creature);
+            _creatures.Add(character);
             UpdateMap();
         }
 

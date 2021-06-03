@@ -4,18 +4,20 @@ using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
+using System;
 using System.Collections.Generic;
 using WorldGeneration;
 using WorldGeneration.Models;
+using WorldGeneration.StateMachine;
 
 namespace Session
 {
-
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
     {
         private IClientController _clientController;
         private ISessionHandler _sessionHandler;
         private IWorldService _worldService;
+        private Random random = new Random();
 
         public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler)
         {
@@ -24,7 +26,7 @@ namespace Session
             _worldService = worldService;
             _sessionHandler = sessionHandler;
         }
-        
+
         public void SendGameSession()
         {
             var StartGameDTO = SetupGameHost();
@@ -36,7 +38,7 @@ namespace Session
             var servicePlayer = new DatabaseService<PlayerPOCO>();
             var gameService = new DatabaseService<GamePOCO>();
 
-            var gamePOCO = new GamePOCO {GameGUID = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
+            var gamePOCO = new GamePOCO { GameGUID = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId() };
             gameService.CreateAsync(gamePOCO);
 
             List<string> allClients = _sessionHandler.GetAllClients();
@@ -52,7 +54,7 @@ namespace Session
                 playerPosition[1] = playerY;
                 players.Add(clientId, playerPosition);
                 var tmpPlayer = new PlayerPOCO
-                    {PlayerGUID = clientId, GameGUID = gamePOCO.GameGUID, XPosition = playerX, YPosition = playerY};
+                { PlayerGUID = clientId, GameGUID = gamePOCO.GameGUID, XPosition = playerX, YPosition = playerY };
                 servicePlayer.CreateAsync(tmpPlayer);
 
                 playerX += 2; // spawn position + 2 each client
@@ -83,21 +85,44 @@ namespace Session
         {
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
 
-            // add name to players
+            // add name to player
             foreach (var player in startGameDTO.PlayerLocations)
             {
                 if (_clientController.GetOriginId() == player.Key)
                 {
                     // add name to players
                     _worldService.AddPlayerToWorld(new WorldGeneration.Player("gerrit", player.Value[0], player.Value[1], CharacterSymbol.CURRENT_PLAYER, player.Key), true);
-                } 
-                else 
+                }
+                else
                 {
                     _worldService.AddPlayerToWorld(new WorldGeneration.Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key), false);
                 }
             }
 
+            for (int i = 0; i < 10; i++)
+            {
+                Monster newMonster = new Monster("Zombie", random.Next(0, 100), random.Next(0, 100), CharacterSymbol.TERMINATOR, "monst" + i);
+                setBrain(newMonster);
+                _worldService.AddCreatureToWorld(newMonster);
+            }
+
             _worldService.DisplayWorld();
+        }
+
+        private void setBrain(Monster monster)
+        {
+            if (random.Next(0, 100) > 5)
+            {
+                ICharacterStateMachine CSM = new MonsterStateMachine(monster._monsterData, null);
+                monster._monsterStateMachine = CSM;
+            }
+            else
+            {
+                if (_sessionHandler.trainingScenario.brainTransplant() != null)
+                {
+                    monster.brain = _sessionHandler.trainingScenario.brainTransplant();
+                }
+            }
         }
     }
 }

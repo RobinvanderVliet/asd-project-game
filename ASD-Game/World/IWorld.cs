@@ -9,10 +9,15 @@ namespace WorldGeneration
     public interface IWorld
     {
         void UpdateCharacterPosition(string id, int newXPosition, int newYPosition);
+
         void AddPlayerToWorld(Player player, bool isCurrentPlayer = false);
-        void AddCreatureToWorld(Creature player);
+
+        void AddCreatureToWorld(Character player);
+
         void UpdateMap();
+
         char[,] GetMapAroundCharacter(Character character);
+
         void DeleteMap();
     }
 }

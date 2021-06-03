@@ -25,6 +25,11 @@ namespace WorldGeneration
             _world.AddPlayerToWorld(player, isCurrentPlayer);
         }
 
+        public void AddCreatureToWorld(Character character)
+        {
+            _world.AddCreatureToWorld(character);
+        }
+
         public void DisplayWorld()
         {
             _world.UpdateMap();
