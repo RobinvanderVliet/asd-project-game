@@ -1,5 +1,8 @@
-using System;
 using System.Collections.Generic;
+using System.Numerics;
+using Creature;
+using Creature.Creature.StateMachine;
+using Creature.Creature.StateMachine.Data;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
@@ -103,6 +106,12 @@ namespace Session
                     _worldService.AddPlayerToWorld(new WorldGeneration.Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key), false);
                 }
             }
+            
+            ICreatureData data = new MonsterData(new Vector2(25, 15), 10, 10, 10, false);
+            ICreatureStateMachine stateMachine = new MonsterStateMachine(data, null);
+            ICreature monster = new Monster(stateMachine);
+
+            _worldService.AddCreatureToWorld(monster);
             
             _worldService.DisplayWorld();
         }

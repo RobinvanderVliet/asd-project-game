@@ -10,6 +10,11 @@ namespace Creature.Creature.StateMachine.State
             _creatureData = creatureData;
         }
 
+        public override void Entry()
+        {
+            Console.WriteLine("UseConsumable state Entry");
+        }
+
         public override void Do()
         {
             throw new NotImplementedException();
@@ -17,6 +22,11 @@ namespace Creature.Creature.StateMachine.State
         public override void Do(ICreatureData creatureData)
         {
             throw new NotImplementedException();
+        }
+
+        public override void Exit()
+        {
+            Console.WriteLine("UseConsumable state Exit");
         }
     }
 }

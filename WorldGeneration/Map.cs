@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Creature;
 using WorldGeneration.Models;
 using WorldGeneration.Models.Interfaces;
 
@@ -90,7 +91,7 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
 
-        public void DisplayMap(Player currentPlayer, int viewDistance, List<Character> characters)
+        public void DisplayMap(Player currentPlayer, int viewDistance, List<Character> characters, List<ICreature> monsters)
         {
             var playerX = currentPlayer.XPosition;
             var playerY = currentPlayer.YPosition;
@@ -100,18 +101,26 @@ namespace WorldGeneration
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
                 {
                     var tile = GetLoadedTileByXAndY(x, y);
-                    Console.Write($" {GetDisplaySymbol(tile, characters)}");
+                    Console.Write($" {GetDisplaySymbol(tile, characters, monsters)}");
                 }
                 Console.WriteLine("");
             }
         }
         
-        private string GetDisplaySymbol(ITile tile, List<Character> characters)
+        private string GetDisplaySymbol(ITile tile, List<Character> characters, List<ICreature> monsters)
         {
-            var characterOnTile = characters.Find(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
+            var creatureOnTile = monsters.Find(monster =>
+                monster.CreatureStateMachine.CreatureData.Position.X == tile.XPosition &&
+                monster.CreatureStateMachine.CreatureData.Position.Y - 1 == tile.YPosition);
+            
+            var characterOnTile  = characters.Find(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
             if(characterOnTile != null)
             {
                 return characterOnTile.Symbol;
+            } 
+            if (creatureOnTile != null)
+            {
+                return "ß";
             }
             else
             {

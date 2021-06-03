@@ -4,6 +4,10 @@
     {
         public enum Event
         {
+            // Generic Events
+            DO,
+            
+            // Specific Creature Event
             LOST_PLAYER,
             SPOTTED_PLAYER,
             ALMOST_DEAD,

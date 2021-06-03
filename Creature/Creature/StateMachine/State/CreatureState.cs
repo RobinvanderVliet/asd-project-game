@@ -12,6 +12,11 @@ namespace Creature.Creature.StateMachine.State
             _creatureData = creatureData;
         }
 
+        public virtual void Entry()
+        {
+            throw new NotImplementedException();
+        }
+        
         public virtual void Do() 
         {
             throw new NotImplementedException();
@@ -22,6 +27,11 @@ namespace Creature.Creature.StateMachine.State
             throw new NotImplementedException();
         }
 
+        public virtual void Exit()
+        {
+            throw new NotImplementedException();
+        }
+        
         public int CompareTo(object obj)
         {
             throw new InvalidOperationException("State machine is not a comparable object.");

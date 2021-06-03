@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Creature;
 
 namespace WorldGeneration
 {
@@ -8,11 +9,13 @@ namespace WorldGeneration
         private Map _map;
         public Player CurrentPlayer { get; set; }
         private List<Player> _players;
+        private List<ICreature> _creatures;
         private readonly int _viewDistance;
 
         public World(int seed, int viewDistance)
         {
             _players = new ();
+            _creatures = new();
             _map = MapFactory.GenerateMap(seed: seed);
             _viewDistance = viewDistance;
             _map.DeleteMap();
@@ -48,7 +51,7 @@ namespace WorldGeneration
             if (CurrentPlayer != null && _players != null)
             {
                 Console.Clear();
-                _map.DisplayMap(CurrentPlayer, _viewDistance, new List<Character>(_players));
+                _map.DisplayMap(CurrentPlayer, _viewDistance, new List<Character>(_players), _creatures);
             }
             
         }
@@ -56,6 +59,11 @@ namespace WorldGeneration
         public void deleteMap()
         {
             _map.DeleteMap();
+        }
+
+        public void AddCreatureToWorld(ICreature creature)
+        {
+            _creatures.Add(creature);
         }
     }
 }

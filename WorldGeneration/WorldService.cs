@@ -1,3 +1,5 @@
+using Creature;
+
 namespace WorldGeneration
 {
     public class WorldService : IWorldService
@@ -12,6 +14,11 @@ namespace WorldGeneration
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
         {
             _world.AddPlayerToWorld(player, isCurrentPlayer);
+        }
+
+        public void AddCreatureToWorld(ICreature creature)
+        {
+            _world.AddCreatureToWorld(creature);
         }
 
         public void DisplayWorld()

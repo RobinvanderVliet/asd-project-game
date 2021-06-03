@@ -10,7 +10,8 @@ namespace Creature.Creature.StateMachine.Data
         int VisionRange { get; set; }
         int Damage { get; set; }
         double Health { get; set; }
-        IWorld World { get; set;  }
+        // TODO:: Fix integration with world
+        // IWorld World { get; set;  }
 
     }
 }

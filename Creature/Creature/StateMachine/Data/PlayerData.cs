@@ -11,7 +11,8 @@ namespace Creature.Creature.StateMachine.Data
         private double _health;
         private int _damage;
         private int _visionRange;
-        private IWorld _world;
+        // TODO:: Fix integration with world
+        // private IWorld _world;
 
         public bool IsAlive { get => _health > 0; }
 
@@ -39,19 +40,19 @@ namespace Creature.Creature.StateMachine.Data
             set => _visionRange = value;
         }
 
-        public IWorld World
-        {
-            get => _world;
-            set => _world = value;
-        }
+        // public IWorld World
+        // {
+        //     get => _world;
+        //     set => _world = value;
+        // }
 
-        public PlayerData(Vector2 position, double health, int damage, int visionRange, IWorld world)
+        public PlayerData(Vector2 position, double health, int damage, int visionRange/**, IWorld world**/)
         {
             _position = position;
             _health = health;
             _damage = damage;
             _visionRange = visionRange;
-            _world = world;
+            // _world = world;
         }
     }
 }
