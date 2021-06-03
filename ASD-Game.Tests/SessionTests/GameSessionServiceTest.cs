@@ -16,8 +16,6 @@ namespace Session.Tests
         private Mock<IDatabaseService<GamePOCO>> _mockedDatabaseGameService;
         private Mock<IDatabaseService<ClientHistoryPoco>> _mockedDatabaseClientHistory;
         private Mock<ISessionHandler> _mockedSessionHandler;
-        private Mock<IRepository<ClientHistoryPoco>> _mockedRepositoryClient;
-        private Mock<IRepository<GamePOCO>> _mockedRepositoryGame;
 
         [SetUp]
         public void GameSessionServiceSetup()
