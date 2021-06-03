@@ -16,18 +16,23 @@ namespace Session
     
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
     {
-        private IClientController _clientController;
-        private ISessionHandler _sessionHandler;
-        private IWorldService _worldService;
+        private readonly IClientController _clientController;
+        private readonly ISessionHandler _sessionHandler;
+        private readonly IWorldService _worldService;
+        private readonly IDatabaseService<ClientHistoryPoco> _clientHistoryService;
+        private readonly IDatabaseService<GamePOCO> _gamePocoService;
 
         public GameSessionHandler(IClientController clientController, IWorldService worldService,
-            ISessionHandler sessionHandler)
+            ISessionHandler sessionHandler, IDatabaseService<GamePOCO> gamePocoService, IDatabaseService<ClientHistoryPoco> clientHistoryService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
             _worldService = worldService;
             _sessionHandler = sessionHandler;
+            _gamePocoService = gamePocoService;
+            _clientHistoryService = clientHistoryService;
         }
+        
 
         public void SendGameSession()
         {
