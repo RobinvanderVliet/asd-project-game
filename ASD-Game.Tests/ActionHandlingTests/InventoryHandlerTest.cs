@@ -79,7 +79,7 @@ namespace ActionHandling.Tests
         }
 
         [Test]
-        public void Test_Drop_SendsInventoryDTO()
+        public void Test_DropItem_SendsInventoryDTO()
         {
             // Arrange
             const string ITEM = "helmet";
@@ -97,7 +97,7 @@ namespace ActionHandling.Tests
         }
 
         [Test]
-        public void Test_Drop_SendsErrorMessage()
+        public void Test_DropItem_SendsErrorMessage()
         {
             // Arrange
             const string ITEM = "helmet99";
@@ -112,6 +112,35 @@ namespace ActionHandling.Tests
 
             // Assert
             _mockedMessageService.Verify(mock => mock.AddMessage("Unknown item slot"), Times.Once);
+        }
+
+        [Test]
+        public void Test_HandlePacket_HandlesDropPacket()
+        {
+            // Arrange
+            string originId = "origin1";
+            InventoryDTO inventoryDTO = new(originId, InventoryType.Drop, 0);
+            string payload = JsonConvert.SerializeObject(inventoryDTO);
+
+            PacketDTO packetDTO = new();
+            packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            packetHeaderDTO.Target = "host";
+            packetDTO.Header = packetHeaderDTO;
+
+            _mockedClientController.Setup(mock => mock.IsHost()).Returns(false);
+
+            Player player = new Player("henk", 0, 0, "#", inventoryDTO.UserId);
+
+            _mockedWorldService.Setup(mock => mock.GetPlayer(inventoryDTO.UserId)).Returns(player);
+
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
+
+            // Act
+            _sut.HandlePacket(packetDTO);
+
+            // Assert
+            _mockedMessageService.Verify(mock => mock.AddMessage("You dropped Bandana"), Times.Once);
         }
 
         [Test]
