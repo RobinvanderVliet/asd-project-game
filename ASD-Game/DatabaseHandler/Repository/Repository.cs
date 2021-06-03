@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using LiteDB;
 
 namespace DatabaseHandler.Repository
 {
@@ -20,10 +21,9 @@ namespace DatabaseHandler.Repository
         [ExcludeFromCodeCoverage]
         public Repository(string collection = null)
         {
-            IDBConnection connection = new DBConnection();
+            IDbConnection connection = new DbConnection();
             _db = connection.GetConnectionAsync();
             _collection = collection ?? typeof(T).Name;
-            _log = new NullLogger<Repository<T>>();
         }
 
         public async Task<BsonValue> CreateAsync(T obj)

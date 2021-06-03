@@ -47,13 +47,13 @@ namespace ASD_project
                     services.AddScoped<IMoveHandler, MoveHandler>();
                     services.AddScoped<IWorldService, WorldService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
-                    services.AddSingleton<IDBConnection, DBConnection>();
+                    services.AddSingleton<IDbConnection, DbConnection>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+                    services.AddScoped(typeof(IServicesDb<>), typeof(ServicesDb<>));
                     services.AddScoped<IScreenHandler, ScreenHandler>();
                     services.AddScoped<IInputHandler, InputHandler>();
                     services.AddScoped<IPipeline, Pipeline>();
-                    services.AddScoped<IEvaluator, Evaluator>();
-                    services.AddScoped(typeof(IDatabaseService<>), typeof(DatabaseService<>));
+                    services.AddScoped<IEvaluator, Evaluator>();                
                 })
                 .UseSerilog()
                 .Build();

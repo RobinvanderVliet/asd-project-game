@@ -7,16 +7,16 @@ namespace WorldGeneration
 {
     public class World
     {
-        private IMap _map;
+        private Map _map;
         public Player CurrentPlayer { get; set; }
         private List<Player> _players;
         private readonly int _viewDistance;
         private IScreenHandler _screenHandler;
 
-        public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler)
+        public World(int seed, int viewDistance, IScreenHandler screenHandler)
         {
             _players = new ();
-            _map = mapFactory.GenerateMap(seed);
+            _map = MapFactory.GenerateMap(seed: seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
             DeleteMap();
@@ -62,7 +62,7 @@ namespace WorldGeneration
 
         private void UpdateMapInConsole()
         {
-            _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, _players));
+            _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, new List<Character>(_players)));
         }
     }
 }

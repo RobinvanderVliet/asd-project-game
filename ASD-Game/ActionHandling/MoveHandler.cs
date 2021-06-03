@@ -19,12 +19,14 @@ namespace ActionHandling
     {
         private IClientController _clientController;
         private IWorldService _worldService;
+        private IServicesDb<PlayerPOCO> _playerServicesDb;
 
-        public MoveHandler(IClientController clientController, IWorldService worldService)
+        public MoveHandler(IClientController clientController, IWorldService worldService, IServicesDb<PlayerPOCO> playerServicesDb)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Move);
             _worldService = worldService;
+            _playerServicesDb = playerServicesDb;
         }
 
         public void SendMove(string directionValue, int stepsValue)
@@ -74,9 +76,7 @@ namespace ActionHandling
             //(_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost)
             if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
             {
-                var servicePlayer = new DatabaseService<PlayerPOCO>();
-
-                var allLocations = servicePlayer.GetAllAsync();
+                var allLocations = _playerServicesDb.GetAllAsync();
 
                 allLocations.Wait();
 
@@ -86,7 +86,7 @@ namespace ActionHandling
                 var result =
                     allLocations.Result.Where(x =>
                         x.XPosition == newPosPlayerX && x.YPosition == newPosPlayerY &&
-                        x.GameGUID == _clientController.SessionId);
+                        x.GameGuid == _clientController.SessionId);
 
                 if (result.Any())
                 {
@@ -111,13 +111,12 @@ namespace ActionHandling
         }
 
         private void InsertToDatabase(MoveDTO moveDTO)
-        {
-            var playerRepository = new DatabaseService<PlayerPOCO>();
-            var player = playerRepository.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGUID == moveDTO.UserId);
+        {            
+            var player = _playerServicesDb.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId && player.GameGuid == _clientController.SessionId);
 
             player.XPosition = moveDTO.XPosition;
             player.YPosition = moveDTO.YPosition;
-            playerRepository.UpdateAsync(player);
+            _playerServicesDb.UpdateAsync(player);
         }
 
         private void HandleMove(MoveDTO moveDTO)

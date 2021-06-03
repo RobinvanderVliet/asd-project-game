@@ -19,13 +19,17 @@ namespace Session
         private IClientController _clientController;
         private ISessionHandler _sessionHandler;
         private IWorldService _worldService;
+        private IServicesDb<PlayerPOCO> _playerServicesDb;
+        private IServicesDb<GamePOCO> _gameServicesDb;
 
-        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler)
+        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IServicesDb<PlayerPOCO> playerServicesDb, IServicesDb<GamePOCO> gameServicesDb)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
             _worldService = worldService;
             _sessionHandler = sessionHandler;
+            _playerServicesDb = playerServicesDb;
+            _gameServicesDb = gameServicesDb;
         }
         
         public void SendGameSession()
@@ -36,11 +40,9 @@ namespace Session
 
         public StartGameDTO SetupGameHost()
         {
-            var servicePlayer = new DatabaseService<PlayerPOCO>();
-            var gameService = new DatabaseService<GamePOCO>();
 
-            var gamePOCO = new GamePOCO {GameGUID = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
-            gameService.CreateAsync(gamePOCO);
+            var gamePOCO = new GamePOCO {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
+            _gameServicesDb.CreateAsync(gamePOCO);
   
             List<string[]> allClients = _sessionHandler.GetAllClients();
 
@@ -56,8 +58,8 @@ namespace Session
                 playerPosition[1] = playerY;
                 players.Add(client[0], playerPosition);
                 var tmpPlayer = new PlayerPOCO
-                    {PlayerGUID = client[0], GameGUID = gamePOCO.GameGUID, XPosition = playerX, YPosition = playerY};
-                servicePlayer.CreateAsync(tmpPlayer);
+                    {PlayerGuid = client[0], GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
+                _playerServicesDb.CreateAsync(tmpPlayer);
 
                 playerX += 2; // spawn position + 2 each client
                 playerY += 2; // spawn position + 2 each client
