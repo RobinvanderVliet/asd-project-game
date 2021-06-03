@@ -11,6 +11,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using WorldGeneration;
+using Session.DTO;
 
 namespace Session.Tests
 {
