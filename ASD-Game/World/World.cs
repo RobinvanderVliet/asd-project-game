@@ -68,7 +68,8 @@ namespace ASD_project.World
             if (CurrentPlayer != null && _players != null && _creatures != null)
             {
                 var characters = ((IEnumerable<Character>)_players).Concat(_creatures).ToList();
-                _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
+                //_screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
+                _map.DisplayMap(CurrentPlayer, _viewDistance, characters);
             }
         }
 

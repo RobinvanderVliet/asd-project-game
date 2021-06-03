@@ -87,6 +87,22 @@ namespace ASD_project.World
             return chunksWithinLoadingRange;
         }
         
+        public void DisplayMap(Character currentPlayer, int viewDistance, List<Character> characters)
+        {
+            var playerX = currentPlayer.XPosition;
+            var playerY = currentPlayer.YPosition;
+            LoadArea(playerX, playerY, viewDistance);
+            for (var y = (playerY + viewDistance); y > ((playerY + viewDistance) - (viewDistance * 2) - 1); y--)
+            {
+                for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
+                {
+                    var tile = GetLoadedTileByXAndY(x, y);
+                    Console.Write($"  {GetDisplaySymbol(tile, characters)}");
+                }
+                Console.WriteLine("");
+            }
+        }
+        
         public char[,] GetMapAroundCharacter(Character centerCharacter, int viewDistance, List<Character> allCharacters)
         {
             if (viewDistance < 0)
