@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
@@ -7,8 +8,6 @@ using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
-using System;
-using System.Collections.Generic;
 using WorldGeneration;
 using WorldGeneration.Models;
 
@@ -61,7 +60,7 @@ namespace Session
                 playerPosition[1] = playerY;
                 players.Add(clientId, playerPosition);
                 var tmpPlayer = new PlayerPOCO
-                    {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
+                    {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, GameGUIDAndPlayerGuid = gamePOCO.GameGuid + clientId, XPosition = playerX, YPosition = playerY};
                 servicePlayer.CreateAsync(tmpPlayer);
                 AddItemsToPlayer(playerItemRepository, clientId, gamePOCO.GameGuid);
 
