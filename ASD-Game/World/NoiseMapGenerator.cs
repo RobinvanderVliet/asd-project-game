@@ -57,19 +57,18 @@ namespace ASD_project.World
         {
             var tile = GetTileFromNoise(worldNoise, x, y);
             var tileWithItem = _itemService.PutItemOnTile(tile, itemNoise);
-
-            var AAA = tileWithItem.ItemsOnTile.FirstOrDefault();
-            if (AAA != null)
-            {
-                if (_items.Contains(item => item.ItemId == AAA.ItemId))
-                {
-                    return tile;
-                }
-                _items.Add(AAA);
-                return tileWithItem;
-            }
-            return tile;
+            var item = tileWithItem.ItemsOnTile.FirstOrDefault();
+            var itemSpawnDTO = new ItemSpawnDTO { item = item, XPosition = x, YPosition = y };
             
+            if (item == null)
+                return tile;
+            
+            if (_items.Contains(itemSpawnDTO))
+            {
+                  return tile;
+            }
+            _items.Add(itemSpawnDTO);
+            return tileWithItem;                      
         }
 
         public ITile GetTileFromNoise(float noise, int x, int y)
