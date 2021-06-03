@@ -167,7 +167,14 @@ namespace InputHandling
             }
             else
             {
-                _gameConfigurationHandler.HandleAnswer(input);
+                bool configurationCompleted = _gameConfigurationHandler.HandleAnswer(input);
+
+                if (configurationCompleted)
+                {
+                    _gameConfigurationHandler.SetGameConfiguration();
+                    _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(), _gameConfigurationHandler.GetUsername());
+                    _screenHandler.TransitionTo(new LobbyScreen());
+                }
             }
         }
     }

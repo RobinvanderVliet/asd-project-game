@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DatabaseHandler;
 using DatabaseHandler.POCO;
-using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using UserInterface;
 
@@ -23,6 +21,7 @@ namespace Session.GameConfiguration
         public MonsterDifficulty CurrentMonsterDifficulty { get; set; }
         public ItemSpawnRate SpawnRate { get; set; }
         public string Username { get; set; }
+        public string SessionName { get; set; }
 
         public GameConfigurationHandler(IScreenHandler screenHandler, IServicesDb<GameConfigurationPOCO> gameConfigServicesDb)
         {
@@ -59,6 +58,11 @@ namespace Session.GameConfiguration
             //Username
             _configurationHeader.Add("Set your username");
             newOptions = new List<string>() {"We need to know what to call you", "It can be anything so please keep it civil"};
+            _configurationChoices.Add(newOptions);
+            
+            //Session name
+            _configurationHeader.Add("Type a session name");
+            newOptions = new List<string>() {"It can be anything so please keep it civil"};
             _configurationChoices.Add(newOptions);
         }
 
@@ -169,7 +173,7 @@ namespace Session.GameConfiguration
             {
                 _setupConfiguration = true;
                 SetGameConfiguration();
-                _optionCounter = _configurationChoices.Count - 1;
+                _optionCounter = _configurationChoices.Count - 2;
                 NewMonsterDifficulty = MonsterDifficulty.Medium;
                 SpawnRate = ItemSpawnRate.Medium;
                 UpdateScreen();
@@ -180,8 +184,9 @@ namespace Session.GameConfiguration
             }
         }
 
-        public void HandleAnswer(string input)
+        public bool HandleAnswer(string input)
         {
+            bool isCompleted = false;
             if (_setupConfiguration)
             {
                 switch (_optionCounter)
@@ -196,6 +201,11 @@ namespace Session.GameConfiguration
                         Username = input;
                         _nextScreen = true;
                         break;
+                    case 3:
+                        SessionName = input;
+                        _nextScreen = true;
+                        isCompleted = true;
+                        break;
                 }
             
                 if (_nextScreen)
@@ -208,6 +218,7 @@ namespace Session.GameConfiguration
             {
                 CheckSetupConfiguration(input);
             }
+            return isCompleted;
         }
 
         private void UpdateScreen()
@@ -221,9 +232,7 @@ namespace Session.GameConfiguration
             else
             {
                 _setupConfiguration = false;
-                SetGameConfiguration();              
-                _screenHandler.TransitionTo(new LobbyScreen());
-                //To the next screen!
+                
             }
         }
 
@@ -260,6 +269,16 @@ namespace Session.GameConfiguration
         public MonsterDifficulty GetNewMonsterDifficulty()
         {
             return NewMonsterDifficulty;
+        }
+
+        public string GetUsername()
+        {
+            return Username;
+        }
+
+        public string GetSessionName()
+        {
+            return SessionName;
         }
     }
 }

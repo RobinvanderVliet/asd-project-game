@@ -5,7 +5,9 @@ namespace Session.GameConfiguration
         MonsterDifficulty GetNewMonsterDifficulty();
         MonsterDifficulty GetCurrentMonsterDifficulty();
         ItemSpawnRate GetSpawnRate();
-        void HandleAnswer(string input);
+        string GetUsername();
+        string GetSessionName();
+        bool HandleAnswer(string input);
         void SetGameConfiguration();
         void SetDifficulty(MonsterDifficulty monsterDifficulty, string sessionId);
         void SetSpawnRate(ItemSpawnRate spawnRate, string sessionId);
