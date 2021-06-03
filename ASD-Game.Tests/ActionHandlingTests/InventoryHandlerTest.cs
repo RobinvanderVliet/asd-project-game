@@ -120,8 +120,16 @@ namespace ActionHandling.Tests
         {
             // Arrange
             string originId = "origin1";
+            PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO();
+            playerItemPOCO.GameGUID = originId;
+            // playerItemPOCO.ItemName = inventoryDTO. TODO: Add correct item name.
+            playerItemPOCO.PlayerGUID = inventoryDTO.UserId;
+            List<PlayerItemPOCO> playerItemPOCOs = new();
+            playerItemPOCOs.Add(playerItemPOCO);
+            IEnumerable<PlayerItemPOCO> enumerable = playerItemPOCOs;
             
             _mockedClientController.Setup(mock => mock.IsHost()).Returns(false);
+            _mockedPlayerItemServicesDb.Setup(mock => mock.GetAllAsync()).Returns(Task.FromResult(enumerable));
 
             Player player = new Player("henk", 0, 0, "#", inventoryDTO.UserId);
             Item item = ItemFactory.GetBandage();
@@ -139,6 +147,7 @@ namespace ActionHandling.Tests
 
             // Assert
             _mockedMessageService.Verify(mock => mock.AddMessage(message), Times.Once);
+            _mockedPlayerItemServicesDb.Verify(mock => mock.DeleteAsync(It.IsAny<PlayerItemPOCO>()), Times.Once);
         }
         
         class HandlesDropPacketCases : IEnumerable
