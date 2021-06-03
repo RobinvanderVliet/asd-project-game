@@ -12,6 +12,7 @@ namespace WorldGeneration
         void AddPlayerToWorld(Player player, bool isCurrentPlayer = false);
         void AddCreatureToWorld(Creature player);
         void UpdateMap();
+        char[,] GetMapAroundCharacter(Character character);
         void DeleteMap();
     }
 }

@@ -4,7 +4,7 @@ namespace WorldGeneration
 {
     public interface IMap
     {
-        char[,] GetMapAroundCharacter(Player currentPlayer, int viewDistance, List<Character> characters);
+        char[,] GetMapAroundCharacter(Character currentPlayer, int viewDistance, List<Character> characters);
         void DeleteMap();
     }
 }

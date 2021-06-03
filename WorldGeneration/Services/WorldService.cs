@@ -48,5 +48,10 @@ namespace WorldGeneration
         {
             return _world;
         }
+
+        public char[,] GetMapAroundCharacter(Character character)
+        {
+            return _world.GetMapAroundCharacter(character);
+        }
     }
 }
