@@ -88,5 +88,14 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                 return true;
             }
         }
+
+        public bool AllPlayersDead()
+        {
+            if ((players).Count == 0)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

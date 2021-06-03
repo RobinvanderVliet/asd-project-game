@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using Creature.Creature.StateMachine.Data;
 
 namespace Creature.Creature.NeuralNetworking
@@ -88,6 +89,8 @@ namespace Creature.Creature.NeuralNetworking
                 genSmartMonsters.Add(tempBest.CloneForReplay());
                 bestScore = tempBest.score;
                 bestSmartMonster = tempBest.CloneForReplay();
+                bestSmartMonster.brain.PrintGenome();
+                Console.WriteLine("bestscore = " + bestScore);
             }
         }
 
@@ -109,7 +112,6 @@ namespace Creature.Creature.NeuralNetworking
 
             float averageSum = GetAvgFitnessSum();
             List<SmartMonsterForTraining> children = new List<SmartMonsterForTraining>();//the next generation
-            //Console.WriteLine("Species:");
             for (int j = 0; j < species.Count; j++)
             {
                 //for each species
@@ -128,6 +130,10 @@ namespace Creature.Creature.NeuralNetworking
             }
             pop.Clear();
             pop = children; //set the children as the current population
+            foreach (SmartMonsterForTraining child in pop)
+            {
+                child.creatureData = RestoreMonster();
+            }
             gen += 1;
             for (int i = 0; i < pop.Count; i++)
             {
@@ -160,6 +166,7 @@ namespace Creature.Creature.NeuralNetworking
                 if (!speciesFound)
                 {//if no species was similar enough then add a new species with this as its champion
                     species.Add(new Species(pop[i]));
+                    Console.WriteLine("new species has been born");
                 }
             }
         }
@@ -261,6 +268,19 @@ namespace Creature.Creature.NeuralNetworking
                 species.RemoveAt(i);//sad
                 i--;
             }
+        }
+
+        private MonsterData RestoreMonster()
+        {
+            return new MonsterData
+            (
+                new Vector2(14, 14),
+                20,
+                5,
+                20,
+                null,
+                false
+            );
         }
     }
 }

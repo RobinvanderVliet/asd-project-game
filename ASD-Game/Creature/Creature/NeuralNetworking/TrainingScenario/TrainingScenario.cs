@@ -26,7 +26,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                 new Vector2(14, 14),
                 20,
                 5,
-                200,
+                20,
                 null,
                 false
             );
@@ -42,7 +42,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                 new Vector2(14, 14),
                 20,
                 5,
-                200,
+                20,
                 null,
                 false
             );
@@ -71,6 +71,11 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                 }
                 runOnce = false;
             }
+        }
+
+        public Genome brainTransplant()
+        {
+            return bestGene;
         }
     }
 }

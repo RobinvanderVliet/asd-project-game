@@ -26,7 +26,7 @@ namespace Creature.Creature
         public int gen = 0;
 
         public static readonly int genomeInputs = 14;
-        public static readonly int genomeOutputs = 9;
+        public static readonly int genomeOutputs = 7;
 
         public float[] vision = new float[genomeInputs];
         public float[] decision = new float[genomeOutputs];
@@ -73,7 +73,7 @@ namespace Creature.Creature
         public void Update()
         {
             _dataGatheringService.CheckNewPosition(this);
-            if (lifeSpan > 1000)
+            if (trainingMapGenerator.AllPlayersDead() || lifeSpan >= 1000)
             {
                 dead = true;
             }
@@ -188,37 +188,27 @@ namespace Creature.Creature
                     break;
 
                 case 2:
-                    //UseItem action
-                    score = -10;
-                    break;
-
-                case 3:
                     smartactions.RunToMonster(_dataGatheringService.closestMonster, this);
                     score = -3;
                     //Run to Monster action
                     break;
 
-                case 4:
-                    //Grab item action
-                    score = -10;
-                    break;
-
-                case 5:
+                case 3:
                     //Move up action
                     smartactions.WalkUp(this);
                     break;
 
-                case 6:
+                case 4:
                     //Move down action
                     smartactions.WalkDown(this);
                     break;
 
-                case 7:
+                case 5:
                     //Move left action
                     smartactions.WalkLeft(this);
                     break;
 
-                case 8:
+                case 6:
                     //Move right action
                     smartactions.WalkRight(this);
                     break;
@@ -243,16 +233,17 @@ namespace Creature.Creature
             int killPoints = 0;
             int deathpoints = 0;
             //Fitness calculation
-            if (EnemysKilled < 0)
+            if (EnemysKilled > 0)
             {
-                killPoints += 1000000 * EnemysKilled;
+                killPoints += 1000 * EnemysKilled;
             }
             if (dead)
             {
                 deathpoints = -100;
             }
             fitness =
-                (float)((DamageDealt * 5 - DamageTaken * 2) + (lifeSpan / 300) + HealthHealed + StatsGained + killPoints + deathpoints + score);
+                (float)((DamageDealt * 10 - DamageTaken * 2)/* + (lifeSpan / 300)*/ + HealthHealed + StatsGained + killPoints + deathpoints + score);
+            score = (int)fitness;
         }
 
         public SmartMonsterForTraining Crossover(SmartMonsterForTraining parent2)

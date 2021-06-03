@@ -18,8 +18,8 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         public TrainerAI(Vector2 loc, string type)
         {
-            this.damage = random.Next(5, 10);
-            this.health = random.Next(10, 50);
+            this.damage = random.Next(1, 10);
+            this.health = random.Next(1, 50);
             this.location = loc;
             this.type = type;
             this.dataGatheringService = new DataGatheringServiceForTraining();

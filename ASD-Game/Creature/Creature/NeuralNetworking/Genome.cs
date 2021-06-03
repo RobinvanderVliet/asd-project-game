@@ -37,7 +37,7 @@ namespace Creature.Creature.NeuralNetworking
             //create output nodes
             for (int i = 0; i < outputs; i++)
             {
-                nodes.Add(new NeuralNode(i + outputs));
+                nodes.Add(new NeuralNode(i + inputs));
                 nodes[i].layer = 1;
                 nextNode++;
             }
@@ -328,14 +328,14 @@ namespace Creature.Creature.NeuralNetworking
             }
             //5% of the time add a new connection
             float rand2 = (float)(random.NextDouble());
-            if (rand2 < 0.08)
+            if (rand2 < 0.05)
             {
                 AddConnection(innovationHistory);
             }
 
             //1% of the time add a node
             float rand3 = (float)(random.NextDouble());
-            if (rand3 < 0.02)
+            if (rand3 < 0.01)
             {
                 AddNode(innovationHistory);
             }
@@ -463,22 +463,121 @@ namespace Creature.Creature.NeuralNetworking
         [ExcludeFromCodeCoverage]
         public void PrintGenome()
         {
+            Console.Clear();
             Console.WriteLine("Print genome  layers: " + layers);
             Console.WriteLine("bias node: " + biasNode);
             Console.WriteLine("nodes");
             for (int i = 0; i < nodes.Count; i++)
             {
-                Console.WriteLine(nodes[i].number + ",");
+                Console.WriteLine(nodes[i].number + " is : " + GetNodeName(nodes[i].number));
             }
             Console.WriteLine("Genes");
             for (int i = 0; i < genes.Count; i++)
             {
                 //for each connectionGene
-                Console.WriteLine("gene " + genes[i].innovationNo, "From node " + genes[i].fromNode.number, "To node " + genes[i].toNode.number,
-                  "is enabled " + genes[i].enabled, "from layer " + genes[i].fromNode.layer, "to layer " + genes[i].toNode.layer, "weight: " + genes[i].weight);
+                Console.WriteLine("gene " + genes[i].innovationNo + " From node " + GetNodeName(genes[i].fromNode.number) + " To node " + GetNodeName(genes[i].toNode.number) +
+                  " is enabled " + genes[i].enabled + " from layer " + genes[i].fromNode.layer + " to layer " + genes[i].toNode.layer + " weight: " + genes[i].weight);
             }
 
             Console.WriteLine();
+        }
+
+        [ExcludeFromCodeCoverage]
+        public string GetNodeName(int nodenum)
+        {
+            switch (nodenum)
+            {
+                case 0:
+                    return "Creature X pos";
+                    break;
+
+                case 1:
+                    return "Creature Y pos";
+                    break;
+
+                case 2:
+                    return "Creature damage";
+                    break;
+
+                case 3:
+                    return "Creature Health";
+                    break;
+
+                case 4:
+                    return "Distance to closest player";
+                    break;
+
+                case 5:
+                    return "Distance to closest monster";
+                    break;
+
+                case 6:
+                    return "Closest player health";
+                    break;
+
+                case 7:
+                    return "Closest player damage";
+                    break;
+
+                case 8:
+                    return "Closest player X pos";
+                    break;
+
+                case 9:
+                    return "Closest player Y pos";
+                    break;
+
+                case 10:
+                    return "Closest Monster Health";
+                    break;
+
+                case 11:
+                    return "Closest Monster damage";
+                    break;
+
+                case 12:
+                    return "Closest Monster X pos";
+                    break;
+
+                case 13:
+                    return "Closest Monster Y pos";
+                    break;
+
+                case 14:
+                    return "Attack ction";
+                    break;
+
+                case 15:
+                    return "Flee action";
+                    break;
+
+                case 16:
+                    return "Run to monster action";
+                    break;
+
+                case 17:
+                    return "walk up";
+                    break;
+
+                case 18:
+                    return "walk down";
+                    break;
+
+                case 19:
+                    return "walk left";
+                    break;
+
+                case 20:
+                    return "walk right";
+                    break;
+
+                case 21:
+                    return "Bias node";
+                    break;
+
+                default:
+                    return "hiddennode";
+            }
         }
     }
 }

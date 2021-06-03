@@ -82,16 +82,16 @@ namespace Creature.Creature.NeuralNetworking
         {
             if (player != null && IsAdjacent(player.location, smartmonster.creatureData.Position))
             {
-                player.health = player.health - smartmonster.creatureData.Damage;
-                smartmonster.DamageDealt = smartmonster.DamageDealt + smartmonster.creatureData.Damage;
                 if (player.health < smartmonster.creatureData.Damage)
                 {
+                    smartmonster.DamageDealt = smartmonster.DamageDealt + smartmonster.creatureData.Damage;
                     smartmonster.EnemysKilled++;
                 }
-            }
-            else
-            {
-                smartmonster.score -= 25;
+                else
+                {
+                    player.health = player.health - smartmonster.creatureData.Damage;
+                    smartmonster.DamageDealt = smartmonster.DamageDealt + smartmonster.creatureData.Damage;
+                }
             }
         }
 
@@ -103,11 +103,6 @@ namespace Creature.Creature.NeuralNetworking
             }
         }
 
-        public void UseItem()
-        {
-            //To be implemented
-        }
-
         public void RunToMonster(TrainerAI monster, SmartMonsterForTraining smartMonster)
         {
             if (monster != null)
@@ -116,11 +111,6 @@ namespace Creature.Creature.NeuralNetworking
                 CheckPath(smartMonster);
                 smartMonster.creatureData.Position = path.Pop().Position;
             }
-        }
-
-        public void GrabItem(Vector2 loc)
-        {
-            //To be implemented
         }
 
         public void TakeDamage(int damage, SmartMonsterForTraining smartMonster)
