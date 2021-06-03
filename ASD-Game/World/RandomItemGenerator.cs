@@ -14,7 +14,7 @@ namespace ASD_project.World
                 (< 88 and >= 77) => ItemFactory.GetBandage(),
                 (< 77 and >= 70) => ItemFactory.GetMorphine(),
                 (< 66 and >= 55) => ItemFactory.GetBaseballBat(),
-                (< 55 and >= 44) => ItemFactory.GetBigMac(),
+                (< 55 and >= 44) => ItemFactory.GetBigMac(),/*
                 (< 44 and >= 37) => ItemFactory.GetFlakVest(),
                 (< 33 and >= 22) => ItemFactory.GetGasMask(),
                 (< 22 and >= 11) => ItemFactory.GetGlock(),
@@ -28,7 +28,7 @@ namespace ASD_project.World
                 (< -66 and >= -71) => ItemFactory.GetMilitaryHelmet(),
                 (< -77 and >= -84) => ItemFactory.GetMonsterEnergy(),
                 (< -88 and >= -92) => ItemFactory.GetSuspiciousWhitePowder(),
-                (< -92 and >= -99) => ItemFactory.GetP90(),
+                (< -92 and >= -99) => ItemFactory.GetP90(),*/
                 _ => null
             };
         }
