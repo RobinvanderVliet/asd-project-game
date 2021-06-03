@@ -25,7 +25,7 @@ namespace UserInterface
             DrawScreen();
         }
 
-        public void PrintWarning(string warning)
+        public virtual void PrintWarning(string warning)
         {
             _screenHandler.ConsoleHelper.SetCursor(2, 6);
             _screenHandler.ConsoleHelper.WriteLine(warning);

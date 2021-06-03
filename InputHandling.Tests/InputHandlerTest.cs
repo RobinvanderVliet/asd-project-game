@@ -1,9 +1,9 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using InputHandling.Antlr;
-using System;
-using System.IO;
-using System.Text;
 using InputHandling.Antlr.Transformer;
+using InputHandling.Models;
+using Microsoft.Win32.SafeHandles;
 using Moq;
 using NUnit.Framework;
 using Session;
@@ -77,6 +77,45 @@ namespace InputHandling.Tests
                     Times.Once);
             }
         }
+        
+        [Test]
+        public void Test_BreakEditorCommands()
+        {
+            //Arrange
+            var mockEditor = new Mock<EditorScreen>();
+            _mockedScreenHandler.Object.Screen = mockEditor.Object;
+            _mockedScreenHandler.Object.Screen.SetScreen(_mockedScreenHandler.Object);
+
+            _mockedScreenHandler.SetupSequence(x => x.GetScreenInput()).Returns("hoi").
+                Returns("break");
+            
+            
+            //Act
+            _sut.HandleEditorScreenCommands();
+
+
+            //Assert 
+            mockEditor.Verify(x => x.PrintWarning("Please fill in an valid answer"), Times.Once);
+        }
+        
+        [Test]
+        public void Test_PrintwarningCommand()
+        {
+            //Arrange
+            var mockEditor = new Mock<EditorScreen>();
+            _mockedScreenHandler.Object.Screen = mockEditor.Object;
+            _mockedScreenHandler.Object.Screen.SetScreen(_mockedScreenHandler.Object);
+
+            _mockedScreenHandler.SetupSequence(x => x.GetScreenInput()).Returns("random").Returns("offensive")
+                .Returns("no").Returns("no").Returns("break");
+            
+            //Act
+            _sut.HandleEditorScreenCommands();
+
+
+            //Assert TODO: CAN NOT GET OUT LOOP IN METHOD.
+            mockEditor.Verify(x => x.PrintWarning("Please fill in an valid answer"), Times.Once);
+        }
 
 
         [Test]
@@ -96,16 +135,20 @@ namespace InputHandling.Tests
             //Assert
             Assert.AreEqual(string.Empty, result);
         }
+        
+
+
+
 
         [Test]
-        public void Test_HandleEditorCommands()
+        public void Test_HandleHelpEditorCommands()
         {
             //Arrange
             var mockEditor = new Mock<EditorScreen>();
             _mockedScreenHandler.Object.Screen = mockEditor.Object;
             _mockedScreenHandler.Object.Screen.SetScreen(_mockedScreenHandler.Object);
 
-            _mockedScreenHandler.SetupSequence(x => x.GetScreenInput()).Returns("random").Returns("offensive")
+            _mockedScreenHandler.SetupSequence(x => x.GetScreenInput()).Returns("help").Returns("offensive")
                 .Returns("no")
                 .Returns("no");
 
@@ -116,25 +159,43 @@ namespace InputHandling.Tests
             //Assert TODO: METHOD SHOULD RETURN SOMETHING AND THAT NEEDS TO BE TESTED
             Assert.AreEqual(true, true);
         }
+
+        
+
+
         [Test]
-        public void Test_PrintWarningEditorCommands()
+        public void Test_Checkinput_correct_baseword()
         {
             //Arrange
-            var mockEditor = new Mock<EditorScreen>();
-            _mockedScreenHandler.Object.Screen = mockEditor.Object;
-            _mockedScreenHandler.Object.Screen.SetScreen(_mockedScreenHandler.Object);
+            List<string> rules = new();
+            BaseVariables variables = new();
+            rules.Add("when");
+            rules.Add("player");
+            rules.Add("nearby");
+            rules.Add("player");
+            rules.Add("then");
+            rules.Add("attack");
 
-            _mockedScreenHandler.SetupSequence(x => x.GetScreenInput()).Returns("blah").Returns("offensive")
-                .Returns("no")
-                .Returns("no");
-
-            //Act
-            _sut.HandleEditorScreenCommands();
-
-
-            //Assert TODO: METHOD SHOULD RETURN SOMETHING AND THAT NEEDS TO BE TESTED
-            Assert.AreEqual(true, true);
+            //Act & Assert
+            Assert.True(_sut.CheckInput(rules, variables));
         }
         
+        
+        [Test]
+        public void Test_Checkinput_incorrect_baseword()
+        {
+            //Arrange
+            List<string> rules = new();
+            BaseVariables variables = new();
+            rules.Add("when");
+            rules.Add("player");
+            rules.Add("nearby");
+            rules.Add("player");
+            rules.Add("dump");
+            rules.Add("attack");
+            
+            //Act & Assert
+            Assert.False(_sut.CheckInput(rules, variables));
+        }
     }
 }

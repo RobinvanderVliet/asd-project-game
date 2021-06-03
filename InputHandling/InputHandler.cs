@@ -129,7 +129,6 @@ namespace InputHandling
 
         public void HandleEditorScreenCommands()
         {
-            // de huidige vraag tonen
             Questions questions = new Questions();
             EditorScreen editorScreen = _screenHandler.Screen as EditorScreen;
 
@@ -154,25 +153,32 @@ namespace InputHandling
                 {
                     answers.Add(input);
                     i++;
-                    Console.Clear();
+                    _screenHandler.ConsoleHelper.ClearConsole();
                 }
                 else
                 {
                     editorScreen.PrintWarning("Please fill in an valid answer");
                 }
             }
-
-            if (answers.ElementAt(2).Contains("yes"))
+            
+            if (answers.Count() == questions.EditorQuestions.Count)
             {
-                _screenHandler.SetScreenInput("BINNEN CUSTOM COMBAT RULE");
-                answers.Add(CustomRuleHandleEditorScreenCommands("combat"));
-            }
+                if (answers.ElementAt(2).Contains("yes"))
+                {
+                    _screenHandler.SetScreenInput("BINNEN CUSTOM COMBAT RULE");
+                    answers.Add(CustomRuleHandleEditorScreenCommands("combat"));
+                }
 
-            if (answers.ElementAt(3).Contains("yes"))
-            {
-                _screenHandler.SetScreenInput("BINNEN CUSTOM EXPLORE RULE");
-                answers.Add(CustomRuleHandleEditorScreenCommands("explore"));
+                if (answers.ElementAt(3).Contains("yes"))
+                {
+                    _screenHandler.SetScreenInput("BINNEN CUSTOM EXPLORE RULE");
+                    answers.Add(CustomRuleHandleEditorScreenCommands("explore"));
+                }
             }
+            
+            
+            
+            
 
             //TODO: naar het volgende scherm gaan!
         }
@@ -218,7 +224,7 @@ namespace InputHandling
                     var help = input.Split(" ");
                     switch (help[1])
                     {
-                        case "armour":
+                        case "armor":
                             editorScreen.UpdateLastQuestion(variables.armor.ToString());
                             break;
                         case "weapon":
@@ -276,7 +282,7 @@ namespace InputHandling
             return builder.ToString();
         }
 
-        private bool CheckInput(List<string> rule, BaseVariables variables)
+        public bool CheckInput(List<string> rule, BaseVariables variables)
         {
             bool correct = false;
             //basic rules
