@@ -353,17 +353,13 @@ namespace Session
         {
             // check if id komt overeen
             var clientId = sessionDTO.ClientIds[0];
-            var dbConnection = new DbConnection();
 
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
-            var gameRepository = new Repository<GamePOCO>(dbConnection);
-            var gameService = new ServicesDb<GamePOCO>(gameRepository);
+            IDatabaseService<PlayerPOCO> servicePlayer = new DatabaseService<PlayerPOCO>();
 
             var allPlayerId = servicePlayer.GetAllAsync();
             allPlayerId.Wait();
             var result =
-                allPlayerId.Result.Where(x => x.GameGuid == _session.SessionId && x.PlayerGuid == clientId).FirstOrDefault();
+                allPlayerId.Result.FirstOrDefault(x => x.GameGuid == _session.SessionId && x.PlayerGuid == clientId);
 
             if (result != null)
             {
@@ -386,7 +382,7 @@ namespace Session
             return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
         }
 
-        public void HandlePlayerLocation(ServicesDb<PlayerPOCO> servicePlayer, PlayerPOCO result)
+        public void HandlePlayerLocation(IDatabaseService<PlayerPOCO> servicePlayer, PlayerPOCO result)
         {
             StartGameDTO joinedPlayerDto = new StartGameDTO();
             joinedPlayerDto.ExistingPlayer = result;

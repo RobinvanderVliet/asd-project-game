@@ -9,6 +9,10 @@ using NUnit.Framework;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
+using DatabaseHandler.POCO;
+using DatabaseHandler.Repository;
+using DatabaseHandler.Services;
 using Session.DTO;
 using WorldGeneration;
 
@@ -25,6 +29,15 @@ namespace Session.Tests
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
         private Mock<ISessionHandler> _mockedsessionHandler;
+        private Mock<IRepository<GamePOCO>> _mockedGamePOCORepository;
+        private Mock<IDatabaseService<GamePOCO>> _mockedGamePOCOServices;
+        private Mock<IRepository<PlayerPOCO>> _mockedPlayerPOCORepository;
+        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerPOCOServices;
+        private IDatabaseService<PlayerPOCO> _databaseServicePlayerPoco;
+        private IList<GamePOCO> _InMemoryDatabaseGame;
+        private IList<PlayerPOCO> _InMemoryDatabasePlayer = new List<PlayerPOCO>();
+        private IDatabaseService<PlayerPOCO> _services;
+
 
         [SetUp]
         public void Setup()
@@ -33,8 +46,20 @@ namespace Session.Tests
             standardOutput.AutoFlush = true;
             Console.SetOut(standardOutput);
             _mockedClientController = new Mock<IClientController>();
+            _mockedGamePOCORepository = new Mock<IRepository<GamePOCO>>();
+            _mockedPlayerPOCORepository = new Mock<IRepository<PlayerPOCO>>();
+
+            _mockedPlayerPOCOServices = new Mock<IDatabaseService<PlayerPOCO>>();
+
+            _databaseServicePlayerPoco = _mockedPlayerPOCOServices.Object;
+            
             _mockedWorldService = new Mock<IWorldService>();
             _mockedsessionHandler = new Mock<ISessionHandler>();
+            
+            
+      
+
+            
             _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object,
                 _mockedsessionHandler.Object);
             _packetDTO = new PacketDTO();
@@ -63,8 +88,6 @@ namespace Session.Tests
                 playerY += 2; // spawn position + 2 each client
             }
 
-            var GUID = new Guid("16346707-31d3-4566-b87d-a0b45803b7ab");
-
             StartGameDTO startGameDto = new StartGameDTO();
             startGameDto.PlayerLocations = players;
             
@@ -80,8 +103,30 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_GameSession_HandlePacket()
+        public void Test_GameSession_HandlePacket_SendsPacket()
         {
+            string gameID = "gameId";
+
+            PlayerPOCO player1 = new PlayerPOCO
+            {
+                Health = 10,
+                Stamina = 100,
+                GameGuid = gameID,
+                XPosition = 10,
+                YPosition = 20,
+                PlayerGuid = "idPlayer1"
+            };
+
+
+
+            _mockedPlayerPOCORepository.Setup(chunkRepo => chunkRepo.CreateAsync(It.IsAny<PlayerPOCO>())).ReturnsAsync((PlayerPOCO item) =>
+            {
+                _InMemoryDatabasePlayer.Add(item);
+                return "succeeded";
+            });
+            
+            
+            
             // Arrange ---------
             List<string> allClients = new List<string>();
             allClients.Add("a");
@@ -108,7 +153,7 @@ namespace Session.Tests
             
             StartGameDTO gameDto = new StartGameDTO();
             gameDto.PlayerLocations = players;
-           // gameDto.GameGuid = Guid.NewGuid().ToString();
+         
 
             var payload = JsonConvert.SerializeObject(gameDto);
             _packetDTO.Payload = payload;

@@ -80,22 +80,16 @@ namespace Session
         }
 
 
-        private ServicesDb<GamePOCO> ReturnGameService()
+        private DatabaseService<GamePOCO> ReturnGameService()
         {
-            var dbConnection = new DbConnection();
-
-            var gameRepository = new Repository<GamePOCO>(dbConnection);
-            var gameService = new ServicesDb<GamePOCO>(gameRepository);
+            var gameService = new DatabaseService<GamePOCO>();
 
             return gameService;
         }
 
-        private ServicesDb<PlayerPOCO> ReturnPlayerService()
+        private DatabaseService<PlayerPOCO> ReturnPlayerService()
         {
-            var dbConnection = new DbConnection();
-
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
+            var servicePlayer = new DatabaseService<PlayerPOCO>();
 
             return servicePlayer;
         }
@@ -126,7 +120,7 @@ namespace Session
         }
 
         private Dictionary<string, int[]> SetupPositionsNewPlayers(List<string> allClients, GamePOCO gamePOCO,
-            ServicesDb<PlayerPOCO> servicePlayer)
+            DatabaseService<PlayerPOCO> servicePlayer)
         {
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
             int playerX = 26; // spawn position
@@ -218,10 +212,8 @@ namespace Session
             {
                 if (_clientController.GetOriginId() == player.Key) 
                 {
-                    var tmp = new DbConnection();
 
-                    var clientHistoryRepository = new Repository<ClientHistoryPoco>(tmp);
-                    var tmpClientHistory = new ServicesDb<ClientHistoryPoco>(clientHistoryRepository);
+                    var tmpClientHistory = new DatabaseService<ClientHistoryPoco>();
                     var tmpObject = new ClientHistoryPoco()
                         {PlayerId = player.Key, GameId = startGameDTO.GameGuid};
                     tmpClientHistory.CreateAsync(tmpObject);

@@ -18,12 +18,15 @@ namespace ActionHandling
     {
         private IClientController _clientController;
         private IWorldService _worldService;
+        private IDatabaseService<PlayerPOCO> _servicePlayer;
 
-        public MoveHandler(IClientController clientController, IWorldService worldService)
+
+        public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Move);
             _worldService = worldService;
+            _servicePlayer = playerDatabaseService;
         }
 
         public void SendMove(string directionValue, int stepsValue)
@@ -73,12 +76,9 @@ namespace ActionHandling
             //(_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost)
             if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
             {
-                var dbConnection = new DbConnection();
 
-                var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-                var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
 
-                var allLocations = servicePlayer.GetAllAsync();
+                var allLocations = _servicePlayer.GetAllAsync();
 
                 allLocations.Wait();
 
@@ -115,20 +115,17 @@ namespace ActionHandling
 
         private void InsertToDatabase(MoveDTO moveDTO)
         {
-            var dbConnection = new DbConnection();
 
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var player = playerRepository.GetAllAsync();
+            var player = _servicePlayer.GetAllAsync();
             player.Wait();
-            PlayerPOCO selectedPlayer = player.Result.Where(x => x.GameGuid == _clientController.SessionId && x.PlayerGuid == moveDTO.UserId).First();
+            PlayerPOCO selectedPlayer = player.Result.First(x => x.GameGuid == _clientController.SessionId && x.PlayerGuid == moveDTO.UserId);
             Console.WriteLine(selectedPlayer);
 
             selectedPlayer.XPosition = moveDTO.XPosition;
             selectedPlayer.YPosition = moveDTO.YPosition;
-            var  insert = playerRepository.UpdateAsync(selectedPlayer);
+            var  insert = _servicePlayer.UpdateAsync(selectedPlayer);
             insert.Wait();
-   
-        }
+   }
 
         private void HandleMove(MoveDTO moveDTO)
         {

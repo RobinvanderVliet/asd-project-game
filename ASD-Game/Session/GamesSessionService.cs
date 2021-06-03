@@ -11,29 +11,24 @@ namespace Session
     {
         private readonly IGameSessionHandler _gameSessionHandler;
         private readonly ISessionHandler _sessionHandler;
+        private readonly IDatabaseService<ClientHistoryPoco> _clientHistoryService;
+        private readonly IDatabaseService<GamePOCO> _gamePocoService;
 
-        public GamesSessionService(IGameSessionHandler gameSessionHandler, ISessionHandler sessionHandler)
+        public GamesSessionService(IGameSessionHandler gameSessionHandler, ISessionHandler sessionHandler, IDatabaseService<ClientHistoryPoco> clientHistoryService, IDatabaseService<GamePOCO> gamePocoService)
         {
             _gameSessionHandler = gameSessionHandler;
             _sessionHandler = sessionHandler;
+            _clientHistoryService = clientHistoryService;
+            _gamePocoService = gamePocoService;
         }
 
         public void RequestSavedGames()
         {
-            // return list met alle games waar ik host ben
-            var tmp = new DbConnection();
-
-            var clientHistoryRepository = new Repository<ClientHistoryPoco>(tmp);
-            var clientHistory = new ServicesDb<ClientHistoryPoco>(clientHistoryRepository);
-            var gameRepository = new Repository<GamePOCO>(tmp);
-            var gameService = new ServicesDb<GamePOCO>(gameRepository);
-
-            var allHistory = clientHistory.GetAllAsync();
-            var allGames = gameService.GetAllAsync();
+            var allHistory = _clientHistoryService.GetAllAsync();
+            var allGames = _gamePocoService.GetAllAsync();
             allHistory.Wait();
             allGames.Wait();
 
-            // join 2 tabels on eachother
             var joinedTables = from p in allGames.Result
                 join pi in allHistory.Result
                     on p.PlayerGUIDHost equals pi.PlayerId
@@ -50,20 +45,16 @@ namespace Session
             }
         }
 
-        private ServicesDb<GamePOCO> GetGameService()
+        private DatabaseService<GamePOCO> GetGameService()
         {
-            var tmp = new DbConnection();
-            var gameRepository = new Repository<GamePOCO>(tmp);
-            var gameService = new ServicesDb<GamePOCO>(gameRepository);
+            var gameService = new DatabaseService<GamePOCO>();
 
             return gameService;
         }
 
         public void LoadGame(string value)
         {
-            var tmp = new DbConnection();
-            var gameRepository = new Repository<GamePOCO>(tmp);
-            var gameService = new ServicesDb<GamePOCO>(gameRepository);
+            var gameService = new DatabaseService<GamePOCO>();
 
             var allGames = gameService.GetAllAsync();
             allGames.Wait();
