@@ -322,7 +322,7 @@ namespace Session
             {
                 if (_screenHandler.Screen is LobbyScreen screen)
                 {
-                    screen.UpdateLobbyScreen(sessionDTO.Clients);
+                    screen.UpdateLobbyScreen(_session.GetAllClients());
                 }
 
                 _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
