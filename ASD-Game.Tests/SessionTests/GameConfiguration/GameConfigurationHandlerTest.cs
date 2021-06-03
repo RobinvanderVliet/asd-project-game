@@ -3,6 +3,8 @@ using Moq;
 using NUnit.Framework;
 using Session.GameConfiguration;
 using UserInterface;
+using DatabaseHandler.Services;
+using DatabaseHandler.POCO;
 
 namespace Session.Tests.GameConfiguration
 {
@@ -11,12 +13,14 @@ namespace Session.Tests.GameConfiguration
     {
         private GameConfigurationHandler _sut;
         private Mock<ScreenHandler> _mockScreenHandler;
+        private Mock<IServicesDb<GameConfigurationPOCO>> _mockedGameConfigServicesDb;
 
         [SetUp]
         public void Setup()
         {
             _mockScreenHandler = new Mock<ScreenHandler>();
-            _sut = new GameConfigurationHandler(_mockScreenHandler.Object);
+            _mockedGameConfigServicesDb = new Mock<IServicesDb<GameConfigurationPOCO>>();
+            _sut = new GameConfigurationHandler(_mockScreenHandler.Object, _mockedGameConfigServicesDb.Object);
         }
 
         [Test]

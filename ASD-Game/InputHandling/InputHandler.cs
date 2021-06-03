@@ -38,6 +38,7 @@ namespace InputHandling
         public void HandleGameScreenCommands()
         {
             SendCommand(GetCommand());
+            _screenHandler.RedrawGameInputBox();
         }
         private void SendCommand(string commando)
         {
@@ -48,11 +49,11 @@ namespace InputHandling
             }
             catch (CommandSyntaxException e)
             {
-                Console.WriteLine(e.Message);
+                    
             }
             catch (MoveException e)
             {
-                Console.WriteLine(e.Message);
+
             }
         }
 

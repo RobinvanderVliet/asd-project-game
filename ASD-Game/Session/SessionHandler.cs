@@ -106,7 +106,6 @@ namespace Session
             _session.InSession = true;
 
             _heartbeatHandler = new HeartbeatHandler();
-
             return _session.InSession;
         }
 

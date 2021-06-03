@@ -4,6 +4,7 @@ using System.Linq;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
+using DatabaseHandler.Services;
 using UserInterface;
 
 namespace Session.GameConfiguration
@@ -17,12 +18,13 @@ namespace Session.GameConfiguration
         private readonly IScreenHandler _screenHandler;
         private readonly List<string> _configurationHeader;
         private readonly List<List<string>> _configurationChoices;
+        private IServicesDb<GameConfigurationPOCO> _gameConfigServicesDb;
         public MonsterDifficulty NewMonsterDifficulty { get; set; }
         public MonsterDifficulty CurrentMonsterDifficulty { get; set; }
         public ItemSpawnRate SpawnRate { get; set; }
         public string Username { get; set; }
 
-        public GameConfigurationHandler(IScreenHandler screenHandler)
+        public GameConfigurationHandler(IScreenHandler screenHandler, IServicesDb<GameConfigurationPOCO> gameConfigServicesDb)
         {
             _setupConfiguration = false;
             _configurationScreen = screenHandler.Screen as ConfigurationScreen;
@@ -32,6 +34,7 @@ namespace Session.GameConfiguration
             NewMonsterDifficulty = MonsterDifficulty.Medium;
             CurrentMonsterDifficulty = MonsterDifficulty.Medium;
             SpawnRate = ItemSpawnRate.Low;
+            _gameConfigServicesDb = gameConfigServicesDb;
         }
 
         public void SetGameConfiguration()
@@ -135,25 +138,19 @@ namespace Session.GameConfiguration
 
         public void SetDifficulty(MonsterDifficulty monsterDifficulty, string sessionId) 
         {
-            var dbConnection = new DbConnection();
-
-            var gameConfigurationRepository = new Repository<GameConfigurationPOCO>(dbConnection);
-            var gameConfiguration = gameConfigurationRepository.GetAllAsync().Result.FirstOrDefault(configuration => configuration.GameGUID == sessionId);
+            var gameConfiguration = _gameConfigServicesDb.GetAllAsync().Result.FirstOrDefault(configuration => configuration.GameGUID == sessionId);
 
             gameConfiguration.NPCDifficultyCurrent = gameConfiguration.NPCDifficultyNew;
             gameConfiguration.NPCDifficultyNew = (int)monsterDifficulty;
-            gameConfigurationRepository.UpdateAsync(gameConfiguration);
+            _gameConfigServicesDb.UpdateAsync(gameConfiguration);
         }
         
         public void SetSpawnRate(ItemSpawnRate spawnRate, string sessionId) 
         {
-            var dbConnection = new DbConnection();
-
-            var gameConfigurationRepository = new Repository<GameConfigurationPOCO>(dbConnection);
-            var gameConfiguration = gameConfigurationRepository.GetAllAsync().Result.FirstOrDefault(configuration => configuration.GameGUID == sessionId);
+            var gameConfiguration = _gameConfigServicesDb.GetAllAsync().Result.FirstOrDefault(configuration => configuration.GameGUID == sessionId);
 
             gameConfiguration.ItemSpawnRate = (int) spawnRate;
-            gameConfigurationRepository.UpdateAsync(gameConfiguration);
+            _gameConfigServicesDb.UpdateAsync(gameConfiguration);
         }
         
         public int AdjustMonsterValue(int monsterProperty) 
@@ -224,7 +221,7 @@ namespace Session.GameConfiguration
             else
             {
                 _setupConfiguration = false;
-                SetGameConfiguration();
+                SetGameConfiguration();              
                 _screenHandler.TransitionTo(new LobbyScreen());
                 //To the next screen!
             }

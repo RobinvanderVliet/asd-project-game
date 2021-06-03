@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WorldGeneration
 {
+    [ExcludeFromCodeCoverage]
     public class WorldGenerationPrototype
     {
         private readonly FastNoiseLite _noise;

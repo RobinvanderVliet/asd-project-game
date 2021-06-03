@@ -3,6 +3,8 @@ using Moq;
 using Network;
 using NUnit.Framework;
 using WorldGeneration;
+using DatabaseHandler.Services;
+using DatabaseHandler.POCO;
 
 namespace ActionHandling.Tests
 {
@@ -12,13 +14,15 @@ namespace ActionHandling.Tests
         private MoveHandler _sut;
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
+        private Mock<IServicesDb<PlayerPOCO>> _mockedServicesDb;
 
         [SetUp]
         public void Setup()
         {
             _mockedClientController = new Mock<IClientController>();
             _mockedWorldService = new Mock<IWorldService>();
-            _sut = new MoveHandler(_mockedClientController.Object, _mockedWorldService.Object);
+            _mockedServicesDb = new Mock<IServicesDb<PlayerPOCO>>();
+            _sut = new MoveHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedServicesDb.Object);
         }
 
         [TestCase("up")]

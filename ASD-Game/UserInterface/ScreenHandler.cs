@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace UserInterface
 {
@@ -24,9 +25,45 @@ namespace UserInterface
             _screen.DrawScreen();
         }
 
+        public void ShowMessages(Queue<string> messages)
+        {
+            if(_screen is GameScreen)
+            {
+                var gameScreen = Screen as GameScreen;
+                gameScreen.ShowMessages(messages);
+            }
+        }
+
         public string GetScreenInput()
         {
             return _consoleHelper.ReadLine();
+        }
+
+        public void RedrawGameInputBox()
+        {
+            if (_screen is GameScreen)
+            {
+                var gameScreen = Screen as GameScreen;
+                gameScreen.RedrawInputBox();
+            }
+        }
+
+        public void UpdateWorld(char[,] map)
+        {
+            if (_screen is GameScreen)
+            {
+                var gameScreen = Screen as GameScreen;
+                gameScreen.UpdateWorld(map);
+            }
+        }
+
+        public void SetStatValues(string name, int score, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree)
+        {
+            if (_screen is GameScreen)
+            {
+                GameScreen gameScreen = _screen as GameScreen;
+                gameScreen.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree);
+            }
         }
     }
 }
