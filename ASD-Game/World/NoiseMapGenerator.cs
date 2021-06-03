@@ -74,11 +74,5 @@ namespace ASD_project.World
                 _ => new GasTile(x, y)
             };
         }
-
-        public void SetNoise(IFastNoise noise)
-        {
-            // This function exists for unit testing purposes.
-            _noise = noise;
-        }
     }
 }
