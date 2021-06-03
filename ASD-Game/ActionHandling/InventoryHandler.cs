@@ -74,8 +74,7 @@ namespace ActionHandling
             } 
             else
             {
-                InventoryDTO inventoryDTO =
-                new InventoryDTO(_clientController.GetOriginId(), InventoryType.Drop, index);
+                InventoryDTO inventoryDTO = new (_clientController.GetOriginId(), InventoryType.Drop, index);
                 SendInventoryDTO(inventoryDTO);
             }   
         }
@@ -198,24 +197,14 @@ namespace ActionHandling
 
             Item item = null;
 
-            int armorPoints = 0;
-
             switch (inventoryDTO.Index)
             {
                 case 0:
                     item = player.Inventory.Helmet;
-                    if (item != null)
-                    {
-                        armorPoints = (item as Armor).ArmorProtectionPoints;
-                    }
                     player.Inventory.Helmet = null;
                     break;
                 case 1:
                     item = player.Inventory.Armor;
-                    if(item != null)
-                    {
-                        armorPoints = (item as Armor).ArmorProtectionPoints;
-                    }
                     player.Inventory.Armor = null;
                     break;
                 case 2:

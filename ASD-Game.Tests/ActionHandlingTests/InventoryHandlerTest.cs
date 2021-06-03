@@ -28,7 +28,7 @@ namespace ActionHandling.Tests
         private Mock<IServicesDb<PlayerPOCO>> _mockedPlayerServicesDb;
         private Mock<IServicesDb<PlayerItemPOCO>> _mockedPlayerItemServicesDb;
         private Mock<IServicesDb<WorldItemPOCO>> _mockedWorldItemServicesDb;
-        private static string _thisIsNotAnItemYouCanDrop = "This is not an item you can drop!";
+        private static readonly string _thisIsNotAnItemYouCanDrop = "This is not an item you can drop!";
 
         [SetUp]
         public void Setup()
@@ -105,9 +105,6 @@ namespace ActionHandling.Tests
             string originId = "origin1";
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
 
-            InventoryDTO inventoryDTO = new(originId, InventoryType.Drop, 99);
-            string payload = JsonConvert.SerializeObject(inventoryDTO);
-
             // Act
             _sut.DropItem(ITEM);
 
@@ -158,7 +155,7 @@ namespace ActionHandling.Tests
         
         class HandlesDropPacketCases : IEnumerable
         {
-            private string _youDroppedBandage = "You dropped Bandage";
+            private readonly string _youDroppedBandage = "You dropped Bandage";
 
             public IEnumerator GetEnumerator()
             {
@@ -427,7 +424,6 @@ namespace ActionHandling.Tests
 
             Player player = new("arie", 0, 0, "#", originId);
             player.Health = 50;
-            var item = ItemFactory.GetBandage();
 
             PlayerPOCO playerPOCO = new() { PlayerGuid = originId, Health = 50 };
             List<PlayerPOCO> playerPOCOList = new();
