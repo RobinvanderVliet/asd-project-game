@@ -13,19 +13,19 @@ namespace Creature.Creature.StateMachine
     {
         protected RuleSet _ruleset;
         protected PassiveStateMachine<CreatureState, CreatureEvent.Event> _passiveStateMachine;
-        protected ICreatureData _creatureData;
+        protected ICharacterData _characterData;
         
-        public ICreatureData CreatureData
+        public ICharacterData CharacterData
         {
-            get => _creatureData;
-            set => _creatureData = value;
+            get => _characterData;
+            set => _characterData = value;
         }
 
         protected Timer _timer;
 
-        public DefaultStateMachine(ICreatureData creatureData, RuleSet ruleset)
+        public DefaultStateMachine(ICharacterData characterData, RuleSet ruleset)
         {
-            _creatureData = creatureData;
+            _characterData = characterData;
             _ruleset = ruleset;
         }
         

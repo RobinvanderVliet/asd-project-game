@@ -110,8 +110,8 @@ namespace WorldGeneration
         private string GetDisplaySymbol(ITile tile, List<Character> characters, List<ICreature> monsters)
         {
             var creatureOnTile = monsters.Find(monster =>
-                monster.CreatureStateMachine.CreatureData.Position.X == tile.XPosition &&
-                monster.CreatureStateMachine.CreatureData.Position.Y - 1 == tile.YPosition);
+                monster.CreatureStateMachine.CharacterData.Position.X == tile.XPosition &&
+                monster.CreatureStateMachine.CharacterData.Position.Y - 1 == tile.YPosition);
             
             var characterOnTile  = characters.Find(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
             if(characterOnTile != null)

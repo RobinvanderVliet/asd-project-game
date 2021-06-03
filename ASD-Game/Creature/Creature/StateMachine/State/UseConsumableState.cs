@@ -5,9 +5,9 @@ namespace Creature.Creature.StateMachine.State
 {
     public class UseConsumableState : CreatureState
     {
-        public UseConsumableState(ICreatureData creatureData) : base(creatureData)
+        public UseConsumableState(ICharacterData characterData) : base(characterData)
         {
-            _creatureData = creatureData;
+            _characterData = characterData;
         }
 
         public override void Entry()
@@ -19,7 +19,7 @@ namespace Creature.Creature.StateMachine.State
         {
             throw new NotImplementedException();
         }
-        public override void Do(ICreatureData creatureData)
+        public override void Do(ICharacterData characterData)
         {
             throw new NotImplementedException();
         }

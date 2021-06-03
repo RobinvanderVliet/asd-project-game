@@ -29,13 +29,13 @@ namespace Creature.Tests
         {
             // Arrange ---------
             PlayerData playerData = new PlayerData(new Vector2(), 50, 10, 10);
-            _creatureStateMachineMock.Setup(c => c.CreatureData).Returns(playerData);
+            _creatureStateMachineMock.Setup(c => c.CharacterData).Returns(playerData);
 
             // Act -------------
             _sut.ApplyDamage(30);
 
             // Assert ----------
-            Assert.AreEqual(_sut.CreatureStateMachine.CreatureData.Health, 20);
+            Assert.AreEqual(_sut.CreatureStateMachine.CharacterData.Health, 20);
         }
 
         [Test]
@@ -43,13 +43,13 @@ namespace Creature.Tests
         {
             // Arrange ---------
             PlayerData playerData = new PlayerData(new Vector2(), 30, 10, 10);
-            _creatureStateMachineMock.Setup(c => c.CreatureData).Returns(playerData);
+            _creatureStateMachineMock.Setup(c => c.CharacterData).Returns(playerData);
 
             // Act -------------
             _sut.HealAmount(10);
 
             // Assert ----------
-            Assert.AreEqual(_sut.CreatureStateMachine.CreatureData.Health, 40);
+            Assert.AreEqual(_sut.CreatureStateMachine.CharacterData.Health, 40);
         }
 
         [Test]

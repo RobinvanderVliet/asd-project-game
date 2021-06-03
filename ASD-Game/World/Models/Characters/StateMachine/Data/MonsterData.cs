@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
-namespace Creature.Creature.StateMachine.Data
+namespace WorldGeneration.StateMachine.Data
 {
     [ExcludeFromCodeCoverage]
-    public class PlayerData : ICharacterData
+    public class MonsterData : ICharacterData
     {
         private Vector2 _position;
         private double _health;
@@ -12,6 +12,7 @@ namespace Creature.Creature.StateMachine.Data
         private int _visionRange;
         // TODO:: Fix integration with world
         // private IWorld _world;
+        private bool _following;
 
         public bool IsAlive { get => _health > 0; }
 
@@ -45,13 +46,20 @@ namespace Creature.Creature.StateMachine.Data
         //     set => _world = value;
         // }
 
-        public PlayerData(Vector2 position, double health, int damage, int visionRange/**, IWorld world**/)
+        public bool IsFollowing
+        {
+            get => _following;
+            set => _following = value;
+        }
+
+        public MonsterData(Vector2 position, double health, int damage, int visionRange/**, IWorld world**/, bool following)
         {
             _position = position;
             _health = health;
             _damage = damage;
             _visionRange = visionRange;
             // _world = world;
+            _following = following;
         }
     }
 }

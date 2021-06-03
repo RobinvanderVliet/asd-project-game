@@ -4,7 +4,7 @@ using System.Numerics;
 namespace Creature.Creature.StateMachine.Data
 {
     [ExcludeFromCodeCoverage]
-    public class MonsterData : ICreatureData
+    public class MonsterData : ICharacterData
     {
         private Vector2 _position;
         private double _health;

@@ -1,9 +1,9 @@
 ﻿using Creature.Creature.StateMachine.Data;
 using System;
 
-namespace Creature.Creature.StateMachine.State
+namespace WorldGeneration.StateMachine.State
 {
-    public class AttackPlayerState : CreatureState
+    public class AttackPlayerState : CharacterState
     {
         
         public AttackPlayerState(ICharacterData characterData) : base(characterData)

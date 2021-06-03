@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
-namespace Creature.Creature.StateMachine.Data
+namespace WorldGeneration.StateMachine.Data
 {
     [ExcludeFromCodeCoverage]
     public class PlayerData : ICharacterData

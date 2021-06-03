@@ -1,9 +1,9 @@
 ﻿using Creature.Creature.StateMachine.Data;
 using System;
 
-namespace Creature.Creature.StateMachine.State
+namespace WorldGeneration.StateMachine.State
 {
-    public class WanderState : CreatureState
+    public class WanderState : CharacterState
     {
         public WanderState(ICharacterData characterData) : base(characterData)
         {

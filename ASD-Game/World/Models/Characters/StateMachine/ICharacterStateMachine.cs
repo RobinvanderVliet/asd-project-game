@@ -1,9 +1,9 @@
 ﻿using Creature.Creature.StateMachine.Data;
 using Creature.Creature.StateMachine.Event;
 
-namespace Creature.Creature.StateMachine
+namespace WorldGeneration.StateMachine
 {
-    public interface ICreatureStateMachine
+    public interface ICharacterStateMachine
     {
         /// <summary>
         /// Every Creature has specific data that will be influenced by the Creature itself or by the statemachine.

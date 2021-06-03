@@ -18,12 +18,12 @@ namespace Creature.Creature
 
         public void ApplyDamage(double amount)
         {
-            _playerStateMachine.CreatureData.Health -= amount;
+            _playerStateMachine.CharacterData.Health -= amount;
         }
 
         public void HealAmount(double amount)
         {
-            _playerStateMachine.CreatureData.Health += amount;
+            _playerStateMachine.CharacterData.Health += amount;
         }
         public void Disconnect()
         {

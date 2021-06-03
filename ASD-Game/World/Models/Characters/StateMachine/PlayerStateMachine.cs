@@ -5,7 +5,7 @@ using Creature.Creature.StateMachine.Data;
 using Creature.Creature.StateMachine.Event;
 using Creature.Creature.StateMachine.State;
 
-namespace Creature.Creature.StateMachine
+namespace WorldGeneration.StateMachine
 {
     public class PlayerStateMachine : DefaultStateMachine
     {

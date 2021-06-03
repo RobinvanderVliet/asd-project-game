@@ -1,13 +1,13 @@
 ﻿using Creature.Creature.StateMachine.Data;
 using System;
 
-namespace Creature.Creature.StateMachine.State
+namespace WorldGeneration.StateMachine.State
 {
-    public abstract class CreatureState : IComparable
+    public abstract class CharacterState : IComparable
     {
         protected ICharacterData _characterData;
 
-        public CreatureState(ICharacterData characterData)
+        public CharacterState(ICharacterData characterData)
         {
             _characterData = characterData;
         }

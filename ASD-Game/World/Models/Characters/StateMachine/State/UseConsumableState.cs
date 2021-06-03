@@ -1,35 +1,32 @@
 ﻿using Creature.Creature.StateMachine.Data;
 using System;
 
-namespace Creature.Creature.StateMachine.State
+namespace WorldGeneration.StateMachine.State
 {
-    public class AttackPlayerState : CreatureState
+    public class UseConsumableState : CharacterState
     {
-        
-        public AttackPlayerState(ICharacterData characterData) : base(characterData)
+        public UseConsumableState(ICharacterData characterData) : base(characterData)
         {
             _characterData = characterData;
         }
 
         public override void Entry()
         {
-            Console.WriteLine("Attack player state Entry");
+            Console.WriteLine("UseConsumable state Entry");
         }
 
         public override void Do()
         {
             throw new NotImplementedException();
         }
-
         public override void Do(ICharacterData characterData)
         {
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void Exit()
         {
-            Console.WriteLine("Attack player state Exit");
+            Console.WriteLine("UseConsumable state Exit");
         }
-
     }
 }

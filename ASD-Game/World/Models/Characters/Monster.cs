@@ -1,17 +1,19 @@
-﻿using Creature.Creature.StateMachine;
+﻿
 
-namespace Creature.Creature
+using WorldGeneration.StateMachine;
+
+namespace WorldGeneration
 {
-    public class Monster : ICreature
+    public class Monster : Character
     {
-        private ICreatureStateMachine _monsterStateMachine;
+        private ICharacterStateMachine _monsterStateMachine;
 
-        public ICreatureStateMachine CreatureStateMachine
+        public ICharacterStateMachine CharacterStateMachine
         {
             get => _monsterStateMachine;
         }
 
-        public Monster(ICreatureStateMachine monsterStateMachine)
+        public Monster(string name, int xPosition, int yPosition, string symbol, ICharacterStateMachine monsterStateMachine) : base(name, xPosition, yPosition, symbol, monsterStateMachine)
         {
             _monsterStateMachine = monsterStateMachine;
             _monsterStateMachine.StartStateMachine();

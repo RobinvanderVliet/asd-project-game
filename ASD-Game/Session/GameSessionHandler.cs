@@ -1,8 +1,6 @@
 using System.Collections.Generic;
+
 using System.Numerics;
-using Creature.Creature;
-using Creature.Creature.StateMachine;
-using Creature.Creature.StateMachine.Data;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
@@ -13,6 +11,8 @@ using Newtonsoft.Json;
 using Session.DTO;
 using WorldGeneration;
 using WorldGeneration.Models;
+using WorldGeneration.StateMachine;
+using WorldGeneration.StateMachine.Data;
 
 namespace Session
 {
@@ -106,9 +106,9 @@ namespace Session
                     _worldService.AddPlayerToWorld(new WorldGeneration.Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key), false);
                 }
             }
-            ICreatureData data = new MonsterData(new Vector2(25, 15), 10, 10, 10, false);
-            ICreatureStateMachine stateMachine = new MonsterStateMachine(data, null);
-            ICreature monster = new Monster(stateMachine);
+            ICharacterData data = new MonsterData(new Vector2(25, 15), 10, 10, 10, false);
+            ICharacterStateMachine stateMachine = new MonsterStateMachine(data, null);
+            Character monster = new Monster(stateMachine);
 
             _worldService.AddCreatureToWorld(monster);
             

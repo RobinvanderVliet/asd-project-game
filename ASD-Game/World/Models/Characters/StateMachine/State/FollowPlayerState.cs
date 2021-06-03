@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace Creature.Creature.StateMachine.State
+namespace WorldGeneration.StateMachine.State
 {
-    public class FollowPlayerState : CreatureState
+    public class FollowPlayerState : CharacterState
     {
         public FollowPlayerState(ICharacterData characterData) : base(characterData)
         {
