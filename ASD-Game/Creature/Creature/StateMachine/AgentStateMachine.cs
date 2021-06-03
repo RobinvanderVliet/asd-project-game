@@ -36,19 +36,20 @@ namespace Creature.Creature.StateMachine
         {
             var builder = new StateMachineDefinitionBuilder<CreatureState, CreatureEvent.Event>();
 
-            CreatureState idleState = new IdleState(CreatureData);
-            CreatureState wanderState = new WanderState(CreatureData);
-            CreatureState inventoryState = new InventoryState(CreatureData);
-            CreatureState useConsumableState = new UseConsumableState(CreatureData);
-            CreatureState followCreatureState = new FollowCreatureState(CreatureData);
-            CreatureState attackState = new AttackState(CreatureData);
-            CreatureState fleeFromCreatureState = new FleeFromCreatureState(CreatureData);
+            CreatureState idleState = new IdleState(CreatureData, this);
+            CreatureState wanderState = new WanderState(CreatureData, this);
+            CreatureState inventoryState = new InventoryState(CreatureData, this);
+            CreatureState useConsumableState = new UseConsumableState(CreatureData, this);
+            CreatureState followCreatureState = new FollowCreatureState(CreatureData, this);
+            CreatureState attackState = new AttackState(CreatureData, this);
+            CreatureState fleeFromCreatureState = new FleeFromCreatureState(CreatureData, this);
             
             // Idle
             builder.In(wanderState).On(CreatureEvent.Event.IDLE).Goto(idleState).Execute<ICreatureData>(wanderState.SetTargetData); //IF not using a Target then remove execute.
             // Wandering
             builder.In(followCreatureState).On(CreatureEvent.Event.LOST_CREATURE).Goto(wanderState).Execute<ICreatureData>(wanderState.SetTargetData);
             builder.In(fleeFromCreatureState).On(CreatureEvent.Event.LOST_CREATURE).Goto(wanderState).Execute<ICreatureData>(wanderState.SetTargetData);
+            builder.In(idleState).On(CreatureEvent.Event.WANDERING).Goto(wanderState).Execute<ICreatureData>(wanderState.SetTargetData);
             // Manage inventory
             builder.In(wanderState).On(CreatureEvent.Event.FOUND_ITEM).Goto(inventoryState).Execute<ICreatureData>(inventoryState.SetTargetData);
             builder.In(fleeFromCreatureState).On(CreatureEvent.Event.FOUND_ITEM).Goto(inventoryState).Execute<ICreatureData>(inventoryState.SetTargetData);

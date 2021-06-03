@@ -10,9 +10,10 @@ namespace Creature.Creature.StateMachine.State
     {
         private MoveHandler _moveHandler = new MoveHandler(new ClientController(new NetworkComponent()), new WorldService());
 
-        public WanderState(ICreatureData creatureData) : base(creatureData)
+        public WanderState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base(creatureData, stateMachine)
         {
             _creatureData = creatureData;
+            _stateMachine = stateMachine;
         }
 
         public override void Do()

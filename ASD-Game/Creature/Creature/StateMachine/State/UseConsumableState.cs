@@ -5,9 +5,10 @@ namespace Creature.Creature.StateMachine.State
 {
     public class UseConsumableState : CreatureState
     {
-        public UseConsumableState(ICreatureData creatureData) : base(creatureData)
+        public UseConsumableState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base(creatureData, stateMachine)
         {
             _creatureData = creatureData;
+            _stateMachine = stateMachine;
         }
 
         public override void Do()

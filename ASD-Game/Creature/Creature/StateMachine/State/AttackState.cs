@@ -5,9 +5,10 @@ namespace Creature.Creature.StateMachine.State
 {
     public class AttackState : CreatureState
     {
-        public AttackState(ICreatureData creatureData) : base(creatureData)
+        public AttackState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base(creatureData, stateMachine)
         {
             _creatureData = creatureData;
+            _stateMachine = stateMachine;
         }
 
         public override void Do()

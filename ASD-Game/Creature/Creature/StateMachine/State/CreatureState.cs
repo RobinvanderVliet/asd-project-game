@@ -7,12 +7,13 @@ namespace Creature.Creature.StateMachine.State
     {
         protected ICreatureData _creatureData;
         protected ICreatureData _target;
+        protected ICreatureStateMachine _stateMachine;
         
-        public CreatureState(ICreatureData creatureData)
+        public CreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine)
         {
             _creatureData = creatureData;
+            _stateMachine = stateMachine;
         }
-
         public virtual void Do()
         {
             throw new NotImplementedException();

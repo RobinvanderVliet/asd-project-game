@@ -5,6 +5,7 @@
         public enum Event
         {
             IDLE,
+            WANDERING,
             LOST_CREATURE,
             SPOTTED_CREATURE,
             ALMOST_DEAD,

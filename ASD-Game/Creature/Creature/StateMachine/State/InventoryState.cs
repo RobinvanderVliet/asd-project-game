@@ -7,9 +7,10 @@ namespace Creature.Creature.StateMachine.State
 {
     public class InventoryState : CreatureState
     {
-        public InventoryState(ICreatureData creatureData) : base(creatureData)
+        public InventoryState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base(creatureData, stateMachine)
         {
             _creatureData = creatureData;
+            _stateMachine = stateMachine;
         }
 
         public override void Do()
