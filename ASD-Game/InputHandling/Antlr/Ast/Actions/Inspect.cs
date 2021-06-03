@@ -1,14 +1,15 @@
-using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
 namespace InputHandling.Antlr.Ast.Actions
 {
-    public class Drop : Command, IEquatable<Drop>
+    public class Inspect: Command
     {
         private InventorySlot _inventorySlot;
+        [ExcludeFromCodeCoverage]
         public InventorySlot InventorySlot { get => _inventorySlot; private set => _inventorySlot = value; }
-        
+
+        [ExcludeFromCodeCoverage]
         public ArrayList GetChildren()
         {
             var children = new ArrayList();
@@ -26,6 +27,7 @@ namespace InputHandling.Antlr.Ast.Actions
             return this;
         }
 
+        [ExcludeFromCodeCoverage]
         public ASTNode RemoveChild(ASTNode child)
         {
             if (child is InventorySlot && child == _inventorySlot)
@@ -35,17 +37,23 @@ namespace InputHandling.Antlr.Ast.Actions
 
             return this;
         }
-
+        
         [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
-            return Equals(obj as Drop);
+            return Equals(obj as Inspect);
         }
 
         [ExcludeFromCodeCoverage]
-        public bool Equals(Drop other)
+        public bool Equals(Inspect other)
         {
-            return true;
+            return _inventorySlot.Equals(other.InventorySlot);
+        }
+        
+        [ExcludeFromCodeCoverage]
+        public override int GetHashCode()
+        {
+            return _inventorySlot.GetHashCode();
         }
     }
 }

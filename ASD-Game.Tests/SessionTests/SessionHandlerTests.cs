@@ -1,3 +1,4 @@
+using Messages;
 using Moq;
 using Network;
 using Network.DTO;
@@ -26,6 +27,7 @@ namespace Session.Tests
 
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;
+        private Mock<IMessageService> _mockedMessageService;
         private Mock<Session> _mockedSession;
         private Mock<IScreenHandler> _mockedScreenHandler;
 
@@ -35,9 +37,10 @@ namespace Session.Tests
             var standardOutput = new StreamWriter(Console.OpenStandardOutput());
             standardOutput.AutoFlush = true;
             Console.SetOut(standardOutput);
-            _mockedClientController = new Mock<IClientController>();
-            _mockedScreenHandler = new Mock<IScreenHandler>();
-            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object);
+            _mockedClientController = new();
+            _mockedMessageService = new();
+            _mockedScreenHandler = new();
+            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object, _mockedMessageService.Object);
             _mockedSession = new Mock<Session>();
             _packetDTO = new PacketDTO();
         }
@@ -48,16 +51,12 @@ namespace Session.Tests
             // Arrange ------------
             string invalidSessionId = "invalid";
 
-            using (StringWriter sw = new StringWriter())
-            {
-                //Act ---------
-                Console.SetOut(sw);
-                _sut.JoinSession(invalidSessionId);
+            //Act ---------
+            _sut.JoinSession(invalidSessionId);
 
-                //Assert ---------
-                string expected = string.Format("Could not find game!{0}", Environment.NewLine);
-                Assert.AreEqual(expected, sw.ToString());
-            }
+            //Assert ---------
+            string expected = "Could not find game!";
+            _mockedMessageService.Verify(mock => mock.AddMessage(expected), Times.Once);
         }
 
         [Test]
@@ -71,7 +70,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = hostOriginId;
             packetHeaderDTO.SessionID = sessionId;
             packetHeaderDTO.PacketType = PacketType.Session;

@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Timers;
 using InputHandling.Antlr;
 using InputHandling.Exceptions;
+using Messages;
 using Session;
 using UserInterface;
 using WebSocketSharp;
@@ -14,14 +15,16 @@ namespace InputHandling
         private IPipeline _pipeline;
         private ISessionHandler _sessionHandler;
         private IScreenHandler _screenHandler;
+        private IMessageService _messageService;
         private static Timer aTimer;
         private const string RETURN_KEYWORD = "return";
 
-        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler)
+        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler, IMessageService messageService)
         {
             _pipeline = pipeline;
             _sessionHandler = sessionHandler;
             _screenHandler = screenHandler;
+            _messageService = messageService;
         }
 
         public InputHandler()
@@ -40,13 +43,9 @@ namespace InputHandling
                 _pipeline.ParseCommand(commando);
                 _pipeline.Transform();
             }
-            catch (CommandSyntaxException e)
+            catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-            }
-            catch (MoveException e)
-            {
-                Console.WriteLine(e.Message);
+                _messageService.AddMessage(e.Message);
             }
         }
 
