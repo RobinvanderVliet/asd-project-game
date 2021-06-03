@@ -29,10 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\InputHandling\InputHandler.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
 	  <EmbeddedResource Include="Resources\test1.txt" />
 	  <EmbeddedResource Include="Resources\test2.txt" />
 	  <EmbeddedResource Include="Resources\test3.txt" />

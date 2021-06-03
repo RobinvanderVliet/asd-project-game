@@ -6,8 +6,9 @@ namespace InputHandling.Models
 {
     public class BaseVariables
     {
-        public readonly List<string> comparebles = new() {
+        public readonly List<string> comparables = new() {
             "player", 
+            "agent",
             "health", 
             "inventory", 
             "item"};

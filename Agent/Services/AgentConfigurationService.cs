@@ -18,6 +18,12 @@ namespace Agent.Services
             FileHandler = new FileHandler();
             Pipeline = new Pipeline();
         }
+        
+        public AgentConfigurationService()
+        {
+            FileHandler = new FileHandler();
+            Pipeline = new Pipeline();
+        }
 
         public virtual List<string> Configure(string input)
         {
@@ -37,7 +43,10 @@ namespace Agent.Services
                 {
                     var output = Pipeline.GenerateAst();
                     string fileName = "agent/agent-config.cfg";
+                    
                     FileHandler.ExportFile(output, fileName);
+                    
+                    
                 }
             }
             catch (FileException e)

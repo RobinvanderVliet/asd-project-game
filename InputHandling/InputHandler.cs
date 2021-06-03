@@ -8,6 +8,8 @@ using InputCommandHandler.Models;
 using Session;
 using UserInterface;
 using System.Text;
+using System.Threading;
+using Agent.Services;
 using InputHandling.Models;
 using Timer = System.Timers.Timer;
 
@@ -188,19 +190,37 @@ namespace InputHandling
                     finalstring += element + Environment.NewLine;
                 }
             }
+
+            AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
+            var errors = agentConfigurationService.Configure(finalstring);
+            var errorsCombined = string.Empty;
+
+            if (errors.Count != 0)
+            {
+                foreach (var error in errors)
+                {
+                    errorsCombined += error + ", ";
+                }
+                editorScreen.UpdateLastQuestion(errorsCombined +
+                                                Environment.NewLine + "Please fix the errors and retry" +
+                                                Environment.NewLine + "press enter to continue...");
+                _screenHandler.GetScreenInput();
+                editorScreen.ClearScreen();
+                _screenHandler.TransitionTo(new StartScreen());
+            }
             
-            
-            //Console.WriteLine(finalstring);
-            
-            //TODO: finalstring naar pipeline
-            //TODO: naar het volgende scherm gaan!
+            editorScreen.UpdateLastQuestion(Environment.NewLine + "Your agent has been configured successfully!" +
+                                            Environment.NewLine + "press enter to continue to the startscreen");
+            _screenHandler.GetScreenInput();
+            editorScreen.ClearScreen();
+            _screenHandler.TransitionTo(new StartScreen());
         }
 
         public string CustomRuleHandleEditorScreenCommands(string type)
         {
             string startText = "Please enter your own " + type + " rule"
                                + Environment.NewLine
-                               + "This is an example line: When player nearby player then attack (optional: otherwise flee)"
+                               + "This is an example line: When agent nearby player then attack (optional: otherwise flee)"
                                + Environment.NewLine;
             StringBuilder builder = new StringBuilder();
             BaseVariables variables = new();
@@ -211,7 +231,7 @@ namespace InputHandling
 
             builder.Append(type + Environment.NewLine);
 
-            editorScreen.UpdateLastQuestion("This is and example line: When player nearby player then attack" +
+            editorScreen.UpdateLastQuestion("This is and example line: When agent nearby player then attack" +
                                             Environment.NewLine + "press enter to continue...");
 
             _screenHandler.GetScreenInput();
@@ -242,21 +262,21 @@ namespace InputHandling
                         case "armor":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible armors: " + Environment.NewLine +
-                                                            String.Join(", ", variables.armor) +
+                                                            string.Join(", ", variables.armor) +
                                                             Environment.NewLine +
                                                             startText);
                             break;
                         case "weapon":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible weapons: " + Environment.NewLine +
-                                                            String.Join(", ", variables.weapons) +
+                                                            string.Join(", ", variables.weapons) +
                                                             Environment.NewLine +
                                                             startText);
                             break;
                         case "comparison":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible comparison: " + Environment.NewLine +
-                                                            String.Join(", ",
+                                                            string.Join(", ",
                                                                 variables.comparison) +
                                                             Environment.NewLine +
                                                             startText);
@@ -264,28 +284,28 @@ namespace InputHandling
                         case "consumables":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible consumables: " + Environment.NewLine +
-                                                            String.Join(", ", variables.consumables) +
+                                                            string.Join(", ", variables.consumables) +
                                                             Environment.NewLine +
                                                             startText);
                             break;
                         case "actions":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible actions: " + Environment.NewLine +
-                                                            String.Join(", ", variables.actions) +
+                                                            string.Join(", ", variables.actions) +
                                                             Environment.NewLine +
                                                             startText);
                             break;
                         case "bitcoinItems":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible bitcoin items: " + Environment.NewLine +
-                                                            String.Join(", ", variables.bitcoinItems) +
+                                                            string.Join(", ", variables.bitcoinItems) +
                                                             Environment.NewLine +
                                                             startText);
                             break;
                         case "comparables":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible comparables: " + Environment.NewLine +
-                                                            String.Join(", ", variables.comparebles) +
+                                                            string.Join(", ", variables.comparables) +
                                                             Environment.NewLine +
                                                             startText);
                             break;
@@ -384,7 +404,7 @@ namespace InputHandling
             }
 
             //check first variable is of type comparebles
-            correct = variables.comparebles.Contains(rule[1]);
+            correct = variables.comparables.Contains(rule[1]);
             if (!correct)
             {
                 return correct;
@@ -393,7 +413,7 @@ namespace InputHandling
             //check second variable is of type item or interger
             correct = rule.IndexOf(variables.ReturnAllItems().FirstOrDefault(x => x.Equals(rule[3]))) == 3 ||
                       int.TryParse(rule[3], out _) ||
-                      rule.FindLastIndex(x => x.Equals(variables.comparebles.FirstOrDefault(x => x.Equals(rule[3])))) ==
+                      rule.FindLastIndex(x => x.Equals(variables.comparables.FirstOrDefault(x => x.Equals(rule[3])))) ==
                       3;
             if (!correct)
             {

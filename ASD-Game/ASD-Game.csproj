@@ -40,6 +40,7 @@
 
   <ItemGroup>
     <Folder Include="Profiles\" />
+    <Folder Include="resource\agent" />
     <Folder Include="resource\agent\" />
   </ItemGroup>
 
