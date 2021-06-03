@@ -43,8 +43,7 @@ namespace ActionHandling
 
         public void Search()
         {
-            string searchResult = _worldService.SearchCurrentTile();
-            _messageService.AddMessage(searchResult);
+            _messageService.AddMessage(_worldService.SearchCurrentTile());
         }
 
         public void PickupItem(int index)
