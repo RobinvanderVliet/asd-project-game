@@ -143,8 +143,8 @@ namespace InputHandling
             //TODO add if to check if you are the host
             if (input == START_COMMAND) 
             {
-                SendCommand(START_COMMAND);
                 _screenHandler.TransitionTo(new GameScreen());
+                SendCommand(START_COMMAND);
             }
 
             if (input.Contains("SAY"))
