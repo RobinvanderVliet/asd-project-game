@@ -36,7 +36,7 @@ namespace Agent
 
         public virtual void ExportFile(string content, string fileName)
         {
-            string safeFileLocation = GetBaseDirectory() + "Resource/" + fileName;
+            string safeFileLocation = GetBaseDirectory() + "/Resource/" + fileName;
 
             CreateDirectory(safeFileLocation);
 
