@@ -1,4 +1,5 @@
-﻿using Items;
+﻿using ASD_project.World.Models;
+using Items;
 
 namespace ASD_project.World
 {
@@ -30,6 +31,17 @@ namespace ASD_project.World
                 (< -92 and >= -99) => ItemFactory.GetP90(),
                 _ => null
             };
+        }
+        
+        public Chunk Spawn(Chunk createdChunk, float noiseresult)
+        {
+            var randomTile = (int) ((createdChunk.RowSize * createdChunk.RowSize - 1) * noiseresult);
+            if (randomTile < 0)
+            {
+                randomTile *= -1;
+            }
+            createdChunk.Map[randomTile].ItemsOnTile.Add(GetRandomItem(noiseresult));
+            return createdChunk;
         }
     }
 }

@@ -23,28 +23,30 @@ namespace ASD_project.World
             _noise.SetSeed(seed);
             _seed = seed;
             _itemService = itemService;
-
         }
 
         public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize)
         {
+            var itemSpawner = new RandomItemGenerator();
             var map = new ITile[chunkRowSize * chunkRowSize];
             for (var y = 0; y < chunkRowSize; y++)
             {
                 for (var x = 0; x < chunkRowSize; x++)
                 {
-                    map[y * chunkRowSize + x] = CreateTileWithItemFromNoise(_noise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize)
+                    map[y * chunkRowSize + x] = CreateTileFromNoise(_noise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize)
                         , x + chunkRowSize * chunkX
                         , chunkRowSize * chunkY - chunkRowSize + y);
                 }
             }
-            return new Chunk(chunkX, chunkY, map, chunkRowSize, _seed);
+            
+            var createdChunk = new Chunk(chunkX, chunkY, map, chunkRowSize, _seed); 
+            var modifiedChunk = itemSpawner.Spawn(createdChunk, _noise.GetNoise(chunkX, chunkY));
+            return modifiedChunk;
         }
 
-        private ITile CreateTileWithItemFromNoise(float noise, int x, int y)
+        private ITile CreateTileFromNoise(float noise, int x, int y)
         {
-            var tile = GetTileFromNoise(noise, x, y);
-            return _itemService.PutItemOnTile(tile, noise);
+            return GetTileFromNoise(noise, x, y);
         }
 
         public ITile GetTileFromNoise(float noise, int x, int y)
