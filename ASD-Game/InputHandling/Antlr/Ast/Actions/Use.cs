@@ -1,51 +1,58 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
 namespace InputHandling.Antlr.Ast.Actions
 {
-    public class Drop : Command, IEquatable<Drop>
+    public class Use : Command, IEquatable<Use>
     {
-        private InventorySlot _inventorySlot;
-        public InventorySlot InventorySlot { get => _inventorySlot; private set => _inventorySlot = value; }
-        
+        private Step _step;
+        public Step Step { get => _step; private set => _step = value; }
+
+        public Use()
+        {
+
+        }
+
         public ArrayList GetChildren()
         {
             var children = new ArrayList();
-            children.Add(_inventorySlot);
+            children.Add(_step);
             return children;
         }
 
         public override ASTNode AddChild(ASTNode child)
         {
-            if (child is InventorySlot)
+            if (child is Step)
             {
-                _inventorySlot = (InventorySlot) child;
+                _step = (Step)child;
             }
-
             return this;
         }
 
         public ASTNode RemoveChild(ASTNode child)
         {
-            if (child is InventorySlot && child == _inventorySlot)
+            if (child is Step && child == _step)
             {
-                _inventorySlot = null;
+                _step = null;
             }
-
             return this;
         }
 
         [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
-            return Equals(obj as Drop);
+            return Equals(obj as Use);
         }
 
         [ExcludeFromCodeCoverage]
-        public bool Equals(Drop other)
+        public bool Equals(Use other)
         {
-            return true;
+            if (other == null)
+            {
+                return false;
+            }
+            return _step.Equals(other.Step);
         }
     }
 }

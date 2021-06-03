@@ -17,6 +17,7 @@ namespace WorldGeneration.Models.TerrainTiles
 
         public DirtTile(int x, int y)
         {
+            ItemsOnTile = new();
             Symbol = TileSymbol.DIRT;
             IsAccessible = true;
             XPosition = x;

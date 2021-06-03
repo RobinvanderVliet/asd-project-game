@@ -1,4 +1,6 @@
 using WorldGeneration.Models.Interfaces;
+﻿using System.Collections.Generic;
+using Items;
 
 namespace WorldGeneration
 {
@@ -9,6 +11,7 @@ namespace WorldGeneration
         public void DisplayWorld();
         public void DeleteMap();
         public void GenerateWorld(int seed);
+        public IList<Item> GetItemsOnCurrentTile();
         public Player getCurrentPlayer();
         public Player GetPlayer(string id);
         public ITile GetTile(int x, int y);

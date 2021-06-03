@@ -1,0 +1,21 @@
+﻿using InputHandling.Antlr.Ast;
+using System;
+using System.Diagnostics.CodeAnalysis;
+
+namespace InputHandling.Antlr.Ast.Actions
+{
+    public class Search : Command, IEquatable<Search>
+    {
+        [ExcludeFromCodeCoverage]
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Search);
+        }
+
+        [ExcludeFromCodeCoverage]
+        public bool Equals(Search other)
+        {
+            return true;
+        }
+    }
+}

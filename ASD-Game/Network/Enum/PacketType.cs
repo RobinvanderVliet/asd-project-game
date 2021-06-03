@@ -7,5 +7,6 @@
         Session,
         GameSession,
         RelativeStat
+        Inventory,        
     }
 }

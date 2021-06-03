@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Items.Consumables;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WorldGeneration
 {
@@ -28,6 +29,21 @@ namespace WorldGeneration
             RadiationLevel = RADIATION_LEVEL_MIN;
             Team = 0;
         }
+
+        public void UseConsumable(Consumable consumable)
+        {
+            if(consumable is HealthConsumable)
+            {
+
+                AddHealth((consumable as HealthConsumable).getHealth());
+            }
+            else if (consumable is StaminaConsumable)
+            {
+
+                AddStamina((consumable as StaminaConsumable).getStamina());
+            }
+        }
+
         
         public void AddStamina(int amount)
         {

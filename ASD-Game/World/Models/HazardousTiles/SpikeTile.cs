@@ -18,6 +18,7 @@ namespace WorldGeneration.Models.HazardousTiles
 
         public SpikeTile(int x, int y)
         {
+            ItemsOnTile = new();
             Symbol = TileSymbol.SPIKE;
             IsAccessible = true;
             XPosition = x;

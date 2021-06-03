@@ -18,6 +18,7 @@ namespace WorldGeneration.Models.TerrainTiles
 
         public StreetTile(int x, int y)
         {
+            ItemsOnTile = new();
             Symbol = TileSymbol.STREET;
             IsAccessible = true;
             XPosition = x;
