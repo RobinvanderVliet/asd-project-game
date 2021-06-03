@@ -235,23 +235,10 @@ namespace ActionHandling
 
             if (item != null)
             {
-                _worldService.GetItemsOnCurrentTile(player).Add(item);
-
                 if (handleInDatabase)
                 {
                     PlayerItemPOCO playerItemPOCO = _playerItemServicesDB.GetAllAsync().Result.FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == item.ItemName && playerItem.PlayerGUID == player.Id);
                     _ = _playerItemServicesDB.DeleteAsync(playerItemPOCO);
-
-                    WorldItemPOCO worldItemPOCO = new WorldItemPOCO()
-                    {
-                        GameGUID = _clientController.SessionId,
-                        ItemName = item.ItemName,
-                        XPosition = player.XPosition,
-                        YPosition = player.YPosition,
-                        ArmorPoints = armorPoints
-                    };
-
-                    _worldItemServicesDB.CreateAsync(worldItemPOCO);
                 }
 
                 if (inventoryDTO.UserId == _clientController.GetOriginId())
