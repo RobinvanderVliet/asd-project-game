@@ -19,13 +19,20 @@ namespace ActionHandling
         private IWorldService _worldService;
         private const int ATTACK_STAMINA = 10;
         private IDeadHandler _deadHandler;
+        private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
+        private readonly IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
+        private readonly IDatabaseService<CreaturePOCO> _creatureDatabaseService;
 
-        public AttackHandler(IClientController clientController, IWorldService worldService, IDeadHandler deadHandler)
+
+        public AttackHandler(IClientController clientController, IWorldService worldService, IDeadHandler deadHandler, IDatabaseService<PlayerPOCO> playerDatabaseService, IDatabaseService<PlayerItemPOCO> playerItemDatabaseService, IDatabaseService<CreaturePOCO> creatureDatabaseService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Attack);
             _worldService = worldService;
             _deadHandler = deadHandler;
+            _playerDatabaseService = playerDatabaseService;
+            _playerItemDatabaseService = playerItemDatabaseService;
+            _creatureDatabaseService = creatureDatabaseService;
         }
 
         public void SendAttack(string direction)
@@ -87,15 +94,19 @@ namespace ActionHandling
                 var PlayerResult =
                     allPlayers.Where(x =>
                         x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition);
-
-                if (PlayerResult.FirstOrDefault().Health <= 0)
+                if (PlayerResult.FirstOrDefault() != null)
                 {
-                    if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
+                    if (PlayerResult.FirstOrDefault().Health <= 0)
                     {
-                        Console.WriteLine("You can't attack this enemy, he is already dead.");
-                        return new HandlerResponseDTO(SendAction.Ignore, null);
+                        if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
+                        {
+                            Console.WriteLine("You can't attack this enemy, he is already dead.");
+                            return new HandlerResponseDTO(SendAction.Ignore, null);
+                        }
                     }
                 }
+
+                
                 //var CreatureResult =
                 //    allCreatures.Where(x =>
                 //        x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition &&
@@ -141,12 +152,10 @@ namespace ActionHandling
 
         private void InsertStaminaToDatabase(AttackDTO attackDto)
         {
-            var dbConnection = new DbConnection();
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var player = playerRepository.GetAllAsync().Result
+            var player = _playerDatabaseService.GetAllAsync().Result
                 .FirstOrDefault(player => player.PlayerGuid == attackDto.PlayerGuid);
             player.Stamina -= ATTACK_STAMINA;
-            playerRepository.UpdateAsync(player);
+            _playerDatabaseService.UpdateAsync(player);
         }
 
         private void InsertDamageToDatabase(AttackDTO attackDto, Boolean isPlayer) // both armor and health damage
@@ -154,15 +163,9 @@ namespace ActionHandling
             int totalDamage = attackDto.Damage;
             if (isPlayer)
             {
-                var dbConnection = new DbConnection();
-
-                var attackedPlayerRepository = new Repository<PlayerPOCO>(dbConnection);
-                var attackedPlayer = attackedPlayerRepository.GetAllAsync().Result
+                var attackedPlayer = _playerDatabaseService.GetAllAsync().Result
                     .FirstOrDefault(attackedPlayer => attackedPlayer.PlayerGuid == attackDto.AttackedPlayerGuid);
-
-                var attackedPlayerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
-                var attackedPlayerItemService = new ServicesDb<PlayerItemPOCO>(attackedPlayerItemRepository);
-
+                
                 var attackedPlayerInArray =
                     _worldService.getAllPlayers().Where(player => player.Id == attackDto.PlayerGuid).FirstOrDefault();
 
@@ -171,7 +174,7 @@ namespace ActionHandling
                     var attackedPlayerHelmet = attackedPlayerInArray.Inventory.Helmet;
                     var helmetPoints = attackedPlayerHelmet.ArmorProtectionPoints;
 
-                    var attackedPlayerItem = attackedPlayerItemService.GetAllAsync();
+                    var attackedPlayerItem = _playerItemDatabaseService.GetAllAsync();
                     attackedPlayerItem.Wait();
                     var results = attackedPlayerItem.Result.OrderByDescending(a => a.ArmorPoints)
                         .First(playerItem =>
@@ -184,13 +187,13 @@ namespace ActionHandling
                     {
                         totalDamage -= results.ArmorPoints;
                         results.ArmorPoints = 0;
-                        attackedPlayerItemService.UpdateAsync(results);
+                        _playerItemDatabaseService.UpdateAsync(results);
                         // TODO: Delete playerItemPoco form database (function DeleteAsync)
                     }
                     else
                     {
                         results.ArmorPoints -= totalDamage;
-                        attackedPlayerItemService.UpdateAsync(results);
+                        _playerItemDatabaseService.UpdateAsync(results);
                     }
                 }
 
@@ -198,7 +201,7 @@ namespace ActionHandling
                 {
                     var attackedPlayerBodyArmor = attackedPlayerInArray.Inventory.Armor;
                     var bodyArmorPoints = attackedPlayerBodyArmor.ArmorProtectionPoints;
-                    var attackedPlayerItem = attackedPlayerItemService.GetAllAsync();
+                    var attackedPlayerItem = _playerItemDatabaseService.GetAllAsync();
                     attackedPlayerItem.Wait();
                     var results = attackedPlayerItem.Result.OrderByDescending(a => a.ArmorPoints)
                         .First(playerItem => playerItem.PlayerGUID == attackDto.PlayerGuid &&
@@ -214,27 +217,24 @@ namespace ActionHandling
                     else
                     {
                         results.ArmorPoints -= totalDamage;
-                        attackedPlayerItemService.UpdateAsync(results);
+                        _playerItemDatabaseService.UpdateAsync(results);
 
                         attackedPlayer.Health -= totalDamage;
-                        attackedPlayerRepository.UpdateAsync(attackedPlayer);
+                        _playerDatabaseService.UpdateAsync(attackedPlayer);
                     }
                 }
                 else
                 {
                     attackedPlayer.Health -= totalDamage;
-                    attackedPlayerRepository.UpdateAsync(attackedPlayer);
+                    _playerDatabaseService.UpdateAsync(attackedPlayer);
                 }
             }
             else
             {
-                var dbConnection = new DbConnection();
-
-                var attackedCreatureRepository = new Repository<CreaturePOCO>(dbConnection);
-                var attackedCreature = attackedCreatureRepository.GetAllAsync().Result
+                var attackedCreature = _creatureDatabaseService.GetAllAsync().Result
                     .FirstOrDefault(attackedCreature => attackedCreature.CreatureGuid == attackDto.AttackedPlayerGuid);
                 attackedCreature.Health -= attackDto.Damage;
-                attackedCreatureRepository.UpdateAsync(attackedCreature);
+                _creatureDatabaseService.UpdateAsync(attackedCreature);
 
                 if (attackedCreature.Health <= 0)
                 {

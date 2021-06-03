@@ -1,16 +1,13 @@
 using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
-using DatabaseHandler.Services;
 using Items;
-using Items.ArmorStats;
-using Items.WeaponStats;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
-using System;
 using System.Collections.Generic;
+using DatabaseHandler.Services;
 using WorldGeneration;
 using WorldGeneration.Models;
 
@@ -39,14 +36,10 @@ namespace Session
 
         public StartGameDTO SetupGameHost()
         {
-            var dbConnection = new DbConnection();
-
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
-            var playerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
-            var playerItemService = new ServicesDb<PlayerItemPOCO>(playerItemRepository);
-            var gameRepository = new Repository<GamePOCO>(dbConnection);
-            var gameService = new ServicesDb<GamePOCO>(gameRepository);
+           
+            var servicePlayer = new DatabaseService<PlayerPOCO>();
+            var playerItemService = new DatabaseService<PlayerItemPOCO>();
+            var gameService = new DatabaseService<GamePOCO>();
 
             var gamePOCO = new GamePOCO {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
             gameService.CreateAsync(gamePOCO);
