@@ -43,12 +43,13 @@ namespace Session.Tests
             _mockedPlayerPOCOServices = new Mock<IDatabaseService<PlayerPOCO>>();
             _mockedWorldService = new Mock<IWorldService>();
             _mockedsessionHandler = new Mock<ISessionHandler>();
+            _mockedGamePOCOServices = new Mock<IDatabaseService<GamePOCO>>();
 
             _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object,
                 _mockedsessionHandler.Object, _mockedGamePOCOServices.Object, _mockedPlayerPOCOServices.Object);
             _packetDTO = new PacketDTO();
         }
-        
+
         [Test]
         public void TestIfGameIsSavedStartGameDTOIsGettingOldSavedGameData()
         {
@@ -56,27 +57,45 @@ namespace Session.Tests
             _mockedsessionHandler.Setup(x => x.GetSavedGame()).Returns(true);
             StartGameDTO startGameDto = new StartGameDTO();
             List<PlayerPOCO> savedPlayers = new List<PlayerPOCO>();
-            PlayerPOCO player = new PlayerPOCO {GameGuid = "GameGuid1", Health = 1, Stamina = 1, PlayerGuid = "PlayerGuid1", 
-                GameGUIDAndPlayerGuid = "GameGuid1Player1", PlayerName = "Player1", TypePlayer = 1, XPosition = 0, YPosition = 0};
-            
+            PlayerPOCO player = new PlayerPOCO
+            {
+                GameGuid = "GameGuid1", Health = 1, Stamina = 1, PlayerGuid = "GameGuid1Player1",
+                GameGUIDAndPlayerGuid = "GameGuid1Player1", PlayerName = "Player1", TypePlayer = 1, XPosition = 0,
+                YPosition = 0
+            };
+
+            Dictionary<string, int[]> dictPlayer = new Dictionary<string, int[]>();
+            int[] playerPosition = new int[2];
+            playerPosition[0] = 0;
+            playerPosition[1] = 0;
+            dictPlayer.Add("GameGuid1Player1", playerPosition);
+
             savedPlayers.Add(player);
-            
-            startGameDto.Seed = 1;
+
+            startGameDto.Seed = 0;
             startGameDto.SavedPlayers = savedPlayers;
             startGameDto.GameGuid = "GameGuid1";
+            startGameDto.PlayerLocations = dictPlayer;
+
+            _mockedClientController.Setup(x => x.SessionId).Returns("GameGuid1");
+            
+
+            StartGameDTO sendGameDTO = new StartGameDTO
+            {
+                Seed = startGameDto.Seed,
+                SavedPlayers = startGameDto.SavedPlayers,
+                PlayerLocations = startGameDto.PlayerLocations,
+                ExistingPlayer = null
+            };
 
             _mockedPlayerPOCOServices.Setup(x => x.GetAllAsync()).ReturnsAsync(savedPlayers);
             _mockedsessionHandler.Setup(x => x.GetSessionSeed()).Returns(1);
             _sut.SendGameSession();
-            var payload = JsonConvert.SerializeObject(startGameDto);
+            var payload = JsonConvert.SerializeObject(sendGameDTO);
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
             _mockedClientController.Verify(x => x.SendPayload(payload, PacketType.GameSession), Times.Once);
         }
-        
-        
-        
-        
-        
+
 
         //     [Test]
         //     public void Test_start_session()
@@ -175,6 +194,5 @@ namespace Session.Tests
         //         Assert.AreEqual(expectedResult.Action, actualResult.Action);
         //     }
         // }
-        
     }
 }
