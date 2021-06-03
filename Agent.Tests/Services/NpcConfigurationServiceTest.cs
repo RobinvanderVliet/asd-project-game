@@ -33,32 +33,32 @@ namespace Agent.Tests.Services
             _handler = new FileHandler();
         }
         
-        [Test]
-        public void Test_CreateNewNpcConfiguration_WithNewNpc()
-        {
-            //Arrange
-            var filepath = _handler.GetBaseDirectory() + "/Resource/npcFileTest.txt";
-            
-            //Act
-            _sut.CreateConfiguration("TestNPCName", filepath);
-            
-            //Assert
-            Assert.True(_sut.GetConfigurations().Count > 0);
-            Assert.AreEqual(_sut.GetConfigurations()[0].GetSetting("aggressiveness"), "high");
-        }
-
-        [Test]
-        public void Test_Configure_CatchesSyntaxError()
-        {
-            //Arrange
-            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns("incorrect:code").Returns("cancel");
-
-            //Act
-            _sut.Configure();
-
-            //Assert
-            Assert.AreEqual("missing '=' at 'code'", _sut.LastError);
-        }
+        // [Test]
+        // public void Test_CreateNewNpcConfiguration_WithNewNpc()
+        // {
+        //     //Arrange
+        //     var filepath = _handler.GetBaseDirectory() + "/Resource/npcFileTest.txt";
+        //     
+        //     //Act
+        //     _sut.CreateConfiguration("TestNPCName", filepath);
+        //     
+        //     //Assert
+        //     Assert.True(_sut.GetConfigurations().Count > 0);
+        //     Assert.AreEqual(_sut.GetConfigurations()[0].GetSetting("aggressiveness"), "high");
+        // }
+        //
+        // [Test]
+        // public void Test_Configure_CatchesSyntaxError()
+        // {
+        //     //Arrange
+        //     _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns("incorrect:code").Returns("cancel");
+        //
+        //     //Act
+        //     _sut.Configure();
+        //
+        //     //Assert
+        //     Assert.AreEqual("missing '=' at 'code'", _sut.LastError);
+        // }
         
         //Deze test moet getest worden zodra er een checker is
         //[Test]

@@ -19,12 +19,7 @@ namespace Agent.Services
             Pipeline = new Pipeline();
         }
 
-        public override void Configure()
-        {
-            //Not implemented see ConfigureAgent(string input)
-        }
-
-        public override List<string> Configure(string input)
+        public virtual List<string> Configure(string input)
         {
             try
             {
@@ -50,7 +45,7 @@ namespace Agent.Services
                 LastError = e.Message;
                 Log.Logger.Information("File error: " + e.Message);
             }
-            return null;
+            return Pipeline.GetErrors();
         }
         
         public override void CreateConfiguration(string agentName, string filepath)

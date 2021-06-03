@@ -82,7 +82,7 @@ namespace Agent.Tests.Services
             var result = _sut.Configure(INPUT);
             
             //Assert
-            Assert.IsNull(result);
+            Assert.IsEmpty(result);
             _pipelineMock.Verify(x => x.ParseString(INPUT),Times.Once);
             _pipelineMock.Verify(x => x.CheckAst(), Times.Once);
             _pipelineMock.Verify(x=> x.GenerateAst(), Times.Once);
