@@ -9,11 +9,10 @@ namespace Creature.Creature.StateMachine.Data
         private Vector2 _position;
         private double _health;
         private double _stamina;
-        private int _damage;
         private int _visionRange;
-        private bool _following;
         private List<ValueTuple<string, string>> _ruleSet;
-
+        private bool _following;
+        
         public bool IsAlive
         {
             get => _health > 0;
@@ -36,13 +35,7 @@ namespace Creature.Creature.StateMachine.Data
             get => _stamina;
             set => _stamina = value;
         }
-
-        public int Damage
-        {
-            get => _damage;
-            set => _damage = value;
-        }
-
+        
         public int VisionRange
         {
             get => _visionRange;
@@ -60,12 +53,11 @@ namespace Creature.Creature.StateMachine.Data
             set => _following = value;
         }
         
-        public AgentData(Vector2 position, double health, double stamina, int damage, int visionRange, List<ValueTuple<string, string>> agentRuleSet, bool following)
+        public AgentData(Vector2 position, double health, double stamina, int visionRange, List<ValueTuple<string, string>> agentRuleSet, bool following)
         {
             _position = position;
             _health = health;
             _stamina = stamina;
-            _damage = damage;
             _visionRange = visionRange;
             _following = following;
             _ruleSet = agentRuleSet;

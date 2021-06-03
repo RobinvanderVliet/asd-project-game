@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using ActionHandling;
 using Creature.Creature.StateMachine.Data;
 using Creature.Creature.StateMachine.Event;
@@ -19,10 +19,12 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do()
         {
-            if (1 = 1)//if player in range
+            int i = 5;
+            
+            if (1 == i)//if player in range
             {
                 _stateMachine.FireEvent(CreatureEvent.Event.SPOTTED_CREATURE);
-            } else if (1 = 1)// item found
+            } else if (2 == i)// item found
             {
                 _stateMachine.FireEvent(CreatureEvent.Event.FOUND_ITEM);
             }

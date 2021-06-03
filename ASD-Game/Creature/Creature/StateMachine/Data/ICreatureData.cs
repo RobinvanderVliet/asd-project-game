@@ -9,7 +9,6 @@ namespace Creature.Creature.StateMachine.Data
         bool IsAlive { get; }
         Vector2 Position { get; set; }
         int VisionRange { get; set; }
-        int Damage { get; set; }
         double Health { get; set; }
         List<ValueTuple<string, string>> RuleSet { get; }
     }

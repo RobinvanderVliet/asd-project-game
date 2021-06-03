@@ -1,24 +1,37 @@
 ﻿using System;
+using System.Numerics;
 using Creature.Creature;
 using Creature.Creature.StateMachine;
 using Creature.Creature.StateMachine.Data;
 using Creature.Creature.StateMachine.Event;
+using WorldGeneration;
 
 namespace Creature
 {
-    public class Agent : ICreature
+    public class Agent : Player, ICreature
     {
         private AgentStateMachine _agentStateMachine;
-
+       
         public ICreatureStateMachine CreatureStateMachine
         {
             get => _agentStateMachine;
         }
 
-        public Agent(AgentData agentData)
+        public Agent(string name, int xPosition, int yPosition, string symbol, string id) : base(name, xPosition, yPosition, symbol, id)
         {
-            _agentStateMachine = new(agentData);
+            Id = id;
+            Name = name;
+            Symbol = symbol;
+            XPosition = xPosition;
+            YPosition = yPosition;
+            _agentStateMachine = new AgentStateMachine(CreateAgentData());
             _agentStateMachine.StartStateMachine();
+        }
+
+        private AgentData CreateAgentData()
+        {
+            Vector2 position = new Vector2(XPosition, YPosition);
+            return new AgentData(position, Health, Stamina, 6, null, false);
         }
         
         public void ApplyDamage(double amount)
