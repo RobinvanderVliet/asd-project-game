@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast;
+﻿using Agent.Antlr.Ast;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.Ast
 {
@@ -55,7 +55,7 @@ namespace Agent.Tests.Ast
             Assert.AreEqual("Node", result);
             Assert.AreEqual(1, _sut.GetChildren().Count);
         }
-        
+
         [Test]
         public void Test_RemoveChild()
         {

@@ -3,13 +3,13 @@ using System.Text;
 
 namespace Agent.Antlr.Ast
 {
-   
-    public class Node 
+
+    public class Node
     {
 
         protected ASTError error = null;
         protected List<Node> body = new List<Node>();
-        
+
         public virtual string GetNodeType()
         {
             return "Node";
@@ -45,14 +45,15 @@ namespace Agent.Antlr.Ast
         private string BuildString(StringBuilder builder)
         {
             builder.Append("[" + GetNodeType() + "]");
-            foreach (var child in GetChildren()) {
+            foreach (var child in GetChildren())
+            {
                 child.BuildString(builder);
             }
 
             return builder.ToString();
         }
-        
-         public override string ToString()
+
+        public override string ToString()
         {
             return BuildString(new StringBuilder()).ToString();
         }

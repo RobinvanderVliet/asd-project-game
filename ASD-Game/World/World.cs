@@ -1,59 +1,76 @@
-﻿using Creature;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UserInterface;
 
 namespace WorldGeneration
 {
-    public class World
+    public class World : IWorld
     {
-        private Map _map;
-        public Player CurrentPlayer { get; set; }
+        private IMap _map;
+        public Player CurrentPlayer;
         private List<Player> _players;
+        private List<Creature> _creatures;
         private readonly int _viewDistance;
+        private IScreenHandler _screenHandler;
 
-        public World(int seed, int viewDistance)
+        public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler)
         {
             _players = new();
-            _map = MapFactory.GenerateMap(seed: seed);
+            _creatures = new();
+            _map = mapFactory.GenerateMap(seed);
             _viewDistance = viewDistance;
-            _map.DeleteMap();
+            _screenHandler = screenHandler;
         }
 
-        public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
+        public void UpdateCharacterPosition(string id, int newXPosition, int newYPosition)
         {
-            if (CurrentPlayer.Id == userId)
+            var player = _players.FirstOrDefault(x => x.Id == id);
+            if (player != null)
             {
-                CurrentPlayer.XPosition = newXPosition;
-                CurrentPlayer.YPosition = newYPosition;
-            }
-            else
-            {
-                var player = _players.Find(x => x.Id == userId);
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
-            DisplayWorld();
+            var creature = _creatures.FirstOrDefault(x => x.Id == id);
+            if (creature != null)
+            {
+                creature.XPosition = newXPosition;
+                creature.YPosition = newYPosition;
+            }
+            UpdateMap();
         }
 
-        public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
+        public void AddPlayerToWorld(Player player, bool isCurrentPlayer = false)
         {
             if (isCurrentPlayer)
             {
                 CurrentPlayer = player;
             }
             _players.Add(player);
+            UpdateMap();
         }
 
-        public void DisplayWorld()
+        public void AddCreatureToWorld(Creature creature)
         {
-            if (CurrentPlayer != null && _players != null)
+            _creatures.Add(creature);
+            UpdateMap();
+        }
+
+        public void UpdateMap()
+        {
+            if (CurrentPlayer != null && _players != null && _creatures != null)
             {
-                Console.Clear();
-                _map.DisplayMap(CurrentPlayer, _viewDistance, new List<Character>(_players));
+                var characters = ((IEnumerable<Character>)_players).Concat(_creatures).ToList();
+                //_screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
             }
         }
 
-        public void deleteMap()
+        public char[,] GetMapAroundCharacter(Character character)
+        {
+            var characters = ((IEnumerable<Character>)_players).Concat(_creatures).ToList();
+            return _map.GetMapAroundCharacter(character, _viewDistance, characters);
+        }
+
+        public void DeleteMap()
         {
             _map.DeleteMap();
         }

@@ -1,11 +1,11 @@
 using Network;
+using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Timers;
-using Network.DTO;
 using WorldGeneration;
 using UserInterface;
 using Timer = System.Timers.Timer;
@@ -91,7 +91,7 @@ namespace Session
             _session = new Session(sessionName);
             _session.GenerateSessionId();
             _session.AddClient(_clientController.GetOriginId());
-            _session.SessionSeed = MapFactory.GenerateSeed();
+            _session.SessionSeed = new MapFactory().GenerateSeed();
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;

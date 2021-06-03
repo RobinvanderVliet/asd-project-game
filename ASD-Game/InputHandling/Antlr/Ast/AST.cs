@@ -37,5 +37,10 @@ namespace InputHandling.Antlr.Ast
         {
             return Equals(obj as AST);
         }
+
+        public override int GetHashCode()
+        {
+            return _root.GetHashCode();
+        }
     }
 }

@@ -10,12 +10,12 @@ namespace Session
     {
         private string _name;
         public string Name { get => _name; set => _name = value; }
-        
+
         private string _sessionId;
         public string SessionId { get => _sessionId; set => _sessionId = value; }
 
         public bool InSession = false;
-        
+
         private List<string> _joinedClients = new();
 
         private int _sessionSeed;

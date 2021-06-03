@@ -1,15 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using Agent.Exceptions;
 using Agent.Mapper;
 using Agent.Models;
 using Agent.Services;
-
-//using InputHandling;
+using InputHandling;
 using Moq;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.Services
 {
@@ -20,13 +18,13 @@ namespace Agent.Tests.Services
         private FileHandler _handler;
         private Mock<FileHandler> _fileHandlerMock;
         private Mock<Pipeline> _pipelineMock;
-        //private Mock<InputHandler> _mockedRetriever;
+        private Mock<InputHandler> _mockedRetriever;
 
         [SetUp]
         public void Setup()
         {
-            //_mockedRetriever = new();
-            //_sut = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), _mockedRetriever.Object);
+            _mockedRetriever = new();
+            _sut = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), _mockedRetriever.Object);
             _fileHandlerMock = new Mock<FileHandler>();
             _sut.FileHandler = _fileHandlerMock.Object;
             _pipelineMock = new Mock<Pipeline>();
@@ -40,7 +38,7 @@ namespace Agent.Tests.Services
             //Arrange
             var input = _handler.GetBaseDirectory() + "/Resource/AgentConfigurationTestFileParseException.txt";
 
-            //_mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
+            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
 
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("wrong:wrong");
 
@@ -78,7 +76,7 @@ namespace Agent.Tests.Services
             var input = _handler.GetBaseDirectory() + "/Resources/AgentTestFileWrongExtension.txt";
             var error = "File not found";
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Throws(new FileException(error));
-            //_mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
+            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
 
             //Act
             _sut.Configure();
@@ -92,7 +90,7 @@ namespace Agent.Tests.Services
         {
             //Arrange
             var input = _handler.GetBaseDirectory() + "/Resources/AgentConfigurationTestFile.txt";
-            //_mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input);
+            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input);
 
             _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("aggressiveness=high");
 

@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Agent.Mapper;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using Agent.Mapper;
-using NUnit.Framework;
 
 namespace Agent.Tests.Mapper
 {
@@ -41,7 +39,7 @@ namespace Agent.Tests.Mapper
 
 
         }
-        
+
         [Test]
         public void Test_MapFileToConfiguration_Unsuccessful()
         {

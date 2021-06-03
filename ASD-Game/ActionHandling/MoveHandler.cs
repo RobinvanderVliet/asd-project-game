@@ -75,10 +75,8 @@ namespace ActionHandling
             //(_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost)
             if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
             {
-                var dbConnection = new DbConnection();
 
-                var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-                var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
+                var servicePlayer = new DatabaseService<PlayerPOCO>();
 
                 var allLocations = servicePlayer.GetAllAsync();
 
@@ -90,7 +88,7 @@ namespace ActionHandling
                 var result =
                     allLocations.Result.Where(x =>
                         x.XPosition == newPosPlayerX && x.YPosition == newPosPlayerY &&
-                        x.GameGuid == _clientController.SessionId);
+                        x.GameGUID == _clientController.SessionId);
 
                 if (result.Any())
                 {
@@ -116,14 +114,12 @@ namespace ActionHandling
 
         private void InsertToDatabase(MoveDTO moveDTO)
         {
-            var dbConnection = new DbConnection();
-
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var player = playerRepository.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId);
+            var playerService = new DatabaseService<PlayerPOCO>();
+            var player = playerService.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGUID == moveDTO.UserId);
 
             player.XPosition = moveDTO.XPosition;
             player.YPosition = moveDTO.YPosition;
-            playerRepository.UpdateAsync(player);
+            playerService.UpdateAsync(player);
         }
 
         private void HandleMove(MoveDTO moveDTO)

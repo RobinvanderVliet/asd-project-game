@@ -36,11 +36,11 @@ namespace Agent.Antlr.Ast
             switch (node)
             {
                 case Comparable comparable:
-                    if (_comparableL == null) 
+                    if (_comparableL == null)
                     {
                         _comparableL = comparable;
                     }
-                    else if (_comparableR == null) 
+                    else if (_comparableR == null)
                     {
                         _comparableR = comparable;
                     }
@@ -62,7 +62,7 @@ namespace Agent.Antlr.Ast
 
             return this;
         }
-        
+
 
         public Comparable GetComparableL()
         {
@@ -73,8 +73,8 @@ namespace Agent.Antlr.Ast
         {
             _comparableL = comparable;
         }
-        
-        
+
+
         public Comparable GetComparableR()
         {
             return _comparableR;
@@ -94,7 +94,7 @@ namespace Agent.Antlr.Ast
         {
             _comparison = comparison;
         }
-        
+
         public ActionReference GetThen()
         {
             return _then;

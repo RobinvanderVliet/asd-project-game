@@ -1,15 +1,13 @@
-﻿using Agent.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using Agent.Mapper;
+﻿using Agent.Mapper;
 using Agent.Models;
 using Agent.Services;
 
 //using InputHandling;
 using Moq;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Agent.Tests.Services
 {

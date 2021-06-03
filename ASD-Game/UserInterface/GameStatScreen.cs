@@ -14,19 +14,19 @@ namespace UserInterface
         private const int STAT_WIDTH = SCREEN_WIDTH - 2;
         private int _statHeight;
 
-        private String _userName = "TEMP USERNAME";
+        private string _userName = "TEMP USERNAME";
         private int _score = 0;
         private int _hp = 100;
         private int _stamina = 100;
         private int _armor = 100;
         private int _radiationProtectionPoints = 100;
-        private String _helm = "Bandana";
-        private String _body = "Jacket";
-        private String _melee = "Knife";
-        private String _ranged = "AK-47";
-        private String _slotOne = "Bandage";
-        private String _slotTwo = "Suspicious white powder";
-        private String _slotThree = "Medkit";
+        private string _helm = "Bandana";
+        private string _body = "Jacket";
+        private string _melee = "Knife";
+        private string _ranged = "AK-47";
+        private string _slotOne = "Bandage";
+        private string _slotTwo = "Suspicious white powder";
+        private string _slotThree = "Medkit";
 
         public GameStatScreen(int height)
         {

@@ -1,11 +1,14 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using DatabaseHandler.POCO;
+using LiteDB;
 using LiteDB.Async;
 
 namespace DatabaseHandler
 {
-    public class DbConnection : IDbConnection
+    [ExcludeFromCodeCoverage]
+    public class DBConnection : IDBConnection
     {
         [ExcludeFromCodeCoverage]
         public ILiteDatabaseAsync GetConnectionAsync()
@@ -13,7 +16,8 @@ namespace DatabaseHandler
             try
             {
                 var currentDirectory = Directory.GetCurrentDirectory();
-                var connection = new LiteDatabaseAsync(@"Filename="  + currentDirectory + "\\ASD-Game.db;connection=shared;");
+                var connection =
+                    new LiteDatabaseAsync(@"Filename=" + currentDirectory + "\\ASD-Game.db;connection=shared;");
                 return connection;
             }
             catch (Exception ex)

@@ -1,13 +1,15 @@
-﻿using NUnit.Framework;
-using Moq;
-using System.Numerics;
+﻿using Creature.Creature.StateMachine;
 using Creature.Creature.StateMachine.Data;
+using Moq;
+using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
-using Creature.Creature.StateMachine;
+using System.Numerics;
+using Creature.Creature;
 
 namespace Creature.Tests
 {
     [ExcludeFromCodeCoverage]
+    [TestFixture]
     class MonsterTest
     {
         private Monster _sut;
