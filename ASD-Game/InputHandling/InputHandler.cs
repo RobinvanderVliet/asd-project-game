@@ -4,6 +4,7 @@ using System.Timers;
 using InputHandling.Antlr;
 using InputHandling.Exceptions;
 using Session;
+using Session.GameConfiguration;
 using UserInterface;
 using WebSocketSharp;
 
@@ -14,20 +15,22 @@ namespace InputHandling
         private IPipeline _pipeline;
         private ISessionHandler _sessionHandler;
         private IScreenHandler _screenHandler;
+        private IGameConfigurationHandler _gameConfigurationHandler;
         private static Timer aTimer;
         private const string RETURN_KEYWORD = "return";
 
-        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler)
+        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler, IGameConfigurationHandler gameConfigurationHandler)
         {
             _pipeline = pipeline;
             _sessionHandler = sessionHandler;
             _screenHandler = screenHandler;
+            _gameConfigurationHandler = gameConfigurationHandler;
         }
 
-        public InputHandler()
-        {
-
-        }
+        // public InputHandler()
+        // {
+        //
+        // }
 
         public void HandleGameScreenCommands()
         {
@@ -114,6 +117,20 @@ namespace InputHandling
             else
             {
                 sessionScreen.UpdateInputMessage("That is not a number, please try again!");
+            }
+        }
+
+        public void HandleConfigurationScreenCommands()
+        {
+            var input = GetCommand();
+            if (input == RETURN_KEYWORD)
+            {
+                _screenHandler.TransitionTo(new StartScreen());
+                _gameConfigurationHandler.SetGameConfiguration();
+            }
+            else
+            {
+                _gameConfigurationHandler.HandleAnswer(input);
             }
         }
     }

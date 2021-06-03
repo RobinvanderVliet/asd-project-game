@@ -5,6 +5,8 @@ using System.IO;
 using Moq;
 using Network;
 using NUnit.Framework;
+using Session.DTO;
+using Session.GameConfiguration;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -23,6 +25,7 @@ namespace Session.Tests
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
         private Mock<ISessionHandler> _mockedsessionHandler;
+        private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
 
         [SetUp]
         public void Setup()
@@ -33,7 +36,7 @@ namespace Session.Tests
             _mockedClientController = new Mock<IClientController>();
             _mockedWorldService = new Mock<IWorldService>();
             _mockedsessionHandler = new Mock<ISessionHandler>();
-            _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedsessionHandler.Object);
+            _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedsessionHandler.Object, _mockedGameConfigurationHandler.Object);
             _packetDTO = new PacketDTO();
         }
 

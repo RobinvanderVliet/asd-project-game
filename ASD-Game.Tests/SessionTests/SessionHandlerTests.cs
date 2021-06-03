@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
+using Session.GameConfiguration;
 using UserInterface;
 using Timer = System.Timers.Timer;
 
@@ -28,6 +29,7 @@ namespace Session.Tests
         private Mock<IClientController> _mockedClientController;
         private Mock<Session> _mockedSession;
         private Mock<IScreenHandler> _mockedScreenHandler;
+        private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
 
         [SetUp]
         public void Setup()
@@ -37,7 +39,8 @@ namespace Session.Tests
             Console.SetOut(standardOutput);
             _mockedClientController = new Mock<IClientController>();
             _mockedScreenHandler = new Mock<IScreenHandler>();
-            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object);
+            _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
+            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object, _mockedGameConfigurationHandler.Object);
             _mockedSession = new Mock<Session>();
             _packetDTO = new PacketDTO();
         }

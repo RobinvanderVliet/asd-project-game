@@ -1,15 +1,16 @@
 using Network;
-using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Timers;
+using Network.DTO;
 using WorldGeneration;
 using DatabaseHandler;
 using DatabaseHandler.Services;
 using DatabaseHandler.Repository;
+using Session.GameConfiguration;
 using UserInterface;
 using Timer = System.Timers.Timer;
 
@@ -17,7 +18,7 @@ namespace Session
 {
     public class SessionHandler : IPacketHandler, ISessionHandler
     {
-        private const bool DEBUG_INTERFACE = true; //TODO: remove when UI is complete, obviously
+        private const bool DEBUG_INTERFACE = false; //TODO: remove when UI is complete, obviously
         
         private IClientController _clientController;
         private Session _session;
@@ -30,11 +31,13 @@ namespace Session
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
         private IScreenHandler _screenHandler;
-        public SessionHandler(IClientController clientController, IScreenHandler screenHandler)
+        private IGameConfigurationHandler _gameConfigurationHandler;
+        public SessionHandler(IClientController clientController, IScreenHandler screenHandler, IGameConfigurationHandler gameConfigurationHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Session);
             _screenHandler = screenHandler;
+            _gameConfigurationHandler = gameConfigurationHandler;
         }
 
         public List<string> GetAllClients()
@@ -135,6 +138,14 @@ namespace Session
                     if (sessionDTO.SessionType == SessionType.SendHeartbeat)
                     {
                         return HandleHeartbeat(packet);
+                    }
+                    if (sessionDTO.SessionType == SessionType.EditMonsterDifficulty)
+                    {
+                        return HandleMonsterDifficulty(packet);
+                    }
+                    if (sessionDTO.SessionType == SessionType.EditItemSpawnRate)
+                    {
+                        return HandleItemSpawnRate(packet);
                     }
                 }
                 if ((packet.Header.Target == "client" || packet.Header.Target == "host" || packet.Header.Target == _clientController.GetOriginId())

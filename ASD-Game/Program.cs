@@ -15,6 +15,7 @@ using InputHandling.Antlr;
 using InputHandling.Antlr.Transformer;
 using Network;
 using Session;
+using Session.GameConfiguration;
 using UserInterface;
 
 namespace ASD_project
@@ -54,6 +55,7 @@ namespace ASD_project
                     services.AddScoped<IInputHandler, InputHandler>();
                     services.AddScoped<IPipeline, Pipeline>();
                     services.AddScoped<IEvaluator, Evaluator>();
+                    services.AddScoped<IGameConfigurationHandler, GameConfigurationHandler>();
                 })
                 .UseSerilog()
                 .Build();
