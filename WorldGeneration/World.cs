@@ -63,8 +63,14 @@ namespace WorldGeneration
                 _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
             }
         }
-        
-        public void DeleteMap()
+
+        public char[,] GetMapAroundCharacter(Character character)
+        {
+            var characters = ((IEnumerable<Character>)_players).Concat(_creatures).ToList();
+            return _map.GetMapAroundCharacter(character, _viewDistance, characters);
+        }
+
+            public void DeleteMap()
         {
             _map.DeleteMap();
         }

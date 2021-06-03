@@ -88,7 +88,7 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
         
-        public char[,] GetMapAroundCharacter(Player centerCharacter, int viewDistance, List<Character> allCharacters)
+        public char[,] GetMapAroundCharacter(Character centerCharacter, int viewDistance, List<Character> allCharacters)
         {
             if (viewDistance < 0)
             {
