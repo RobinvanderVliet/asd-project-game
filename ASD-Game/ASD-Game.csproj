@@ -67,4 +67,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="InputHandling\Antlr\Grammar\PlayerCommands.g4" />
+  </ItemGroup>
 </Project>

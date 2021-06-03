@@ -44,11 +44,6 @@ namespace WorldGeneration
             }
         }
 
-        /// <summary>
-        /// Returns false if item could not be added. True otherwise.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
         public void AddItem(Item item)
         {
             if (item is Weapon weapon)
