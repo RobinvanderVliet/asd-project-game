@@ -9,6 +9,7 @@ using Session.DTO;
 using Session.GameConfiguration;
 using System;
 using System.Collections.Generic;
+using UserInterface;
 using WorldGeneration;
 using WorldGeneration.Models;
 
@@ -21,12 +22,13 @@ namespace Session
         private ISessionHandler _sessionHandler;
         private IWorldService _worldService;
         private IGameConfigurationHandler _gameConfigurationHandler;
+        private IScreenHandler _screenHandler;
         
         private IServicesDb<PlayerPOCO> _playerServicesDb;
         private IServicesDb<GamePOCO> _gameServicesDb;
         private IServicesDb<GameConfigurationPOCO> _gameConfigServicesDb;
 
-        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IServicesDb<PlayerPOCO> playerServicesDb, IServicesDb<GamePOCO> gameServicesDb, IServicesDb<GameConfigurationPOCO> gameConfigservicesDb, IGameConfigurationHandler gameConfigurationHandler)
+        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IServicesDb<PlayerPOCO> playerServicesDb, IServicesDb<GamePOCO> gameServicesDb, IServicesDb<GameConfigurationPOCO> gameConfigservicesDb, IGameConfigurationHandler gameConfigurationHandler, IScreenHandler screenHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
@@ -36,6 +38,7 @@ namespace Session
             _playerServicesDb = playerServicesDb;
             _gameServicesDb = gameServicesDb;
             _gameConfigServicesDb = gameConfigservicesDb;
+            _screenHandler = screenHandler;
         }
         
         public void SendGameSession()
@@ -95,6 +98,7 @@ namespace Session
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
+            _screenHandler.TransitionTo(new GameScreen());
             var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
             HandleStartGameSession(startGameDTO);
             return new HandlerResponseDTO(SendAction.SendToClients, null);
