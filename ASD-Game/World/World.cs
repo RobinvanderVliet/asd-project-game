@@ -17,6 +17,7 @@ namespace ASD_project.World
         private readonly int _viewDistance;
         private IScreenHandler _screenHandler;
         private IItemService _itemService;
+        
 
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService)
         {
@@ -24,7 +25,7 @@ namespace ASD_project.World
             _players = new ();
             _creatures = new ();
             _itemService = itemService;
-            _map = mapFactory.GenerateMap(itemService, seed);
+            _map = mapFactory.GenerateMap(itemService, _items, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
             itemService.GetSpawnHandler().setItemSpawnDTOs(_items);

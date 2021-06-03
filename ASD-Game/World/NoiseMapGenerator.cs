@@ -1,4 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using ActionHandling.DTO;
 using ASD_project.World.Models;
 using ASD_project.World.Models.HazardousTiles;
 using ASD_project.World.Models.Interfaces;
@@ -13,9 +16,10 @@ namespace ASD_project.World
         private IFastNoise _itemNoise;
         private readonly int _seed;
         private IItemService _itemService;
+        private List<ItemSpawnDTO> _items;
 
         [ExcludeFromCodeCoverage]
-        public NoiseMapGenerator(int seed, IItemService itemService)
+        public NoiseMapGenerator(int seed, IItemService itemService, List<ItemSpawnDTO> items)
         {
             _worldNoise = new FastNoiseLite();
             _worldNoise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
@@ -29,10 +33,7 @@ namespace ASD_project.World
             _itemNoise.SetSeed(seed);
             _seed = seed;
             _itemService = itemService;
-            _itemNoise = new FastNoiseLite();
-            _itemNoise.SetFrequency(1f);
-            _itemNoise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
-            _itemNoise.SetSeed(seed);
+            _items = items;
         }
 
         public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize)
@@ -55,7 +56,20 @@ namespace ASD_project.World
         private ITile CreateTileWithItemFromNoise(float worldNoise, float itemNoise, int x, int y)
         {
             var tile = GetTileFromNoise(worldNoise, x, y);
-            return _itemService.PutItemOnTile(tile, itemNoise);
+            var tileWithItem = _itemService.PutItemOnTile(tile, itemNoise);
+
+            var AAA = tileWithItem.ItemsOnTile.FirstOrDefault();
+            if (AAA != null)
+            {
+                if (_items.Contains(item => item.ItemId == AAA.ItemId))
+                {
+                    return tile;
+                }
+                _items.Add(AAA);
+                return tileWithItem;
+            }
+            return tile;
+            
         }
 
         public ITile GetTileFromNoise(float noise, int x, int y)
