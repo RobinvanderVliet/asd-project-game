@@ -29,7 +29,7 @@ namespace WorldGeneration.Tests
         public void Setup()
         {
             //Initialisation of variables
-            _chunk = new Chunk(0,0,new ITile[4],2);
+            _chunk = new Chunk(0,0,new ITile[4],2, 2);
             _chunk.X = 0;
             _chunk.Y = 0;
 
