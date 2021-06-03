@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using ActionHandling;
 using Items;
 using WorldGeneration.Models;
 using WorldGeneration.Models.HazardousTiles;
@@ -12,10 +13,11 @@ namespace WorldGeneration
     {
         private IFastNoise _noise;
         private readonly int _seed;
-        private ItemSpawner _itemSpawner;
+        // static ItemSpawner _itemSpawner;
+        private IItemService _itemService;
 
         [ExcludeFromCodeCoverage]
-        public NoiseMapGenerator(int seed)
+        public NoiseMapGenerator(int seed, IItemService itemService)
         {
             _noise = new FastNoiseLite();
             _noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
@@ -23,7 +25,9 @@ namespace WorldGeneration
             _noise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
             _noise.SetSeed(seed);
             _seed = seed;
-            _itemSpawner = new ItemSpawner();
+            _itemService = itemService;
+            // _itemSpawner = new ItemSpawner(spawnHandler);
+
         }
 
         public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize)
@@ -44,7 +48,7 @@ namespace WorldGeneration
         private ITile CreateTileWithItemFromNoise(float noise, int x, int y)
         {
             var tile = GetTileFromNoise(noise, x, y);
-            return _itemSpawner.PutItemOnTile(tile, noise);
+            return _itemService.PutItemOnTile(tile, noise);
         }
 
         public ITile GetTileFromNoise(float noise, int x, int y)

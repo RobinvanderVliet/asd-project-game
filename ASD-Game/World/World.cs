@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ActionHandling;
+using ActionHandling.DTO;
 using Items;
 using UserInterface;
 
@@ -9,17 +11,20 @@ namespace WorldGeneration
     {
         private IMap _map;
         public Player CurrentPlayer;
-        private List<Player> _players;
-        private List<Item> _items;
-        private List<Creature> _creatures;
+        public List<Player> _players;
+        public List<ItemSpawnDTO> _items;
+        public List<Creature> _creatures;
         private readonly int _viewDistance;
         private IScreenHandler _screenHandler;
+        private IItemService _itemService;
 
-        public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler)
+        public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService)
         {
+            _items = new();
             _players = new ();
             _creatures = new ();
-            _map = mapFactory.GenerateMap(seed);
+            _itemService = itemService;
+            _map = mapFactory.GenerateMap(itemService, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
         }
@@ -76,6 +81,12 @@ namespace WorldGeneration
         {
             _map.DeleteMap();
         }
+
+            public void AddItemToWorld(ItemSpawnDTO itemSpawnDto)
+            {
+                _items.Add(itemSpawnDto);
+                UpdateMap();
+            }
     }
 }
      

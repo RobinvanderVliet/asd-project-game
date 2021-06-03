@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ActionHandling.DTO;
 
 namespace WorldGeneration
 {
@@ -14,5 +15,6 @@ namespace WorldGeneration
         void UpdateMap();
         char[,] GetMapAroundCharacter(Character character);
         void DeleteMap();
+        void AddItemToWorld(ItemSpawnDTO itemSpawnDto);
     }
 }

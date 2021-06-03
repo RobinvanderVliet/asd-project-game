@@ -1,23 +1,16 @@
-﻿using System;
-using Items;
-using WorldGeneration.Models;
+﻿using ActionHandling;
 using WorldGeneration.Models.Interfaces;
-using WorldGeneration.Models.LootableTiles;
 
 namespace WorldGeneration
 {
     public class ItemSpawner
     {
-
-        public ITile PutItemOnTile(ITile tile, float noiseResult)
+        private ISpawnHandler _spawnHandler;
+        public ItemSpawner(ISpawnHandler spawnHandler)
         {
-            var item = RandomItemGenerator.GetRandomItem(noiseResult);
-            if (item != null)
-            {
-                tile.ItemsOnTile.Add(item);
-            }
-
-            return tile;
+            _spawnHandler = spawnHandler;
         }
+
+        
     }
 }
