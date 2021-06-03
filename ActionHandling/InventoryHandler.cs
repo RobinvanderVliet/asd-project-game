@@ -68,14 +68,17 @@ namespace ActionHandling
                 "slot 3" => 5,
                 _ => 99
             };
+
             if (index == 99)
             {
                 _messageService.AddMessage("Unknown item slot");
-            }
-
-            InventoryDTO inventoryDTO =
+            } 
+            else
+            {
+                InventoryDTO inventoryDTO =
                 new InventoryDTO(_clientController.GetOriginId(), InventoryType.Drop, index);
-            SendInventoryDTO(inventoryDTO);
+                SendInventoryDTO(inventoryDTO);
+            }   
         }
 
         private void SendInventoryDTO(InventoryDTO inventoryDTO)
