@@ -21,7 +21,7 @@ namespace Agent.Antlr.Ast
             Root = configuration;
         }
 
-        public List<ASTError> GetErrors()
+        public virtual List<ASTError> GetErrors()
         {
             var errors = new List<ASTError>();
             CollectErrors(errors, Root);

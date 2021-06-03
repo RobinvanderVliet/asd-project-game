@@ -35,7 +35,7 @@ namespace Agent.Services
             return _npcConfigurations;
         }
 
-        public override void Configure()
+        public void Configure()
         {
             //TODO: Seems like duplicate code for now, but must be refactored later to match anticipated feature 'Configure NPC during a game'
             Console.WriteLine("What NPC do you wish to configure?");
@@ -46,26 +46,19 @@ namespace Agent.Services
             }
             Console.WriteLine("Please provide code for the NPC");
             var code = _inputHandler.GetCommand();
-            try
+           
+            Pipeline.ParseString(code);
+            if (Pipeline.GetErrors().Count <= 0)
             {
-                Pipeline.ParseString(code);
                 Pipeline.CheckAst();
-                var output = Pipeline.GenerateAst();
-                string fileName = "npc/" + npc + "-config.cfg";
-                FileHandler.ExportFile(output, fileName);
             }
-            catch (SyntaxErrorException e)
+            if (Pipeline.GetErrors().Count > 0)
             {
-                LastError = e.Message;
-                Log.Logger.Information("Syntax error: " + e.Message);
-                Configure();
+                return;
             }
-            catch (SemanticErrorException e)
-            {
-                LastError = e.Message;
-                Log.Logger.Information("Semantic error: " + e.Message);
-                Configure();
-            }
+            var output = Pipeline.GenerateAst();
+            string fileName = "npc/" + npc + "-config.cfg";
+            FileHandler.ExportFile(output, fileName);
         }
     }
 }

@@ -24,7 +24,5 @@ namespace Agent.Services
         public abstract void CreateConfiguration(string configurationName, string filepath);
 
         public abstract List<Configuration> GetConfigurations();
-
-        public abstract void Configure();
     }
 }
