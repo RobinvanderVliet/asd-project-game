@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Timers;
 using InputHandling.Antlr;
 using InputHandling.Exceptions;
 using WebSocketSharp;
@@ -10,6 +9,7 @@ using Session;
 using UserInterface;
 using System.Text;
 using InputHandling.Models;
+using Timer = System.Timers.Timer;
 
 namespace InputHandling
 {
@@ -133,6 +133,10 @@ namespace InputHandling
             EditorScreen editorScreen = _screenHandler.Screen as EditorScreen;
 
             List<string> answers = new();
+            answers.Add("explore=");
+            answers.Add("combat=");
+            answers.Add("");
+            answers.Add("");
 
             editorScreen.DrawHeader(questions.WELCOME);
 
@@ -151,7 +155,7 @@ namespace InputHandling
 
                 if (questions.EditorAnswers.ElementAt(i).Contains(input))
                 {
-                    answers.Add(input);
+                    answers[i] = answers[i] + input;
                     i++;
                     _screenHandler.ConsoleHelper.ClearConsole();
                 }
@@ -160,7 +164,7 @@ namespace InputHandling
                     editorScreen.PrintWarning("Please fill in an valid answer");
                 }
             }
-            
+
             if (answers.Count() == questions.EditorQuestions.Count)
             {
                 if (answers.ElementAt(2).Contains("yes"))
@@ -175,16 +179,29 @@ namespace InputHandling
                     answers.Add(CustomRuleHandleEditorScreenCommands("explore"));
                 }
             }
-            
-            
-            
-            
 
+            string finalstring = "";
+            foreach (string element in answers)
+            {
+                if (element != "yes" && element != "no")
+                {
+                    finalstring += element + Environment.NewLine;
+                }
+            }
+            
+            
+            //Console.WriteLine(finalstring);
+            
+            //TODO: finalstring naar pipeline
             //TODO: naar het volgende scherm gaan!
         }
 
         public string CustomRuleHandleEditorScreenCommands(string type)
         {
+            string startText = "Please enter your own " + type + " rule"
+                               + Environment.NewLine
+                               + "This is an example line: When player nearby player then attack (optional: otherwise flee)"
+                               + Environment.NewLine;
             StringBuilder builder = new StringBuilder();
             BaseVariables variables = new();
             bool nextLine = true;
@@ -192,7 +209,7 @@ namespace InputHandling
 
             string input;
 
-            builder.Append(type);
+            builder.Append(type + Environment.NewLine);
 
             editorScreen.UpdateLastQuestion("This is and example line: When player nearby player then attack" +
                                             Environment.NewLine + "press enter to continue...");
@@ -203,12 +220,10 @@ namespace InputHandling
             while (nextLine)
             {
                 editorScreen.UpdateLastQuestion(
-                    "Please enter your own combat rule"
+                    startText
+                    + "Type Help + armor, weapon, comparison, consumables, actions, bitcoinItems, comparables for possibilities"
                     + Environment.NewLine
-                    + "This is and example line: When player nearby player then attack (optional: otherwise flee)"
-                    + Environment.NewLine
-                    + "Type Help + armour, weapon, comparison, consumables, actions, bitcoinItems, comparables"
-                    + "Type Stop to stop the custom rules");
+                    + "Type Stop to stop the custom rules editor");
 
                 input = _screenHandler.GetScreenInput();
                 input = input.ToLower();
@@ -225,26 +240,54 @@ namespace InputHandling
                     switch (help[1])
                     {
                         case "armor":
-                            editorScreen.UpdateLastQuestion(variables.armor.ToString());
+                            editorScreen.ClearScreen();
+                            editorScreen.UpdateLastQuestion("Possible armors: " + Environment.NewLine +
+                                                            String.Join(", ", variables.armor) +
+                                                            Environment.NewLine +
+                                                            startText);
                             break;
                         case "weapon":
-                            editorScreen.UpdateLastQuestion(variables.weapons.ToString());
+                            editorScreen.ClearScreen();
+                            editorScreen.UpdateLastQuestion("Possible weapons: " + Environment.NewLine +
+                                                            String.Join(", ", variables.weapons) +
+                                                            Environment.NewLine +
+                                                            startText);
                             break;
                         case "comparison":
-                            editorScreen.UpdateLastQuestion(variables.comparison.ToString());
+                            editorScreen.ClearScreen();
+                            editorScreen.UpdateLastQuestion("Possible comparison: " + Environment.NewLine +
+                                                            String.Join(", ",
+                                                                variables.comparison) +
+                                                            Environment.NewLine +
+                                                            startText);
                             break;
                         case "consumables":
-                            editorScreen.UpdateLastQuestion(variables.consumables.ToString());
+                            editorScreen.ClearScreen();
+                            editorScreen.UpdateLastQuestion("Possible consumables: " + Environment.NewLine +
+                                                            String.Join(", ", variables.consumables) +
+                                                            Environment.NewLine +
+                                                            startText);
                             break;
                         case "actions":
-                            editorScreen.UpdateLastQuestion(variables.actions.ToString() +
-                                                            variables.actionReferences.ToString());
+                            editorScreen.ClearScreen();
+                            editorScreen.UpdateLastQuestion("Possible actions: " + Environment.NewLine +
+                                                            String.Join(", ", variables.actions) +
+                                                            Environment.NewLine +
+                                                            startText);
                             break;
                         case "bitcoinItems":
-                            editorScreen.UpdateLastQuestion(variables.bitcoinItems.ToString());
+                            editorScreen.ClearScreen();
+                            editorScreen.UpdateLastQuestion("Possible bitcoin items: " + Environment.NewLine +
+                                                            String.Join(", ", variables.bitcoinItems) +
+                                                            Environment.NewLine +
+                                                            startText);
                             break;
                         case "comparables":
-                            editorScreen.UpdateLastQuestion(variables.comparebles.ToString());
+                            editorScreen.ClearScreen();
+                            editorScreen.UpdateLastQuestion("Possible comparables: " + Environment.NewLine +
+                                                            String.Join(", ", variables.comparebles) +
+                                                            Environment.NewLine +
+                                                            startText);
                             break;
                     }
 
@@ -258,6 +301,13 @@ namespace InputHandling
                 if (CheckInput(rule, variables))
                 {
                     builder.Append(input);
+                }
+                else
+                {
+                    editorScreen.ClearScreen();
+                    editorScreen.UpdateLastQuestion("Your rule did not pass the check and was not added" +
+                                                    Environment.NewLine + "press enter to continue...");
+                    _screenHandler.GetScreenInput();
                 }
 
                 while (true)
