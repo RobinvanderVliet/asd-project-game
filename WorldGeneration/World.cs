@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Items;
 
 namespace WorldGeneration
 {
@@ -8,11 +9,13 @@ namespace WorldGeneration
         private Map _map;
         public Player CurrentPlayer { get; set; }
         private List<Player> _players;
+        private List<Item> _items;
         private readonly int _viewDistance;
 
         public World(int seed, int viewDistance)
         {
             _players = new ();
+            _items = new List<Item>();
             _map = MapFactory.GenerateMap(seed: seed);
             _viewDistance = viewDistance;
             _map.DeleteMap();

@@ -17,7 +17,6 @@ namespace WorldGeneration
         
         public void Spawn(Chunk chunk)
         {
-            // Determine if an item should be spawned in the chunk. For now this will always be true.
             var noiseresult = _noise.GetNoise(chunk.X, chunk.Y);
             var numberOfItemSpawns = 0;
 
@@ -47,6 +46,7 @@ namespace WorldGeneration
                 {
                     randomTile *= -1;
                 }
+                // Hier de message call doen.
                 chunk.Map[randomTile].ItemsOnTile.Add(ItemFactory.GetKnife());
             }
         }
