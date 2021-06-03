@@ -60,7 +60,7 @@ command:
     (MOVE | WALK | GO) SPACE direction (SPACE step)? #move |
     (ATTACK | SLASH | STRIKE) SPACE direction #attack |
     (PICKUP | GET) SPACE step #pickup |
-    DROP #drop |
+    DROP SPACE inventorySlot #drop | 
     (EXIT | LEAVE) #exit |
     SAY SPACE message #say |
     SHOUT SPACE message #shout |

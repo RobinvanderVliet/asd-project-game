@@ -84,13 +84,13 @@ namespace ActionHandling.Tests
             const int COMPENSATED_INDEX = 0;
             string originId = "origin1";
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
-            
+
             InventoryDTO inventoryDTO = new(originId, InventoryType.Pickup, COMPENSATED_INDEX);
             string payload = JsonConvert.SerializeObject(inventoryDTO);
-            
+
             // Act
             _sut.PickupItem(INDEX);
-            
+
             // Assert
             _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Inventory), Times.Once);
         }
@@ -129,7 +129,7 @@ namespace ActionHandling.Tests
                 _mockedClientController.Setup(mock => mock.IsHost()).Returns(true);
                 _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(inventoryDTO.UserId);
             }
-            
+
             // Act
             HandlerResponseDTO handlerResponseDTO = _sut.HandlePacket(packetDTO);
 
@@ -140,7 +140,7 @@ namespace ActionHandling.Tests
                 _mockedPlayerItemServicesDb.Verify(mock => mock.CreateAsync(It.IsAny<PlayerItemPOCO>()), Times.Once());
             }
         }
-        
+
         class HandlesPickupPacketCases : IEnumerable
         {
             public IEnumerator GetEnumerator()
