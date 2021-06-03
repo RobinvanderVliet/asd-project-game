@@ -119,6 +119,8 @@ namespace ActionHandling.Tests
         {
             // Arrange
             string originId = "origin1";
+
+            //Player drops Helmet
             InventoryDTO inventoryDTO = new(originId, InventoryType.Drop, 0);
             string payload = JsonConvert.SerializeObject(inventoryDTO);
 
@@ -128,19 +130,45 @@ namespace ActionHandling.Tests
             packetHeaderDTO.Target = "host";
             packetDTO.Header = packetHeaderDTO;
 
+            //Player drops Knife
+            InventoryDTO inventoryDTO2 = new(originId, InventoryType.Drop, 2);
+            string payload2 = JsonConvert.SerializeObject(inventoryDTO2);
+
+            PacketDTO packetDTO2 = new();
+            packetDTO2.Payload = payload2;
+            PacketHeaderDTO packetHeaderDTO2 = new PacketHeaderDTO();
+            packetHeaderDTO2.Target = "host";
+            packetDTO2.Header = packetHeaderDTO2;
+
+            //Player drops Knife
+            InventoryDTO inventoryDTO3 = new(originId, InventoryType.Drop, 1);
+            string payload3 = JsonConvert.SerializeObject(inventoryDTO3);
+
+            PacketDTO packetDTO3 = new();
+            packetDTO3.Payload = payload3;
+            PacketHeaderDTO packetHeaderDTO3 = new PacketHeaderDTO();
+            packetHeaderDTO3.Target = "host";
+            packetDTO3.Header = packetHeaderDTO3;
+
             _mockedClientController.Setup(mock => mock.IsHost()).Returns(false);
 
             Player player = new Player("henk", 0, 0, "#", inventoryDTO.UserId);
 
-            _mockedWorldService.Setup(mock => mock.GetPlayer(inventoryDTO.UserId)).Returns(player);
+            Player player2 = new Player("henk", 0, 0, "#", inventoryDTO2.UserId);
+
+            _mockedWorldService.Setup(mock => mock.GetPlayer(inventoryDTO2.UserId)).Returns(player2);
 
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
 
             // Act
             _sut.HandlePacket(packetDTO);
+            _sut.HandlePacket(packetDTO2);
+            _sut.HandlePacket(packetDTO3);
 
             // Assert
             _mockedMessageService.Verify(mock => mock.AddMessage("You dropped Bandana"), Times.Once);
+            _mockedMessageService.Verify(mock => mock.AddMessage("You dropped Knife"), Times.Once);
+            _mockedMessageService.Verify(mock => mock.AddMessage("This is not an item you can drop!"), Times.Once);
         }
 
         [Test]

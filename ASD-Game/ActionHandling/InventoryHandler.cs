@@ -205,12 +205,17 @@ namespace ActionHandling
             {
                 case 0:
                     item = player.Inventory.Helmet;
-                    armorPoints = (item as Armor).ArmorProtectionPoints;  
+                    {
+                        armorPoints = (item as Armor).ArmorProtectionPoints;
+                    }
                     player.Inventory.Helmet = null;
                     break;
                 case 1:
                     item = player.Inventory.Armor;
-                    armorPoints = (item as Armor).ArmorProtectionPoints;
+                    if(item != null)
+                    {
+                        armorPoints = (item as Armor).ArmorProtectionPoints;
+                    }
                     player.Inventory.Armor = null;
                     break;
                 case 2:
