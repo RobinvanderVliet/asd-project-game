@@ -1,6 +1,7 @@
 using System;
 using ActionHandling;
 using Creature.Creature.StateMachine.Data;
+using Creature.Creature.StateMachine.Event;
 using Network;
 using WorldGeneration;
 
@@ -18,8 +19,18 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do()
         {
-            int steps = new Random().Next(10);
-            _moveHandler.SendMove(pickRandomDirection(), steps);
+            if (1 = 1)//if player in range
+            {
+                _stateMachine.FireEvent(CreatureEvent.Event.SPOTTED_CREATURE);
+            } else if (1 = 1)// item found
+            {
+                _stateMachine.FireEvent(CreatureEvent.Event.FOUND_ITEM);
+            }
+            else
+            {
+                int steps = new Random().Next(10);
+                _moveHandler.SendMove(pickRandomDirection(), steps);     
+            }
         }
         
         private string pickRandomDirection()

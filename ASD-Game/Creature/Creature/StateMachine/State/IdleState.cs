@@ -14,7 +14,7 @@ namespace Creature.Creature.StateMachine.State
 
         public void Do()
         {
-            if (true)//Map.getmapAroundplayer returns an other player.
+            if (true)//Map.getmapAroundplayer returns an other player or object or anything that should stop the machine from ideleing and start doing stuff.
             {
                 _stateMachine.FireEvent(CreatureEvent.Event.WANDERING);
             }
