@@ -32,7 +32,7 @@ namespace Chat.Tests
             _mockedClientController = new Mock<IClientController>();
             _mockedScreenHandler = new Mock<IScreenHandler>();
             _mockedGameScreen = new Mock<GameScreen>();
-            _sut = new ChatHandler(_mockedClientController.Object, _mockedScreenHandler.Object);
+            _sut = new ChatHandler(_mockedClientController.Object);
             _packetDTO = new PacketDTO();
 
         }

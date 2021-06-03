@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+/*using System.Diagnostics.CodeAnalysis;
 using Moq;
 using NUnit.Framework;
 
@@ -34,4 +34,4 @@ namespace WorldGeneration.Tests
             Assert.That(seed1 != seed2);
         }
     }
-}
+}*/

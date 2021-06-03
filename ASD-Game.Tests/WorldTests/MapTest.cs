@@ -1,8 +1,7 @@
-using System;
+/*using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using DatabaseHandler.Services;
-using Display;
 using NUnit.Framework;
 using Moq;
 using WorldGeneration.Models;
@@ -32,10 +31,10 @@ namespace WorldGeneration.Tests
         
         //Declaration of mocks
         private INoiseMapGenerator _noiseMapGeneratorMockObject;
-        private IDatabaseService<Chunk> _databaseServiceMockObject;
+        private IServicesDb<Chunk> _databaseServiceMockObject;
         private IConsolePrinter _consolePrinterMockObject;
         private Mock<INoiseMapGenerator> _noiseMapGeneratorMock;
-        private Mock<IDatabaseService<Chunk>> _databaseServiceMock;
+        private Mock<IServicesDb<Chunk>> _databaseServiceMock;
         private Mock<IConsolePrinter> _consolePrinterMock;
         
  
@@ -184,4 +183,4 @@ namespace WorldGeneration.Tests
             _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText("  " + _chunks[3].Map[0].Symbol), Times.AtLeast(1));
         }
     }
-}
+}*/
