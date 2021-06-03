@@ -208,6 +208,20 @@ namespace InputHandling.Antlr.Parser
             }
         }
 
+        public override void EnterUsername(PlayerCommandsParser.UsernameContext context)
+        {
+            var action = _currentContainer.Peek();
+            
+            if (action is JoinSession joinSession)
+            {
+                joinSession.AddChild(new Username(context.GetText()));
+            }
+            else if (action is CreateSession createSession)
+            {
+                createSession.AddChild(new Username(context.GetText()));
+            }
+        }
+
         public override void EnterMonsterdifficulty(PlayerCommandsParser.MonsterdifficultyContext context)
         {
             _currentContainer.Push(new MonsterDifficulty(context.children[2].GetText()));

@@ -59,21 +59,21 @@ namespace Session
             
             var gamePOCO = new GamePOCO {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
             gameService.CreateAsync(gamePOCO);
-
-            List<string> allClients = _sessionHandler.GetAllClients();
+  
+            List<string[]> allClients = _sessionHandler.GetAllClients();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
 
             // Needs to be refactored to something random in construction; this was for testing
             int playerX = 26; // spawn position
             int playerY = 11; // spawn position
-            foreach (string clientId in allClients)
+            foreach (string[] client in allClients)
             {
                 int[] playerPosition = new int[2];
                 playerPosition[0] = playerX;
                 playerPosition[1] = playerY;
-                players.Add(clientId, playerPosition);
+                players.Add(client[0], playerPosition);
                 var tmpPlayer = new PlayerPOCO
-                    {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
+                    {PlayerGuid = client[0], PlayerName = client[1], GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY}; 
                 servicePlayer.CreateAsync(tmpPlayer);
 
                 playerX += 2; // spawn position + 2 each client

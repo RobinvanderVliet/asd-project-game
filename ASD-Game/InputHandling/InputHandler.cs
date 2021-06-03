@@ -18,6 +18,9 @@ namespace InputHandling
         private IGameConfigurationHandler _gameConfigurationHandler;
         private static Timer aTimer;
         private const string RETURN_KEYWORD = "return";
+        private string _enteredSessionName;
+
+        public string START_COMMAND = "start_session";
 
         public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler, IGameConfigurationHandler gameConfigurationHandler)
         {
@@ -55,7 +58,7 @@ namespace InputHandling
 
         public virtual string GetCommand()
         {
-            return Console.ReadLine();
+            return _screenHandler.GetScreenInput();
         }
         
         public void HandleStartScreenCommands()
@@ -80,7 +83,7 @@ namespace InputHandling
                     _screenHandler.TransitionTo(new EditorScreen());
                     break;
                 case 5:
-                    Environment.Exit(0);
+                    SendCommand("exit");
                     break;
                 default:
                     StartScreen startScreen = _screenHandler.Screen as StartScreen;
@@ -91,35 +94,68 @@ namespace InputHandling
 
         public void HandleSessionScreenCommands()
         {
-            var input = GetCommand();
-            int sessionNumber = 0;
-            int.TryParse(input, out sessionNumber);
-            SessionScreen sessionScreen = _screenHandler.Screen as SessionScreen;
 
+            SessionScreen sessionScreen = _screenHandler.Screen as SessionScreen;
+            var input = GetCommand();
+            
             if (input == RETURN_KEYWORD)
             {
                 _screenHandler.TransitionTo(new StartScreen());
+                return;
             }
-            else if (sessionNumber > 0)
-            {
-                string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
+            
+            var inputParts = input.Split(" ");
 
+            if (inputParts.Length != 2)
+            {
+                sessionScreen.UpdateInputMessage("Provide both a session number and username (example: 1 Gerrit)");
+            }
+            else
+            {
+                int sessionNumber = 0;
+                int.TryParse(input[0].ToString(), out sessionNumber);
+
+                string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
+        
                 if (sessionId.IsNullOrEmpty())
                 {
                     sessionScreen.UpdateInputMessage("Not a valid session, try again!");
                 }
                 else
                 {
-                    SendCommand("join_session \"" + sessionId + "\"");
-                    _screenHandler.TransitionTo(new ConfigurationScreen()); // maybe a waiting screen in stead?   
+                    _screenHandler.TransitionTo(new LobbyScreen());
+                    SendCommand("join_session \"" + sessionId + "\" \"" + inputParts[1].Replace("\"", "") + "\"");
                 }
-            }
-            else
-            {
-                sessionScreen.UpdateInputMessage("That is not a number, please try again!");
             }
         }
 
+        public void HandleLobbyScreenCommands()
+        {
+            var input = GetCommand();
+
+            if (input == RETURN_KEYWORD)
+            {
+                _screenHandler.TransitionTo(new StartScreen());
+                return;
+            }
+
+            //TODO add if to check if you are the host
+            if (input == START_COMMAND) 
+            {
+                SendCommand(START_COMMAND);
+                _screenHandler.TransitionTo(new GameScreen());
+            }
+
+            if (input.Contains("SAY"))
+            {
+                SendCommand(input);
+            }
+            else if (input.Contains("SHOUT")) 
+            {
+                SendCommand(input);
+            }
+
+        }
         public void HandleConfigurationScreenCommands()
         {
             var input = GetCommand();

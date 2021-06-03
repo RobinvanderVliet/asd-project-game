@@ -6,5 +6,6 @@ namespace InputHandling
         public void HandleStartScreenCommands();
         public void HandleSessionScreenCommands();
         public void HandleConfigurationScreenCommands();
+        public void HandleLobbyScreenCommands();
     }
 }

@@ -160,12 +160,12 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformCreateSession(CreateSession createSession)
         {
-            _sessionHandler.CreateSession(createSession.Message.MessageValue);
+            _sessionHandler.CreateSession(createSession.Message.MessageValue, createSession.Username.UsernameValue);
         }
 
         private void TransformJoinSession(JoinSession joinSession)
         {
-            _sessionHandler.JoinSession(joinSession.Message.MessageValue);
+            _sessionHandler.JoinSession(joinSession.Message.MessageValue, joinSession.Username.UsernameValue);
         }
 
         private void TransformRequestSessions(RequestSessions requestSessions)
