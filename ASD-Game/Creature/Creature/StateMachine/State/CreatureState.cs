@@ -1,5 +1,6 @@
 ﻿using Creature.Creature.StateMachine.Data;
 using System;
+using Creature.Creature.StateMachine.CustomRuleSet;
 
 namespace Creature.Creature.StateMachine.State
 {
@@ -8,6 +9,7 @@ namespace Creature.Creature.StateMachine.State
         protected ICreatureData _creatureData;
         protected ICreatureData _target;
         protected ICreatureStateMachine _stateMachine;
+        protected RuleSetCoreFunctions _ruleSetCoreFunctions = new RuleSetCoreFunctions();
         
         public CreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine)
         {

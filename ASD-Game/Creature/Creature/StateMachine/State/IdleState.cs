@@ -1,5 +1,4 @@
-﻿using System;
-using Creature.Creature.StateMachine.Data;
+﻿using Creature.Creature.StateMachine.Data;
 using Creature.Creature.StateMachine.Event;
 
 namespace Creature.Creature.StateMachine.State
@@ -14,10 +13,23 @@ namespace Creature.Creature.StateMachine.State
 
         public void Do()
         {
-            if (true)//Map.getmapAroundplayer returns an other player or object or anything that should stop the machine from ideleing and start doing stuff.
+            string mapResult = _ruleSetCoreFunctions.AnalyzeMap();
+            if (mapResult == null)
             {
-                _stateMachine.FireEvent(CreatureEvent.Event.WANDERING);
-            }
+                //Do Nothing
+            } else if (mapResult != null )
+            {
+                switch (mapResult)
+                {
+                    case "player":
+                    case "monster":
+                        _stateMachine.FireEvent(CreatureEvent.Event.SPOTTED_CREATURE);
+                        break;
+                    case "item":
+                        _stateMachine.FireEvent(CreatureEvent.Event.FOUND_ITEM);
+                        break;
+                }
+            } 
         }
     }
 }

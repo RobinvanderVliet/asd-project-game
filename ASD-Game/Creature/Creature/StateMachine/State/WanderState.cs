@@ -19,20 +19,27 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do()
         {
-            int i = 5;
-            
-            if (1 == i)//if player in range
+            string mapResult = _ruleSetCoreFunctions.AnalyzeMap();
+            if (mapResult == null)
             {
-                _stateMachine.FireEvent(CreatureEvent.Event.SPOTTED_CREATURE);
-            } else if (2 == i)// item found
+                _stateMachine.FireEvent(CreatureEvent.Event.IDLE);
+            } else if (mapResult != null )
             {
-                _stateMachine.FireEvent(CreatureEvent.Event.FOUND_ITEM);
-            }
-            else
-            {
-                int steps = new Random().Next(10);
-                _moveHandler.SendMove(pickRandomDirection(), steps);     
-            }
+                switch (mapResult)
+                {
+                    case "player":
+                    case "monster":
+                        _stateMachine.FireEvent(CreatureEvent.Event.SPOTTED_CREATURE);
+                        break;
+                    case "item":
+                        _stateMachine.FireEvent(CreatureEvent.Event.FOUND_ITEM);
+                        break;
+                    default:
+                        int steps = new Random().Next(10);
+                        _moveHandler.SendMove(pickRandomDirection(), steps);
+                        break;
+                }
+            } 
         }
         
         private string pickRandomDirection()
