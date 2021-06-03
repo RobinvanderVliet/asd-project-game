@@ -90,7 +90,8 @@ namespace Session
             var gamePOCO = new GamePOCO
             {
                 GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId(),
-                Seed = _sessionHandler.GetSessionSeed()
+                Seed = _sessionHandler.GetSessionSeed(),
+                GameName = _sessionHandler.GameName
             };
             _gamePocoService.CreateAsync(gamePOCO);
 

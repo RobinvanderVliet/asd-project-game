@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Moq;
@@ -35,7 +36,7 @@ namespace Session.Tests
             List<GamePOCO> gameList = new List<GamePOCO>();
 
             ClientHistoryPoco clientHistoryPoco = new ClientHistoryPoco {GameId = "game1", PlayerId = "player1"};
-            GamePOCO gamePoco = new GamePOCO {GameGuid = "game1", PlayerGUIDHost = "player1"};
+            GamePOCO gamePoco = new GamePOCO {GameGuid = "game1", PlayerGUIDHost = "player1", GameName = "gameName1"};
 
             clientList.Add(clientHistoryPoco);
             gameList.Add(gamePoco);
@@ -51,6 +52,7 @@ namespace Session.Tests
                 {
                     p.PlayerGUIDHost,
                     p.GameGuid,
+                    p.GameName
                 };
 
             // check e WriteLine overeenkomen met de gevulde tabel
@@ -59,8 +61,8 @@ namespace Session.Tests
                 // Act
                 Console.SetOut(sw);
                 sut.RequestSavedGames();
-                string stom = joinedTables.Select(x => x.GameGuid).First().ToString();
-                string expected = string.Format(stom + Environment.NewLine);
+                var variable = joinedTables.Select(x => new {x.GameGuid, x.GameName}).First();
+                string expected = string.Format(variable.GameGuid + " " + variable.GameName + Environment.NewLine);
 
                 // Assert
                 Assert.AreEqual(expected, sw.ToString());
@@ -96,9 +98,9 @@ namespace Session.Tests
             // Arrange
             List<GamePOCO> gameList = new List<GamePOCO>();
             gameList.Clear();
-
+            
             _mockedDatabaseGameService.Setup(x => x.GetAllAsync()).ReturnsAsync(gameList);
-
+            
             using (StringWriter sw = new StringWriter())
             {
                 // Act

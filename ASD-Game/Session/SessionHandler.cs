@@ -34,6 +34,7 @@ namespace Session
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
         private IScreenHandler _screenHandler;
+        public string GameName { get; set; }
         public SessionHandler(IClientController clientController, IScreenHandler screenHandler)
         {
             _clientController = clientController;
@@ -93,6 +94,7 @@ namespace Session
 
         public bool CreateSession(string sessionName, bool savedGame, string sessionId, int? seed)
         {
+            GameName = sessionName;
             _session = new Session(sessionName);
             _session.SessionId = sessionId;
             if (sessionId is null)
@@ -491,5 +493,6 @@ namespace Session
         {
             _session.GameStarted = startSessie;
         }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Dynamic;
 
 namespace Session
 {
@@ -19,5 +20,6 @@ namespace Session
 
         public void SetGameStarted(bool startSessie);
 
+        public string GameName { get; set; }
     }
 }

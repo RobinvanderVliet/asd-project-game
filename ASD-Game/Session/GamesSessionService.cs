@@ -36,6 +36,7 @@ namespace Session
                 {
                     p.PlayerGUIDHost,
                     p.GameGuid,
+                    p.GameName
                 };
 
             if (joinedTables.IsNullOrEmpty())
@@ -44,9 +45,9 @@ namespace Session
             }
             else
             {
-                foreach (var element in joinedTables.Select(x => x.GameGuid))
+                foreach (var element in joinedTables.Select(x => new {x.GameGuid, x.GameName}))
                 {
-                    Console.WriteLine(element);
+                    Console.WriteLine(element.GameGuid + " " + element.GameName);
                 }
             }
         }
