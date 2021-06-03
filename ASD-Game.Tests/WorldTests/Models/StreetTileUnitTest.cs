@@ -1,5 +1,5 @@
-using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
+using NUnit.Framework;
 using WorldGeneration.Models.Interfaces;
 using WorldGeneration.Models.TerrainTiles;
 
@@ -10,14 +10,14 @@ namespace WorldGeneration.Tests
     {
         private ITerrainTile _tile;
         private string _tileSymbol;
-
+        
         [SetUp]
         public void Setup()
         {
-            _tile = new StreetTile(1, 1);
+            _tile = new StreetTile(1,1);
             _tileSymbol = "\u2591";
         }
-
+        
         [Test]
         public void Test_InstanceOf_StreetTile()
         {
@@ -26,7 +26,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile, Is.InstanceOf<StreetTile>());
         }
-
+        
         [Test]
         public void Test_InstanceOf_TerrainTile()
         {
@@ -35,7 +35,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile, Is.InstanceOf<ITerrainTile>());
         }
-
+        
         [Test]
         public void Test_InstanceOf_Tile()
         {
@@ -44,7 +44,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile, Is.InstanceOf<ITile>());
         }
-
+        
         [Test]
         public void Test_SetX_EqualsTo_5()
         {
@@ -54,7 +54,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile.XPosition, Is.EqualTo(5));
         }
-
+        
         [Test]
         public void Test_SetY_EqualsTo_5()
         {
@@ -64,7 +64,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile.YPosition, Is.EqualTo(5));
         }
-
+        
         [Test]
         public void Test_TileSymbol_EqualsTo_StreetTileSymbol()
         {
@@ -73,7 +73,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
         }
-
+        
         [Test]
         public void Test_IsAccessible_EqualsTo_True()
         {
