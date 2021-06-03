@@ -1,10 +1,10 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using ActionHandling;
+using ASD_project.World.Models;
+using ASD_project.World.Services;
 using DatabaseHandler.Services;
-using WorldGeneration.Models;
 
-namespace WorldGeneration
+namespace ASD_project.World
 {
     public class MapFactory: IMapFactory
     {

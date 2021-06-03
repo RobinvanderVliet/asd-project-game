@@ -1,19 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using ActionHandling;
-using Items;
-using WorldGeneration.Models;
-using WorldGeneration.Models.HazardousTiles;
-using WorldGeneration.Models.Interfaces;
-using WorldGeneration.Models.TerrainTiles;
+﻿using System.Diagnostics.CodeAnalysis;
+using ASD_project.World.Models;
+using ASD_project.World.Models.HazardousTiles;
+using ASD_project.World.Models.Interfaces;
+using ASD_project.World.Models.TerrainTiles;
+using ASD_project.World.Services;
 
-namespace WorldGeneration
+namespace ASD_project.World
 {
     public class NoiseMapGenerator : INoiseMapGenerator
     {
         private IFastNoise _noise;
         private readonly int _seed;
-        // static ItemSpawner _itemSpawner;
         private IItemService _itemService;
 
         [ExcludeFromCodeCoverage]
@@ -26,7 +23,6 @@ namespace WorldGeneration
             _noise.SetSeed(seed);
             _seed = seed;
             _itemService = itemService;
-            // _itemSpawner = new ItemSpawner(spawnHandler);
 
         }
 

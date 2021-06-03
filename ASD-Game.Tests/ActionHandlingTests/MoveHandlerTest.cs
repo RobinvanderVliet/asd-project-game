@@ -1,4 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
+using ASD_project.World.Models.Characters;
+using ASD_project.World.Services;
 using Moq;
 using Network;
 using NUnit.Framework;

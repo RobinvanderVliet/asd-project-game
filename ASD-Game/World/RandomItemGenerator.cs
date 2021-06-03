@@ -1,8 +1,6 @@
 ﻿using Items;
-using System;
-using System.Collections.Generic;
 
-namespace WorldGeneration
+namespace ASD_project.World
 {
     public class RandomItemGenerator
     {

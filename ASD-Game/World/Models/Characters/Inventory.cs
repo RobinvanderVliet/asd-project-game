@@ -1,12 +1,8 @@
-﻿using Items;
+﻿using System.Collections.Generic;
+using Items;
 using Items.Consumables;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace WorldGeneration
+namespace ASD_project.World.Models.Characters
 {
     public class Inventory
     {

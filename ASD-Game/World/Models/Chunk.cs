@@ -1,8 +1,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using WorldGeneration.Models.Interfaces;
+using ASD_project.World.Models.Interfaces;
 
-namespace WorldGeneration.Models
+namespace ASD_project.World.Models
 {
     [ExcludeFromCodeCoverage]
     public class Chunk : IEquatable<Chunk>

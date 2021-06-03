@@ -1,9 +1,9 @@
-﻿using Items;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using WorldGeneration.Models.Interfaces;
+using ASD_project.World.Models.Interfaces;
+using Items;
 
-namespace WorldGeneration.Models.TerrainTiles
+namespace ASD_project.World.Models.TerrainTiles
 {
     [ExcludeFromCodeCoverage]
     public class DirtTile : ITerrainTile

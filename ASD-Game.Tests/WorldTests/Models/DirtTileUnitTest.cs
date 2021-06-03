@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
-using WorldGeneration.Models.Interfaces;
-using WorldGeneration.Models.TerrainTiles;
+using ASD_project.World.Models.Interfaces;
+using ASD_project.World.Models.TerrainTiles;
 
 namespace WorldGeneration.Tests
 {

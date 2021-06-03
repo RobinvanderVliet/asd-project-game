@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ActionHandling;
 using ActionHandling.DTO;
-using Items;
+using ASD_project.World.Models.Characters;
+using ASD_project.World.Services;
 using UserInterface;
 
-namespace WorldGeneration
+namespace ASD_project.World
 {
     public class World : IWorld
     {
@@ -13,7 +13,7 @@ namespace WorldGeneration
         public Player CurrentPlayer;
         public List<Player> _players;
         public List<ItemSpawnDTO> _items;
-        public List<Creature> _creatures;
+        public List<Models.Characters.Creature> _creatures;
         private readonly int _viewDistance;
         private IScreenHandler _screenHandler;
         private IItemService _itemService;
@@ -56,7 +56,7 @@ namespace WorldGeneration
             UpdateMap();
         }
         
-        public void AddCreatureToWorld(Creature creature)
+        public void AddCreatureToWorld(Models.Characters.Creature creature)
         {
             _creatures.Add(creature);
             UpdateMap();

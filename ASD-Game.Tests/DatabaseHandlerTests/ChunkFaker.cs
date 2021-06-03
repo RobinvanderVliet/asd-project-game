@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
+using ASD_project.World.Models;
 using AutoBogus;
-using WorldGeneration.Models;
 
 namespace DatabaseHandler.Tests
 {

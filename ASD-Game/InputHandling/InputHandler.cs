@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Timers;
 using InputHandling.Antlr;
 using InputHandling.Exceptions;

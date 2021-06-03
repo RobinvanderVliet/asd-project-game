@@ -8,6 +8,7 @@ using NUnit.Framework;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using ASD_project.World.Services;
 using WorldGeneration;
 
 namespace Session.Tests

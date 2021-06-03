@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Timers;
-using WorldGeneration;
+using ASD_project.World;
 using DatabaseHandler;
 using DatabaseHandler.Services;
 using DatabaseHandler.Repository;

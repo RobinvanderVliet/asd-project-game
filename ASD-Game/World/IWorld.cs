@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ActionHandling.DTO;
+﻿using ActionHandling.DTO;
+using ASD_project.World.Models.Characters;
 
-namespace WorldGeneration
+namespace ASD_project.World
 {
     public interface IWorld
     {
         void UpdateCharacterPosition(string id, int newXPosition, int newYPosition);
         void AddPlayerToWorld(Player player, bool isCurrentPlayer = false);
-        void AddCreatureToWorld(Creature player);
+        void AddCreatureToWorld(Models.Characters.Creature player);
         void UpdateMap();
         char[,] GetMapAroundCharacter(Character character);
         void DeleteMap();

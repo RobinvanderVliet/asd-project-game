@@ -1,7 +1,9 @@
 ﻿using ActionHandling;
-using WorldGeneration.Models.Interfaces;
+using ASD_project.World;
+using ASD_project.World.Models.Interfaces;
+using ASD_project.World.Services;
 
-namespace WorldGeneration
+namespace ASD_project.Items.Services
 {
     public class ItemService : IItemService
     {

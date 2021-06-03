@@ -1,6 +1,6 @@
-﻿using WorldGeneration.Models;
+﻿using ASD_project.World.Models;
 
-namespace WorldGeneration
+namespace ASD_project.World
 {
     public class EnemySpawner
     {

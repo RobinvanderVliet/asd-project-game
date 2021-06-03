@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ActionHandling;
 using ActionHandling.DTO;
-using Items;
+using ASD_project.World.Models.Characters;
 using UserInterface;
 
-namespace WorldGeneration
+namespace ASD_project.World.Services
 {
     [ExcludeFromCodeCoverage]
     public class WorldService : IWorldService

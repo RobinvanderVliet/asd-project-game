@@ -1,6 +1,6 @@
-﻿using WorldGeneration.Models.Interfaces;
+﻿using ASD_project.World.Models.Interfaces;
 
-namespace WorldGeneration
+namespace ASD_project.World.Services
 {
     public interface IItemService
     {

@@ -1,8 +1,8 @@
 using NUnit.Framework;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using WorldGeneration.Models.Interfaces;
-using WorldGeneration.Models.LootableTiles;
+using ASD_project.World.Models.Interfaces;
+using ASD_project.World.Models.LootableTiles;
 
 namespace WorldGeneration.Tests
 {

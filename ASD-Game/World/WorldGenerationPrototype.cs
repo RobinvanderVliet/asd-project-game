@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace WorldGeneration
+namespace ASD_project.World
 {
     [ExcludeFromCodeCoverage]
     public class WorldGenerationPrototype

@@ -1,7 +1,6 @@
-using System.Reflection;
-using ActionHandling;
+using ASD_project.World.Services;
 
-namespace WorldGeneration
+namespace ASD_project.World
 {
     public interface IMapFactory
     {

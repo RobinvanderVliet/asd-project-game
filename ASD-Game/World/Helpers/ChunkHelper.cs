@@ -1,8 +1,8 @@
 ﻿using System;
-using WorldGeneration.Models;
-using WorldGeneration.Models.Interfaces;
+using ASD_project.World.Models;
+using ASD_project.World.Models.Interfaces;
 
-namespace WorldGeneration.Helper
+namespace ASD_project.World.Helpers
 {
     public class ChunkHelper
     {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using ActionHandling.DTO;
-using Items;
+using ASD_project.World.Models.Characters;
 
-namespace WorldGeneration
+namespace ASD_project.World.Services
 {
     public interface IWorldService
     {
