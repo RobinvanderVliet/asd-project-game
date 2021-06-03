@@ -223,16 +223,25 @@ namespace ActionHandling
                     player.Inventory.Weapon = null;
                     break;
                 case 3:
-                    item = player.Inventory.ConsumableItemList[0];
-                    player.Inventory.ConsumableItemList[0] = null;
+                    if(player.Inventory.ConsumableItemList.Count == 1)
+                    {
+                        item = player.Inventory.ConsumableItemList.ElementAt(0);
+                        player.Inventory.ConsumableItemList.RemoveAt(0);
+                    }              
                     break;
                 case 4:
-                    item = player.Inventory.ConsumableItemList[1];
-                    player.Inventory.ConsumableItemList[1] = null;
+                    if (player.Inventory.ConsumableItemList.Count == 2)
+                    {
+                        item = player.Inventory.ConsumableItemList.ElementAt(1);
+                        player.Inventory.ConsumableItemList.RemoveAt(1);
+                    }
                     break;
                 case 5:
-                    item = player.Inventory.ConsumableItemList[2];
-                    player.Inventory.ConsumableItemList[2] = null;
+                    if (player.Inventory.ConsumableItemList.Count == 2)
+                    {
+                        item = player.Inventory.ConsumableItemList.ElementAt(2);
+                        player.Inventory.ConsumableItemList.RemoveAt(2);
+                    }
                     break;
                 default:
                     break;

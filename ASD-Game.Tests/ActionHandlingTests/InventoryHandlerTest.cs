@@ -140,7 +140,7 @@ namespace ActionHandling.Tests
             packetHeaderDTO2.Target = "host";
             packetDTO2.Header = packetHeaderDTO2;
 
-            //Player drops Knife
+            //Player drops Armor
             InventoryDTO inventoryDTO3 = new(originId, InventoryType.Drop, 1);
             string payload3 = JsonConvert.SerializeObject(inventoryDTO3);
 
@@ -149,6 +149,36 @@ namespace ActionHandling.Tests
             PacketHeaderDTO packetHeaderDTO3 = new PacketHeaderDTO();
             packetHeaderDTO3.Target = "host";
             packetDTO3.Header = packetHeaderDTO3;
+
+            //Player drops Consumable 1
+            InventoryDTO inventoryDTO4 = new(originId, InventoryType.Drop, 3);
+            string payload4 = JsonConvert.SerializeObject(inventoryDTO4);
+
+            PacketDTO packetDTO4 = new();
+            packetDTO4.Payload = payload4;
+            PacketHeaderDTO packetHeaderDTO4 = new PacketHeaderDTO();
+            packetHeaderDTO4.Target = "host";
+            packetDTO4.Header = packetHeaderDTO4;
+
+            //Player drops Consumable 2
+            InventoryDTO inventoryDTO5 = new(originId, InventoryType.Drop, 4);
+            string payload5 = JsonConvert.SerializeObject(inventoryDTO5);
+
+            PacketDTO packetDTO5 = new();
+            packetDTO5.Payload = payload5;
+            PacketHeaderDTO packetHeaderDTO5 = new PacketHeaderDTO();
+            packetHeaderDTO5.Target = "host";
+            packetDTO5.Header = packetHeaderDTO5;
+
+            //Player drops Consumable 3
+            InventoryDTO inventoryDTO6 = new(originId, InventoryType.Drop, 5);
+            string payload6 = JsonConvert.SerializeObject(inventoryDTO6);
+
+            PacketDTO packetDTO6 = new();
+            packetDTO6.Payload = payload6;
+            PacketHeaderDTO packetHeaderDTO6 = new PacketHeaderDTO();
+            packetHeaderDTO6.Target = "host";
+            packetDTO6.Header = packetHeaderDTO6;
 
             _mockedClientController.Setup(mock => mock.IsHost()).Returns(false);
 
@@ -164,11 +194,14 @@ namespace ActionHandling.Tests
             _sut.HandlePacket(packetDTO);
             _sut.HandlePacket(packetDTO2);
             _sut.HandlePacket(packetDTO3);
+            _sut.HandlePacket(packetDTO4);
+            _sut.HandlePacket(packetDTO5);
+            _sut.HandlePacket(packetDTO6);
 
             // Assert
             _mockedMessageService.Verify(mock => mock.AddMessage("You dropped Bandana"), Times.Once);
             _mockedMessageService.Verify(mock => mock.AddMessage("You dropped Knife"), Times.Once);
-            _mockedMessageService.Verify(mock => mock.AddMessage("This is not an item you can drop!"), Times.Once);
+            _mockedMessageService.Verify(mock => mock.AddMessage("This is not an item you can drop!"), Times.AtLeastOnce);
         }
 
         [Test]
