@@ -4,13 +4,13 @@ using System.Data;
 
 namespace Agent.Mapper
 {
-    public class FileToDictionaryMapper
+    public class FileToSettingListMapper
     {
         public FileHandler FileHandler;
-        public Dictionary<string, string> MapFileToConfiguration(string filepath)
+        public List<Setting> MapFileToConfiguration(string filepath)
         {
             FileHandler = new FileHandler();
-            Dictionary<string, string> configuration = new  Dictionary<string, string>();
+            List<Setting> configuration = new ();
                     
             string content = FileHandler.ImportFile(filepath);
                     
@@ -24,7 +24,7 @@ namespace Agent.Mapper
                 }
                 //Trim removes spaces before and after given string. string 'Less than' will keep its format.
                 var seperatedComponents = setting.Split("=");
-                configuration.Add(seperatedComponents[0].Trim(), seperatedComponents[1].Trim());
+                configuration.Add(new Setting(seperatedComponents[0].Trim(), seperatedComponents[1].Trim()));
             }
         
             return configuration;

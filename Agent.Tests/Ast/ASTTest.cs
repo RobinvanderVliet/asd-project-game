@@ -17,7 +17,7 @@ namespace Agent.Tests.Ast
             //Act
             var result = new AST();
             //Assert
-            Assert.IsInstanceOf(typeof(Configuration), result.root);
+            Assert.IsInstanceOf(typeof(Configuration), result.Root);
         }
         
         [Test]
@@ -28,7 +28,7 @@ namespace Agent.Tests.Ast
             //Act
             var result = new AST(configuration);
             //Assert
-            Assert.AreEqual(configuration,result.root);
+            Assert.AreEqual(configuration,result.Root);
         }
         
     }

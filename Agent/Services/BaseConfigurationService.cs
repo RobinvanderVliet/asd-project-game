@@ -6,7 +6,7 @@ namespace Agent.Services
 {
     public abstract class BaseConfigurationService
     {
-        public FileToDictionaryMapper FileToDictionaryMapper;
+        public FileToSettingListMapper FileToSettingListMapper;
 
         private FileHandler _fileHandler;
         private Pipeline _pipeline;
@@ -22,7 +22,5 @@ namespace Agent.Services
         public abstract void CreateConfiguration(string configurationName, string filepath);
 
         public abstract List<Configuration> GetConfigurations();
-
-        public abstract void Configure();
     }
 }

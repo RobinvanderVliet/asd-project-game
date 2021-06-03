@@ -1,14 +1,12 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using Agent.Exceptions;
 using Agent.Mapper;
-using Agent.Models;
 using Agent.Services;
-using InputHandling;
 using Moq;
 using NUnit.Framework;
+using Configuration = Agent.Models.Configuration;
 
 namespace Agent.Tests.Services
 {
@@ -19,13 +17,12 @@ namespace Agent.Tests.Services
         private FileHandler _handler; 
         private Mock<FileHandler> _fileHandlerMock;
         private Mock<Pipeline> _pipelineMock;
-        private Mock<InputHandler> _mockedRetriever;
+        private const string INPUT = "aggressiveness=high";
 
         [SetUp]
         public void Setup()
         {
-            _mockedRetriever = new();
-            _sut = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper());
+            _sut = new AgentConfigurationService(new List<Configuration>(), new FileToSettingListMapper());
             _fileHandlerMock = new Mock<FileHandler>();
             _sut.FileHandler = _fileHandlerMock.Object;
             _pipelineMock = new Mock<Pipeline>();
@@ -34,53 +31,75 @@ namespace Agent.Tests.Services
         }
 
         [Test]
-        public void Test_Configure_SyntaxError()
+        public void Test_Configure_SyntaxErrors()
         {
             //Arrange
-            var input = _handler.GetBaseDirectory() + "/Resource/AgentConfigurationTestFileParseException.txt";
-
-            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
+            List<string> errors = new()
+            {
+                "error"
+            };
+            _pipelineMock.Setup(mock => mock.GetErrors()).Returns(errors);
             
-            _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("wrong:wrong");
-
             //Act
-            _sut.Configure();
-
+            var result = _sut.Configure(INPUT);
+            
             //Assert
-            Assert.AreEqual("missing '=' at 'wrong'", _sut.LastError);
+            Assert.AreEqual(errors,result);
+            _pipelineMock.Verify(x => x.ParseString(INPUT),Times.Once);
+            _pipelineMock.Verify(x => x.CheckAst(), Times.Never);
+            _pipelineMock.Verify(x=> x.GenerateAst(), Times.Never);
+            _fileHandlerMock.Verify( x => x.ExportFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never);    
         }
         
-        // Deze test moet getest worden als er een checker is
-        //[Test]
-        //public void Test_Configure_CatchesSemanticError()
-        //{
-        //    //Arrange
-        //    var input = handler.GetBaseDirectory() + "Resources/AgentTestFileWrongExtension.txt";
-
-        //    var error = "Semantic error";
+        [Test]
+        public void Test_Configure_SemanticErrors()
+        {
+            //Arrange
+            List<string> errors = new()
+            {
+                "error"
+            };
+            _pipelineMock.SetupSequence(mock => mock.GetErrors()).Returns(new List<string>()).Returns(errors).Returns(errors);
             
-        //    _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
-        //    _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("explore=high");
-        //    _pipelineMock.Setup(x => x.CheckAst()).Throws(new SemanticErrorException(error));
-
-        //    //Act
-        //    _sut.Configure();
-
-        //    //Assert
-        //    Assert.AreEqual(error, _sut.LastError);
-        //}
+            //Act
+            var result = _sut.Configure(INPUT);
+            
+            //Assert
+            Assert.AreEqual(errors,result);
+            _pipelineMock.Verify(x => x.ParseString(INPUT),Times.Once);
+            _pipelineMock.Verify(x => x.CheckAst(), Times.Once);
+            _pipelineMock.Verify(x=> x.GenerateAst(), Times.Never);
+            _fileHandlerMock.Verify( x => x.ExportFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never);    
+        }
         
+        [Test]
+        public void Test_Configure_Correct()
+        {
+            //Arrange
+            _pipelineMock.Setup(mock => mock.GetErrors()).Returns(new List<string>());
+            
+            //Act
+            var result = _sut.Configure(INPUT);
+            
+            //Assert
+            Assert.IsEmpty(result);
+            _pipelineMock.Verify(x => x.ParseString(INPUT),Times.Once);
+            _pipelineMock.Verify(x => x.CheckAst(), Times.Once);
+            _pipelineMock.Verify(x=> x.GenerateAst(), Times.Once);
+            _fileHandlerMock.Verify( x => x.ExportFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);    
+        }
+        
+
         [Test]
         public void Test_Configure_FileError()
         {
             //Arrange
-            var input = _handler.GetBaseDirectory() + "/Resources/AgentTestFileWrongExtension.txt";
             var error = "File not found";
-            _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Throws(new FileException(error));
-            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input).Returns("cancel");
+            _fileHandlerMock.Setup(x => x.ExportFile(It.IsAny<String>(),It.IsAny<String>())).Throws(new FileException(error));
+            _pipelineMock.Setup(mock => mock.GetErrors()).Returns(new List<string>());
             
             //Act
-            _sut.Configure();
+            _sut.Configure("gerrit");
 
             //Assert
             Assert.AreEqual(error, _sut.LastError);
@@ -90,13 +109,9 @@ namespace Agent.Tests.Services
         public void Test_Configure_SavesFileInAgentFolder()
         {
             //Arrange
-            var input = _handler.GetBaseDirectory() + "/Resources/AgentConfigurationTestFile.txt";
-            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns(input);
-            
-            _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns("aggressiveness=high");
-
+            _pipelineMock.Setup(mock => mock.GetErrors()).Returns(new List<string>());
             //Act
-            _sut.Configure();
+            _sut.Configure("aggressiveness=high");
             
             //Assert
             _fileHandlerMock.Verify( x => x.ExportFile(It.IsAny<String>(), It.IsAny<String>()), Times.Exactly(1));
