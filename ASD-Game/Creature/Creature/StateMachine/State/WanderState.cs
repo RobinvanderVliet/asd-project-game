@@ -26,7 +26,7 @@ namespace Creature.Creature.StateMachine.State
             } else if (mapResult != null )
             {
                 switch (mapResult)
-                {
+                {//TODO make sure this acquires a target
                     case "player":
                     case "monster":
                         _stateMachine.FireEvent(CreatureEvent.Event.SPOTTED_CREATURE);
@@ -34,12 +34,11 @@ namespace Creature.Creature.StateMachine.State
                     case "item":
                         _stateMachine.FireEvent(CreatureEvent.Event.FOUND_ITEM);
                         break;
-                    default:
-                        int steps = new Random().Next(10);
-                        _moveHandler.SendMove(pickRandomDirection(), steps);
-                        break;
+
                 }
             } 
+            int steps = new Random().Next(10);
+            _moveHandler.SendMove(pickRandomDirection(), steps);
         }
         
         private string pickRandomDirection()

@@ -20,7 +20,7 @@ namespace Creature.Creature.StateMachine.State
             } else if (mapResult != null )
             {
                 switch (mapResult)
-                {
+                { //TODO make sure this acquires a target
                     case "player":
                     case "monster":
                         _stateMachine.FireEvent(CreatureEvent.Event.SPOTTED_CREATURE);

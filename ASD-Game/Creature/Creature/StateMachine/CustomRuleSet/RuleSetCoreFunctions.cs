@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Creature.Creature.StateMachine.Data;
 
 namespace Creature.Creature.StateMachine.CustomRuleSet
@@ -21,16 +23,26 @@ namespace Creature.Creature.StateMachine.CustomRuleSet
             return false;
         }
                 
-        public List<KeyValuePair<string, string>> RequestRules(ICreatureData data, List<string> requestedRules)
+        public Dictionary<string, string> RequestRules(ICreatureData data, List<string> requestedRules)
         {
-            List<KeyValuePair<string, string>> RequestedRules = new List<KeyValuePair<string, string>>();
+            Dictionary<string, string> RequestedRules = new Dictionary<string, string>();
             for (int i = 0; i < data.RuleSet.Count; i ++)
             {
                 for (int j = 0; j < requestedRules.Count; j++)
                 {
                     if (data.RuleSet[i].Item1 == requestedRules[j])
                     {
-                        RequestedRules.Add(new KeyValuePair<string, string>(data.RuleSet[i].Item1, data.RuleSet[i].Item2));
+                        if (data.RuleSet[i].Item1 == "combat_default_agent_treshold" 
+                            ||data.RuleSet[i].Item1 == "combat_default_agent_comparison" 
+                            || data.RuleSet[i].Item1 == "combat_default_agent_comparison_true")
+                        {
+                            string key = data.RuleSet[i].Item1 + data.RuleSet[i].Item2;
+                            RequestedRules.Add(key, data.RuleSet[i].Item2);
+                        }
+                        else
+                        {
+                            RequestedRules.Add(data.RuleSet[i].Item1, data.RuleSet[i].Item2);
+                        }
                     }
                 }
             }
@@ -58,6 +70,72 @@ namespace Creature.Creature.StateMachine.CustomRuleSet
                 return true;
             }
             return false;
+        }
+
+        public String checkIfAttack(ICreatureData data, string creatureType)
+        {
+            List<string> requestedRules = new List<string>();
+            requestedRules.Add("combat_default_agent_treshold");
+            requestedRules.Add("combat_default_agent_comparison");
+            requestedRules.Add("combat_default_agent_comparison_true");
+            requestedRules.Add("combat_engage_health_treshold");
+            requestedRules.Add("combat_engage_health_comparison");
+            requestedRules.Add("combat_engage_health_comparison_true");
+            requestedRules.Add("combat_engage_health_comparison_false");
+            Dictionary<string, string> givenRules = RequestRules(data, requestedRules);
+
+            if (givenRules.ContainsKey("combat_default_agent_treshold" + creatureType)&&
+                givenRules.ContainsKey("combat_default_agent_comparison" + creatureType))
+            {
+                if (givenRules.ContainsKey("combat_default_agent_comparison_true" + creatureType))
+                {
+                    if (givenRules["combat_default_agent_comparison_true"] == "flee")
+                    {
+                        return givenRules["combat_default_agent_comparison_true"];
+                    }
+                }
+                
+            }
+
+            if (givenRules.ContainsKey("combat_engage_health_treshold")&&
+                givenRules.ContainsKey("combat_engage_health_comparison")&&
+                givenRules.ContainsKey("combat_engage_health_comparison_true")&&
+                givenRules.ContainsKey("combat_engage_health_comparison_false"))
+            {
+                int heathTreshold = Convert.ToInt32(givenRules["combat_engage_health_treshold"]);
+                switch (givenRules["combat_engage_health_comparison"])
+                {
+                    case "less than":
+                        if (heathTreshold < data.Health)
+                        {
+                            return givenRules["combat_engage_health_comparison_true"];
+                        }
+                        else
+                        {
+                            return givenRules["combat_engage_health_comparison_false"];
+                        }
+                    case "greater than":
+                        if (heathTreshold > data.Health)
+                        {
+                            return givenRules["combat_engage_health_comparison_true"];
+                        }
+                        else
+                        {
+                            return givenRules["combat_engage_health_comparison_false"];
+                        }
+                    case "equals":
+                        if (heathTreshold == data.Health)
+                        {
+                            return givenRules["combat_engage_health_comparison_true"];
+                        }
+                        else
+                        {
+                            return givenRules["combat_engage_health_comparison_false"];
+                        }
+                }
+            }
+
+            return "attack";
         }
         
         public string AnalyzeMap()//TODO Build this function and refactor to a proper location
