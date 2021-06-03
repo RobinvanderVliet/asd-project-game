@@ -10,25 +10,25 @@ namespace ASD_project.World
         {
             return (noise * 100) switch
             {
-                (< 92 and >= 88) => ItemFactory.GetAK47(),
-                (< 88 and >= 77) => ItemFactory.GetBandage(),
-                (< 77 and >= 70) => ItemFactory.GetMorphine(),
-                (< 66 and >= 55) => ItemFactory.GetBaseballBat(),
-                (< 55 and >= 44) => ItemFactory.GetBigMac(),/*
-                (< 44 and >= 37) => ItemFactory.GetFlakVest(),
-                (< 33 and >= 22) => ItemFactory.GetGasMask(),
-                (< 22 and >= 11) => ItemFactory.GetGlock(),
-                (< 11 and >= 0) => ItemFactory.GetHardHat(),
-                (< 0 and >= -11) => ItemFactory.GetHazmatSuit(),
-                (< -11 and >= -22) => ItemFactory.GetIodineTablets(),
-                (< -22 and >= -33) => ItemFactory.GetJacket(),
-                (< -33 and >= -38) => ItemFactory.GetKatana(),
-                (< -44 and >= -49) => ItemFactory.GetTacticalVest(),
-                (< -55 and >= -60) => ItemFactory.GetMedkit(),
-                (< -66 and >= -71) => ItemFactory.GetMilitaryHelmet(),
-                (< -77 and >= -84) => ItemFactory.GetMonsterEnergy(),
-                (< -88 and >= -92) => ItemFactory.GetSuspiciousWhitePowder(),
-                (< -92 and >= -99) => ItemFactory.GetP90(),*/
+                (> 99.5f) => ItemFactory.GetAK47(),
+                (> 98.5f) => ItemFactory.GetBandage(),
+                (> 97.5f) => ItemFactory.GetMorphine(),
+                (> 96.5f) => ItemFactory.GetBaseballBat(),
+                (> 95.5f) => ItemFactory.GetBigMac(),
+                (> 94.5f) => ItemFactory.GetFlakVest(),
+                (> 93.5f) => ItemFactory.GetGasMask(),
+                (> 92.5f) => ItemFactory.GetGlock(),
+                (> 91.5f) => ItemFactory.GetHardHat(),
+                (> 90.5f) => ItemFactory.GetHazmatSuit(),
+                (> 89.5f) => ItemFactory.GetIodineTablets(),
+                (> 88.5f) => ItemFactory.GetJacket(),
+                (> 87.5f) => ItemFactory.GetKatana(),
+                (> 86.5f) => ItemFactory.GetTacticalVest(),
+                (> 85.5f) => ItemFactory.GetMedkit(),
+                (> 84.5f) => ItemFactory.GetMilitaryHelmet(),
+                (> 83.5f) => ItemFactory.GetMonsterEnergy(),
+                (> 82.5f) => ItemFactory.GetSuspiciousWhitePowder(),
+                (> 81.5f) => ItemFactory.GetP90(),
                 _ => null
             };
         }
