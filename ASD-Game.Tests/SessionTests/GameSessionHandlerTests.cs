@@ -29,11 +29,8 @@ namespace Session.Tests
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
         private Mock<ISessionHandler> _mockedsessionHandler;
-        private Mock<IRepository<GamePOCO>> _mockedGamePOCORepository;
         private Mock<IDatabaseService<GamePOCO>> _mockedGamePOCOServices;
-        private Mock<IRepository<PlayerPOCO>> _mockedPlayerPOCORepository;
         private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerPOCOServices;
-        private IDatabaseService<PlayerPOCO> _databaseServicePlayerPoco;
         private IList<GamePOCO> _InMemoryDatabaseGame;
         private IList<PlayerPOCO> _InMemoryDatabasePlayer = new List<PlayerPOCO>();
         private IDatabaseService<PlayerPOCO> _services;
@@ -46,22 +43,12 @@ namespace Session.Tests
             standardOutput.AutoFlush = true;
             Console.SetOut(standardOutput);
             _mockedClientController = new Mock<IClientController>();
-            _mockedGamePOCORepository = new Mock<IRepository<GamePOCO>>();
-            _mockedPlayerPOCORepository = new Mock<IRepository<PlayerPOCO>>();
-
             _mockedPlayerPOCOServices = new Mock<IDatabaseService<PlayerPOCO>>();
-
-            _databaseServicePlayerPoco = _mockedPlayerPOCOServices.Object;
-            
             _mockedWorldService = new Mock<IWorldService>();
             _mockedsessionHandler = new Mock<ISessionHandler>();
-            
-            
-      
 
-            
             _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object,
-                _mockedsessionHandler.Object);
+                _mockedsessionHandler.Object, _mockedGamePOCOServices.Object, _mockedPlayerPOCOServices.Object);
             _packetDTO = new PacketDTO();
         }
 
@@ -90,7 +77,7 @@ namespace Session.Tests
 
             StartGameDTO startGameDto = new StartGameDTO();
             startGameDto.PlayerLocations = players;
-            
+
             // Act ---------
             _sut.SendGameSession();
 
@@ -117,16 +104,6 @@ namespace Session.Tests
                 PlayerGuid = "idPlayer1"
             };
 
-
-
-            _mockedPlayerPOCORepository.Setup(chunkRepo => chunkRepo.CreateAsync(It.IsAny<PlayerPOCO>())).ReturnsAsync((PlayerPOCO item) =>
-            {
-                _InMemoryDatabasePlayer.Add(item);
-                return "succeeded";
-            });
-            
-            
-            
             // Arrange ---------
             List<string> allClients = new List<string>();
             allClients.Add("a");
@@ -150,10 +127,10 @@ namespace Session.Tests
 
             _mockedsessionHandler.Setup(x => x.GetAllClients()).Returns(allClients);
             _sut.SendGameSession();
-            
+
             StartGameDTO gameDto = new StartGameDTO();
             gameDto.PlayerLocations = players;
-         
+
 
             var payload = JsonConvert.SerializeObject(gameDto);
             _packetDTO.Payload = payload;

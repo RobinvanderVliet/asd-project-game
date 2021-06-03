@@ -71,7 +71,6 @@ namespace ASD_project
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIROMENT") ?? "Production"}.json", optional: true)
                 .AddEnvironmentVariables();
-
         }
     }
 }
