@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using DatabaseHandler.POCO;
-using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using Moq;
 using NUnit.Framework;
@@ -53,7 +52,7 @@ namespace Session.Tests
                     p.PlayerGUIDHost,
                     p.GameGuid,
                 };
-            
+
             // check e WriteLine overeenkomen met de gevulde tabel
             using (StringWriter sw = new StringWriter())
             {
@@ -67,24 +66,45 @@ namespace Session.Tests
                 Assert.AreEqual(expected, sw.ToString());
             }
         }
-        
+
         [Test]
         public void TestIfRequestSavedGamesGivesBackAnEmptyList()
         {
             // Arrange
             List<ClientHistoryPoco> clientList = new List<ClientHistoryPoco>();
-            List<GamePOCO> gameList = new List<GamePOCO>(); // niet gebruiken want er zijn geen oude spellen
+            List<GamePOCO> gameList = new List<GamePOCO>(); // Niet gebruiken want er zijn geen oude spellen
             ClientHistoryPoco clientHistoryPoco = new ClientHistoryPoco {GameId = "game1", PlayerId = "player1"};
             clientList.Add(clientHistoryPoco);
 
             _mockedDatabaseClientHistory.Setup(x => x.GetAllAsync()).ReturnsAsync(clientList);
-            
+
             using (StringWriter sw = new StringWriter())
             {
                 // Act
                 Console.SetOut(sw);
                 sut.RequestSavedGames();
                 string expected = string.Format("There are no saved games" + Environment.NewLine);
+
+                // Assert
+                Assert.AreEqual(expected, sw.ToString());
+            }
+        }
+
+        [Test]
+        public void TestLoadGameWhenGameDoesNotExist()
+        {
+            // Arrange
+            List<GamePOCO> gameList = new List<GamePOCO>();
+            gameList.Clear();
+
+            _mockedDatabaseGameService.Setup(x => x.GetAllAsync()).ReturnsAsync(gameList);
+
+            using (StringWriter sw = new StringWriter())
+            {
+                // Act
+                Console.SetOut(sw);
+                sut.LoadGame("non-existing-game");
+                string expected = string.Format("Game cannot be loaded as it does not exist." + Environment.NewLine);
 
                 // Assert
                 Assert.AreEqual(expected, sw.ToString());

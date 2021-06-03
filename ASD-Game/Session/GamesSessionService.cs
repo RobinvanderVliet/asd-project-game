@@ -63,12 +63,18 @@ namespace Session
             var gameService = new DatabaseService<GamePOCO>();
 
             var allGames = gameService.GetAllAsync();
-            allGames.Wait();
 
-            Console.WriteLine("load game with name: ");
-            var gameName = Console.ReadLine();
-            var seed = allGames.Result.Where(x => x.GameGuid == value).Select(x => x.Seed).FirstOrDefault();
-            _sessionHandler.CreateSession(gameName, true, value, seed);
+            if (allGames.Result.Where(x => x.GameGuid == value).IsNullOrEmpty())
+            {
+                Console.WriteLine("Game cannot be loaded as it does not exist.");
+            }
+            else
+            {
+                Console.WriteLine("load game with name: ");
+                var gameName = Console.ReadLine();
+                var seed = allGames.Result.Where(x => x.GameGuid == value).Select(x => x.Seed).FirstOrDefault();
+                _sessionHandler.CreateSession(gameName, true, value, seed);
+            }
         }
 
         public void StartGame()
