@@ -52,7 +52,7 @@ namespace Agent.Antlr.Checker
             "bitcoin-mining-farm", "chest", "door", "wall"
         };
         
-        public void Check(Node node)
+        public virtual void Check(Node node)
         {
             switch (node)
             {

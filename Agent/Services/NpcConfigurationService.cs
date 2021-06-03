@@ -67,5 +67,11 @@ namespace Agent.Services
                 Configure();
             }
         }
+
+        public override  List<string> Configure(string input)
+        {
+            //Not implemented see Configure()
+            return null;
+        }
     }
 }
