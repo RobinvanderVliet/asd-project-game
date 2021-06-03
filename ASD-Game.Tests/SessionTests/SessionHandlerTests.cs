@@ -242,7 +242,7 @@ namespace Session.Tests
 
             _mockedClientController.Setup(mock => mock.SendPayload(payloadping, PacketType.Session));
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns("1");
-            _sut.JoinSession(sessionId, userName);
+            _sut.JoinSession(sessionId, "");
             
             _sut.setHostPingTimer(new Timer());
 
@@ -515,7 +515,7 @@ namespace Session.Tests
                 SessionType = SessionType.RequestToJoinSession,
                 Clients = sessionDTO.Clients
             };
-            sessionDTOInHandlerResponse.Clients.Add(new []{originIdHost, userName});
+            sessionDTOInHandlerResponse.Clients.Add(new []{originIdHost, ""});
             
             HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients,
                 JsonConvert.SerializeObject(sessionDTOInHandlerResponse));

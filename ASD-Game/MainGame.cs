@@ -23,7 +23,7 @@ namespace ASD_project
 
                 if (!DEBUG_INTERFACE)
                 {
-                    _screenHandler.TransitionTo(new GameScreen());
+                    _screenHandler.TransitionTo(new StartScreen());
                     while (true)
                     {
                         var currentScreen = _screenHandler.Screen;
