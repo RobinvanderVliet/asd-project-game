@@ -225,7 +225,7 @@ namespace Session.GameConfiguration
             {
                 _setupConfiguration = false;
                 SetGameConfiguration();
-                _configurationScreen.UpdateInputMessage("To the lobbbbbbbbybybybybybyyyyyy!!!!!!!!");
+                _screenHandler.TransitionTo(new LobbyScreen());
                 //To the next screen!
             }
         }
