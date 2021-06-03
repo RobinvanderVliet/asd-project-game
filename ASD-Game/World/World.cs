@@ -57,11 +57,6 @@ namespace WorldGeneration
             }
         }
 
-        public Player GetPlayer(string id)
-        {
-            return _players.Find(x => x.Id == id);
-        }
-
         public void deleteMap()
         {
             _map.DeleteMap();
@@ -88,6 +83,16 @@ namespace WorldGeneration
         public void LoadArea(int playerX, int playerY, int viewDistance)
         {
             _map.LoadArea(playerX, playerY, viewDistance);
+        }
+        
+        public ITile GetCurrentTile()
+        {
+            return _map.GetLoadedTileByXAndY(CurrentPlayer.XPosition, CurrentPlayer.YPosition);
+        }
+
+        public ITile GetTileForPlayer(Player player)
+        {
+            return _map.GetLoadedTileByXAndY(player.XPosition, player.YPosition);
         }
     }
 }

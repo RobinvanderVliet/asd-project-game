@@ -32,7 +32,7 @@ namespace ActionHandling
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.RelativeStat);
             _worldService = worldService;
-            _player = _worldService.getCurrentPlayer();
+            _player = _worldService.GetCurrentPlayer();
         }
         
         public void CheckStaminaTimer()
@@ -65,8 +65,8 @@ namespace ActionHandling
         private void RadiationEvent(object sender, ElapsedEventArgs e)
         {
             var tile = _worldService.GetTile(
-                _worldService.getCurrentPlayer().XPosition, 
-                _worldService.getCurrentPlayer().YPosition);
+                _worldService.GetCurrentPlayer().XPosition, 
+                _worldService.GetCurrentPlayer().YPosition);
             
             if (tile is GasTile)
             {

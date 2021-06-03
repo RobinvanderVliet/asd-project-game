@@ -29,9 +29,6 @@ namespace Session
         private int _hostInactiveCounter = 0;
         private Timer _hostPingTimer;
         private Timer _senderHeartbeatTimer;
-        private const int WAITTIMEPINGTIMER = 500;
-        private const int INTERVALTIMEPINGTIMER = 1000;
-        private IScreenHandler _screenHandler;
         private Session _session;
 
         public SessionHandler(IClientController clientController, IScreenHandler screenHandler, IMessageService messageService)
