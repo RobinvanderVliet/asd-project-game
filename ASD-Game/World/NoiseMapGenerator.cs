@@ -41,19 +41,14 @@ namespace WorldGeneration
 
         private ITile CreateTileWithItemFromNoise(float noise, int x, int y)
         {
+            RandomItemGenerator randomItemGenerator = new RandomItemGenerator();
             var tile = GetTileFromNoise(noise, x, y);
-            tile.ItemsOnTile.Add(GetItemForTileFromNoise(noise, x, y));
-            return tile;
-        }
-
-        private Item GetItemForTileFromNoise(float noise, int x, int y)
-        {
-            return (noise * 100) switch
+            var item = randomItemGenerator.GetRandomItem(noise);
+            if (item != null)
             {
-                // (< -99) => ItemFactory.GetMilitaryHelmet(),
-                // (< -98) => ItemFactory.GetMilitaryHelmet(),
-                // (< -97) => ItemFactory.GetMilitaryHelmet(),
-            };
+                tile.ItemsOnTile.Add(item);
+            }
+            return tile;
         }
 
         public ITile GetTileFromNoise(float noise, int x, int y)
