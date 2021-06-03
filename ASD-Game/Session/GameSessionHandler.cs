@@ -101,7 +101,7 @@ namespace Session
 
             for (int i = 0; i < 10; i++)
             {
-                Monster newMonster = new Monster("Zombie", random.Next(0, 100), random.Next(0, 100), CharacterSymbol.TERMINATOR, "monst" + i);
+                Monster newMonster = new Monster("Zombie", random.Next(12, 25), random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i);
                 setBrain(newMonster);
                 _worldService.AddCreatureToWorld(newMonster);
             }

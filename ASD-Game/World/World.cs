@@ -61,6 +61,7 @@ namespace WorldGeneration
             {
                 var characters = ((IEnumerable<Character>)_players).Concat(_creatures).ToList();
                 //_screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
+                _map.DisplayMap(CurrentPlayer, _viewDistance, characters);
             }
         }
 
