@@ -31,10 +31,7 @@ namespace Session.Tests
         private Mock<ISessionHandler> _mockedsessionHandler;
         private Mock<IDatabaseService<GamePOCO>> _mockedGamePOCOServices;
         private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerPOCOServices;
-        private IList<GamePOCO> _InMemoryDatabaseGame;
-        private IList<PlayerPOCO> _InMemoryDatabasePlayer = new List<PlayerPOCO>();
         private IDatabaseService<PlayerPOCO> _services;
-
 
         [SetUp]
         public void Setup()
@@ -51,102 +48,133 @@ namespace Session.Tests
                 _mockedsessionHandler.Object, _mockedGamePOCOServices.Object, _mockedPlayerPOCOServices.Object);
             _packetDTO = new PacketDTO();
         }
-
+        
         [Test]
-        public void Test_start_session()
+        public void TestIfGameIsSavedStartGameDTOIsGettingOldSavedGameData()
         {
-            //arrange
-            List<string> allClients = new List<string>();
-            allClients.Add("a");
-            allClients.Add("b");
-            allClients.Add("c");
-
-            Dictionary<string, int[]> players = new Dictionary<string, int[]>();
-
-            int playerX = 26; // spawn position
-            int playerY = 11; // spawn position
-            foreach (string element in allClients)
-            {
-                int[] playerPosition = new int[2];
-                playerPosition[0] = playerX;
-                playerPosition[1] = playerY;
-                players.Add(element, playerPosition);
-                playerX += 2; // spawn position + 2 each client
-                playerY += 2; // spawn position + 2 each client
-            }
-
+            // Als game is saved dan moet StartGameDTO gevuld worden met betsaande items
+            _mockedsessionHandler.Setup(x => x.GetSavedGame()).Returns(true);
             StartGameDTO startGameDto = new StartGameDTO();
-            startGameDto.PlayerLocations = players;
+            List<PlayerPOCO> savedPlayers = new List<PlayerPOCO>();
+            PlayerPOCO player = new PlayerPOCO {GameGuid = "GameGuid1", Health = 1, Stamina = 1, PlayerGuid = "PlayerGuid1", 
+                GameGUIDAndPlayerGuid = "GameGuid1Player1", PlayerName = "Player1", TypePlayer = 1, XPosition = 0, YPosition = 0};
+            
+            savedPlayers.Add(player);
+            
+            startGameDto.Seed = 1;
+            startGameDto.SavedPlayers = savedPlayers;
+            startGameDto.GameGuid = "GameGuid1";
 
-            // Act ---------
+            _mockedPlayerPOCOServices.Setup(x => x.GetAllAsync()).ReturnsAsync(savedPlayers);
+            _mockedsessionHandler.Setup(x => x.GetSessionSeed()).Returns(1);
             _sut.SendGameSession();
-
             var payload = JsonConvert.SerializeObject(startGameDto);
-
-            _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.GameSession));
-
-            // Assert ---------
-            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.GameSession), Times.Once());
+            _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
+            _mockedClientController.Verify(x => x.SendPayload(payload, PacketType.GameSession), Times.Once);
         }
+        
+        
+        
+        
+        
 
-        [Test]
-        public void Test_GameSession_HandlePacket_SendsPacket()
-        {
-            string gameID = "gameId";
-
-            PlayerPOCO player1 = new PlayerPOCO
-            {
-                Health = 10,
-                Stamina = 100,
-                GameGuid = gameID,
-                XPosition = 10,
-                YPosition = 20,
-                PlayerGuid = "idPlayer1"
-            };
-
-            // Arrange ---------
-            List<string> allClients = new List<string>();
-            allClients.Add("a");
-            allClients.Add("b");
-            allClients.Add("c");
-
-
-            Dictionary<string, int[]> players = new Dictionary<string, int[]>();
-
-            int playerX = 26; // spawn position
-            int playerY = 11; // spawn position
-            foreach (string element in allClients)
-            {
-                int[] playerPosition = new int[2];
-                playerPosition[0] = playerX;
-                playerPosition[1] = playerY;
-                players.Add(element, playerPosition);
-                playerX += 2; // spawn position + 2 each client
-                playerY += 2; // spawn position + 2 each client
-            }
-
-            _mockedsessionHandler.Setup(x => x.GetAllClients()).Returns(allClients);
-            _sut.SendGameSession();
-
-            StartGameDTO gameDto = new StartGameDTO();
-            gameDto.PlayerLocations = players;
-
-
-            var payload = JsonConvert.SerializeObject(gameDto);
-            _packetDTO.Payload = payload;
-            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
-            packetHeaderDTO.OriginID = "testOriginId";
-            packetHeaderDTO.SessionID = null;
-            packetHeaderDTO.PacketType = PacketType.GameSession;
-            packetHeaderDTO.Target = "host";
-            _packetDTO.Header = packetHeaderDTO;
-
-            // Act -------------
-            HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
-
-            // Assert ----------
-            HandlerResponseDTO expectedResult = new HandlerResponseDTO(SendAction.SendToClients, "testSessionName");
-            Assert.AreEqual(expectedResult.Action, actualResult.Action);
-        }
+        //     [Test]
+        //     public void Test_start_session()
+        //     {
+        //         //arrange
+        //         List<string> allClients = new List<string>();
+        //         allClients.Add("a");
+        //         allClients.Add("b");
+        //         allClients.Add("c");
+        //
+        //         Dictionary<string, int[]> players = new Dictionary<string, int[]>();
+        //
+        //         int playerX = 26; // spawn position
+        //         int playerY = 11; // spawn position
+        //         foreach (string element in allClients)
+        //         {
+        //             int[] playerPosition = new int[2];
+        //             playerPosition[0] = playerX;
+        //             playerPosition[1] = playerY;
+        //             players.Add(element, playerPosition);
+        //             playerX += 2; // spawn position + 2 each client
+        //             playerY += 2; // spawn position + 2 each client
+        //         }
+        //
+        //         StartGameDTO startGameDto = new StartGameDTO();
+        //         startGameDto.PlayerLocations = players;
+        //
+        //         // Act ---------
+        //         _sut.SendGameSession();
+        //
+        //         var payload = JsonConvert.SerializeObject(startGameDto);
+        //
+        //         _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.GameSession));
+        //
+        //         // Assert ---------
+        //         _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.GameSession), Times.Once());
+        //     }
+        //
+        //     [Test]
+        //     public void Test_GameSession_HandlePacket_SendsPacket()
+        //     {
+        //         string gameID = "gameId";
+        //
+        //         PlayerPOCO player1 = new PlayerPOCO
+        //         {
+        //             Health = 10,
+        //             Stamina = 100,
+        //             GameGuid = gameID,
+        //             XPosition = 10,
+        //             YPosition = 20,
+        //             PlayerGuid = "idPlayer1"
+        //         };
+        //
+        //         // Arrange ---------
+        //         List<string> allClients = new List<string>();
+        //         allClients.Add("a");
+        //         allClients.Add("b");
+        //         allClients.Add("c");
+        //
+        //
+        //         Dictionary<string, int[]> players = new Dictionary<string, int[]>();
+        //
+        //         int playerX = 26; // spawn position
+        //         int playerY = 11; // spawn position
+        //         foreach (string element in allClients)
+        //         {
+        //             int[] playerPosition = new int[2];
+        //             playerPosition[0] = playerX;
+        //             playerPosition[1] = playerY;
+        //             players.Add(element, playerPosition);
+        //             playerX += 2; // spawn position + 2 each client
+        //             playerY += 2; // spawn position + 2 each client
+        //         }
+        //
+        //         _mockedsessionHandler.Setup(x => x.GetAllClients()).Returns(allClients);
+        //         _sut.SendGameSession();
+        //
+        //         StartGameDTO gameDto = new StartGameDTO();
+        //         gameDto.PlayerLocations = players;
+        //
+        //
+        //         var payload = JsonConvert.SerializeObject(gameDto);
+        //         _packetDTO.Payload = payload;
+        //         PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+        //         packetHeaderDTO.OriginID = "testOriginId";
+        //         packetHeaderDTO.SessionID = null;
+        //         packetHeaderDTO.PacketType = PacketType.GameSession;
+        //         packetHeaderDTO.Target = "host";
+        //         _packetDTO.Header = packetHeaderDTO;
+        //
+        //         // Act -------------
+        //         HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
+        //
+        //         // Assert ----------
+        //         HandlerResponseDTO expectedResult = new HandlerResponseDTO(SendAction.SendToClients, "testSessionName");
+        //         Assert.AreEqual(expectedResult.Action, actualResult.Action);
+        //     }
+        // }
+        
     }
 }
