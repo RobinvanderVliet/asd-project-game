@@ -184,9 +184,14 @@ namespace ActionHandling.Tests
 
             Player player = new Player("henk", 0, 0, "#", inventoryDTO.UserId);
 
-            Player player2 = new Player("henk", 0, 0, "#", inventoryDTO2.UserId);
+            Item item = ItemFactory.GetBandage();
 
-            _mockedWorldService.Setup(mock => mock.GetPlayer(inventoryDTO2.UserId)).Returns(player2);
+            for(int i = 0; i < 3; i++)
+            {
+                player.Inventory.AddConsumableItem((Items.Consumables.Consumable)item);
+            }
+
+            _mockedWorldService.Setup(mock => mock.GetPlayer(inventoryDTO2.UserId)).Returns(player);
 
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
 
