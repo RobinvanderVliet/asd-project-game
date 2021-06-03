@@ -135,7 +135,14 @@ namespace ASD_project.World
             }
             else
             {
-                return tile.Symbol;
+                if (tile.ItemsOnTile.Count != 0)
+                {
+                    return "n";
+                }
+                else
+                {
+                    return tile.Symbol;                    
+                }
             }
         }
 
