@@ -14,6 +14,5 @@ namespace DatabaseHandler.POCO
         public int ArmorPoints { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
-
     }
 }
