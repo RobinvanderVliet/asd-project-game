@@ -124,6 +124,8 @@ namespace Session.Tests
             gameList.Add(gamePoco);
 
             _mockedDatabaseGameService.Setup(x => x.GetAllAsync()).ReturnsAsync(gameList);
+           
+            sut.LoadGame("game1");
 
             _mockedSessionHandler.Verify(x => x.CreateSession(gamePoco.GameName, true, gamePoco.GameGuid, gamePoco.Seed));
         }
