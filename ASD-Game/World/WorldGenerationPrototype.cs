@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WorldGeneration
 {
+    [ExcludeFromCodeCoverage]
     public class WorldGenerationPrototype
     {
         private readonly FastNoiseLite _noise;
@@ -49,10 +51,10 @@ namespace WorldGeneration
                 for (var x = 0; x < NUMBER; x++)
                 {
                     noiseData[x, y] = _noise.GetNoise(x, y);
-                    if ((int)Math.Floor(noiseData[x, y] * 10) > -1)
-                        Console.Write("_" + (int)Math.Floor(noiseData[x, y] * 10));
+                    if ((int) Math.Floor(noiseData[x, y] * 10) > -1)
+                        Console.Write("_" + (int) Math.Floor(noiseData[x, y] * 10));
                     else
-                        Console.Write((int)Math.Floor(noiseData[x, y] * 10));
+                        Console.Write((int) Math.Floor(noiseData[x, y] * 10));
                 }
 
                 Console.WriteLine("");

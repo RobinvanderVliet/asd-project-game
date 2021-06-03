@@ -50,6 +50,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using WorldGeneration.Models.Interfaces;
+
 // Switch between using floats or doubles for input position
 
 //using FNLfloat = System.Double;
@@ -57,7 +59,7 @@ using System.Runtime.CompilerServices;
 namespace WorldGeneration
 {
     [ExcludeFromCodeCoverage]
-    public class FastNoiseLite
+    public class FastNoiseLite : IFastNoise
     {
         public enum CellularDistanceFunction
         {
@@ -772,19 +774,19 @@ namespace WorldGeneration
         [MethodImpl(INLINE)]
         private static float FastSqrt(float f)
         {
-            return (float)Math.Sqrt(f);
+            return (float) Math.Sqrt(f);
         }
 
         [MethodImpl(INLINE)]
         private static int FastFloor(float f)
         {
-            return f >= 0 ? (int)f : (int)f - 1;
+            return f >= 0 ? (int) f : (int) f - 1;
         }
 
         [MethodImpl(INLINE)]
         private static int FastRound(float f)
         {
-            return f >= 0 ? (int)(f + 0.5f) : (int)(f - 0.5f);
+            return f >= 0 ? (int) (f + 0.5f) : (int) (f - 0.5f);
         }
 
         [MethodImpl(INLINE)]
@@ -815,7 +817,7 @@ namespace WorldGeneration
         [MethodImpl(INLINE)]
         private static float PingPong(float t)
         {
-            t -= (int)(t * 0.5f) * 2;
+            t -= (int) (t * 0.5f) * 2;
             return t < 1 ? t : 2 - t;
         }
 
@@ -1017,13 +1019,13 @@ namespace WorldGeneration
             {
                 case NoiseType.OpenSimplex2:
                 case NoiseType.OpenSimplex2S:
-                    {
-                        const float SQRT3 = (float)1.7320508075688772935274463415059;
-                        const float F2 = 0.5f * (SQRT3 - 1);
-                        var t = (x + y) * F2;
-                        x += t;
-                        y += t;
-                    }
+                {
+                    const float SQRT3 = (float) 1.7320508075688772935274463415059;
+                    const float F2 = 0.5f * (SQRT3 - 1);
+                    var t = (x + y) * F2;
+                    x += t;
+                    y += t;
+                }
                     break;
             }
         }
@@ -1038,33 +1040,33 @@ namespace WorldGeneration
             switch (mTransformType3D)
             {
                 case TransformType3D.ImproveXYPlanes:
-                    {
-                        var xy = x + y;
-                        var s2 = xy * -(float)0.211324865405187;
-                        z *= (float)0.577350269189626;
-                        x += s2 - z;
-                        y = y + s2 - z;
-                        z += xy * (float)0.577350269189626;
-                    }
+                {
+                    var xy = x + y;
+                    var s2 = xy * -(float) 0.211324865405187;
+                    z *= (float) 0.577350269189626;
+                    x += s2 - z;
+                    y = y + s2 - z;
+                    z += xy * (float) 0.577350269189626;
+                }
                     break;
                 case TransformType3D.ImproveXZPlanes:
-                    {
-                        var xz = x + z;
-                        var s2 = xz * -(float)0.211324865405187;
-                        y *= (float)0.577350269189626;
-                        x += s2 - y;
-                        z += s2 - y;
-                        y += xz * (float)0.577350269189626;
-                    }
+                {
+                    var xz = x + z;
+                    var s2 = xz * -(float) 0.211324865405187;
+                    y *= (float) 0.577350269189626;
+                    x += s2 - y;
+                    z += s2 - y;
+                    y += xz * (float) 0.577350269189626;
+                }
                     break;
                 case TransformType3D.DefaultOpenSimplex2:
-                    {
-                        const float R3 = (float)(2.0 / 3.0);
-                        var r = (x + y + z) * R3; // Rotation, not skew
-                        x = r - x;
-                        y = r - y;
-                        z = r - z;
-                    }
+                {
+                    const float R3 = (float) (2.0 / 3.0);
+                    var r = (x + y + z) * R3; // Rotation, not skew
+                    x = r - x;
+                    y = r - y;
+                    z = r - z;
+                }
                     break;
             }
         }
@@ -1105,13 +1107,13 @@ namespace WorldGeneration
             {
                 case DomainWarpType.OpenSimplex2:
                 case DomainWarpType.OpenSimplex2Reduced:
-                    {
-                        const float SQRT3 = (float)1.7320508075688772935274463415059;
-                        const float F2 = 0.5f * (SQRT3 - 1);
-                        var t = (x + y) * F2;
-                        x += t;
-                        y += t;
-                    }
+                {
+                    const float SQRT3 = (float) 1.7320508075688772935274463415059;
+                    const float F2 = 0.5f * (SQRT3 - 1);
+                    var t = (x + y) * F2;
+                    x += t;
+                    y += t;
+                }
                     break;
             }
         }
@@ -1122,33 +1124,33 @@ namespace WorldGeneration
             switch (mWarpTransformType3D)
             {
                 case TransformType3D.ImproveXYPlanes:
-                    {
-                        var xy = x + y;
-                        var s2 = xy * -(float)0.211324865405187;
-                        z *= (float)0.577350269189626;
-                        x += s2 - z;
-                        y = y + s2 - z;
-                        z += xy * (float)0.577350269189626;
-                    }
+                {
+                    var xy = x + y;
+                    var s2 = xy * -(float) 0.211324865405187;
+                    z *= (float) 0.577350269189626;
+                    x += s2 - z;
+                    y = y + s2 - z;
+                    z += xy * (float) 0.577350269189626;
+                }
                     break;
                 case TransformType3D.ImproveXZPlanes:
-                    {
-                        var xz = x + z;
-                        var s2 = xz * -(float)0.211324865405187;
-                        y *= (float)0.577350269189626;
-                        x += s2 - y;
-                        z += s2 - y;
-                        y += xz * (float)0.577350269189626;
-                    }
+                {
+                    var xz = x + z;
+                    var s2 = xz * -(float) 0.211324865405187;
+                    y *= (float) 0.577350269189626;
+                    x += s2 - y;
+                    z += s2 - y;
+                    y += xz * (float) 0.577350269189626;
+                }
                     break;
                 case TransformType3D.DefaultOpenSimplex2:
-                    {
-                        const float R3 = (float)(2.0 / 3.0);
-                        var r = (x + y + z) * R3; // Rotation, not skew
-                        x = r - x;
-                        y = r - y;
-                        z = r - z;
-                    }
+                {
+                    const float R3 = (float) (2.0 / 3.0);
+                    var r = (x + y + z) * R3; // Rotation, not skew
+                    x = r - x;
+                    y = r - y;
+                    z = r - z;
+                }
                     break;
             }
         }
@@ -1399,9 +1401,9 @@ namespace WorldGeneration
             var y0 = y - j;
             var z0 = z - k;
 
-            var xNSign = (int)(-1.0f - x0) | 1;
-            var yNSign = (int)(-1.0f - y0) | 1;
-            var zNSign = (int)(-1.0f - z0) | 1;
+            var xNSign = (int) (-1.0f - x0) | 1;
+            var yNSign = (int) (-1.0f - y0) | 1;
+            var zNSign = (int) (-1.0f - z0) | 1;
 
             var ax0 = xNSign * -x0;
             var ay0 = yNSign * -y0;
@@ -1414,7 +1416,7 @@ namespace WorldGeneration
             float value = 0;
             var a = 0.6f - x0 * x0 - (y0 * y0 + z0 * z0);
 
-            for (var l = 0; ; l++)
+            for (var l = 0;; l++)
             {
                 if (a > 0) value += a * a * (a * a) * GradCoord(seed, i, j, k, x0, y0, z0);
 
@@ -1479,7 +1481,7 @@ namespace WorldGeneration
         {
             // 2D OpenSimplex2S case is a modified 2D simplex noise.
 
-            const float SQRT3 = (float)1.7320508075688772935274463415059;
+            const float SQRT3 = (float) 1.7320508075688772935274463415059;
             const float G2 = (3 - SQRT3) / 6;
 
             /*
@@ -1604,9 +1606,9 @@ namespace WorldGeneration
             k *= PRIME_Z;
             var seed2 = seed + 1293373;
 
-            var xNMask = (int)(-0.5f - xi);
-            var yNMask = (int)(-0.5f - yi);
-            var zNMask = (int)(-0.5f - zi);
+            var xNMask = (int) (-0.5f - xi);
+            var yNMask = (int) (-0.5f - yi);
+            var zNMask = (int) (-0.5f - zi);
 
             var x0 = xi + xNMask;
             var y0 = yi + yNMask;
@@ -2658,9 +2660,9 @@ namespace WorldGeneration
             var y0 = y - j;
             var z0 = z - k;
 
-            var xNSign = (int)(-x0 - 1.0f) | 1;
-            var yNSign = (int)(-y0 - 1.0f) | 1;
-            var zNSign = (int)(-z0 - 1.0f) | 1;
+            var xNSign = (int) (-x0 - 1.0f) | 1;
+            var yNSign = (int) (-y0 - 1.0f) | 1;
+            var zNSign = (int) (-z0 - 1.0f) | 1;
 
             var ax0 = xNSign * -x0;
             var ay0 = yNSign * -y0;
@@ -2674,7 +2676,7 @@ namespace WorldGeneration
             vx = vy = vz = 0;
 
             var a = 0.6f - x0 * x0 - (y0 * y0 + z0 * z0);
-            for (var l = 0; ; l++)
+            for (var l = 0;; l++)
             {
                 if (a > 0)
                 {

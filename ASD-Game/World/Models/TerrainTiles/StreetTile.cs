@@ -8,7 +8,7 @@ namespace WorldGeneration.Models.TerrainTiles
     [ExcludeFromCodeCoverage]
     public class StreetTile : ITerrainTile
     {
-
+        
         public bool IsAccessible { get; set; }
         public string Symbol { get; set; }
         public int XPosition { get; set; }
@@ -21,6 +21,7 @@ namespace WorldGeneration.Models.TerrainTiles
             IsAccessible = true;
             XPosition = x;
             YPosition = y;
+            ItemsOnTile = new List<Item>();
         }
     }
 }

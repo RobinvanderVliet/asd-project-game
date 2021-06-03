@@ -19,6 +19,7 @@ namespace WorldGeneration.Models.LootableTiles
         {
             Symbol = TileSymbol.CHEST;
             IsAccessible = true;
+            ItemsOnTile = new List<Item>();
         }
 
         public int GenerateLoot()

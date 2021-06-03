@@ -1,12 +1,9 @@
-using DatabaseHandler;
 using DatabaseHandler.POCO;
-using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
-using System;
 using System.Collections.Generic;
 using WorldGeneration;
 using WorldGeneration.Models;
@@ -36,14 +33,10 @@ namespace Session
 
         public StartGameDTO SetupGameHost()
         {
-            var dbConnection = new DbConnection();
+            var servicePlayer = new DatabaseService<PlayerPOCO>();
+            var gameService = new DatabaseService<GamePOCO>();
 
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
-            var gameRepository = new Repository<GamePOCO>(dbConnection);
-            var gameService = new ServicesDb<GamePOCO>(gameRepository);
-
-            var gamePOCO = new GamePOCO {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
+            var gamePOCO = new GamePOCO {GameGUID = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
             gameService.CreateAsync(gamePOCO);
 
             List<string> allClients = _sessionHandler.GetAllClients();
@@ -59,7 +52,7 @@ namespace Session
                 playerPosition[1] = playerY;
                 players.Add(clientId, playerPosition);
                 var tmpPlayer = new PlayerPOCO
-                    {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
+                    {PlayerGUID = clientId, GameGUID = gamePOCO.GameGUID, XPosition = playerX, YPosition = playerY};
                 servicePlayer.CreateAsync(tmpPlayer);
 
                 playerX += 2; // spawn position + 2 each client
