@@ -64,7 +64,7 @@ namespace WorldGeneration
 
         public ITile GetLoadedTileByXAndY(int x, int y)
         {
-            return _map.GetLoadedTileByXAndY(x, y); //map hier
+            return _map.GetLoadedTileByXAndY(x, y);
         }
         
         public bool CheckIfPlayerOnTile(ITile tile)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WorldGeneration.Models;
@@ -110,15 +110,13 @@ namespace WorldGeneration
         
         private string GetDisplaySymbol(ITile tile, List<Character> characters)
         {
-            var characterOnTile = characters.Find(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
+            
+            var characterOnTile = characters.Find(character => character.XPosition == tile.XPosition && character.YPosition == tile.YPosition);
             if(characterOnTile != null)
             {
                 return characterOnTile.Symbol;
             }
-            else
-            {
-                return tile.Symbol;
-            }
+            return tile.Symbol;
         }
 
         private Chunk GenerateNewChunk(int chunkX, int chunkY)
