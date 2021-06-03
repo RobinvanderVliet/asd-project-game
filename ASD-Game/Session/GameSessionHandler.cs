@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
-using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using Network;
 using Network.DTO;
@@ -22,13 +22,20 @@ namespace Session
         private IWorldService _worldService;
         private IGameConfigurationHandler _gameConfigurationHandler;
         
-        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IGameConfigurationHandler gameConfigurationHandler)
+        private IServicesDb<PlayerPOCO> _playerServicesDb;
+        private IServicesDb<GamePOCO> _gameServicesDb;
+        private IServicesDb<GameConfigurationPOCO> _gameConfigServicesDb;
+
+        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IServicesDb<PlayerPOCO> playerServicesDb, IServicesDb<GamePOCO> gameServicesDb, IServicesDb<GameConfigurationPOCO> gameConfigservicesDb, IGameConfigurationHandler gameConfigurationHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
             _worldService = worldService;
             _sessionHandler = sessionHandler;
             _gameConfigurationHandler = gameConfigurationHandler;
+            _playerServicesDb = playerServicesDb;
+            _gameServicesDb = gameServicesDb;
+            _gameConfigServicesDb = gameConfigservicesDb;
         }
         
         public void SendGameSession()
@@ -39,15 +46,6 @@ namespace Session
 
         public StartGameDTO SetupGameHost()
         {
-            var dbConnection = new DbConnection();
-
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
-            var gameRepository = new Repository<GamePOCO>(dbConnection);
-            var gameService = new ServicesDb<GamePOCO>(gameRepository);
-            var gameConfigurationRepository = new Repository<GameConfigurationPOCO>(dbConnection);
-            var gameServiceConfiguration = new ServicesDb<GameConfigurationPOCO>(gameConfigurationRepository);
-
             var gameConfigurationPOCO = new GameConfigurationPOCO
             {
                 GameGUID = _clientController.SessionId,
@@ -55,12 +53,14 @@ namespace Session
                 NPCDifficultyNew = (int) _gameConfigurationHandler.GetNewMonsterDifficulty(),
                 ItemSpawnRate = (int) _gameConfigurationHandler.GetSpawnRate()
             };
-            gameServiceConfiguration.CreateAsync(gameConfigurationPOCO);
+            _gameConfigServicesDb.CreateAsync(gameConfigurationPOCO);
             
             var gamePOCO = new GamePOCO {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
-            gameService.CreateAsync(gamePOCO);
+
+            _gameServicesDb.CreateAsync(gamePOCO);
   
             List<string[]> allClients = _sessionHandler.GetAllClients();
+
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
 
             // Needs to be refactored to something random in construction; this was for testing
@@ -73,8 +73,8 @@ namespace Session
                 playerPosition[1] = playerY;
                 players.Add(client[0], playerPosition);
                 var tmpPlayer = new PlayerPOCO
-                    {PlayerGuid = client[0], PlayerName = client[1], GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY}; 
-                servicePlayer.CreateAsync(tmpPlayer);
+                    {PlayerGuid = client[0], GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
+                _playerServicesDb.CreateAsync(tmpPlayer);
 
                 playerX += 2; // spawn position + 2 each client
                 playerY += 2; // spawn position + 2 each client
