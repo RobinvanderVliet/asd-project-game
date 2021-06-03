@@ -320,19 +320,20 @@ namespace Session
 
             if (packet.Header.Target == "host")
             {
-                if (_screenHandler.Screen is LobbyScreen screen)
-                {
-                    screen.UpdateLobbyScreen(_session.GetAllClients());
-                }
 
                 _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
                 sessionDTO.Clients = new List<string[]>();
-
+                
                 sessionDTO.SessionSeed = _session.SessionSeed;
 
                 foreach (string[] client in _session.GetAllClients())
                 {
                     sessionDTO.Clients.Add(client);
+                }
+
+                if (_screenHandler.Screen is LobbyScreen screen)
+                {
+                    screen.UpdateLobbyScreen(_session.GetAllClients());
                 }
 
                 return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
@@ -349,11 +350,6 @@ namespace Session
                     _session.AddClient(client[0], client[1]);
                 }
 
-                if (_screenHandler.Screen is LobbyScreen screen)
-                {
-                    screen.UpdateLobbyScreen(sessionDTOClients.Clients);
-                }
-
                 if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost) {
                     if (sessionDTOClients.Clients[1][0].Equals(_clientController.GetOriginId()))
                     {
@@ -361,6 +357,12 @@ namespace Session
                         PingHostTimer();
                     }
                 }
+                
+                if (_screenHandler.Screen is LobbyScreen screen)
+                {
+                    screen.UpdateLobbyScreen(_session.GetAllClients());
+                }
+
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
         }
