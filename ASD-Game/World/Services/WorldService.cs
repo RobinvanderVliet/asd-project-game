@@ -64,5 +64,12 @@ namespace WorldGeneration
         {
             return null;
         }
+
+        //public List<string> getCreatureMoves()
+        //{
+        //    for (_world._creatures.Count)
+        //    {
+        //    }
+        //}
     }
 }

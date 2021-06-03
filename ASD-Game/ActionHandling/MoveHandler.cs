@@ -18,6 +18,8 @@ namespace ActionHandling
         private IClientController _clientController;
         private IWorldService _worldService;
 
+        private List<string> _creatureMoves = new List<string>();
+
         public MoveHandler(IClientController clientController, IWorldService worldService)
         {
             _clientController = clientController;
@@ -61,6 +63,11 @@ namespace ActionHandling
             SendMoveDTO(moveDTO);
         }
 
+        public void GetAIMoves()
+        {
+            //_creatureMoves = _worldService.getCreatureMove();
+        }
+
         private void SendMoveDTO(MoveDTO moveDTO)
         {
             var payload = JsonConvert.SerializeObject(moveDTO);
@@ -75,7 +82,6 @@ namespace ActionHandling
             //(_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost)
             if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
             {
-
                 var servicePlayer = new DatabaseService<PlayerPOCO>();
 
                 var allLocations = servicePlayer.GetAllAsync();

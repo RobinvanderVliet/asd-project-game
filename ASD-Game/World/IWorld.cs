@@ -8,6 +8,8 @@ namespace WorldGeneration
 {
     public interface IWorld
     {
+        public List<Character> _creatures { get; set; }
+
         void UpdateCharacterPosition(string id, int newXPosition, int newYPosition);
 
         void AddPlayerToWorld(Player player, bool isCurrentPlayer = false);

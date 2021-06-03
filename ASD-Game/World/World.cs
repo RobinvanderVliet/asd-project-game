@@ -9,7 +9,7 @@ namespace WorldGeneration
         private IMap _map;
         public Player CurrentPlayer;
         private List<Player> _players;
-        private List<Character> _creatures;
+        public List<Character> _creatures { get; set; }
         private readonly int _viewDistance;
         private IScreenHandler _screenHandler;
 
