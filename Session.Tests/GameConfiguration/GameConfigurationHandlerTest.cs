@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Moq;
 using NUnit.Framework;
@@ -16,6 +17,8 @@ namespace Session.Tests.GameConfiguration
         public void Setup()
         {
             _mockScreenHandler = new Mock<ScreenHandler>();
+            // _mockScreenHandler.Object.Screen
+            // _mockScreenHandler = new Mock<ScreenHandler>();
             _sut = new GameConfigurationHandler(_mockScreenHandler.Object);
         }
 
@@ -87,6 +90,43 @@ namespace Session.Tests.GameConfiguration
             //Assert
             Assert.AreEqual(difficulty, _sut.NewMonsterDifficulty);
             Assert.AreEqual(true, _sut.NextScreen);
+        }
+        
+        [TestCase("6")]
+        [TestCase("falseChoice")]
+        [Test]
+        public void Test_UpdateMonsterDifficultyDoesntExist(string input)
+        {
+            //Arrange
+            Mock<ConfigurationScreen> _screen = new Mock<ConfigurationScreen>();
+            _mockScreenHandler.Object.Screen = _screen.Object;
+            _screen.Setup(x => x.UpdateInputMessage(""));
+            GameConfigurationHandler _gameConfiguration = new GameConfigurationHandler(_mockScreenHandler.Object);
+
+            //Act
+            _gameConfiguration.UpdateMonsterDifficulty(input);
+            
+            //Assert
+            Assert.False(_sut.NextScreen);
+        }
+        
+        [Test]
+        public void Test_HandleAnswerSetsUsername()
+        {
+            //Arrange
+            _sut.SetGameConfiguration();
+            Mock<ConfigurationScreen> _screen = new Mock<ConfigurationScreen>();
+            _mockScreenHandler.Object.Screen = _screen.Object;
+            _screen.Setup(x => x.UpdateConfigurationScreen(_sut.ConfigurationHeader[_sut.OptionCounter], _sut.ConfigurationChoices[_sut.OptionCounter]));
+
+            //Act
+            _sut.HandleAnswer("1");
+            _sut.HandleAnswer("1");
+            _sut.HandleAnswer("1");
+            _sut.HandleAnswer("Abdul");
+
+            //Assert
+            Assert.AreEqual("Abdul", _sut.Username);
         }
     }
 }
