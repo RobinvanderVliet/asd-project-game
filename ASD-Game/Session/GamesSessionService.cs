@@ -9,14 +9,12 @@ namespace Session
 {
     public class GamesSessionService : IGamesSessionService
     {
-        private readonly IGameSessionHandler _gameSessionHandler;
         private readonly ISessionHandler _sessionHandler;
         private readonly IDatabaseService<ClientHistoryPoco> _clientHistoryService;
         private readonly IDatabaseService<GamePOCO> _gamePocoService;
 
-        public GamesSessionService(IGameSessionHandler gameSessionHandler, ISessionHandler sessionHandler, IDatabaseService<ClientHistoryPoco> clientHistoryService, IDatabaseService<GamePOCO> gamePocoService)
+        public GamesSessionService(ISessionHandler sessionHandler, IDatabaseService<ClientHistoryPoco> clientHistoryService, IDatabaseService<GamePOCO> gamePocoService)
         {
-            _gameSessionHandler = gameSessionHandler;
             _sessionHandler = sessionHandler;
             _clientHistoryService = clientHistoryService;
             _gamePocoService = gamePocoService;
@@ -39,7 +37,7 @@ namespace Session
                 };
 
 
-            foreach (var element in joinedTables)
+            foreach (var element in joinedTables.Select(x => x.GameGuid))
             {
                 Console.WriteLine(element);
             }
