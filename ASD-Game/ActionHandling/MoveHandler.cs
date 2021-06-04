@@ -5,6 +5,7 @@ using System.Linq;
 using ActionHandling.DTO;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
+using Messages;
 using Network.DTO;
 using Newtonsoft.Json;
 using WorldGeneration;
@@ -17,13 +18,15 @@ namespace ActionHandling
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
         private readonly IDatabaseService<PlayerPOCO> _playerService;
+        private readonly IMessageService _messageService;
 
-        public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerService)
+        public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerService, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Move);
             _worldService = worldService;
             _playerService = playerService;
+            _messageService = messageService;
         }
 
         public void SendMove(string directionValue, int stepsValue)
@@ -90,7 +93,7 @@ namespace ActionHandling
                 {
                     if (packet.Header.OriginID == null)
                     {
-                        Console.WriteLine("You do not have enough stamina to move!");
+                        _messageService.AddMessage("You do not have enough stamina to move!");
                     }
 
                     return new HandlerResponseDTO(SendAction.ReturnToSender, "You do not have enough stamina to move!");
@@ -113,7 +116,7 @@ namespace ActionHandling
                             moveDTO.YPosition = player.YPosition;
                         }
                         resultMessage = "You could not move to the next tile.";
-                        Console.WriteLine(resultMessage);
+                        _messageService.AddMessage(resultMessage);
                     }
                     
                     HandleMove(moveDTO);
@@ -125,6 +128,7 @@ namespace ActionHandling
             }
             else
             {
+                _worldService.LoadArea(moveDTO.XPosition, moveDTO.YPosition, 10);
                 HandleMove(moveDTO);
             }
             
@@ -143,7 +147,6 @@ namespace ActionHandling
 
         private void HandleMove(MoveDTO moveDTO)
         {
-            // _worldService.UpdateCharacterPosition(moveDTO.UserId, moveDTO.XPosition, moveDTO.YPosition);
             var player = _worldService.GetPlayer(moveDTO.UserId);
             player.Stamina = moveDTO.Stamina;
             player.XPosition = moveDTO.XPosition;

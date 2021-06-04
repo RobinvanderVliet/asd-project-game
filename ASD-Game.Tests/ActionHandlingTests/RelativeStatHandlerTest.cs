@@ -3,6 +3,7 @@ using ActionHandling;
 using ActionHandling.DTO;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
+using Messages;
 using Moq;
 using Network;
 using Newtonsoft.Json;
@@ -18,6 +19,7 @@ namespace Session.Tests
         private Mock<IWorldService> _mockedWorldService;
         private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerServicesDb;
         private RelativeStatHandler _sut;
+        private Mock<IMessageService> _mockedMessageService;
 
         [SetUp]
         public void Setup()
@@ -25,7 +27,7 @@ namespace Session.Tests
             _mockedClientController = new Mock<IClientController>();
             _mockedWorldService = new Mock<IWorldService>();
 
-            _sut = new RelativeStatHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerServicesDb.Object);
+            _sut = new RelativeStatHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerServicesDb.Object, _mockedMessageService.Object);
         }
 
         [Test]

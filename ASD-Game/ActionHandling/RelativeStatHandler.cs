@@ -6,6 +6,7 @@ using System.Timers;
 using ActionHandling.DTO;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
+using Messages;
 using Network.DTO;
 using WorldGeneration;
 using WorldGeneration.Models.HazardousTiles;
@@ -26,13 +27,15 @@ namespace ActionHandling
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
         private readonly IDatabaseService<PlayerPOCO> _playerService;
+        private readonly IMessageService _messageService;
 
-        public RelativeStatHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerService)
+        public RelativeStatHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerService, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.RelativeStat);
             _worldService = worldService;
             _playerService = playerService;
+            _messageService = messageService;
         }
         
         public void CheckStaminaTimer()
@@ -56,7 +59,7 @@ namespace ActionHandling
             if (_player.Stamina < 100)
             {
                 var statDto = new RelativeStatDTO();
-                statDto.Stamina = 100;
+                statDto.Stamina = 1;
                 SendStat(statDto);
             }
         }
@@ -102,24 +105,24 @@ namespace ActionHandling
             bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
 
             var player = _worldService.GetPlayer(relativeStatDTO.Id);
-            if(player.Stamina < Player.STAMINA_MAX && relativeStatDTO.Stamina != 0)
+            if (player.Stamina < Player.STAMINA_MAX && relativeStatDTO.Stamina != 0)
             {
                 player.AddStamina(relativeStatDTO.Stamina);
-                Console.WriteLine("Gained Stamina! S: " + _player.Stamina);
+                _messageService.AddMessage("Gained stamina! S: " + _player.Stamina);
                 InsertToDatabase(relativeStatDTO, handleInDatabase, player);
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
-            if(player.RadiationLevel > 0 && relativeStatDTO.RadiationLevel != 0)
+            if (player.RadiationLevel > 0 && relativeStatDTO.RadiationLevel != 0)
             {
                 player.AddRadiationLevel(relativeStatDTO.RadiationLevel);
-                Console.WriteLine("Radiation damage! H: " + _player.Health + " | R: " + _player.RadiationLevel);
+                _messageService.AddMessage("Radiation damage! H: " + _player.Health + " | R: " + _player.RadiationLevel);
                 InsertToDatabase(relativeStatDTO, handleInDatabase, player);
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
-            if(player.Health > 0 && relativeStatDTO.Health != 0)
+            if (player.Health > 0 && relativeStatDTO.Health != 0)
             {
                 player.AddHealth(relativeStatDTO.Health);
-                Console.WriteLine("Radiation damage! H: " + _player.Health + " | R: " + _player.RadiationLevel);
+                _messageService.AddMessage("Radiation damage! H: " + _player.Health + " | R: " + _player.RadiationLevel);
                 InsertToDatabase(relativeStatDTO, handleInDatabase, player);
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
