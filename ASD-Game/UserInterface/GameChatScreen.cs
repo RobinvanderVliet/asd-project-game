@@ -54,48 +54,51 @@ namespace UserInterface
 
         public void ShowMessages(Queue<string> messages)
         {
-            //Queue<string> messageQueue = new Queue<string>();
-
-            Stack<string> messageQueue = new();
-            int messageCount = messages.Count;
-            int chunkSize = _width - BORDER_SIZE;
-            int maxSize = chunkSize * _height;
-            for (int i = 0; i < messageCount; i++)
+            Stack<string> messageStack = new();
+            for (int i = 0; i < messages.Count; i++)
             {
                 string message = messages.Dequeue();
                 if (message.Length >= _width - BORDER_SIZE)
                 {
                     int stringLength = message.Length;
+                    int chunkSize = _width - BORDER_SIZE;
+                    int maxSize = chunkSize * _height;
                     if (stringLength > maxSize)
                     {
                         message = message.Substring(0, maxSize - 3) + "...";
                         stringLength = maxSize;
                     }
 
+                    Stack<string> tempStack = new();
                     for (int j = 0; j < stringLength; j += chunkSize)
                     {
                         if (j + chunkSize > stringLength)
                         {
                             chunkSize = stringLength - j;
                         }
-                        messageQueue.Push(message.Substring(j, chunkSize));
+                        tempStack.Push(message.Substring(j, chunkSize));
 
-                        if (messageQueue.Count > _height)
+                        if (messageStack.Count + tempStack.Count > _height)
                         {
-                            messageQueue.Pop();
+                            tempStack.Pop();
                         }
+                    }
+                    foreach(string line in tempStack)
+                    {
+                        messageStack.Push(line);
                     }
                 }
                 else
                 {
-                    messageQueue.Push(message);
+                    messageStack.Push(message);
                 }
-                if (messageQueue.Count > _height)
+
+                if (messageStack.Count > _height)
                 {
-                    messageQueue.Pop();
+                    messageStack.Pop();
                 }
             }
-            DrawMessages(messageQueue);
+            DrawMessages(messageStack);
         }
     }
 }
