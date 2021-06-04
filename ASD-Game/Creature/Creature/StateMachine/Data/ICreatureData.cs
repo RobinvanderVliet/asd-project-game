@@ -10,6 +10,6 @@ namespace Creature.Creature.StateMachine.Data
         Vector2 Position { get; set; }
         int VisionRange { get; set; }
         double Health { get; set; }
-        List<ValueTuple<string, string>> RuleSet { get; }
+        List<KeyValuePair<string, string>> RuleSet { get; }
     }
 }

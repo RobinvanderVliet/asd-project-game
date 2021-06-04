@@ -1,12 +1,9 @@
-﻿using Creature.Creature.StateMachine.Event;
+﻿using Creature.Creature.StateMachine.CustomRuleSet;
+using Creature.Creature.StateMachine.Event;
 using Creature.Creature.StateMachine.State;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Creature.Creature.StateMachine.CustomRuleSet
+namespace Creature.Creature.StateMachine.Builder
 {
     public class BuilderInfo
     {
@@ -44,6 +41,12 @@ namespace Creature.Creature.StateMachine.CustomRuleSet
         {
             get => _targetState;
             set => _targetState = value;
+        }
+
+        public BuilderInfo()
+        {
+            _initialSates = new List<CreatureState>();
+            _ruleSet = new List<RuleSet>();
         }
     }
 }

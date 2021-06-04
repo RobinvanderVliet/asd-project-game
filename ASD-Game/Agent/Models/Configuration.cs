@@ -6,9 +6,9 @@ namespace Agent.Models
 {
     public abstract class Configuration
     {
-        private List<ValueTuple<string, string>> _settings;
+        private List<KeyValuePair<string, string>> _settings;
 
-        public List<ValueTuple<string, string>> Settings
+        public List<KeyValuePair<string, string>> Settings
         {
             get => _settings;
             set => _settings = value;
@@ -16,7 +16,7 @@ namespace Agent.Models
 
         public string GetSetting(string setting)
         {
-            return _settings.Where(x => x.Item1 == setting).FirstOrDefault().Item2;
+            return _settings.Where(x => x.Key == setting).FirstOrDefault().Value;
         }
     }
 }

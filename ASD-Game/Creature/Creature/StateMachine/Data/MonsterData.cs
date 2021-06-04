@@ -13,7 +13,7 @@ namespace Creature.Creature.StateMachine.Data
         private int _damage;
         private int _visionRange;
 
-        private List<ValueTuple<string, string>> _ruleSet;
+        private List<KeyValuePair<string, string>> _ruleSet;
         private bool _following;
 
         public bool IsAlive => _health > 0;
@@ -45,7 +45,7 @@ namespace Creature.Creature.StateMachine.Data
         }
         
 
-        public List<ValueTuple<string, string>> RuleSet
+        public List<KeyValuePair<string, string>> RuleSet
         {
             get => _ruleSet;
         }
@@ -56,7 +56,7 @@ namespace Creature.Creature.StateMachine.Data
             set => _following = value;
         }
 
-        public MonsterData(Vector2 position, double health, int damage, int visionRange, List<ValueTuple<string, string>> ruleSet, bool following)
+        public MonsterData(Vector2 position, double health, int damage, int visionRange, List<KeyValuePair<string, string>> ruleSet, bool following)
         {
             _position = position;
             _health = health;

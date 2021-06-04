@@ -7,10 +7,10 @@ namespace Agent.Mapper
     public class FileToDictionaryMapper
     {
         public FileHandler FileHandler;
-        public List<ValueTuple<string, string>> MapFileToConfiguration(string filepath)
+        public List<KeyValuePair<string, string>> MapFileToConfiguration(string filepath)
         {
             FileHandler = new FileHandler();
-            List<ValueTuple<string, string>> configuration = new List<ValueTuple<string, string>>();
+            List<KeyValuePair<string, string>> configuration = new List<KeyValuePair<string, string>>();
                     
             string content = FileHandler.ImportFile(filepath);
 
@@ -24,7 +24,7 @@ namespace Agent.Mapper
                 }
                 // Trim removes spaces before and after given string. string 'Less than' will keep its format.
                 var seperatedComponents = setting.Split("=");
-                ValueTuple<string, string> splitSetting = new ValueTuple<string, string>(seperatedComponents[0].Trim(), seperatedComponents[1].Trim());
+                KeyValuePair<string, string> splitSetting = new KeyValuePair<string, string>(seperatedComponents[0].Trim(), seperatedComponents[1].Trim());
                 configuration.Add(splitSetting);
             }
 
