@@ -17,7 +17,12 @@ namespace Creature.Creature.StateMachine.State
             _builderConfiguration = builderConfiguration;
             _builderInfoList = builderInfoList;
         }
-
+        
+        public FollowCreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base (creatureData, stateMachine)
+        {
+            _creatureData = creatureData;
+            _stateMachine = stateMachine;
+        }
         public override void Do()
         {
             //TODO implement State functions

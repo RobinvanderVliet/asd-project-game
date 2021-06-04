@@ -23,6 +23,11 @@ namespace Creature.Creature.StateMachine.State
             _builderInfoList = builderInfoList;
         }
 
+        public FleeFromCreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base (creatureData, stateMachine)
+        {
+            _creatureData = creatureData;
+            _stateMachine = stateMachine;
+        }
         public override void Do()
         {
             String direction = "";

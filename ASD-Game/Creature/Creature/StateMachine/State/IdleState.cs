@@ -16,6 +16,12 @@ namespace Creature.Creature.StateMachine.State
             _builderInfoList = builderInfoList;
         }
 
+        public IdleState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base (creatureData, stateMachine)
+        {
+            _creatureData = creatureData;
+            _stateMachine = stateMachine;
+        }
+        
         public void Do()
         {
            

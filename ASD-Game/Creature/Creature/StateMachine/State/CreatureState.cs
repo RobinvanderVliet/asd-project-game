@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using ASD_project.Creature.Creature.StateMachine.Builder;
 using Creature.Creature.StateMachine.Builder;
+using Creature.Creature.StateMachine.Event;
 
 namespace Creature.Creature.StateMachine.State
 {
@@ -21,6 +22,12 @@ namespace Creature.Creature.StateMachine.State
             _stateMachine = stateMachine;
             _builderConfiguration = builderConfiguration;
             _builderInfoList = builderInfoList;
+        }
+
+        public CreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine)
+        {
+            _creatureData = creatureData;
+            _stateMachine = stateMachine;
         }
         public virtual void Do()
         {
