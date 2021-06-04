@@ -70,9 +70,6 @@
 
   <ItemGroup>
     <Content Include="InputHandling\Antlr\Grammar\PlayerCommands.g4" />
-    <ProjectReference Include="..\Chat\Chat.csproj" />
-    <ProjectReference Include="..\InputHandling\InputHandling.csproj" />
-    <ProjectReference Include="..\ActionHandling\ActionHandling.csproj" />
   </ItemGroup>
 
   <ItemGroup>

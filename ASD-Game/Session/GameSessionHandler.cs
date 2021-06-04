@@ -62,7 +62,7 @@ namespace Session
                 var tmpPlayer = new PlayerPOCO
                     {PlayerGuid = client[0], PlayerName = client[1], GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY}; 
                 servicePlayer.CreateAsync(tmpPlayer);
-                AddItemsToPlayer(playerItemRepository, clientId, gamePOCO.GameGuid);
+                AddItemsToPlayer(playerItemRepository, client[1], gamePOCO.GameGuid);
 
                 playerX += 2; // spawn position + 2 each client
                 playerY += 2; // spawn position + 2 each client
