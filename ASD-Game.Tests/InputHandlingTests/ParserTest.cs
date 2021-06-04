@@ -36,11 +36,12 @@ namespace InputHandling.Tests
             return listener.getAST();
         }
 
-        public static AST PickupCommand()
+        public static AST PickupCommand(int number)
         {
             Input pickup = new Input();
 
-            pickup.AddChild(new Pickup());
+            pickup.AddChild(new Pickup()
+                .AddChild(new Step(number)));
 
             return new AST(pickup);
         }
@@ -83,6 +84,16 @@ namespace InputHandling.Tests
             return new AST(say);
         }
 
+        public static AST UseCommand(int index)
+        {
+            Input use = new Input();
+
+            use.AddChild(new Use()
+                .AddChild(new Step(index)));
+
+            return new AST(use);
+        }
+
         public static AST ShoutCommand(string message)
         {
             Input shout = new Input();
@@ -118,6 +129,15 @@ namespace InputHandling.Tests
             resume.AddChild(new Resume());
 
             return new AST(resume);
+        }
+        
+        public static AST SearchCommand()
+        {
+            Input search = new Input();
+
+            search.AddChild(new Search());
+
+            return new AST(search);
         }
 
         [Test]
@@ -189,14 +209,29 @@ namespace InputHandling.Tests
         [Test]
         public void Test_AstListener_CreatesPickupAst()
         {
-            //act
-            AST exp = PickupCommand();
-            //arrange
-            AST sut = SetupParser("pickup");
-            //assert
+            // Act
+            AST exp = PickupCommand(1);
+            
+            // Arrange
+            AST sut = SetupParser("pickup 1");
+            
+            // Assert
             Assert.AreEqual(exp, sut);
         }
-
+        
+        [Test]
+        public void Test_AstListener_CreatesPickupAstWithDoubleDigits()
+        {
+            // Act
+            AST exp = PickupCommand(10);
+            
+            // Arrange
+            AST sut = SetupParser("pickup 10");
+            
+            // Assert
+            Assert.AreEqual(exp, sut);
+        }
+        
         [Test]
         public void Test_AstListener_CreatesSayAstWithMessage()
         {
@@ -204,6 +239,18 @@ namespace InputHandling.Tests
             AST exp = SayCommand("\"hello world!\"");
             //arrange
             AST sut = SetupParser("say \"hello world!\"");
+            //assert
+            Assert.AreEqual(exp, sut);
+        }
+
+        [Test]
+        public void Test_AstListener_CreatesUseAstWithIndex()
+        {
+            //act
+            int index = 3;
+            AST exp = UseCommand(index);
+            //arrange
+            AST sut = SetupParser("use 3");
             //assert
             Assert.AreEqual(exp, sut);
         }
@@ -248,6 +295,17 @@ namespace InputHandling.Tests
             AST exp = ResumeCommand();
             //arrange
             AST sut = SetupParser("resume");
+            //assert
+            Assert.AreEqual(exp, sut);
+        }
+
+        [Test]
+        public void Test_AstListener_CreatesSearchAst()
+        {
+            //act
+            AST exp = SearchCommand();
+            //arrange
+            AST sut = SetupParser("search");
             //assert
             Assert.AreEqual(exp, sut);
         }
@@ -396,7 +454,7 @@ namespace InputHandling.Tests
 
             return new AST(moveForward);
         }
-                
+
         [Test]
         public void Test_AstListener_CreatesRequestSessions()
         {
@@ -466,6 +524,7 @@ namespace InputHandling.Tests
 
             return new AST(joinSession);
         }
+        
         [Test]
         public void Test_AstListener_StartSession()
         {
@@ -486,6 +545,72 @@ namespace InputHandling.Tests
             startSession.AddChild(new StartSession());
 
             return new AST(startSession);
+        }
+        
+        public static AST InspectCommand(string inventorySlot)
+        {
+            Input inspect = new Input();
+
+            inspect.AddChild(new Inspect()
+                .AddChild(new InventorySlot(inventorySlot)));
+            
+            return new AST(inspect);
+        }
+        
+        [Test]
+        public void Test_AstListener_CreatesInspectCommandWithArmor()
+        {
+            // Arrange
+            const string inventorySlot = "armor";
+            AST exp = InspectCommand(inventorySlot);
+            
+            // Act
+            AST sut = SetupParser($"inspect {inventorySlot}");
+
+            // Assert
+            Assert.AreEqual(exp, sut);
+        }
+        
+        [Test]
+        public void Test_AstListener_CreatesInspectCommandWithHelmet()
+        {
+            // Arrange
+            const string inventorySlot = "helmet";
+            AST exp = InspectCommand(inventorySlot);
+            
+            // Act
+            AST sut = SetupParser($"inspect {inventorySlot}");
+
+            // Assert
+            Assert.AreEqual(exp, sut);
+        }
+        
+        [Test]
+        public void Test_AstListener_CreatesInspectCommandWithWeapon()
+        {
+            // Arrange
+            const string inventorySlot = "weapon";
+            AST exp = InspectCommand(inventorySlot);
+            
+            // Act
+            AST sut = SetupParser($"inspect {inventorySlot}");
+
+            // Assert
+            Assert.AreEqual(exp, sut);
+        }
+
+        [Test]
+        public void Test_AstListener_CreatesInspectCommandWithSlot1()
+        {
+            // Arrange
+            const string inventorySlot = "slot 1";
+            AST exp = InspectCommand(inventorySlot);
+
+            // Act
+            AST sut = SetupParser($"inspect {inventorySlot}");
+
+            // Assert
+            Assert.AreEqual(exp, sut);
         }
     }
 }

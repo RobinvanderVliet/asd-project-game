@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Antlr4.Runtime.Misc;
 using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Antlr.Grammar;
@@ -161,51 +162,93 @@ namespace InputHandling.Antlr.Parser
         {
             _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
+        
+        public override void EnterInspect(PlayerCommandsParser.InspectContext context)
+        {
+            _currentContainer.Push(new Inspect());
+        }
+
+        public override void ExitInspect(PlayerCommandsParser.InspectContext context)
+        {
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+        }
+        
+        public override void EnterInventorySlot(PlayerCommandsParser.InventorySlotContext context)
+        {
+            ASTNode node = (ASTNode)_currentContainer.Peek();
+            node.AddChild(new InventorySlot(Convert.ToString(context.GetText())));
+        }
+
+        public override void EnterUse(PlayerCommandsParser.UseContext context)
+        {
+            _currentContainer.Push(new Use());
+        }
+
+        public override void ExitUse(PlayerCommandsParser.UseContext context)
+        {
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
+        }
+        
+        public override void EnterSearch(PlayerCommandsParser.SearchContext context)
+        {
+            _currentContainer.Push(new Search());
+        }
+
+        public override void ExitSearch(PlayerCommandsParser.SearchContext context)
+        {
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
+        }
 
         public override void EnterDirection(PlayerCommandsParser.DirectionContext context)
         {
-            var action = _currentContainer.Peek();
-
-            if (action is Move)
-            {
-                Move move = (Move)action;
-                move.AddChild(new Direction(context.GetText()));
-            }
-            else if (action is Attack)
-            {
-                Attack attack = (Attack)action;
-                attack.AddChild(new Direction(context.GetText()));
-            }
+            ASTNode node = (ASTNode)_currentContainer.Peek();
+            node.AddChild(new Direction(context.GetText()));
         }
 
         public override void EnterStep(PlayerCommandsParser.StepContext context)
         {
-            Move move = (Move)_currentContainer.Peek();
-            move.AddChild(new Step(Convert.ToInt32(context.GetText())));
+            ASTNode node = (ASTNode)_currentContainer.Peek();
+            node.AddChild(new Step(Convert.ToInt32(context.GetText())));
         }
 
         public override void EnterMessage(PlayerCommandsParser.MessageContext context)
         {
-            var action = _currentContainer.Peek();
+            ASTNode node = (ASTNode) _currentContainer.Peek();
+            node.AddChild(new Message(context.GetText()));
+        }
 
-            if (action is Say)
+        public override void EnterUsername(PlayerCommandsParser.UsernameContext context)
+        {
+            var action = _currentContainer.Peek();
+            
+            if (action is JoinSession joinSession)
             {
-                Say say = (Say)action;
-                say.AddChild(new Message(context.GetText()));
-            }
-            else if (action is Shout)
-            {
-                Shout shout = (Shout)action;
-                shout.AddChild(new Message(context.GetText()));
+                joinSession.AddChild(new Username(context.GetText()));
             }
             else if (action is CreateSession createSession)
             {
-                createSession.AddChild(new Message(context.GetText()));
+                createSession.AddChild(new Username(context.GetText()));
             }
-            else if (action is JoinSession joinSession)
-            {
-                joinSession.AddChild(new Message(context.GetText()));
-            }
+        }
+
+        public override void EnterMonsterdifficulty(PlayerCommandsParser.MonsterdifficultyContext context)
+        {
+            _currentContainer.Push(new MonsterDifficulty(context.children[2].GetText()));
+        }
+
+        public override void ExitMonsterdifficulty(PlayerCommandsParser.MonsterdifficultyContext context)
+        {
+            _ast.Root.AddChild((MonsterDifficulty) _currentContainer.Pop());
+        }
+
+        public override void EnterItemfrequency(PlayerCommandsParser.ItemfrequencyContext context)
+        {
+            _currentContainer.Push(new ItemFrequency(context.children[2].GetText()));
+        }
+
+        public override void ExitItemfrequency(PlayerCommandsParser.ItemfrequencyContext context)
+        {
+            _ast.Root.AddChild((ItemFrequency) _currentContainer.Pop());
         }
     }
 }

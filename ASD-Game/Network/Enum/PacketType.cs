@@ -5,6 +5,7 @@
         Chat,
         Move,
         Session,
+        Inventory,        
         GameSession,
         Attack,
         Dead

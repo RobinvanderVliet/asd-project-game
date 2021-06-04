@@ -66,6 +66,7 @@ namespace WorldGeneration.Models
                 return true;
 
             return X == other.X && Y == other.Y && RowSize == other.RowSize;
+
         }
 
         public override bool Equals(object obj)

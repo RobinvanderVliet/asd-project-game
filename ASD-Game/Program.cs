@@ -15,7 +15,9 @@ using InputHandling.Antlr;
 using InputHandling.Antlr.Transformer;
 using Network;
 using Session;
+using Session.GameConfiguration;
 using UserInterface;
+using Messages;
 
 namespace ASD_project
 {
@@ -42,11 +44,13 @@ namespace ASD_project
                     services.AddTransient<IMainGame, MainGame>();
                     services.AddScoped<INetworkComponent, NetworkComponent>();
                     services.AddScoped<IClientController, ClientController>();
+                    services.AddScoped<IInventoryHandler, InventoryHandler>();
                     services.AddScoped<IChatHandler, ChatHandler>();
                     services.AddScoped<ISessionHandler, SessionHandler>();
                     services.AddScoped<IMoveHandler, MoveHandler>();
                     services.AddScoped<IAttackHandler, AttackHandler>();
                     services.AddScoped<IWorldService, WorldService>();
+                    services.AddScoped<IMessageService, MessageService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
                     services.AddScoped<IDeadHandler, DeadHandler>();
                     services.AddSingleton<IDBConnection, DBConnection>();
@@ -56,6 +60,7 @@ namespace ASD_project
                     services.AddScoped<IInputHandler, InputHandler>();
                     services.AddScoped<IPipeline, Pipeline>();
                     services.AddScoped<IEvaluator, Evaluator>();
+                    services.AddScoped<IGameConfigurationHandler, GameConfigurationHandler>();
                 })
                 .UseSerilog()
                 .Build();
