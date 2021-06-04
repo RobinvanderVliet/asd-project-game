@@ -4,9 +4,8 @@ using Newtonsoft.Json;
 using System.Linq;
 using System.Timers;
 using ActionHandling.DTO;
-using DatabaseHandler;
 using DatabaseHandler.POCO;
-using DatabaseHandler.Repository;
+using DatabaseHandler.Services;
 using Network.DTO;
 using WorldGeneration;
 using WorldGeneration.Models.HazardousTiles;
@@ -24,15 +23,16 @@ namespace ActionHandling
         private Timer _staminaTimer;
         private Timer _radiationTimer;
 
-        private IClientController _clientController;
-        private IWorldService _worldService;
+        private readonly IClientController _clientController;
+        private readonly IWorldService _worldService;
+        private readonly IServicesDb<PlayerPOCO> _playerService;
 
-        public RelativeStatHandler(IClientController clientController, IWorldService worldService)
+        public RelativeStatHandler(IClientController clientController, IWorldService worldService, IServicesDb<PlayerPOCO> playerService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.RelativeStat);
             _worldService = worldService;
-            _player = _worldService.GetCurrentPlayer();
+            _playerService = playerService;
         }
         
         public void CheckStaminaTimer()
@@ -45,10 +45,10 @@ namespace ActionHandling
         
         public void CheckRadiationTimer()
         {
-            // _radiationTimer = new Timer(RADIATION_TIMER);
-            // _radiationTimer.AutoReset = true;
-            // _radiationTimer.Elapsed += RadiationEvent;
-            // _radiationTimer.Start();
+            _radiationTimer = new Timer(RADIATION_TIMER);
+            _radiationTimer.AutoReset = true;
+            _radiationTimer.Elapsed += RadiationEvent;
+            _radiationTimer.Start();
         }
         
         private void StaminaEvent(object sender, ElapsedEventArgs e)
@@ -58,7 +58,6 @@ namespace ActionHandling
                 var statDto = new RelativeStatDTO();
                 statDto.Stamina = 100;
                 SendStat(statDto);
-                Console.WriteLine("Gained Stamina! S: " + _player.Stamina);
             }
         }
         
@@ -82,8 +81,6 @@ namespace ActionHandling
                 }
             
                 SendStat(statDto);
-            
-                Console.WriteLine("Radiation damage! H: " + _player.Health + " | R: " + _player.RadiationLevel);
             }
         }
 
@@ -108,18 +105,21 @@ namespace ActionHandling
             if(player.Stamina < Player.STAMINA_MAX && relativeStatDTO.Stamina != 0)
             {
                 player.AddStamina(relativeStatDTO.Stamina);
+                Console.WriteLine("Gained Stamina! S: " + _player.Stamina);
                 InsertToDatabase(relativeStatDTO, handleInDatabase, player);
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
             if(player.RadiationLevel > 0 && relativeStatDTO.RadiationLevel != 0)
             {
                 player.AddRadiationLevel(relativeStatDTO.RadiationLevel);
+                Console.WriteLine("Radiation damage! H: " + _player.Health + " | R: " + _player.RadiationLevel);
                 InsertToDatabase(relativeStatDTO, handleInDatabase, player);
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
             if(player.Health > 0 && relativeStatDTO.Health != 0)
             {
                 player.AddHealth(relativeStatDTO.Health);
+                Console.WriteLine("Radiation damage! H: " + _player.Health + " | R: " + _player.RadiationLevel);
                 InsertToDatabase(relativeStatDTO, handleInDatabase, player);
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
@@ -131,10 +131,7 @@ namespace ActionHandling
         {
             if (handleInDatabase)
             {
-                var dbConnection = new DbConnection();
-                var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-
-                PlayerPOCO playerPOCO = playerRepository.GetAllAsync().Result.FirstOrDefault(poco => poco.PlayerGuid == player.Id);
+                PlayerPOCO playerPOCO = _playerService.GetAllAsync().Result.FirstOrDefault(poco => poco.PlayerGuid == player.Id && poco.GameGuid == _clientController.SessionId);
                 if (relativeStatDTO.Stamina != 0)
                 {
                     playerPOCO.Stamina = player.Stamina;
@@ -147,8 +144,13 @@ namespace ActionHandling
                 {
                     playerPOCO.Health = player.Health;
                 }
-                playerRepository.UpdateAsync(playerPOCO);
+                _playerService.UpdateAsync(playerPOCO);
             }
+        }
+
+        public void SetCurrentPlayer(Player player)
+        {
+            _player = _worldService.GetCurrentPlayer();
         }
     }
 }

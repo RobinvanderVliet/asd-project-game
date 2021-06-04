@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using ActionHandling;
-using DatabaseHandler;
 using DatabaseHandler.POCO;
-using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using Items;
 using Network;
@@ -16,17 +14,24 @@ namespace Session
 {
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
     {
-        private IClientController _clientController;
-        private ISessionHandler _sessionHandler;
-        private IWorldService _worldService;
-        private IRelativeStatHandler _relativeStatHandler;
+        private readonly IClientController _clientController;
+        private readonly ISessionHandler _sessionHandler;
+        private readonly IWorldService _worldService;
+        private readonly IRelativeStatHandler _relativeStatHandler;
+        private readonly IServicesDb<PlayerPOCO> _playerService;
+        private readonly IServicesDb<GamePOCO> _gameService;
+        private readonly IServicesDb<PlayerItemPOCO> _playerItemService;
 
-        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler)
+        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IServicesDb<PlayerPOCO> playerService, IServicesDb<GamePOCO> gameService, IServicesDb<PlayerItemPOCO> playerItemService, IRelativeStatHandler relativeStatHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
             _worldService = worldService;
             _sessionHandler = sessionHandler;
+            _playerService = playerService;
+            _gameService = gameService;
+            _playerItemService = playerItemService;
+            _relativeStatHandler = relativeStatHandler;
         }
 
         public void SendGameSession()
@@ -37,16 +42,8 @@ namespace Session
 
         public StartGameDTO SetupGameHost()
         {
-            var dbConnection = new DbConnection();
-
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
-            var gameRepository = new Repository<GamePOCO>(dbConnection);
-            var gameService = new ServicesDb<GamePOCO>(gameRepository);
-            var playerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
-
             var gamePOCO = new GamePOCO {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
-            gameService.CreateAsync(gamePOCO);
+            _gameService.CreateAsync(gamePOCO);
 
             List<string> allClients = _sessionHandler.GetAllClients();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
@@ -62,8 +59,8 @@ namespace Session
                 players.Add(clientId, playerPosition);
                 var tmpPlayer = new PlayerPOCO
                     {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, GameGUIDAndPlayerGuid = gamePOCO.GameGuid + clientId, XPosition = playerX, YPosition = playerY};
-                servicePlayer.CreateAsync(tmpPlayer);
-                AddItemsToPlayer(playerItemRepository, clientId, gamePOCO.GameGuid);
+                _playerService.CreateAsync(tmpPlayer);
+                AddItemsToPlayer(clientId, gamePOCO.GameGuid);
 
                 playerX += 2; // spawn position + 2 each client
                 playerY += 2; // spawn position + 2 each client
@@ -76,13 +73,13 @@ namespace Session
             return startGameDTO;
         }
 
-        private void AddItemsToPlayer(Repository<PlayerItemPOCO> repo, string playerId, string gameId)
+        private void AddItemsToPlayer(string playerId, string gameId)
         {
             PlayerItemPOCO poco = new() {PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGUID = gameId };
-            _ = repo.CreateAsync(poco);
+            _playerItemService.CreateAsync(poco);
 
             poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetKnife().ItemName, GameGUID = gameId };
-            _ = repo.CreateAsync(poco);
+            _playerItemService.CreateAsync(poco);
         }
         
         private void SendGameSessionDTO(StartGameDTO startGameDTO)
@@ -118,8 +115,7 @@ namespace Session
             }
 
             _worldService.DisplayWorld();
-
-            _relativeStatHandler = new RelativeStatHandler(_clientController, _worldService);
+            _relativeStatHandler.SetCurrentPlayer(_worldService.GetCurrentPlayer());
             _relativeStatHandler.CheckStaminaTimer();
             _relativeStatHandler.CheckRadiationTimer();
         }

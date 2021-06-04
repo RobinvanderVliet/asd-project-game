@@ -1,5 +1,5 @@
-
 using ActionHandling.DTO;
+using WorldGeneration;
 
 namespace ActionHandling
 {
@@ -8,5 +8,6 @@ namespace ActionHandling
         public void CheckStaminaTimer();
         public void CheckRadiationTimer();
         public void SendStat(RelativeStatDTO stat);
+        public void SetCurrentPlayer(Player player);
     }
 }

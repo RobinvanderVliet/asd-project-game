@@ -104,8 +104,6 @@ namespace WorldGeneration
                 }
                 Console.WriteLine("");
             }
-
-            Console.WriteLine(GetLoadedTileByXAndY(currentPlayer.XPosition, currentPlayer.YPosition).Symbol);
         }
         
         private string GetDisplaySymbol(ITile tile, List<Character> characters)

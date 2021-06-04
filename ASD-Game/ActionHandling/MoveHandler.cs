@@ -3,16 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ActionHandling.DTO;
-using DatabaseHandler;
 using DatabaseHandler.POCO;
-using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using Network.DTO;
 using Newtonsoft.Json;
 using WorldGeneration;
-using WorldGeneration.Models.BuildingTiles;
 using WorldGeneration.Models.Interfaces;
-
 
 namespace ActionHandling
 {
@@ -20,12 +16,14 @@ namespace ActionHandling
     {
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
+        private readonly IServicesDb<PlayerPOCO> _playerService;
 
-        public MoveHandler(IClientController clientController, IWorldService worldService)
+        public MoveHandler(IClientController clientController, IWorldService worldService, IServicesDb<PlayerPOCO> playerService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Move);
             _worldService = worldService;
+            _playerService = playerService;
         }
 
         public void SendMove(string directionValue, int stepsValue)
@@ -83,39 +81,11 @@ namespace ActionHandling
                 var playerStamina = player.Stamina;
                 
                 _worldService.LoadArea(newPosPlayerX, newPosPlayerY, 10);
-                Console.WriteLine("moveDTO: " + moveDTO.XPosition + " " + moveDTO.YPosition);
                 var allTiles = GetTilesForPositions(oldPosPlayerX, oldPosPlayerY, newPosPlayerX, newPosPlayerY);
-
-                Console.WriteLine(oldPosPlayerX + " " + oldPosPlayerY);
-                foreach (var tile in allTiles)
-                {
-                    Console.WriteLine(tile + ": " + tile.XPosition + " " + tile.YPosition);
-                }
-                // List<ITile> allTilesMinusYours = allTiles;
-                // allTilesMinusYours.RemoveAt(1);
                 var accessibleTiles = inAccessibleTileExists(allTiles);
-                var moveableTiles = GetMoveAbleTiles(allTiles, accessibleTiles);
+                var movableTiles = GetMovableTiles(allTiles, accessibleTiles);
+                var staminaCost = GetStaminaCostForTiles(movableTiles);
                 
-                Console.WriteLine(accessibleTiles.Count);
-                Console.WriteLine(moveableTiles.Count);
-                for (int i = 0; i < moveableTiles.Count; i++)
-                {
-                    Console.WriteLine(moveableTiles[i] + ": " + moveableTiles[i].XPosition + " " + moveableTiles[i].YPosition + " Accessible: "+accessibleTiles[i]);
-                }
-
-                var staminaCost = GetStaminaCostForTiles(moveableTiles);
-                
-                //check if possible
-                // if ()
-                // {
-                    // if (packet.Header.OriginID == null)
-                    // {
-                        // Console.WriteLine("Can't move to new position something is in the way");
-                    // }
-
-                    // return new HandlerResponseDTO(SendAction.ReturnToSender, "Can't move to new position something is in the way");
-                // }
-                //else
                 if (staminaCost > playerStamina)
                 {
                     if (packet.Header.OriginID == null)
@@ -124,45 +94,33 @@ namespace ActionHandling
                     }
 
                     return new HandlerResponseDTO(SendAction.ReturnToSender, "You do not have enough stamina to move!");
-                } 
-                // else if (CheckIfPlayerOnTiles(oldPosPlayerX, oldPosPlayerY, newPosPlayerX, newPosPlayerY))
-                // {
-                //     if (packet.Header.OriginID == null)
-                //     {
-                //         Console.WriteLine("A player is on the tile");
-                //     }
-                //     
-                //     var allTiles = GetTilesBetweenPositions(oldPosPlayerX, oldPosPlayerY, newPosPlayerX, newPosPlayerY);
-                //     var moveableTiles = GetMoveAbleTiles(allTiles,inAccessibleTileExists(allTiles));
-                //
-                //     var staminaCost = GetStaminaCostForTiles(moveableTiles);
-                //
-                //     return new HandlerResponseDTO(SendAction.ReturnToSender, "A player is on the tile");
-                // }
+                }
                 else
                 {
+                    string resultMessage = null;
                     moveDTO.Stamina = playerStamina - staminaCost;
-                    if (moveableTiles.Count < allTiles.Count-1)
+                    //allTiles.Count-1 because the maximum count movableTiles can have is always 1 less, since it doesn't contain the first tile
+                    if (movableTiles.Count < allTiles.Count-1)
                     {
-                        Console.WriteLine("Ik kom erin");
-                        if (moveableTiles.Count != 0)
+                        if (movableTiles.Count != 0)
                         {
-                            moveDTO.XPosition = moveableTiles.Last().XPosition;
-                            moveDTO.YPosition = moveableTiles.Last().YPosition;
+                            moveDTO.XPosition = movableTiles.Last().XPosition;
+                            moveDTO.YPosition = movableTiles.Last().YPosition;
                         }
                         else
                         {
                             moveDTO.XPosition = player.XPosition;
                             moveDTO.YPosition = player.YPosition;
                         }
+                        resultMessage = "You could not move to the next tile.";
+                        Console.WriteLine(resultMessage);
                     }
                     
-                    Console.WriteLine("stamina: " +moveDTO.Stamina);
-                    InsertToDatabase(moveDTO);
                     HandleMove(moveDTO);
+                    InsertToDatabase(moveDTO);
                     packet.Payload = JsonConvert.SerializeObject(moveDTO);
                     
-                    return new HandlerResponseDTO(SendAction.SendToClients, null);
+                    return new HandlerResponseDTO(SendAction.SendToClients, resultMessage);
                 }
             }
             else
@@ -171,98 +129,16 @@ namespace ActionHandling
             }
             
             return new(SendAction.Ignore, null);
-            
-            // var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
-
-            //check for backup host like comments below
-            //(_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost)
-            // if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
-            // {
-            //     var dbConnection = new DbConnection();
-            //
-            //     var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            //     var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
-            //     
-            //     var allLocations = servicePlayer.GetAllAsync();
-            //
-            //     allLocations.Wait();
-            //
-            //     var newPosPlayerX = moveDTO.XPosition;
-            //     var newPosPlayerY = moveDTO.YPosition;
-            //     
-            //     var oldPosPlayerX =
-            //         allLocations.Result.Where(x =>
-            //             x.PlayerGuid == moveDTO.UserId
-            //         ).Select(x => x.XPosition).FirstOrDefault();
-            //     var oldPosPlayerY =
-            //         allLocations.Result.Where(x =>
-            //             x.PlayerGuid == moveDTO.UserId
-            //         ).Select(x => x.YPosition).FirstOrDefault();
-            //
-            //     _worldService.LoadArea(newPosPlayerX, newPosPlayerY, 10);
-            //
-            //     var stamina = GetStaminaCostForTiles(
-            //         GetTilesBetweenPositions(oldPosPlayerX, oldPosPlayerY, newPosPlayerX, newPosPlayerY));
-            //
-            //     var result =
-            //         allLocations.Result.Where(x =>
-            //             x.XPosition == newPosPlayerX && x.YPosition == newPosPlayerY &&
-            //             x.GameGuid == _clientController.SessionId);
-            //
-            //     var resultStamina =
-            //         allLocations.Result.Where(x =>
-            //             x.PlayerGuid == moveDTO.UserId
-            //         ).Select(x => x.Stamina).FirstOrDefault();
-            //
-            //     if (result.Any())
-            //     {
-            //         if (packet.Header.OriginID == null)
-            //         {
-            //             Console.WriteLine("Can't move to new position something is in the way");
-            //         }
-            //
-            //         return new HandlerResponseDTO(SendAction.ReturnToSender, "Can't move to new position something is in the way");
-            //     }
-            //     else if (resultStamina < stamina)
-            //     {
-            //         if (packet.Header.OriginID == null)
-            //         {
-            //             Console.WriteLine("You do not have enough stamina to move!");
-            //         }
-            //
-            //         return new HandlerResponseDTO(SendAction.ReturnToSender, "You do not have enough stamina to move!");
-            //     }
-            //     else
-            //     {
-            //         moveDTO.Stamina = resultStamina - stamina;
-            //         InsertToDatabase(moveDTO);
-            //         HandleMove(moveDTO);
-            //         packet.Payload = JsonConvert.SerializeObject(moveDTO);
-            //     }
-            // }
-            // else if (packet.Header.Target.Equals(_clientController.GetOriginId()))
-            // {
-            //     Console.WriteLine(packet.HandlerResponse.ResultMessage);
-            // }
-            // else
-            // {
-            //     HandleMove(moveDTO);
-            // }
-            //
-            // return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
         private void InsertToDatabase(MoveDTO moveDTO)
         {
-            var dbConnection = new DbConnection();
-
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var player = playerRepository.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId);
+            var player = _playerService.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId && player.GameGuid == _clientController.SessionId);
 
             player.XPosition = moveDTO.XPosition;
             player.YPosition = moveDTO.YPosition;
             player.Stamina = moveDTO.Stamina;
-            playerRepository.UpdateAsync(player);
+            _playerService.UpdateAsync(player);
         }
 
         private void HandleMove(MoveDTO moveDTO)
@@ -272,7 +148,6 @@ namespace ActionHandling
             player.Stamina = moveDTO.Stamina;
             player.XPosition = moveDTO.XPosition;
             player.YPosition = moveDTO.YPosition;
-            Console.WriteLine("NewPlayer: " + player.Stamina + " "+ player.XPosition + " "+ player.YPosition);
             _worldService.DisplayWorld();
         }
 
@@ -313,47 +188,9 @@ namespace ActionHandling
                         tiles.Add(_worldService.GetTile(i, y1));
                     }
                 }
-                
-                // for (var i = Math.Min(x1, x2); i < Math.Max(x1, x2); i++)
-                // {
-                //     tiles.Add(_worldService.GetTile(i, y1+1));
-                // }
             }
             return tiles;
         }
-        
-        // private bool CheckIfPlayerOnTiles(int x1, int y1, int x2, int y2) {
-        //     var boolean = false;
-        //
-        //     if (x1 == x2)
-        //     {
-        //         for (var i = Math.Min(y1, y2); i <= Math.Max(y1, y2); i++)
-        //         {
-        //             if (i != y1)
-        //             {
-        //                 if (_worldService.CheckIfPlayerOnTile(x1, i))
-        //                 {
-        //                     boolean = true;
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     else
-        //     {
-        //         for (var i = Math.Min(x1, x2); i <= Math.Max(x1, x2); i++)
-        //         {
-        //             if (i != x1)
-        //             {
-        //                 if (_worldService.CheckIfPlayerOnTile(i, y1))
-        //                 {
-        //                     boolean = true;
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     
-        //     return boolean;
-        // }
 
         private int GetStaminaCostForTiles(List<ITile> tiles)
         {
@@ -370,37 +207,30 @@ namespace ActionHandling
         private List<bool> inAccessibleTileExists(List<ITile> tiles)
         {
             var accessibleTiles = new List<bool>();
+            //i=1 because we want to skip the first tile, since the player is standing on that tile and it doesn't matter if that tile is accessible.
             for (int i = 1; i < tiles.Count; i++)
             {
-                if (tiles[i].IsAccessible)
-                {
-                    accessibleTiles.Add(true);
-                }
-                else
-                {
-                    accessibleTiles.Add(false);
-                }
+                accessibleTiles.Add(tiles[i].IsAccessible);
             }
             return accessibleTiles;
         }
 
-        private List<ITile> GetMoveAbleTiles(List<ITile> tiles, List<bool> accessible)
+        private List<ITile> GetMovableTiles(List<ITile> tiles, List<bool> accessible)
         {
-            var moveableTiles = new List<ITile>();
+            var movableTiles = new List<ITile>();
             for (int i = 0; i < accessible.Count; i++)
             {
-                Console.Write("Player: ");
-                Console.WriteLine(_worldService.CheckIfPlayerOnTile(tiles[i+1]));
+                //tiles[i+1] since we don't want to check the first tile, since the player is standing on that tile and the accessible list has 1 tile less than list tiles
                 if (accessible[i] && !_worldService.CheckIfPlayerOnTile(tiles[i+1]))
                 {
-                    moveableTiles.Add(tiles[i+1]);
+                    movableTiles.Add(tiles[i+1]);
                 }
                 else
                 {
-                    return moveableTiles;
+                    break;
                 }
             }
-            return moveableTiles;
+            return movableTiles;
         }
     }
 }
