@@ -7,7 +7,7 @@ namespace InputCommandHandler.Models
     [ExcludeFromCodeCoverage]
     public class Questions
     {
-        public readonly string WELCOME = "Welcome to the ingame agent configurator!";
+        public readonly string WELCOME = "Welcome to the in-game agent configurator!";
         private const string EXPLORE = "Please select your explore level: 'random', 'target player' or 'target objective' type 'help explore' for more information";
         private const string COMBAT = "Please select your combat level: 'offensive' or 'defensive' or 'target objective' type 'help combat' for more information";
         private const string EXTEND_EXPLORE = "Would you like to configure custom rules for exploring?: 'yes', 'no'";
