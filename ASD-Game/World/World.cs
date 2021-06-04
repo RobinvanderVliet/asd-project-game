@@ -4,6 +4,7 @@ using System.Numerics;
 using WorldGeneration.Models.Interfaces;
 using System.Linq;
 using UserInterface;
+using System.Timers;
 
 namespace WorldGeneration
 {
@@ -17,6 +18,7 @@ namespace WorldGeneration
 
         private readonly int _viewDistance;
         private IScreenHandler _screenHandler;
+        private Timer AIUpdateTimer;
 
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler)
         {
@@ -25,6 +27,8 @@ namespace WorldGeneration
             _map = mapFactory.GenerateMap(seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
+            AIUpdateTimer = new Timer(2000);
+            CheckAITimer();
             DeleteMap();
         }
 
@@ -42,7 +46,6 @@ namespace WorldGeneration
                 creature.XPosition = newXPosition;
                 creature.YPosition = newYPosition;
             }
-            UpdateAI();
             UpdateMap();
         }
 
@@ -93,6 +96,21 @@ namespace WorldGeneration
                     UpdateSmartMonster(smartMonster);
                 }
             }
+            UpdateMap();
+        }
+
+        private void CheckAITimer()
+        {
+            AIUpdateTimer.AutoReset = true;
+            AIUpdateTimer.Elapsed += CheckAITimerEvent;
+            AIUpdateTimer.Start();
+        }
+
+        private void CheckAITimerEvent(object sender, ElapsedEventArgs e)
+        {
+            AIUpdateTimer.Stop();
+            UpdateAI();
+            AIUpdateTimer.Start();
         }
 
         private void UpdateSmartMonster(SmartMonster smartMonster)
