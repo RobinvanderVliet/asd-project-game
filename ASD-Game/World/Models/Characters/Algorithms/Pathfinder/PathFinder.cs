@@ -25,9 +25,21 @@ namespace Creature
             {
                 for (int col = 0; col < _gridCols; col++)
                 {
+                    _grid[row][col].Position = new Vector2(row, col);
                     _grid[row][col].DistanceToTarget = -1;
                     _grid[row][col].Cost = 1;
                     _grid[row][col].Parent = null;
+                }
+            }
+
+            for (int row = 0; row < _grid.Count; row++)
+            {
+                for (int col = 0; col < _grid[row].Count; col++)
+                {
+                    if (_grid[row][col].Position.X != row || _grid[row][col].Position.Y != col)
+                    {
+                        Console.WriteLine("Konijnen op coordinaat (" + row.ToString() + "," + col.ToString() + ")");
+                    }
                 }
             }
         }
@@ -89,7 +101,8 @@ namespace Creature
 
             if (!AreNodesAtSamePosition(currentNode, endNode))
             {
-                throw new PathHasNoDestinationException();
+                //TODO need to call a destruction action on the stuck monster
+                return null;
             }
             else if (AreNodesAtSamePosition(currentNode, startNode))
             {

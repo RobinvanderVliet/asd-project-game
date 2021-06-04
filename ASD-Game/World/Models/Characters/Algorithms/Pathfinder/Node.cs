@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using WorldGeneration;
 
 namespace Creature.Pathfinder
 {
@@ -7,6 +8,7 @@ namespace Creature.Pathfinder
     {
         private Node _parent;
         private Vector2 _position;
+
         private float _distanceToTarget;
         private float _cost;
         private float _weight;
@@ -17,26 +19,31 @@ namespace Creature.Pathfinder
             get => _parent;
             set => _parent = value;
         }
+
         public Vector2 Position
         {
             get => _position;
             set => _position = value;
         }
+
         public float DistanceToTarget
         {
             get => _distanceToTarget;
             set => _distanceToTarget = value;
         }
+
         public float Cost
         {
             get => _cost;
             set => _cost = value;
         }
+
         public float Weight
         {
             get => _weight;
             set => _weight = value;
         }
+
         public float FScore
         {
             get
@@ -46,6 +53,7 @@ namespace Creature.Pathfinder
                 return -1;
             }
         }
+
         public bool IsWalkable
         {
             get => _isWalkable;
@@ -67,6 +75,5 @@ namespace Creature.Pathfinder
             double otherFScore = rhs.FScore;
             return FScore < otherFScore ? -1 : FScore > otherFScore ? 1 : 0;
         }
-
     }
 }

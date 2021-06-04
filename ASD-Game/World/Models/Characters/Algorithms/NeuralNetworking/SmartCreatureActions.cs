@@ -34,9 +34,8 @@ namespace Creature.Creature.NeuralNetworking
                 Vector2 destination = new Vector2(newXLoc, newYLoc);
                 ViewPointCalculator(smartMonster.creatureData.Position);
                 path = _pathfinder.FindPath(startPos, destination);
-                TransformPath();
             }
-            smartMonster.NextAction = path.Pop().Position;
+            smartMonster.NextAction = TransformPath(path.Pop().Position);
         }
 
         public void WalkUp(SmartMonster smartMonster)
@@ -46,8 +45,7 @@ namespace Creature.Creature.NeuralNetworking
             if (IsValidMove(destination))
             {
                 path = _pathfinder.FindPath(startPos, destination);
-                TransformPath();
-                smartMonster.NextAction = path.Pop().Position;
+                smartMonster.NextAction = TransformPath(path.Pop().Position);
             }
         }
 
@@ -58,8 +56,7 @@ namespace Creature.Creature.NeuralNetworking
             if (IsValidMove(destination))
             {
                 path = _pathfinder.FindPath(startPos, destination);
-                TransformPath();
-                smartMonster.NextAction = path.Pop().Position;
+                smartMonster.NextAction = TransformPath(path.Pop().Position);
             }
         }
 
@@ -70,8 +67,7 @@ namespace Creature.Creature.NeuralNetworking
             if (IsValidMove(destination))
             {
                 path = _pathfinder.FindPath(startPos, destination);
-                TransformPath();
-                smartMonster.NextAction = path.Pop().Position;
+                smartMonster.NextAction = TransformPath(path.Pop().Position);
             }
         }
 
@@ -82,8 +78,7 @@ namespace Creature.Creature.NeuralNetworking
             if (IsValidMove(destination))
             {
                 path = _pathfinder.FindPath(startPos, destination);
-                TransformPath();
-                smartMonster.NextAction = path.Pop().Position;
+                smartMonster.NextAction = TransformPath(path.Pop().Position);
             }
         }
 
@@ -115,8 +110,7 @@ namespace Creature.Creature.NeuralNetworking
                 ViewPointCalculator(smartMonster.creatureData.Position);
                 Vector2 MPos = new Vector2(monster.XPosition - _pathingOffset.X, monster.YPosition - _pathingOffset.Y);
                 path = _pathfinder.FindPath(startPos, MPos);
-                TransformPath();
-                smartMonster.NextAction = path.Pop().Position;
+                smartMonster.NextAction = TransformPath(path.Pop().Position);
             }
         }
 
@@ -141,13 +135,9 @@ namespace Creature.Creature.NeuralNetworking
             return true;
         }
 
-        private void TransformPath()
+        private Vector2 TransformPath(Vector2 nextpos)
         {
-            foreach (Node node in path)
-            {
-                Vector2 transPos = node.Position + _pathingOffset;
-                node.Position = transPos;
-            }
+            return nextpos + _pathingOffset;
         }
 
         private void ViewPointCalculator(Vector2 pos)

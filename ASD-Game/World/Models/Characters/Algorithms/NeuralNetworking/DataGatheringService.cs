@@ -105,7 +105,8 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         private Node TranslateCharToNode(Vector2 pos, char c)
         {
-            return new Node(pos, IsWalkable(c));
+            Node node = new Node(pos, IsWalkable(c));
+            return node;
         }
 
         private bool IsWalkable(char c)
