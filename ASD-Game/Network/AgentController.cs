@@ -1,4 +1,5 @@
 ﻿using System;
+using Creature.Creature;
 using Network;
 using Network.DTO;
 
@@ -9,16 +10,24 @@ namespace WorldGeneration
         private IClientController _clientController;
         private IWorldService _worldService;
 
-        public AgentController(INetworkComponent networkComponent, IWorldService worldService)
+        public AgentController(IClientController clientController, IWorldService worldService)
         {
             _worldService = worldService;
-            _clientController = new ClientController(networkComponent)
-                {AbsoluteOriginId = Guid.NewGuid().ToString(), IsBackupHost = false};
+            _clientController = clientController;
+            _clientController.AbsoluteOriginId = Guid.NewGuid().ToString();
+            _clientController.IsBackupHost = false;
+        }
+
+        public ICreature CreateAgent(string sessionId)
+        {
+            _clientController.SetSessionId(sessionId);
+            return new Creature.Creature.Player(null);
         }
 
         public void HandlePacket(PacketDTO packet)
         {
-        
+            
+            Console.WriteLine(packet.Payload);
             //return new(SendAction.Ignore, "result...");
         }
 

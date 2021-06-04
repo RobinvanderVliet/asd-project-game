@@ -113,15 +113,13 @@ namespace Session
             // Maak 3 playerobjecten die dan een agent zijn
             if (startGameDTO.PlayerLocations.Count < 8)
             {
+                
                 Console.WriteLine("Not enough players. Replacing " + (8 - startGameDTO.PlayerLocations.Count) +
                                   "/8 players with agents.");
 
                 for (var i = 0; i < (8 - startGameDTO.PlayerLocations.Count); i++)
                 {
-                    var agentController = new AgentController(_networkComponent, _worldService);
-                    agentController.setSessionId(_clientController.SessionId);
-                    // Add to host
-                    _clientController.AddAgentController(agentController);
+                    
                 }
             }
             _worldService.DisplayWorld();
