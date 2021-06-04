@@ -103,7 +103,7 @@ namespace Session.Tests.GameConfiguration
             Mock<ConfigurationScreen> _screen = new Mock<ConfigurationScreen>();
             _mockScreenHandler.Object.Screen = _screen.Object;
             _screen.Setup(x => x.UpdateInputMessage(""));
-            GameConfigurationHandler _gameConfiguration = new GameConfigurationHandler(_mockScreenHandler.Object);
+            GameConfigurationHandler _gameConfiguration = new GameConfigurationHandler(_mockScreenHandler.Object, _mockedGameConfigServicesDb.Object);
 
             //Act
             _gameConfiguration.UpdateMonsterDifficulty(input);
