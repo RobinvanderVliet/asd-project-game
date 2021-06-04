@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Session;
 using Session.GameConfiguration;
 using UserInterface;
+using Messages;
 
 namespace InputHandling.Tests
 {
@@ -19,6 +20,7 @@ namespace InputHandling.Tests
         private Mock<StartScreen> _mockedStartScreen;
         private Mock<SessionScreen> _mockedSessionScreen;
         private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
+        private Mock<IMessageService> _mockedMessageService;
         
         [SetUp]
         public void SetUp()
@@ -31,7 +33,9 @@ namespace InputHandling.Tests
             _mockedSessionScreen = new Mock<SessionScreen>();
             _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
             _mockedScreenHandler.Object.ConsoleHelper = new Mock<ConsoleHelper>().Object;
-            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedScreenHandler.Object, _mockedGameConfigurationHandler.Object);
+            _mockedMessageService = new Mock<IMessageService>();
+
+            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedScreenHandler.Object, _mockedMessageService.Object, _mockedGameConfigurationHandler.Object);
         }
 
         [Test]

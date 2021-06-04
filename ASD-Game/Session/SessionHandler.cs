@@ -34,7 +34,6 @@ namespace Session
         private int _hostInactiveCounter = 0;
         private Timer _hostPingTimer;
         private Timer _senderHeartbeatTimer;
-        private IScreenHandler _screenHandler;
         private IGameConfigurationHandler _gameConfigurationHandler;
         public SessionHandler(IClientController clientController, IScreenHandler screenHandler, IGameConfigurationHandler gameConfigurationHandler, IMessageService messageService)
         {

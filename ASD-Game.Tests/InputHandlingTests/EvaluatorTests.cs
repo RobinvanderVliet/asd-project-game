@@ -36,8 +36,7 @@ namespace InputHandling.Tests
             _mockedChatHandler = new Mock<IChatHandler>();
             _mockedClientController = new Mock<IClientController>();
             _mockedInventoryHandler = new Mock<IInventoryHandler>();
-            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedInventoryHandler.Object);
-            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedClientController.Object);
+            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedInventoryHandler.Object, _mockedClientController.Object);
         }
     
         [Test]
@@ -188,20 +187,21 @@ namespace InputHandling.Tests
         {
             // Arrange
             const string sessionId = "1234-1234";
-            var ast = JoinSessionAst(sessionId);
+            var ast = JoinSessionAst(sessionId, "");
         
             // Act
             _sut.Apply(ast);
         
             // Assert
-            _mockedSessionHandler.Verify(mockedSession => mockedSession.JoinSession(sessionId), Times.Once);
+            _mockedSessionHandler.Verify(mockedSession => mockedSession.JoinSession(sessionId, ""), Times.Once);
         }
     
-        private static AST JoinSessionAst(string sessionId)
+        private static AST JoinSessionAst(string sessionId, string username)
         {
             Input joinSession = new Input();
             joinSession.AddChild(new JoinSession()
-                .AddChild(new Message(sessionId)));
+                .AddChild(new Message(sessionId))
+                .AddChild(new Username(username)));
             return new AST(joinSession);
         }
         

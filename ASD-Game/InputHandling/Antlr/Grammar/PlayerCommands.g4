@@ -81,7 +81,7 @@ command:
     REQUEST_SESSIONS #requestSessions |
     START_SESSION #startSession |
     SET_MONSTER_DIFFICULTY SPACE (EASY | MEDIUM | HARD | IMPOSSIBLE) #monsterdifficulty | 
-    SET_ITEM_FREQUENCY SPACE (LOW | MEDIUM | HIGH) #itemfrequency;
+    SET_ITEM_FREQUENCY SPACE (LOW | MEDIUM | HIGH) #itemfrequency |
     INSPECT SPACE inventorySlot #inspect |
     USE SPACE step #use	|
     SEARCH #search;

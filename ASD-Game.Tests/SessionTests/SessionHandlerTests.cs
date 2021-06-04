@@ -42,11 +42,10 @@ namespace Session.Tests
             _mockedClientController = new Mock<IClientController>();
             _mockedScreenHandler = new Mock<IScreenHandler>();
             _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
-            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object, _mockedGameConfigurationHandler.Object);
             _mockedClientController = new();
             _mockedMessageService = new();
             _mockedScreenHandler = new();
-            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object, _mockedMessageService.Object);
+            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object, _mockedGameConfigurationHandler.Object, _mockedMessageService.Object);
             _mockedSession = new Mock<Session>();
             _packetDTO = new PacketDTO();
         }
@@ -58,7 +57,7 @@ namespace Session.Tests
             string invalidSessionId = "invalid";
 
             //Act ---------
-            _sut.JoinSession(invalidSessionId);
+            _sut.JoinSession(invalidSessionId, "");
 
             //Assert ---------
             string expected = "Could not find game!";

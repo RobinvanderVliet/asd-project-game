@@ -61,7 +61,7 @@ namespace WorldGeneration
             return _players.Find(x => x.Id == id);
         }
 
-        public void deleteMap()
+        public void DeleteMap()
         {
             _map.DeleteMap();
         }
