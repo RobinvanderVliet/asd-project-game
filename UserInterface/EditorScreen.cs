@@ -19,7 +19,7 @@ namespace UserInterface
             DrawInputBox(X_START, 10, "Enter an answer");
         }
 
-        public void UpdateLastQuestion(string question)
+        public virtual void UpdateLastQuestion(string question)
         {
             _displayedQuestions = question;
             DrawScreen();

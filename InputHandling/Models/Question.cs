@@ -8,14 +8,17 @@ namespace InputCommandHandler.Models
     public class Questions
     {
         public readonly string WELCOME = "Welcome to the ingame agent configurator!";
-        private const string EXPLORE = "Please select your explore level: 'random', 'target player' or 'target objective'";
-        private const string COMBAT = "Please select your combat level: 'offensive', 'defensive' or 'flee'";
+        private const string EXPLORE = "Please select your explore level: 'random', 'target player' or 'target objective' type 'help explore' for more information";
+        private const string COMBAT = "Please select your combat level: 'offensive' or 'defensive' or 'target objective' type 'help combat' for more information";
         private const string EXTEND_EXPLORE = "Would you like to configure custom rules for exploring?: 'yes', 'no'";
         private const string EXTEND_COMBAT = "Would you like to configure custom rules for combat?: 'yes', 'no'";
 
         private readonly string[] EXPLORE_ANSWERS = {"random", "target player", "target objective"};
-        private readonly string[] COMBAT_ANSWERS = {"offensive", "defensive", "flee"};
+        private readonly string[] COMBAT_ANSWERS = {"offensive", "defensive"};
         private readonly string[] EXTEND_ANSWERS = {"yes", "no"};
+
+        public readonly string helpCombat = "offensive = , defensive =";
+        public readonly string helpExplore = "random = ,  target player = , target objective =";
 
         private List<string> _editorQuestions;
         private List<string[]> _editorAnswers;

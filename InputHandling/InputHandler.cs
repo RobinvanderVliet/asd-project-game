@@ -155,7 +155,15 @@ namespace InputHandling
                     break;
                 }
 
-                if (questions.EditorAnswers.ElementAt(i).Contains(input))
+                if(input.Equals("help combat"))
+                {
+                    _screenHandler.ConsoleHelper.ClearConsole();
+                    editorScreen.UpdateLastQuestion(questions.helpCombat);
+                } else if(input.Equals("help explore"))
+                {
+                    _screenHandler.ConsoleHelper.ClearConsole();
+                    editorScreen.UpdateLastQuestion(questions.helpExplore);
+                } else if (questions.EditorAnswers.ElementAt(i).Contains(input))
                 {
                     answers[i] = answers[i] + input;
                     i++;
@@ -295,7 +303,7 @@ namespace InputHandling
                                                             Environment.NewLine +
                                                             startText);
                             break;
-                        case "bitcoinItems":
+                        case "bitcoinitems":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible bitcoin items: " + Environment.NewLine +
                                                             string.Join(", ", variables.bitcoinItems) +
@@ -312,7 +320,7 @@ namespace InputHandling
                     }
 
                     input = _screenHandler.GetScreenInput();
-                    input.ToLower();
+                    input = input.ToLower();
                 }
 
                 var rule = input.Split(" ").ToList();
@@ -334,7 +342,7 @@ namespace InputHandling
                 {
                     editorScreen.ClearScreen();
                     editorScreen.UpdateLastQuestion("Do you want to add another rule? yes or no");
-                    input = GetCommand();
+                    input = _screenHandler.GetScreenInput();
                     input = input.ToLower();
                     if (input.Equals("yes") || input.Equals("no"))
                     {
