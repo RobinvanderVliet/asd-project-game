@@ -98,14 +98,17 @@ namespace Session
         private void HandleStartGameSession(StartGameDTO startGameDTO)
         {
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
-
+            Player currentPlayer = null;
             // add name to players
             foreach (var player in startGameDTO.PlayerLocations)
             {
                 if (_clientController.GetOriginId() == player.Key)
                 {
                     // add name to players
-                    _worldService.AddPlayerToWorld(new WorldGeneration.Player("gerrit", player.Value[0], player.Value[1], CharacterSymbol.CURRENT_PLAYER, player.Key), true);
+                    currentPlayer = new Player("gerrit", player.Value[0], player.Value[1],
+                        CharacterSymbol.CURRENT_PLAYER, player.Key);
+                    _worldService.AddPlayerToWorld(currentPlayer, true);
+                    
                 }
                 else
                 {
@@ -114,6 +117,10 @@ namespace Session
                 }
             }
 
+            if (currentPlayer != null)
+            {
+                _worldService.LoadArea(currentPlayer.XPosition, currentPlayer.YPosition, 10);
+            }
             _worldService.DisplayWorld();
             _relativeStatHandler.SetCurrentPlayer(_worldService.GetCurrentPlayer());
             _relativeStatHandler.CheckStaminaTimer();

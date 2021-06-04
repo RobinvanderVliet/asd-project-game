@@ -108,8 +108,6 @@ namespace ActionHandling
                 {
                     _messageService.AddMessage("You do not have enough stamina to move!");
                 }
-                
-                //edit payload
 
                 return new HandlerResponseDTO(SendAction.ReturnToSender, "You do not have enough stamina to move!");
             }
@@ -135,9 +133,6 @@ namespace ActionHandling
                 {
                     InsertToDatabase(moveDTO);
                 }
-                
-                //edit payload
-                // packet.Payload = JsonConvert.SerializeObject(moveDTO);
                 
                 return new HandlerResponseDTO(SendAction.SendToClients, resultMessage);
             }

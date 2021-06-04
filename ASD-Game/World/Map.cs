@@ -94,7 +94,7 @@ namespace WorldGeneration
         {
             var playerX = currentPlayer.XPosition;
             var playerY = currentPlayer.YPosition;
-            LoadArea(playerX, playerY, viewDistance);
+            // LoadArea(playerX, playerY, viewDistance);
             for (var y = (playerY + viewDistance); y > ((playerY + viewDistance) - (viewDistance * 2) - 1); y--)
             {
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
