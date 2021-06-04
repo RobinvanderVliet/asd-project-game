@@ -22,6 +22,11 @@ namespace Creature.Creature.StateMachine
             set => _agentData = (AgentData)value;
         }
 
+        public void StopStateMachine()
+        {
+            _passiveStateMachine.Stop();
+        }
+
         public void FireEvent(CreatureEvent.Event creatureEvent, object argument)
         {
              _passiveStateMachine.Fire(creatureEvent, argument);

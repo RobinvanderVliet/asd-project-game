@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using ASD_project.Creature.Creature.StateMachine.Builder;
 using Creature.Creature.StateMachine.Builder;
-using Creature.Creature.StateMachine.CustomRuleSet;
 
 namespace Creature.Creature.StateMachine.State
 {
@@ -14,6 +13,7 @@ namespace Creature.Creature.StateMachine.State
         protected ICreatureStateMachine _stateMachine;
         protected BuilderConfiguration _builderConfiguration;
         protected List<BuilderInfo> _builderInfoList;
+
 
         public CreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine, List<BuilderInfo> builderInfoList, BuilderConfiguration builderConfiguration)
         {

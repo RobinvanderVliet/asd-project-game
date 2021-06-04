@@ -2,6 +2,7 @@ using System;
 using InputHandling;
 using UserInterface;
 
+
 namespace ASD_project
 {
     partial class Program
@@ -20,7 +21,6 @@ namespace ASD_project
 
             public void Run()
             {
-
                 if (!DEBUG_INTERFACE)
                 {
                     _screenHandler.TransitionTo(new StartScreen());

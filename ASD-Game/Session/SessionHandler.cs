@@ -6,10 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Timers;
+using Agent.Antlr.Ast;
+using Agent.Mapper;
+using Agent.Models;
+using Agent.Services;
 using WorldGeneration;
 using DatabaseHandler;
 using DatabaseHandler.Services;
 using DatabaseHandler.Repository;
+using InputHandling;
 using UserInterface;
 using Timer = System.Timers.Timer;
 
@@ -59,6 +64,7 @@ namespace Session
 
                 _session.SessionId = sessionId;
                 _clientController.SetSessionId(sessionId);
+                SendAgentConfiguration();
                 Console.WriteLine("Trying to join game with name: " + _session.Name);
 
                 SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
@@ -101,6 +107,17 @@ namespace Session
 
             return _session.InSession;
         }
+        
+        // TODO: get this config from the AgentConfigurationService
+        private void SendAgentConfiguration()
+        {
+            var agentConfigurationDto = new AgentConfigurationDTO(SessionType.SendAgentConfiguration)
+            {
+                AgentConfiguration = new List<ValueTuple<string, string>>()
+            };
+            var payload = JsonConvert.SerializeObject(agentConfigurationDto);
+            _clientController.SendPayload(payload, PacketType.Session);
+        }
 
         public void RequestSessions()
         {
@@ -123,7 +140,6 @@ namespace Session
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
-
             if (packet.Header.SessionID == _session?.SessionId)
             {
                 if (packet.Header.Target == "client" || packet.Header.Target == "host")
@@ -135,6 +151,10 @@ namespace Session
                     if (sessionDTO.SessionType == SessionType.SendHeartbeat)
                     {
                         return HandleHeartbeat(packet);
+                    }
+                    if (sessionDTO.SessionType == SessionType.SendAgentConfiguration)
+                    {
+                        return new HandlerResponseDTO(SendAction.Ignore, null);
                     }
                 }
                 if ((packet.Header.Target == "client" || packet.Header.Target == "host" || packet.Header.Target == _clientController.GetOriginId())
