@@ -24,7 +24,9 @@ namespace InputHandling.Antlr.Ast
         public bool Equals(Username other)
         {
             if (other == null)
+            {
                 return false;
+            }
 
             return _username == other.UsernameValue;
         }

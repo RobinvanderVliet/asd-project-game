@@ -26,7 +26,8 @@ namespace InputHandling.Antlr.Ast.Actions
             if (child is Message)
             {
                 _message = (Message) child;
-            } else if (child is Username)
+            }
+            else if (child is Username)
             {
                 _username = (Username) child;
             }
