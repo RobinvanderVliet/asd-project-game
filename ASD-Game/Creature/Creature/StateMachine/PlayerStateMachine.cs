@@ -1,4 +1,5 @@
-﻿using Appccelerate.StateMachine;
+﻿using System;
+using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
 using Creature.Creature.StateMachine.CustomRuleSet;
 using Creature.Creature.StateMachine.Data;

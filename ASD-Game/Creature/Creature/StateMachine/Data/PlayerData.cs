@@ -1,6 +1,9 @@
-﻿using Creature.World;
+﻿using System;
+using Creature.World;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using System.Timers;
+using ActionHandling;
 
 namespace Creature.Creature.StateMachine.Data
 {
@@ -12,6 +15,7 @@ namespace Creature.Creature.StateMachine.Data
         private int _damage;
         private int _visionRange;
         private IWorld _world;
+        private IMoveHandler _moveHandler;
 
         public bool IsAlive { get => _health > 0; }
 
@@ -44,14 +48,35 @@ namespace Creature.Creature.StateMachine.Data
             get => _world;
             set => _world = value;
         }
+        
+        public IMoveHandler MoveHandler
+        {
+            get => _moveHandler;
+            set => _moveHandler = value;
+        }
 
-        public PlayerData(Vector2 position, double health, int damage, int visionRange, IWorld world)
+        public PlayerData(Vector2 position, double health, int damage, int visionRange, IWorld world, IMoveHandler moveHandler)
         {
             _position = position;
             _health = health;
             _damage = damage;
             _visionRange = visionRange;
             _world = world;
+            _moveHandler = moveHandler;
+            
+            var aTimer = new Timer();
+            aTimer.Elapsed += OnTimedEvent;
+            aTimer.Interval = 1000;
+            aTimer.Enabled = true;
+            
+            while(Console.Read() != 'q');
         }
+
+        // Specify what you want to happen when the Elapsed event is raised.
+        private  void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            _moveHandler.SendMove("up", 1);
+        }
+
     }
 }
