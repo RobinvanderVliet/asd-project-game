@@ -4,8 +4,8 @@ namespace ASD_project.ActionHandling.DTO
 {
     public class ItemSpawnDTO
     {
-        public int XPosition { get; set; }
-        public int YPosition { get; set; }
-        public Item Item { get; set; }
+        public int XPosition;
+        public int YPosition;
+        public Item Item;
     }
 }
