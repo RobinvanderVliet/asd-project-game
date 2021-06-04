@@ -8,6 +8,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Action = Agent.Antlr.Ast.Action;
 
 namespace Agent.Tests.Checker
 {

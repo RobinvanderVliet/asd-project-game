@@ -95,7 +95,7 @@ namespace InputHandling
         public void HandleSessionScreenCommands()
         {
             SessionScreen sessionScreen = _screenHandler.Screen as SessionScreen;
-            var input = GetCommand();
+            string input = GetCommand();
 
             if (input == RETURN_KEYWORD)
             {
@@ -103,7 +103,7 @@ namespace InputHandling
                 return;
             }
 
-            var inputParts = input.Split(" ");
+            string[] inputParts = input.Split(" ");
 
             if (inputParts.Length != 2)
             {
@@ -146,7 +146,7 @@ namespace InputHandling
             {
                 editorScreen.UpdateLastQuestion(questions.EditorQuestions.ElementAt(i));
 
-                var input = _screenHandler.GetScreenInput();
+                string input = _screenHandler.GetScreenInput();
                 _screenHandler.SetScreenInput(input);
 
                 if (input.Equals("break"))
@@ -199,8 +199,8 @@ namespace InputHandling
             }
 
             AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
-            var errors = agentConfigurationService.Configure(finalstring);
-            var errorsCombined = string.Empty;
+            List<string> errors = agentConfigurationService.Configure(finalstring);
+            string errorsCombined = string.Empty;
 
             if (errors.Count != 0)
             {
@@ -263,7 +263,7 @@ namespace InputHandling
 
                 if (input.Contains("help"))
                 {
-                    var help = input.Split(" ");
+                    string[] help = input.Split(" ");
                     switch (help[1])
                     {
                         case "armor":
@@ -322,7 +322,7 @@ namespace InputHandling
                     input = input.ToLower();
                 }
 
-                var rule = input.Split(" ").ToList();
+                List<string> rule = input.Split(" ").ToList();
 
                 //basis check hier!
                 if (CheckInput(rule, variables))

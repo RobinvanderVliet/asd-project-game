@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using InputHandling.Antlr;
 using InputHandling.Antlr.Transformer;
 using InputHandling.Models;
+using Messages;
 using Microsoft.Win32.SafeHandles;
 using Moq;
 using NUnit.Framework;
@@ -33,7 +34,7 @@ namespace InputHandling.Tests
             mockedConsole = new();
             _mockedScreenHandler.Object.ConsoleHelper = mockedConsole.Object;
 
-            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedScreenHandler.Object);
+            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedScreenHandler.Object, new Mock<IMessageService>().Object);
         }
 
         [Test]

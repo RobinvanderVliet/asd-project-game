@@ -52,10 +52,12 @@ namespace Session.Tests
             string invalidSessionId = "invalid";
             string userName = "Gerrit";
 
-            using (StringWriter sw = new StringWriter()) {
+            using (StringWriter sw = new StringWriter())
+            {
                 //Act ---------
                 Console.SetOut(sw);
                 _sut.JoinSession(invalidSessionId, userName);
+            }
 
             //Assert ---------
             string expected = "Could not find game!";

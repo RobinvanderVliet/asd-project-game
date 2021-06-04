@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
+using Agent.Antlr.Ast;
+using Agent.Exceptions;
+using Antlr4.Runtime;
 
 namespace Agent.Tests
 {
