@@ -9,8 +9,7 @@ namespace Creature.Creature.StateMachine.State
         protected ICreatureData _creatureData;
         protected ICreatureData _target;
         protected ICreatureStateMachine _stateMachine;
-        protected RuleSetCoreFunctions _ruleSetCoreFunctions = new RuleSetCoreFunctions();
-        
+
         public CreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine)
         {
             _creatureData = creatureData;
