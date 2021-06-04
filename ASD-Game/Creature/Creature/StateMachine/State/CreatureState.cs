@@ -10,7 +10,7 @@ namespace Creature.Creature.StateMachine.State
         protected ICreatureData _target;
         protected ICreatureStateMachine _stateMachine;
 
-        public CreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine)
+        public CreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine, )
         {
             _creatureData = creatureData;
             _stateMachine = stateMachine;

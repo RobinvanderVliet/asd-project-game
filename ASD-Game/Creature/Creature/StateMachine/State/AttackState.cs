@@ -16,7 +16,7 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do()
         {
-            BuilderConfiguration builderConfiguration = //haal op
+            BuilderConfiguration builderConfiguration = 
             List<BuilderInfo> builderInfoList = //haal op
             foreach (var builderInfo in builderInfoList)
             {
