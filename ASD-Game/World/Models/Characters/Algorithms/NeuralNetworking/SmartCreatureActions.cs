@@ -35,7 +35,10 @@ namespace Creature.Creature.NeuralNetworking
                 ViewPointCalculator(smartMonster.creatureData.Position);
                 path = _pathfinder.FindPath(startPos, destination);
             }
-            smartMonster.NextAction = TransformPath(path.Pop().Position);
+            if (path != null)
+            {
+                smartMonster.Destination = TransformPath(path.Pop().Position);
+            }
         }
 
         public void WalkUp(SmartMonster smartMonster)
@@ -45,7 +48,10 @@ namespace Creature.Creature.NeuralNetworking
             if (IsValidMove(destination))
             {
                 path = _pathfinder.FindPath(startPos, destination);
-                smartMonster.NextAction = TransformPath(path.Pop().Position);
+                if (path != null)
+                {
+                    smartMonster.Destination = TransformPath(path.Pop().Position);
+                }
             }
         }
 
@@ -56,7 +62,10 @@ namespace Creature.Creature.NeuralNetworking
             if (IsValidMove(destination))
             {
                 path = _pathfinder.FindPath(startPos, destination);
-                smartMonster.NextAction = TransformPath(path.Pop().Position);
+                if (path != null)
+                {
+                    smartMonster.Destination = TransformPath(path.Pop().Position);
+                }
             }
         }
 
@@ -67,7 +76,10 @@ namespace Creature.Creature.NeuralNetworking
             if (IsValidMove(destination))
             {
                 path = _pathfinder.FindPath(startPos, destination);
-                smartMonster.NextAction = TransformPath(path.Pop().Position);
+                if (path != null)
+                {
+                    smartMonster.Destination = TransformPath(path.Pop().Position);
+                }
             }
         }
 
@@ -78,7 +90,10 @@ namespace Creature.Creature.NeuralNetworking
             if (IsValidMove(destination))
             {
                 path = _pathfinder.FindPath(startPos, destination);
-                smartMonster.NextAction = TransformPath(path.Pop().Position);
+                if (path != null)
+                {
+                    smartMonster.Destination = TransformPath(path.Pop().Position);
+                }
             }
         }
 
@@ -110,7 +125,10 @@ namespace Creature.Creature.NeuralNetworking
                 ViewPointCalculator(smartMonster.creatureData.Position);
                 Vector2 MPos = new Vector2(monster.XPosition - _pathingOffset.X, monster.YPosition - _pathingOffset.Y);
                 path = _pathfinder.FindPath(startPos, MPos);
-                smartMonster.NextAction = TransformPath(path.Pop().Position);
+                if (path != null)
+                {
+                    smartMonster.Destination = TransformPath(path.Pop().Position);
+                }
             }
         }
 

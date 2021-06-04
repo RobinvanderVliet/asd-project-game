@@ -40,6 +40,7 @@ namespace WorldGeneration
                 creature.XPosition = newXPosition;
                 creature.YPosition = newYPosition;
             }
+            UpdateAI();
             UpdateMap();
         }
 
@@ -67,7 +68,6 @@ namespace WorldGeneration
                 //_screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
                 _map.DisplayMap(CurrentPlayer, _viewDistance, characters);
             }
-            UpdateAI();
         }
 
         public char[,] GetMapAroundCharacter(Character character)
@@ -83,14 +83,20 @@ namespace WorldGeneration
 
         public void UpdateAI()
         {
+            movesList = new List<Character>();
             foreach (Character monster in _creatures)
             {
                 if (monster is SmartMonster smartMonster)
                 {
-                    smartMonster.Update();
-                    movesList.Add(monster);
+                    UpdateSmartMonster(smartMonster);
                 }
             }
+        }
+
+        private void UpdateSmartMonster(SmartMonster smartMonster)
+        {
+            smartMonster.Update();
+            movesList.Add(smartMonster);
         }
     }
 }

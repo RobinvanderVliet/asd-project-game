@@ -11,6 +11,7 @@ using Network.DTO;
 using Newtonsoft.Json;
 using WorldGeneration;
 using System.Numerics;
+using Creature.Creature;
 
 namespace ActionHandling
 {
@@ -62,14 +63,24 @@ namespace ActionHandling
             MoveDTO moveDTO = new(currentPlayer.Id, currentPlayer.XPosition + x, currentPlayer.YPosition + y);
 
             SendMoveDTO(moveDTO);
+            MoveAIs();
         }
 
         public void MoveAIs()
         {
+            List<MoveDTO> moveDTOs = new List<MoveDTO>();
+            GetAIMoves();
             foreach (Character move in _creatureMoves)
             {
-                MoveDTO moveDTO = new(move.Id, (int)move.Destination.X, (int)move.Destination.Y);
-                SendMoveDTO(moveDTO);
+                if (move is SmartMonster smartMonster)
+                {
+                    MoveDTO moveDTO = new(smartMonster.Id, (int)smartMonster.Destination.X, (int)smartMonster.Destination.Y);
+                    moveDTOs.Add(moveDTO);
+                }
+            }
+            foreach (MoveDTO move in moveDTOs)
+            {
+                SendMoveDTO(move);
             }
         }
 
@@ -82,7 +93,6 @@ namespace ActionHandling
         {
             var payload = JsonConvert.SerializeObject(moveDTO);
             _clientController.SendPayload(payload, PacketType.Move);
-            MoveAIs();
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
@@ -133,10 +143,12 @@ namespace ActionHandling
         {
             var playerService = new DatabaseService<PlayerPOCO>();
             var player = playerService.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGUID == moveDTO.UserId);
-
-            player.XPosition = moveDTO.XPosition;
-            player.YPosition = moveDTO.YPosition;
-            playerService.UpdateAsync(player);
+            if (player != null)
+            {
+                player.XPosition = moveDTO.XPosition;
+                player.YPosition = moveDTO.YPosition;
+                playerService.UpdateAsync(player);
+            }
         }
 
         private void HandleMove(MoveDTO moveDTO)

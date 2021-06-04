@@ -15,7 +15,7 @@ namespace Creature.Creature
         private DataGatheringService _dataGatheringService;
         public SmartCreatureActions smartactions;
 
-        public Vector2 NextAction { get; set; }
+        public Vector2 Destination { get; set; }
 
         public Genome brain;
         public Boolean replay = false;
@@ -49,6 +49,7 @@ namespace Creature.Creature
         public void Update()
         {
             _dataGatheringService.CheckNewPosition(this);
+            Destination = new Vector2(this.XPosition, this.YPosition);
             if (!dead)
             {
                 lifeSpan++;
