@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using ActionHandling;
+using ASD_project.Creature.Creature.StateMachine.Builder;
+using Creature.Creature.StateMachine.Builder;
 using Creature.Creature.StateMachine.Data;
 using Creature.Creature.StateMachine.Event;
 using Network;
@@ -11,10 +14,12 @@ namespace Creature.Creature.StateMachine.State
     {
         private MoveHandler _moveHandler = new MoveHandler(new ClientController(new NetworkComponent()), new WorldService());
 
-        public WanderState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base(creatureData, stateMachine)
+        public WanderState(ICreatureData creatureData, ICreatureStateMachine stateMachine, List<BuilderInfo> builderInfoList, BuilderConfiguration builderConfiguration) : base(creatureData, stateMachine, builderInfoList, builderConfiguration)
         {
             _creatureData = creatureData;
             _stateMachine = stateMachine;
+            _builderConfiguration = builderConfiguration;
+            _builderInfoList = builderInfoList;
         }
 
         public override void Do()

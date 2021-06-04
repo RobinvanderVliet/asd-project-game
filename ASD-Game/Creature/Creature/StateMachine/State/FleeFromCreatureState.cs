@@ -12,7 +12,7 @@ namespace Creature.Creature.StateMachine.State
         private ICreatureData _target;
         private MoveHandler _moveHandler = new MoveHandler(new ClientController(new NetworkComponent()), new WorldService());
 
-        public FleeFromCreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base(creatureData, stateMachine)
+        public FleeFromCreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine, BuilderInfo builderInfo, BuilderConfiguration builderConfiguration) : base(creatureData, stateMachine, builderInfo, builderConfiguration)
         {
             _creatureData = creatureData;
             _stateMachine = stateMachine;

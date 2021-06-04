@@ -8,10 +8,12 @@ namespace Creature.Creature.StateMachine.State
 {
     public class AttackState : CreatureState
     {
-        public AttackState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base(creatureData, stateMachine)
+        public AttackState(ICreatureData creatureData, ICreatureStateMachine stateMachine, List<BuilderInfo> builderInfoList, BuilderConfiguration builderConfiguration) : base(creatureData, stateMachine, builderInfoList, builderConfiguration)
         {
             _creatureData = creatureData;
             _stateMachine = stateMachine;
+            _builderConfiguration = builderConfiguration;
+            _builderInfoList = builderInfoList;
         }
 
         public override void Do()
