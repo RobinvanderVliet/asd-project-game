@@ -110,9 +110,8 @@ namespace ActionHandling
                 player.AddStamina(relativeStatDTO.Stamina);
                 if (relativeStatDTO.Id == _clientController.GetOriginId())
                 {
-                    _messageService.AddMessage("Gained stamina! S: " + _player.Stamina);
+                     _worldService.DisplayStats();
                 }
-                //displaystats worldservice
                 InsertToDatabase(relativeStatDTO, handleInDatabase, player);
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
@@ -121,9 +120,8 @@ namespace ActionHandling
                 player.AddRadiationLevel(relativeStatDTO.RadiationLevel);
                 if (relativeStatDTO.Id == _clientController.GetOriginId())
                 {
-                    _messageService.AddMessage("Radiation damage! H: " + _player.Health + " | R: " + _player.RadiationLevel);
+                    _worldService.DisplayStats();
                 }
-                //displaystats worldservice
                 InsertToDatabase(relativeStatDTO, handleInDatabase, player);
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
@@ -132,9 +130,8 @@ namespace ActionHandling
                 player.AddHealth(relativeStatDTO.Health);
                 if (relativeStatDTO.Id == _clientController.GetOriginId())
                 {
-                    _messageService.AddMessage("Radiation damage! H: " + _player.Health + " | R: " + _player.RadiationLevel);
+                    _worldService.DisplayStats();
                 }
-                //displaystats worldservice
                 InsertToDatabase(relativeStatDTO, handleInDatabase, player);
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }

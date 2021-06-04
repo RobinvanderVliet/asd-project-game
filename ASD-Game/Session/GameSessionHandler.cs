@@ -47,13 +47,16 @@ namespace Session
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
-            _worldService = worldService;
-            _messageService = messageService;
             _sessionHandler = sessionHandler;
+            _relativeStatHandler = relativeStatHandler;
+            _gameConfigurationHandler = gameConfigurationHandler;
+            _screenHandler = screenHandler;
             _playerService = playerService;
             _gameService = gameService;
+            _gameConfigServicesDb = gameConfigServicesDb;
             _playerItemService = playerItemService;
-            _relativeStatHandler = relativeStatHandler;
+            _worldService = worldService;
+            _messageService = messageService;
         }
 
         public void SendGameSession()

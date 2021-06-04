@@ -173,7 +173,7 @@ namespace ActionHandling
             player.Stamina = moveDTO.Stamina;
             player.XPosition = moveDTO.XPosition;
             player.YPosition = moveDTO.YPosition;
-            //display stats worldservice
+            _worldService.DisplayStats();
             _worldService.DisplayWorld();
         }
 
