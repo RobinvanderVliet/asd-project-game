@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using UserInterface;
 using WorldGeneration;
 using WorldGeneration.Models;
+using Messages;
 
 namespace Session
 {
@@ -22,6 +23,7 @@ namespace Session
         private IClientController _clientController;
         private ISessionHandler _sessionHandler;
         private IWorldService _worldService;
+        private IMessageService _messageService;
         private IGameConfigurationHandler _gameConfigurationHandler;
         private IScreenHandler _screenHandler;
         
@@ -30,13 +32,14 @@ namespace Session
         private IServicesDb<GameConfigurationPOCO> _gameConfigServicesDb;
         private IServicesDb<PlayerItemPOCO> _playerItemServicesDb;
 
-        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IServicesDb<PlayerPOCO> playerServicesDb, 
-            IServicesDb<GamePOCO> gameServicesDb, IServicesDb<GameConfigurationPOCO> gameConfigservicesDb, IGameConfigurationHandler gameConfigurationHandler, 
-            IScreenHandler screenHandler, IServicesDb<PlayerItemPOCO> playerItemServicesDb)
+        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IServicesDb<PlayerPOCO> playerServicesDb,
+            IServicesDb<GamePOCO> gameServicesDb, IServicesDb<GameConfigurationPOCO> gameConfigservicesDb, IGameConfigurationHandler gameConfigurationHandler,
+            IScreenHandler screenHandler, IServicesDb<PlayerItemPOCO> playerItemServicesDb, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
             _worldService = worldService;
+            _messageService = messageService;
             _sessionHandler = sessionHandler;
             _gameConfigurationHandler = gameConfigurationHandler;
             _playerServicesDb = playerServicesDb;
@@ -141,6 +144,7 @@ namespace Session
 
             _worldService.DisplayWorld();
             _worldService.DisplayStats();
+            _messageService.DisplayMessages();
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace UserInterface
@@ -35,10 +36,9 @@ namespace UserInterface
             int messageCount = messageQueue.Count;
             for (int i = 0; i < messageCount; i++)
             {
-                string message = messageQueue.Peek();
+                string message = messageQueue.Pop();
                 _screenHandler.ConsoleHelper.SetCursor(_xPosition + OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
                 _screenHandler.ConsoleHelper.Write(message);
-                messageQueue.Pop();
             }
             _screenHandler.ConsoleHelper.SetCursor(originalCursorX, originalCursorY);
         }
@@ -55,47 +55,56 @@ namespace UserInterface
         public void ShowMessages(Queue<string> messages)
         {
             Stack<string> messageStack = new();
-            for (int i = 0; i < messages.Count; i++)
+            int totalMessage = messages.Count;
+            for (int i = 0; i < totalMessage; i++)
             {
                 string message = messages.Dequeue();
-                if (message.Length >= _width - BORDER_SIZE)
-                {
-                    int stringLength = message.Length;
-                    int chunkSize = _width - BORDER_SIZE;
-                    int maxSize = chunkSize * _height;
-                    if (stringLength > maxSize)
-                    {
-                        message = message.Substring(0, maxSize - 3) + "...";
-                        stringLength = maxSize;
-                    }
+                var messageSplitted = message.Split(Environment.NewLine);
 
-                    Stack<string> tempStack = new();
-                    for (int j = 0; j < stringLength; j += chunkSize)
+                for (int k = messageSplitted.Length - 1; k >= 0; k--)
+                {
+                    message = messageSplitted[k];
+                    if (message.Length >= _width - BORDER_SIZE)
                     {
-                        if (j + chunkSize > stringLength)
+                        int stringLength = message.Length;
+                        int chunkSize = _width - BORDER_SIZE;
+                        int maxSize = chunkSize * _height;
+
+                        if (stringLength > maxSize)
                         {
-                            chunkSize = stringLength - j;
+                            message = message.Substring(0, maxSize - 3) + "...";
+                            stringLength = maxSize;
                         }
-                        tempStack.Push(message.Substring(j, chunkSize));
 
-                        if (messageStack.Count + tempStack.Count > _height)
+                        Stack<string> tempStack = new();
+                        for (int j = 0; j < stringLength; j += chunkSize)
                         {
-                            tempStack.Pop();
+                            if (j + chunkSize > stringLength)
+                            {
+                                chunkSize = stringLength - j;
+                            }
+                            tempStack.Push(message.Substring(j, chunkSize));
+
+                            if (messageStack.Count + tempStack.Count > _height)
+                            {
+                                tempStack.Pop();
+                            }
+                        }
+                        foreach(string line in tempStack)
+                        {
+                            messageStack.Push(line);
                         }
                     }
-                    foreach(string line in tempStack)
+                    else
                     {
-                        messageStack.Push(line);
+                        messageStack.Push(message);
                     }
-                }
-                else
-                {
-                    messageStack.Push(message);
-                }
 
-                if (messageStack.Count > _height)
-                {
-                    messageStack.Pop();
+                    if (messageStack.Count > _height)
+                    {
+                        messageStack.Pop();
+                    }
+
                 }
             }
             DrawMessages(messageStack);

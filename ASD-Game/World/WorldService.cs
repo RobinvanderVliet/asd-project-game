@@ -87,9 +87,9 @@ namespace WorldGeneration
                 player.Inventory.Helmet?.ItemName ?? "Empty",
                 player.Inventory.Armor?.ItemName ?? "Empty",
                 player.Inventory.Weapon?.ItemName ?? "Empty",
-                player.Inventory.ConsumableItemList?[0]?.ItemName ?? "Empty",
-                player.Inventory.ConsumableItemList?[1]?.ItemName ?? "Empty",
-                player.Inventory.ConsumableItemList?[2]?.ItemName ?? "Empty");
+                player.Inventory.GetConsumableAtIndex(0)?.ItemName ?? "Empty",
+                player.Inventory.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
+                player.Inventory.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
         }
     }
 }

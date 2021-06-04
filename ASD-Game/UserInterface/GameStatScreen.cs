@@ -46,7 +46,7 @@ namespace UserInterface
             int xpos = (_width / 5) * 2 + BORDER_SIZE;
             int ypos = _yPosition + 1;
             _screenHandler.ConsoleHelper.SetCursor(xpos, ypos++);
-            _screenHandler.ConsoleHelper.Write("Helm: " + helm);
+            _screenHandler.ConsoleHelper.Write("Helmet: " + helm);
             _screenHandler.ConsoleHelper.SetCursor(xpos, ypos++);
             _screenHandler.ConsoleHelper.Write("Body: " + body);
             _screenHandler.ConsoleHelper.SetCursor(xpos, ypos++);

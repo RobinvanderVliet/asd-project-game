@@ -23,7 +23,7 @@ namespace Messages
 
         public void DisplayMessages()
         {
-            var latestMessages = _messages.GetLatestMessages(20);
+            var latestMessages = _messages.GetLatestMessages(40);
             _screenHandler.ShowMessages(latestMessages);
         }
     }
