@@ -27,7 +27,7 @@ namespace UserInterface
             DrawBox(_xPosition, _yPosition, _width, _height);
         }
 
-        private void DrawMessages(Queue<string> messageQueue)
+        private void DrawMessages(Stack<string> messageQueue)
         {
             int originalCursorX = _screenHandler.ConsoleHelper.GetCursorLeft();
             int originalCursorY = _screenHandler.ConsoleHelper.GetCursorTop();
@@ -38,7 +38,7 @@ namespace UserInterface
                 string message = messageQueue.Peek();
                 _screenHandler.ConsoleHelper.SetCursor(_xPosition + OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
                 _screenHandler.ConsoleHelper.Write(message);
-                messageQueue.Dequeue();
+                messageQueue.Pop();
             }
             _screenHandler.ConsoleHelper.SetCursor(originalCursorX, originalCursorY);
         }
@@ -54,7 +54,9 @@ namespace UserInterface
 
         public void ShowMessages(Queue<string> messages)
         {
-            Queue<string> messageQueue = new Queue<string>();
+            //Queue<string> messageQueue = new Queue<string>();
+
+            Stack<string> messageQueue = new();
             int messageCount = messages.Count;
             for (int i = 0; i < messageCount; i++)
             {
@@ -76,21 +78,21 @@ namespace UserInterface
                         {
                             chunkSize = stringLength - j;
                         }
-                        messageQueue.Enqueue(message.Substring(j, chunkSize));
+                        messageQueue.Push(message.Substring(j, chunkSize));
 
                         if (messageQueue.Count > _height)
                         {
-                            messageQueue.Dequeue();
+                            messageQueue.Pop();
                         }
                     }
                 }
                 else
                 {
-                    messageQueue.Enqueue(message);
+                    messageQueue.Push(message);
                 }
                 if (messageQueue.Count > _height)
                 {
-                    messageQueue.Dequeue();
+                    messageQueue.Pop();
                 }
             }
             DrawMessages(messageQueue);
