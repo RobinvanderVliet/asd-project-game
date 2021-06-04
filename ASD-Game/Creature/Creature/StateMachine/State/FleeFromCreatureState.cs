@@ -1,7 +1,10 @@
 ﻿using Creature.Creature.StateMachine.Data;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using ActionHandling;
+using ASD_project.Creature.Creature.StateMachine.Builder;
+using Creature.Creature.StateMachine.Builder;
 using Network;
 using WorldGeneration;
 
@@ -12,10 +15,12 @@ namespace Creature.Creature.StateMachine.State
         private ICreatureData _target;
         private MoveHandler _moveHandler = new MoveHandler(new ClientController(new NetworkComponent()), new WorldService());
 
-        public FleeFromCreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine, BuilderInfo builderInfo, BuilderConfiguration builderConfiguration) : base(creatureData, stateMachine, builderInfo, builderConfiguration)
+        public FleeFromCreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine, List<BuilderInfo> builderInfoList, BuilderConfiguration builderConfiguration) : base(creatureData, stateMachine, builderInfoList, builderConfiguration)
         {
             _creatureData = creatureData;
             _stateMachine = stateMachine;
+            _builderConfiguration = builderConfiguration;
+            _builderInfoList = builderInfoList;
         }
 
         public override void Do()
