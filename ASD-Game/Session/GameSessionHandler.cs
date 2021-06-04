@@ -38,7 +38,7 @@ namespace Session
 
        
 
-        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IMessageService messageService, DatabaseService<PlayerPOCO> playerServicesDb, DatabaseService<GamePOCO> gameServicesDb, DatabaseService<GameConfigurationPOCO> gameConfigServicesDb, DatabaseService<PlayerItemPOCO> playerItemServicesDb)
+        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IMessageService messageService, DatabaseService<PlayerPOCO> playerServicesDb, DatabaseService<GamePOCO> gameServicesDb, DatabaseService<GameConfigurationPOCO> gameConfigServicesDb, DatabaseService<PlayerItemPOCO> playerItemServicesDb, IGameConfigurationHandler gameConfigurationHandler, IScreenHandler screenHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
@@ -48,10 +48,10 @@ namespace Session
             _gameServicesDb = gameServicesDb;
             _gameConfigServicesDb = gameConfigServicesDb;
             _playerItemServicesDb = playerItemServicesDb;
-            _sessionHandler = sessionHandler;
-            _messageService = messageService;
             _gameConfigurationHandler = gameConfigurationHandler;
             _screenHandler = screenHandler;
+            _sessionHandler = sessionHandler;
+            _messageService = messageService;
         }
         
         public void SendGameSession()
@@ -79,27 +79,27 @@ namespace Session
             var gamePOCO = new GamePOCO {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
             gameService.CreateAsync(gamePOCO);
 
-            List<string> allClients = _sessionHandler.GetAllClients();
+            List<string[]> allClients = _sessionHandler.GetAllClients();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
 
             // Needs to be refactored to something random in construction; this was for testing
             int playerX = 26; // spawn position
             int playerY = 11; // spawn position
-            foreach (string clientId in allClients)
+            foreach (string[] client in allClients)
             {
                 int[] playerPosition = new int[2];
                 playerPosition[0] = playerX;
                 playerPosition[1] = playerY;
-                players.Add(clientId, playerPosition);
+                players.Add(client[0], playerPosition);
                 var tmpPlayer = new PlayerPOCO
-                    {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
+                    {PlayerGuid = client[0], PlayerName = client[1], GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
                 servicePlayer.CreateAsync(tmpPlayer);
                 var playerHelmet = new PlayerItemPOCO()
                 {
-                   GameGUID = gamePOCO.GameGuid, PlayerGUID = clientId, ItemName = ItemFactory.GetBandana().ItemName, ArmorPoints = ItemFactory.GetBandana().ArmorProtectionPoints
+                   GameGUID = gamePOCO.GameGuid, PlayerGUID = client[0], ItemName = ItemFactory.GetBandana().ItemName, ArmorPoints = ItemFactory.GetBandana().ArmorProtectionPoints
                 };
                 var playerWeapon = new PlayerItemPOCO(){
-                    GameGUID = gamePOCO.GameGuid, PlayerGUID = clientId, ItemName = ItemFactory.GetKnife().ItemName
+                    GameGUID = gamePOCO.GameGuid, PlayerGUID = client[0], ItemName = ItemFactory.GetKnife().ItemName
                 };
                 playerItemService.CreateAsync(playerHelmet);
                 playerItemService.CreateAsync(playerWeapon);

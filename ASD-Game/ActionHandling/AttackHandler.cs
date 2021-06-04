@@ -37,13 +37,13 @@ namespace ActionHandling
 
         public void SendAttack(string direction)
         {
-            if (_worldService.isDead(_worldService.getCurrentPlayer()))
+            if (_worldService.isDead(_worldService.GetCurrentPlayer()))
             {
                 Console.WriteLine("You can't attack, you're dead!");
                 return;
             }
 
-            var weapon = _worldService.getCurrentPlayer().Inventory.Weapon;
+            var weapon = _worldService.GetCurrentPlayer().Inventory.Weapon;
             int x = 0;
             int y = 0;
             switch (direction)
@@ -68,7 +68,7 @@ namespace ActionHandling
                     break;
             }
 
-            var currentPlayer = _worldService.getCurrentPlayer();
+            var currentPlayer = _worldService.GetCurrentPlayer();
             AttackDTO attackDto = new AttackDTO();
             attackDto.XPosition = currentPlayer.XPosition + x;
             attackDto.YPosition = currentPlayer.YPosition + y;
@@ -247,15 +247,15 @@ namespace ActionHandling
         {
             if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
             {
-                if (_worldService.getCurrentPlayer().Stamina < ATTACK_STAMINA)
+                if (_worldService.GetCurrentPlayer().Stamina < ATTACK_STAMINA)
                 {
                     Console.WriteLine("You're out of stamina, you can't attack.");
                 }
                 else
                 {
                     Console.WriteLine("Your stamina got lowered with " + ATTACK_STAMINA + ".");
-                    _worldService.getCurrentPlayer().Stamina -= ATTACK_STAMINA;
-                    Console.WriteLine("stamina: " + _worldService.getCurrentPlayer().Stamina);    
+                    _worldService.GetCurrentPlayer().Stamina -= ATTACK_STAMINA;
+                    Console.WriteLine("stamina: " + _worldService.GetCurrentPlayer().Stamina);    
                 }
             }
 
@@ -264,14 +264,14 @@ namespace ActionHandling
                 Console.WriteLine("You took a total of " + attackDto.Damage + " damage.");
                 int ArmorPoints = 0;
                 int HelmetPoints = 0;
-                if (_worldService.getCurrentPlayer().Inventory.Armor != null)
+                if (_worldService.GetCurrentPlayer().Inventory.Armor != null)
                 {
-                    ArmorPoints = _worldService.getCurrentPlayer().Inventory.Armor.ArmorProtectionPoints;
+                    ArmorPoints = _worldService.GetCurrentPlayer().Inventory.Armor.ArmorProtectionPoints;
                 }
 
-                if (_worldService.getCurrentPlayer().Inventory.Helmet != null)
+                if (_worldService.GetCurrentPlayer().Inventory.Helmet != null)
                 {
-                    HelmetPoints = _worldService.getCurrentPlayer().Inventory.Helmet.ArmorProtectionPoints;
+                    HelmetPoints = _worldService.GetCurrentPlayer().Inventory.Helmet.ArmorProtectionPoints;
                 }
 
                 //Eerst wordt Damage van de helm afgehaald, vervolgens van de body armor en tot slot van de speler.
@@ -279,37 +279,37 @@ namespace ActionHandling
                 {
                     Console.WriteLine("Your helmet has been destroyed!");
                     attackDto.Damage -= HelmetPoints;
-                    _worldService.getCurrentPlayer().Inventory.Helmet = null;
+                    _worldService.GetCurrentPlayer().Inventory.Helmet = null;
                 }
                 else if (HelmetPoints != 0)
                 {
                     Console.WriteLine("Your Helmet took " + attackDto.Damage + " damage.");
                     attackDto.Damage = 0;
-                    _worldService.getCurrentPlayer().Inventory.Helmet.ArmorProtectionPoints -= attackDto.Damage;
+                    _worldService.GetCurrentPlayer().Inventory.Helmet.ArmorProtectionPoints -= attackDto.Damage;
                 }
 
                 if (ArmorPoints - attackDto.Damage <= 0 && ArmorPoints != 0)
                 {
                     Console.WriteLine("Your armor piece has been destroyed!");
                     attackDto.Damage -= ArmorPoints;
-                    _worldService.getCurrentPlayer().Inventory.Armor = null;
-                    _worldService.getCurrentPlayer().Health -= attackDto.Damage;
+                    _worldService.GetCurrentPlayer().Inventory.Armor = null;
+                    _worldService.GetCurrentPlayer().Health -= attackDto.Damage;
                     Console.WriteLine("Your health took " + attackDto.Damage + " damage.");
                 }
                 else if (ArmorPoints != 0)
                 {
                     Console.WriteLine("Your armor took " + attackDto.Damage + " damage.");
-                    _worldService.getCurrentPlayer().Inventory.Armor.ArmorProtectionPoints -= attackDto.Damage;
+                    _worldService.GetCurrentPlayer().Inventory.Armor.ArmorProtectionPoints -= attackDto.Damage;
                 }
                 else
                 {
                     Console.WriteLine("Your health took " + attackDto.Damage + " damage.");
-                    _worldService.getCurrentPlayer().Health -= attackDto.Damage;
+                    _worldService.GetCurrentPlayer().Health -= attackDto.Damage;
                 }
 
-                if (_worldService.getCurrentPlayer().Health <= 0)
+                if (_worldService.GetCurrentPlayer().Health <= 0)
                 {
-                    _deadHandler.SendDead(_worldService.getCurrentPlayer());
+                    _deadHandler.SendDead(_worldService.GetCurrentPlayer());
                 }
             }
         }

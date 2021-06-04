@@ -25,9 +25,9 @@ namespace ActionHandling.Tests
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
         private Mock<IMessageService> _mockedMessageService;
-        private Mock<IServicesDb<PlayerPOCO>> _mockedPlayerServicesDb;
-        private Mock<IServicesDb<PlayerItemPOCO>> _mockedPlayerItemServicesDb;
-        private Mock<IServicesDb<WorldItemPOCO>> _mockedWorldItemServicesDb;
+        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerServicesDb;
+        private Mock<IDatabaseService<PlayerItemPOCO>> _mockedPlayerItemServicesDb;
+        private Mock<IDatabaseService<WorldItemPOCO>> _mockedWorldItemServicesDb;
         private static readonly string _thisIsNotAnItemYouCanDrop = "This is not an item you can drop!";
 
         [SetUp]

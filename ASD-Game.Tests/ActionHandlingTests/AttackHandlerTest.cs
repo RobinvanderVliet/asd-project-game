@@ -72,7 +72,7 @@ namespace ActionHandling.Tests
                 //string AttackGuid = Guid.NewGuid().ToString();
                 Player player = new Player("test", x, y, "#", PlayerGuid);
             
-                _mockedWorldService.Setup(WorldService => WorldService.getCurrentPlayer())
+                _mockedWorldService.Setup(WorldService => WorldService.GetCurrentPlayer())
                     .Returns(player);
                 _attackDTO = new AttackDTO();
                 _attackDTO.XPosition = 26;

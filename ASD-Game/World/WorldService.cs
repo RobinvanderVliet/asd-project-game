@@ -44,7 +44,8 @@ namespace WorldGeneration
         {
             _world = new World(seed, 6, _screenHandler);
         }
-        
+
+
         public Player GetCurrentPlayer()
         {
             return _world.CurrentPlayer;
@@ -58,7 +59,6 @@ namespace WorldGeneration
         public void playerDied(Player player)
         {
             player.Symbol = "X";
-            
         }
 
         public bool isDead(Player player)

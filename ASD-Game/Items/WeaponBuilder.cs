@@ -36,6 +36,7 @@ namespace Items
         {
             _weapon.Distance = weaponDistance;
         }
+        
 
         public void SetWeaponSpeed(WeaponSpeed speed)
         {

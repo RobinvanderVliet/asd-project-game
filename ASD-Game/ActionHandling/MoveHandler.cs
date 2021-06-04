@@ -27,7 +27,7 @@ namespace ActionHandling
 
         public void SendMove(string directionValue, int stepsValue)
         {
-            if (_worldService.isDead(_worldService.getCurrentPlayer()))
+            if (_worldService.isDead(_worldService.GetCurrentPlayer()))
             {
                 Console.WriteLine("You can't move, you're dead!");
                 return;
@@ -56,7 +56,7 @@ namespace ActionHandling
                     break;
             }
 
-            var currentPlayer = _worldService.getCurrentPlayer();
+            var currentPlayer = _worldService.GetCurrentPlayer();
 
             MoveDTO moveDTO = new(currentPlayer.Id, currentPlayer.XPosition + x, currentPlayer.YPosition + y);
 

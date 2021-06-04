@@ -18,12 +18,8 @@ namespace InputHandling.Antlr.Transformer
 {
     public class Evaluator : IEvaluator
     {
-        private readonly ISessionHandler _sessionHandler;
-        private readonly IMoveHandler _moveHandler;
-        private readonly IGameSessionHandler _gameSessionHandler;
-        private readonly IChatHandler _chatHandler;
-        private readonly IAttackHandler _attackHandler;
         
+        private readonly IAttackHandler _attackHandler;
         private readonly ISessionHandler _sessionHandler;
         private readonly IMoveHandler _moveHandler;
         private readonly IGameSessionHandler _gameSessionHandler;
@@ -135,9 +131,9 @@ namespace InputHandling.Antlr.Transformer
             }
         }
 
-        private void TransformPickup()
+        private void TransformPickup(Pickup pickup)
         {
-            // TODO: Call InventoryHandler method
+            _inventoryHandler.PickupItem(pickup.Item.StepValue);
         }
 
         private void TransformDrop(Drop drop)
