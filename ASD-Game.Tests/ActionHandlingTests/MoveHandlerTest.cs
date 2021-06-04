@@ -5,6 +5,7 @@ using NUnit.Framework;
 using WorldGeneration;
 using DatabaseHandler.Services;
 using DatabaseHandler.POCO;
+using Messages;
 
 namespace ActionHandling.Tests
 {
@@ -15,6 +16,7 @@ namespace ActionHandling.Tests
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
         private Mock<IServicesDb<PlayerPOCO>> _mockedServicesDb;
+        private Mock<IMessageService> _mockedMessageService;
 
         [SetUp]
         public void Setup()
@@ -22,7 +24,8 @@ namespace ActionHandling.Tests
             _mockedClientController = new Mock<IClientController>();
             _mockedWorldService = new Mock<IWorldService>();
             _mockedServicesDb = new Mock<IServicesDb<PlayerPOCO>>();
-            _sut = new MoveHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedServicesDb.Object);
+            _mockedMessageService = new Mock<IMessageService>();
+            _sut = new MoveHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedServicesDb.Object, _mockedMessageService.Object);
         }
 
         [TestCase("up")]

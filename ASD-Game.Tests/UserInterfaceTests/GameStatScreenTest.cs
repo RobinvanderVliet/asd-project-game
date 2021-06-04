@@ -82,7 +82,7 @@ namespace UserInterface.Tests
             _mockedConsoleHelper.Verify(mock => mock.Write("Stamina: " + stamina), Times.Exactly(1));
             _mockedConsoleHelper.Verify(mock => mock.Write("Armor: " + armor), Times.Exactly(1));
             _mockedConsoleHelper.Verify(mock => mock.Write("RPP: " + radiation), Times.Exactly(1));
-            _mockedConsoleHelper.Verify(mock => mock.Write("Helm: " + helm), Times.Exactly(1));
+            _mockedConsoleHelper.Verify(mock => mock.Write("Helmet: " + helm), Times.Exactly(1));
             _mockedConsoleHelper.Verify(mock => mock.Write("Body: " + body), Times.Exactly(1));
             _mockedConsoleHelper.Verify(mock => mock.Write("Weapon: " + weapon), Times.Exactly(1));
             _mockedConsoleHelper.Verify(mock => mock.Write("Slot 1: " + slotOne), Times.Exactly(1));

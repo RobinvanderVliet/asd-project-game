@@ -126,24 +126,24 @@ namespace UserInterface.Tests
             Queue<string> stringQueue = new Queue<string>();
             for (int i = 0; i <= CHAT_HEIGHT; i++)
             {
-                if (i == CHAT_HEIGHT - 1)
+                if (i == 0)
                 {
                     stringQueue.Enqueue("+");
                 }
-                else if (i == 0)
+                else if (i == CHAT_HEIGHT)
                 {
                     stringQueue.Enqueue("-");
                 }
                 else
                 {
-                    stringQueue.Enqueue("0");
+                    stringQueue.Enqueue("=");
                 }
             }
             //Act
             _sut.ShowMessages(stringQueue);
 
             //Assert
-            _mockedConsoleHelper.Verify(mock => mock.Write("0"), Times.Exactly(CHAT_HEIGHT - 1));
+            _mockedConsoleHelper.Verify(mock => mock.Write("="), Times.Exactly(CHAT_HEIGHT - 1));
             _mockedConsoleHelper.Verify(mock => mock.Write("-"), Times.Never);
             _mockedConsoleHelper.Verify(mock => mock.Write("+"), Times.Once);
         }
@@ -159,22 +159,22 @@ namespace UserInterface.Tests
             {
                 if (i == CHAT_HEIGHT - 1)
                 {
-                    stringQueue.Enqueue(startMessage + message);
+                    stringQueue.Enqueue("-");
                 }
                 else if (i == 0)
-                {
-                    stringQueue.Enqueue("-");
+                {                 
+                    stringQueue.Enqueue(startMessage + message);
                 }
                 else
                 {
-                    stringQueue.Enqueue("0");
+                    stringQueue.Enqueue("=");
                 }
             }
             //Act
             _sut.ShowMessages(stringQueue);
 
             //Assert
-            _mockedConsoleHelper.Verify(mock => mock.Write("0"), Times.Exactly(CHAT_HEIGHT - 2));
+            _mockedConsoleHelper.Verify(mock => mock.Write("="), Times.Exactly(CHAT_HEIGHT - 2));
             _mockedConsoleHelper.Verify(mock => mock.Write("-"), Times.Never);
             _mockedConsoleHelper.Verify(mock => mock.Write(startMessage), Times.Once);
             _mockedConsoleHelper.Verify(mock => mock.Write(message), Times.Once);
