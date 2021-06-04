@@ -95,6 +95,11 @@ namespace WorldGeneration
         {
             return _map.GetLoadedTileByXAndY(player.XPosition, player.YPosition);
         }
+
+        public List<Player> GetAllPlayers()
+        {
+            return _players;
+        }
     }
 }
 

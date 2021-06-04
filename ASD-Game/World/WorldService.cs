@@ -115,5 +115,10 @@ namespace WorldGeneration
                 displayingStats = false;
             }
         }
+
+        public List<Player> GetPlayers()
+        {
+            return _world.GetAllPlayers();
+        }
     }
 }

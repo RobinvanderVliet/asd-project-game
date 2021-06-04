@@ -15,6 +15,7 @@ namespace WorldGeneration
         public IList<Item> GetItemsOnCurrentTile();
         public Player GetCurrentPlayer();
         public Player GetPlayer(string id);
+        public List<Player> GetPlayers();
         public ITile GetTile(int x, int y);
         public bool CheckIfCharacterOnTile(ITile tile);
         public void LoadArea(int playerX, int playerY, int viewDistance);
