@@ -1,4 +1,4 @@
-﻿namespace Items
+﻿namespace ASD_project.Items
 {
     public class HazardProtectedArmor : Armor
     {

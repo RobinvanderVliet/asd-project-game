@@ -1,6 +1,6 @@
-﻿using Items.Consumables.ConsumableStats;
+﻿using ASD_project.Items.Consumables.ConsumableStats;
 
-namespace Items.Consumables
+namespace ASD_project.Items.Consumables
 {
     public class StaminaConsumable : Consumable
     {

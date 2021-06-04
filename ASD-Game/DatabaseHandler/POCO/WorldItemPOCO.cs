@@ -1,7 +1,7 @@
 ﻿using System;
 using LiteDB;
 
-namespace DatabaseHandler.POCO
+namespace ASD_project.DatabaseHandler.POCO
 {
     public class WorldItemPoco
     {

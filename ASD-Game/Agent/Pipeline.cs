@@ -1,15 +1,15 @@
-﻿using Agent.Antlr.Ast;
-using Agent.Antlr.Checker;
+﻿using System;
+using System.Collections.Generic;
 using Agent.Antlr.Grammar;
-using Agent.Antlr.Parser;
-using Agent.Generator;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using System;
-using System.Collections.Generic;
-using SyntaxErrorException = Agent.Exceptions.SyntaxErrorException;
+using ASD_project.Agent.Antlr.Ast;
+using ASD_project.Agent.Antlr.Checker;
+using ASD_project.Agent.Antlr.Parser;
+using ASD_project.Agent.Generator;
+using SyntaxErrorException = ASD_project.Agent.Exceptions.SyntaxErrorException;
 
-namespace Agent
+namespace ASD_project.Agent
 {
     public class Pipeline : IAntlrErrorListener<IToken>
     {

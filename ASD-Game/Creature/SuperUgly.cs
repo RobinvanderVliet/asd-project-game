@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-namespace Creature
+namespace ASD_project.Creature
 {
     [ExcludeFromCodeCoverage]
     public class SuperUgly

@@ -1,7 +1,8 @@
 ﻿using System;
+using ASD_project.Network.DTO;
 using Newtonsoft.Json;
 
-namespace Network
+namespace ASD_project.Network
 {
     public class NetworkComponent : IPacketListener, INetworkComponent
     {

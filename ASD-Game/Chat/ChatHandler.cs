@@ -1,10 +1,11 @@
-﻿using Chat.DTO;
-using Network;
+﻿using System;
+using ASD_project.Chat.DTO;
+using ASD_project.Network;
+using ASD_project.Network.DTO;
+using ASD_project.Network.Enum;
 using Newtonsoft.Json;
-using System;
-using Network.DTO;
 
-namespace Chat
+namespace ASD_project.Chat
 {
     public class ChatHandler : IPacketHandler, IChatHandler
     {

@@ -1,12 +1,12 @@
-﻿using Creature.Creature.StateMachine.Event;
-using Creature.Pathfinder;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using Creature.Creature;
+using ASD_project.Creature.Creature;
+using ASD_project.Creature.Creature.StateMachine.Event;
+using ASD_project.Creature.Pathfinder;
 
-namespace Creature.World
+namespace ASD_project.Creature.World
 {
     [ExcludeFromCodeCoverage]
     public class DefaultWorld : IWorld

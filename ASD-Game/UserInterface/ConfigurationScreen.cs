@@ -1,6 +1,6 @@
 using System;
 
-namespace UserInterface
+namespace ASD_project.UserInterface
 {
     public class ConfigurationScreen : Screen
     {

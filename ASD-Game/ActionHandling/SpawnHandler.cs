@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
-using Network;
 using System.Linq;
-using ActionHandling.DTO;
-using ASD_project.World.Services;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using Items;
-using Network.DTO;
+using ASD_project.ActionHandling.DTO;
+using ASD_project.DatabaseHandler.POCO;
+using ASD_project.DatabaseHandler.Services;
+using ASD_project.Items;
+using ASD_project.Network;
+using ASD_project.Network.DTO;
+using ASD_project.Network.Enum;
 using Newtonsoft.Json;
 
-
-namespace ActionHandling
+namespace ASD_project.ActionHandling
 {
     public class SpawnHandler : ISpawnHandler, IPacketHandler
     {
@@ -23,7 +22,7 @@ namespace ActionHandling
             _clientController.SubscribeToPacketType(this, PacketType.Spawn);
         }
 
-        public void setItemSpawnDTOs(List<ItemSpawnDTO> itemSpawnDTOs)
+        public void SetItemSpawnDtOs(List<ItemSpawnDTO> itemSpawnDTOs)
         {
             _itemSpawnDTOs = itemSpawnDTOs;
         }

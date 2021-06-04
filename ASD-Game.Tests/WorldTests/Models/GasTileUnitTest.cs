@@ -1,9 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
-using NUnit.Framework;
 using ASD_project.World.Models.HazardousTiles;
 using ASD_project.World.Models.Interfaces;
+using NUnit.Framework;
 
-namespace WorldGeneration.Tests
+namespace ASD_Game.Tests.WorldTests.Models
 {
     [ExcludeFromCodeCoverage]
     public class GasTileUnitTest

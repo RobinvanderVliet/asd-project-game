@@ -1,16 +1,16 @@
-using Agent.Antlr.Ast;
-using Agent.Antlr.Grammar;
-using Agent.Antlr.Parser;
-using Antlr4.Runtime;
-using Antlr4.Runtime.Tree;
-using NUnit.Framework;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Agent.Antlr.Grammar;
+using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
+using ASD_project.Agent.Antlr.Ast;
+using ASD_project.Agent.Antlr.Parser;
+using NUnit.Framework;
 
-namespace Agent.Tests.Parser
+namespace ASD_Game.Tests.AgentTests.Parser
 {
     [ExcludeFromCodeCoverage]
     public class ASTListenerTest

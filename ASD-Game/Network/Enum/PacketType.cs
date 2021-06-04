@@ -1,4 +1,4 @@
-﻿namespace Network
+﻿namespace ASD_project.Network.Enum
 {
     public enum PacketType
     {

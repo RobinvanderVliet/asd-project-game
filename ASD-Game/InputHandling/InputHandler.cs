@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Timers;
-using InputHandling.Antlr;
-using InputHandling.Exceptions;
-using Session;
-using UserInterface;
+using ASD_project.InputHandling.Antlr;
+using ASD_project.InputHandling.Exceptions;
+using ASD_project.Session;
+using ASD_project.UserInterface;
 using WebSocketSharp;
 
-namespace InputHandling
+namespace ASD_project.InputHandling
 {
     public class InputHandler : IInputHandler
     {

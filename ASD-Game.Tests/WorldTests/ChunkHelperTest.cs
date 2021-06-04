@@ -6,7 +6,7 @@ using ASD_project.World.Models;
 using ASD_project.World.Models.Interfaces;
 using ASD_project.World.Models.TerrainTiles;
 
-namespace WorldGeneration.Tests
+namespace ASD_Game.Tests.WorldTests
 {
     [ExcludeFromCodeCoverage] 
     [TestFixture]

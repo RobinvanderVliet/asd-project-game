@@ -1,6 +1,6 @@
-﻿using InputHandling.Antlr.Ast;
+﻿using ASD_project.InputHandling.Antlr.Ast;
 
-namespace InputHandling.Antlr.Transformer
+namespace ASD_project.InputHandling.Antlr.Transformer
 {
     public interface IEvaluator
     {

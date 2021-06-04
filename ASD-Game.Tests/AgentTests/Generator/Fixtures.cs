@@ -1,9 +1,9 @@
-﻿using Agent.Antlr.Ast;
-using Agent.Antlr.Ast.Comparables;
-using Agent.Antlr.Ast.Comparables.Subjects;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using ASD_project.Agent.Antlr.Ast;
+using ASD_project.Agent.Antlr.Ast.Comparables;
+using ASD_project.Agent.Antlr.Ast.Comparables.Subjects;
 
-namespace Agent.Tests.Generator
+namespace ASD_Game.Tests.AgentTests.Generator
 {
     /*
       Maakt AST trees voor de verschillende test bestanden om te vergelijken in de tests  
@@ -35,9 +35,9 @@ namespace Agent.Tests.Generator
             configuration.AddChild((new Setting("walking"))
                     .AddChild((new Condition())
                         .AddChild((new When())
-                            .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                            .AddChild(new Player("player"))
                             .AddChild(new Comparison("nearby"))
-                            .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                            .AddChild(new Player("player"))
                             .AddChild(new ActionReference("attack"))
                         )
                 )
@@ -45,9 +45,9 @@ namespace Agent.Tests.Generator
             configuration.AddChild((new Setting("combat"))
                 .AddChild((new Condition())
                     .AddChild((new When())
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                        .AddChild(new Player("player"))
                         .AddChild(new Comparison("nearby"))
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                        .AddChild(new Player("player"))
                         .AddChild(new ActionReference("attack"))
                     )
                 )
@@ -55,9 +55,9 @@ namespace Agent.Tests.Generator
             configuration.AddChild((new Setting("sleeping"))
                 .AddChild((new Condition())
                     .AddChild((new When())
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                        .AddChild(new Player("player"))
                         .AddChild(new Comparison("nearby"))
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                        .AddChild(new Player("player"))
                         .AddChild(new ActionReference("attack"))
                     )
                 )
@@ -74,9 +74,9 @@ namespace Agent.Tests.Generator
             configuration.AddChild((new Setting("combat"))
                 .AddChild((new Condition())
                     .AddChild((new When())
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                        .AddChild(new Player("player"))
                         .AddChild(new Comparison("nearby"))
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                        .AddChild(new Player("player"))
                         .AddChild(new ActionReference("attack"))
                     )
                 )
@@ -114,9 +114,9 @@ namespace Agent.Tests.Generator
             configuration.AddChild((new Setting("combat"))
                 .AddChild((new Condition())
                     .AddChild((new When())
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                        .AddChild(new Player("player"))
                         .AddChild(new Comparison("nearby"))
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("opponent"))
+                        .AddChild(new Player("opponent"))
                         .AddChild(new ActionReference("attack"))
                     )
                 )
@@ -147,7 +147,7 @@ namespace Agent.Tests.Generator
             configuration.AddChild((new Setting("explore"))
                 .AddChild((new Condition())
                     .AddChild((new When())
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                        .AddChild(new Player("player"))
                         .AddChild(new Comparison("finds"))
                         .AddChild(new Item("item"))
                         .AddChild(new ActionReference("collect"))

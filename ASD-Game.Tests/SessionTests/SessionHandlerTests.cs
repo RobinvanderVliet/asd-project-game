@@ -1,18 +1,20 @@
-using Moq;
-using Network;
-using Network.DTO;
-using Newtonsoft.Json;
-using NUnit.Framework;
-using Session.DTO;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
-using UserInterface;
+using ASD_project.Network;
+using ASD_project.Network.DTO;
+using ASD_project.Network.Enum;
+using ASD_project.Session;
+using ASD_project.Session.DTO;
+using ASD_project.UserInterface;
+using Moq;
+using Newtonsoft.Json;
+using NUnit.Framework;
 using Timer = System.Timers.Timer;
 
-namespace Session.Tests
+namespace ASD_Game.Tests.SessionTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
@@ -26,7 +28,7 @@ namespace Session.Tests
 
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;
-        private Mock<Session> _mockedSession;
+        private Mock<ASD_project.Session.Session> _mockedSession;
         private Mock<IScreenHandler> _mockedScreenHandler;
 
         [SetUp]
@@ -38,7 +40,7 @@ namespace Session.Tests
             _mockedClientController = new Mock<IClientController>();
             _mockedScreenHandler = new Mock<IScreenHandler>();
             _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object);
-            _mockedSession = new Mock<Session>();
+            _mockedSession = new Mock<ASD_project.Session.Session>();
             _packetDTO = new PacketDTO();
         }
 
@@ -71,7 +73,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = hostOriginId;
             packetHeaderDTO.SessionID = sessionId;
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -217,7 +219,7 @@ namespace Session.Tests
             SessionDTO sessionDTOjoin = new SessionDTO(SessionType.RequestSessions);
             var payload = JsonConvert.SerializeObject(sessionDTOjoin);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = hostOriginId;
             packetHeaderDTO.SessionID = sessionId;
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -264,7 +266,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = "testOriginId";
             packetHeaderDTO.SessionID = null;
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -289,7 +291,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = hostOriginId;
             packetHeaderDTO.SessionID = "sessionId";
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -322,7 +324,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = hostOriginId;
             packetHeaderDTO.SessionID = "sessionId";
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -355,7 +357,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = hostOriginId;
             packetHeaderDTO.SessionID = "sessionId";
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -387,7 +389,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = "testOriginId";
             packetHeaderDTO.SessionID = "otherSessionId";
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -419,7 +421,7 @@ namespace Session.Tests
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = originId;
             packetHeaderDTO.SessionID = generatedSessionId;
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -453,7 +455,7 @@ namespace Session.Tests
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = originId;
             packetHeaderDTO.SessionID = generatedSessionId;
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -498,7 +500,7 @@ namespace Session.Tests
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
 
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO
             {
                 OriginID = originId,
                 SessionID = generatedSessionId,
@@ -550,7 +552,7 @@ namespace Session.Tests
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO
             {
                 OriginID = originId,
                 SessionID = generatedSessionId,
@@ -670,7 +672,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.SendHeartbeat);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.PacketType = PacketType.Session;
             packetHeaderDTO.Target = "host";
             _packetDTO.Header = packetHeaderDTO;

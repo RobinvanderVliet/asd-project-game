@@ -1,9 +1,9 @@
-﻿using Session.DTO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Timers;
+using ASD_project.Session.DTO;
 
-namespace Session
+namespace ASD_project.Session
 {
     public class HeartbeatHandler : IHeartbeatHandler
     {

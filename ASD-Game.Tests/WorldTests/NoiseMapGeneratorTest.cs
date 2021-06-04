@@ -6,7 +6,7 @@ using ASD_project.World.Models.TerrainTiles;
 using Moq;
 using NUnit.Framework;
 
-namespace WorldGeneration.Tests
+namespace ASD_Game.Tests.WorldTests
 {
     [ExcludeFromCodeCoverage]  
     [TestFixture]

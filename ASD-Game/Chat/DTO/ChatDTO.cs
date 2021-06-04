@@ -1,4 +1,4 @@
-﻿namespace Chat.DTO
+﻿namespace ASD_project.Chat.DTO
 {
     public class ChatDTO
     {

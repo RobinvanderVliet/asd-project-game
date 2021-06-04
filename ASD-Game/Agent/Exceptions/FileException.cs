@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-namespace Agent.Exceptions
+namespace ASD_project.Agent.Exceptions
 {
     [Serializable]
     [ExcludeFromCodeCoverage]

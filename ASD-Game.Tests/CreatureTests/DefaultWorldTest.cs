@@ -1,13 +1,13 @@
-﻿using Creature.Pathfinder;
-using Creature.World;
-using Moq;
-using NUnit.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using Creature.Creature;
+using ASD_project.Creature.Creature;
+using ASD_project.Creature.Pathfinder;
+using ASD_project.Creature.World;
+using Moq;
+using NUnit.Framework;
 
-namespace Creature.Tests
+namespace ASD_Game.Tests.CreatureTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]

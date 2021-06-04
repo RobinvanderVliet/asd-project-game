@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ActionHandling.DTO;
+using ASD_project.ActionHandling.DTO;
+using ASD_project.DatabaseHandler.Services;
+using ASD_project.Items.Services;
 using ASD_project.World.Models;
-using ASD_project.World.Services;
-using DatabaseHandler.Services;
 
 namespace ASD_project.World
 {
@@ -18,7 +18,7 @@ namespace ASD_project.World
         }
         
         [ExcludeFromCodeCoverage]
-        public IMap GenerateMap(int chunkSize, int seed, IItemService itemservice, List<ItemSpawnDTO> items)
+        public IMap GenerateMap(int chunkSize, int seed, IItemService itemService, List<ItemSpawnDTO> items)
         {
             // If seed is 0 it becomes random
             if (seed == 0)
@@ -26,7 +26,7 @@ namespace ASD_project.World
                 seed = GenerateSeed();
             }
 
-            return new Map(new NoiseMapGenerator(seed, itemservice, items), chunkSize, new DatabaseService<Chunk>(), seed);
+            return new Map(new NoiseMapGenerator(seed, itemService, items), chunkSize, new DatabaseService<Chunk>(), seed);
         }
 
         public int GenerateSeed()

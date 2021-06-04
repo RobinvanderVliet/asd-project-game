@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Session
+namespace ASD_project.Session
 {
     public interface ISessionHandler
     {

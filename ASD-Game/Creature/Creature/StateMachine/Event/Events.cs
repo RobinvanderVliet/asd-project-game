@@ -1,4 +1,4 @@
-﻿namespace Creature.Creature.StateMachine.Event
+﻿namespace ASD_project.Creature.Creature.StateMachine.Event
 {
     public class CreatureEvent
     {

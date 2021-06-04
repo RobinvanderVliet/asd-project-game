@@ -1,15 +1,15 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using ActionHandling;
-using Chat;
-using InputHandling.Antlr.Ast;
-using InputHandling.Antlr.Ast.Actions;
-using InputHandling.Antlr.Transformer;
-using InputHandling.Exceptions;
+using ASD_project.ActionHandling;
+using ASD_project.Chat;
+using ASD_project.InputHandling.Antlr.Ast;
+using ASD_project.InputHandling.Antlr.Ast.Actions;
+using ASD_project.InputHandling.Antlr.Transformer;
+using ASD_project.InputHandling.Exceptions;
+using ASD_project.Session;
 using Moq;
 using NUnit.Framework;
-using Session;
 
-namespace InputHandling.Tests
+namespace ASD_Game.Tests.InputHandlingTests
 {
     [ExcludeFromCodeCoverage]
     public class EvaluatorTests

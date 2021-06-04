@@ -1,4 +1,6 @@
-﻿namespace Network
+﻿using ASD_project.Network.Enum;
+
+namespace ASD_project.Network
 {
     public interface IClientController
     {

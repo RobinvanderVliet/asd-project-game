@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using ASD_project.DatabaseHandler.Repository;
+using ASD_project.DatabaseHandler.Services;
 using ASD_project.World.Models;
-using DatabaseHandler.Repository;
-using DatabaseHandler.Services;
 using Moq;
 using NUnit.Framework;
 
-namespace DatabaseHandler.Tests
+namespace ASD_Game.Tests.DatabaseHandlerTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]

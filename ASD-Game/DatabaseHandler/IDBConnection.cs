@@ -1,6 +1,6 @@
 using LiteDB.Async;
 
-namespace DatabaseHandler
+namespace ASD_project.DatabaseHandler
 {
     public interface IDBConnection
     {

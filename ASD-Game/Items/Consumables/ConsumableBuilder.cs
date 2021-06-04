@@ -1,8 +1,8 @@
-﻿using Items.Consumables.ConsumableStats;
-using Items.ItemStats;
-using System;
+﻿using System;
+using ASD_project.Items.Consumables.ConsumableStats;
+using ASD_project.Items.ItemStats;
 
-namespace Items.Consumables
+namespace ASD_project.Items.Consumables
 {
     public class ConsumableBuilder : IBuilder
     {

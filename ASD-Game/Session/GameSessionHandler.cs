@@ -1,15 +1,16 @@
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using Network;
-using Network.DTO;
-using Newtonsoft.Json;
-using Session.DTO;
 using System.Collections.Generic;
+using ASD_project.DatabaseHandler.POCO;
+using ASD_project.DatabaseHandler.Services;
+using ASD_project.Network;
+using ASD_project.Network.DTO;
+using ASD_project.Network.Enum;
+using ASD_project.Session.DTO;
 using ASD_project.World.Models;
 using ASD_project.World.Models.Characters;
 using ASD_project.World.Services;
+using Newtonsoft.Json;
 
-namespace Session
+namespace ASD_project.Session
 {
 
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler

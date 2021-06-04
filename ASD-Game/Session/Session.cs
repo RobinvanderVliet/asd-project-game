@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace Session
+namespace ASD_project.Session
 {
     [ExcludeFromCodeCoverage]
     public class Session

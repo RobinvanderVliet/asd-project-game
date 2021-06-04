@@ -1,10 +1,10 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using NUnit.Framework;
 using ASD_project.World.Models.BuildingTiles;
 using ASD_project.World.Models.Interfaces;
+using NUnit.Framework;
 
-namespace WorldGeneration.Tests
+namespace ASD_Game.Tests.WorldTests.Models
 {
     [ExcludeFromCodeCoverage]
     public class DoorTileUnitTest

@@ -1,9 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
-using NUnit.Framework;
 using ASD_project.World.Models.Interfaces;
 using ASD_project.World.Models.TerrainTiles;
+using NUnit.Framework;
 
-namespace WorldGeneration.Tests
+namespace ASD_Game.Tests.WorldTests.Models
 {
     [ExcludeFromCodeCoverage]
     public class DirtTileUnitTest

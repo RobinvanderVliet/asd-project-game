@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Items;
-using Items.Consumables;
+using ASD_project.Items;
+using ASD_project.Items.Consumables;
 
 namespace ASD_project.World.Models.Characters
 {

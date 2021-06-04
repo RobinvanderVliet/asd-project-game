@@ -1,7 +1,7 @@
-﻿using Items.ItemStats;
-using Items.WeaponStats;
+﻿using ASD_project.Items.ItemStats;
+using ASD_project.Items.WeaponStats;
 
-namespace Items
+namespace ASD_project.Items
 {
     public class WeaponBuilder : IBuilder
     {

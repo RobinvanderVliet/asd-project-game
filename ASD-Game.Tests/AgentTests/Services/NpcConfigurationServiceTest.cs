@@ -1,14 +1,15 @@
-﻿using Agent.Mapper;
-using Agent.Models;
-using Agent.Services;
-using InputHandling;
-using Moq;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using ASD_project.Agent;
+using ASD_project.Agent.Mapper;
+using ASD_project.Agent.Models;
+using ASD_project.Agent.Services;
+using ASD_project.InputHandling;
+using Moq;
+using NUnit.Framework;
 
-namespace Agent.Tests.Services
+namespace ASD_Game.Tests.AgentTests.Services
 {
     [ExcludeFromCodeCoverage]
     public class NpcConfigurationServiceTest

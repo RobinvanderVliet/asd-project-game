@@ -1,10 +1,11 @@
-﻿using Agent.Exceptions;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using ASD_project.Agent;
+using ASD_project.Agent.Exceptions;
+using NUnit.Framework;
 
-namespace Agent.Tests
+namespace ASD_Game.Tests.AgentTests
 {
     [ExcludeFromCodeCoverage]
     public class FileHandlerTests

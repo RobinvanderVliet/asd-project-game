@@ -1,6 +1,6 @@
-﻿using Creature.Creature.StateMachine;
+﻿using ASD_project.Creature.Creature.StateMachine;
 
-namespace Creature.Creature
+namespace ASD_project.Creature.Creature
 {
     public interface ICreature
     {

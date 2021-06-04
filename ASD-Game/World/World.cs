@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ActionHandling.DTO;
+using ASD_project.ActionHandling.DTO;
+using ASD_project.Items.Services;
+using ASD_project.UserInterface;
 using ASD_project.World.Models.Characters;
-using ASD_project.World.Services;
-using UserInterface;
 
 namespace ASD_project.World
 {
@@ -28,7 +28,7 @@ namespace ASD_project.World
             _map = mapFactory.GenerateMap(itemService, _items, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
-            itemService.GetSpawnHandler().setItemSpawnDTOs(_items);
+            itemService.GetSpawnHandler().SetItemSpawnDtOs(_items);
         }
 
         public void UpdateCharacterPosition(string id, int newXPosition, int newYPosition)

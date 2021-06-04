@@ -1,7 +1,7 @@
-﻿using Creature.World;
-using System.Numerics;
+﻿using System.Numerics;
+using ASD_project.Creature.World;
 
-namespace Creature.Creature.StateMachine.Data
+namespace ASD_project.Creature.Creature.StateMachine.Data
 {
     public interface ICreatureData
     {

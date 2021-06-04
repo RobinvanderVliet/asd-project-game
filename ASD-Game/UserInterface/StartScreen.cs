@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace UserInterface
+namespace ASD_project.UserInterface
 {
     public class StartScreen : Screen
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace InputHandling.Antlr.Ast
+namespace ASD_project.InputHandling.Antlr.Ast
 {
     public class Step : ASTNode, IEquatable<Step>
     {

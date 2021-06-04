@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using ASD_project.World.Models;
 using AutoBogus;
 
-namespace DatabaseHandler.Tests
+namespace ASD_Game.Tests.DatabaseHandlerTests
 {
     [ExcludeFromCodeCoverage]
     public sealed class ChunkFaker : AutoFaker<Chunk>

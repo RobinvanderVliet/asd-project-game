@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using Moq;
-using Network;
-using NUnit.Framework;
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
+using ASD_project.Network;
+using ASD_project.Network.DTO;
+using ASD_project.Session;
 using ASD_project.World.Services;
-using WorldGeneration;
+using Moq;
+using NUnit.Framework;
 
-namespace Session.Tests
+namespace ASD_Game.Tests.SessionTests
 {
     [ExcludeFromCodeCoverage]
     public class GameSessionHandlerTests
