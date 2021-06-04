@@ -23,18 +23,20 @@ namespace InputHandling.Antlr.Transformer
         private IGameSessionHandler _gameSessionHandler;
         private IChatHandler _chatHandler;
         private IClientController _clientController;
-        
+        private IInventoryHandler _inventoryHandler;
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private String _commando;
 
         public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IClientController clientController)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IInventoryHandler inventoryHandler)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
             _gameSessionHandler = gameSessionHandler;
             _chatHandler = chatHandler;
             _clientController = clientController;
+            _inventoryHandler = inventoryHandler;
         }
         public void Apply(AST ast)
         {
@@ -64,7 +66,7 @@ namespace InputHandling.Antlr.Transformer
                         TransformPause();
                         break;
                     case Pickup:
-                        TransformPickup();
+                        TransformPickup((Pickup)nodeBody[i]);
                         break;
                     case Replace:
                         TransformReplace();
@@ -96,7 +98,21 @@ namespace InputHandling.Antlr.Transformer
                     case ItemFrequency:
                         TransformItemFrequency((ItemFrequency)nodeBody[i]);
                         break;
+                    case Inspect:
+                        TransformInspect((Inspect)nodeBody[i]);
+                        break;    
+                    case Use:
+                        TransformUse((Use)nodeBody[i]);
+                        break;
+                    case Search:
+                        TransformSearch();
+                        break;
                 }
+        }
+
+        private void TransformUse(Use use)
+        {
+            _inventoryHandler.UseItem(use.Step.StepValue);
         }
 
         private void TransformMove(Move move)
@@ -113,14 +129,14 @@ namespace InputHandling.Antlr.Transformer
             }
         }
 
-        private void TransformPickup()
+        private void TransformPickup(Pickup pickup)
         {
-            // TODO: Call InventoryHandler method
+            _inventoryHandler.PickupItem(pickup.Item.StepValue);
         }
 
         private void TransformDrop(Drop drop)
         {
-            // TODO: Call InventoryHandler method with (drop.ItemName.MessageValue)
+            _inventoryHandler.DropItem(drop.InventorySlot.InventorySlotValue);
         }
 
         private void TransformAttack(Attack attack)
@@ -243,6 +259,23 @@ namespace InputHandling.Antlr.Transformer
         {
             var jsonObject = JsonConvert.SerializeObject(sessionDto);
             _clientController.SendPayload(jsonObject, PacketType.Session);
+        }
+        private void TransformInspect(Inspect inspect)
+        {
+            string slot = inspect.InventorySlot.InventorySlotValue;
+            if (slot == "armor" | slot == "weapon" | slot == "helmet" | slot == "slot 1" | slot == "slot 2" | slot == "slot 3")
+            {
+                _inventoryHandler.InspectItem(inspect.InventorySlot.InventorySlotValue);
+            }
+            else
+            {
+                throw new SlotException($"The slot you provided {slot} is not valid.");
+            }
+        }
+
+        private void TransformSearch()
+        {
+            _inventoryHandler.Search();
         }
     }
 }

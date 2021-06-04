@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
+using Items;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
@@ -63,6 +64,7 @@ namespace Session
             _gameServicesDb.CreateAsync(gamePOCO);
   
             List<string[]> allClients = _sessionHandler.GetAllClients();
+            var playerItemRepository = new Repository<PlayerItemPOCO>(dbConnection);
 
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
 
@@ -76,8 +78,9 @@ namespace Session
                 playerPosition[1] = playerY;
                 players.Add(client[0], playerPosition);
                 var tmpPlayer = new PlayerPOCO
-                    {PlayerGuid = client[0], GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
+                    {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, GameGUIDAndPlayerGuid = gamePOCO.GameGuid + clientId, XPosition = playerX, YPosition = playerY};
                 _playerServicesDb.CreateAsync(tmpPlayer);
+                AddItemsToPlayer(playerItemRepository, clientId, gamePOCO.GameGuid);
 
                 playerX += 2; // spawn position + 2 each client
                 playerY += 2; // spawn position + 2 each client
@@ -90,6 +93,15 @@ namespace Session
             return startGameDTO;
         }
 
+        private void AddItemsToPlayer(Repository<PlayerItemPOCO> repo, string playerId, string gameId)
+        {
+            PlayerItemPOCO poco = new() {PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGUID = gameId };
+            _ = repo.CreateAsync(poco);
+
+            poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetKnife().ItemName, GameGUID = gameId };
+            _ = repo.CreateAsync(poco);
+        }
+        
         private void SendGameSessionDTO(StartGameDTO startGameDTO)
         {
             var payload = JsonConvert.SerializeObject(startGameDTO);
@@ -114,11 +126,13 @@ namespace Session
                 if (_clientController.GetOriginId() == player.Key)
                 {
                     // add name to players
-                    _worldService.AddPlayerToWorld(new WorldGeneration.Player("gerrit", player.Value[0], player.Value[1], CharacterSymbol.CURRENT_PLAYER, player.Key), true);
+                    var playerObject = new Player("gerrit", player.Value[0], player.Value[1], CharacterSymbol.CURRENT_PLAYER, player.Key);
+                    _worldService.AddPlayerToWorld(playerObject, true);
                 } 
                 else 
                 {
-                    _worldService.AddPlayerToWorld(new WorldGeneration.Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key), false);
+                    var playerObject = new Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key);
+                    _worldService.AddPlayerToWorld(playerObject, false);
                 }
             }
 

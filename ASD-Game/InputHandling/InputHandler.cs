@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Timers;
 using InputHandling.Antlr;
 using InputHandling.Exceptions;
+using Messages;
 using Session;
 using Session.GameConfiguration;
 using UserInterface;
@@ -16,6 +17,7 @@ namespace InputHandling
         private ISessionHandler _sessionHandler;
         private IScreenHandler _screenHandler;
         private IGameConfigurationHandler _gameConfigurationHandler;
+        private IMessageService _messageService;
         private static Timer aTimer;
         private const string RETURN_KEYWORD = "return";
         private string _enteredSessionName;
@@ -23,11 +25,13 @@ namespace InputHandling
         public string START_COMMAND = "start_session";
 
         public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler, IGameConfigurationHandler gameConfigurationHandler)
+        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler, IMessageService messageService)
         {
             _pipeline = pipeline;
             _sessionHandler = sessionHandler;
             _screenHandler = screenHandler;
             _gameConfigurationHandler = gameConfigurationHandler;
+            _messageService = messageService;
         }
 
         // public InputHandler()
@@ -47,13 +51,9 @@ namespace InputHandling
                 _pipeline.ParseCommand(commando);
                 _pipeline.Transform();
             }
-            catch (CommandSyntaxException e)
+            catch (Exception e)
             {
-                    
-            }
-            catch (MoveException e)
-            {
-
+                _messageService.AddMessage(e.Message);
             }
         }
 

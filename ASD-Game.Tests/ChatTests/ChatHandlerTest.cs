@@ -6,7 +6,9 @@ using Network;
 using Chat.DTO;
 using Network.DTO;
 using Newtonsoft.Json;
-using UserInterface;
+using System.IO;
+using WorldGeneration;
+using Messages;
 
 namespace Chat.Tests
 {
@@ -23,16 +25,17 @@ namespace Chat.Tests
 
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;
-        private Mock<IScreenHandler> _mockedScreenHandler;
-        private Mock<GameScreen> _mockedGameScreen;
+        private Mock<IWorldService> _mockedWorldService;
+        private Mock<IMessageService> _mockedMessageService;
 
         [SetUp]
         public void Setup()
         {
-            _mockedClientController = new Mock<IClientController>();
-            _mockedScreenHandler = new Mock<IScreenHandler>();
-            _mockedGameScreen = new Mock<GameScreen>();
-            _sut = new ChatHandler(_mockedClientController.Object);
+            _mockedClientController = new();
+            _mockedWorldService = new();
+            _mockedMessageService = new();
+
+            _sut = new ChatHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedMessageService.Object);
             _packetDTO = new PacketDTO();
 
         }
@@ -87,42 +90,76 @@ namespace Chat.Tests
         public void Test_HandlePacket_HandleSayProperly()
         {
             //Arrange ---------
+            string originId = "origin1";
             string message = "Hello World";
             _chatDTO = new ChatDTO(ChatType.Say, message);
-            _chatDTO.OriginId = "TestID";
-            string resultMessage = "TestID said: Hello World";
+            _chatDTO.OriginId = originId;
             var payload = JsonConvert.SerializeObject(_chatDTO);
-            _packetDTO.Payload = payload;           
-           /* _mockedScreenHandler.Setup(mock => mock.Screen).Returns(_mockedGameScreen.Object);
-            _mockedGameScreen.Setup(mock => mock.AddMessage(message));
+            _packetDTO.Payload = payload;
+            Player player = new("arie", 0, 0, "#", originId);
+            _mockedWorldService.Setup(mock => mock.GetPlayer(player.Id)).Returns(player);
+
 
             //Act ---------
             HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
 
             //Assert ---------
-            _mockedGameScreen.Verify(mock => mock.AddMessage(resultMessage), Times.Once());*/
+            HandlerResponseDTO ExpectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
+            string expected = $"{player.Name} said: {message}";
+            Assert.AreEqual(ExpectedResult, actualResult);
+            _mockedMessageService.Verify(mock => mock.AddMessage(expected), Times.Once);
         }
 
         //TODO Test fixen
         [Test]
-        public void Test_HandlePacket_HandleShoutProperly()
+        public void Test_HandlePacket_HandleSayNoNameSetProperly()
         {
             //Arrange ---------
+            string originId = "origin1";
             string message = "Hello World";
-            _chatDTO = new ChatDTO(ChatType.Shout, message);
-            _chatDTO.OriginId = "TestID";
-            string resultMessage = "TestID shouted: Hello World";
+            _chatDTO = new ChatDTO(ChatType.Say, message);
+            _chatDTO.OriginId = originId;
             var payload = JsonConvert.SerializeObject(_chatDTO);
             _packetDTO.Payload = payload;
-            /*_mockedScreenHandler.Setup(mock => mock.Screen).Returns(_mockedGameScreen.Object);
-            _mockedGameScreen.Setup(mock => mock.AddMessage(message));
+            Player player = new(null, 0, 0, "#", originId);
+            _mockedWorldService.Setup(mock => mock.GetPlayer(player.Id)).Returns(player);
+
 
             //Act ---------
             HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
 
             //Assert ---------
-            _mockedGameScreen.Verify(mock => mock.AddMessage(resultMessage), Times.Once());*/
+            HandlerResponseDTO ExpectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
+            string expected = $"player with id '{originId}' said: {message}";
+            Assert.AreEqual(ExpectedResult, actualResult);
+            _mockedMessageService.Verify(mock => mock.AddMessage(expected), Times.Once);
         }
+
+        [Test]
+        public void Test_HandlePacket_HandleShoutProperly()
+        {
+            //Arrange ---------
+            string originId = "origin1";
+            string message = "Hello World";
+            _chatDTO = new ChatDTO(ChatType.Shout, message);
+            _chatDTO.OriginId = originId;
+            var payload = JsonConvert.SerializeObject(_chatDTO);
+            _packetDTO.Payload = payload;
+            Player player = new("arie", 0, 0, "#", originId);
+            _mockedWorldService.Setup(mock => mock.GetPlayer(player.Id)).Returns(player);
+
+
+            //Act ---------
+            HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
+
+            //Assert ---------
+            HandlerResponseDTO ExpectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
+            string expected = $"{player.Name} shouted: {message}";
+            Assert.AreEqual(ExpectedResult, actualResult);
+            _mockedMessageService.Verify(mock => mock.AddMessage(expected), Times.Once);
+        }
+
+
     }
 }
 

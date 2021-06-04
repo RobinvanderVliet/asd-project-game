@@ -14,31 +14,35 @@ using DatabaseHandler.Repository;
 using Session.GameConfiguration;
 using UserInterface;
 using Timer = System.Timers.Timer;
+using Messages;
 
 namespace Session
 {
     public class SessionHandler : IPacketHandler, ISessionHandler
     {
         private const bool DEBUG_INTERFACE = false; //TODO: remove when UI is complete, obviously
-        
+        private const int WAITTIMEPINGTIMER = 500;
+        private const int INTERVALTIMEPINGTIMER = 1000;
         private IClientController _clientController;
         private Session _session;
         private IHeartbeatHandler _heartbeatHandler;
+        private readonly IScreenHandler _screenHandler;
+        private readonly IMessageService _messageService;
+
         private Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;
         private int _hostInactiveCounter = 0;
         private Timer _hostPingTimer;
         private Timer _senderHeartbeatTimer;
-        private const int WAITTIMEPINGTIMER = 500;
-        private const int INTERVALTIMEPINGTIMER = 1000;
         private IScreenHandler _screenHandler;
         private IGameConfigurationHandler _gameConfigurationHandler;
-        public SessionHandler(IClientController clientController, IScreenHandler screenHandler, IGameConfigurationHandler gameConfigurationHandler)
+        public SessionHandler(IClientController clientController, IScreenHandler screenHandler, IGameConfigurationHandler gameConfigurationHandler, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Session);
             _screenHandler = screenHandler;
             _gameConfigurationHandler = gameConfigurationHandler;
+            _messageService = messageService;
         }
 
         public SessionHandler()
@@ -57,7 +61,7 @@ namespace Session
 
             if (!_availableSessions.TryGetValue(sessionId, out PacketDTO packetDTO))
             {
-                Console.WriteLine("Could not find game!");
+                _messageService.AddMessage("Could not find game!");
             }
             else
             {
@@ -68,7 +72,7 @@ namespace Session
 
                 _session.SessionId = sessionId;
                 _clientController.SetSessionId(sessionId);
-                //Console.WriteLine("Trying to join game with name: " + _session.Name);
+                _messageService.AddMessage("Trying to join game with name: " + _session.Name);
 
                 SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
                 sessionDTO.Clients = new List<string[]>();
@@ -106,6 +110,7 @@ namespace Session
             _session.InSession = true;
 
             _heartbeatHandler = new HeartbeatHandler();
+            _messageService.AddMessage("Created session with the name: " + _session.Name);
             return _session.InSession;
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Antlr4.Runtime.Misc;
 using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Antlr.Grammar;
@@ -161,51 +162,59 @@ namespace InputHandling.Antlr.Parser
         {
             _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
+        
+        public override void EnterInspect(PlayerCommandsParser.InspectContext context)
+        {
+            _currentContainer.Push(new Inspect());
+        }
+
+        public override void ExitInspect(PlayerCommandsParser.InspectContext context)
+        {
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+        }
+        
+        public override void EnterInventorySlot(PlayerCommandsParser.InventorySlotContext context)
+        {
+            ASTNode node = (ASTNode)_currentContainer.Peek();
+            node.AddChild(new InventorySlot(Convert.ToString(context.GetText())));
+        }
+
+        public override void EnterUse(PlayerCommandsParser.UseContext context)
+        {
+            _currentContainer.Push(new Use());
+        }
+
+        public override void ExitUse(PlayerCommandsParser.UseContext context)
+        {
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
+        }
+        
+        public override void EnterSearch(PlayerCommandsParser.SearchContext context)
+        {
+            _currentContainer.Push(new Search());
+        }
+
+        public override void ExitSearch(PlayerCommandsParser.SearchContext context)
+        {
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
+        }
 
         public override void EnterDirection(PlayerCommandsParser.DirectionContext context)
         {
-            var action = _currentContainer.Peek();
-
-            if (action is Move)
-            {
-                Move move = (Move)action;
-                move.AddChild(new Direction(context.GetText()));
-            }
-            else if (action is Attack)
-            {
-                Attack attack = (Attack)action;
-                attack.AddChild(new Direction(context.GetText()));
-            }
+            ASTNode node = (ASTNode)_currentContainer.Peek();
+            node.AddChild(new Direction(context.GetText()));
         }
 
         public override void EnterStep(PlayerCommandsParser.StepContext context)
         {
-            Move move = (Move)_currentContainer.Peek();
-            move.AddChild(new Step(Convert.ToInt32(context.GetText())));
+            ASTNode node = (ASTNode)_currentContainer.Peek();
+            node.AddChild(new Step(Convert.ToInt32(context.GetText())));
         }
 
         public override void EnterMessage(PlayerCommandsParser.MessageContext context)
         {
-            var action = _currentContainer.Peek();
-
-            if (action is Say)
-            {
-                Say say = (Say)action;
-                say.AddChild(new Message(context.GetText()));
-            }
-            else if (action is Shout)
-            {
-                Shout shout = (Shout)action;
-                shout.AddChild(new Message(context.GetText()));
-            }
-            else if (action is CreateSession createSession)
-            {
-                createSession.AddChild(new Message(context.GetText()));
-            }
-            else if (action is JoinSession joinSession)
-            {
-                joinSession.AddChild(new Message(context.GetText()));
-            }
+            ASTNode node = (ASTNode) _currentContainer.Peek();
+            node.AddChild(new Message(context.GetText()));
         }
 
         public override void EnterUsername(PlayerCommandsParser.UsernameContext context)

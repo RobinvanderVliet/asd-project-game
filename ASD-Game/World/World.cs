@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WorldGeneration.Models.Interfaces;
 using System.Linq;
 using UserInterface;
 
@@ -55,7 +56,12 @@ namespace WorldGeneration
             }
         }
 
-        public void DeleteMap()
+        public Player GetPlayer(string id)
+        {
+            return _players.Find(x => x.Id == id);
+        }
+
+        public void deleteMap()
         {
             _map.DeleteMap();
         }
@@ -63,6 +69,16 @@ namespace WorldGeneration
         private void UpdateMapInConsole()
         {
             _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, new List<Character>(_players)));
+        }
+
+        public ITile GetCurrentTile()
+        {
+            return _map.GetLoadedTileByXAndY(CurrentPlayer.XPosition, CurrentPlayer.YPosition);
+        }
+
+        public ITile GetTileForPlayer(Player player)
+        {
+            return _map.GetLoadedTileByXAndY(player.XPosition, player.YPosition);
         }
     }
 }
