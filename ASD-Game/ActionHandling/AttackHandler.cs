@@ -14,11 +14,11 @@ namespace ActionHandling
 {
     public class AttackHandler : IAttackHandler, IPacketHandler
     {
-        private IClientController _clientController;
+        private readonly IClientController _clientController;
         private string _playerGuid;
-        private IWorldService _worldService;
+        private readonly IWorldService _worldService;
         private const int ATTACK_STAMINA = 10;
-        private IDeadHandler _deadHandler;
+        private readonly IDeadHandler _deadHandler;
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
         private readonly IDatabaseService<CreaturePOCO> _creatureDatabaseService;

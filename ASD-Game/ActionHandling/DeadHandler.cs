@@ -15,8 +15,8 @@ namespace ActionHandling
 {
     public class DeadHandler : IDeadHandler, IPacketHandler
     {
-        private IClientController _clientController;
-        private IWorldService _worldService;
+        private readonly IClientController _clientController;
+        private readonly IWorldService _worldService;
 
         public DeadHandler(IClientController clientController, IWorldService worldService)
         {

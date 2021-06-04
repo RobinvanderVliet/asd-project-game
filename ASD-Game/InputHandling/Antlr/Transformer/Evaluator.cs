@@ -11,11 +11,11 @@ namespace InputHandling.Antlr.Transformer
 {
     public class Evaluator : IEvaluator
     {
-        private ISessionHandler _sessionHandler;
-        private IMoveHandler _moveHandler;
-        private IGameSessionHandler _gameSessionHandler;
-        private IChatHandler _chatHandler;
-        private IAttackHandler _attackHandler;
+        private readonly ISessionHandler _sessionHandler;
+        private readonly IMoveHandler _moveHandler;
+        private readonly IGameSessionHandler _gameSessionHandler;
+        private readonly IChatHandler _chatHandler;
+        private readonly IAttackHandler _attackHandler;
         
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
