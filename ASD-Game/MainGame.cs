@@ -40,6 +40,10 @@ namespace ASD_project
                         {
                             _inputHandler.HandleConfigurationScreenCommands();
                         }
+                        else if (currentScreen is EditorScreen)
+                        {
+                            _inputHandler.HandleEditorScreenCommands();
+                        }
                         else if (currentScreen is GameScreen)
                         {
                             _inputHandler.HandleGameScreenCommands();

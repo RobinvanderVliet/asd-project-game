@@ -10,6 +10,8 @@ namespace Session.DTO
         public string Name { get; set; }
         public List<string[]> Clients { get; set; }
         
+        public List<string> ClientIds { get; set; }
+
         public int SessionSeed { get; set; }
 
         public SessionDTO(SessionType sessionType)

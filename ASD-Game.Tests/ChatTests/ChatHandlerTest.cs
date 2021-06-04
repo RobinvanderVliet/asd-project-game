@@ -6,6 +6,9 @@ using Network;
 using Chat.DTO;
 using Network.DTO;
 using Newtonsoft.Json;
+using System.IO;
+using WorldGeneration;
+using Messages;
 using UserInterface;
 
 namespace Chat.Tests
@@ -25,10 +28,17 @@ namespace Chat.Tests
         private Mock<IClientController> _mockedClientController;
         private Mock<IScreenHandler> _mockedScreenHandler;
         private Mock<GameScreen> _mockedGameScreen;
+        private Mock<IWorldService> _mockedWorldService;
+        private Mock<IMessageService> _mockedMessageService;
 
         [SetUp]
         public void Setup()
         {
+            _mockedClientController = new();
+            _mockedWorldService = new();
+            _mockedMessageService = new();
+
+            _sut = new ChatHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedMessageService.Object);
             _mockedClientController = new Mock<IClientController>();
             _mockedScreenHandler = new Mock<IScreenHandler>();
             _mockedGameScreen = new Mock<GameScreen>();
@@ -87,6 +97,7 @@ namespace Chat.Tests
         public void Test_HandlePacket_HandleSayProperly()
         {
             //Arrange ---------
+            string originId = "origin1";
             string message = "Hello World";
             _chatDTO = new ChatDTO(ChatType.Say, message);
             _chatDTO.OriginId = "TestID";
@@ -108,6 +119,7 @@ namespace Chat.Tests
         public void Test_HandlePacket_HandleShoutProperly()
         {
             //Arrange ---------
+            string originId = "origin1";
             string message = "Hello World";
             _chatDTO = new ChatDTO(ChatType.Shout, message);
             _chatDTO.OriginId = "TestID";
@@ -123,6 +135,8 @@ namespace Chat.Tests
             //Assert ---------
             _mockedGameScreen.Verify(mock => mock.AddMessage(resultMessage), Times.Once());*/
         }
+
+
     }
 }
 

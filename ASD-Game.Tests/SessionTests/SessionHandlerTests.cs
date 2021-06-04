@@ -1,3 +1,4 @@
+using Messages;
 using Moq;
 using Network;
 using Network.DTO;
@@ -27,6 +28,7 @@ namespace Session.Tests
 
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;
+        private Mock<IMessageService> _mockedMessageService;
         private Mock<Session> _mockedSession;
         private Mock<IScreenHandler> _mockedScreenHandler;
         private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
@@ -37,10 +39,12 @@ namespace Session.Tests
             var standardOutput = new StreamWriter(Console.OpenStandardOutput());
             standardOutput.AutoFlush = true;
             Console.SetOut(standardOutput);
-            _mockedClientController = new Mock<IClientController>();
             _mockedScreenHandler = new Mock<IScreenHandler>();
             _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
-            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object, _mockedGameConfigurationHandler.Object);
+            _mockedClientController = new();
+            _mockedMessageService = new();
+            _mockedScreenHandler = new();
+            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object, _mockedMessageService.Object, _mockedGameConfigurationHandler.Object);
             _mockedSession = new Mock<Session>();
             _packetDTO = new PacketDTO();
         }
@@ -55,12 +59,12 @@ namespace Session.Tests
             {
                 //Act ---------
                 Console.SetOut(sw);
-                _sut.JoinSession(invalidSessionId, "");
-
-                //Assert ---------
-                string expected = string.Format("Could not find game!{0}", Environment.NewLine);
-                Assert.AreEqual(expected, sw.ToString());
+                _sut.JoinSession(invalidSessionId, userName);
             }
+
+            //Assert ---------
+            string expected = "Could not find game!";
+            _mockedMessageService.Verify(mock => mock.AddMessage(expected), Times.Once);
         }
 
         [Test]
@@ -74,7 +78,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = hostOriginId;
             packetHeaderDTO.SessionID = sessionId;
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -242,7 +246,7 @@ namespace Session.Tests
 
             _mockedClientController.Setup(mock => mock.SendPayload(payloadping, PacketType.Session));
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns("1");
-            _sut.JoinSession(sessionId, "");
+            _sut.JoinSession(sessionId, userName);
             
             _sut.setHostPingTimer(new Timer());
 
@@ -262,7 +266,7 @@ namespace Session.Tests
         public void Test_HandlePacket_RequestSessionsAtClientOrHost()
         {
             // Arrange ---------
-            _sut.CreateSession("testSessionName", "");
+            _sut.CreateSession("testSessionName", "testHost");
 
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             var payload = JsonConvert.SerializeObject(sessionDTO);
@@ -385,7 +389,7 @@ namespace Session.Tests
         public void Test_HandlePacket_RequestToJoinSessionThatDoesNotExist()
         {
             // Arrange ---------
-            _sut.CreateSession("testSessionName", "");
+            _sut.CreateSession("testSessionName", "testHost");
 
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
             var payload = JsonConvert.SerializeObject(sessionDTO);
@@ -412,13 +416,13 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName", "");
+            _sut.CreateSession("testSessionName", "testHost");
 
             string originId = "testOriginId";
 
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
             sessionDTO.Clients = new List<string[]>();
-            sessionDTO.Clients.Add(new string[] { originId, "" });
+            sessionDTO.Clients.Add(new []{originId, "Gerrit"});
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
@@ -445,14 +449,15 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName", "");
+            _sut.CreateSession("testSessionName", "testHost");
 
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";
+            string userName = "Gerrit";
 
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
             sessionDTO.Clients = new List<string[]>();
-            sessionDTO.Clients.Add(new string[] { originId, "" });
+            sessionDTO.Clients.Add(new []{ originId, userName });
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
@@ -465,7 +470,7 @@ namespace Session.Tests
 
             SessionDTO sessionDTOInHandlerResponse = new SessionDTO(SessionType.RequestToJoinSession);
             sessionDTOInHandlerResponse.Clients = sessionDTO.Clients;
-            sessionDTOInHandlerResponse.Clients.Add( new string[] { originIdHost, "" });
+            sessionDTOInHandlerResponse.Clients.Add(new []{ originIdHost, userName });
             HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients,
                 JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
             _packetDTO.HandlerResponse = handlerResponseDTO;
@@ -486,17 +491,18 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName", "");
+            _sut.CreateSession("testSessionName", "testHost");
 
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";
+            string userName = "Gerrit";
 
             SessionDTO sessionDTO = new SessionDTO
             {
                 SessionType = SessionType.RequestToJoinSession,
                 Clients = new List<string[]>()
             };
-            sessionDTO.Clients.Add(new string[] { originId, "" });
+            sessionDTO.Clients.Add(new []{originId, userName});
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
@@ -515,7 +521,7 @@ namespace Session.Tests
                 SessionType = SessionType.RequestToJoinSession,
                 Clients = sessionDTO.Clients
             };
-            sessionDTOInHandlerResponse.Clients.Add(new []{originIdHost, ""});
+            sessionDTOInHandlerResponse.Clients.Add(new []{originIdHost, userName});
             
             HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients,
                 JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
@@ -540,7 +546,7 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName", "");
+            _sut.CreateSession("testSessionName", "testHost");
 
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";
@@ -587,7 +593,7 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName", "");
+            _sut.CreateSession("testSessionName", "testHost");
 
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";
@@ -630,7 +636,7 @@ namespace Session.Tests
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName", "");
+            _sut.CreateSession("testSessionName", "testHost");
 
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";

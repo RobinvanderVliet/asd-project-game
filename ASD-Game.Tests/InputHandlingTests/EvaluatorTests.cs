@@ -27,6 +27,8 @@ namespace InputHandling.Tests
         private Mock<IChatHandler> _mockedChatHandler;
         private Mock<IClientController> _mockedClientController;
     
+        private Mock<IInventoryHandler> _mockedInventoryHandler;
+
         [SetUp]
         public void Setup()
         {
@@ -35,7 +37,8 @@ namespace InputHandling.Tests
             _mockedGameSessionHandler = new Mock<IGameSessionHandler>();
             _mockedChatHandler = new Mock<IChatHandler>();
             _mockedClientController = new Mock<IClientController>();
-            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedClientController.Object);
+            _mockedInventoryHandler = new Mock<IInventoryHandler>();
+            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object , _mockedClientController.Object, _mockedInventoryHandler.Object);
         }
     
         [Test]
@@ -131,13 +134,33 @@ namespace InputHandling.Tests
             _mockedSessionHandler.Verify(mockedSession => mockedSession.RequestSessions(), Times.Once);
         }
     
+        private static AST SearchAst()
+        {
+            Input search = new Input();
+            search.AddChild(new Search());
+            return new AST(search);
+        }
+
+        [Test]
+        public void Test_Apply_SearchActionIsCalled()
+        {
+            // Arrange
+            var ast = SearchAst();
+
+            // Act
+            _sut.Apply(ast);
+
+            // Assert
+            _mockedInventoryHandler.Verify(mock => mock.Search(), Times.Once);
+        }
+
         private static AST RequestSessionsAst()
         {
             Input requestSessions = new Input();
             requestSessions.AddChild(new RequestSessions());
             return new AST(requestSessions);
         }
-    
+
         [Test]
         public void Test_Apply_HandleCreateSessionActionIsCalled()
         {
@@ -319,5 +342,36 @@ namespace InputHandling.Tests
             _ => (int)ItemSpawnRate.High
         };
 
+        
+        [Test]
+        public void Test_Apply_InspectItemActionIsCalled()
+        {
+            //Arrange
+            string inventorySlot = "armor";
+            var ast = InspectAST(inventorySlot);
+            
+            //Act
+            _sut.Apply(ast);
+            
+            //Assert
+            _mockedInventoryHandler.Verify(mockedInventory => mockedInventory.InspectItem(inventorySlot), Times.Once);
+        }
+        
+        [Test]
+        public void Test_Inspect_ThrowsExceptionWithSlotDigit42()
+        {
+            //arrange
+            var ast = InspectAST("slot 42");
+            //act & assert
+            Assert.Throws<SlotException>(() => _sut.Apply(ast));
+        }
+
+        public static AST InspectAST(string inventorySlot)
+        {
+            Input inspect = new Input();
+            inspect.AddChild(new Inspect()
+                .AddChild(new InventorySlot(inventorySlot)));
+            return new AST(inspect);
+        }
     }
 }

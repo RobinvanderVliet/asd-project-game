@@ -40,14 +40,14 @@ namespace ActionHandling.Tests
             
             Player player = new Player("test", x, y, "#", "test2");
             
-            _mockedWorldService.Setup(mock => mock.getCurrentPlayer()).Returns(player);
+            _mockedWorldService.Setup(mock => mock.GetCurrentPlayer()).Returns(player);
             _mockedClientController.Setup(mock => mock.SendPayload(It.IsAny<string>(), PacketType.Move));
             
             //act
             _sut.SendMove(direction, steps);
             
             //assert
-            _mockedWorldService.Verify(mock => mock.getCurrentPlayer(), Times.Once);
+            _mockedWorldService.Verify(mock => mock.GetCurrentPlayer(), Times.Once);
             _mockedClientController.Verify(mock => mock.SendPayload(It.IsAny<string>(), PacketType.Move), Times.Once);
         }
     }

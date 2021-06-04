@@ -17,6 +17,7 @@ namespace WorldGeneration.Models.HazardousTiles
 
         public GasTile(int x, int y, int radius = 1)
         {
+            ItemsOnTile = new();
             Symbol = TileSymbol.GAS;
             IsAccessible = true;
             XPosition = x;

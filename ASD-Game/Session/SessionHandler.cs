@@ -14,16 +14,23 @@ using DatabaseHandler.Repository;
 using Session.GameConfiguration;
 using UserInterface;
 using Timer = System.Timers.Timer;
+using Messages;
 
 namespace Session
 {
     public class SessionHandler : IPacketHandler, ISessionHandler
     {
+        private const int WAITTIMEPINGTIMER = 500;
+        private const int INTERVALTIMEPINGTIMER = 1000;
+
+        private readonly IClientController _clientController;
         private const bool DEBUG_INTERFACE = false; //TODO: remove when UI is complete, obviously
-        
-        private IClientController _clientController;
+
         private Session _session;
         private IHeartbeatHandler _heartbeatHandler;
+        private readonly IScreenHandler _screenHandler;
+        private readonly IMessageService _messageService;
+
         private Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;
         private int _hostInactiveCounter = 0;
@@ -39,6 +46,7 @@ namespace Session
             _clientController.SubscribeToPacketType(this, PacketType.Session);
             _screenHandler = screenHandler;
             _gameConfigurationHandler = gameConfigurationHandler;
+            _messageService = messageService;
         }
 
         public SessionHandler()
@@ -48,7 +56,7 @@ namespace Session
         
         public List<string[]> GetAllClients()
         {
-            return _session.GetAllClients();
+           return _session.GetAllClients();
         }
      
         public bool JoinSession(string sessionId, string userName)
@@ -57,7 +65,7 @@ namespace Session
 
             if (!_availableSessions.TryGetValue(sessionId, out PacketDTO packetDTO))
             {
-                Console.WriteLine("Could not find game!");
+                _messageService.AddMessage("Could not find game!");
             }
             else
             {
@@ -68,7 +76,7 @@ namespace Session
 
                 _session.SessionId = sessionId;
                 _clientController.SetSessionId(sessionId);
-                //Console.WriteLine("Trying to join game with name: " + _session.Name);
+                _messageService.AddMessage("Trying to join game with name: " + _session.Name);
 
                 SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
                 sessionDTO.Clients = new List<string[]>();
@@ -111,6 +119,8 @@ namespace Session
             }
 
             _heartbeatHandler = new HeartbeatHandler();
+            _messageService.AddMessage("Created session with the name: " + _session.Name);
+
             return _session.InSession;
         }
 

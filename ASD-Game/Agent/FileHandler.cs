@@ -38,6 +38,11 @@ namespace Agent
         {
             string safeFileLocation = GetBaseDirectory() + "/Resource/" + fileName;
 
+            if (File.Exists(safeFileLocation))
+            {
+                File.Delete(safeFileLocation);
+            }
+            
             CreateDirectory(safeFileLocation);
 
             using (FileStream fileStream = File.Open(safeFileLocation, FileMode.OpenOrCreate))
@@ -63,7 +68,7 @@ namespace Agent
             return string.Format(Path.GetFullPath(Path.Combine(GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory))));
         }
 
-        private string GoBackToRoot(String path)
+        private string GoBackToRoot(string path)
         {
             return Directory.GetParent
                 (Directory.GetParent
@@ -71,5 +76,6 @@ namespace Agent
                         (Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).ToString()).ToString()).ToString()).ToString();
 
         }
+        
     }
 }

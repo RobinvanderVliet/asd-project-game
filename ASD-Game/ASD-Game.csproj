@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+	<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <RootNamespace>ASD_project</RootNamespace>
   </PropertyGroup>
   
@@ -60,10 +61,24 @@
       <CustomToolNamespace>InputHandling.Antlr.Grammar</CustomToolNamespace>
     </Antlr4>
   </ItemGroup>
-  
+
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="InputHandling\Antlr\Grammar\PlayerCommands.g4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Profiles\" />
+    <Folder Include="resource\agent" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="resource\config\agent" />
+    <Folder Include="resource\config\npc" />
   </ItemGroup>
 </Project>
