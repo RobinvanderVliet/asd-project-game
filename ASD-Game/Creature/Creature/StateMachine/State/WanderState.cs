@@ -19,24 +19,6 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do()
         {
-            string mapResult = _ruleSetCoreFunctions.AnalyzeMap();
-            if (mapResult == null)
-            {
-                _stateMachine.FireEvent(CreatureEvent.Event.IDLE);
-            } else if (mapResult != null )
-            {
-                switch (mapResult)
-                {//TODO make sure this acquires a target
-                    case "player":
-                    case "monster":
-                        _stateMachine.FireEvent(CreatureEvent.Event.SPOTTED_CREATURE);
-                        break;
-                    case "item":
-                        _stateMachine.FireEvent(CreatureEvent.Event.FOUND_ITEM);
-                        break;
-
-                }
-            } 
             int steps = new Random().Next(10);
             _moveHandler.SendMove(pickRandomDirection(), steps);
         }
