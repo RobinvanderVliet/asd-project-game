@@ -5,6 +5,7 @@ using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
+using Items;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
@@ -43,28 +44,29 @@ namespace ActionHandling
                 return;
             }
 
-            var weapon = _worldService.GetCurrentPlayer().Inventory.Weapon;
+            Weapon weapon = _worldService.GetCurrentPlayer().Inventory.Weapon;
+            int weaponDistance = (int) weapon.Distance;
             int x = 0;
             int y = 0;
             switch (direction)
             {
                 case "right":
                 case "east":
-                    x = weapon.GetWeaponDistance();
+                    x = weaponDistance;
                     break;
                 case "left":
                 case "west":
-                    x = -weapon.GetWeaponDistance();
+                    x = -weaponDistance;
                     break;
                 case "forward":
                 case "up":
                 case "north":
-                    y = weapon.GetWeaponDistance();
+                    y = weaponDistance;
                     break;
                 case "backward":
                 case "down":
                 case "south":
-                    y = -weapon.GetWeaponDistance();
+                    y = -weaponDistance;
                     break;
             }
 
@@ -72,7 +74,7 @@ namespace ActionHandling
             AttackDTO attackDto = new AttackDTO();
             attackDto.XPosition = currentPlayer.XPosition + x;
             attackDto.YPosition = currentPlayer.YPosition + y;
-            attackDto.Damage = weapon.GetWeaponDamage();
+            attackDto.Damage = (int) weapon.Damage;
             attackDto.Stamina = currentPlayer.Stamina;
             attackDto.PlayerGuid = _clientController.GetOriginId();
             SendAttackDTO(attackDto);
