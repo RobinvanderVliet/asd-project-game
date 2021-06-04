@@ -9,14 +9,12 @@ namespace WorldGeneration
     public class WorldService : IWorldService
     {
         private World _world;
-        private bool displayingStats;
 
         private IScreenHandler _screenHandler;
 
         public WorldService(IScreenHandler screenHandler)
         {
             _screenHandler = screenHandler;
-            displayingStats = false;
         }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
@@ -95,25 +93,20 @@ namespace WorldGeneration
 
          public void DisplayStats()
          {
-            if (!displayingStats)
-            {
-                displayingStats = true;
-                Player player = GetCurrentPlayer();
-                _screenHandler.SetStatValues(
-                    player.Name,
-                    0,
-                    player.Health,
-                    player.Stamina,
-                    player.GetArmorPoints(),
-                    player.RadiationLevel,
-                    player.Inventory.Helmet?.ItemName ?? "Empty",
-                    player.Inventory.Armor?.ItemName ?? "Empty",
-                    player.Inventory.Weapon?.ItemName ?? "Empty",
-                    player.Inventory.GetConsumableAtIndex(0)?.ItemName ?? "Empty",
-                    player.Inventory.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
-                    player.Inventory.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
-                displayingStats = false;
-            }
+            Player player = GetCurrentPlayer();
+            _screenHandler.SetStatValues(
+                player.Name,
+                0,
+                player.Health,
+                player.Stamina,
+                player.GetArmorPoints(),
+                player.RadiationLevel,
+                player.Inventory.Helmet?.ItemName ?? "Empty",
+                player.Inventory.Armor?.ItemName ?? "Empty",
+                player.Inventory.Weapon?.ItemName ?? "Empty",
+                player.Inventory.GetConsumableAtIndex(0)?.ItemName ?? "Empty",
+                player.Inventory.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
+                player.Inventory.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
         }
 
         public List<Player> GetPlayers()
