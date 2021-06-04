@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace WorldGeneration
 {
     public class WorldService : IWorldService
@@ -32,6 +35,22 @@ namespace WorldGeneration
         public Player getCurrentPlayer()
         {
             return _world.CurrentPlayer;
+        }
+
+        public List<Player> getAllPlayers()
+        {
+            return _world._players;
+        }
+
+        public void playerDied(Player player)
+        {
+            player.Symbol = "X";
+            
+        }
+
+        public bool isDead(Player player)
+        {
+            return player.Health <= 0;
         }
     }
 }

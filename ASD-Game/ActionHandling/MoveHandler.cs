@@ -1,11 +1,8 @@
 ﻿using Network;
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using ActionHandling.DTO;
-using DatabaseHandler;
 using DatabaseHandler.POCO;
-using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using Network.DTO;
 using Newtonsoft.Json;
@@ -16,18 +13,25 @@ namespace ActionHandling
 {
     public class MoveHandler : IMoveHandler, IPacketHandler
     {
-        private IClientController _clientController;
-        private IWorldService _worldService;
+        private readonly IClientController _clientController;
+        private readonly IWorldService _worldService;
+        private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
 
-        public MoveHandler(IClientController clientController, IWorldService worldService)
+        public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Move);
             _worldService = worldService;
+            _playerDatabaseService = playerDatabaseService;
         }
 
         public void SendMove(string directionValue, int stepsValue)
         {
+            if (_worldService.isDead(_worldService.getCurrentPlayer()))
+            {
+                Console.WriteLine("You can't move, you're dead!");
+                return;
+            }
             int x = 0;
             int y = 0;
             switch (directionValue)
@@ -73,12 +77,8 @@ namespace ActionHandling
             //(_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost)
             if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
             {
-                var dbConnection = new DbConnection();
-
-                var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-                var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
-
-                var allLocations = servicePlayer.GetAllAsync();
+               
+                var allLocations = _playerDatabaseService.GetAllAsync();
 
                 allLocations.Wait();
 
@@ -114,14 +114,12 @@ namespace ActionHandling
 
         private void InsertToDatabase(MoveDTO moveDTO)
         {
-            var dbConnection = new DbConnection();
-
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var player = playerRepository.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId);
+            
+            var player = _playerDatabaseService.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId);
 
             player.XPosition = moveDTO.XPosition;
             player.YPosition = moveDTO.YPosition;
-            playerRepository.UpdateAsync(player);
+            _playerDatabaseService.UpdateAsync(player);
         }
 
         private void HandleMove(MoveDTO moveDTO)

@@ -13,7 +13,7 @@ namespace WorldGeneration
 
         //random default values for health&stamina for now
         private const int HEALTHCAP = 100;
-        private const int STAMINACAP = 10;
+        private const int STAMINACAP = 100;
 
         public Player(string name, int xPosition, int yPosition, string symbol, string id) : base(name, xPosition, yPosition, symbol)
         {

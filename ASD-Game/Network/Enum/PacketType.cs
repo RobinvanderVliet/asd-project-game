@@ -5,7 +5,9 @@
         Chat,
         Move,
         Session,
-        GameSession
-
+        GameSession,
+        Attack,
+        Dead
+        
     }
 }

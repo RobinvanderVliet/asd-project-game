@@ -11,21 +11,23 @@ namespace InputHandling.Antlr.Transformer
 {
     public class Evaluator : IEvaluator
     {
-        private ISessionHandler _sessionHandler;
-        private IMoveHandler _moveHandler;
-        private IGameSessionHandler _gameSessionHandler;
-        private IChatHandler _chatHandler;
+        private readonly ISessionHandler _sessionHandler;
+        private readonly IMoveHandler _moveHandler;
+        private readonly IGameSessionHandler _gameSessionHandler;
+        private readonly IChatHandler _chatHandler;
+        private readonly IAttackHandler _attackHandler;
         
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private String _commando;
 
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IAttackHandler attackHandler)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
             _gameSessionHandler = gameSessionHandler;
             _chatHandler = chatHandler;
+            _attackHandler = attackHandler;
         }
         public void Apply(AST ast)
         {
@@ -110,7 +112,7 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformAttack(Attack attack)
         {
-            // TODO: Call AttackHandler method with (attack.Direction.DirectionValue)
+            _attackHandler.SendAttack(attack.Direction.DirectionValue);
         }
 
         private void TransformExit()
