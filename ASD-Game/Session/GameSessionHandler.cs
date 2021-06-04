@@ -13,21 +13,22 @@ using WorldGeneration.Models;
 
 namespace Session
 {
-
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
     {
         private IClientController _clientController;
         private ISessionHandler _sessionHandler;
         private IWorldService _worldService;
+        private INetworkComponent _networkComponent;
 
-        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler)
+        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, INetworkComponent networkComponent)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
             _worldService = worldService;
             _sessionHandler = sessionHandler;
+            _networkComponent = networkComponent;
         }
-        
+
         public void SendGameSession()
         {
             var StartGameDTO = SetupGameHost();
@@ -43,7 +44,8 @@ namespace Session
             var gameRepository = new Repository<GamePOCO>(dbConnection);
             var gameService = new ServicesDb<GamePOCO>(gameRepository);
 
-            var gamePOCO = new GamePOCO {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
+            var gamePOCO = new GamePOCO
+                {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
             gameService.CreateAsync(gamePOCO);
 
             List<string> allClients = _sessionHandler.GetAllClients();
@@ -96,14 +98,30 @@ namespace Session
                 if (_clientController.GetOriginId() == player.Key)
                 {
                     // add name to players
-                    _worldService.AddPlayerToWorld(new WorldGeneration.Player("gerrit", player.Value[0], player.Value[1], CharacterSymbol.CURRENT_PLAYER, player.Key), true);
-                } 
-                else 
+                    _worldService.AddPlayerToWorld(
+                        new WorldGeneration.Player("gerrit", player.Value[0], player.Value[1],
+                            CharacterSymbol.CURRENT_PLAYER, player.Key), true);
+                }
+                else
                 {
-                    _worldService.AddPlayerToWorld(new WorldGeneration.Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key), false);
+                    _worldService.AddPlayerToWorld(
+                        new WorldGeneration.Player("arie", player.Value[0], player.Value[1],
+                            CharacterSymbol.ENEMY_PLAYER, player.Key), false);
                 }
             }
 
+            // Maak 3 playerobjecten die dan een agent zijn
+            if (startGameDTO.PlayerLocations.Count < 8)
+            {
+                
+                Console.WriteLine("Not enough players. Replacing " + (8 - startGameDTO.PlayerLocations.Count) +
+                                  "/8 players with agents.");
+
+                for (var i = 0; i < (8 - startGameDTO.PlayerLocations.Count); i++)
+                {
+                    
+                }
+            }
             _worldService.DisplayWorld();
         }
     }

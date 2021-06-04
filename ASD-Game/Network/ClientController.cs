@@ -10,10 +10,25 @@ namespace Network
         private INetworkComponent _networkComponent;
         private IHostController _hostController;
         private string _sessionId;
+        private string _absoluteOriginId;
         private Dictionary<PacketType, IPacketHandler> _subscribers = new();
         private bool _isBackupHost;
-        public bool IsBackupHost { get => _isBackupHost; set => _isBackupHost = value; }
-        public string SessionId { get => _sessionId; }
+
+        public bool IsBackupHost
+        {
+            get => _isBackupHost;
+            set => _isBackupHost = value;
+        }
+
+        public string SessionId
+        {
+            get => _sessionId;
+        }
+
+        public string AbsoluteOriginId
+        {
+            set => _absoluteOriginId = value;
+        }
 
         public ClientController(INetworkComponent networkComponent)
         {
@@ -52,7 +67,7 @@ namespace Network
         [ExcludeFromCodeCoverage]
         public string GetOriginId()
         {
-            return _networkComponent.GetOriginId();
+            return _absoluteOriginId ?? _networkComponent.GetOriginId();
         }
 
         public void SendPayload(string payload, PacketType packetType)
@@ -92,6 +107,11 @@ namespace Network
         public bool IsHost()
         {
             return _hostController != null;
+        }
+
+        public void AddAgentController(IAgentController agentController)
+        {
+            _hostController.AddAgentController(agentController);
         }
     }
 }
