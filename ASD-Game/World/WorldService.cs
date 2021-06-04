@@ -73,5 +73,23 @@ namespace WorldGeneration
             }
             return result;
         }
+
+        public void DisplayStats()
+        {
+            Player player = GetCurrentPlayer();
+            _screenHandler.SetStatValues(
+                player.Name,
+                0,
+                player.Health,
+                player.Stamina,
+                player.GetArmorPoints(),
+                player.RadiationLevel,
+                player.Inventory.Helmet?.ItemName ?? "Empty",
+                player.Inventory.Armor?.ItemName ?? "Empty",
+                player.Inventory.Weapon?.ItemName ?? "Empty",
+                player.Inventory.ConsumableItemList?[0]?.ItemName ?? "Empty",
+                player.Inventory.ConsumableItemList?[1]?.ItemName ?? "Empty",
+                player.Inventory.ConsumableItemList?[2]?.ItemName ?? "Empty");
+        }
     }
 }

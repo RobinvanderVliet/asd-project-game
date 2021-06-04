@@ -140,6 +140,7 @@ namespace Session
             }
 
             _worldService.DisplayWorld();
+            _worldService.DisplayStats();
         }
     }
 }
