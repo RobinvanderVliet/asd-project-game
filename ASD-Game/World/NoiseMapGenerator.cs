@@ -78,7 +78,7 @@ namespace ASD_project.World
             return tile;                      
         }
 
-        private ITile GetTileFromNoise(float noise, int x, int y)
+        public ITile GetTileFromNoise(float noise, int x, int y)
         {
             return (noise * 10) switch
             {
@@ -89,6 +89,11 @@ namespace ASD_project.World
                 (< 8) => new StreetTile(x, y),
                 _ => new GasTile(x, y)
             };
+        }
+        public void SetNoise (IFastNoise noise)
+        {
+            _itemNoise = noise;
+            _worldNoise = noise;
         }
     }
 }
