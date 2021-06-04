@@ -1,4 +1,5 @@
-﻿using Network;
+﻿using System.Collections.Generic;
+using Network;
 using System.Linq;
 using ActionHandling.DTO;
 using ASD_project.World.Services;
@@ -14,22 +15,25 @@ namespace ActionHandling
     public class SpawnHandler : ISpawnHandler, IPacketHandler
     {
         private IClientController _clientController;
-        private IWorldService _worldService;
+        private List<ItemSpawnDTO> _itemSpawnDTOs;
 
-        public SpawnHandler(IClientController clientController, IWorldService worldService)
+        public SpawnHandler(IClientController clientController)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Spawn);
-            _worldService = worldService;
+        }
+
+        public void setItemSpawnDTOs(List<ItemSpawnDTO> itemSpawnDTOs)
+        {
+            _itemSpawnDTOs = itemSpawnDTOs;
         }
 
         public void SendSpawn(int x, int y, Item item)
         {
-
             ItemSpawnDTO itemSpawnDto = new ItemSpawnDTO();
             itemSpawnDto.XPosition = x;
             itemSpawnDto.YPosition = y;
-            itemSpawnDto.item = item;
+            itemSpawnDto.Item = item;
             SendSpawnDTO(itemSpawnDto);
         }
 
@@ -45,7 +49,7 @@ namespace ActionHandling
             
             if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
             {
-                ItemSpawnDTO item = _worldService.getAllItems()
+                ItemSpawnDTO item = _itemSpawnDTOs
                     .FirstOrDefault(item => item.Equals(itemSpawnDto));
                 if (item == null)
                 {
@@ -56,11 +60,6 @@ namespace ActionHandling
                     return new HandlerResponseDTO(SendAction.Ignore, null);
                 }
             }
-            else
-            {
-                HandleItemSpawn(itemSpawnDto);
-            }
-
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
@@ -68,14 +67,8 @@ namespace ActionHandling
         {
             var ItemService = new DatabaseService<ItemPoco>();
             var item = new ItemPoco()
-                {ItemName = itemSpawnDto.item.ItemName, Xposition = itemSpawnDto.XPosition, Yposition = itemSpawnDto.YPosition};
+                {ItemName = itemSpawnDto.Item.ItemName, Xposition = itemSpawnDto.XPosition, Yposition = itemSpawnDto.YPosition};
             ItemService.CreateAsync(item);
-        }
-
-        private void HandleItemSpawn(ItemSpawnDTO itemSpawnDto)
-        {
-            // _worldService.UpdateCharacterPosition(moveDTO.UserId, moveDTO.XPosition, moveDTO.YPosition);
-            _worldService.DisplayWorld();
         }
     }
 }

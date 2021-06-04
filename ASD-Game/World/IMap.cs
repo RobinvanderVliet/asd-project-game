@@ -7,5 +7,7 @@ namespace ASD_project.World
     {
         char[,] GetMapAroundCharacter(Character currentPlayer, int viewDistance, List<Character> characters);
         void DeleteMap();
+        void DisplayMap(Character currentPlayer, int viewDistance, List<Character> characters);
+
     }
 }

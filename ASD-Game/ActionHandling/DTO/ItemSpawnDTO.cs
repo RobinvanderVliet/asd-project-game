@@ -6,6 +6,6 @@ namespace ActionHandling.DTO
     {
         public int XPosition { get; set; }
         public int YPosition { get; set; }
-        public Item item { get; set; }
+        public Item Item { get; set; }
     }
 }

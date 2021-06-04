@@ -44,22 +44,8 @@ namespace ASD_project.World
             {
                 if (_chunks.Any(chunk => chunk.X == chunkCoordinates[0] && chunk.Y == chunkCoordinates[1])) continue;
                 {
-                    // chunk isn't loaded in local memory yet
-                    var chunk = new Chunk { 
-                        X = chunkCoordinates[0], 
-                        Y = chunkCoordinates[1] 
-                    };
-                    var getAllChunksQuery = _chunkDBService.GetAllAsync();
-                    getAllChunksQuery.Wait();
-                    var results = getAllChunksQuery.Result.FirstOrDefault(c => c.X == chunkCoordinates[0] && c.Y == chunkCoordinates[1] && c.Seed == _seed);
-                    if (results == null)
-                    {
-                        _chunks.Add(GenerateNewChunk(chunkCoordinates[0], chunkCoordinates[1]));
-                    }
-                    else
-                    {
-                        _chunks.Add(results);
-                    }
+                    // chunk isn't loaded yet
+                    _chunks.Add(GenerateNewChunk(chunkCoordinates[0], chunkCoordinates[1]));
                 }
             }
         }
@@ -85,6 +71,22 @@ namespace ASD_project.World
                 }
             }
             return chunksWithinLoadingRange;
+        }
+        
+        public void DisplayMap(Character currentPlayer, int viewDistance, List<Character> characters)
+        {
+            var playerX = currentPlayer.XPosition;
+            var playerY = currentPlayer.YPosition;
+            LoadArea(playerX, playerY, viewDistance);
+            for (var y = (playerY + viewDistance); y > ((playerY + viewDistance) - (viewDistance * 2) - 1); y--)
+            {
+                for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
+                {
+                    var tile = GetLoadedTileByXAndY(x, y);
+                    Console.Write($"  {GetDisplaySymbol(tile, characters)}");
+                }
+                Console.WriteLine("");
+            }
         }
         
         public char[,] GetMapAroundCharacter(Character centerCharacter, int viewDistance, List<Character> allCharacters)
@@ -119,7 +121,14 @@ namespace ASD_project.World
             }
             else
             {
-                return tile.Symbol;
+                if (tile.ItemsOnTile.Count != 0)
+                {
+                    return "n";
+                }
+                else
+                {
+                    return tile.Symbol;                    
+                }
             }
         }
 

@@ -17,6 +17,7 @@ namespace ASD_project.World
         private readonly int _viewDistance;
         private IScreenHandler _screenHandler;
         private IItemService _itemService;
+        
 
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService)
         {
@@ -24,9 +25,10 @@ namespace ASD_project.World
             _players = new ();
             _creatures = new ();
             _itemService = itemService;
-            _map = mapFactory.GenerateMap(itemService, seed);
+            _map = mapFactory.GenerateMap(itemService, _items, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
+            itemService.GetSpawnHandler().setItemSpawnDTOs(_items);
         }
 
         public void UpdateCharacterPosition(string id, int newXPosition, int newYPosition)
@@ -68,6 +70,7 @@ namespace ASD_project.World
             {
                 var characters = ((IEnumerable<Character>)_players).Concat(_creatures).ToList();
                 //_screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
+                _map.DisplayMap(CurrentPlayer, _viewDistance, characters);
             }
         }
 
@@ -77,16 +80,16 @@ namespace ASD_project.World
             return _map.GetMapAroundCharacter(character, _viewDistance, characters);
         }
 
-            public void DeleteMap()
+        public void DeleteMap()
         {
             _map.DeleteMap();
         }
 
-            public void AddItemToWorld(ItemSpawnDTO itemSpawnDto)
-            {
-                _items.Add(itemSpawnDto);
-                UpdateMap();
-            }
+        public void AddItemToWorld(ItemSpawnDTO itemSpawnDto)
+        {
+            _items.Add(itemSpawnDto);
+            UpdateMap();
+        }
     }
 }
      
