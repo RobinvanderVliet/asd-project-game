@@ -32,7 +32,7 @@ namespace UserInterface
             DrawInputBox(INPUT_X, INPUT_Y + options.Count, inputText);
         }
 
-        public void UpdateConfigurationScreen(string configurationHeader, List<string> configurationChoices)
+        public virtual void UpdateConfigurationScreen(string configurationHeader, List<string> configurationChoices)
         {
             configuration = configurationHeader;
             options = configurationChoices;
@@ -61,7 +61,7 @@ namespace UserInterface
             DrawBox(CONFIGURATION_X - 1, CONFIGURATION_Y, CONFIGURATION_WIDTH, options.Count + 1);
         }
         
-        public void UpdateInputMessage(string message)
+        public virtual void UpdateInputMessage(string message)
         {
             inputText = message;
             DrawScreen();
