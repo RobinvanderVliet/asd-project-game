@@ -28,7 +28,7 @@ namespace ASD_project.World
             _worldNoise.SetSeed(seed);
             _itemNoise = new FastNoiseLite();
             _itemNoise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
-            _itemNoise.SetFrequency(5f);
+            _itemNoise.SetFrequency(10f);
             _itemNoise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
             _itemNoise.SetSeed(seed);
             _seed = seed;
@@ -38,13 +38,13 @@ namespace ASD_project.World
 
         public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize)
         {
-            var itemSpawner = new RandomItemGenerator();
             var map = new ITile[chunkRowSize * chunkRowSize];
             for (var y = 0; y < chunkRowSize; y++)
             {
                 for (var x = 0; x < chunkRowSize; x++)
                 {
-                    map[y * chunkRowSize + x] = CreateTileWithItemFromNoise(_worldNoise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize)
+                    map[y * chunkRowSize + x] = CreateTileWithItemFromNoise(
+                        _worldNoise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize)
                         , _itemNoise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize)
                         , x + chunkRowSize * chunkX
                         , chunkRowSize * chunkY - chunkRowSize + y);
@@ -56,24 +56,30 @@ namespace ASD_project.World
         private ITile CreateTileWithItemFromNoise(float worldNoise, float itemNoise, int x, int y)
         {
             var tile = GetTileFromNoise(worldNoise, x, y);
-            var tileWithItem = _itemService.PutItemOnTile(tile, itemNoise);
-            var item = tileWithItem.ItemsOnTile.FirstOrDefault();
-            var itemSpawnDTO = new ItemSpawnDTO { item = item, XPosition = x, YPosition = y };
             
+            if (!tile.IsAccessible)
+            {
+                return tile;
+            }
+            
+            var item = _itemService.GenerateItemFromNoise(itemNoise, x, y);
+            var itemSpawnDTO = new ItemSpawnDTO { item = item, XPosition = x, YPosition = y };
+
             if (item == null)
                 return tile;
             
-            if (_items.Exists(itemInList => itemInList.item.ItemId.Equals(item.ItemId)))
+            if (_items.Exists(itemInList => itemInList.item.ItemId == item.ItemId))
             {
                   return tile;
             }
             _items.Add(itemSpawnDTO);
-            return tileWithItem;                      
+            tile.ItemsOnTile.Add(item);
+            
+            return tile;                      
         }
 
-        public ITile GetTileFromNoise(float noise, int x, int y)
+        private ITile GetTileFromNoise(float noise, int x, int y)
         {
-            // this function is public for unit testing purposes only.
             return (noise * 10) switch
             {
                 (< -8) => new WaterTile(x, y),

@@ -2,6 +2,8 @@
 using ASD_project.World;
 using ASD_project.World.Models.Interfaces;
 using ASD_project.World.Services;
+using Items;
+using MathNet.Numerics.Optimization;
 
 namespace ASD_project.Items.Services
 {
@@ -12,16 +14,15 @@ namespace ASD_project.Items.Services
         {
             _spawnHandler = spawnHandler;
         }
-        public ITile PutItemOnTile(ITile tile, float noiseResult)
+        public Item GenerateItemFromNoise(float noiseResult, int x, int y)
         {
             var item = RandomItemGenerator.GetRandomItem(noiseResult);
             if (item != null)
             {
-                _spawnHandler.SendSpawn(tile.XPosition, tile.YPosition, item);
-                tile.ItemsOnTile.Add(item);
+                item.ItemId = (x + "!" + y + "!");
+                _spawnHandler.SendSpawn(x, y, item);
             }
-
-            return tile;
+            return item;
         }
 
         public ISpawnHandler GetSpawnHandler()

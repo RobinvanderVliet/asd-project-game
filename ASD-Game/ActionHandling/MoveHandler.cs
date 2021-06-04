@@ -123,7 +123,6 @@ namespace ActionHandling
         private void HandleMove(MoveDTO moveDTO)
         {
             _worldService.UpdateCharacterPosition(moveDTO.UserId, moveDTO.XPosition, moveDTO.YPosition);
-            _worldService.DisplayWorld();
         }
     }
 }

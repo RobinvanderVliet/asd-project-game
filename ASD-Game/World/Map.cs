@@ -44,7 +44,7 @@ namespace ASD_project.World
             {
                 if (_chunks.Any(chunk => chunk.X == chunkCoordinates[0] && chunk.Y == chunkCoordinates[1])) continue;
                 {
-                    // chunk isn't loaded in local memory yet
+                    // chunk isn't loaded yet
                     _chunks.Add(GenerateNewChunk(chunkCoordinates[0], chunkCoordinates[1]));
                 }
             }
