@@ -2,7 +2,7 @@
 
 namespace ASD_project.World
 {
-    public class RandomItemGenerator
+    public static class RandomItemGenerator
     {
 
         public static Item GetRandomItem(float noise)
