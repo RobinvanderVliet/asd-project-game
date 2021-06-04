@@ -6,6 +6,9 @@ using Moq;
 using Network;
 using NUnit.Framework;
 using WorldGeneration;
+using DatabaseHandler.Services;
+using DatabaseHandler.POCO;
+using Messages;
 
 namespace ActionHandling.Tests
 {
@@ -23,6 +26,8 @@ namespace ActionHandling.Tests
         {
             _mockedClientController = new Mock<IClientController>();
             _mockedWorldService = new Mock<IWorldService>();
+            _mockedPlayerServicesDb = new Mock<IDatabaseService<PlayerPOCO>>();
+            _mockedMessageService = new Mock<IMessageService>();
             _sut = new MoveHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerServicesDb.Object, _mockedMessageService.Object);
         }
 

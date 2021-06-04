@@ -85,6 +85,7 @@ namespace Chat.Tests
             Assert.AreEqual(ExpectedResult, actualResult);
         }
 
+        //TODO Test fixen
         [Test]
         public void Test_HandlePacket_HandleSayProperly()
         {
@@ -109,6 +110,7 @@ namespace Chat.Tests
             _mockedMessageService.Verify(mock => mock.AddMessage(expected), Times.Once);
         }
 
+        //TODO Test fixen
         [Test]
         public void Test_HandlePacket_HandleSayNoNameSetProperly()
         {
@@ -160,3 +162,4 @@ namespace Chat.Tests
 
     }
 }
+

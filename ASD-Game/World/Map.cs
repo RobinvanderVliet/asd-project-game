@@ -149,5 +149,28 @@ namespace WorldGeneration
         {
             return GetChunkForTileXAndY(x, y).GetTileByWorldCoordinates(x, y);
         }
+
+        public char[,] GetMapAroundCharacter(Player centerCharacter, int viewDistance, List<Character> allCharacters)
+        {
+            if (viewDistance < 0)
+            {
+                throw new InvalidOperationException("viewDistance smaller than 0.");
+            }
+
+            var tileArray = new char[viewDistance * 2 + 1, viewDistance * 2 + 1];
+            var centerCharacterXPosition = centerCharacter.XPosition;
+            var centerCharacterYPosition = centerCharacter.YPosition;
+            LoadArea(centerCharacterXPosition, centerCharacterYPosition, viewDistance);
+
+            for (var y = tileArray.GetLength(0) - 1; y >= 0; y--)
+            {
+                for (var x = 0; x < tileArray.GetLength(1); x++)
+                {
+                    var tile = GetLoadedTileByXAndY(x + (centerCharacterXPosition - viewDistance), (centerCharacterYPosition + viewDistance) - y);
+                    tileArray[y, x] = GetDisplaySymbol(tile, allCharacters).ToCharArray()[0];
+                }
+            }
+            return tileArray;
+        }
     }
 }

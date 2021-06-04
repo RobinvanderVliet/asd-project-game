@@ -2,12 +2,20 @@ using WorldGeneration.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using Items;
+using UserInterface;
 
 namespace WorldGeneration
 {
     public class WorldService : IWorldService
     {
         private World _world;
+
+        private IScreenHandler _screenHandler;
+
+        public WorldService(IScreenHandler screenHandler)
+        {
+            _screenHandler = screenHandler;
+        }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
         {
@@ -26,12 +34,12 @@ namespace WorldGeneration
 
         public void DeleteMap()
         {
-            _world.deleteMap();
+            _world.DeleteMap();
         }
 
         public void GenerateWorld(int seed)
         {
-            _world = new World(seed, 6);
+            _world = new World(seed, 6, _screenHandler);
         }
         
         public Player GetCurrentPlayer()
@@ -81,6 +89,24 @@ namespace WorldGeneration
         public void LoadArea(int playerX, int playerY, int viewDistance)
         {
             _world.LoadArea(playerX, playerY, viewDistance);
+        }
+
+         public void DisplayStats()
+        {
+            Player player = GetCurrentPlayer();
+            _screenHandler.SetStatValues(
+                player.Name,
+                0,
+                player.Health,
+                player.Stamina,
+                player.GetArmorPoints(),
+                player.RadiationLevel,
+                player.Inventory.Helmet?.ItemName ?? "Empty",
+                player.Inventory.Armor?.ItemName ?? "Empty",
+                player.Inventory.Weapon?.ItemName ?? "Empty",
+                player.Inventory.GetConsumableAtIndex(0)?.ItemName ?? "Empty",
+                player.Inventory.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
+                player.Inventory.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
         }
     }
 }
