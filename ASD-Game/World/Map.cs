@@ -123,7 +123,7 @@ namespace ASD_project.World
             {
                 if (tile.ItemsOnTile.Count != 0)
                 {
-                    return "n";
+                    return TileSymbol.CHEST;
                 }
                 else
                 {
