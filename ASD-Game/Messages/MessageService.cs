@@ -1,15 +1,18 @@
 ﻿using System;
+using UserInterface;
 
 namespace Messages
 {
     public class MessageService : IMessageService
     {
-        private MessageModel _messages; 
+        private MessageModel _messages;
+        private IScreenHandler _screenHandler;
         //add screenhandler 
 
-        public MessageService()
+        public MessageService(IScreenHandler screenHandler)
         {
             _messages = new();
+            _screenHandler = screenHandler;
         }
 
         public void AddMessage(string message)
@@ -21,9 +24,7 @@ namespace Messages
         public void DisplayMessages()
         {
             var latestMessages = _messages.GetLatestMessages(20);
-
-            //should be replace by _screenHandler.displayMessages(latestMessages)
-            Console.WriteLine(latestMessages.Peek());
+            _screenHandler.ShowMessages(latestMessages);
         }
     }
 }

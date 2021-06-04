@@ -58,14 +58,14 @@ namespace UserInterface
 
             Stack<string> messageQueue = new();
             int messageCount = messages.Count;
+            int chunkSize = _width - BORDER_SIZE;
+            int maxSize = chunkSize * _height;
             for (int i = 0; i < messageCount; i++)
             {
                 string message = messages.Dequeue();
                 if (message.Length >= _width - BORDER_SIZE)
                 {
-                    int chunkSize = _width - BORDER_SIZE;
                     int stringLength = message.Length;
-                    int maxSize = chunkSize * _height;
                     if (stringLength > maxSize)
                     {
                         message = message.Substring(0, maxSize - 3) + "...";
