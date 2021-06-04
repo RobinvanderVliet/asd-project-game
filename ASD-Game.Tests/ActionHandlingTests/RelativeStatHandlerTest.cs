@@ -1,5 +1,7 @@
 using ActionHandling;
 using ActionHandling.DTO;
+using DatabaseHandler.POCO;
+using DatabaseHandler.Services;
 using Moq;
 using Network;
 using Newtonsoft.Json;
@@ -12,6 +14,7 @@ namespace Session.Tests
     {
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
+        private Mock<IServicesDb<PlayerPOCO>> _mockedPlayerServicesDb;
         private RelativeStatHandler _sut;
 
         [SetUp]
@@ -20,7 +23,7 @@ namespace Session.Tests
             _mockedClientController = new Mock<IClientController>();
             _mockedWorldService = new Mock<IWorldService>();
 
-            _sut = new RelativeStatHandler(_mockedClientController.Object, _mockedWorldService.Object);
+            _sut = new RelativeStatHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerServicesDb.Object);
         }
 
         [Test]
