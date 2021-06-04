@@ -21,7 +21,7 @@ namespace WorldGeneration
         public ICreature CreateAgent(string sessionId)
         {
             _clientController.SetSessionId(sessionId);
-            return new Creature.Creature.Player(null);
+            return new Creature.Agent("Bob", 10, 10, "#", "random-id-totally-bad-hardcoded");
         }
 
         public void HandlePacket(PacketDTO packet)
