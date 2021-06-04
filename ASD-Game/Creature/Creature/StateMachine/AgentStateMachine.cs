@@ -1,5 +1,9 @@
-﻿using Appccelerate.StateMachine;
+﻿using System.Collections.Generic;
+using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
+using ASD_project.Creature.Creature.StateMachine.Builder;
+using Creature.Creature.StateMachine.Builder;
+using Creature.Creature.StateMachine.CustomRuleSet;
 using Creature.Creature.StateMachine.Data;
 using Creature.Creature.StateMachine.Event;
 using Creature.Creature.StateMachine.State;
@@ -40,14 +44,17 @@ namespace Creature.Creature.StateMachine
         public void StartStateMachine()
         {
             var builder = new StateMachineDefinitionBuilder<CreatureState, CreatureEvent.Event>();
+            List<RuleSet> rulesetList = RuleSetFactory.GetRuleSetListFromSettingsList(CreatureData.RuleSet);
+            var builderConfiguration = new BuilderConfiguration(rulesetList, CreatureData, this);
+            List<BuilderInfo> builderInfoList = builderConfiguration.GetBuilderInfoList();
 
-            CreatureState idleState = new IdleState(CreatureData, this);
-            CreatureState wanderState = new WanderState(CreatureData, this);
-            CreatureState inventoryState = new InventoryState(CreatureData, this);
-            CreatureState useConsumableState = new UseConsumableState(CreatureData, this);
-            CreatureState followCreatureState = new FollowCreatureState(CreatureData, this);
-            CreatureState attackState = new AttackState(CreatureData, this);
-            CreatureState fleeFromCreatureState = new FleeFromCreatureState(CreatureData, this);
+            CreatureState idleState = new IdleState(CreatureData, this, builderInfoList, builderConfiguration);
+            CreatureState wanderState = new WanderState(CreatureData, this, builderInfoList, builderConfiguration);
+            CreatureState inventoryState = new InventoryState(CreatureData, this, builderInfoList, builderConfiguration);
+            CreatureState useConsumableState = new UseConsumableState(CreatureData, this, builderInfoList, builderConfiguration);
+            CreatureState followCreatureState = new FollowCreatureState(CreatureData, this, builderInfoList, builderConfiguration);
+            CreatureState attackState = new AttackState(CreatureData, this, builderInfoList, builderConfiguration);
+            CreatureState fleeFromCreatureState = new FleeFromCreatureState(CreatureData, this, builderInfoList, builderConfiguration);
             
             // Idle
             builder.In(wanderState).On(CreatureEvent.Event.IDLE).Goto(idleState).Execute<ICreatureData>(wanderState.SetTargetData); //IF not using a Target then remove execute.

@@ -50,11 +50,11 @@ namespace Creature.Creature.StateMachine
             var builderConfiguration = new BuilderConfiguration(rulesetList, CreatureData, this);
             List<BuilderInfo> builderInfoList = builderConfiguration.GetBuilderInfoList();
             
-            _followPlayerState = new FollowCreatureState(CreatureData, this);
-            _wanderState = new WanderState(CreatureData, this);
-            _useConsumableState = new UseConsumableState(CreatureData, this);
-            _attackPlayerState = new AttackState(CreatureData, this);
-            _fleeFromCreatureState = new FleeFromCreatureState(CreatureData, this);
+            _followPlayerState = new FollowCreatureState(CreatureData, this,builderInfoList, builderConfiguration);
+            _wanderState = new WanderState(CreatureData, this, builderInfoList, builderConfiguration);
+            _useConsumableState = new UseConsumableState(CreatureData, this, builderInfoList, builderConfiguration);
+            _attackPlayerState = new AttackState(CreatureData, this, builderInfoList, builderConfiguration);
+            _fleeFromCreatureState = new FleeFromCreatureState(CreatureData, this, builderInfoList, builderConfiguration);
 
             foreach (BuilderInfo builderInfo in builderInfoList)
             {
