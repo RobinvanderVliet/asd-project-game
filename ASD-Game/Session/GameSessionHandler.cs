@@ -43,9 +43,11 @@ namespace Session
             List<string> allClients = _sessionHandler.GetAllClients();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
 
-            // Needs to be refactored to something random in construction; this was for testing
-            int playerX = 26; // spawn position
-            int playerY = 11; // spawn position
+            // Have refactored into something a bit more exciting.
+            
+            int spawnSeed = _sessionHandler.GetSessionSeed();
+            int playerX = spawnSeed % 50; // spawn position first person.
+            int playerY = spawnSeed % 50;
             foreach (string clientId in allClients)
             {
                 int[] playerPosition = new int[2];
@@ -56,8 +58,22 @@ namespace Session
                     {PlayerGUID = clientId, GameGUID = gamePOCO.GameGUID, XPosition = playerX, YPosition = playerY};
                 servicePlayer.CreateAsync(tmpPlayer);
 
-                playerX += 2; // spawn position + 2 each client
-                playerY += 2; // spawn position + 2 each client
+                if (playerX % 2 == 0)
+                {
+                    playerX += spawnSeed % 3;
+                }
+                else
+                {
+                    playerX -= spawnSeed % 3;
+                }
+                if (playerY % 2 == 0)
+                {
+                    playerY += spawnSeed % 5;
+                }
+                else
+                {
+                    playerY -= spawnSeed % 5;
+                }
             }
 
             StartGameDTO startGameDTO = new StartGameDTO();
