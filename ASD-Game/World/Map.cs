@@ -12,7 +12,7 @@ namespace WorldGeneration
     {
         private readonly int _chunkSize;
         private IList<Chunk> _chunks; // NOT readonly, don't listen to the compiler
-        private readonly IDatabaseService<Chunk> _chunkDBService;
+        private readonly IServicesDb<Chunk> _chunkDBService;
         private ChunkHelper _chunkHelper;
         private readonly INoiseMapGenerator _noiseMapGenerator;
         private int _seed;
@@ -20,7 +20,7 @@ namespace WorldGeneration
         public Map(
             INoiseMapGenerator noiseMapGenerator
             , int chunkSize
-            , IDatabaseService<Chunk> chunkDbServices
+            , IServicesDb<Chunk> chunkDbServices
             , int seed
             , IList<Chunk> chunks = null
         )
@@ -163,10 +163,33 @@ namespace WorldGeneration
             _chunkDBService.DeleteAllAsync();
         }
 
-        private ITile GetLoadedTileByXAndY(int x, int y)
+        public ITile GetLoadedTileByXAndY(int x, int y)
         {
             _chunkHelper = new ChunkHelper(GetChunkForTileXAndY(x, y));
             return _chunkHelper.GetTileByWorldCoordinates(x, y);
+        }
+
+        public char[,] GetMapAroundCharacter(Player centerCharacter, int viewDistance, List<Character> allCharacters)
+        {
+            if (viewDistance < 0)
+            {
+                throw new InvalidOperationException("viewDistance smaller than 0.");
+            }
+
+            var tileArray = new char[viewDistance * 2 + 1, viewDistance * 2 + 1];
+            var centerCharacterXPosition = centerCharacter.XPosition;
+            var centerCharacterYPosition = centerCharacter.YPosition;
+            LoadArea(centerCharacterXPosition, centerCharacterYPosition, viewDistance);
+
+            for (var y = tileArray.GetLength(0) - 1; y >= 0; y--)
+            {
+                for (var x = 0; x < tileArray.GetLength(1); x++)
+                {
+                    var tile = GetLoadedTileByXAndY(x + (centerCharacterXPosition - viewDistance), (centerCharacterYPosition + viewDistance) - y);
+                    tileArray[y, x] = GetDisplaySymbol(tile, allCharacters).ToCharArray()[0];
+                }
+            }
+            return tileArray;
         }
     }
 }

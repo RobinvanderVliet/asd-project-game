@@ -1,7 +1,8 @@
 ﻿using Creature.Creature;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
+using WorldGeneration.Models.Interfaces;
+using System.Linq;
 using UserInterface;
 
 namespace WorldGeneration
@@ -24,6 +25,7 @@ namespace WorldGeneration
             _map = mapFactory.GenerateMap(seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
+            DeleteMap();
         }
 
         public void UpdateCharacterPosition(string id, int newXPosition, int newYPosition)
@@ -97,6 +99,21 @@ namespace WorldGeneration
         {
             smartMonster.Update();
             movesList.Add(smartMonster);
+        }
+
+        public Player GetPlayer(string id)
+        {
+            return _players.Find(x => x.Id == id);
+        }
+
+        public ITile GetCurrentTile()
+        {
+            return _map.GetLoadedTileByXAndY(CurrentPlayer.XPosition, CurrentPlayer.YPosition);
+        }
+
+        public ITile GetTileForPlayer(Player player)
+        {
+            return _map.GetLoadedTileByXAndY(player.XPosition, player.YPosition);
         }
     }
 }

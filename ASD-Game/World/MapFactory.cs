@@ -5,7 +5,7 @@ using WorldGeneration.Models;
 
 namespace WorldGeneration
 {
-    public class MapFactory: IMapFactory
+    public class MapFactory : IMapFactory
     {
         [ExcludeFromCodeCoverage]
         public IMap GenerateMap(int seed = 0)
@@ -13,7 +13,7 @@ namespace WorldGeneration
             return GenerateMap(8, seed);
             // default chunksize is 8. Can be adjusted in the line above
         }
-        
+
         [ExcludeFromCodeCoverage]
         public IMap GenerateMap(int chunkSize, int seed)
         {
@@ -23,7 +23,7 @@ namespace WorldGeneration
                 seed = GenerateSeed();
             }
 
-            return new Map(new NoiseMapGenerator(seed), chunkSize, new DatabaseService<Chunk>(), seed);
+            return new Map(new NoiseMapGenerator(seed), chunkSize, new ServicesDb<Chunk>(), seed);
         }
 
         public int GenerateSeed()

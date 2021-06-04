@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Moq;
 using NUnit.Framework;
@@ -7,54 +6,47 @@ using UserInterface;
 
 namespace WorldGeneration.Tests
 {
-    [ExcludeFromCodeCoverage]  
+    [ExcludeFromCodeCoverage]
     [TestFixture]
     public class WorldTest
     {
         //Declaration and initialisation of constant variables
- 
+
         //Declaration of variables
-        private Player _friendlyPlayer;
-        private Player _enemyPlayer;
-        private Creature _creature;
- 
+        private Player _mapCharacterDTOPlayer;
+        private Player _mapCharacterDTOEnemy;
+
         //Declaration of mocks
         private IMapFactory _mapFactoryMockObject;
         private Mock<IMapFactory> _mapFactoryMock;
         private IMap _mapMockObject;
         private Mock<IMap> _mapMock;
-        private Mock<IScreenHandler> _screenHandlerMock;
-        private IScreenHandler _screenHandlerMockObject;
-
+        private Mock<IScreenHandler> _mockedScreenHandler;
         private World _sut;
-
 
         [SetUp]
         public void Setup()
         {
             //Initialisation of variables
-            _friendlyPlayer = new Player("A", 0, 0, "#", "1");
-            _enemyPlayer = new Player("B", 0, 1, "!", "2");
-            _creature = new Creature("B", 1, 0, "!", "2");
+            _mapCharacterDTOPlayer = new Player("A", 0, 0, "#", "1");
+            _mapCharacterDTOEnemy = new Player("B", 0, 0, "!", "2");
             //Initialisation of mocks
             _mapMock = new Mock<IMap>();
             _mapMock.Setup(Map => Map.DeleteMap()).Verifiable();
             _mapMockObject = _mapMock.Object;
-            
+
             _mapFactoryMock = new Mock<IMapFactory>();
             _mapFactoryMock.Setup(mapFactory => mapFactory.GenerateMap(It.IsAny<int>())).Returns(_mapMockObject).Verifiable();
             _mapFactoryMock.Setup(mapFactory => mapFactory.GenerateSeed()).Returns(11246).Verifiable();
             _mapFactoryMockObject = _mapFactoryMock.Object;
 
-            _screenHandlerMock = new Mock<IScreenHandler>();
-            // _screenHandlerMock.Setup(handler => handler.UpdateWorld(It.IsAny<Char[,]>())).Verifiable();
-            _screenHandlerMockObject = _screenHandlerMock.Object;
+            _mockedScreenHandler = new Mock<IScreenHandler>();
 
-            _sut = new World(5, 2, _mapFactoryMockObject, _screenHandlerMockObject);
+            _sut = new World(5, 2, _mapFactoryMockObject, _mockedScreenHandler.Object);
         }
-        
+
         [Test]
-        public void Test_WorldConstructor_SetsMapUpCorrectly() 
+        public void Test_WorldConstructor_SetsMapUpCorrectly()
         {
             //Arrange ---------
             var seed = 10;
@@ -62,103 +54,79 @@ namespace WorldGeneration.Tests
             //Assert ---------
             Assert.DoesNotThrow(() =>
             {
-                var world = new World(seed, 55, _mapFactoryMockObject, _screenHandlerMockObject);
+                var world = new World(seed, 55, _mapFactoryMockObject, _mockedScreenHandler.Object);
             });
-            _mapFactoryMock.Verify(mapFactory => mapFactory.GenerateMap(seed), Times.Once);
+            _mapFactoryMock.Verify(mapFactory => mapFactory.GenerateMap(seed), Times.AtLeastOnce);
+            _mapMock.Verify(map => map.DeleteMap(), Times.Exactly(2));
         }
 
         [Test]
-        public void Test_DisplayWorld_DoesNothingWithoutCurrentPlayer() 
+        public void Test_DisplayWorld_DoesNothingWithoutCharacters()
         {
             //Arrange ---------
             //Act ---------
-            _sut.UpdateMap();
+            _sut.DisplayWorld();
             //Assert ---------
-            _mapMock.Verify(map => map.GetMapAroundCharacter(It.IsAny<Player>(), It.IsAny<int>(), It.IsAny<List<Character>>()), Times.AtMost(0));
+            _mapMock.Verify(map => map.DisplayMap(It.IsAny<Player>(), It.IsAny<int>(), It.IsAny<List<Player>>()), Times.AtMost(0));
         }
-        
-        [Test]
-        public void Test_UpdateMap_CallsGetMapAroundCharacterWhenGivenCharacters() 
-        {
-            //Arrange ---------
-            //Act ---------
-            _sut.AddPlayerToWorld(_friendlyPlayer, true);
-            _sut.UpdateMap();
-            //Assert ---------
-            _mapMock.Verify(map => map.GetMapAroundCharacter(It.IsAny<Player>(), It.IsAny<int>(), It.IsAny<List<Character>>()), Times.Exactly(2));
 
-        }
-        
         [Test]
-        public void Test_AddCharacterToWorld_AddsCurrentPlayerCharacter() 
+        public void Test_GetMapAroundCharacter_CallsDisplayMapWhenGivenCharacters()
         {
             //Arrange ---------
             //Act ---------
-            _sut.AddPlayerToWorld(_friendlyPlayer, true);
-            _sut.AddPlayerToWorld(_enemyPlayer, false);
+            _sut.AddPlayerToWorld(_mapCharacterDTOPlayer, true);
+            _sut.DisplayWorld();
             //Assert ---------
-            Assert.That(_sut.CurrentPlayer == _friendlyPlayer);
+            _mapMock.Verify(map => map.GetMapAroundCharacter(It.IsAny<Player>(), It.IsAny<int>(), It.IsAny<List<Player>>()), Times.Once);
         }
-        
+
         [Test]
-        public void Test_AddCharacterToWorld_AddsNotCurrentPlayerCharacter() 
+        public void Test_AddCharacterToWorld_AddsNotCurrentPlayerCharacter()
         {
             //Arrange ---------
             //Act ---------
-            _sut.AddPlayerToWorld(_friendlyPlayer, true);
-            _sut.AddPlayerToWorld(_enemyPlayer, false);
+            _sut.AddPlayerToWorld(_mapCharacterDTOPlayer, true);
+            _sut.AddPlayerToWorld(_mapCharacterDTOEnemy, false);
             //Assert ---------
-            Assert.That(_sut.CurrentPlayer != _enemyPlayer);
+            Assert.That(_sut.CurrentPlayer != _mapCharacterDTOEnemy);
         }
-        
+
         [Test]
-        public void Test_UpdateCharacterPosition_UpdatesCurrentPlayer() 
+        public void Test_AddCharacterToWorld_AddsCurrentPlayerCharacter()
         {
             //Arrange ---------
-            _sut.AddPlayerToWorld(_friendlyPlayer, true);
-            _sut.AddPlayerToWorld(_enemyPlayer, false);
-            _enemyPlayer.XPosition = 2;
             //Act ---------
-            _sut.UpdateCharacterPosition(_friendlyPlayer.Id, _friendlyPlayer.XPosition, _friendlyPlayer.YPosition);
+            _sut.AddPlayerToWorld(_mapCharacterDTOPlayer, true);
+            _sut.AddPlayerToWorld(_mapCharacterDTOEnemy, false);
             //Assert ---------
-            Assert.That(_sut.CurrentPlayer.XPosition == _friendlyPlayer.XPosition);
+            Assert.That(_sut.CurrentPlayer == _mapCharacterDTOPlayer);
         }
-        
+
         [Test]
-        public void Test_UpdateCharacterPosition_UpdatesOtherPlayer() 
+        public void Test_UpdateCharacterPosition_UpdatesCurrentPlayer()
         {
             //Arrange ---------
-            _sut.AddPlayerToWorld(_friendlyPlayer, true);
-            _sut.AddPlayerToWorld(_enemyPlayer, false);
-            _enemyPlayer.XPosition = 2;
+            _sut.AddPlayerToWorld(_mapCharacterDTOPlayer, true);
+            _sut.AddPlayerToWorld(_mapCharacterDTOEnemy, false);
+            _mapCharacterDTOEnemy.XPosition = 2;
             //Act ---------
-            _sut.UpdateCharacterPosition(_enemyPlayer.Id, _enemyPlayer.XPosition, _enemyPlayer.YPosition);
+            _sut.UpdateCharacterPosition(_mapCharacterDTOPlayer.Id, _mapCharacterDTOPlayer.XPosition, _mapCharacterDTOPlayer.YPosition);
             //Assert ---------
-            Assert.That(_sut.CurrentPlayer.XPosition != _enemyPlayer.XPosition);
+            Assert.That(_sut.CurrentPlayer.XPosition == _mapCharacterDTOPlayer.XPosition);
         }
-        
+
         [Test]
-        public void Test_DeleteMap_PassesThroughDeleteCommand() 
+        public void Test_UpdateCharacterPosition_UpdatesOtherPlayer()
         {
             //Arrange ---------
-            _sut.AddPlayerToWorld(_friendlyPlayer, true);
-            _sut.AddPlayerToWorld(_enemyPlayer, false);
-            _enemyPlayer.XPosition = 2;
+            _sut.AddPlayerToWorld(_mapCharacterDTOPlayer, true);
+            _sut.AddPlayerToWorld(_mapCharacterDTOEnemy, false);
+            _mapCharacterDTOEnemy.XPosition = 2;
             //Act ---------
-            _sut.UpdateCharacterPosition(_enemyPlayer.Id, _enemyPlayer.XPosition, _enemyPlayer.YPosition);
+            _sut.UpdateCharacterPosition(_mapCharacterDTOEnemy.Id, _mapCharacterDTOEnemy.XPosition, _mapCharacterDTOEnemy.YPosition);
             //Assert ---------
-            Assert.That(_sut.CurrentPlayer.XPosition != _enemyPlayer.XPosition);
-        }
-        
-        [Test]
-        public void Test_AddCreatureToWorld_AddsCreature() 
-        {
-            //Arrange ---------
-            _sut.AddCreatureToWorld(_creature);
-            //Act ---------
-            _sut.UpdateCharacterPosition(_creature.Id, _creature.XPosition, _creature.YPosition);
-            //Assert ---------
-            Assert.That(_sut.CurrentPlayer.XPosition != _enemyPlayer.XPosition);
+            Assert.That(_sut.CurrentPlayer.XPosition != _mapCharacterDTOEnemy.XPosition);
         }
     }
-}
+}*/

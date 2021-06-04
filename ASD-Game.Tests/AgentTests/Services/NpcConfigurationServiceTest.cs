@@ -14,6 +14,7 @@ namespace Agent.Tests.Services
     [ExcludeFromCodeCoverage]
     public class NpcConfigurationServiceTest
     {
+        private object _mockedRetriever;
         private NpcConfigurationService _sut;
         private Mock<FileHandler> _fileHandlerMock;
         private Mock<Pipeline> _pipelineMock;
@@ -24,8 +25,8 @@ namespace Agent.Tests.Services
         [SetUp]
         public void Setup()
         {
-            //_mockedRetriever = new();
-            //_sut = new NpcConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), _mockedRetriever.Object);
+            _mockedRetriever = new();
+            _sut = new NpcConfigurationService(new List<Configuration>(), new FileToDictionaryMapper());
             _fileHandlerMock = new Mock<FileHandler>();
             _sut.FileHandler = _fileHandlerMock.Object;
             _pipelineMock = new Mock<Pipeline>();
@@ -37,7 +38,7 @@ namespace Agent.Tests.Services
         public void Test_CreateNewNpcConfiguration_WithNewNpc()
         {
             //Arrange
-            var filepath = _handler.GetBaseDirectory() + "/AgentTests/Resource/npcFileTest.txt";
+            var filepath = _handler.GetBaseDirectory() + "/Resource/npcFileTest.txt";
 
             //Act
             _sut.CreateConfiguration("TestNPCName", filepath);

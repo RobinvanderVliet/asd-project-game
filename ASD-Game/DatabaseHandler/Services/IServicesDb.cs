@@ -4,12 +4,16 @@ using LiteDB;
 
 namespace DatabaseHandler.Services
 {
-    public interface IDatabaseService<T>
+    public interface IServicesDb<T>
     {
         Task<BsonValue> CreateAsync(T obj);
+
         Task<int> UpdateAsync(T obj);
+
         Task<int> DeleteAsync(T obj);
+
         Task<IEnumerable<T>> GetAllAsync();
+
         Task<int> DeleteAllAsync();
     }
 }

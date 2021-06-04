@@ -1,6 +1,7 @@
+using Items;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
 using UserInterface;
 
 namespace WorldGeneration
@@ -74,6 +75,53 @@ namespace WorldGeneration
         public List<Character> getCreatureMoves()
         {
             return _world.movesList;
+        }
+
+        public Player GetPlayer(string userId)
+        {
+            return _world?.GetPlayer(userId);
+        }
+
+        public IList<Item> GetItemsOnCurrentTile()
+        {
+            return _world.GetCurrentTile().ItemsOnTile;
+        }
+
+        public IList<Item> GetItemsOnCurrentTile(Player player)
+        {
+            return _world.GetTileForPlayer(player).ItemsOnTile;
+        }
+
+        public string SearchCurrentTile()
+        {
+            var itemsOnCurrentTile = GetItemsOnCurrentTile();
+
+            string result = "The following items are on the current tile:" + Environment.NewLine;
+            int index = 1;
+            foreach (var item in itemsOnCurrentTile)
+            {
+                result += $"{index}. {item.ItemName}{Environment.NewLine}";
+                index += 1;
+            }
+            return result;
+        }
+
+        public void DisplayStats()
+        {
+            Player player = getCurrentPlayer();
+            _screenHandler.SetStatValues(
+                player.Name,
+                0,
+                player.Health,
+                player.Stamina,
+                player.GetArmorPoints(),
+                player.RadiationLevel,
+                player.Inventory.Helmet?.ItemName ?? "Empty",
+                player.Inventory.Armor?.ItemName ?? "Empty",
+                player.Inventory.Weapon?.ItemName ?? "Empty",
+                player.Inventory.GetConsumableAtIndex(0)?.ItemName ?? "Empty",
+                player.Inventory.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
+                player.Inventory.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
         }
     }
 }

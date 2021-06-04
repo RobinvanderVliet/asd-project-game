@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
+using Items;
 
 namespace WorldGeneration
 {
@@ -17,7 +18,7 @@ namespace WorldGeneration
 
         public void GenerateWorld(int seed);
 
-        public Player getCurrentPlayer();
+        public IList<Item> GetItemsOnCurrentTile();
 
         List<Character> getCreatureMoves();
 
@@ -26,5 +27,15 @@ namespace WorldGeneration
         List<Character> GetMonsters();
 
         public char[,] GetMapAroundCharacter(Character character);
+
+        public IList<Item> GetItemsOnCurrentTile(Player player);
+
+        public string SearchCurrentTile();
+
+        public Player getCurrentPlayer();
+
+        public Player GetPlayer(string userId);
+
+        public void DisplayStats();
     }
 }

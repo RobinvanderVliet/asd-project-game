@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
 {
@@ -9,5 +10,7 @@ namespace WorldGeneration
         char[,] GetMapAroundCharacter(Character currentPlayer, int viewDistance, List<Character> characters);
 
         void DeleteMap();
+
+        ITile GetLoadedTileByXAndY(int x, int y);
     }
 }

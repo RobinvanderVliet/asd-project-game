@@ -11,9 +11,9 @@ namespace WorldGeneration.Models
         public int Y { get; set; }
         public ITile[] Map { get; set; }
         public int RowSize { get; set; }
-        
+
         public int Seed { get; set; }
-        
+
         public Chunk()
         {
         }
@@ -28,26 +28,26 @@ namespace WorldGeneration.Models
 
         public bool Equals(Chunk other)
         {
-            if (ReferenceEquals(null, other)) 
+            if (ReferenceEquals(null, other))
                 return false;
-            
-            if (ReferenceEquals(this, other)) 
+
+            if (ReferenceEquals(this, other))
                 return true;
-            
+
             return X == other.X && Y == other.Y;
         }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) 
+            if (ReferenceEquals(null, obj))
                 return false;
-            
-            if (ReferenceEquals(this, obj)) 
+
+            if (ReferenceEquals(this, obj))
                 return true;
-            
-            if (obj.GetType() != GetType()) 
+
+            if (obj.GetType() != GetType())
                 return false;
-            
+
             return Equals((Chunk) obj);
         }
 

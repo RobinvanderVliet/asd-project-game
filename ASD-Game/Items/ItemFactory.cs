@@ -1,5 +1,4 @@
 ﻿using Items.Consumables;
-using Items.Consumables.ConsumableStats;
 using Items.WeaponStats;
 using System;
 using System.Collections.Generic;
@@ -144,111 +143,14 @@ namespace Items
             return armorBuilder.GetItem();
         }
 
-        public static Armor GetTacticalVest()
-        {
-            ArmorBuilder armorBuilder = new(ArmorStats.ArmorType.DefaultArmor);
-            armorBuilder.SetName("Tactical Vest");
-            armorBuilder.SetDescription("Bullets got nothing on this!");
-            armorBuilder.SetArmorPartType(ArmorStats.ArmorPartType.Body);
-            armorBuilder.SetRarity(ItemStats.Rarity.Rare);
-            armorBuilder.SetArmorProtectionPoints(40);
-            return armorBuilder.GetItem();
-        }
-
-        public static Armor GetHazmatSuit()
-        {
-            ArmorBuilder armorBuilder = new(ArmorStats.ArmorType.HazardProtectedArmor);
-            armorBuilder.SetName("Hazmat Suit");
-            armorBuilder.SetDescription("I look like an employee at a nuclear power plant!");
-            armorBuilder.SetArmorPartType(ArmorStats.ArmorPartType.Body);
-            armorBuilder.SetRarity(ItemStats.Rarity.Rare);
-            armorBuilder.SetArmorProtectionPoints(20);
-            armorBuilder.SetRadiationProtectionPoints(80);
-            armorBuilder.SetStaminaPoints(-20);
-            return armorBuilder.GetItem();
-        }
-
-        public static Armor GetGasMask()
-        {
-            ArmorBuilder armorBuilder = new(ArmorStats.ArmorType.HazardProtectedArmor);
-            armorBuilder.SetName("Gas Mask");
-            armorBuilder.SetDescription("I can breath now.");
-            armorBuilder.SetArmorPartType(ArmorStats.ArmorPartType.Helmet);
-            armorBuilder.SetRarity(ItemStats.Rarity.Uncommon);
-            armorBuilder.SetArmorProtectionPoints(20);
-            armorBuilder.SetRadiationProtectionPoints(40);
-            armorBuilder.SetStaminaPoints(-20);
-            return armorBuilder.GetItem();
-        }
-
-        public static Consumable GetIodineTablets()
-        {
-            ConsumableBuilder consumableBuilder = new(ConsumableType.HazardProtected);
-            consumableBuilder.SetName("Iodine tablets");
-            consumableBuilder.SetDescription("What do you call a child with Iodine deficiency? Chld.");
-            consumableBuilder.SetRarity(ItemStats.Rarity.Common);
-            consumableBuilder.SetRpp(20);
-            return consumableBuilder.GetItem();
-        }
-
         public static Consumable GetBandage()
         {
-            ConsumableBuilder consumableBuilder = new(ConsumableType.Health);
-            consumableBuilder.SetName("Bandage");
-            consumableBuilder.SetDescription("Let me patch you together.");
-            consumableBuilder.SetRarity(ItemStats.Rarity.Common);
-            consumableBuilder.SetHealth(Health.Low);
-            return consumableBuilder.GetItem();
-        }
-
-        public static Consumable GetMedkit()
-        {
-            ConsumableBuilder consumableBuilder = new(ConsumableType.Health);
-            consumableBuilder.SetName("Medkit");
-            consumableBuilder.SetDescription("Good as new.");
-            consumableBuilder.SetRarity(ItemStats.Rarity.Rare);
-            consumableBuilder.SetHealth(Health.High);
-            return consumableBuilder.GetItem();
-        }
-
-        public static Consumable GetMorphine()
-        {
-            ConsumableBuilder consumableBuilder = new(ConsumableType.Health);
-            consumableBuilder.SetName("Morphine");
-            consumableBuilder.SetDescription("Comfortably numb!");
-            consumableBuilder.SetRarity(ItemStats.Rarity.Uncommon);
-            consumableBuilder.SetHealth(Health.Medium);
-            return consumableBuilder.GetItem();
-        }
-
-        public static Consumable GetBigMac()
-        {
-            ConsumableBuilder consumableBuilder = new(ConsumableType.Stamina);
-            consumableBuilder.SetName("Big Mac");
-            consumableBuilder.SetDescription("What type of computer does Ronald McDonald use?");
-            consumableBuilder.SetRarity(ItemStats.Rarity.Common);
-            consumableBuilder.SetStamina(Stamina.Low);
-            return consumableBuilder.GetItem();
-        }
-
-        public static Consumable GetMonsterEnergy()
-        {
-            ConsumableBuilder consumableBuilder = new(ConsumableType.Stamina);
-            consumableBuilder.SetName("Monster energy");
-            consumableBuilder.SetDescription("WARNING: contains real monsters!");
-            consumableBuilder.SetRarity(ItemStats.Rarity.Uncommon);
-            consumableBuilder.SetStamina(Stamina.Medium);
-            return consumableBuilder.GetItem();
-        }
-
-        public static Consumable GetSuspiciousWhitePowder()
-        {
-            ConsumableBuilder consumableBuilder = new(ConsumableType.Stamina);
-            consumableBuilder.SetName("Suspicious white powder");
-            consumableBuilder.SetDescription("Pink fluffy unicorns dancing on rainbows..");
-            consumableBuilder.SetRarity(ItemStats.Rarity.Rare);
-            consumableBuilder.SetStamina(Stamina.High);
-            return consumableBuilder.GetItem();
+            ConsumableBuilder builder = new(Consumables.ConsumableStats.ConsumableType.Health);
+            builder.SetName("Bandage");
+            builder.SetDescription("Let me patch you together");
+            builder.SetHealth(Consumables.ConsumableStats.Health.Low);
+            builder.SetRarity(ItemStats.Rarity.Common);
+            return builder.GetItem();
         }
     }
 }

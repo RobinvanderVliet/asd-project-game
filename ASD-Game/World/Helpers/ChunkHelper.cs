@@ -7,14 +7,21 @@ namespace WorldGeneration.Helper
     public class ChunkHelper
     {
         public Chunk chunk { get; set; }
+
         public ChunkHelper(Chunk chunk)
         {
             this.chunk = chunk;
         }
 
+        public int[] GetTileCoordinatesInChunk(int indexInArray)
+        {
+            var x = indexInArray % chunk.RowSize;
+            var y = (int)Math.Floor((double)indexInArray / chunk.RowSize);
+            return new[] { x, y };
+        }
+
         private int GetPositionInTileArrayByWorldCoordinates(int x, int y)
         {
-
             var yPos = Math.Abs(y);
             var chunkYPos = Math.Abs(chunk.Y);
             while (x < 0)
@@ -30,4 +37,3 @@ namespace WorldGeneration.Helper
         public ITile GetTileByWorldCoordinates(int x, int y) => chunk.Map[GetPositionInTileArrayByWorldCoordinates(x, y)];
     }
 }
-

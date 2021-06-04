@@ -17,6 +17,7 @@ namespace WorldGeneration.Models.TerrainTiles
 
         public GrassTile(int x, int y)
         {
+            ItemsOnTile = new();
             Symbol = TileSymbol.GRASS;
             IsAccessible = true;
             XPosition = x;

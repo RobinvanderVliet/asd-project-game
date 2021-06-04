@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using LiteDB;
 using LiteDB.Async;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
+using LiteDB;
 
 namespace DatabaseHandler.Repository
 {
@@ -21,7 +20,6 @@ namespace DatabaseHandler.Repository
             IDBConnection connection = new DBConnection();
             _db = connection.GetConnectionAsync();
             _collection = collection ?? typeof(T).Name;
-            _log = new NullLogger<Repository<T>>();
         }
 
         public async Task<BsonValue> CreateAsync(T obj)
@@ -41,7 +39,7 @@ namespace DatabaseHandler.Repository
         public async Task<int> UpdateAsync(T obj)
         {
             var results = await _db.GetCollection<T>(_collection).UpdateAsync(obj);
-            
+
             if (results)
             {
                 return 1;
