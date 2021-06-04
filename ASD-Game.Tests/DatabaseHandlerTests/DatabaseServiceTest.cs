@@ -17,7 +17,7 @@ namespace DatabaseHandler.Tests
         private ChunkFaker _chunkFaker;
         private MockRepository _mockRepository;
         private Mock<IRepository<Chunk>> _repository;
-        private IServicesDb<Chunk> _services;
+        private IDatabaseService<Chunk> _services;
         private IList<Chunk> _chunkInMemoryDatabase;
         
         [SetUp]
