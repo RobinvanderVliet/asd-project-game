@@ -36,7 +36,7 @@ namespace WorldGeneration
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
-            UpdateMapInConsole();
+            DisplayWorld();
         }
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
@@ -52,7 +52,7 @@ namespace WorldGeneration
         {
             if (CurrentPlayer != null && _players != null)
             {
-                UpdateMapInConsole();
+                _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, new List<Character>(_players)));
             }
         }
 
@@ -64,11 +64,6 @@ namespace WorldGeneration
         public void DeleteMap()
         {
             _map.DeleteMap();
-        }
-
-        private void UpdateMapInConsole()
-        {
-            _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, new List<Character>(_players)));
         }
 
         public ITile GetCurrentTile()
