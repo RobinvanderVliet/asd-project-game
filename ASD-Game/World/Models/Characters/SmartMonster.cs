@@ -70,7 +70,7 @@ namespace Creature.Creature
             vision[3] = (float)creatureData.Health;
             //calculate closest player and monster
             _dataGatheringService.ScanMap(this, creatureData.VisionRange);
-            // needs to be player location in X and Y
+            //Needs to be player location in X and Y
             //get distance to player
             vision[4] = _dataGatheringService.distanceToClosestPlayer;
             //get distance to monster
