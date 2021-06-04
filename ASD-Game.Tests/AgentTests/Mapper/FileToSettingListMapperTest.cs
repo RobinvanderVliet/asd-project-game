@@ -26,10 +26,9 @@ namespace Agent.Tests.Mapper
         {
             //Arrange
             List<Setting> expected = new List<Setting>();
-            expected.Add(new Setting("aggressiveness", "high"));
             expected.Add(new Setting("explore", "random"));
             expected.Add(new Setting("combat", "offensive"));
-            var filepath = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest.txt";
+            var filepath = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resource\\npcFileTest.txt";
             
             //Act
             var actual = _sut.MapFileToConfiguration(filepath);
@@ -42,10 +41,10 @@ namespace Agent.Tests.Mapper
         public void Test_MapFileToConfiguration_Unsuccessful()
         {
             //Arrange
-            var filepath = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "resource\\npcFileTest_2.txt";
+            var filepath = string.Format(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\..\\"))) + "Resource\\npcFileTest_2.txt";
             
             //Act & Assert
-            Assert.Throws<SyntaxErrorException>(() => _sut.MapFileToConfiguration(filepath));
+            Assert.Throws<System.IndexOutOfRangeException>(() => _sut.MapFileToConfiguration(filepath));
 
         }
     }
