@@ -1,6 +1,6 @@
-using NUnit.Framework;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using NUnit.Framework;
 using ASD_project.World.Models.Interfaces;
 using ASD_project.World.Models.LootableTiles;
 
@@ -11,14 +11,14 @@ namespace WorldGeneration.Tests
     {
         private ILootAbleTile _tile;
         private string _tileSymbol;
-
+        
         [SetUp]
         public void Setup()
         {
             _tile = new ChestTile();
             _tileSymbol = "n";
         }
-
+        
         [Test]
         public void Test_InstanceOf_ChestTile()
         {
@@ -27,7 +27,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile, Is.InstanceOf<ChestTile>());
         }
-
+        
         [Test]
         public void Test_InstanceOf_LootAbleTile()
         {
@@ -36,7 +36,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile, Is.InstanceOf<ILootAbleTile>());
         }
-
+        
         [Test]
         public void Test_InstanceOf_Tile()
         {
@@ -45,7 +45,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile, Is.InstanceOf<ITile>());
         }
-
+        
         [Test]
         public void Test_SetX_EqualsTo_5()
         {
@@ -55,7 +55,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile.XPosition, Is.EqualTo(5));
         }
-
+        
         [Test]
         public void Test_SetY_EqualsTo_5()
         {
@@ -65,7 +65,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile.YPosition, Is.EqualTo(5));
         }
-
+        
         [Test]
         public void Test_TileSymbol_EqualsTo_ChestTileSymbol()
         {
@@ -74,7 +74,7 @@ namespace WorldGeneration.Tests
             //assert
             Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
         }
-
+        
         [Test]
         public void Test_GenerateLoot_CanGenerateLoot()
         {
@@ -86,7 +86,7 @@ namespace WorldGeneration.Tests
                 _tile.GenerateLoot();
             });
         }
-
+        
         [Test]
         public void Test_LootItem_CanLootItem()
         {
