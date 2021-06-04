@@ -80,16 +80,16 @@ namespace ASD_project.World
             return _map.GetMapAroundCharacter(character, _viewDistance, characters);
         }
 
-            public void DeleteMap()
+        public void DeleteMap()
         {
             _map.DeleteMap();
         }
 
-            public void AddItemToWorld(ItemSpawnDTO itemSpawnDto)
-            {
-                _items.Add(itemSpawnDto);
-                UpdateMap();
-            }
+        public void AddItemToWorld(ItemSpawnDTO itemSpawnDto)
+        {
+            _items.Add(itemSpawnDto);
+            UpdateMap();
+        }
     }
 }
      

@@ -63,12 +63,12 @@ namespace ASD_project.World
             }
             
             var item = _itemService.GenerateItemFromNoise(itemNoise, x, y);
-            var itemSpawnDTO = new ItemSpawnDTO { item = item, XPosition = x, YPosition = y };
+            var itemSpawnDTO = new ItemSpawnDTO { Item = item, XPosition = x, YPosition = y };
 
             if (item == null)
                 return tile;
             
-            if (_items.Exists(itemInList => itemInList.item.ItemId == item.ItemId))
+            if (_items.Exists(itemInList => itemInList.Item.ItemId == item.ItemId))
             {
                   return tile;
             }

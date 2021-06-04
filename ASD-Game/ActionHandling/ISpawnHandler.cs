@@ -7,6 +7,7 @@ namespace ActionHandling
     public interface ISpawnHandler
     {
         public void SendSpawn(int x, int y, Item item);
-        void setItemSpawnDTOs(List<ItemSpawnDTO> itemSpawnDTOs);
+        
+        public void setItemSpawnDTOs(List<ItemSpawnDTO> itemSpawnDTOs);
     }
 }

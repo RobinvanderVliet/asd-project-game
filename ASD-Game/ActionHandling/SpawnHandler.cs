@@ -30,11 +30,10 @@ namespace ActionHandling
 
         public void SendSpawn(int x, int y, Item item)
         {
-
             ItemSpawnDTO itemSpawnDto = new ItemSpawnDTO();
             itemSpawnDto.XPosition = x;
             itemSpawnDto.YPosition = y;
-            itemSpawnDto.item = item;
+            itemSpawnDto.Item = item;
             SendSpawnDTO(itemSpawnDto);
         }
 
@@ -61,7 +60,6 @@ namespace ActionHandling
                     return new HandlerResponseDTO(SendAction.Ignore, null);
                 }
             }
-
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
@@ -69,7 +67,7 @@ namespace ActionHandling
         {
             var ItemService = new DatabaseService<ItemPoco>();
             var item = new ItemPoco()
-                {ItemName = itemSpawnDto.item.ItemName, Xposition = itemSpawnDto.XPosition, Yposition = itemSpawnDto.YPosition};
+                {ItemName = itemSpawnDto.Item.ItemName, Xposition = itemSpawnDto.XPosition, Yposition = itemSpawnDto.YPosition};
             ItemService.CreateAsync(item);
         }
     }
