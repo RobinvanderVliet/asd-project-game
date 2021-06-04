@@ -18,7 +18,7 @@ namespace ActionHandling.Tests
         private MoveHandler _sut;
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
-        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerServicesDb;
+        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerDatabaseService;
         private Mock<IMessageService> _mockedMessageService;
 
         [SetUp]
@@ -26,9 +26,9 @@ namespace ActionHandling.Tests
         {
             _mockedClientController = new Mock<IClientController>();
             _mockedWorldService = new Mock<IWorldService>();
-            _mockedPlayerServicesDb = new Mock<IDatabaseService<PlayerPOCO>>();
+            _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPOCO>>();
             _mockedMessageService = new Mock<IMessageService>();
-            _sut = new MoveHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerServicesDb.Object, _mockedMessageService.Object);
+            _sut = new MoveHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerDatabaseService.Object, _mockedMessageService.Object);
         }
 
         [TestCase("up")]

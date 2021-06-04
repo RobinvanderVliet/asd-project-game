@@ -26,15 +26,15 @@ namespace ActionHandling
 
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
-        private readonly IDatabaseService<PlayerPOCO> _playerServicesDB;
+        private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IMessageService _messageService;
 
-        public RelativeStatHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerServicesDb, IMessageService messageService)
+        public RelativeStatHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.RelativeStat);
             _worldService = worldService;
-            _playerServicesDB = playerServicesDb;
+            _playerDatabaseService = playerDatabaseService;
             _messageService = messageService;
         }
         
@@ -143,7 +143,7 @@ namespace ActionHandling
         {
             if (handleInDatabase)
             {
-                PlayerPOCO playerPOCO = _playerServicesDB.GetAllAsync().Result.FirstOrDefault(poco => poco.PlayerGuid == player.Id && poco.GameGuid == _clientController.SessionId);
+                PlayerPOCO playerPOCO = _playerDatabaseService.GetAllAsync().Result.FirstOrDefault(poco => poco.PlayerGuid == player.Id && poco.GameGuid == _clientController.SessionId);
                 if (relativeStatDTO.Stamina != 0)
                 {
                     playerPOCO.Stamina = player.Stamina;
@@ -156,7 +156,7 @@ namespace ActionHandling
                 {
                     playerPOCO.Health = player.Health;
                 }
-                _playerServicesDB.UpdateAsync(playerPOCO);
+                _playerDatabaseService.UpdateAsync(playerPOCO);
             }
         }
 

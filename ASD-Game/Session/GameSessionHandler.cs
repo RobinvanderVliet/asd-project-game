@@ -24,10 +24,10 @@ namespace Session
         private readonly IRelativeStatHandler _relativeStatHandler;
         private readonly IGameConfigurationHandler _gameConfigurationHandler;
         private readonly IScreenHandler _screenHandler;
-        private readonly IDatabaseService<PlayerPOCO> _playerService;
-        private readonly IDatabaseService<GamePOCO> _gameService;
-        private readonly IDatabaseService<GameConfigurationPOCO> _gameConfigServicesDb;
-        private readonly IDatabaseService<PlayerItemPOCO> _playerItemService;
+        private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
+        private readonly IDatabaseService<GamePOCO> _gameDatabaseService;
+        private readonly IDatabaseService<GameConfigurationPOCO> _gameConfigDatabaseService;
+        private readonly IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
         private readonly IWorldService _worldService;
         private readonly IMessageService _messageService;
 
@@ -37,10 +37,10 @@ namespace Session
             IRelativeStatHandler relativeStatHandler,
             IGameConfigurationHandler gameConfigurationHandler,
             IScreenHandler screenHandler,
-            IDatabaseService<PlayerPOCO> playerService, 
-            IDatabaseService<GamePOCO> gameService, 
-            IDatabaseService<GameConfigurationPOCO> gameConfigServicesDb,
-            IDatabaseService<PlayerItemPOCO> playerItemService, 
+            IDatabaseService<PlayerPOCO> playerDatabaseService, 
+            IDatabaseService<GamePOCO> gameDatabaseService, 
+            IDatabaseService<GameConfigurationPOCO> gameConfigDatabaseService,
+            IDatabaseService<PlayerItemPOCO> playerItemDatabaseService, 
             IWorldService worldService,
             IMessageService messageService 
         )
@@ -51,10 +51,10 @@ namespace Session
             _relativeStatHandler = relativeStatHandler;
             _gameConfigurationHandler = gameConfigurationHandler;
             _screenHandler = screenHandler;
-            _playerService = playerService;
-            _gameService = gameService;
-            _gameConfigServicesDb = gameConfigServicesDb;
-            _playerItemService = playerItemService;
+            _playerDatabaseService = playerDatabaseService;
+            _gameDatabaseService = gameDatabaseService;
+            _gameConfigDatabaseService = gameConfigDatabaseService;
+            _playerItemDatabaseService = playerItemDatabaseService;
             _worldService = worldService;
             _messageService = messageService;
         }
@@ -74,11 +74,11 @@ namespace Session
                 NPCDifficultyNew = (int) _gameConfigurationHandler.GetNewMonsterDifficulty(),
                 ItemSpawnRate = (int) _gameConfigurationHandler.GetSpawnRate()
             };
-            _gameConfigServicesDb.CreateAsync(gameConfigurationPOCO);
+            _gameConfigDatabaseService.CreateAsync(gameConfigurationPOCO);
             
             var gamePOCO = new GamePOCO {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
 
-            _gameService.CreateAsync(gamePOCO);
+            _gameDatabaseService.CreateAsync(gamePOCO);
   
             List<string[]> allClients = _sessionHandler.GetAllClients();
 
@@ -95,7 +95,7 @@ namespace Session
                 players.Add(client[0], playerPosition);
                 var tmpPlayer = new PlayerPOCO
                     {PlayerGuid = client[0], GameGuid = gamePOCO.GameGuid, GameGUIDAndPlayerGuid = gamePOCO.GameGuid + client[0], XPosition = playerX, YPosition = playerY};
-                _playerService.CreateAsync(tmpPlayer);
+                _playerDatabaseService.CreateAsync(tmpPlayer);
                 AddItemsToPlayer(client[0], gamePOCO.GameGuid);
 
                 playerX += 2; // spawn position + 2 each client
@@ -112,10 +112,10 @@ namespace Session
         private void AddItemsToPlayer( string playerId, string gameId)
         {
             PlayerItemPOCO poco = new() {PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGUID = gameId };
-            _ = _playerItemService.CreateAsync(poco);
+            _ = _playerItemDatabaseService.CreateAsync(poco);
 
             poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetKnife().ItemName, GameGUID = gameId };
-            _ = _playerItemService.CreateAsync(poco);
+            _ = _playerItemDatabaseService.CreateAsync(poco);
         }
         
         private void SendGameSessionDTO(StartGameDTO startGameDTO)

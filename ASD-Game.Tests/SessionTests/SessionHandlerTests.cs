@@ -24,7 +24,7 @@ namespace Session.Tests
         private SessionHandler _sut;
 
         private PacketDTO _packetDTO;
-        private const int HOSTINACTIVECOUNTER = 5;
+        private const int HOSTINACTIVECOUNTER = 20;
 
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;

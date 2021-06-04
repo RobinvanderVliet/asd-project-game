@@ -70,14 +70,15 @@ namespace WorldGeneration
             return _map.GetLoadedTileByXAndY(x, y);
         }
         
-        public bool CheckIfPlayerOnTile(ITile tile)
+        public bool CheckIfCharacterOnTile(ITile tile)
         {
-            if (_players.Exists(player => player.XPosition == tile.XPosition && player.YPosition == tile.YPosition))
-            {
-                return true;
-            }
+            return GetAllCharacters().Exists(player => player.XPosition == tile.XPosition && player.YPosition == tile.YPosition);
+        }
 
-            return false;
+        private List<Character> GetAllCharacters()
+        {
+            List<Character> characters = _players.Cast<Character>().ToList();
+            return characters;
         }
         
         public void LoadArea(int playerX, int playerY, int viewDistance)

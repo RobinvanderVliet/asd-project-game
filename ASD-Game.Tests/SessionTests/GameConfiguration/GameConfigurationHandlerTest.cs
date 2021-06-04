@@ -13,14 +13,14 @@ namespace Session.Tests.GameConfiguration
     {
         private GameConfigurationHandler _sut;
         private Mock<ScreenHandler> _mockScreenHandler;
-        private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigServicesDb;
+        private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigDatabaseService;
 
         [SetUp]
         public void Setup()
         {
             _mockScreenHandler = new Mock<ScreenHandler>();
-            _mockedGameConfigServicesDb = new Mock<IDatabaseService<GameConfigurationPOCO>>();
-            _sut = new GameConfigurationHandler(_mockScreenHandler.Object, _mockedGameConfigServicesDb.Object);
+            _mockedGameConfigDatabaseService = new Mock<IDatabaseService<GameConfigurationPOCO>>();
+            _sut = new GameConfigurationHandler(_mockScreenHandler.Object, _mockedGameConfigDatabaseService.Object);
         }
 
         [Test]

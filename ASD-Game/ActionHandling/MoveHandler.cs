@@ -21,15 +21,15 @@ namespace ActionHandling
     {
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
-        private readonly IDatabaseService<PlayerPOCO> _playerServicesDB;
+        private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IMessageService _messageService;
 
-        public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerServicesDb, IMessageService messageService)
+        public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Move);
             _worldService = worldService;
-            _playerServicesDB = playerServicesDb;
+            _playerDatabaseService = playerDatabaseService;
             _messageService = messageService;
         }
 
@@ -76,7 +76,7 @@ namespace ActionHandling
         {
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
             bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
-
+            // Console.WriteLine();
             if (packet.Header.Target == "host" || packet.Header.Target == "client")
             {
                 return HandleMove(moveDTO, handleInDatabase);
@@ -144,11 +144,11 @@ namespace ActionHandling
 
         private void InsertToDatabase(MoveDTO moveDTO)
         {
-            var player = _playerServicesDB.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId && player.GameGuid == _clientController.SessionId);
+            var player = _playerDatabaseService.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId && player.GameGuid == _clientController.SessionId);
             player.XPosition = moveDTO.XPosition;
             player.YPosition = moveDTO.YPosition;
             player.Stamina = moveDTO.Stamina;
-            _playerServicesDB.UpdateAsync(player);
+            _playerDatabaseService.UpdateAsync(player);
         }
 
         private MoveDTO ChangeMoveDTOToNewLocation(MoveDTO moveDTO, List<ITile> movableTiles, Player player)
@@ -247,7 +247,7 @@ namespace ActionHandling
             for (int i = 0; i < accessible.Count; i++)
             {
                 //tiles[i+1] since we don't want to check the first tile, since the player is standing on that tile and the accessible list has 1 tile less than list tiles
-                if (accessible[i] && !_worldService.CheckIfPlayerOnTile(tiles[i+1]))
+                if (accessible[i] && !_worldService.CheckIfCharacterOnTile(tiles[i+1]))
                 {
                     movableTiles.Add(tiles[i+1]);
                 }

@@ -83,9 +83,9 @@ namespace WorldGeneration
             return _world.GetLoadedTileByXAndY(x, y);
         }
         
-        public bool CheckIfPlayerOnTile(ITile tile)
+        public bool CheckIfCharacterOnTile(ITile tile)
         {
-            return _world.CheckIfPlayerOnTile(tile);
+            return _world.CheckIfCharacterOnTile(tile);
         }
 
         public void LoadArea(int playerX, int playerY, int viewDistance)
