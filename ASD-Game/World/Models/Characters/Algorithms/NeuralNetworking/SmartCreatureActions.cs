@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using ActionHandling;
+using Creature.Creature.NeuralNetworking.TrainingScenario;
 using Creature.Pathfinder;
 using WorldGeneration;
 
@@ -11,80 +11,92 @@ namespace Creature.Creature.NeuralNetworking
     {
         private readonly Random _random = new Random();
         private readonly PathFinder _pathfinder;
+        private DataGatheringService _dataGatheringService;
 
         public Stack<Node> path = new Stack<Node>();
 
-        public SmartCreatureActions()
+        private Vector2 startPos = new Vector2(6, 6);
+        private Vector2 _pathingOffset;
+
+        public SmartCreatureActions(SmartMonster smartMonster, DataGatheringService dataGatheringService)
         {
-            //_pathfinder = new PathFinder(world);
+            _dataGatheringService = dataGatheringService;
+            _pathfinder = new PathFinder(_dataGatheringService.TranslateCharacterMap(smartMonster));
         }
 
         public void Wander(SmartMonster smartMonster)
         {
             if (path == null || path.Count == 0)
             {
-                int newXLoc = _random.Next((int)smartMonster.creatureData.Position.X, smartMonster.creatureData.VisionRange);
-                int newYLoc = _random.Next((int)smartMonster.creatureData.Position.Y, smartMonster.creatureData.VisionRange);
+                int newXLoc = _random.Next(0, 12);
+                int newYLoc = _random.Next(0, 12);
 
                 Vector2 destination = new Vector2(newXLoc, newYLoc);
-
-                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
-                CheckPath(smartMonster);
+                ViewPointCalculator(smartMonster.creatureData.Position);
+                path = _pathfinder.FindPath(startPos, destination);
+                TransformPath();
             }
-            smartMonster.creatureData.Position = path.Pop().Position;
+            smartMonster.NextAction = path.Pop().Position;
         }
 
         public void WalkUp(SmartMonster smartMonster)
         {
-            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X, smartMonster.creatureData.Position.Y + 1);
+            ViewPointCalculator(smartMonster.creatureData.Position);
+            Vector2 destination = new Vector2(startPos.X, startPos.Y + 1);
             if (IsValidMove(destination))
             {
-                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
-                CheckPath(smartMonster);
-                smartMonster.creatureData.Position = path.Pop().Position;
+                path = _pathfinder.FindPath(startPos, destination);
+                TransformPath();
+                smartMonster.NextAction = path.Pop().Position;
             }
         }
 
         public void WalkDown(SmartMonster smartMonster)
         {
-            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X, smartMonster.creatureData.Position.Y - 1);
+            ViewPointCalculator(smartMonster.creatureData.Position);
+            Vector2 destination = new Vector2(startPos.X, startPos.Y - 1);
             if (IsValidMove(destination))
             {
-                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
-                CheckPath(smartMonster);
-                smartMonster.creatureData.Position = path.Pop().Position;
+                path = _pathfinder.FindPath(startPos, destination);
+                TransformPath();
+                smartMonster.NextAction = path.Pop().Position;
             }
         }
 
         public void WalkLeft(SmartMonster smartMonster)
         {
-            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X - 1, smartMonster.creatureData.Position.Y);
+            ViewPointCalculator(smartMonster.creatureData.Position);
+            Vector2 destination = new Vector2(startPos.X - 1, startPos.Y);
             if (IsValidMove(destination))
             {
-                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
-                CheckPath(smartMonster);
-                smartMonster.creatureData.Position = path.Pop().Position;
+                path = _pathfinder.FindPath(startPos, destination);
+                TransformPath();
+                smartMonster.NextAction = path.Pop().Position;
             }
         }
 
         public void WalkRight(SmartMonster smartMonster)
         {
-            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X + 1, smartMonster.creatureData.Position.Y);
+            ViewPointCalculator(smartMonster.creatureData.Position);
+            Vector2 destination = new Vector2(startPos.X + 1, startPos.Y);
             if (IsValidMove(destination))
             {
-                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
-                CheckPath(smartMonster);
-                smartMonster.creatureData.Position = path.Pop().Position;
+                path = _pathfinder.FindPath(startPos, destination);
+                TransformPath();
+                smartMonster.NextAction = path.Pop().Position;
             }
         }
 
         public void Attack(Character player, SmartMonster smartmonster)
         {
-            Vector2 PPos = new Vector2(player.XPosition, player.YPosition);
-            Vector2 SMPos = new Vector2(smartmonster.XPosition, smartmonster.YPosition);
-            if (player != null && IsAdjacent(PPos, SMPos))
+            if (player != null)
             {
-                //TODO attack for AI
+                Vector2 PPos = new Vector2(player.XPosition, player.YPosition);
+                Vector2 SMPos = new Vector2(smartmonster.XPosition, smartmonster.YPosition);
+                if (IsAdjacent(PPos, SMPos))
+                {
+                    //TODO attack for AI
+                }
             }
         }
 
@@ -96,26 +108,16 @@ namespace Creature.Creature.NeuralNetworking
             }
         }
 
-        public void UseItem()
-        {
-            //To be implemented
-        }
-
         public void RunToMonster(Character monster, SmartMonster smartMonster)
         {
             if (monster != null)
             {
-                Vector2 MPos = new Vector2(monster.XPosition, monster.YPosition);
-                Vector2 SMPos = new Vector2(smartMonster.XPosition, smartMonster.YPosition);
-                path = _pathfinder.FindPath(SMPos, MPos);
-                CheckPath(smartMonster);
-                smartMonster.creatureData.Position = path.Pop().Position;
+                ViewPointCalculator(smartMonster.creatureData.Position);
+                Vector2 MPos = new Vector2(monster.XPosition - _pathingOffset.X, monster.YPosition - _pathingOffset.Y);
+                path = _pathfinder.FindPath(startPos, MPos);
+                TransformPath();
+                smartMonster.NextAction = path.Pop().Position;
             }
-        }
-
-        public void GrabItem(Vector2 loc)
-        {
-            //To be implemented
         }
 
         public void TakeDamage(int damage, SmartMonster smartMonster)
@@ -134,26 +136,23 @@ namespace Creature.Creature.NeuralNetworking
             return (distance < 2);
         }
 
-        private void CheckPath(SmartMonster smartMonster)
+        private static bool IsValidMove(Vector2 destination)
         {
-            if (path == null)
+            return true;
+        }
+
+        private void TransformPath()
+        {
+            foreach (Node node in path)
             {
+                Vector2 transPos = node.Position + _pathingOffset;
+                node.Position = transPos;
             }
         }
 
-        private static bool IsValidMove(Vector2 destination)
+        private void ViewPointCalculator(Vector2 pos)
         {
-            int topOfMap = 0;
-            int botOfMap = 29;
-            int leftOfMap = 0;
-            int rightOfMap = 29;
-
-            if (destination.X > leftOfMap && destination.X < rightOfMap && destination.Y > topOfMap && destination.Y < botOfMap)
-            {
-                return true;
-            }
-
-            return false;
+            _pathingOffset = new Vector2(pos.X - 6, pos.Y - 6);
         }
     }
 }

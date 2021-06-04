@@ -10,6 +10,7 @@ using DatabaseHandler.Services;
 using Network.DTO;
 using Newtonsoft.Json;
 using WorldGeneration;
+using System.Numerics;
 
 namespace ActionHandling
 {
@@ -18,7 +19,7 @@ namespace ActionHandling
         private IClientController _clientController;
         private IWorldService _worldService;
 
-        private List<string> _creatureMoves = new List<string>();
+        private List<Character> _creatureMoves = new List<Character>();
 
         public MoveHandler(IClientController clientController, IWorldService worldService)
         {
@@ -63,15 +64,25 @@ namespace ActionHandling
             SendMoveDTO(moveDTO);
         }
 
+        public void MoveAIs()
+        {
+            foreach (Character move in _creatureMoves)
+            {
+                MoveDTO moveDTO = new(move.Id, (int)move.Destination.X, (int)move.Destination.Y);
+                SendMoveDTO(moveDTO);
+            }
+        }
+
         public void GetAIMoves()
         {
-            //_creatureMoves = _worldService.getCreatureMove();
+            _creatureMoves = _worldService.getCreatureMoves();
         }
 
         private void SendMoveDTO(MoveDTO moveDTO)
         {
             var payload = JsonConvert.SerializeObject(moveDTO);
             _clientController.SendPayload(payload, PacketType.Move);
+            MoveAIs();
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)

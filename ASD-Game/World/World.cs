@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Creature.Creature;
+using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using UserInterface;
 
 namespace WorldGeneration
@@ -8,8 +10,10 @@ namespace WorldGeneration
     {
         private IMap _map;
         public Player CurrentPlayer;
-        private List<Player> _players;
+        public List<Player> _players { get; set; }
         public List<Character> _creatures { get; set; }
+        public List<Character> movesList = new List<Character>();
+
         private readonly int _viewDistance;
         private IScreenHandler _screenHandler;
 
@@ -63,6 +67,7 @@ namespace WorldGeneration
                 //_screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
                 _map.DisplayMap(CurrentPlayer, _viewDistance, characters);
             }
+            UpdateAI();
         }
 
         public char[,] GetMapAroundCharacter(Character character)
@@ -74,6 +79,18 @@ namespace WorldGeneration
         public void DeleteMap()
         {
             _map.DeleteMap();
+        }
+
+        public void UpdateAI()
+        {
+            foreach (Character monster in _creatures)
+            {
+                if (monster is SmartMonster smartMonster)
+                {
+                    smartMonster.Update();
+                    movesList.Add(monster);
+                }
+            }
         }
     }
 }

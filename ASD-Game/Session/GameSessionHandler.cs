@@ -1,3 +1,5 @@
+using Creature.Creature;
+using Creature.Creature.NeuralNetworking.TrainingScenario;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Network;
@@ -98,31 +100,41 @@ namespace Session
                     _worldService.AddPlayerToWorld(new WorldGeneration.Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key), false);
                 }
             }
-
-            for (int i = 0; i < 10; i++)
-            {
-                Monster newMonster = new Monster("Zombie", random.Next(12, 25), random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i);
-                setBrain(newMonster);
-                _worldService.AddCreatureToWorld(newMonster);
-            }
-
+            CreateMonsters();
             _worldService.DisplayWorld();
         }
 
-        private void setBrain(Monster monster)
+        private void CreateMonsters()
         {
-            if (random.Next(0, 100) > 5)
+            for (int i = 0; i < 10; i++)
             {
-                ICharacterStateMachine CSM = new MonsterStateMachine(monster._monsterData, null);
-                monster._monsterStateMachine = CSM;
-            }
-            else
-            {
-                if (_sessionHandler.trainingScenario.brainTransplant() != null)
+                if (i < 5)
                 {
-                    monster.brain = _sessionHandler.trainingScenario.brainTransplant();
+                    Monster newMonster = new Monster("Zombie", random.Next(12, 25), random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i);
+                    setStateMachine(newMonster);
+                    _worldService.AddCreatureToWorld(newMonster);
+                }
+                else
+                {
+                    SmartMonster newMonster = new SmartMonster("Zombie", random.Next(12, 25), random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i, new DataGatheringService(_worldService));
+                    setBrain(newMonster);
+                    _worldService.AddCreatureToWorld(newMonster);
                 }
             }
+        }
+
+        private void setBrain(SmartMonster monster)
+        {
+            if (_sessionHandler.trainingScenario.brainTransplant() != null)
+            {
+                monster.brain = _sessionHandler.trainingScenario.brainTransplant();
+            }
+        }
+
+        private void setStateMachine(Monster monster)
+        {
+            ICharacterStateMachine CSM = new MonsterStateMachine(monster._monsterData, null);
+            monster._monsterStateMachine = CSM;
         }
     }
 }

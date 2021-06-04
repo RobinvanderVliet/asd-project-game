@@ -8,8 +8,8 @@ namespace WorldGeneration
     public class Monster : Character
     {
         public ICharacterStateMachine _monsterStateMachine;
+        public string NextAction { get; set; }
         public MonsterData _monsterData;
-        public Genome brain;
 
         public ICharacterStateMachine CharacterStateMachine
         {
@@ -23,6 +23,10 @@ namespace WorldGeneration
             {
                 _monsterStateMachine.StartStateMachine();
             }
+        }
+
+        public void Update()
+        {
         }
 
         private void SetStats(int difficulty)

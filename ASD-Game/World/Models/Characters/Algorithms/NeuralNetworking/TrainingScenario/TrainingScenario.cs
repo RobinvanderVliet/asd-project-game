@@ -57,7 +57,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                     //all dead
                     //genetic algorithm
                     pop.NaturalSelection();
-                    if (pop.bestScore >= 100)
+                    if (pop.bestSmartMonster != null)
                     {
                         bestGene = pop.bestSmartMonster.brain;
                     }

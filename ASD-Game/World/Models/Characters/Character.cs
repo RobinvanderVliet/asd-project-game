@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Creature.Creature.NeuralNetworking;
+using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 
 namespace WorldGeneration
 {
@@ -11,6 +13,7 @@ namespace WorldGeneration
         public int XPosition { get; set; }
         public int YPosition { get; set; }
         public string Symbol { get; set; }
+        public Vector2 Destination { get; set; }
 
         public Character(string name, int xPosition, int yPosition, string symbol, string id)
         {
@@ -20,6 +23,10 @@ namespace WorldGeneration
             YPosition = yPosition;
             Symbol = symbol;
             Id = id;
+        }
+
+        public void Update()
+        {
         }
     }
 }

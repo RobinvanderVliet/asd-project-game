@@ -3,8 +3,8 @@ using System;
 using Creature.Creature.NeuralNetworking.TrainingScenario;
 using System.Diagnostics.CodeAnalysis;
 using WorldGeneration;
-using WorldGeneration.StateMachine;
 using WorldGeneration.StateMachine.Data;
+using System.Numerics;
 
 namespace Creature.Creature
 {
@@ -12,8 +12,10 @@ namespace Creature.Creature
     public class SmartMonster : Monster
     {
         public MonsterData creatureData;
-        private readonly DataGatheringService _dataGatheringService;
+        private DataGatheringService _dataGatheringService;
         public SmartCreatureActions smartactions;
+
+        public Vector2 NextAction { get; set; }
 
         public Genome brain;
         public Boolean replay = false;
@@ -37,24 +39,11 @@ namespace Creature.Creature
         public float currDistanceToPlayer;
         public float currDistanceToMonster;
 
-        public ICharacterStateMachine CreatureStateMachine => null;
-
-        public SmartMonster(string name, int xPosition, int yPosition, string symbol, string id) : base(name, xPosition, yPosition, symbol, id)
+        public SmartMonster(string name, int xPosition, int yPosition, string symbol, string id, DataGatheringService datagatheringservice) : base(name, xPosition, yPosition, symbol, id)
         {
-            this.creatureData = creatureData;
-            this.smartactions = new SmartCreatureActions();
-            this._dataGatheringService = new DataGatheringService();
-            //= TODO;
-        }
-
-        public void ApplyDamage(double amount)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void HealAmount(double amount)
-        {
-            throw new NotImplementedException();
+            creatureData = CreateMonsterData(0);
+            this._dataGatheringService = datagatheringservice;
+            this.smartactions = new SmartCreatureActions(this, datagatheringservice);
         }
 
         public void Update()
@@ -191,6 +180,22 @@ namespace Creature.Creature
                     smartactions.WalkRight(this);
                     break;
             }
+        }
+
+        public void SetDifficulty(int difficulty)
+        {
+            _monsterData = new MonsterData(
+                XPosition,
+                YPosition,
+                difficulty);
+        }
+
+        private MonsterData CreateMonsterData(int difficulty)
+        {
+            return new MonsterData(
+                XPosition,
+                YPosition,
+                difficulty);
         }
     }
 }

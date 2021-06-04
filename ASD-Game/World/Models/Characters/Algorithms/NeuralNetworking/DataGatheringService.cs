@@ -8,18 +8,23 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 {
     public class DataGatheringService
     {
-        private WorldService WorldService = new WorldService(null);
+        private IWorldService WorldService;
 
-        private int _colCount = 13;
-        private int _rowCount = 13;
+        private int _colCount = 12;
+        private int _rowCount = 12;
 
         private List<Player> _players = new List<Player>();
 
         public List<List<Node>> mapNodes = new List<List<Node>>();
-        public Character closestPlayer { get; set; }
+        public Player closestPlayer { get; set; }
         public Single distanceToClosestPlayer { get; set; } = 9999999999999999999;
         public Character closestMonster { get; set; }
         public Single distanceToClosestMonster { get; set; } = 9999999999999999999;
+
+        public DataGatheringService(IWorldService worldService)
+        {
+            WorldService = worldService;
+        }
 
         public void ScanMap(SmartMonster smartMonster, int visionRange)
         {
@@ -29,12 +34,34 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         private void SetClosestMonster(SmartMonster smartMonster, int visionRange)
         {
-            //TODO
+            List<Character> monsters = WorldService.GetMonsters();
+            foreach (Character monster in monsters)
+            {
+                Vector2 pPos = new Vector2(monster.XPosition, monster.YPosition);
+                Vector2 cPos = new Vector2(smartMonster.XPosition, smartMonster.YPosition);
+                Single distance = Vector2.Distance(pPos, cPos);
+                if (distance < distanceToClosestPlayer)
+                {
+                    closestMonster = monster;
+                    distanceToClosestPlayer = distance;
+                }
+            }
         }
 
         private void SetClosestPlayer(SmartMonster smartMonster, int visionRange)
         {
-            //TODO
+            List<Player> players = WorldService.GetPlayers();
+            foreach (Player player in players)
+            {
+                Vector2 pPos = new Vector2(player.XPosition, player.YPosition);
+                Vector2 cPos = new Vector2(smartMonster.XPosition, smartMonster.YPosition);
+                Single distance = Vector2.Distance(pPos, cPos);
+                if (distance < distanceToClosestPlayer)
+                {
+                    closestPlayer = player;
+                    distanceToClosestPlayer = distance;
+                }
+            }
         }
 
         public void CheckNewPosition(SmartMonster smartMonster)

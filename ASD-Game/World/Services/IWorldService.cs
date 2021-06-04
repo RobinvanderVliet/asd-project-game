@@ -1,4 +1,7 @@
-﻿namespace WorldGeneration
+﻿using System.Collections.Generic;
+using System.Numerics;
+
+namespace WorldGeneration
 {
     public interface IWorldService
     {
@@ -15,5 +18,13 @@
         public void GenerateWorld(int seed);
 
         public Player getCurrentPlayer();
+
+        List<Character> getCreatureMoves();
+
+        List<Player> GetPlayers();
+
+        List<Character> GetMonsters();
+
+        public char[,] GetMapAroundCharacter(Character character);
     }
 }

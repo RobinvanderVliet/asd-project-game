@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using UserInterface;
 
 namespace WorldGeneration
@@ -62,14 +63,17 @@ namespace WorldGeneration
 
         public List<Player> GetPlayers()
         {
-            return null;
+            return _world._players;
         }
 
-        //public List<string> getCreatureMoves()
-        //{
-        //    for (_world._creatures.Count)
-        //    {
-        //    }
-        //}
+        public List<Character> GetMonsters()
+        {
+            return _world._creatures;
+        }
+
+        public List<Character> getCreatureMoves()
+        {
+            return _world.movesList;
+        }
     }
 }
