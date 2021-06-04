@@ -24,6 +24,8 @@ CREATE_SESSION : 'create_session';
 JOIN_SESSION : 'join_session';
 REQUEST_SESSIONS : 'request_sessions';
 START_SESSION : 'start_session';
+SET_MONSTER_DIFFICULTY : 'monster_difficulty';
+SET_ITEM_FREQUENCY : 'item_spawn_rate';
 INSPECT : 'inspect';
 USE : 'use';
 SEARCH : 'search';
@@ -39,6 +41,12 @@ LEFT: 'left';
 WEST: 'west';
 RIGHT: 'right';
 EAST: 'east';
+EASY: 'easy';
+MEDIUM: 'medium';
+HARD: 'hard';
+IMPOSSIBLE: 'impossible';
+LOW : 'low';
+HIGH : 'high';
 ARMOR: 'armor';
 HELMET: 'helmet';
 WEAPON: 'weapon';
@@ -53,6 +61,7 @@ MESSAGE: '"' ~'"'+ '"';
 input: command EOF;
 
 step: NUMBER;
+username: MESSAGE;
 slotdigit: NUMBER;
 message: MESSAGE;
 
@@ -67,10 +76,12 @@ command:
     REPLACE #replace |
     PAUSE #pause |
     RESUME #resume |
-    CREATE_SESSION SPACE message #createSession |
-    JOIN_SESSION SPACE message #joinSession |
+    CREATE_SESSION SPACE message SPACE username #createSession |
+    JOIN_SESSION SPACE message SPACE username #joinSession |
     REQUEST_SESSIONS #requestSessions |
     START_SESSION #startSession |
+    SET_MONSTER_DIFFICULTY SPACE (EASY | MEDIUM | HARD | IMPOSSIBLE) #monsterdifficulty | 
+    SET_ITEM_FREQUENCY SPACE (LOW | MEDIUM | HIGH) #itemfrequency |
     INSPECT SPACE inventorySlot #inspect |
     USE SPACE step #use	|
     SEARCH #search;

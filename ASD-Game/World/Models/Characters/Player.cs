@@ -58,6 +58,20 @@ namespace WorldGeneration
             }
         }
 
+        public int GetArmorPoints()
+        {
+            int armorpoints = 0;
+            if (Inventory.Armor != null)
+            {
+                armorpoints += Inventory.Armor.ArmorProtectionPoints;
+            }
+            if (Inventory.Helmet != null)
+            {
+                armorpoints += Inventory.Helmet.ArmorProtectionPoints;
+            }
+            return armorpoints;
+        }
+
 
     }
 }

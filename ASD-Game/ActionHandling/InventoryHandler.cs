@@ -161,6 +161,7 @@ namespace ActionHandling
                 player.Inventory.AddItem(item);
 
                 _worldService.GetItemsOnCurrentTile(player).RemoveAt(inventoryDTO.Index);
+                _worldService.DisplayStats();
 
                 if (handleInDatabase)
                 {
@@ -238,6 +239,7 @@ namespace ActionHandling
 
             if (item != null)
             {
+                _worldService.DisplayStats();
                 if (handleInDatabase)
                 {
                     PlayerItemPOCO playerItemPOCO = _playerItemServicesDB.GetAllAsync().Result.FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == item.ItemName && playerItem.PlayerGUID == player.Id);
@@ -270,6 +272,7 @@ namespace ActionHandling
                 Consumable itemToUse = player.Inventory.ConsumableItemList.ElementAt(inventoryDTO.Index-1);
                 player.Inventory.ConsumableItemList.RemoveAt(inventoryDTO.Index-1);
                 player.UseConsumable(itemToUse);
+                _worldService.DisplayStats();
 
                 if (handleInDatabase)
                 {

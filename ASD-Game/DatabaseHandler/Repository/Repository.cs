@@ -1,11 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using DatabaseHandler.POCO;
-using LiteDB;
 using LiteDB.Async;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using LiteDB;
 
 namespace DatabaseHandler.Repository
 {
@@ -14,10 +18,12 @@ namespace DatabaseHandler.Repository
         private readonly string _collection;
         private readonly ILiteDatabaseAsync _db;
 
-        public Repository(IDbConnection connection, string collection = null)
+        [ExcludeFromCodeCoverage]
+        public Repository(string collection = null)
         {
-            _collection = collection ?? typeof(T).Name;
+            IDbConnection connection = new DbConnection();
             _db = connection.GetConnectionAsync();
+            _collection = collection ?? typeof(T).Name;
         }
 
         public async Task<BsonValue> CreateAsync(T obj)
@@ -26,6 +32,7 @@ namespace DatabaseHandler.Repository
             return result;
         }
 
+        [ExcludeFromCodeCoverage]
         public async Task<T> ReadAsync(T obj)
         {
             var chunk = await _db.GetCollection<T>(_collection)

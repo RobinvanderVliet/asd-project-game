@@ -24,5 +24,6 @@ namespace WorldGeneration
         public string SearchCurrentTile();
         public Player GetCurrentPlayer();
         public Player GetPlayer(string userId);
+        public void DisplayStats();
     }
 }

@@ -216,5 +216,39 @@ namespace InputHandling.Antlr.Parser
             ASTNode node = (ASTNode) _currentContainer.Peek();
             node.AddChild(new Message(context.GetText()));
         }
+
+        public override void EnterUsername(PlayerCommandsParser.UsernameContext context)
+        {
+            var action = _currentContainer.Peek();
+            
+            if (action is JoinSession joinSession)
+            {
+                joinSession.AddChild(new Username(context.GetText()));
+            }
+            else if (action is CreateSession createSession)
+            {
+                createSession.AddChild(new Username(context.GetText()));
+            }
+        }
+
+        public override void EnterMonsterdifficulty(PlayerCommandsParser.MonsterdifficultyContext context)
+        {
+            _currentContainer.Push(new MonsterDifficulty(context.children[2].GetText()));
+        }
+
+        public override void ExitMonsterdifficulty(PlayerCommandsParser.MonsterdifficultyContext context)
+        {
+            _ast.Root.AddChild((MonsterDifficulty) _currentContainer.Pop());
+        }
+
+        public override void EnterItemfrequency(PlayerCommandsParser.ItemfrequencyContext context)
+        {
+            _currentContainer.Push(new ItemFrequency(context.children[2].GetText()));
+        }
+
+        public override void ExitItemfrequency(PlayerCommandsParser.ItemfrequencyContext context)
+        {
+            _ast.Root.AddChild((ItemFrequency) _currentContainer.Pop());
+        }
     }
 }

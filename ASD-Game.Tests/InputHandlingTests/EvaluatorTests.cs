@@ -6,8 +6,14 @@ using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Antlr.Transformer;
 using InputHandling.Exceptions;
 using Moq;
+using Network;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using Session;
+using Session.DTO;
+using Session.GameConfiguration;
+using ItemFrequency = InputHandling.Antlr.Ast.Actions.ItemFrequency;
+using MonsterDifficulty = InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
 namespace InputHandling.Tests
 {
@@ -19,8 +25,8 @@ namespace InputHandling.Tests
         private Mock<IMoveHandler> _mockedMoveHandler;
         private Mock<IGameSessionHandler> _mockedGameSessionHandler;
         private Mock<IChatHandler> _mockedChatHandler;
+        private Mock<IClientController> _mockedClientController;
         private Mock<IInventoryHandler> _mockedInventoryHandler;
-
         [SetUp]
         public void Setup()
         {
@@ -28,8 +34,9 @@ namespace InputHandling.Tests
             _mockedMoveHandler = new Mock<IMoveHandler>();
             _mockedGameSessionHandler = new Mock<IGameSessionHandler>();
             _mockedChatHandler = new Mock<IChatHandler>();
+            _mockedClientController = new Mock<IClientController>();
             _mockedInventoryHandler = new Mock<IInventoryHandler>();
-            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedInventoryHandler.Object);
+            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedInventoryHandler.Object, _mockedClientController.Object);
         }
     
         [Test]
@@ -157,20 +164,21 @@ namespace InputHandling.Tests
         {
             // Arrange
             const string sessionName = "cool world";
-            var ast = CreateSessionAst(sessionName);
+            string hostName = "gerrit";
+            var ast = CreateSessionAst(sessionName, hostName);
         
             // Act
             _sut.Apply(ast);
         
             // Assert
-            _mockedSessionHandler.Verify(mockedSession => mockedSession.CreateSession(sessionName), Times.Once);
+            _mockedSessionHandler.Verify(mockedSession => mockedSession.CreateSession(sessionName, hostName), Times.Once);
         }
     
-        private static AST CreateSessionAst(string sessionName)
+        private static AST CreateSessionAst(string sessionName, string hostName)
         {
             Input createSession = new Input();
             createSession.AddChild(new CreateSession()
-                .AddChild(new Message(sessionName)));
+                .AddChild(new Message(sessionName)).AddChild(new Username(hostName)));
             return new AST(createSession);
         }
     
@@ -179,20 +187,21 @@ namespace InputHandling.Tests
         {
             // Arrange
             const string sessionId = "1234-1234";
-            var ast = JoinSessionAst(sessionId);
+            var ast = JoinSessionAst(sessionId, "");
         
             // Act
             _sut.Apply(ast);
         
             // Assert
-            _mockedSessionHandler.Verify(mockedSession => mockedSession.JoinSession(sessionId), Times.Once);
+            _mockedSessionHandler.Verify(mockedSession => mockedSession.JoinSession(sessionId, ""), Times.Once);
         }
     
-        private static AST JoinSessionAst(string sessionId)
+        private static AST JoinSessionAst(string sessionId, string username)
         {
             Input joinSession = new Input();
             joinSession.AddChild(new JoinSession()
-                .AddChild(new Message(sessionId)));
+                .AddChild(new Message(sessionId))
+                .AddChild(new Username(username)));
             return new AST(joinSession);
         }
         
@@ -246,5 +255,122 @@ namespace InputHandling.Tests
                 .AddChild(new InventorySlot(inventorySlot)));
             return new AST(inspect);
         }
+        
+        [TestCase("easy")]
+        [TestCase("medium")]
+        [TestCase("hard")]
+        [TestCase("impossible")]
+        [Test]
+        public void Test_Apply_HandleMonsterDifficultyHost(string difficulty)
+        {
+            // Arrange
+            var ast = MonsterDifficultyAst(difficulty);
+            _mockedClientController.Setup(x => x.IsHost()).Returns(true);
+            _mockedClientController.Setup(x => x.SendPayload(It.IsAny<string>(), It.IsAny<PacketType>()));
+        
+            // Act
+            _sut.Apply(ast);
+        
+            // Assert
+            SessionDTO sessionDto = new SessionDTO
+            {
+                SessionType = SessionType.EditMonsterDifficulty,
+                Name = GetDifficulty(difficulty).ToString()
+            };
+            var jsonObject = JsonConvert.SerializeObject(sessionDto);
+            _mockedClientController.Verify(mock => mock.IsHost(), Times.Once);
+            _mockedClientController.Verify(mock => mock.SendPayload(jsonObject, PacketType.Session), Times.Once);
+        }
+        
+        [TestCase("easy")]
+        [TestCase("medium")]
+        [TestCase("hard")]
+        [TestCase("impossible")]
+        [Test]
+        public void Test_Apply_HandleMonsterDifficultyNotHost(string difficulty)
+        {
+            // Arrange
+            var ast = MonsterDifficultyAst(difficulty);
+            _mockedClientController.Setup(x => x.IsHost()).Returns(false);
+        
+            // Act
+            _sut.Apply(ast);
+        
+            // Assert
+            _mockedClientController.Verify(mock => mock.IsHost(), Times.Once);
+            _mockedClientController.Verify(mock => mock.SendPayload(It.IsAny<string>(), It.IsAny<PacketType>()), Times.Never);
+        }
+    
+        private static AST MonsterDifficultyAst(string difficulty)
+        {
+            Input monster = new Input();
+            monster.AddChild(new MonsterDifficulty(difficulty));
+            return new AST(monster);
+        }
+
+        private static int GetDifficulty(string difficulty) => difficulty switch
+        {
+            "easy" => (int)Session.GameConfiguration.MonsterDifficulty.Easy,
+            "medium" => (int)Session.GameConfiguration.MonsterDifficulty.Medium,
+            "hard" => (int)Session.GameConfiguration.MonsterDifficulty.Hard,
+            _ => (int)Session.GameConfiguration.MonsterDifficulty.Impossible
+        };
+        
+        [TestCase("low")]
+        [TestCase("medium")]
+        [TestCase("high")]
+        [Test]
+        public void Test_Apply_HandleItemFrequencyHost(string frequency)
+        {
+            // Arrange
+            var ast = ItemFrequencyAst(frequency);
+            _mockedClientController.Setup(x => x.IsHost()).Returns(true);
+        
+            // Act
+            _sut.Apply(ast);
+        
+            // Assert
+            SessionDTO sessionDto = new SessionDTO
+            {
+                SessionType = SessionType.EditItemSpawnRate,
+                Name = GetFrequency(frequency).ToString()
+            };
+            var jsonObject = JsonConvert.SerializeObject(sessionDto);
+            _mockedClientController.Verify(mock => mock.IsHost(), Times.Once);
+            _mockedClientController.Verify(mock => mock.SendPayload(jsonObject, PacketType.Session), Times.Once);
+        }
+        
+        [TestCase("low")]
+        [TestCase("medium")]
+        [TestCase("high")]
+        [Test]
+        public void Test_Apply_HandleItemFrequencyNotHost(string frequency)
+        {
+            // Arrange
+            var ast = ItemFrequencyAst(frequency);
+            _mockedClientController.Setup(x => x.IsHost()).Returns(false);
+        
+            // Act
+            _sut.Apply(ast);
+        
+            // Assert
+            _mockedClientController.Verify(mock => mock.IsHost(), Times.Once);
+            _mockedClientController.Verify(mock => mock.SendPayload(It.IsAny<string>(), It.IsAny<PacketType>()), Times.Never);
+        }
+    
+        private static AST ItemFrequencyAst(string frequency)
+        {
+            Input monster = new Input();
+            monster.AddChild(new ItemFrequency(frequency));
+            return new AST(monster);
+        }
+
+        private static int GetFrequency(string frequency) => frequency switch
+        {
+            "low" => (int)ItemSpawnRate.Low,
+            "medium" => (int)ItemSpawnRate.Medium,
+            _ => (int)ItemSpawnRate.High
+        };
+
     }
 }
