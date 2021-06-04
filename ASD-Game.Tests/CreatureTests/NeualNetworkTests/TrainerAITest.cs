@@ -1,9 +1,9 @@
 ﻿using Creature.Creature;
 using Creature.Creature.NeuralNetworking.TrainingScenario;
-using Creature.Creature.StateMachine.Data;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using WorldGeneration.StateMachine.Data;
 
 namespace Creature.Tests
 {
@@ -20,14 +20,11 @@ namespace Creature.Tests
             MonsterData _MonsterData =
                 new MonsterData
                 (
-                    new Vector2(14, 14),
-                    20,
-                    5,
-                    200,
-                    null,
-                    false
+                14,
+                14,
+                0
                 );
-            _smartTestMonster = new SmartMonsterForTraining(_MonsterData);
+            _smartTestMonster = new SmartMonsterForTraining("Zombie", 14, 14, "T", "monst");
         }
 
         [Test]

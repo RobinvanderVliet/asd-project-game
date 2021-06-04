@@ -1,11 +1,8 @@
-﻿using Creature.Creature.NeuralNetworking;
-using Creature.Creature.NeuralNetworking.TrainingScenario;
-using Creature.Creature.StateMachine.Data;
-using Moq;
+﻿using Creature.Creature.NeuralNetworking.TrainingScenario;
 using NUnit.Framework;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using WorldGeneration.StateMachine.Data;
 
 namespace Creature.Tests
 {
@@ -22,12 +19,9 @@ namespace Creature.Tests
             MonsterData _MonsterData =
                 new MonsterData
                 (
-                    new Vector2(14, 14),
-                    20,
-                    5,
-                    200,
-                    null,
-                    false
+               14,
+                14,
+                0
                 );
         }
 
