@@ -40,11 +40,12 @@ namespace Creature
                 
                 // TODO: damage and world should not be in there
                 // TODO: after roy merge into develop 
-                var playerData = new PlayerData(new Vector2(player.XPosition, player.YPosition), player.Health, 10, 6, null, _moveHandler);
                 
-                var playerStateMachine = new PlayerStateMachine(playerData);
-                _creature = new Creature.Player(playerStateMachine);
-                _creature.CreatureStateMachine.StartStateMachine();
+                // var playerData = new PlayerData(new Vector2(player.XPosition, player.YPosition), player.Health, 10, 6, null, _moveHandler);
+                //
+                // var playerStateMachine = new PlayerStateMachine(playerData);
+                // _creature = new Creature.Player(playerStateMachine);
+                // _creature.CreatureStateMachine.StartStateMachine();
             }
             else
             {
