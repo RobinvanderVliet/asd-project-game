@@ -17,15 +17,15 @@ namespace ActionHandling
     {
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
-        private readonly IDatabaseService<PlayerPOCO> _playerService;
+        private readonly IDatabaseService<PlayerPOCO> _playerServicesDB;
         private readonly IMessageService _messageService;
 
-        public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerService, IMessageService messageService)
+        public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerServicesDb, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Move);
             _worldService = worldService;
-            _playerService = playerService;
+            _playerServicesDB = playerServicesDb;
             _messageService = messageService;
         }
 
@@ -72,85 +72,109 @@ namespace ActionHandling
         {
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
             bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
-            
-            if (handleInDatabase)
-            {
-                var player = _worldService.GetPlayer(moveDTO.UserId);
-                
-                var newPosPlayerX = moveDTO.XPosition;
-                var newPosPlayerY = moveDTO.YPosition;
-                var oldPosPlayerX = player.XPosition;
-                var oldPosPlayerY = player.YPosition;
-                var playerStamina = player.Stamina;
-                
-                _worldService.LoadArea(newPosPlayerX, newPosPlayerY, 10);
-                var allTiles = GetTilesForPositions(oldPosPlayerX, oldPosPlayerY, newPosPlayerX, newPosPlayerY);
-                var accessibleTiles = inAccessibleTileExists(allTiles);
-                var movableTiles = GetMovableTiles(allTiles, accessibleTiles);
-                var staminaCost = GetStaminaCostForTiles(movableTiles);
-                
-                if (staminaCost > playerStamina)
-                {
-                    if (packet.Header.OriginID == null)
-                    {
-                        _messageService.AddMessage("You do not have enough stamina to move!");
-                    }
 
-                    return new HandlerResponseDTO(SendAction.ReturnToSender, "You do not have enough stamina to move!");
-                }
-                else
-                {
-                    string resultMessage = null;
-                    moveDTO.Stamina = playerStamina - staminaCost;
-                    //allTiles.Count-1 because the maximum count movableTiles can have is always 1 less, since it doesn't contain the first tile
-                    if (movableTiles.Count < allTiles.Count-1)
-                    {
-                        if (movableTiles.Count != 0)
-                        {
-                            moveDTO.XPosition = movableTiles.Last().XPosition;
-                            moveDTO.YPosition = movableTiles.Last().YPosition;
-                        }
-                        else
-                        {
-                            moveDTO.XPosition = player.XPosition;
-                            moveDTO.YPosition = player.YPosition;
-                        }
-                        resultMessage = "You could not move to the next tile.";
-                        _messageService.AddMessage(resultMessage);
-                    }
-                    
-                    HandleMove(moveDTO);
-                    InsertToDatabase(moveDTO);
-                    packet.Payload = JsonConvert.SerializeObject(moveDTO);
-                    
-                    return new HandlerResponseDTO(SendAction.SendToClients, resultMessage);
-                }
+            if (packet.Header.Target == "host" || packet.Header.Target == "client")
+            {
+                return HandleMove(moveDTO, handleInDatabase);
             }
             else
             {
-                _worldService.LoadArea(moveDTO.XPosition, moveDTO.YPosition, 10);
-                HandleMove(moveDTO);
+                _messageService.AddMessage(packet.HandlerResponse.ResultMessage);
             }
-            
             return new(SendAction.Ignore, null);
+        }
+
+        public HandlerResponseDTO HandleMove(MoveDTO moveDTO, bool handleInDatabase)
+        {
+            var player = _worldService.GetPlayer(moveDTO.UserId);
+            
+            var newPosPlayerX = moveDTO.XPosition;
+            var newPosPlayerY = moveDTO.YPosition;
+            var oldPosPlayerX = player.XPosition;
+            var oldPosPlayerY = player.YPosition;
+            var playerStamina = player.Stamina;
+            
+            _worldService.LoadArea(newPosPlayerX, newPosPlayerY, 10);
+            var allTiles = GetTilesForPositions(oldPosPlayerX, oldPosPlayerY, newPosPlayerX, newPosPlayerY);
+            var accessibleTiles = inAccessibleTileExists(allTiles);
+            var movableTiles = GetMovableTiles(allTiles, accessibleTiles);
+            var staminaCost = GetStaminaCostForTiles(movableTiles);
+            
+            if (staminaCost > playerStamina)
+            {
+                moveDTO = ChangeMoveDTOToNewLocation(moveDTO, movableTiles, player);
+                
+                if (moveDTO.UserId == _clientController.GetOriginId())
+                {
+                    _messageService.AddMessage("You do not have enough stamina to move!");
+                }
+                
+                //edit payload
+
+                return new HandlerResponseDTO(SendAction.ReturnToSender, "You do not have enough stamina to move!");
+            }
+            else
+            {
+                string resultMessage = null;
+                moveDTO.Stamina = playerStamina - staminaCost;
+                //allTiles.Count-1 because the maximum count movableTiles always has 1 less tile, since it doesn't contain the first tile
+                if (movableTiles.Count < allTiles.Count - 1)
+                {
+                    moveDTO = ChangeMoveDTOToNewLocation(moveDTO, movableTiles, player);
+                    resultMessage = "You could not move to the next tile.";
+
+                    if (moveDTO.UserId == _clientController.GetOriginId())
+                    {
+                        _messageService.AddMessage(resultMessage);
+                    }
+                }
+
+                ChangePlayerPosition(moveDTO);
+
+                if (handleInDatabase)
+                {
+                    InsertToDatabase(moveDTO);
+                }
+                
+                //edit payload
+                // packet.Payload = JsonConvert.SerializeObject(moveDTO);
+                
+                return new HandlerResponseDTO(SendAction.SendToClients, resultMessage);
+            }
         }
 
         private void InsertToDatabase(MoveDTO moveDTO)
         {
-            var player = _playerService.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId && player.GameGuid == _clientController.SessionId);
-
+            var player = _playerServicesDB.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId && player.GameGuid == _clientController.SessionId);
             player.XPosition = moveDTO.XPosition;
             player.YPosition = moveDTO.YPosition;
             player.Stamina = moveDTO.Stamina;
-            _playerService.UpdateAsync(player);
+            _playerServicesDB.UpdateAsync(player);
         }
 
-        private void HandleMove(MoveDTO moveDTO)
+        private MoveDTO ChangeMoveDTOToNewLocation(MoveDTO moveDTO, List<ITile> movableTiles, Player player)
+        {
+            if (movableTiles.Count != 0)
+            {
+                moveDTO.XPosition = movableTiles.Last().XPosition;
+                moveDTO.YPosition = movableTiles.Last().YPosition;
+            }
+            else
+            {
+                moveDTO.XPosition = player.XPosition;
+                moveDTO.YPosition = player.YPosition;
+            }
+
+            return moveDTO;
+        }
+
+        private void ChangePlayerPosition(MoveDTO moveDTO)
         {
             var player = _worldService.GetPlayer(moveDTO.UserId);
             player.Stamina = moveDTO.Stamina;
             player.XPosition = moveDTO.XPosition;
             player.YPosition = moveDTO.YPosition;
+            //display stats worldservice
             _worldService.DisplayWorld();
         }
 

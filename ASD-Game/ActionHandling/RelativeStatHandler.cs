@@ -26,15 +26,15 @@ namespace ActionHandling
 
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
-        private readonly IDatabaseService<PlayerPOCO> _playerService;
+        private readonly IDatabaseService<PlayerPOCO> _playerServicesDB;
         private readonly IMessageService _messageService;
 
-        public RelativeStatHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerService, IMessageService messageService)
+        public RelativeStatHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerServicesDb, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.RelativeStat);
             _worldService = worldService;
-            _playerService = playerService;
+            _playerServicesDB = playerServicesDb;
             _messageService = messageService;
         }
         
@@ -108,21 +108,33 @@ namespace ActionHandling
             if (player.Stamina < Player.STAMINA_MAX && relativeStatDTO.Stamina != 0)
             {
                 player.AddStamina(relativeStatDTO.Stamina);
-                _messageService.AddMessage("Gained stamina! S: " + _player.Stamina);
+                if (relativeStatDTO.Id == _clientController.GetOriginId())
+                {
+                    _messageService.AddMessage("Gained stamina! S: " + _player.Stamina);
+                }
+                //displaystats worldservice
                 InsertToDatabase(relativeStatDTO, handleInDatabase, player);
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
             if (player.RadiationLevel > 0 && relativeStatDTO.RadiationLevel != 0)
             {
                 player.AddRadiationLevel(relativeStatDTO.RadiationLevel);
-                _messageService.AddMessage("Radiation damage! H: " + _player.Health + " | R: " + _player.RadiationLevel);
+                if (relativeStatDTO.Id == _clientController.GetOriginId())
+                {
+                    _messageService.AddMessage("Radiation damage! H: " + _player.Health + " | R: " + _player.RadiationLevel);
+                }
+                //displaystats worldservice
                 InsertToDatabase(relativeStatDTO, handleInDatabase, player);
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
             if (player.Health > 0 && relativeStatDTO.Health != 0)
             {
                 player.AddHealth(relativeStatDTO.Health);
-                _messageService.AddMessage("Radiation damage! H: " + _player.Health + " | R: " + _player.RadiationLevel);
+                if (relativeStatDTO.Id == _clientController.GetOriginId())
+                {
+                    _messageService.AddMessage("Radiation damage! H: " + _player.Health + " | R: " + _player.RadiationLevel);
+                }
+                //displaystats worldservice
                 InsertToDatabase(relativeStatDTO, handleInDatabase, player);
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
@@ -134,7 +146,7 @@ namespace ActionHandling
         {
             if (handleInDatabase)
             {
-                PlayerPOCO playerPOCO = _playerService.GetAllAsync().Result.FirstOrDefault(poco => poco.PlayerGuid == player.Id && poco.GameGuid == _clientController.SessionId);
+                PlayerPOCO playerPOCO = _playerServicesDB.GetAllAsync().Result.FirstOrDefault(poco => poco.PlayerGuid == player.Id && poco.GameGuid == _clientController.SessionId);
                 if (relativeStatDTO.Stamina != 0)
                 {
                     playerPOCO.Stamina = player.Stamina;
@@ -147,7 +159,7 @@ namespace ActionHandling
                 {
                     playerPOCO.Health = player.Health;
                 }
-                _playerService.UpdateAsync(playerPOCO);
+                _playerServicesDB.UpdateAsync(playerPOCO);
             }
         }
 

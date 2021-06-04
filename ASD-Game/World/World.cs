@@ -69,12 +69,9 @@ namespace WorldGeneration
         
         public bool CheckIfPlayerOnTile(ITile tile)
         {
-            foreach (var player in _players)
+            if (_players.Exists(player => player.XPosition == tile.XPosition && player.YPosition == tile.YPosition))
             {
-                if (player.XPosition == tile.XPosition && player.YPosition == tile.YPosition)
-                {
-                    return true;
-                }
+                return true;
             }
 
             return false;
