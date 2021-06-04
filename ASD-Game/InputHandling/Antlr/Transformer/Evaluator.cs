@@ -31,7 +31,7 @@ namespace InputHandling.Antlr.Transformer
         private const int MAXIMUM_STEPS = 10;
         private String _commando;
 
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IClientController clientController)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IClientController clientController, IInventoryHandler inventoryHandler)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;

@@ -1,3 +1,2 @@
-﻿aggressiveness = high
-explore = random
+﻿explore = random
 combat = offensive

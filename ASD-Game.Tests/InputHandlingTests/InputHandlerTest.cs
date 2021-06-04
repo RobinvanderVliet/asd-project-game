@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using InputHandling.Antlr;
 using InputHandling.Antlr.Transformer;
+using Messages;
 using Moq;
 using NUnit.Framework;
 using Session;
@@ -19,6 +20,7 @@ namespace InputHandling.Tests
         private Mock<StartScreen> _mockedStartScreen;
         private Mock<SessionScreen> _mockedSessionScreen;
         private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
+        public Mock<MessageService> mockedMessagesService;
         
         [SetUp]
         public void SetUp()
@@ -31,7 +33,8 @@ namespace InputHandling.Tests
             _mockedSessionScreen = new Mock<SessionScreen>();
             _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
             _mockedScreenHandler.Object.ConsoleHelper = new Mock<ConsoleHelper>().Object;
-            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedScreenHandler.Object, _mockedGameConfigurationHandler.Object);
+            mockedMessagesService = new();
+            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedScreenHandler.Object, mockedMessagesService.Object ,_mockedGameConfigurationHandler.Object);
         }
 
         [Test]

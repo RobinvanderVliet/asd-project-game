@@ -10,11 +10,12 @@ namespace Agent.Services
     public class NpcConfigurationService : BaseConfigurationService
     {
         private List<Configuration> _npcConfigurations;
+        public FileToDictionaryMapper fileToDictionaryMapper;
 
         public NpcConfigurationService(List<Configuration> npcConfigurations, FileToDictionaryMapper fileToDictionaryMapper)
         {
             _npcConfigurations = npcConfigurations;
-            FileToDictionaryMapper = fileToDictionaryMapper;
+            this.fileToDictionaryMapper = fileToDictionaryMapper;
             FileHandler = new FileHandler();
             Pipeline = new Pipeline();
         }
@@ -23,7 +24,7 @@ namespace Agent.Services
         {
             var npcConfiguration = new NpcConfiguration();
             npcConfiguration.NpcName = npcName;
-            npcConfiguration.Settings = FileToDictionaryMapper.MapFileToConfiguration(filepath);
+            npcConfiguration.Settings = fileToDictionaryMapper.MapFileToConfiguration(filepath);
             _npcConfigurations.Add(npcConfiguration);
         }
 
@@ -32,7 +33,7 @@ namespace Agent.Services
             return _npcConfigurations;
         }
 
-        public override void Configure()
+        public  void Configure()
         {
             // //TODO: Seems like duplicate code for now, but must be refactored later to match anticipated feature 'Configure NPC during a game'
             // Console.WriteLine("What NPC do you wish to configure?");

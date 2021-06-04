@@ -44,7 +44,7 @@ namespace Session.Tests
             _mockedClientController = new();
             _mockedMessageService = new();
             _mockedScreenHandler = new();
-            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object, _mockedMessageService.Object, _mockedGameConfigurationHandler.Object);
+            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object, _mockedGameConfigurationHandler.Object, _mockedMessageService.Object);
             _mockedSession = new Mock<Session>();
             _packetDTO = new PacketDTO();
         }
@@ -54,6 +54,7 @@ namespace Session.Tests
         {
             // Arrange ------------
             string invalidSessionId = "invalid";
+            string userName = "Gerrit";
 
             using (StringWriter sw = new StringWriter())
             {
@@ -220,6 +221,7 @@ namespace Session.Tests
             string sessionId = "sessionId";
             string hostOriginId = "hostTestOriginId";
             string originId = "testOriginId";
+            string userName = "Gerrit";
 
             SessionDTO sessionDTOjoin = new SessionDTO(SessionType.RequestSessions);
             var payload = JsonConvert.SerializeObject(sessionDTOjoin);

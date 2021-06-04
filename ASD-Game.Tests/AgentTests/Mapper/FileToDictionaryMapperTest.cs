@@ -24,10 +24,9 @@ namespace Agent.Tests.Mapper
         public void Test_MapFileToConfiguration_Successful()
         {
             //Arrange
-            Dictionary<string, string> expectedDictionary = new Dictionary<string, string>();
-            expectedDictionary.Add("aggressiveness", "high");
-            expectedDictionary.Add("explore", "random");
-            expectedDictionary.Add("combat", "offensive");
+            List<Setting> expectedDictionary = new();
+            expectedDictionary.Add(new Setting("explore", "random"));
+            expectedDictionary.Add(new Setting("combat", "offensive"));
             var filepath = _handler.GetBaseDirectory() + "/AgentTests/Resource/npcFileTest.txt";
             
             //Act
@@ -35,9 +34,6 @@ namespace Agent.Tests.Mapper
 
             //Assert
             Assert.AreEqual(expectedDictionary, actualDictionary);
-            Assert.AreEqual(expectedDictionary["explore"], actualDictionary["explore"]);
-
-
         }
 
         [Test]

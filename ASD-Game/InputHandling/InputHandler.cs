@@ -61,10 +61,6 @@ namespace InputHandling
             {
                 _messageService.AddMessage(e.Message);
             }
-            catch (MoveException e)
-            {
-
-            }
         }
 
         public virtual string GetCommand()
@@ -182,8 +178,7 @@ namespace InputHandling
                     _gameConfigurationHandler.SetGameConfiguration();
                     _screenHandler.TransitionTo(new LobbyScreen());
                     _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(), _gameConfigurationHandler.GetUsername());
-                    SendCommand("join_session \"" + sessionId + "\" \"" + inputParts[1] + "\"");
-                    _screenHandler.TransitionTo(new ConfigurationScreen());
+
                 }
             }
         }

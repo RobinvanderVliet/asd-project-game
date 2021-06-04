@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Agent.Mapper;
+using InputHandling;
 using Configuration = Agent.Models.Configuration;
 
 namespace Agent.Services
@@ -24,5 +25,6 @@ namespace Agent.Services
         public abstract void CreateConfiguration(string configurationName, string filepath);
 
         public abstract List<Configuration> GetConfigurations();
+
     }
 }
