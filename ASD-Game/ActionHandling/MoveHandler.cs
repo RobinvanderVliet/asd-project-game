@@ -11,7 +11,7 @@ using DatabaseHandler.Services;
 using Network.DTO;
 using Newtonsoft.Json;
 using WorldGeneration;
-
+using Messages;
 
 namespace ActionHandling
 {
@@ -19,13 +19,15 @@ namespace ActionHandling
     {
         private IClientController _clientController;
         private IWorldService _worldService;
+        private IMessageService _messageService;
         private IServicesDb<PlayerPOCO> _playerServicesDb;
 
-        public MoveHandler(IClientController clientController, IWorldService worldService, IServicesDb<PlayerPOCO> playerServicesDb)
+        public MoveHandler(IClientController clientController, IWorldService worldService, IServicesDb<PlayerPOCO> playerServicesDb, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Move);
             _worldService = worldService;
+            _messageService = messageService;
             _playerServicesDb = playerServicesDb;
         }
 
@@ -100,7 +102,7 @@ namespace ActionHandling
             }
             else if (packet.Header.Target.Equals(_clientController.GetOriginId()))
             {
-                Console.WriteLine(packet.HandlerResponse.ResultMessage);
+                _messageService.AddMessage(packet.HandlerResponse.ResultMessage);
             }
             else
             {
