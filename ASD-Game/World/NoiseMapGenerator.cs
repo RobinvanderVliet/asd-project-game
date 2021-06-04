@@ -63,7 +63,7 @@ namespace ASD_project.World
             if (item == null)
                 return tile;
             
-            if (_items.Contains(itemSpawnDTO))
+            if (_items.Exists(itemInList => itemInList.item.ItemId.Equals(item.ItemId)))
             {
                   return tile;
             }
