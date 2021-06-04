@@ -28,4 +28,8 @@
       <ProjectReference Include="..\ASD-Game\ASD-Game.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="CreatureTests\Exceptions" />
+    </ItemGroup>
+
 </Project>
