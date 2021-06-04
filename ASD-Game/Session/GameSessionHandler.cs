@@ -18,11 +18,11 @@ namespace Session
         private readonly ISessionHandler _sessionHandler;
         private readonly IWorldService _worldService;
         private readonly IRelativeStatHandler _relativeStatHandler;
-        private readonly IServicesDb<PlayerPOCO> _playerService;
-        private readonly IServicesDb<GamePOCO> _gameService;
-        private readonly IServicesDb<PlayerItemPOCO> _playerItemService;
+        private readonly IDatabaseService<PlayerPOCO> _playerService;
+        private readonly IDatabaseService<GamePOCO> _gameService;
+        private readonly IDatabaseService<PlayerItemPOCO> _playerItemService;
 
-        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IServicesDb<PlayerPOCO> playerService, IServicesDb<GamePOCO> gameService, IServicesDb<PlayerItemPOCO> playerItemService, IRelativeStatHandler relativeStatHandler)
+        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IDatabaseService<PlayerPOCO> playerService, IDatabaseService<GamePOCO> gameService, IDatabaseService<PlayerItemPOCO> playerItemService, IRelativeStatHandler relativeStatHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);

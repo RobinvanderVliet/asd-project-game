@@ -26,9 +26,9 @@ namespace Session.Tests
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
         private Mock<ISessionHandler> _mockedsessionHandler;
-        private Mock<IServicesDb<PlayerPOCO>> _mockedPlayerServicesDb;
-        private Mock<IServicesDb<GamePOCO>> _mockedGameServicesDb;
-        private Mock<IServicesDb<PlayerItemPOCO>> _mockedPlayerItemServicesDb;
+        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerServicesDb;
+        private Mock<IDatabaseService<GamePOCO>> _mockedGameServicesDb;
+        private Mock<IDatabaseService<PlayerItemPOCO>> _mockedPlayerItemServicesDb;
         private Mock<IRelativeStatHandler> _mockedRelativeStatHandler;
 
         [SetUp]

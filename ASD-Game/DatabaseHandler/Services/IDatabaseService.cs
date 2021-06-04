@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using LiteDB;
 
-namespace DatabaseHandler.Repository
+namespace DatabaseHandler.Services
 {
-    public interface IRepository<T>
+    public interface IDatabaseService<T>
     {
         Task<BsonValue> CreateAsync(T obj);
         Task<int> UpdateAsync(T obj);

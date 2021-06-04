@@ -19,12 +19,12 @@ namespace ActionHandling
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
         private readonly IMessageService _messageService;
-        private readonly IServicesDb<PlayerPOCO> _playerServicesDB;
-        private readonly IServicesDb<PlayerItemPOCO> _playerItemServicesDB;
-        private readonly IServicesDb<WorldItemPOCO> _worldItemServicesDB;
+        private readonly IDatabaseService<PlayerPOCO> _playerServicesDB;
+        private readonly IDatabaseService<PlayerItemPOCO> _playerItemServicesDB;
+        private readonly IDatabaseService<WorldItemPOCO> _worldItemServicesDB;
 
 
-        public InventoryHandler(IClientController clientController, IWorldService worldService, IServicesDb<PlayerPOCO> playerServicesDB, IServicesDb<PlayerItemPOCO> playerItemServicesDB, IServicesDb<WorldItemPOCO> worldItemServicesDB, IMessageService messageService)
+        public InventoryHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerServicesDB, IDatabaseService<PlayerItemPOCO> playerItemServicesDB, IDatabaseService<WorldItemPOCO> worldItemServicesDB, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Inventory);

@@ -14,7 +14,7 @@ namespace ActionHandling.Tests
         private MoveHandler _sut;
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
-        private Mock<IServicesDb<PlayerPOCO>> _mockedPlayerServicesDb;
+        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerServicesDb;
 
         [SetUp]
         public void Setup()

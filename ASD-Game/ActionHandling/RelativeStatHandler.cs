@@ -25,9 +25,9 @@ namespace ActionHandling
 
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
-        private readonly IServicesDb<PlayerPOCO> _playerService;
+        private readonly IDatabaseService<PlayerPOCO> _playerService;
 
-        public RelativeStatHandler(IClientController clientController, IWorldService worldService, IServicesDb<PlayerPOCO> playerService)
+        public RelativeStatHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.RelativeStat);
