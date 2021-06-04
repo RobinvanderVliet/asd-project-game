@@ -115,7 +115,7 @@ namespace Session
             foreach(Player player in players)
             {
                 PlayerPOCO playerPoco = new PlayerPOCO { PlayerGuid = player.Id, GameGuid = _clientController.SessionId, GameGUIDAndPlayerGuid = _clientController.SessionId + player.Id, XPosition = player.XPosition, YPosition = player.YPosition };
-                _playerService.CreateAsync(playerPoco);
+                _playerDatabaseService.CreateAsync(playerPoco);
                 AddItemsToPlayer(player.Id, _clientController.SessionId);
             }
         }
@@ -124,7 +124,7 @@ namespace Session
         private void InsertGameIntoDatabase()
         {
             var gamePOCO = new GamePOCO { GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId() };
-            _gameService.CreateAsync(gamePOCO);
+            _gameDatabaseService.CreateAsync(gamePOCO);
         }
 
         private void InsertConfigurationIntoDatabase()
@@ -136,7 +136,7 @@ namespace Session
                 NPCDifficultyNew = (int)_gameConfigurationHandler.GetNewMonsterDifficulty(),
                 ItemSpawnRate = (int)_gameConfigurationHandler.GetSpawnRate()
             };
-            _gameConfigServicesDb.CreateAsync(gameConfigurationPOCO);
+            _gameConfigDatabaseService.CreateAsync(gameConfigurationPOCO);
         }
 
         private Player AddPlayersToWorld()
