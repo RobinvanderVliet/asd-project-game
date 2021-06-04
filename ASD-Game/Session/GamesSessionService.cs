@@ -11,11 +11,11 @@ namespace Session
     public class GamesSessionService : IGamesSessionService
     {
         private readonly ISessionHandler _sessionHandler;
-        private readonly IDatabaseService<ClientHistoryPoco> _clientHistoryService;
+        private readonly IDatabaseService<ClientHistoryPOCO> _clientHistoryService;
         private readonly IDatabaseService<GamePOCO> _gamePocoService;
 
         public GamesSessionService(ISessionHandler sessionHandler,
-            IDatabaseService<ClientHistoryPoco> clientHistoryService, IDatabaseService<GamePOCO> gamePocoService)
+            IDatabaseService<ClientHistoryPOCO> clientHistoryService, IDatabaseService<GamePOCO> gamePocoService)
         {
             _sessionHandler = sessionHandler;
             _clientHistoryService = clientHistoryService;

@@ -2,7 +2,7 @@ using LiteDB;
 
 namespace DatabaseHandler.POCO
 {
-    public class ClientHistoryPoco
+    public class ClientHistoryPOCO
     {
         [BsonId]
         public string PlayerId { get; set; }

@@ -14,14 +14,14 @@ namespace Session.Tests
     {
         private GamesSessionService sut;
         private Mock<IDatabaseService<GamePOCO>> _mockedDatabaseGameService;
-        private Mock<IDatabaseService<ClientHistoryPoco>> _mockedDatabaseClientHistory;
+        private Mock<IDatabaseService<ClientHistoryPOCO>> _mockedDatabaseClientHistory;
         private Mock<ISessionHandler> _mockedSessionHandler;
 
         [SetUp]
         public void GameSessionServiceSetup()
         {
             _mockedSessionHandler = new Mock<ISessionHandler>();
-            _mockedDatabaseClientHistory = new Mock<IDatabaseService<ClientHistoryPoco>>();
+            _mockedDatabaseClientHistory = new Mock<IDatabaseService<ClientHistoryPOCO>>();
             _mockedDatabaseGameService = new Mock<IDatabaseService<GamePOCO>>();
 
             sut = new GamesSessionService(_mockedSessionHandler.Object, _mockedDatabaseClientHistory.Object,
@@ -32,10 +32,10 @@ namespace Session.Tests
         public void TestIfRequestSavedGamesGivesBackAListWhereIAmHost()
         {
             // Arrange
-            List<ClientHistoryPoco> clientList = new List<ClientHistoryPoco>();
+            List<ClientHistoryPOCO> clientList = new List<ClientHistoryPOCO>();
             List<GamePOCO> gameList = new List<GamePOCO>();
 
-            ClientHistoryPoco clientHistoryPoco = new ClientHistoryPoco {GameId = "game1", PlayerId = "player1"};
+            ClientHistoryPOCO clientHistoryPoco = new ClientHistoryPOCO {GameId = "game1", PlayerId = "player1"};
             GamePOCO gamePoco = new GamePOCO {GameGuid = "game1", PlayerGUIDHost = "player1", GameName = "gameName1"};
 
             clientList.Add(clientHistoryPoco);
@@ -73,9 +73,9 @@ namespace Session.Tests
         public void TestIfRequestSavedGamesGivesBackAnEmptyList()
         {
             // Arrange
-            List<ClientHistoryPoco> clientList = new List<ClientHistoryPoco>();
+            List<ClientHistoryPOCO> clientList = new List<ClientHistoryPOCO>();
             List<GamePOCO> gameList = new List<GamePOCO>(); // Niet gebruiken want er zijn geen oude spellen
-            ClientHistoryPoco clientHistoryPoco = new ClientHistoryPoco {GameId = "game1", PlayerId = "player1"};
+            ClientHistoryPOCO clientHistoryPoco = new ClientHistoryPOCO {GameId = "game1", PlayerId = "player1"};
             clientList.Add(clientHistoryPoco);
 
             _mockedDatabaseClientHistory.Setup(x => x.GetAllAsync()).ReturnsAsync(clientList);

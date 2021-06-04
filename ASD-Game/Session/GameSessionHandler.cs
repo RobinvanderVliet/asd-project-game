@@ -200,8 +200,8 @@ namespace Session
             {
                 if (_clientController.GetOriginId() == player.Key)
                 {
-                    var tmpClientHistory = new DatabaseService<ClientHistoryPoco>();
-                    var tmpObject = new ClientHistoryPoco()
+                    var tmpClientHistory = new DatabaseService<ClientHistoryPOCO>();
+                    var tmpObject = new ClientHistoryPOCO()
                         {PlayerId = player.Key, GameId = startGameDTO.GameGuid};
                     tmpClientHistory.CreateAsync(tmpObject);
 
