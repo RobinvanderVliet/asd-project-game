@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using WorldGeneration;
 
 namespace World.Tests.Models.Characters
 {
+    [ExcludeFromCodeCoverage]
     public class PlayerTest
     {
         private Player _sut;

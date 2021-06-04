@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using ActionHandling;
 using ActionHandling.DTO;
 using DatabaseHandler.POCO;
@@ -10,6 +11,7 @@ using WorldGeneration;
 
 namespace Session.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class RelativeStatHandlerTest
     {
         private Mock<IClientController> _mockedClientController;
