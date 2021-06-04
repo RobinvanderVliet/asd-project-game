@@ -23,6 +23,7 @@ namespace Session.Tests
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
         private Mock<ISessionHandler> _mockedsessionHandler;
+        private Mock<NetworkComponent> _networkComponentMock;
 
         [SetUp]
         public void Setup()
@@ -33,7 +34,8 @@ namespace Session.Tests
             _mockedClientController = new Mock<IClientController>();
             _mockedWorldService = new Mock<IWorldService>();
             _mockedsessionHandler = new Mock<ISessionHandler>();
-            _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedsessionHandler.Object);
+            _networkComponentMock = new Mock<NetworkComponent>();
+            _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedsessionHandler.Object, _networkComponentMock.Object);
             _packetDTO = new PacketDTO();
         }
 

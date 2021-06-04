@@ -4,10 +4,12 @@
     {
         public string SessionId { get; }
         public bool IsBackupHost { get; set; }
+        public string AbsoluteOriginId { set; }
         public void SendPayload(string payload, PacketType packetType);
         public void SubscribeToPacketType(IPacketHandler packetHandler, PacketType packetType);
         public void SetSessionId(string sessionId);
         public void CreateHostController();
+        public void AddAgentController(IAgentController agentController);
         public string GetOriginId();
         public bool IsHost();
     }
