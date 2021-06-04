@@ -76,7 +76,6 @@ namespace ActionHandling
         {
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
             bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
-            // Console.WriteLine();
             if (packet.Header.Target == "host" || packet.Header.Target == "client")
             {
                 return HandleMove(moveDTO, handleInDatabase);
