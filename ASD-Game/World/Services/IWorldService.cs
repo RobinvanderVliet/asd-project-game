@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
+using Creature.Creature.NeuralNetworking;
 using Items;
 
 namespace WorldGeneration
@@ -25,6 +26,8 @@ namespace WorldGeneration
         List<Player> GetPlayers();
 
         List<Character> GetMonsters();
+
+        public void UpdateBrains(Genome genome);
 
         public char[,] GetMapAroundCharacter(Character character);
 

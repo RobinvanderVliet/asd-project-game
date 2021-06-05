@@ -19,6 +19,7 @@ using WorldGeneration;
 using WorldGeneration.Models;
 using WorldGeneration.StateMachine;
 using Messages;
+using System.Timers;
 
 namespace Session
 {
@@ -37,6 +38,7 @@ namespace Session
         private IServicesDb<PlayerItemPoco> _playerItemServicesDb;
 
         private Random random = new Random();
+        private Timer AIUpdateTimer;
 
         public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IServicesDb<PlayerPOCO> playerServicesDb,
             IServicesDb<GamePOCO> gameServicesDb, IServicesDb<GameConfigurationPOCO> gameConfigservicesDb, IGameConfigurationHandler gameConfigurationHandler,
@@ -53,6 +55,8 @@ namespace Session
             _gameConfigServicesDb = gameConfigservicesDb;
             _screenHandler = screenHandler;
             _playerItemServicesDb = playerItemServicesDb;
+            AIUpdateTimer = new Timer(60000);
+            CheckAITimer();
         }
 
         public void SendGameSession()
@@ -176,6 +180,25 @@ namespace Session
             {
                 monster.brain = _sessionHandler.trainingScenario.brainTransplant();
             }
+        }
+
+        private void CheckAITimer()
+        {
+            AIUpdateTimer.AutoReset = true;
+            AIUpdateTimer.Elapsed += CheckAITimerEvent;
+            AIUpdateTimer.Start();
+        }
+
+        private void CheckAITimerEvent(object sender, ElapsedEventArgs e)
+        {
+            AIUpdateTimer.Stop();
+            UpdateBrain();
+            AIUpdateTimer.Start();
+        }
+
+        public void UpdateBrain()
+        {
+            _worldService.UpdateBrains(_sessionHandler.trainingScenario.brainTransplant());
         }
 
         private void setStateMachine(Monster monster)

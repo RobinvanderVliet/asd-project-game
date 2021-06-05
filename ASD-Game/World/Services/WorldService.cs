@@ -1,3 +1,5 @@
+using Creature.Creature;
+using Creature.Creature.NeuralNetworking;
 using Items;
 using System;
 using System.Collections.Generic;
@@ -70,6 +72,17 @@ namespace WorldGeneration
         public List<Character> GetMonsters()
         {
             return _world._creatures;
+        }
+
+        public void UpdateBrains(Genome genome)
+        {
+            foreach (Character monster in _world._creatures)
+            {
+                if (monster is SmartMonster smartMonster)
+                {
+                    smartMonster.brain = genome;
+                }
+            }
         }
 
         public List<Character> getCreatureMoves()
