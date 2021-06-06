@@ -44,8 +44,9 @@ namespace Creature.Creature.StateMachine
         public void StartStateMachine()
         {
             var builder = new StateMachineDefinitionBuilder<CreatureState, CreatureEvent.Event>();
-            List<RuleSet> rulesetList = RuleSetFactory.GetRuleSetListFromSettingsList(CreatureData.RuleSet);
-            var builderConfiguration = new BuilderConfiguration(rulesetList, CreatureData, this);
+            RuleSetFactory ruleSetFactory = new RuleSetFactory();
+            List<RuleSet> rulesetList = ruleSetFactory.GetRuleSetListFromSettingsList(CreatureData.RuleSet);
+            var builderConfiguration = new BuilderConfigurator(rulesetList, CreatureData, this);
             List<BuilderInfo> builderInfoList = builderConfiguration.GetBuilderInfoList();
 
             CreatureState idleState = new IdleState(CreatureData, this, builderInfoList, builderConfiguration);

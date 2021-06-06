@@ -4,18 +4,19 @@ using Creature.Creature.StateMachine.CustomRuleSet;
 using Creature.Creature.StateMachine.Data;
 using Creature.Creature.StateMachine.Event;
 using Creature.Creature.StateMachine.State;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ASD_project.Creature.Creature.StateMachine.Builder
 {
-    public class BuilderConfiguration
+    public class BuilderConfigurator
     {
         List<RuleSet> _rulesetList;
         ICreatureData _creatureData;
         ICreatureStateMachine _stateMachine;
 
-        public BuilderConfiguration(List<RuleSet> rulesetList, ICreatureData creatureData, ICreatureStateMachine stateMachine)
+        public BuilderConfigurator(List<RuleSet> rulesetList, ICreatureData creatureData, ICreatureStateMachine stateMachine)
         {
             _rulesetList = rulesetList;
             _creatureData = creatureData;
@@ -51,7 +52,8 @@ namespace ASD_project.Creature.Creature.StateMachine.Builder
                             {
                                 if (ruleSet2.Action == "default" && (ruleSet2.ComparisonTrue == ruleSet.Action || ruleSet2.ComparisonFalse == ruleSet.Action))
                                 {
-                                    CreatureEvent.Event creatureEvent = GetEvent(ruleSet2, action.Key);
+                                    CreatureEvent.Event creatureEvent = GetEvent(ruleSet2, ruleSet.Action);
+                                    builderInfo.Event = creatureEvent;
                                     builderInfo.RuleSets.Add(ruleSet2);
                                     builderInfo.RuleSets.Add(ruleSet);
                                 }
@@ -65,7 +67,7 @@ namespace ASD_project.Creature.Creature.StateMachine.Builder
             return builderInfoList;
         }
 
-        public CreatureEvent.Event GetEvent(RuleSet rule, string state)
+        private CreatureEvent.Event GetEvent(RuleSet rule, string state)
         {
             if ((rule.Comparable == "monster" || rule.Comparable == "agent") && (rule.Threshold == "monster" || rule.Threshold == "agent"))
             {
@@ -110,44 +112,44 @@ namespace ASD_project.Creature.Creature.StateMachine.Builder
             return CreatureEvent.Event.IDLE;
         }
 
-        public bool GetGuard(object comparableData, object thresholdData, List<RuleSet> ruleSets, string state)
+        public bool GetGuard(object comparableData, object thresholdData, BuilderInfo builderInfo)
         {
             bool firstRulesetCondition = true;
 
-            if (ruleSets[0].Comparison == "sees" || ruleSets[0].Comparison == "nearby" || ruleSets[0].Comparison == "lost")
+            if (builderInfo.RuleSets[0].Comparison == "sees" || builderInfo.RuleSets[0].Comparison == "nearby" || builderInfo.RuleSets[0].Comparison == "lost")
             {
-                firstRulesetCondition = IsInstanceOf(comparableData, ruleSets[0].Comparable) && IsInstanceOf(thresholdData, ruleSets[0].Threshold);
+                firstRulesetCondition = IsInstanceOf(comparableData, builderInfo.RuleSets[0].Comparable) && IsInstanceOf(thresholdData, builderInfo.RuleSets[0].Threshold);
             }
 
             bool secondRulesetCondition = true;
 
-            if (ruleSets.Count > 1)
+            if (builderInfo.RuleSets.Count > 1)
             {
-                object comparableObject = GetData(comparableData, ruleSets[1].Comparable);
-                object thresholdObject = GetData(thresholdData, ruleSets[1].Threshold);
+                object comparableObject = GetData(comparableData, builderInfo.RuleSets[1].Comparable);
+                object thresholdObject = GetData(thresholdData, builderInfo.RuleSets[1].Threshold);
 
-                if (ruleSets[1].Comparison == "less than")
+                if (builderInfo.RuleSets[1].Comparison == "less than")
                 {
-                    secondRulesetCondition = (int)comparableObject < (int)thresholdObject;
+                    secondRulesetCondition = (double)comparableObject < (double)thresholdObject;
                 }
-                else if (ruleSets[1].Comparison == "greater than")
+                else if (builderInfo.RuleSets[1].Comparison == "greater than")
                 {
-                    secondRulesetCondition = (int)comparableObject > (int)thresholdObject;
+                    secondRulesetCondition = (double)comparableObject > (double)thresholdObject;
                 }
-                else if (ruleSets[1].Comparison == "is equal to")
+                else if (builderInfo.RuleSets[1].Comparison == "is equal to")
                 {
                     secondRulesetCondition = comparableObject == thresholdObject;
                 }
-                else if (ruleSets[1].Comparison == "contains")
+                else if (builderInfo.RuleSets[1].Comparison == "contains")
                 {
                     // return ?
                 }
-                else if (ruleSets[1].Comparison == "does not contain")
+                else if (builderInfo.RuleSets[1].Comparison == "does not contain")
                 {
                     // return ?
                 }
 
-                if (ruleSets[1].ComparisonFalse == state)
+                if (builderInfo.RuleSets[1].ComparisonFalse == builderInfo.Action)
                 {
                     secondRulesetCondition = !secondRulesetCondition;
                 }
@@ -160,7 +162,7 @@ namespace ASD_project.Creature.Creature.StateMachine.Builder
             return true;
         }
 
-        public object GetData(object comparisonData, string comparisonString)
+        private object GetData(object comparisonData, string comparisonString)
         {
             if (comparisonString == "health")
             {
@@ -177,9 +179,9 @@ namespace ASD_project.Creature.Creature.StateMachine.Builder
                 ICreatureData data = (ICreatureData)comparisonData;
                 // TODO: return data.Inventory;
             }
-            else if (int.TryParse(comparisonString, out _))
+            else if (double.TryParse(comparisonString, out _))
             {
-                return comparisonString;
+                return double.Parse(comparisonString);
             }
             else if (comparisonString == "opponent")
             {
@@ -190,7 +192,7 @@ namespace ASD_project.Creature.Creature.StateMachine.Builder
             return comparisonData;
         }
 
-        public bool IsInstanceOf(object comparisonData, string comparisonString)
+        private bool IsInstanceOf(object comparisonData, string comparisonString)
         {
             if (comparisonString == "agent")
             {
