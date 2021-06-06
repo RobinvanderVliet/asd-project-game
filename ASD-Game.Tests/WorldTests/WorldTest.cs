@@ -94,7 +94,7 @@ namespace ASD_Game.Tests.WorldTests
             //Act ---------
             _sut.UpdateMap();
             //Assert ---------
-            _mapMock.Verify(map => map.GetMapAroundCharacter(It.IsAny<Player>(), It.IsAny<int>(), It.IsAny<List<Character>>()), Times.AtMost(0));
+            _mapMock.Verify(map => map.GetCharArrayMapAroundCharacter(It.IsAny<Player>(), It.IsAny<int>(), It.IsAny<List<Character>>()), Times.AtMost(0));
         }
         
         [Test]
@@ -105,7 +105,7 @@ namespace ASD_Game.Tests.WorldTests
             _sut.AddPlayerToWorld(_friendlyPlayer, true);
             _sut.UpdateMap();
             //Assert ---------
-            _mapMock.Verify(map => map.GetMapAroundCharacter(It.IsAny<Player>(), It.IsAny<int>(), It.IsAny<List<Character>>()), Times.Exactly(2));
+            _mapMock.Verify(map => map.GetCharArrayMapAroundCharacter(It.IsAny<Player>(), It.IsAny<int>(), It.IsAny<List<Character>>()), Times.Exactly(2));
 
         }
         

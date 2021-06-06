@@ -5,7 +5,7 @@ namespace ASD_project.World
 {
     public interface IMap
     {
-        char[,] GetMapAroundCharacter(Character currentPlayer, int viewDistance, List<Character> characters);
+        char[,] GetCharArrayMapAroundCharacter(Character currentPlayer, int viewDistance, List<Character> characters);
         void DeleteMap();
         void DisplayMap(Character currentPlayer, int viewDistance, List<Character> characters);
 

@@ -77,7 +77,7 @@ namespace ASD_project.World
         public char[,] GetMapAroundCharacter(Character character)
         {
             var characters = ((IEnumerable<Character>)_players).Concat(_creatures).ToList();
-            return _map.GetMapAroundCharacter(character, _viewDistance, characters);
+            return _map.GetCharArrayMapAroundCharacter(character, _viewDistance, characters);
         }
 
         public void DeleteMap()
