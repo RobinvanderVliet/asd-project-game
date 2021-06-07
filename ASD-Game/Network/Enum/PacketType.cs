@@ -5,6 +5,7 @@
         Chat,
         Move,
         Session,
+        RelativeStat,
         Inventory,        
         GameSession,
         Attack,

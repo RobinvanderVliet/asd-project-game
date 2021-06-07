@@ -20,7 +20,6 @@ namespace ASD_project
 
             public void Run()
             {
-
                 if (!DEBUG_INTERFACE)
                 {
                     _screenHandler.TransitionTo(new StartScreen());

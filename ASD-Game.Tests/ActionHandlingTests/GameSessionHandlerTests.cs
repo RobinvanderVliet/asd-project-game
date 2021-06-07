@@ -10,6 +10,9 @@ using Session.GameConfiguration;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using ActionHandling;
+using DatabaseHandler.POCO;
+using DatabaseHandler.Services;
 using WorldGeneration;
 using DatabaseHandler.Services;
 using DatabaseHandler.POCO;
@@ -27,11 +30,13 @@ namespace Session.Tests
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
         private Mock<ISessionHandler> _mockedsessionHandler;
+        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerDatabaseService;
+        private Mock<IDatabaseService<GamePOCO>> _mockedGameDatabaseService;
+        private Mock<IDatabaseService<PlayerItemPOCO>> _mockedPlayerItemDatabaseService;
+        private Mock<IRelativeStatHandler> _mockedRelativeStatHandler;
 
         private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
-        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerServiceDb;
-        private Mock<IDatabaseService<GamePOCO>> _mockedgameServicesDb;
-        private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigServicesDb;
+        private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigDatabaseService;
 
 
         [SetUp]
@@ -44,11 +49,12 @@ namespace Session.Tests
             _mockedWorldService = new Mock<IWorldService>();
             _mockedsessionHandler = new Mock<ISessionHandler>();
             _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
-            _mockedGameConfigServicesDb = new Mock<IDatabaseService<GameConfigurationPOCO>>();
-
-            _mockedPlayerServiceDb = new Mock<IDatabaseService<PlayerPOCO>>();
-            _mockedgameServicesDb = new Mock<IDatabaseService<GamePOCO>>();
-           // _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedsessionHandler.Object, _mockedPlayerServiceDb.Object, _mockedgameServicesDb.Object, _mockedGameConfigServicesDb.Object, _mockedGameConfigurationHandler.Object);
+            _mockedGameConfigDatabaseService = new Mock<IDatabaseService<GameConfigurationPOCO>>();
+            _mockedPlayerItemDatabaseService = new Mock<IDatabaseService<PlayerItemPOCO>>();
+            _mockedRelativeStatHandler = new Mock<IRelativeStatHandler>();
+            _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPOCO>>();
+            _mockedGameDatabaseService = new Mock<IDatabaseService<GamePOCO>>();
+           // _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedsessionHandler.Object, _mockedPlayerServiceDb.Object, _mockedgameDatabaseService.Object, _mockedGameConfigDatabaseService.Object, _mockedGameConfigurationHandler.Object);
             _packetDTO = new PacketDTO();
         }
 

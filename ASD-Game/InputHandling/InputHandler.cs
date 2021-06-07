@@ -33,16 +33,17 @@ namespace InputHandling
             _messageService = messageService;
         }
 
-        // public InputHandler()
-        // {
-        //
-        // }
+        public InputHandler()
+        {
+            //Empty constructor needed for testing purposes
+        }
 
         public void HandleGameScreenCommands()
         {
             SendCommand(GetCommand());
             _screenHandler.RedrawGameInputBox();
         }
+        
         private void SendCommand(string commando)
         {
             try

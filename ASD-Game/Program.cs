@@ -49,13 +49,12 @@ namespace ASD_project
                     services.AddScoped<ISessionHandler, SessionHandler>();
                     services.AddScoped<IMoveHandler, MoveHandler>();
                     services.AddScoped<IAttackHandler, AttackHandler>();
+                    services.AddScoped<IRelativeStatHandler, RelativeStatHandler>();
                     services.AddScoped<IWorldService, WorldService>();
                     services.AddScoped<IMessageService, MessageService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
-                    services.AddScoped<IDeadHandler, DeadHandler>();
+                    services.AddScoped<IDeadHandler, DeadHandler>(); services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
                     services.AddSingleton<IDBConnection, DBConnection>();
-                    services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-                    services.AddScoped(typeof(IDatabaseService<>), typeof(DatabaseService<>));
                     services.AddScoped<IScreenHandler, ScreenHandler>();
                     services.AddScoped<IInputHandler, InputHandler>();
                     services.AddScoped<IPipeline, Pipeline>();

@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+using WorldGeneration.Models.Interfaces;
+ using System.Collections.Generic;
 using Items;
-
-using System.Collections.Generic;
 
 namespace WorldGeneration
 {
@@ -22,16 +21,20 @@ namespace WorldGeneration
         /// Returns items on title for the player of this instance.
         /// </summary>
         /// <returns></returns>
-        public IList<Item> GetItemsOnCurrentTile();
         /// <summary>
         /// Returns items on tile for the specified player.
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
         public IList<Item> GetItemsOnCurrentTile(Player player);
-        public string SearchCurrentTile();
+        public IList<Item> GetItemsOnCurrentTile();
         public Player GetCurrentPlayer();
-        public Player GetPlayer(string userId);
+        public Player GetPlayer(string id);
+        public List<Player> GetPlayers();
+        public ITile GetTile(int x, int y);
+        public bool CheckIfCharacterOnTile(ITile tile);
+        public void LoadArea(int playerX, int playerY, int viewDistance);
+        public string SearchCurrentTile();
         public void DisplayStats();
     }
 }

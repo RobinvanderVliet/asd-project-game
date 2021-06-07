@@ -6,6 +6,7 @@ namespace DatabaseHandler.POCO
     [ExcludeFromCodeCoverage]
     public class PlayerPOCO
     {
+        
         public string GameGuid { get; set; }
         public string PlayerGuid { get; set; }
         [BsonId]
@@ -14,7 +15,9 @@ namespace DatabaseHandler.POCO
         public int TypePlayer { get; set; }
         public int Health { get; set; }
         public int Stamina { get; set; }
+        public int RadiationLevel { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
+
     }
 }

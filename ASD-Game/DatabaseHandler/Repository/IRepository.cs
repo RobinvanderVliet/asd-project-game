@@ -1,6 +1,6 @@
-using LiteDB;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using LiteDB;
 
 namespace DatabaseHandler.Repository
 {
@@ -11,6 +11,5 @@ namespace DatabaseHandler.Repository
         Task<int> DeleteAsync(T obj);
         Task<IEnumerable<T>> GetAllAsync();
         Task<int> DeleteAllAsync();
-
     }
 }
