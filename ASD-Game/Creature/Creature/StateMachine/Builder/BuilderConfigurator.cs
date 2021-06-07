@@ -4,9 +4,11 @@ using Creature.Creature.StateMachine.CustomRuleSet;
 using Creature.Creature.StateMachine.Data;
 using Creature.Creature.StateMachine.Event;
 using Creature.Creature.StateMachine.State;
+using Items;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WorldGeneration;
 
 namespace ASD_project.Creature.Creature.StateMachine.Builder
 {
@@ -142,13 +144,16 @@ namespace ASD_project.Creature.Creature.StateMachine.Builder
                 }
                 else if (builderInfo.RuleSets[1].Comparison == "contains")
                 {
-                    // return ?
+                    Inventory inventory = (Inventory)comparableData;
+                    Item item = (Item)thresholdData;
+                    secondRulesetCondition = inventory.GetConsumableItem(item.ItemName) != null;
                 }
                 else if (builderInfo.RuleSets[1].Comparison == "does not contain")
                 {
-                    // return ?
+                    Inventory inventory = (Inventory)comparableData;
+                    Item item = (Item)thresholdData;
+                    secondRulesetCondition = inventory.GetConsumableItem(item.ItemName) == null;
                 }
-
                 if (builderInfo.RuleSets[1].ComparisonFalse == builderInfo.Action)
                 {
                     secondRulesetCondition = !secondRulesetCondition;
@@ -177,7 +182,7 @@ namespace ASD_project.Creature.Creature.StateMachine.Builder
             else if (comparisonString == "inventory")
             {
                 ICreatureData data = (ICreatureData)comparisonData;
-                // TODO: return data.Inventory;
+                return data.Inventory;
             }
             else if (double.TryParse(comparisonString, out _))
             {
@@ -185,7 +190,7 @@ namespace ASD_project.Creature.Creature.StateMachine.Builder
             }
             else if (comparisonString == "opponent")
             {
-
+                // Needs context
             }
             // TODO: Add more
 
