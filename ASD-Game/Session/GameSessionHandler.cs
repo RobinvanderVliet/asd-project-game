@@ -168,27 +168,5 @@ namespace Session
             _worldService.DisplayWorld();
             return currentPlayer;
         }
-
-
-/*    private void SaveInBackupDatabase(StartGameDTO startGameDTO)
-        {
-            //create new backup repositories.
-            var playerRepository = new Repository<PlayerPOCO>();
-            var servicePlayer = new DatabaseService<PlayerPOCO>(playerRepository);
-            var gameRepository = new Repository<GamePOCO>();
-            var gameService = new DatabaseService<GamePOCO>(gameRepository);
-
-            //Game
-            var gamePOCO = new GamePOCO { GameGuid = startGameDTO.GameGuid, PlayerGUIDHost = _sessionHandler.GetAllClients()[0][0]};
-            gameService.CreateAsync(gamePOCO);
-
-            //Players
-            foreach (KeyValuePair<string, int[]> player in startGameDTO.PlayerLocations)
-            {
-                servicePlayer.CreateAsync(
-                    new PlayerPOCO{ PlayerGuid = player.Key, GameGuid = gamePOCO.GameGuid, XPosition = player.Value[0], YPosition = player.Value[1] }
-                    );
-            }
-        }*/
     }
 }
