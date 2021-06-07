@@ -97,12 +97,12 @@ namespace ActionHandling
             if (_clientController.IsHost() && packet.Header.Target.Equals("host") || _clientController.IsBackupHost)
             {
                 var allPlayers = _worldService.GetAllPlayers();
-                var PlayerResult =
+                var playerToAttack =
                     allPlayers.Where(x =>
                         x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition);
-                if (PlayerResult.FirstOrDefault() != null)
+                if (playerToAttack.FirstOrDefault() != null)
                 {
-                    if (PlayerResult.FirstOrDefault().Health <= 0)
+                    if (playerToAttack.FirstOrDefault().Health <= 0)
                     {
                         if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
                         {
@@ -113,28 +113,28 @@ namespace ActionHandling
                 }
 
 
-                //var CreatureResult =
-                //    allCreatures.Where(x =>
-                //        x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition &&
-                //        x.GameGuid == _clientController.SessionId);
+                // var creatureToAttack =
+                //     allCreatures.Where(x =>
+                //         x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition &&
+                //         x.GameGuid == _clientController.SessionId);
 
                 InsertStaminaToDatabase(attackDto);
 
-                if (PlayerResult.Any())
+                if (playerToAttack.Any())
                 {
-                    attackDto.AttackedPlayerGuid = PlayerResult.FirstOrDefault().Id;
+                    attackDto.AttackedPlayerGuid = playerToAttack.FirstOrDefault().Id;
                     if (attackDto.Stamina >= ATTACK_STAMINA)
                     {
                         InsertDamageToDatabase(attackDto, true);
                         packet.Payload = JsonConvert.SerializeObject(attackDto);
                     }
                 }
-                //else if (CreatureResult.Any())
-                //{
-                //    attackDto.AttackedPlayerGuid = CreatureResult.FirstOrDefault().CreatureGuid;
-                //    InsertDamageToDatabase(attackDto, false);
-                //    packet.Payload = JsonConvert.SerializeObject(attackDto);
-                //}
+                // else if (creatureToAttack.Any())
+                // {
+                //     attackDto.AttackedPlayerGuid = creatureToAttack.FirstOrDefault().CreatureGuid;
+                //     InsertDamageToDatabase(attackDto, false);
+                //     packet.Payload = JsonConvert.SerializeObject(attackDto);
+                // }
                 else
                 {
                     if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
