@@ -31,7 +31,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_ScanMap()
+        public void Test_ScanMap_ScanMapForNearbyCharacters()
         {
             //act
             _sut.ScanMap(_smartMonster, _smartMonster.CreatureData.VisionRange);

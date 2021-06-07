@@ -15,7 +15,7 @@ namespace Creature.Tests
     {
         private SmartCreatureTrainingActions _sut;
         private SmartMonsterForTraining _smartTestMonster;
-        private TrainingMapGenerator trainingMap;
+        private TrainingMapGenerator _trainingMap;
         private TrainerAI _AI;
         private Node _node;
 
@@ -24,7 +24,7 @@ namespace Creature.Tests
         [SetUp]
         public void Setup()
         {
-            trainingMap = new TrainingMapGenerator();
+            _trainingMap = new TrainingMapGenerator();
             MonsterData _MonsterData =
                 new MonsterData
                 (
@@ -33,7 +33,7 @@ namespace Creature.Tests
                 0
                 );
             _smartTestMonster = new SmartMonsterForTraining("Zombie", 14, 14, "T", "monst");
-            _sut = new SmartCreatureTrainingActions(trainingMap.trainingmap);
+            _sut = new SmartCreatureTrainingActions(_trainingMap.trainingmap);
             loc = new Vector2(15, 15);
         }
 
