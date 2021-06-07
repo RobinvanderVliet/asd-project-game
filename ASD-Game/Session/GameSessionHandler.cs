@@ -23,22 +23,22 @@ namespace Session
 
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
     {
-        private IClientController _clientController;
-        private ISessionHandler _sessionHandler;
-        private IWorldService _worldService;
+        private readonly IClientController _clientController;
+        private readonly ISessionHandler _sessionHandler;
+        private readonly IWorldService _worldService;
         
-        private IMessageService _messageService;
-        private IGameConfigurationHandler _gameConfigurationHandler;
-        private IScreenHandler _screenHandler;
+        private readonly IMessageService _messageService;
+        private readonly IGameConfigurationHandler _gameConfigurationHandler;
+        private readonly IScreenHandler _screenHandler;
         
-        private DatabaseService<PlayerPOCO> _playerServicesDb;
-        private DatabaseService<GamePOCO> _gameServicesDb;
-        private DatabaseService<GameConfigurationPOCO> _gameConfigServicesDb;
-        private DatabaseService<PlayerItemPOCO> _playerItemServicesDb;
+        private readonly IDatabaseService<PlayerPOCO> _playerServicesDb;
+        private readonly IDatabaseService<GamePOCO> _gameServicesDb;
+        private readonly IDatabaseService<GameConfigurationPOCO> _gameConfigServicesDb;
+        private readonly IDatabaseService<PlayerItemPOCO> _playerItemServicesDb;
 
        
 
-        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IMessageService messageService, DatabaseService<PlayerPOCO> playerServicesDb, DatabaseService<GamePOCO> gameServicesDb, DatabaseService<GameConfigurationPOCO> gameConfigServicesDb, DatabaseService<PlayerItemPOCO> playerItemServicesDb, IGameConfigurationHandler gameConfigurationHandler, IScreenHandler screenHandler)
+        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IMessageService messageService, IDatabaseService<PlayerPOCO> playerServicesDb, IDatabaseService<GamePOCO> gameServicesDb, IDatabaseService<GameConfigurationPOCO> gameConfigServicesDb, IDatabaseService<PlayerItemPOCO> playerItemServicesDb, IGameConfigurationHandler gameConfigurationHandler, IScreenHandler screenHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
@@ -62,10 +62,6 @@ namespace Session
 
         public StartGameDTO SetupGameHost()
         {
-           
-            var servicePlayer = new DatabaseService<PlayerPOCO>();
-            var playerItemService = new DatabaseService<PlayerItemPOCO>();
-            var gameService = new DatabaseService<GamePOCO>();
 
             var gameConfigurationPOCO = new GameConfigurationPOCO
             {
@@ -77,7 +73,7 @@ namespace Session
             _gameConfigServicesDb.CreateAsync(gameConfigurationPOCO);
             
             var gamePOCO = new GamePOCO {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
-            gameService.CreateAsync(gamePOCO);
+            _gameServicesDb.CreateAsync(gamePOCO);
 
             List<string[]> allClients = _sessionHandler.GetAllClients();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
@@ -92,8 +88,8 @@ namespace Session
                 playerPosition[1] = playerY;
                 players.Add(client[0], playerPosition);
                 var tmpPlayer = new PlayerPOCO
-                    {PlayerGuid = client[0], PlayerName = client[1], GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
-                servicePlayer.CreateAsync(tmpPlayer);
+                    {PlayerGuid = client[0], GameGUIDAndPlayerGuid = gamePOCO.GameGuid+_clientController.GetOriginId(), PlayerName = client[1], GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
+                _playerServicesDb.CreateAsync(tmpPlayer);
                 var playerHelmet = new PlayerItemPOCO()
                 {
                    GameGUID = gamePOCO.GameGuid, PlayerGUID = client[0], ItemName = ItemFactory.GetBandana().ItemName, ArmorPoints = ItemFactory.GetBandana().ArmorProtectionPoints
@@ -101,8 +97,8 @@ namespace Session
                 var playerWeapon = new PlayerItemPOCO(){
                     GameGUID = gamePOCO.GameGuid, PlayerGUID = client[0], ItemName = ItemFactory.GetKnife().ItemName
                 };
-                playerItemService.CreateAsync(playerHelmet);
-                playerItemService.CreateAsync(playerWeapon);
+                _playerItemServicesDb.CreateAsync(playerHelmet);
+                _playerItemServicesDb.CreateAsync(playerWeapon);
                 
                 
 
