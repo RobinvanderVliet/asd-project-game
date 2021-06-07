@@ -8,14 +8,11 @@ using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
 using Session.GameConfiguration;
-using System;
-using System.Collections.Generic;
 using UserInterface;
 using WorldGeneration;
 using WorldGeneration.Models;
 using Messages;
-using DatabaseHandler;
-using DatabaseHandler.Repository;
+
 
 namespace Session
 {
@@ -165,7 +162,6 @@ namespace Session
                 playerX += 2;
                 playerY += 2;
             }
-            _worldService.DisplayWorld();
             return currentPlayer;
         }
     }

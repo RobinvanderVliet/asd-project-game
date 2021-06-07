@@ -979,7 +979,7 @@ namespace Session.Tests
             packetDTO.HandlerResponse = new HandlerResponseDTO(SendAction.Ignore, "");
 
             Session session = new Session("testsession");
-            _sut.setSession(session);
+            _sut.SetSession(session);
 
             //Arrange the mock for lobbyscreen
             Mock<LobbyScreen> lobbyMock = new Mock<LobbyScreen>();
@@ -1015,7 +1015,7 @@ namespace Session.Tests
             packetDTO.HandlerResponse = new HandlerResponseDTO(SendAction.Ignore, JsonConvert.SerializeObject(resultMessage));
 
             Session session = new Session("testsession");
-            _sut.setSession(session);
+            _sut.SetSession(session);
 
             //Arrange the mock for lobbyscreen
             Mock<LobbyScreen> lobbyMock = new Mock<LobbyScreen>();

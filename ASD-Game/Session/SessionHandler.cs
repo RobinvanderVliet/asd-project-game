@@ -244,8 +244,11 @@ namespace Session
 
                 if (!_clientController.IsBackupHost && nextBackupHost) 
                 {
+                    //TODO reanable this after datatransfer is done
+                    /*
                     _clientController.IsBackupHost = true;
                     PingHostTimer();
+                    */
                     Console.WriteLine("I'm Mr. BackupHost! Look at me!");
                     return new HandlerResponseDTO(SendAction.Ignore, null);
                 }
@@ -482,10 +485,6 @@ namespace Session
         public void SetSession(Session ses)
         {
             _session = ses;
-        }
-        public void setSession(Session session) 
-        {
-            this._session = session;
         }
     }
 }
