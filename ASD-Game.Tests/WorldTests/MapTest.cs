@@ -75,7 +75,7 @@ namespace ASD_Game.Tests.WorldTests
             _characterList.Add(_character1);
             _characterList.Add(_character2);
             
-            _sut = new Map(_noiseMapGeneratorMockObject, _chunkSize, _databaseServiceMockObject, 0);
+            _sut = new Map(_noiseMapGeneratorMockObject, _chunkSize, _databaseServiceMockObject, _chunks);
         }
         
         [Test]
