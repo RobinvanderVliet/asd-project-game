@@ -8,13 +8,11 @@ namespace ASD_project.Agent.Services
     public class NpcConfigurationService : BaseConfigurationService
     {
         private List<Configuration> _npcConfigurations;
-        private InputHandler _inputHandler;
         
-        public NpcConfigurationService(List<Configuration> npcConfigurations, FileToDictionaryMapper fileToDictionaryMapper, InputHandler inputHandler)
+        public NpcConfigurationService(List<Configuration> npcConfigurations, FileToDictionaryMapper fileToDictionaryMapper)
         {
             _npcConfigurations = npcConfigurations;
             FileToDictionaryMapper = fileToDictionaryMapper;
-            _inputHandler = inputHandler;
             FileHandler = new FileHandler();
             Pipeline = new Pipeline();
         }

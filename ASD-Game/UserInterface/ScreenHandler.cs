@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
+using UserInterface;
 
-namespace UserInterface
+namespace ASD_project.UserInterface
 {
     public class ScreenHandler : IScreenHandler
     {

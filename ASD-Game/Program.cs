@@ -6,6 +6,7 @@ using System;
 using System.Data;
 using System.Data.Common;
 using System.IO;
+using ActionHandling;
 using ASD_project.ActionHandling;
 using ASD_project.Chat;
 using ASD_project.DatabaseHandler;
@@ -15,11 +16,15 @@ using ASD_project.InputHandling;
 using ASD_project.InputHandling.Antlr;
 using ASD_project.InputHandling.Antlr.Transformer;
 using ASD_project.Items.Services;
+using ASD_project.Messages;
 using ASD_project.Network;
 using ASD_project.Session;
+using ASD_project.Session.GameConfiguration;
 using ASD_project.UserInterface;
 using ASD_project.World.Services;
+using Messages;
 using Session;
+using Session.GameConfiguration;
 using UserInterface;
 
 namespace ASD_project

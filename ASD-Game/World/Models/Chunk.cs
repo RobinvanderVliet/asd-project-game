@@ -12,5 +12,18 @@ namespace ASD_project.World.Models
         public int RowSize { get; set; }
         public int Seed { get; set; }
 
+        public Chunk()
+        {
+            
+        }
+
+        public Chunk(int x, int y, ITile[] map, int rowSize, int seed)
+        {
+            X = x;
+            Y = y;
+            Map = map;
+            RowSize = rowSize;
+            Seed = seed;
+        }
     }
 }

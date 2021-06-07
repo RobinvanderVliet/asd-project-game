@@ -4,6 +4,8 @@ using ASD_project.InputHandling.Antlr;
 using ASD_project.InputHandling.Exceptions;
 using ASD_project.Session;
 using ASD_project.UserInterface;
+using Messages;
+using Session.GameConfiguration;
 using WebSocketSharp;
 
 namespace ASD_project.InputHandling

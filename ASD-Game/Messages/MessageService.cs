@@ -1,7 +1,7 @@
-﻿using System;
-using UserInterface;
+﻿using ASD_project.UserInterface;
+using Messages;
 
-namespace Messages
+namespace ASD_project.Messages
 {
     public class MessageService : IMessageService
     {

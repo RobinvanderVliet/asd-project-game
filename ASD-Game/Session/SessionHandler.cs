@@ -1,22 +1,22 @@
-using Network;
-using Newtonsoft.Json;
-using Session.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Timers;
-using Network.DTO;
-using WorldGeneration;
-using DatabaseHandler;
-using DatabaseHandler.Services;
-using DatabaseHandler.Repository;
+using ASD_project.Network;
+using ASD_project.Network.DTO;
+using ASD_project.Network.Enum;
+using ASD_project.Session.DTO;
+using ASD_project.Session.GameConfiguration;
+using ASD_project.UserInterface;
+using ASD_project.World;
+using Messages;
+using Newtonsoft.Json;
 using Session.GameConfiguration;
 using UserInterface;
 using Timer = System.Timers.Timer;
-using Messages;
 
-namespace Session
+namespace ASD_project.Session
 {
     public class SessionHandler : IPacketHandler, ISessionHandler
     {
@@ -103,7 +103,7 @@ namespace Session
             _session = new Session(sessionName);
             _session.GenerateSessionId();
             _session.AddClient(_clientController.GetOriginId(), userName);
-            _session.SessionSeed = MapFactory.GenerateSeed();
+            _session.SessionSeed = new MapFactory().GenerateSeed();
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;

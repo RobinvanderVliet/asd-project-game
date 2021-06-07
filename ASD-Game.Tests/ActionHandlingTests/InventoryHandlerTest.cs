@@ -3,19 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using ActionHandling;
 using ActionHandling.DTO;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using Items;
+using ASD_project.ActionHandling;
+using ASD_project.DatabaseHandler.POCO;
+using ASD_project.DatabaseHandler.Services;
+using ASD_project.Items;
+using ASD_project.Items.Consumables;
+using ASD_project.Network;
+using ASD_project.Network.DTO;
+using ASD_project.Network.Enum;
+using ASD_project.World.Models.Characters;
+using ASD_project.World.Services;
 using Messages;
 using Moq;
-using Network;
-using Network.DTO;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using WorldGeneration;
 
-namespace ActionHandling.Tests
+namespace ASD_Game.Tests.ActionHandlingTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
@@ -25,9 +30,9 @@ namespace ActionHandling.Tests
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
         private Mock<IMessageService> _mockedMessageService;
-        private Mock<IServicesDb<PlayerPOCO>> _mockedPlayerServicesDb;
-        private Mock<IServicesDb<PlayerItemPOCO>> _mockedPlayerItemServicesDb;
-        private Mock<IServicesDb<WorldItemPOCO>> _mockedWorldItemServicesDb;
+        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerServicesDb;
+        private Mock<IDatabaseService<PlayerItemPOCO>> _mockedPlayerItemServicesDb;
+        private Mock<IDatabaseService<WorldItemPOCO>> _mockedWorldItemServicesDb;
         private static readonly string _thisIsNotAnItemYouCanDrop = "This is not an item you can drop!";
 
         [SetUp]
@@ -136,7 +141,7 @@ namespace ActionHandling.Tests
 
             for(int i = 0; i < 3; i++)
             {
-                player.Inventory.AddConsumableItem((Items.Consumables.Consumable)item);
+                player.Inventory.AddConsumableItem((Consumable)item);
             }
 
             _mockedWorldService.Setup(mock => mock.GetPlayer(inventoryDTO.UserId)).Returns(player);
@@ -378,7 +383,7 @@ namespace ActionHandling.Tests
             var item = ItemFactory.GetBandage();
             player.Inventory.AddConsumableItem(item);
 
-            PlayerPOCO playerPOCO = new() { PlayerGuid = originId, Health = 50 };
+            PlayerPOCO playerPOCO = new() { PlayerGUID = originId, Health = 50 };
             List<PlayerPOCO> playerPOCOList = new();
             playerPOCOList.Add(playerPOCO);
             IEnumerable<PlayerPOCO> en = playerPOCOList;
@@ -425,7 +430,7 @@ namespace ActionHandling.Tests
             Player player = new("arie", 0, 0, "#", originId);
             player.Health = 50;
 
-            PlayerPOCO playerPOCO = new() { PlayerGuid = originId, Health = 50 };
+            PlayerPOCO playerPOCO = new() { PlayerGUID = originId, Health = 50 };
             List<PlayerPOCO> playerPOCOList = new();
             playerPOCOList.Add(playerPOCO);
             IEnumerable<PlayerPOCO> en = playerPOCOList;

@@ -27,7 +27,7 @@ namespace ASD_Game.Tests.WorldTests
         private IMapFactory _mapFactoryMockObject;
         private Mock<IMapFactory> _mapFactoryMock;
         private IMap _mapMockObject;
-        private Mock<IMap> _mapMock;
+        private Mock<Map> _mapMock;
         private Mock<IScreenHandler> _screenHandlerMock;
         private IScreenHandler _screenHandlerMockObject;
         private Mock<IItemService> _itemServiceMock;
@@ -44,12 +44,12 @@ namespace ASD_Game.Tests.WorldTests
             _enemyPlayer = new Player("B", 0, 1, "!", "2");
             _creature = new ASD_project.World.Models.Characters.Creature("B", 1, 0, "!", "2");
             //Initialisation of mocks
-            _mapMock = new Mock<IMap>();
+            _mapMock = new Mock<Map>();
             _mapMock.Setup(Map => Map.DeleteMap()).Verifiable();
             _mapMockObject = _mapMock.Object;
             
             _mapFactoryMock = new Mock<IMapFactory>();
-            _mapFactoryMock.Setup(mapFactory => mapFactory.GenerateMap(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<IItemService>(), It.IsAny<List<ItemSpawnDTO>>())).Returns(_mapMockObject).Verifiable();
+            //_mapFactoryMock.Setup(mapFactory => mapFactory.GenerateMap(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<IItemService>(), It.IsAny<List<ItemSpawnDTO>>())).Returns(_mapMockObject).Verifiable();
             _mapFactoryMock.Setup(mapFactory => mapFactory.GenerateSeed()).Returns(11246).Verifiable();
             _mapFactoryMockObject = _mapFactoryMock.Object;
 

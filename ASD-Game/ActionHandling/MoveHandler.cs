@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using ASD_project.ActionHandling.DTO;
 using ASD_project.DatabaseHandler.POCO;
 using ASD_project.DatabaseHandler.Services;
@@ -7,6 +6,7 @@ using ASD_project.Network;
 using ASD_project.Network.DTO;
 using ASD_project.Network.Enum;
 using ASD_project.World.Services;
+using Messages;
 using Newtonsoft.Json;
 
 namespace ASD_project.ActionHandling
@@ -110,7 +110,7 @@ namespace ASD_project.ActionHandling
 
         private void InsertToDatabase(MoveDTO moveDTO)
         {            
-            var player = _playerServicesDb.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId && player.GameGuid == _clientController.SessionId);
+            var player = _playerServicesDb.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGUID == moveDTO.UserId && player.GameGUID == _clientController.SessionId);
 
             player.XPosition = moveDTO.XPosition;
             player.YPosition = moveDTO.YPosition;

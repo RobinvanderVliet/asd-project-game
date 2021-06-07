@@ -1,8 +1,7 @@
-﻿using InputHandling.Antlr.Ast;
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace InputHandling.Antlr.Ast.Actions
+namespace ASD_project.InputHandling.Antlr.Ast.Actions
 {
     public class Search : Command, IEquatable<Search>
     {

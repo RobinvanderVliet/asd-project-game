@@ -1,11 +1,10 @@
-﻿using ASD_project.Items;
-using ASD_project.Items.ArmorStats;
+﻿using ASD_project.Items.ArmorStats;
 using ASD_project.Items.Consumables;
 using ASD_project.Items.Consumables.ConsumableStats;
 using ASD_project.Items.ItemStats;
 using ASD_project.Items.WeaponStats;
 
-namespace Items
+namespace ASD_project.Items
 {
     public static class ItemFactory
     {
@@ -15,7 +14,7 @@ namespace Items
             weaponbuilder.SetName("Knife");
             weaponbuilder.SetDescription("That ain't a knoife, this is a knoife");
             weaponbuilder.SetWeaponType(WeaponType.Melee);
-            weaponbuilder.SetRarity(Items.ItemStats.Rarity.Common);
+            weaponbuilder.SetRarity(Rarity.Common);
             weaponbuilder.SetWeaponSpeed(WeaponSpeed.Slow);
             weaponbuilder.SetWeaponDistance(WeaponDistance.Close);
             weaponbuilder.SetDamage(WeaponDamage.Low);
@@ -24,11 +23,11 @@ namespace Items
 
         public static Armor GetBandana()
         {
-            ArmorBuilder armorBuilder = new(ArmorStats.ArmorType.DefaultArmor);
+            ArmorBuilder armorBuilder = new(ArmorType.DefaultArmor);
             armorBuilder.SetName("Bandana");
             armorBuilder.SetDescription("Default headwear, plain but good looking");
-            armorBuilder.SetArmorPartType(ArmorStats.ArmorPartType.Helmet);
-            armorBuilder.SetRarity(ItemStats.Rarity.Common);
+            armorBuilder.SetArmorPartType(ArmorPartType.Helmet);
+            armorBuilder.SetRarity(Rarity.Common);
             armorBuilder.SetArmorProtectionPoints(1);
             return armorBuilder.GetItem();
         }

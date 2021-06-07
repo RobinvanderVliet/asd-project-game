@@ -1,9 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
-using NUnit.Framework;
-using UserInterface;
+using ASD_project.UserInterface;
+using ASD_project.World.Services;
 using Moq;
+using NUnit.Framework;
 
-namespace WorldGeneration.Tests
+namespace ASD_Game.Tests.WorldTests
 {
     [ExcludeFromCodeCoverage]  
     [TestFixture]
@@ -23,7 +24,7 @@ namespace WorldGeneration.Tests
             //Initialisation of variables
             //Initialisation of mocks
             _mockedScreenHandler = new Mock<IScreenHandler>();
-            _sut = new WorldService(_mockedScreenHandler.Object);
+            //_sut = new WorldService(_mockedScreenHandler.Object);
         }
         
         [Test]

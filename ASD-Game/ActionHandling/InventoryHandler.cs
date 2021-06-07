@@ -1,30 +1,33 @@
-﻿using ActionHandling.DTO;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using Items.Consumables;
-using Network;
-using Network.DTO;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Linq;
-using Items;
-using WorldGeneration;
-using WorldGeneration.Exceptions;
+using ActionHandling;
+using ActionHandling.DTO;
+using ASD_project.DatabaseHandler.POCO;
+using ASD_project.DatabaseHandler.Services;
+using ASD_project.Items;
+using ASD_project.Items.Consumables;
+using ASD_project.Network;
+using ASD_project.Network.DTO;
+using ASD_project.Network.Enum;
+using ASD_project.World.Models.Characters;
+using ASD_project.World.Services;
 using Messages;
+using Newtonsoft.Json;
+using WorldGeneration.Exceptions;
 
-namespace ActionHandling
+namespace ASD_project.ActionHandling
 {
     public class InventoryHandler : IPacketHandler, IInventoryHandler
     {
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
         private readonly IMessageService _messageService;
-        private readonly IServicesDb<PlayerPOCO> _playerServicesDB;
-        private readonly IServicesDb<PlayerItemPOCO> _playerItemServicesDB;
-        private readonly IServicesDb<WorldItemPOCO> _worldItemServicesDB;
+        private readonly IDatabaseService<PlayerPOCO> _playerServicesDB;
+        private readonly IDatabaseService<PlayerItemPOCO> _playerItemServicesDB;
+        private readonly IDatabaseService<WorldItemPOCO> _worldItemServicesDB;
 
 
-        public InventoryHandler(IClientController clientController, IWorldService worldService, IServicesDb<PlayerPOCO> playerServicesDB, IServicesDb<PlayerItemPOCO> playerItemServicesDB, IServicesDb<WorldItemPOCO> worldItemServicesDB, IMessageService messageService)
+        public InventoryHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerServicesDB, IDatabaseService<PlayerItemPOCO> playerItemServicesDB, IDatabaseService<WorldItemPOCO> worldItemServicesDB, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Inventory);
@@ -280,7 +283,7 @@ namespace ActionHandling
                     _ = _playerItemServicesDB.DeleteAsync(playerItemPOCO);
 
                     var result = _playerServicesDB.GetAllAsync().Result;
-                    PlayerPOCO playerPOCO = result.FirstOrDefault(player => player.PlayerGuid == inventoryDTO.UserId && player.GameGuid == _clientController.SessionId );
+                    PlayerPOCO playerPOCO = result.FirstOrDefault(player => player.PlayerGUID == inventoryDTO.UserId && player.GameGUID == _clientController.SessionId );
 
                     playerPOCO.Health = player.Health;
                     //add stamina to playerPOCO

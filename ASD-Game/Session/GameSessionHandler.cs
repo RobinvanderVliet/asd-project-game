@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using ASD_project.DatabaseHandler.POCO;
 using ASD_project.DatabaseHandler.Services;
+using ASD_project.Items;
 using ASD_project.Network;
 using ASD_project.Network.DTO;
 using ASD_project.Network.Enum;
@@ -9,8 +10,10 @@ using ASD_project.UserInterface;
 using ASD_project.World.Models;
 using ASD_project.World.Models.Characters;
 using ASD_project.World.Services;
-using Items;
+using DatabaseHandler.POCO;
+using Messages;
 using Newtonsoft.Json;
+using Session.GameConfiguration;
 
 namespace ASD_project.Session
 {
@@ -30,7 +33,7 @@ namespace ASD_project.Session
         private IDatabaseService<PlayerItemPOCO> _playerItemServicesDb;
 
         public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IDatabaseService<PlayerPOCO> playerServicesDb,
-            IDatabaseService<GamePOCO> gameServicesDb, IServicesDb<GameConfigurationPOCO> gameConfigservicesDb, IGameConfigurationHandler gameConfigurationHandler,
+            IDatabaseService<GamePOCO> gameServicesDb, IDatabaseService<GameConfigurationPOCO> gameConfigservicesDb, IGameConfigurationHandler gameConfigurationHandler,
             IScreenHandler screenHandler, IDatabaseService<PlayerItemPOCO> playerItemServicesDb, IMessageService messageService)
         {
             _clientController = clientController;

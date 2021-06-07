@@ -1,5 +1,5 @@
-﻿using Items.Consumables;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using ASD_project.Items.Consumables;
 
 namespace ASD_project.World.Models.Characters
 {

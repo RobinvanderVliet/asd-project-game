@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using ActionHandling;
 using ASD_project.ActionHandling;
 using ASD_project.Chat;
 using ASD_project.InputHandling.Antlr.Ast;
@@ -9,11 +10,14 @@ using ASD_project.Network;
 using ASD_project.Network.Enum;
 using ASD_project.Session;
 using ASD_project.Session.DTO;
+using InputHandling.Antlr.Ast.Actions;
+using InputHandling.Exceptions;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using ItemFrequency = InputHandling.Antlr.Ast.Actions.ItemFrequency;
-using MonsterDifficulty = InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
+using Session.GameConfiguration;
+using ItemFrequency = ASD_project.InputHandling.Antlr.Ast.Actions.ItemFrequency;
+using MonsterDifficulty = ASD_project.InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
 namespace ASD_Game.Tests.InputHandlingTests
 {
@@ -310,10 +314,10 @@ namespace ASD_Game.Tests.InputHandlingTests
 
         private static int GetDifficulty(string difficulty) => difficulty switch
         {
-            "easy" => (int)Session.GameConfiguration.MonsterDifficulty.Easy,
-            "medium" => (int)Session.GameConfiguration.MonsterDifficulty.Medium,
-            "hard" => (int)Session.GameConfiguration.MonsterDifficulty.Hard,
-            _ => (int)Session.GameConfiguration.MonsterDifficulty.Impossible
+            "easy" => (int)ASD_project.Session.GameConfiguration.MonsterDifficulty.Easy,
+            "medium" => (int)ASD_project.Session.GameConfiguration.MonsterDifficulty.Medium,
+            "hard" => (int)ASD_project.Session.GameConfiguration.MonsterDifficulty.Hard,
+            _ => (int)ASD_project.Session.GameConfiguration.MonsterDifficulty.Impossible
         };
         
         [TestCase("low")]

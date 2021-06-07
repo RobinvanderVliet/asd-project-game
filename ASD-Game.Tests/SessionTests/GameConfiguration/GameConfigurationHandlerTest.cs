@@ -1,25 +1,26 @@
 using System.Diagnostics.CodeAnalysis;
+using ASD_project.DatabaseHandler.Services;
+using ASD_project.Session.GameConfiguration;
+using ASD_project.UserInterface;
+using DatabaseHandler.POCO;
 using Moq;
 using NUnit.Framework;
 using Session.GameConfiguration;
-using UserInterface;
-using DatabaseHandler.Services;
-using DatabaseHandler.POCO;
 
-namespace Session.Tests.GameConfiguration
+namespace ASD_Game.Tests.SessionTests.GameConfiguration
 {
     [ExcludeFromCodeCoverage]
     public class GameConfigurationHandlerTest
     {
         private GameConfigurationHandler _sut;
         private Mock<ScreenHandler> _mockScreenHandler;
-        private Mock<IServicesDb<GameConfigurationPOCO>> _mockedGameConfigServicesDb;
+        private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigServicesDb;
 
         [SetUp]
         public void Setup()
         {
             _mockScreenHandler = new Mock<ScreenHandler>();
-            _mockedGameConfigServicesDb = new Mock<IServicesDb<GameConfigurationPOCO>>();
+            _mockedGameConfigServicesDb = new Mock<IDatabaseService<GameConfigurationPOCO>>();
             _sut = new GameConfigurationHandler(_mockScreenHandler.Object, _mockedGameConfigServicesDb.Object);
         }
 

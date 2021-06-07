@@ -7,8 +7,10 @@ using ASD_project.Network;
 using ASD_project.Network.DTO;
 using ASD_project.Session;
 using ASD_project.World.Services;
+using DatabaseHandler.POCO;
 using Moq;
 using NUnit.Framework;
+using Session.GameConfiguration;
 
 namespace ASD_Game.Tests.SessionTests
 {

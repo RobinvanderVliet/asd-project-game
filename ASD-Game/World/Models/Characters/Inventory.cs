@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ASD_project.Items;
 using ASD_project.Items.ArmorStats;
 using ASD_project.Items.Consumables;
+using WorldGeneration.Exceptions;
 
 namespace ASD_project.World.Models.Characters
 {

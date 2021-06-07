@@ -1,11 +1,7 @@
-﻿using Chat.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Chat.DTO;
 
-namespace UserInterface
+namespace ASD_project.UserInterface
 {
     public class LobbyScreen : Screen
     {

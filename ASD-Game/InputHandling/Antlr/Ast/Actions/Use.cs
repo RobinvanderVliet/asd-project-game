@@ -2,12 +2,11 @@
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
-namespace InputHandling.Antlr.Ast.Actions
+namespace ASD_project.InputHandling.Antlr.Ast.Actions
 {
     public class Use : Command, IEquatable<Use>
     {
-        private Step _step;
-        public Step Step { get => _step; private set => _step = value; }
+        public Step Step { get => Step; private set => Step = value; }
 
         public Use()
         {
@@ -17,7 +16,7 @@ namespace InputHandling.Antlr.Ast.Actions
         public ArrayList GetChildren()
         {
             var children = new ArrayList();
-            children.Add(_step);
+            children.Add(Step);
             return children;
         }
 
@@ -25,16 +24,16 @@ namespace InputHandling.Antlr.Ast.Actions
         {
             if (child is Step)
             {
-                _step = (Step)child;
+                Step = (Step)child;
             }
             return this;
         }
 
         public ASTNode RemoveChild(ASTNode child)
         {
-            if (child is Step && child == _step)
+            if (child is Step && child == Step)
             {
-                _step = null;
+                Step = null;
             }
             return this;
         }
@@ -52,7 +51,7 @@ namespace InputHandling.Antlr.Ast.Actions
             {
                 return false;
             }
-            return _step.Equals(other.Step);
+            return Step.Equals(other.Step);
         }
     }
 }

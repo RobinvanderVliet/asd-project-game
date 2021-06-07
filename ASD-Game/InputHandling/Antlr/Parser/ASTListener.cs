@@ -2,6 +2,8 @@
 using System.Collections;
 using ASD_project.InputHandling.Antlr.Ast;
 using ASD_project.InputHandling.Antlr.Ast.Actions;
+using InputHandling.Antlr.Ast;
+using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Antlr.Grammar;
 
 namespace ASD_project.InputHandling.Antlr.Parser

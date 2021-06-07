@@ -4,13 +4,14 @@ using ASD_project.ActionHandling.DTO;
 using ASD_project.Items.Services;
 using ASD_project.UserInterface;
 using ASD_project.World.Models.Characters;
+using ASD_project.World.Models.Interfaces;
 
 namespace ASD_project.World
 {
     public class World : IWorld
     {
         public Player CurrentPlayer;
-        private IMap _map;
+        private Map _map;
         private List<Models.Characters.Creature> _creatures;
         private List<Player> _players;
         public List<ItemSpawnDTO> Items;
@@ -29,6 +30,10 @@ namespace ASD_project.World
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
             itemService.GetSpawnHandler().SetItemSpawnDtOs(Items);
+        }
+        public Player GetPlayer(string id)
+        {
+            return _players.Find(x => x.Id == id);
         }
 
         public void UpdateCharacterPosition(string id, int newXPosition, int newYPosition)
@@ -89,6 +94,41 @@ namespace ASD_project.World
         {
             Items.Add(itemSpawnDto);
             UpdateMap();
+        }
+        public ITile GetLoadedTileByXAndY(int x, int y)
+        {
+            return _map.GetLoadedTileByXAndY(x, y);
+        }
+        
+        public bool CheckIfCharacterOnTile(ITile tile)
+        {
+            return GetAllCharacters().Exists(player => player.XPosition == tile.XPosition && player.YPosition == tile.YPosition);
+        }
+
+        private List<Character> GetAllCharacters()
+        {
+            List<Character> characters = _players.Cast<Character>().ToList();
+            return characters;
+        }
+        
+        public void LoadArea(int playerX, int playerY, int viewDistance)
+        {
+            _map.LoadArea(playerX, playerY, viewDistance);
+        }
+        
+        public ITile GetCurrentTile()
+        {
+            return _map.GetLoadedTileByXAndY(CurrentPlayer.XPosition, CurrentPlayer.YPosition);
+        }
+
+        public ITile GetTileForPlayer(Player player)
+        {
+            return _map.GetLoadedTileByXAndY(player.XPosition, player.YPosition);
+        }
+
+        public List<Player> GetAllPlayers()
+        {
+            return _players;
         }
     }
 }

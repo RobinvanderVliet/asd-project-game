@@ -6,8 +6,8 @@ namespace ASD_project.World
 {
     public interface IMapFactory
     {
-        IMap GenerateMap(int chunkSize, int seed, IItemService itemService, List<ItemSpawnDTO> items);
-        IMap GenerateMap(IItemService itemService, List<ItemSpawnDTO> items, int seed);
+        Map GenerateMap(int chunkSize, int seed, IItemService itemService, List<ItemSpawnDTO> items);
+        Map GenerateMap(IItemService itemService, List<ItemSpawnDTO> items, int seed);
         int GenerateSeed();
     }
 }
