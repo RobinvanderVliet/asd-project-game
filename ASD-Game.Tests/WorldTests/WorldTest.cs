@@ -34,7 +34,7 @@ namespace ASD_Game.Tests.WorldTests
         private IItemService _itemServiceMockObject;
         private Mock<ISpawnHandler> _spawnHandlerMock;
         private ISpawnHandler _spawnHandlerMockObject;
-        private World _sut;
+        private ASD_project.World.World _sut;
 
         [SetUp]
         public void Setup()
@@ -68,7 +68,7 @@ namespace ASD_Game.Tests.WorldTests
             _itemServiceMock.Setup(wrm => wrm.GetSpawnHandler()).Returns(_spawnHandlerMockObject);
 ;           _itemServiceMockObject = _itemServiceMock.Object;
 
-            _sut = new World(5, 2, _mapFactoryMockObject, _screenHandlerMockObject, _itemServiceMockObject);
+            _sut = new ASD_project.World.World(5, 2, _mapFactoryMockObject, _screenHandlerMockObject, _itemServiceMockObject);
         }
         
         [Test]
@@ -81,7 +81,7 @@ namespace ASD_Game.Tests.WorldTests
             //Assert ---------
             Assert.DoesNotThrow(() =>
             {
-                var world = new World(seed, 55, _mapFactoryMockObject, _screenHandlerMockObject, _itemServiceMockObject);
+                var world = new ASD_project.World.World(seed, 55, _mapFactoryMockObject, _screenHandlerMockObject, _itemServiceMockObject);
             });
             //_mapFactoryMock.Verify(mapFactory => mapFactory.GenerateMap(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<ItemService>(), It.IsAny<List<ItemSpawnDTO>>()), Times.Once);
             _mapFactoryMock.Verify(mapFactory => mapFactory.GenerateMap(_itemServiceMockObject, It.IsAny<List<ItemSpawnDTO>>(), seed), Times.Once);

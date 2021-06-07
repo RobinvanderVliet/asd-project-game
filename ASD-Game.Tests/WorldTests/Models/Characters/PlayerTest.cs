@@ -1,8 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
+using ASD_project.World.Models.Characters;
 using NUnit.Framework;
-using WorldGeneration;
 
-namespace World.Tests.Models.Characters
+namespace ASD_Game.Tests.WorldTests.Models.Characters
 {
     [ExcludeFromCodeCoverage]
     public class PlayerTest
