@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 
 namespace UserInterface
 {
@@ -9,12 +10,15 @@ namespace UserInterface
         private ConsoleHelper _consoleHelper;
         public ConsoleHelper ConsoleHelper { get => _consoleHelper; set => _consoleHelper = value; }
         private bool _displaying;
+        public static Thread DisplayThread { get; set; }
         
         public ScreenHandler()
         {
+            
             _consoleHelper = new ConsoleHelper();
             _displaying = false;
         }
+
         public void TransitionTo(Screen screen)
         {
             _consoleHelper.ClearConsole();
@@ -24,20 +28,22 @@ namespace UserInterface
         }
         public void DisplayScreen()
         {
-            _screen.DrawScreen();
+            if(DisplayThread != null)
+            {
+                DisplayThread.Join();
+            }
+            DisplayThread = new Thread(_screen.DrawScreen);
+            DisplayThread.Start();
         }
 
         public void ShowMessages(Queue<string> messages)
         {
-            if (!_displaying)
+            if (_screen is GameScreen)
             {
-                _displaying = true;
-                if(_screen is GameScreen)
-                {
-                    var gameScreen = Screen as GameScreen;
-                    gameScreen.ShowMessages(messages);
-                }
-                _displaying = false;
+                var gameScreen = Screen as GameScreen;
+                DisplayThread.Join();
+                DisplayThread = new Thread(empty => gameScreen.ShowMessages(messages));
+                DisplayThread.Start();
             }
         }
 
@@ -51,35 +57,31 @@ namespace UserInterface
             if (_screen is GameScreen)
             {
                 var gameScreen = Screen as GameScreen;
-                gameScreen.RedrawInputBox();
+                DisplayThread.Join();
+                DisplayThread = new Thread(gameScreen.RedrawInputBox);
+                DisplayThread.Start();
             }
         }
 
         public void UpdateWorld(char[,] map)
         {
-            if (!_displaying)
+            if (_screen is GameScreen)
             {
-                _displaying = true;
-                if (_screen is GameScreen)
-                {
-                    var gameScreen = Screen as GameScreen;
-                    gameScreen.UpdateWorld(map);
-                }
-                _displaying = false;
+                var gameScreen = Screen as GameScreen;
+                DisplayThread.Join();
+                DisplayThread = new Thread(empty => gameScreen.UpdateWorld(map));
+                DisplayThread.Start();
             }
         }
 
         public void SetStatValues(string name, int score, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree)
         {
-            if (!_displaying)
+            if (_screen is GameScreen)
             {
-                _displaying = true;
-                if (_screen is GameScreen)
-                {
-                    GameScreen gameScreen = _screen as GameScreen;
-                    gameScreen.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree);
-                }
-                _displaying = false;
+                GameScreen gameScreen = _screen as GameScreen;
+                DisplayThread.Join();
+                DisplayThread = new Thread(empty => gameScreen.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree));
+                DisplayThread.Start();
             }
         }
     }
