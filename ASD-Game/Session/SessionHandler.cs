@@ -352,7 +352,7 @@ namespace Session
 
         private HandlerResponseDTO ActiveGameAddsPlayer(SessionDTO sessionDTO, PacketDTO packet)
         {
-            // check if id komt overeen
+            // check if ID matches
             var clientId = sessionDTO.ClientIds[0];
 
             IDatabaseService<PlayerPOCO> servicePlayer = new DatabaseService<PlayerPOCO>();
