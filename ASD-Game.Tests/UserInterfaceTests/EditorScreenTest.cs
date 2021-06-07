@@ -35,7 +35,7 @@ namespace UserInterface.Tests
             sut.UpdateLastQuestion(It.IsAny<string>());
 
             //Assert
-            mockedConsole.Verify(x => x.WriteLine(It.IsAny<string>()), Times.Once);
+            mockedConsole.Verify(x => x.WriteLine(It.IsAny<string>()), Times.AtLeastOnce);
         }
 
         [Test]
