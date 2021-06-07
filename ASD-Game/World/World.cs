@@ -33,7 +33,7 @@ namespace ASD_Game.World
             _map = mapFactory.GenerateMap(itemService, Items, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
-            itemService.GetSpawnHandler().SetItemSpawnDtOs(Items);
+            itemService.GetSpawnHandler().SetItemSpawnDtos(Items);
         }
         
         public Player GetPlayer(string id)

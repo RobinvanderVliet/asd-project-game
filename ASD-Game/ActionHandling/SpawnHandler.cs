@@ -22,7 +22,7 @@ namespace ASD_Game.ActionHandling
             _clientController.SubscribeToPacketType(this, PacketType.Spawn);
         }
 
-        public void SetItemSpawnDtOs(List<ItemSpawnDTO> itemSpawnDTOs)
+        public void SetItemSpawnDtos(List<ItemSpawnDTO> itemSpawnDTOs)
         {
             _itemSpawnDTOs = itemSpawnDTOs;
         }
