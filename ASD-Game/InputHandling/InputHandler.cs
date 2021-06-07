@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using InputHandling.Antlr;
-using InputHandling.Exceptions;
 using WebSocketSharp;
 using InputCommandHandler.Models;
 using Messages;
@@ -10,7 +9,6 @@ using Session;
 using Session.GameConfiguration;
 using UserInterface;
 using System.Text;
-using System.Threading;
 using Agent.Services;
 using InputHandling.Models;
 using Timer = System.Timers.Timer;
@@ -233,28 +231,26 @@ namespace InputHandling
             {
                 if (answers.ElementAt(2).Contains("yes"))
                 {
-                    _screenHandler.SetScreenInput("BINNEN CUSTOM COMBAT RULE");
                     answers.Add(CustomRuleHandleEditorScreenCommands("combat"));
                 }
 
                 if (answers.ElementAt(3).Contains("yes"))
                 {
-                    _screenHandler.SetScreenInput("BINNEN CUSTOM EXPLORE RULE");
                     answers.Add(CustomRuleHandleEditorScreenCommands("explore"));
                 }
             }
 
-            string finalstring = "";
+            string finalString = "";
             foreach (string element in answers)
             {
                 if (element != "yes" && element != "no")
                 {
-                    finalstring += element + Environment.NewLine;
+                    finalString += element + Environment.NewLine;
                 }
             }
 
             AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
-            List<string> errors = agentConfigurationService.Configure(finalstring);
+            List<string> errors = agentConfigurationService.Configure(finalString);
             string errorsCombined = string.Empty;
 
             if (errors.Count != 0)
@@ -379,7 +375,7 @@ namespace InputHandling
 
                 List<string> rule = input.Split(" ").ToList();
 
-                //basis check hier!
+                //Çheck if the user input match basic requirements
                 if (CheckInput(rule, variables))
                 {
                     builder.Append(input);
