@@ -28,7 +28,7 @@ namespace WorldGeneration.Models.HazardousTiles
         }
 
         public int Damage { get; set; }
-
+        
 
         public int GetDamage(int time)
         {

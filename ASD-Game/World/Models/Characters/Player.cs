@@ -32,7 +32,7 @@ namespace WorldGeneration
 
         public void UseConsumable(Consumable consumable)
         {
-            if (consumable is HealthConsumable)
+            if(consumable is HealthConsumable)
             {
 
                 AddHealth((consumable as HealthConsumable).getHealth());
