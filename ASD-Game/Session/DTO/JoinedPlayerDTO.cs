@@ -6,7 +6,7 @@ namespace Session.DTO
 {
     public class JoinedPlayerDTO
     {
-            public Dictionary<string, int[]> PlayerLocations  {get; set;}
-            public PlayerPOCO PlayerPoco;
+        public Dictionary<string, int[]> PlayerLocations { get; set; }
+        public PlayerPOCO PlayerPoco;
     }
 }

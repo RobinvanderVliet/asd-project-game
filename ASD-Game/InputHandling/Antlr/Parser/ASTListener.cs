@@ -209,14 +209,12 @@ namespace InputHandling.Antlr.Parser
         {
             var action = _currentContainer.Peek();
 
-            if (action is Say)
+            if (action is Say say)
             {
-                Say say = (Say)action;
                 say.AddChild(new Message(context.GetText()));
             }
-            else if (action is Shout)
+            else if (action is Shout shout)
             {
-                Shout shout = (Shout)action;
                 shout.AddChild(new Message(context.GetText()));
             }
             else if (action is CreateSession createSession)
