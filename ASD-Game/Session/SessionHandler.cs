@@ -466,9 +466,9 @@ namespace Session
             return _hostActive;
         }
 
-        public void setHostActive(bool boolean)
+        public void setHostActive(bool hostActive)
         {
-            _hostActive = boolean;
+            _hostActive = hostActive;
         }
 
         public void setHostPingTimer(Timer timer)
