@@ -285,7 +285,7 @@ namespace ASD_project.Agent.Antlr.Parser
 
         public override void EnterPlayer([NotNull] AgentConfigurationParser.PlayerContext context)
         {
-            global::ASD_project.Agent.Antlr.Ast.Comparables.Subjects.Player player = new(context.PLAYER().GetText());
+            Ast.Comparables.Subjects.Player player = new(context.PLAYER().GetText());
             _currentContainer.Push(player);
         }
 

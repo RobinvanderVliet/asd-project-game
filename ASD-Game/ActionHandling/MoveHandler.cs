@@ -15,12 +15,16 @@ namespace ASD_project.ActionHandling
     {
         private IClientController _clientController;
         private IWorldService _worldService;
+        private IMessageService _messageService;
+        private IDatabaseService<PlayerPOCO> _playerServicesDb;
 
-        public MoveHandler(IClientController clientController, IWorldService worldService)
+        public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerServicesDb, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Move);
             _worldService = worldService;
+            _messageService = messageService;
+            _playerServicesDb = playerServicesDb;
         }
 
         public void SendMove(string directionValue, int stepsValue)
@@ -49,7 +53,7 @@ namespace ASD_project.ActionHandling
                     break;
             }
 
-            var currentPlayer = _worldService.getCurrentPlayer();
+            var currentPlayer = _worldService.GetCurrentPlayer();
 
             MoveDTO moveDTO = new(currentPlayer.Id, currentPlayer.XPosition + x, currentPlayer.YPosition + y);
 
@@ -70,10 +74,7 @@ namespace ASD_project.ActionHandling
             //(_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost)
             if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
             {
-
-                var servicePlayer = new DatabaseService<PlayerPOCO>();
-
-                var allLocations = servicePlayer.GetAllAsync();
+                var allLocations = _playerServicesDb.GetAllAsync();
 
                 allLocations.Wait();
 
@@ -97,7 +98,7 @@ namespace ASD_project.ActionHandling
             }
             else if (packet.Header.Target.Equals(_clientController.GetOriginId()))
             {
-                Console.WriteLine(packet.HandlerResponse.ResultMessage);
+                _messageService.AddMessage(packet.HandlerResponse.ResultMessage);
             }
             else
             {
@@ -108,13 +109,12 @@ namespace ASD_project.ActionHandling
         }
 
         private void InsertToDatabase(MoveDTO moveDTO)
-        {
-            var playerService = new DatabaseService<PlayerPOCO>();
-            var player = playerService.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGUID == moveDTO.UserId);
+        {            
+            var player = _playerServicesDb.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId && player.GameGuid == _clientController.SessionId);
 
             player.XPosition = moveDTO.XPosition;
             player.YPosition = moveDTO.YPosition;
-            playerService.UpdateAsync(player);
+            _playerServicesDb.UpdateAsync(player);
         }
 
         private void HandleMove(MoveDTO moveDTO)

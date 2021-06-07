@@ -1,15 +1,19 @@
 ﻿using System;
 using LiteDB;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ASD_project.DatabaseHandler.POCO
 {
-    public class WorldItemPoco
+    [ExcludeFromCodeCoverage]
+    public class WorldItemPOCO
     {
         [BsonId]
-        public Guid GameGUID { get; set; }
-        [BsonId]
+        public string Id = Guid.NewGuid().ToString();
+        public string GameGUID { get; set; }
+        public string ItemName { get; set; }
+        public int ArmorPoints { get; set; }
+        public int XPosition { get; set; }
+        public int YPosition { get; set; }
         public Guid WorldItemGUID { get; set; }
-        public String ItemName { get; set; }
-
     }
 }

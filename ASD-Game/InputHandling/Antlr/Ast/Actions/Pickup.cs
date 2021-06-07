@@ -5,6 +5,20 @@ namespace ASD_project.InputHandling.Antlr.Ast.Actions
 {
     public class Pickup : Command, IEquatable<Pickup>
     {
+        private Step _item;
+        [ExcludeFromCodeCoverage]
+        public Step Item { get => _item; private set => _item = value; }
+
+        public override ASTNode AddChild(ASTNode child)
+        {
+            if (child is Step step)
+            {
+                _item = step;
+            }
+
+            return this;
+        }
+
         [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
@@ -14,7 +28,10 @@ namespace ASD_project.InputHandling.Antlr.Ast.Actions
         [ExcludeFromCodeCoverage]
         public bool Equals(Pickup other)
         {
-            return true;
+            if (other == null)
+                return false;
+            
+            return _item.Equals(other._item);
         }
         public override int GetHashCode()
         {

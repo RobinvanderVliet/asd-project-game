@@ -106,7 +106,7 @@ namespace ASD_Game.Tests.AgentTests.Services
         public void Test_CreateNewAgentConfiguration_WithNewAgent()
         {
             //Arrange
-            var filepath = _handler.GetBaseDirectory() + "/AgentTests/Resource/agent_test.cfg";
+            var filepath = _handler.GetBaseDirectory() + "/Resource/agent_test.cfg";
 
             //Act
             _sut.CreateConfiguration("Agent", filepath);

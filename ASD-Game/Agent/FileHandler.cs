@@ -61,7 +61,10 @@ namespace ASD_project.Agent
 
         public string GetBaseDirectory()
         {
-            return string.Format(Path.GetFullPath(Path.Combine(GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory))));
+            string currentDirectory = string.Format(Path.GetFullPath(Path.Combine(GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory))));
+            string childDirectory = Directory.GetDirectories(currentDirectory, "*Agent*")[0].ToString();
+
+            return childDirectory;
         }
 
         private string GoBackToRoot(String path)

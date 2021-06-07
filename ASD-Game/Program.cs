@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
+using System.Data;
+using System.Data.Common;
 using System.IO;
 using ASD_project.ActionHandling;
 using ASD_project.Chat;
@@ -17,8 +19,8 @@ using ASD_project.Network;
 using ASD_project.Session;
 using ASD_project.UserInterface;
 using ASD_project.World.Services;
-using InputHandling;
-using InputHandling.Antlr;
+using Session;
+using UserInterface;
 
 namespace ASD_project
 {
@@ -45,10 +47,12 @@ namespace ASD_project
                     services.AddTransient<IMainGame, MainGame>();
                     services.AddScoped<INetworkComponent, NetworkComponent>();
                     services.AddScoped<IClientController, ClientController>();
+                    services.AddScoped<IInventoryHandler, InventoryHandler>();
                     services.AddScoped<IChatHandler, ChatHandler>();
                     services.AddScoped<ISessionHandler, SessionHandler>();
                     services.AddScoped<IMoveHandler, MoveHandler>();
                     services.AddScoped<IWorldService, WorldService>();
+                    services.AddScoped<IMessageService, MessageService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
                     services.AddScoped<IItemService, ItemService>();
                     services.AddScoped<ISpawnHandler, SpawnHandler>();
@@ -59,6 +63,7 @@ namespace ASD_project
                     services.AddScoped<IInputHandler, InputHandler>();
                     services.AddScoped<IPipeline, Pipeline>();
                     services.AddScoped<IEvaluator, Evaluator>();
+                    services.AddScoped<IGameConfigurationHandler, GameConfigurationHandler>();
                 })
                 .UseSerilog()
                 .Build();

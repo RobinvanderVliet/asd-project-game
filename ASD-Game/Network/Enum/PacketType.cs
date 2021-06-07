@@ -6,7 +6,7 @@
         Move,
         Session,
         GameSession,
-        Spawn
-
+        Spawn,
+        Inventory     
     }
 }

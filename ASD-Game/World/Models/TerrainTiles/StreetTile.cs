@@ -17,6 +17,7 @@ namespace ASD_project.World.Models.TerrainTiles
 
         public StreetTile(int x, int y)
         {
+            ItemsOnTile = new();
             Symbol = TileSymbol.STREET;
             IsAccessible = true;
             XPosition = x;

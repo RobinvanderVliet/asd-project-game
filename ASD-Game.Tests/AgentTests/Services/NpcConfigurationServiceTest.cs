@@ -24,7 +24,7 @@ namespace ASD_Game.Tests.AgentTests.Services
         public void Setup()
         {
             _mockedRetriever = new();
-            _sut = new NpcConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), _mockedRetriever.Object);
+            _sut = new NpcConfigurationService(new List<Configuration>(), new FileToDictionaryMapper());
             _fileHandlerMock = new Mock<FileHandler>();
             _sut.FileHandler = _fileHandlerMock.Object;
             _pipelineMock = new Mock<Pipeline>();
@@ -36,7 +36,7 @@ namespace ASD_Game.Tests.AgentTests.Services
         public void Test_CreateNewNpcConfiguration_WithNewNpc()
         {
             //Arrange
-            var filepath = _handler.GetBaseDirectory() + "/AgentTests/Resource/npcFileTest.txt";
+            var filepath = _handler.GetBaseDirectory() + "/Resource/npcFileTest.txt";
             
             //Act
             _sut.CreateConfiguration("TestNPCName", filepath);

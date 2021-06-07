@@ -3,7 +3,6 @@
     public class AgentConfiguration : Configuration
     {
         private string _agentName;
-
         public string AgentName
         {
             get => _agentName;

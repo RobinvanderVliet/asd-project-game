@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Items.Consumables;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ASD_project.World.Models.Characters
 {
@@ -22,5 +23,53 @@ namespace ASD_project.World.Models.Characters
             RadiationLevel = 0;
             Team = 0;
         }
+
+        public void UseConsumable(Consumable consumable)
+        {
+            if(consumable is HealthConsumable)
+            {
+
+                AddHealth((consumable as HealthConsumable).getHealth());
+            }
+            else if (consumable is StaminaConsumable)
+            {
+
+                AddStamina((consumable as StaminaConsumable).getStamina());
+            }
+        }
+
+        public void AddHealth(int amount)
+        {
+            Health += amount;
+            if(Health > HEALTHCAP)
+            {
+                Health = HEALTHCAP;
+            }
+        }
+
+        public void AddStamina(int amount)
+        {
+            Stamina += amount;
+            if (Stamina > STAMINACAP)
+            {
+                Stamina = STAMINACAP;    
+            }
+        }
+
+        public int GetArmorPoints()
+        {
+            int armorpoints = 0;
+            if (Inventory.Armor != null)
+            {
+                armorpoints += Inventory.Armor.ArmorProtectionPoints;
+            }
+            if (Inventory.Helmet != null)
+            {
+                armorpoints += Inventory.Helmet.ArmorProtectionPoints;
+            }
+            return armorpoints;
+        }
+
+
     }
 }

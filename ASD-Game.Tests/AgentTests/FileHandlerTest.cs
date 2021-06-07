@@ -11,7 +11,6 @@ namespace ASD_Game.Tests.AgentTests
     public class FileHandlerTests
     {
         private FileHandler _sut;
-
         [SetUp]
         public void Setup()
         {
@@ -24,7 +23,7 @@ namespace ASD_Game.Tests.AgentTests
         {
             //Arrange
             var expected = "combat when player nearby player then attack";
-            var fileLocation = _sut.GetBaseDirectory() + "/AgentTests/Resource/import_test_file_1.txt";
+            var fileLocation = _sut.GetBaseDirectory() + "/Resource/import_test_file_1.txt";
             
             //Act
             var result = _sut.ImportFile(fileLocation);
@@ -50,7 +49,7 @@ namespace ASD_Game.Tests.AgentTests
         public void Test_ImportFile_ThrowsFileException2()
         {
             //Arrange
-            var fileLocation = _sut.GetBaseDirectory() + "/AgentTests/Resource/AgentTestFileWrongExtension.xml";
+            var fileLocation = _sut.GetBaseDirectory() + "/Resource/AgentTestFileWrongExtension.xml";
 
             //Act
             var exception = Assert.Throws<FileException>(() =>
@@ -65,7 +64,7 @@ namespace ASD_Game.Tests.AgentTests
         {
             //Arrange
             var expected = "combat=defensive" + Environment.NewLine + "explore=random";
-            var fileLocation = _sut.GetBaseDirectory() + "/AgentTests/Resource/";
+            var fileLocation = _sut.GetBaseDirectory() + "/Resource/";
             var fileName = "AgentExportFile.cfg";
 
             //Act

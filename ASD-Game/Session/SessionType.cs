@@ -7,6 +7,8 @@ namespace ASD_project.Session
         RequestToJoinSession,
         SendPing,
         ReceivedPingResponse,
-        SendHeartbeat
+        SendHeartbeat,
+        EditMonsterDifficulty,
+        EditItemSpawnRate
     }
 }

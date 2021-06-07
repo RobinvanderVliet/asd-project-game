@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ASD_project.ActionHandling.DTO;
+using ASD_project.Items;
 using ASD_project.World.Models.Characters;
 
 namespace ASD_project.World.Services
@@ -14,5 +15,20 @@ namespace ASD_project.World.Services
         public Player getCurrentPlayer();
         public List<ItemSpawnDTO> getAllItems();
         public void AddItemToWorld(ItemSpawnDTO itemSpawnDto);
+        /// <summary>
+        /// Returns items on title for the player of this instance.
+        /// </summary>
+        /// <returns></returns>
+        public IList<Item> GetItemsOnCurrentTile();
+        /// <summary>
+        /// Returns items on tile for the specified player.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public IList<Item> GetItemsOnCurrentTile(Player player);
+        public string SearchCurrentTile();
+        public Player GetCurrentPlayer();
+        public Player GetPlayer(string userId);
+        public void DisplayStats();
     }
 }
