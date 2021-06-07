@@ -18,6 +18,7 @@ using Session;
 using Session.GameConfiguration;
 using UserInterface;
 using Messages;
+using ASD_project;
 
 namespace ASD_Game
 {
@@ -40,7 +41,7 @@ namespace ASD_Game
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddTransient<IMainGame, MainGame>();
+                    services.AddTransient<IMainGame, ASD_project.Program.MainGame>();
                     services.AddScoped<INetworkComponent, NetworkComponent>();
                     services.AddScoped<IClientController, ClientController>();
                     services.AddScoped<IInventoryHandler, InventoryHandler>();
@@ -63,8 +64,16 @@ namespace ASD_Game
                 .UseSerilog()
                 .Build();
             
-            var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);
+            var svc = ActivatorUtilities.CreateInstance<ASD_project.Program.MainGame>(host.Services);
             svc.Run();
+        }
+        static void BuildConfig(IConfigurationBuilder builder)
+        {
+            builder.SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIROMENT") ?? "Production"}.json", optional: true)
+                .AddEnvironmentVariables();
+
         }
     }
 }

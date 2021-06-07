@@ -2,6 +2,7 @@ using WorldGeneration.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using UserInterface;
+using Items;
 
 namespace WorldGeneration
 {

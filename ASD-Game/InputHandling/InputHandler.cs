@@ -38,14 +38,12 @@ namespace InputHandling
             //Empty constructor needed for testing purposes
         }
 
-        }
-
         public void HandleGameScreenCommands()
         {
             SendCommand(GetCommand());
             _screenHandler.RedrawGameInputBox();
         }
-        
+
         private void SendCommand(string commando)
         {
             try
