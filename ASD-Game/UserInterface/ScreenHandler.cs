@@ -9,14 +9,12 @@ namespace UserInterface
         public Screen Screen { get => _screen; set => _screen = value; }
         private ConsoleHelper _consoleHelper;
         public ConsoleHelper ConsoleHelper { get => _consoleHelper; set => _consoleHelper = value; }
-        private bool _displaying;
         public static Thread DisplayThread { get; set; }
         
         public ScreenHandler()
         {
-            
+
             _consoleHelper = new ConsoleHelper();
-            _displaying = false;
         }
 
         public void TransitionTo(Screen screen)
@@ -32,8 +30,7 @@ namespace UserInterface
             {
                 DisplayThread.Join();
             }
-            DisplayThread = new Thread(_screen.DrawScreen);
-            DisplayThread.Start();
+            DisplayThread = new Thread(new ThreadStart(_screen.DrawScreen));
         }
 
         public void ShowMessages(Queue<string> messages)
@@ -42,8 +39,7 @@ namespace UserInterface
             {
                 var gameScreen = Screen as GameScreen;
                 DisplayThread.Join();
-                DisplayThread = new Thread(empty => gameScreen.ShowMessages(messages));
-                DisplayThread.Start();
+                DisplayThread = new Thread(new ParameterizedThreadStart(empty => gameScreen.ShowMessages(messages)));
             }
         }
 
@@ -58,8 +54,7 @@ namespace UserInterface
             {
                 var gameScreen = Screen as GameScreen;
                 DisplayThread.Join();
-                DisplayThread = new Thread(gameScreen.RedrawInputBox);
-                DisplayThread.Start();
+                DisplayThread = new Thread(new ThreadStart(gameScreen.RedrawInputBox));
             }
         }
 
@@ -69,8 +64,7 @@ namespace UserInterface
             {
                 var gameScreen = Screen as GameScreen;
                 DisplayThread.Join();
-                DisplayThread = new Thread(empty => gameScreen.UpdateWorld(map));
-                DisplayThread.Start();
+                DisplayThread = new Thread(new ParameterizedThreadStart(empty => gameScreen.UpdateWorld(map)));
             }
         }
 
@@ -80,8 +74,7 @@ namespace UserInterface
             {
                 GameScreen gameScreen = _screen as GameScreen;
                 DisplayThread.Join();
-                DisplayThread = new Thread(empty => gameScreen.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree));
-                DisplayThread.Start();
+                DisplayThread = new Thread(new ParameterizedThreadStart(empty => gameScreen.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree)));
             }
         }
     }
