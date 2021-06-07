@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using WorldGeneration.Models.Interfaces;
 using System.Linq;
 using UserInterface;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
 {
@@ -16,7 +16,7 @@ namespace WorldGeneration
 
         public World(int seed, int viewDistance, IScreenHandler screenHandler)
         {
-            _players = new ();
+            _players = new();
             _map = MapFactory.GenerateMap(seed: seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;

@@ -16,6 +16,7 @@
         <PackageReference Include="NUnit" Version="3.13.2" />
         <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+		<PackageReference Include="AutoBogus.Moq" Version="2.13.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -28,8 +29,7 @@
       <EmbeddedResource Include="AgentTests\Resource\test3.txt" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\ASD-Game\ASD-Game.csproj" />
-    </ItemGroup>
-
+	<ItemGroup>
+		<ProjectReference Include="..\ASD-Game\ASD-Game.csproj" />
+	</ItemGroup>
 </Project>

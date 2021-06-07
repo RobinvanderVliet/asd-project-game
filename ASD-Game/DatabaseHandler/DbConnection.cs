@@ -9,7 +9,7 @@ namespace DatabaseHandler
 {
     public class DbConnection : IDbConnection
     {
-       public void SetForeignKeys()
+        public void SetForeignKeys()
         {
             //FK Player -> Game
             BsonMapper.Global.Entity<PlayerPOCO>()

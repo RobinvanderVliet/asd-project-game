@@ -27,7 +27,7 @@ namespace UserInterface
 
         public void ShowMessages(Queue<string> messages)
         {
-            if(_screen is GameScreen)
+            if (_screen is GameScreen)
             {
                 var gameScreen = Screen as GameScreen;
                 gameScreen.ShowMessages(messages);

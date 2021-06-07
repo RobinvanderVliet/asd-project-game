@@ -22,13 +22,13 @@ namespace InputHandling.Antlr
 
         public Pipeline()
         {
-            
+
         }
-        public void SyntaxError(IRecognizer recognizer, 
-                                IToken offendingSymbol, 
-                                int line, 
-                                int charPositionInLine, 
-                                string msg, 
+        public void SyntaxError(IRecognizer recognizer,
+                                IToken offendingSymbol,
+                                int line,
+                                int charPositionInLine,
+                                string msg,
                                 RecognitionException e)
         {
             throw new CommandSyntaxException(msg);

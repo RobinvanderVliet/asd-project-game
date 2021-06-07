@@ -50,6 +50,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+
 // Switch between using floats or doubles for input position
 
 //using FNLfloat = System.Double;

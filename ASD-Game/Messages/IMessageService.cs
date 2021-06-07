@@ -1,4 +1,5 @@
-﻿namespace Messages
+﻿
+namespace Messages
 {
     public interface IMessageService
     {

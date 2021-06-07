@@ -1,4 +1,5 @@
-﻿namespace WorldGeneration.Models.Interfaces
+﻿
+namespace WorldGeneration.Models.Interfaces
 {
     public interface IHazardousTile : ITile
     {

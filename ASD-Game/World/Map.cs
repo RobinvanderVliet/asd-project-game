@@ -105,11 +105,11 @@ namespace WorldGeneration
                 Console.WriteLine("");
             }
         }
-        
+
         private string GetDisplaySymbol(ITile tile, List<Character> characters)
         {
             var characterOnTile = characters.Find(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
-            if(characterOnTile != null)
+            if (characterOnTile != null)
             {
                 return characterOnTile.Symbol;
             }

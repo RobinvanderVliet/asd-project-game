@@ -1,6 +1,6 @@
-﻿namespace Agent.Antlr.Ast
+﻿
+namespace Agent.Antlr.Ast
 {
-
     public class Comparison : Node
     {
         public string ComparisonType { get; set; }

@@ -1,10 +1,10 @@
-﻿using Creature.Creature.StateMachine.Event;
+﻿using Creature.Creature;
+using Creature.Creature.StateMachine.Event;
 using Creature.Pathfinder;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using Creature.Creature;
 
 namespace Creature.World
 {

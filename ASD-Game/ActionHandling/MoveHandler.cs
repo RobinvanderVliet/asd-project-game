@@ -1,17 +1,17 @@
-using Network;
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
 using ActionHandling.DTO;
 using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
+using Messages;
+using Network;
 using Network.DTO;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Linq;
 using WorldGeneration;
-using Messages;
 
 namespace ActionHandling
 {
@@ -113,7 +113,7 @@ namespace ActionHandling
         }
 
         private void InsertToDatabase(MoveDTO moveDTO)
-        {            
+        {
             var player = _playerServicesDb.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId && player.GameGuid == _clientController.SessionId);
 
             player.XPosition = moveDTO.XPosition;

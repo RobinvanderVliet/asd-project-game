@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Items;
+﻿using Items;
 using Items.ArmorStats;
 using Items.Consumables;
+using System;
+using System.Collections.Generic;
 using WorldGeneration.Exceptions;
 
 namespace WorldGeneration
@@ -93,7 +93,7 @@ namespace WorldGeneration
             {
                 return ConsumableItemList[i];
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return null;
             }

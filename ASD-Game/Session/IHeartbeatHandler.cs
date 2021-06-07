@@ -1,4 +1,5 @@
-﻿namespace Session
+﻿
+namespace Session
 {
     public interface IHeartbeatHandler
     {

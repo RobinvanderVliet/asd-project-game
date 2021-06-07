@@ -1,6 +1,6 @@
-﻿using Creature.Pathfinder;
+﻿using Creature.Creature;
+using Creature.Pathfinder;
 using System.Collections.Generic;
-using Creature.Creature;
 
 namespace Creature.World
 {

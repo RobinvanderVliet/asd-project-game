@@ -1,4 +1,5 @@
-﻿namespace ActionHandling
+﻿
+namespace ActionHandling
 {
     public interface IMoveHandler
     {

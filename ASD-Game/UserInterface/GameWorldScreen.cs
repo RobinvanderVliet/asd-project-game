@@ -1,4 +1,5 @@
-﻿namespace UserInterface
+﻿
+namespace UserInterface
 {
     public class GameWorldScreen : Screen, IGameWorldScreen
     {
@@ -33,8 +34,8 @@
                 _screenHandler.ConsoleHelper.SetCursor(_xPosition + 1, _yPosition + OFFSET_TOP + i);
                 for (int j = 0; j < newMap.GetLength(1); j++)
                 {
-                    _screenHandler.ConsoleHelper.Write(newMap[i,j].ToString());
-                    if(j < newMap.GetLength(1) - 1)
+                    _screenHandler.ConsoleHelper.Write(newMap[i, j].ToString());
+                    if (j < newMap.GetLength(1) - 1)
                     {
                         _screenHandler.ConsoleHelper.Write("  ");
                     }
@@ -51,7 +52,7 @@
                 _screenHandler.ConsoleHelper.Write(new string(' ', _width - 1));
             }
         }
-        
+
 
         public void UpdateWorld(char[,] newMap)
         {

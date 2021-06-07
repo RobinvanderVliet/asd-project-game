@@ -1,3 +1,4 @@
+
 namespace Session
 {
     public enum SessionType

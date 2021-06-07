@@ -1,4 +1,5 @@
-﻿#nullable enable
+﻿
+#nullable enable
 namespace WorldGeneration.DatabaseFunctions
 {
     public class ChunkNotFoundException : DatabaseException

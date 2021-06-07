@@ -1,4 +1,5 @@
-﻿namespace Items.WeaponStats
+﻿
+namespace Items.WeaponStats
 {
     public enum WeaponSpeed
     {

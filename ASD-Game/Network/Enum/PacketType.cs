@@ -1,4 +1,5 @@
-﻿namespace Network
+﻿
+namespace Network
 {
     public enum PacketType
     {
@@ -6,6 +7,6 @@
         Move,
         Session,
         GameSession,
-        Inventory,        
+        Inventory,
     }
 }

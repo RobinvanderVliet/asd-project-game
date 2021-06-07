@@ -1,4 +1,5 @@
-﻿namespace Items
+﻿
+namespace Items
 {
     public class HazardProtectedArmor : Armor
     {

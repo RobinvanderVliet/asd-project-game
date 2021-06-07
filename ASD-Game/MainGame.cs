@@ -1,5 +1,5 @@
-using System;
 using InputHandling;
+using System;
 using UserInterface;
 
 namespace ASD_project
@@ -44,7 +44,7 @@ namespace ASD_project
                         {
                             _inputHandler.HandleGameScreenCommands();
                         }
-                        else if (currentScreen is LobbyScreen) 
+                        else if (currentScreen is LobbyScreen)
                         {
                             _inputHandler.HandleLobbyScreenCommands();
                         }

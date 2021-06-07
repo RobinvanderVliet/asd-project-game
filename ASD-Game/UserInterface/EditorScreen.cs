@@ -1,3 +1,4 @@
+
 namespace UserInterface
 {
     public class EditorScreen : Screen

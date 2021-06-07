@@ -1,16 +1,16 @@
 ﻿using ActionHandling.DTO;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
+using Items;
 using Items.Consumables;
+using Messages;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
-using Items;
 using WorldGeneration;
 using WorldGeneration.Exceptions;
-using Messages;
 
 namespace ActionHandling
 {
@@ -71,12 +71,12 @@ namespace ActionHandling
             if (index == 99)
             {
                 _messageService.AddMessage("Unknown item slot");
-            } 
+            }
             else
             {
-                InventoryDTO inventoryDTO = new (_clientController.GetOriginId(), InventoryType.Drop, index);
+                InventoryDTO inventoryDTO = new(_clientController.GetOriginId(), InventoryType.Drop, index);
                 SendInventoryDTO(inventoryDTO);
-            }   
+            }
         }
 
         private void SendInventoryDTO(InventoryDTO inventoryDTO)
@@ -102,14 +102,14 @@ namespace ActionHandling
                     "slot 3" => inventory.ConsumableItemList[2],
                     _ => null
                 };
-                
+
                 if (inventoryItem != null)
                 {
                     output = inventoryItem.ToString();
                 }
             }
-            catch (ArgumentOutOfRangeException e) {}
-            
+            catch (ArgumentOutOfRangeException e) { }
+
             _messageService.AddMessage(output);
         }
 
@@ -171,7 +171,7 @@ namespace ActionHandling
                         GameGUID = _clientController.SessionId,
                         ItemName = item.ItemName,
                     };
-                    
+
                     if (item is Armor armor)
                     {
                         playerItemPOCO.ArmorPoints = armor.ArmorProtectionPoints;
@@ -213,11 +213,11 @@ namespace ActionHandling
                     player.Inventory.Weapon = null;
                     break;
                 case 3:
-                    if(player.Inventory.ConsumableItemList.Count >= 1)
+                    if (player.Inventory.ConsumableItemList.Count >= 1)
                     {
                         item = player.Inventory.ConsumableItemList.ElementAt(0);
                         player.Inventory.ConsumableItemList.RemoveAt(0);
-                    }              
+                    }
                     break;
                 case 4:
                     if (player.Inventory.ConsumableItemList.Count >= 2)
@@ -252,10 +252,10 @@ namespace ActionHandling
                 }
 
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
-            } 
+            }
             else
             {
-                if(inventoryDTO.UserId == _clientController.GetOriginId())
+                if (inventoryDTO.UserId == _clientController.GetOriginId())
                 {
                     _messageService.AddMessage("This is not an item you can drop!");
 
@@ -267,10 +267,10 @@ namespace ActionHandling
         private HandlerResponseDTO HandleUse(InventoryDTO inventoryDTO, bool handleInDatabase)
         {
             var player = _worldService.GetPlayer(inventoryDTO.UserId);
-            if(player.Inventory.ConsumableItemList.Count >= inventoryDTO.Index)
+            if (player.Inventory.ConsumableItemList.Count >= inventoryDTO.Index)
             {
-                Consumable itemToUse = player.Inventory.ConsumableItemList.ElementAt(inventoryDTO.Index-1);
-                player.Inventory.ConsumableItemList.RemoveAt(inventoryDTO.Index-1);
+                Consumable itemToUse = player.Inventory.ConsumableItemList.ElementAt(inventoryDTO.Index - 1);
+                player.Inventory.ConsumableItemList.RemoveAt(inventoryDTO.Index - 1);
                 player.UseConsumable(itemToUse);
                 _worldService.DisplayStats();
 
@@ -280,7 +280,7 @@ namespace ActionHandling
                     _ = _playerItemServicesDB.DeleteAsync(playerItemPOCO);
 
                     var result = _playerServicesDB.GetAllAsync().Result;
-                    PlayerPOCO playerPOCO = result.FirstOrDefault(player => player.PlayerGuid == inventoryDTO.UserId && player.GameGuid == _clientController.SessionId );
+                    PlayerPOCO playerPOCO = result.FirstOrDefault(player => player.PlayerGuid == inventoryDTO.UserId && player.GameGuid == _clientController.SessionId);
 
                     playerPOCO.Health = player.Health;
                     //add stamina to playerPOCO
@@ -290,7 +290,7 @@ namespace ActionHandling
             }
             else
             {
-                if(inventoryDTO.UserId == _clientController.GetOriginId())
+                if (inventoryDTO.UserId == _clientController.GetOriginId())
                 {
                     _messageService.AddMessage("Could not find item");
                 }

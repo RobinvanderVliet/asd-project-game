@@ -8,7 +8,7 @@ namespace UserInterface
         private int _xPosition;
         private int _yPosition;
         private int _width;
-        private int _height;      
+        private int _height;
 
         public GameChatScreen(int x, int y, int width, int height)
         {
@@ -20,7 +20,7 @@ namespace UserInterface
 
         public override void DrawScreen()
         {
-            DrawChatBox();          
+            DrawChatBox();
         }
 
         private void DrawChatBox()
@@ -90,7 +90,7 @@ namespace UserInterface
                                 tempStack.Pop();
                             }
                         }
-                        foreach(string line in tempStack)
+                        foreach (string line in tempStack)
                         {
                             messageStack.Push(line);
                         }

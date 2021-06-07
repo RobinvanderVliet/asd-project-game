@@ -2,7 +2,6 @@
 
 namespace Agent.Antlr.Ast
 {
-
     public class Rule : Node
     {
         private List<Node> _settings = new List<Node>();

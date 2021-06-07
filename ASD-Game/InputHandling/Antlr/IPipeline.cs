@@ -1,3 +1,4 @@
+
 namespace InputHandling.Antlr
 {
     public interface IPipeline

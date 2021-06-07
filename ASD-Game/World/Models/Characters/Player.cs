@@ -28,7 +28,7 @@ namespace WorldGeneration
 
         public void UseConsumable(Consumable consumable)
         {
-            if(consumable is HealthConsumable)
+            if (consumable is HealthConsumable)
             {
 
                 AddHealth((consumable as HealthConsumable).getHealth());
@@ -43,7 +43,7 @@ namespace WorldGeneration
         public void AddHealth(int amount)
         {
             Health += amount;
-            if(Health > HEALTHCAP)
+            if (Health > HEALTHCAP)
             {
                 Health = HEALTHCAP;
             }
@@ -54,7 +54,7 @@ namespace WorldGeneration
             Stamina += amount;
             if (Stamina > STAMINACAP)
             {
-                Stamina = STAMINACAP;    
+                Stamina = STAMINACAP;
             }
         }
 

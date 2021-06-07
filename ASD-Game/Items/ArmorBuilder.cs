@@ -67,7 +67,7 @@ namespace Items
                 armor.RadiationProtectionPoints = radiationProtectionPoints;
             }
         }
-        
+
         public void SetStaminaPoints(int staminaPoints)
         {
             if (_armor is HazardProtectedArmor armor)
@@ -75,7 +75,7 @@ namespace Items
                 armor.StaminaPoints = staminaPoints;
             }
         }
-        
+
         public Armor GetItem()
         {
             return _armor;

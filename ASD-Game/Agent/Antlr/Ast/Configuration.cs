@@ -1,6 +1,6 @@
-﻿namespace Agent.Antlr.Ast
+﻿
+namespace Agent.Antlr.Ast
 {
-
     public class Configuration : Node
     {
         public Configuration() { }

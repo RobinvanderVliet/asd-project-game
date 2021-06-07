@@ -1,4 +1,5 @@
-﻿namespace Network
+﻿
+namespace Network
 {
     public interface IHostController
     {

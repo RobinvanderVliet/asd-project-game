@@ -1,4 +1,5 @@
-﻿namespace Chat.DTO
+﻿
+namespace Chat.DTO
 {
     public class ChatDTO
     {

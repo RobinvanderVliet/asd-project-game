@@ -1,4 +1,5 @@
-﻿namespace InputHandling.Antlr.Ast
+﻿
+namespace InputHandling.Antlr.Ast
 {
     public class ASTNode
     {

@@ -26,7 +26,7 @@ namespace InputHandling.Antlr.Ast
         {
             return Equals(obj as InventorySlot);
         }
-        
+
         [ExcludeFromCodeCoverage]
         public override int GetHashCode()
         {

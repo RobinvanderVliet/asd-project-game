@@ -2,7 +2,6 @@
 
 namespace Agent.Antlr.Ast
 {
-
     public class Setting : Node
     {
 

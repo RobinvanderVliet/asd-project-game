@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace InputHandling.Antlr.Ast.Actions
 {
-    public class RequestSessions: Command, IEquatable<RequestSessions>
+    public class RequestSessions : Command, IEquatable<RequestSessions>
     {
         [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
