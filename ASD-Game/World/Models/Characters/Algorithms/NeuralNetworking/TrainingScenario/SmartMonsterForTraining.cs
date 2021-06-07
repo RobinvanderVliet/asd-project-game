@@ -180,7 +180,7 @@ namespace Creature.Creature
         //returns a clone of this player with the same brain
         public SmartMonsterForTraining Clone()
         {
-            SmartMonsterForTraining clone = new SmartMonsterForTraining("trainee", 14, 14, "D", "hkljubadfilkubh");
+            SmartMonsterForTraining clone = new SmartMonsterForTraining("trainee", 14, 14, "D", "id");
             clone.Brain = Brain.Clone();
             clone.Fitness = Fitness;
             clone.Brain.GenerateNetwork();
@@ -210,7 +210,7 @@ namespace Creature.Creature
 
         public SmartMonsterForTraining Crossover(SmartMonsterForTraining parent2)
         {
-            SmartMonsterForTraining child = new SmartMonsterForTraining("trainee", 14, 14, "D", "hkljubadfilkubh");
+            SmartMonsterForTraining child = new SmartMonsterForTraining("trainee", 14, 14, "D", "id");
             child.Brain = Brain.Crossover(parent2.Brain);
             child.Brain.GenerateNetwork();
             return child;
@@ -220,7 +220,7 @@ namespace Creature.Creature
         //this fuction does that
         public SmartMonsterForTraining CloneForReplay()
         {
-            SmartMonsterForTraining clone = new SmartMonsterForTraining("trainee", 14, 14, "D", "hkljubadfilkubh");
+            SmartMonsterForTraining clone = new SmartMonsterForTraining("trainee", 14, 14, "D", "id");
             clone.Brain = Brain.Clone();
             clone.Fitness = Fitness;
             clone.Brain.GenerateNetwork();

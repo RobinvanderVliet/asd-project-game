@@ -44,7 +44,7 @@ namespace Creature.Tests
             _sut.Wander(_smartTestMonster);
 
             //assert
-            Assert.NotNull(_sut.path);
+            Assert.NotNull(_sut.Path);
         }
 
         [Test]
@@ -156,7 +156,7 @@ namespace Creature.Tests
             _sut.Flee(_AI, _smartTestMonster);
 
             //assert
-            Assert.NotNull(_sut.path);
+            Assert.NotNull(_sut.Path);
         }
 
         [Test]
@@ -171,7 +171,7 @@ namespace Creature.Tests
 
             //assert
             Vector2 expected = new Vector2(14, 16);
-            Vector2 actual = _sut.path.Peek().Position;
+            Vector2 actual = _sut.Path.Peek().Position;
 
             Assert.AreEqual(expected, actual);
         }
