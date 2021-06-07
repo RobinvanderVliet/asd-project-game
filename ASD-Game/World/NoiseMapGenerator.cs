@@ -9,6 +9,7 @@ using ASD_project.World.Models.TerrainTiles;
 
 namespace ASD_project.World
 {
+    [ExcludeFromCodeCoverage]
     public class NoiseMapGenerator : INoiseMapGenerator
     {
         private IFastNoise _worldNoise;
@@ -17,7 +18,6 @@ namespace ASD_project.World
         private IItemService _itemService;
         private List<ItemSpawnDTO> _items;
 
-        [ExcludeFromCodeCoverage]
         public NoiseMapGenerator(int seed, IItemService itemService, List<ItemSpawnDTO> items)
         {
             _worldNoise = new FastNoiseLite();
@@ -65,12 +65,14 @@ namespace ASD_project.World
             var itemSpawnDTO = new ItemSpawnDTO { Item = item, XPosition = x, YPosition = y };
 
             if (item == null)
+            {
                 return tile;
-            
+            }
             if (_items.Exists(itemInList => itemInList.Item.ItemId == item.ItemId))
             {
                   return tile;
             }
+            
             _items.Add(itemSpawnDTO);
             tile.ItemsOnTile.Add(item);
             

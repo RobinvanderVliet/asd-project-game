@@ -52,7 +52,7 @@ namespace ASD_project.World.Services
 
         public List<ItemSpawnDTO> getAllItems()
         {
-            return _world._items;
+            return _world.Items;
         }
 
         public void AddItemToWorld(ItemSpawnDTO itemSpawnDTO)

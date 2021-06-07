@@ -9,11 +9,11 @@ namespace ASD_project.World
 {
     public class World : IWorld
     {
-        private IMap _map;
         public Player CurrentPlayer;
-        public List<Player> _players;
-        public List<ItemSpawnDTO> _items;
-        public List<Models.Characters.Creature> _creatures;
+        private IMap _map;
+        private List<Models.Characters.Creature> _creatures;
+        private List<Player> _players;
+        public List<ItemSpawnDTO> Items;
         private readonly int _viewDistance;
         private IScreenHandler _screenHandler;
         private IItemService _itemService;
@@ -21,14 +21,14 @@ namespace ASD_project.World
 
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService)
         {
-            _items = new();
+            Items = new();
             _players = new ();
             _creatures = new ();
             _itemService = itemService;
-            _map = mapFactory.GenerateMap(itemService, _items, seed);
+            _map = mapFactory.GenerateMap(itemService, Items, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
-            itemService.GetSpawnHandler().SetItemSpawnDtOs(_items);
+            itemService.GetSpawnHandler().SetItemSpawnDtOs(Items);
         }
 
         public void UpdateCharacterPosition(string id, int newXPosition, int newYPosition)
@@ -77,7 +77,7 @@ namespace ASD_project.World
         public char[,] GetMapAroundCharacter(Character character)
         {
             var characters = ((IEnumerable<Character>)_players).Concat(_creatures).ToList();
-            return _map.GetMapAroundCharacter(character, _viewDistance, characters);
+            return _map.GetCharArrayMapAroundCharacter(character, _viewDistance, characters);
         }
 
         public void DeleteMap()
@@ -87,7 +87,7 @@ namespace ASD_project.World
 
         public void AddItemToWorld(ItemSpawnDTO itemSpawnDto)
         {
-            _items.Add(itemSpawnDto);
+            Items.Add(itemSpawnDto);
             UpdateMap();
         }
     }

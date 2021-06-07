@@ -105,7 +105,7 @@ namespace ASD_Game.Tests.WorldTests
             //Assert ---------
             Assert.DoesNotThrow(() =>
             {
-                _sut.GetMapAroundCharacter(_character1, 1, _characterList);
+                _sut.GetCharArrayMapAroundCharacter(_character1, 1, _characterList);
             });
         }
         
@@ -114,7 +114,7 @@ namespace ASD_Game.Tests.WorldTests
         {
             //Arrange ---------
             //Act ---------
-            _sut.GetMapAroundCharacter(_character1,2, _characterList);
+            _sut.GetCharArrayMapAroundCharacter(_character1,2, _characterList);
             //Assert ---------
             // _consolePrinterMock.Verify(consolePrinterMock => consolePrinterMock.PrintText(It.IsAny<string>()), Times.Exactly(25));
 
@@ -127,7 +127,7 @@ namespace ASD_Game.Tests.WorldTests
             var viewDistance = 2;
             var maxLoadingLimit = (int)(Math.Pow(viewDistance, 4)  * _chunkSize / _chunkSize * 4);
             //Act ---------
-            _sut.GetMapAroundCharacter(_character1,viewDistance, _characterList);
+            _sut.GetCharArrayMapAroundCharacter(_character1,viewDistance, _characterList);
             //Assert ---------
             _databaseServiceMock.Verify(databaseService => databaseService.CreateAsync(It.IsAny<Chunk>()), Times.Between(0, maxLoadingLimit, Range.Inclusive));
         }
@@ -136,7 +136,7 @@ namespace ASD_Game.Tests.WorldTests
         public void Test_DeleteMap_PassesCommandThrough() 
         {
             //Arrange ---------
-            _sut.GetMapAroundCharacter(_character1,1, _characterList);
+            _sut.GetCharArrayMapAroundCharacter(_character1,1, _characterList);
             //Act ---------
             _sut.DeleteMap();
             //Assert ---------
@@ -163,7 +163,7 @@ namespace ASD_Game.Tests.WorldTests
             //Assert ---------
             Assert.Throws<InvalidOperationException>(() =>
             {
-                _sut.GetMapAroundCharacter(_character1,-1, _characterList);
+                _sut.GetCharArrayMapAroundCharacter(_character1,-1, _characterList);
             });
         }
         
@@ -172,7 +172,7 @@ namespace ASD_Game.Tests.WorldTests
         {
             //Arrange ---------
             //Act ---------
-            _sut.GetMapAroundCharacter(_character1,2, _characterList);
+            _sut.GetCharArrayMapAroundCharacter(_character1,2, _characterList);
             //Assert ---------
             // _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText("  " + _chunks[0].Map[0].Symbol), Times.AtLeast(1));
             // _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText("  " + _chunks[1].Map[0].Symbol), Times.AtLeast(1));
