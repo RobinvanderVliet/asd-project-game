@@ -49,8 +49,8 @@ namespace Creature.Tests.Creature.StateMachine.Builder
             ruleSet3.Comparable = "health";
             ruleSet3.Threshold = "50";
             ruleSet3.Comparison = "less than";
-            ruleSet3.ComparisonTrue = "attack";
-            ruleSet3.ComparisonFalse = "flee";
+            ruleSet3.ComparisonTrue = "flee";
+            ruleSet3.ComparisonFalse = "attack";
 
             List<RuleSet> rulesetList = new()
             {
@@ -59,9 +59,11 @@ namespace Creature.Tests.Creature.StateMachine.Builder
                 ruleSet3
             };
 
-            _creatureData1 = new AgentData(new Vector2(1, 0), 10, 11, 12, null, false);
-            _creatureData2 = new AgentData(new Vector2(1, 0), 60, 11, 12, null, false);
-            _creatureData3 = new MonsterData(new Vector2(1, 0), 10, 11, 12, null, false);
+            _creatureData1 = new AgentData(1, 0, 0);
+            _creatureData1.Health = 10;
+            _creatureData2 = new AgentData(1, 0, 0);
+            _creatureData2.Health = 60;
+            _creatureData3 = new MonsterData(1, 0, 0);
             _creatureStateMachineMock = new Mock<ICreatureStateMachine>();
 
             _sut = new BuilderConfigurator(rulesetList, _creatureData1, _creatureStateMachineMock.Object);
@@ -108,11 +110,11 @@ namespace Creature.Tests.Creature.StateMachine.Builder
         }
 
         [Test]
-        public void Test_GetGuard_ReturnsTrueIfCreatureDataIsInstanceOfAgentAndHealthIsLowerThan50AndExecutedActionIsAttack()
+        public void Test_GetGuard_ReturnsTrueIfCreatureDataIsInstanceOfAgentAndHealthIsLowerThan50AndExecutedActionIsFlee()
         {
             // Arrange
             List<BuilderInfo> builderInfoList = _sut.GetBuilderInfoList();
-            BuilderInfo builderInfoAttack = builderInfoList.Where(x => x.Action == "attack").FirstOrDefault();
+            BuilderInfo builderInfoAttack = builderInfoList.Where(x => x.Action == "flee").FirstOrDefault();
 
             // Act
             bool condition = _sut.GetGuard(_creatureData1, _creatureData1, builderInfoAttack);
@@ -122,11 +124,11 @@ namespace Creature.Tests.Creature.StateMachine.Builder
         }
 
         [Test]
-        public void Test_GetGuard_ReturnsFalseIfCreatureDataIsNotInstanceOfAgentAndHealthIsLowerThan50AndExecutedActionIsAttack()
+        public void Test_GetGuard_ReturnsFalseIfCreatureDataIsNotInstanceOfAgentAndHealthIsLowerThan50AndExecutedActionIsFlee()
         {
             // Arrange
             List<BuilderInfo> builderInfoList = _sut.GetBuilderInfoList();
-            BuilderInfo builderInfoAttack = builderInfoList.Where(x => x.Action == "attack").FirstOrDefault();
+            BuilderInfo builderInfoAttack = builderInfoList.Where(x => x.Action == "flee").FirstOrDefault();
 
             // Act
             bool condition = _sut.GetGuard(_creatureData3, _creatureData1, builderInfoAttack);
@@ -136,11 +138,11 @@ namespace Creature.Tests.Creature.StateMachine.Builder
         }
 
         [Test]
-        public void Test_GetGuard_ReturnsFalseIfCreatureDataIsInstanceOfAgentAndHealthIsHigherThan50AndExecutedActionIsAttack()
+        public void Test_GetGuard_ReturnsFalseIfCreatureDataIsInstanceOfAgentAndHealthIsHigherThan50AndExecutedActionIsFlee()
         {
             // Arrange
             List<BuilderInfo> builderInfoList = _sut.GetBuilderInfoList();
-            BuilderInfo builderInfoAttack = builderInfoList.Where(x => x.Action == "attack").FirstOrDefault();
+            BuilderInfo builderInfoAttack = builderInfoList.Where(x => x.Action == "flee").FirstOrDefault();
 
             // Act
             bool condition = _sut.GetGuard(_creatureData2, _creatureData1, builderInfoAttack);
@@ -150,11 +152,11 @@ namespace Creature.Tests.Creature.StateMachine.Builder
         }
 
         [Test]
-        public void Test_GetGuard_ReturnsTrueIfCreatureDataIsInstanceOfAgentAndHealthIsHigherThan50AndExecutedActionIsFlee()
+        public void Test_GetGuard_ReturnsTrueIfCreatureDataIsInstanceOfAgentAndHealthIsHigherThan50AndExecutedActionIsAttack()
         {
             // Arrange
             List<BuilderInfo> builderInfoList = _sut.GetBuilderInfoList();
-            BuilderInfo builderInfoFlee = builderInfoList.Where(x => x.Action == "flee").FirstOrDefault();
+            BuilderInfo builderInfoFlee = builderInfoList.Where(x => x.Action == "attack").FirstOrDefault();
 
             // Act
             bool condition = _sut.GetGuard(_creatureData2, _creatureData1, builderInfoFlee);

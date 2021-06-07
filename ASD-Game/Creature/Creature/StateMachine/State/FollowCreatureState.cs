@@ -25,7 +25,7 @@ namespace Creature.Creature.StateMachine.State
         }
         public override void Do()
         {
-        //     foreach (var builderInfo in _builderInfoList)
+            //     foreach (var builderInfo in _builderInfoList)
         //     {
         //     if (builderInfo.Action == "attack")
         //     {
