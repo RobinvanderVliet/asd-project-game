@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using WorldGeneration.Models.Interfaces;
 using System.Linq;
 using UserInterface;
@@ -13,11 +14,14 @@ namespace WorldGeneration
         private List<Player> _players;
         private readonly int _viewDistance;
         private IScreenHandler _screenHandler;
+        private static readonly char _separator = Path.DirectorySeparatorChar;
 
         public World(int seed, int viewDistance, IScreenHandler screenHandler)
         {
+            var currentDirectory = Directory.GetCurrentDirectory();
+
             _players = new ();
-            _map = MapFactory.GenerateMap(seed: seed);
+            _map = MapFactory.GenerateMap(dbLocation: $"Filename={currentDirectory}{_separator}ChunkDatabase.db;connection=shared;", seed: seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
             DeleteMap();
@@ -77,4 +81,3 @@ namespace WorldGeneration
         }
     }
 }
-
