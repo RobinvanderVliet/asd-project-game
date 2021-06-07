@@ -27,6 +27,8 @@ namespace InputHandling.Tests
         private Mock<IChatHandler> _mockedChatHandler;
         private Mock<IClientController> _mockedClientController;
         private Mock<IInventoryHandler> _mockedInventoryHandler;
+        private Mock<IGamesSessionService> _mockedGamesSessionService;
+    
         [SetUp]
         public void Setup()
         {
@@ -34,6 +36,8 @@ namespace InputHandling.Tests
             _mockedMoveHandler = new Mock<IMoveHandler>();
             _mockedGameSessionHandler = new Mock<IGameSessionHandler>();
             _mockedChatHandler = new Mock<IChatHandler>();
+            _mockedGamesSessionService = new Mock<IGamesSessionService>();
+            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedGamesSessionService.Object, _mockedChatHandler.Object);
             _mockedClientController = new Mock<IClientController>();
             _mockedInventoryHandler = new Mock<IInventoryHandler>();
             _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedInventoryHandler.Object, _mockedClientController.Object);
@@ -158,7 +162,7 @@ namespace InputHandling.Tests
             requestSessions.AddChild(new RequestSessions());
             return new AST(requestSessions);
         }
-
+    
         [Test]
         public void Test_Apply_HandleCreateSessionActionIsCalled()
         {
@@ -171,6 +175,7 @@ namespace InputHandling.Tests
             _sut.Apply(ast);
         
             // Assert
+            _mockedSessionHandler.Verify(mockedSession => mockedSession.CreateSession(sessionName, false, null, null), Times.Once);
             _mockedSessionHandler.Verify(mockedSession => mockedSession.CreateSession(sessionName, hostName), Times.Once);
         }
     

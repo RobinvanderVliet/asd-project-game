@@ -45,6 +45,17 @@ namespace WorldGeneration
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
+            DisplayWorld();
+        }
+
+        public void AddExistingPlayerToWorld(Player player, bool isCurrentPlayer)
+        {
+            if (isCurrentPlayer)
+            {
+                CurrentPlayer = player;
+            }
+
+            _players.Add(player);
         }
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)

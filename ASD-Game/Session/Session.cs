@@ -17,8 +17,12 @@ namespace Session
         public bool InSession = false;
         
         private List<string[]> _joinedClients = new();
+        public bool SavedGame = false;
+        
+        private List<string> _joinedClients = new();
 
         private int _sessionSeed;
+        public bool GameStarted = false;
         public int SessionSeed { get => _sessionSeed; set => _sessionSeed = value; }
 
         public Session(string name)

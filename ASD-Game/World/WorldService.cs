@@ -27,6 +27,11 @@ namespace WorldGeneration
             _world.AddPlayerToWorld(player, isCurrentPlayer);
         }
 
+        public void AddExistingPlayerToWorld(Player player, bool isCurrentPlayer)
+        {
+            _world.AddExistingPlayerToWorld(player, isCurrentPlayer);
+        }
+
         public void DisplayWorld()
         {
             _world.DisplayWorld();
@@ -113,5 +118,6 @@ namespace WorldGeneration
         {
             return _world.GetAllPlayers();
         }
+
     }
 }

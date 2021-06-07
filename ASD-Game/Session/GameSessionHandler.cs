@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using ActionHandling;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Items;
@@ -17,6 +15,7 @@ using Messages;
 
 namespace Session
 {
+
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
     {
         private readonly IClientController _clientController;
@@ -73,7 +72,7 @@ namespace Session
             poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetKnife().ItemName, GameGUID = gameId };
             _ = _playerItemDatabaseService.CreateAsync(poco);
         }
-        
+
         private void SendGameSessionDTO(StartGameDTO startGameDTO)
         {
             var payload = JsonConvert.SerializeObject(startGameDTO);

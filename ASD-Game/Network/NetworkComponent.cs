@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
+using WebSocketSharp;
 
 namespace Network
 {
@@ -13,7 +14,17 @@ namespace Network
         public NetworkComponent()
         {
             _webSocketConnection = new WebSocketConnection(this);
-            _originId = Guid.NewGuid().ToString();
+
+            if (_webSocketConnection.UserSettingsConfig.OriginId.IsNullOrEmpty())
+            {
+                _originId = Guid.NewGuid().ToString();
+                _webSocketConnection.AddOrUpdateConfigVariables("UserSettingsConfig:OriginId", _originId);
+            }
+            else
+            {
+                _originId = _webSocketConnection.UserSettingsConfig.OriginId;
+            }
+            
         }
 
         public NetworkComponent(IWebSocketConnection webSocketConnection)

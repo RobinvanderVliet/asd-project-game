@@ -2,6 +2,7 @@ using System;
 using ActionHandling;
 using Agent.Antlr.Ast;
 using Chat;
+using InputCommandHandler.Antlr.Ast.Actions;
 using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Exceptions;
@@ -24,6 +25,8 @@ namespace InputHandling.Antlr.Transformer
         private IChatHandler _chatHandler;
         private IClientController _clientController;
         private IInventoryHandler _inventoryHandler;
+        private IGamesSessionService _gamesSessionService;
+        
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private string _commando;
@@ -33,6 +36,7 @@ namespace InputHandling.Antlr.Transformer
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
             _gameSessionHandler = gameSessionHandler;
+            _gamesSessionService = gamesSessionService;
             _chatHandler = chatHandler;
             _clientController = clientController;
             _inventoryHandler = inventoryHandler;
@@ -90,6 +94,12 @@ namespace InputHandling.Antlr.Transformer
                         break;
                     case StartSession:
                         TransformStartSession((StartSession)nodeBody[i]);
+                        break;
+                    case LoadGame:
+                        TransformLoadGame((LoadGame)nodeBody[i]);
+                        break;
+                    case RequestSavedGames:
+                        TransformRequestSavedGames((RequestSavedGames)nodeBody[i]);
                         break;
                     case MonsterDifficulty:
                         TransformMonsterDifficulty((MonsterDifficulty)nodeBody[i]);
@@ -276,5 +286,17 @@ namespace InputHandling.Antlr.Transformer
         {
             _inventoryHandler.Search();
         }
+    
+
+        private void TransformLoadGame(LoadGame loadGame)
+        {
+            _gamesSessionService.LoadGame(loadGame.Message.MessageValue);
+        }
+
+        private void TransformRequestSavedGames(RequestSavedGames requestSavedGames)
+        {
+            _gamesSessionService.RequestSavedGames();
+        }
+        
     }
 }
