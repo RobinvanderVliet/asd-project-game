@@ -142,32 +142,48 @@ namespace Session.Tests
         }
 
         /// <summary>
-        ///  [HandleStartGameSession()]
+        ///  [HandleStartGameSession(), DisplayWorld()]
         ///
         /// [Description of the test]
         /// Players toevoegen aan de game met de seed
         /// </summary>
-        // [Test]
-        // public void Test_HandleStartGameSession()
-        // {
-        //     // Arrange
-        //     StartGameDTO startGameDto = new StartGameDTO();
-        //     startGameDto.Seed = 0;
-        //     startGameDto.GameGuid = "GameGuid1";
-        //     PlayerPOCO player = new PlayerPOCO
-        //     {
-        //         GameGuid = "GameGuid1", Health = 1, Stamina = 1, PlayerGuid = "GameGuid1Player1",
-        //         GameGUIDAndPlayerGuid = "GameGuid1Player1", PlayerName = "Player1", TypePlayer = 1, XPosition = 0,
-        //         YPosition = 0
-        //     };
-        //     startGameDto.ExistingPlayer = player;
-        //
-        //     _mockedClientController.Setup(x => x.GetOriginId()).Returns(startGameDto.ExistingPlayer.GameGuid);
-        //
-        //     // Act
-        //
-        //     // Assert
-        //     _sut.HandleStartGameSEssion(startGameDto);
-        // }
+        [Test]
+        public void Test_HandleStartGameSession_CheckIfCrashedPlayerRejoinsGame()
+        {
+            // Arrange
+            StartGameDTO startGameDto = new StartGameDTO();
+            startGameDto.Seed = 0;
+            startGameDto.GameGuid = "GameGuid1";
+            PlayerPOCO player = new PlayerPOCO
+            {
+                GameGuid = "GameGuid1", Health = 1, Stamina = 1, PlayerGuid = "GameGuid1Player1",
+                GameGUIDAndPlayerGuid = "GameGuid1Player1", PlayerName = "Player1", TypePlayer = 1, XPosition = 0,
+                YPosition = 0
+            };
+            startGameDto.ExistingPlayer = player;
+        
+            _mockedClientController.Setup(x => x.GetOriginId()).Returns(startGameDto.ExistingPlayer.GameGuid);
+
+            string sessionId = "sessionId";
+            string hostOriginId = "Player2";
+            string originId = "Player1";
+
+            var payload = JsonConvert.SerializeObject(startGameDto);
+            _packetDTO.Payload = payload;
+            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            packetHeaderDTO.OriginID = hostOriginId;
+            packetHeaderDTO.SessionID = sessionId;
+            packetHeaderDTO.PacketType = PacketType.Session;
+            packetHeaderDTO.Target = originId;
+            _packetDTO.Header = packetHeaderDTO;
+
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
+            
+            // Act
+            _sut.HandlePacket(_packetDTO);
+
+            // Assert
+            _mockedWorldService.Verify(x => x.DisplayWorld(), Times.Once);
+        }
     }
 }
