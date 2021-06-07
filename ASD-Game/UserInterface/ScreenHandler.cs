@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -9,12 +11,24 @@ namespace UserInterface
         public Screen Screen { get => _screen; set => _screen = value; }
         private ConsoleHelper _consoleHelper;
         public ConsoleHelper ConsoleHelper { get => _consoleHelper; set => _consoleHelper = value; }
-        public static Thread DisplayThread { get; set; }
+        private Thread _displayThread { get; set; }
+        private BlockingCollection<Action> _actionsInQueue;
         
         public ScreenHandler()
         {
-
             _consoleHelper = new ConsoleHelper();
+            _actionsInQueue = new();
+
+            _displayThread = new Thread(RunDisplay);
+            _displayThread.Start();
+        }
+
+        private void RunDisplay()
+        {
+            while(_actionsInQueue.TryTake(out Action a, -1))
+            {
+                a.Invoke();
+            }
         }
 
         public void TransitionTo(Screen screen)
@@ -26,20 +40,16 @@ namespace UserInterface
         }
         public void DisplayScreen()
         {
-            if(DisplayThread != null)
-            {
-                DisplayThread.Join();
-            }
-            DisplayThread = new Thread(new ThreadStart(_screen.DrawScreen));
+            _actionsInQueue.Add(_screen.DrawScreen);
         }
 
         public void ShowMessages(Queue<string> messages)
         {
+            
             if (_screen is GameScreen)
             {
                 var gameScreen = Screen as GameScreen;
-                DisplayThread.Join();
-                DisplayThread = new Thread(new ParameterizedThreadStart(empty => gameScreen.ShowMessages(messages)));
+                _actionsInQueue.Add(() => gameScreen.ShowMessages(messages));
             }
         }
 
@@ -53,8 +63,8 @@ namespace UserInterface
             if (_screen is GameScreen)
             {
                 var gameScreen = Screen as GameScreen;
-                DisplayThread.Join();
-                DisplayThread = new Thread(new ThreadStart(gameScreen.RedrawInputBox));
+                _actionsInQueue.Add(gameScreen.RedrawInputBox);
+                _displayThread = new Thread(gameScreen.RedrawInputBox);
             }
         }
 
@@ -63,8 +73,7 @@ namespace UserInterface
             if (_screen is GameScreen)
             {
                 var gameScreen = Screen as GameScreen;
-                DisplayThread.Join();
-                DisplayThread = new Thread(new ParameterizedThreadStart(empty => gameScreen.UpdateWorld(map)));
+                _actionsInQueue.Add(() => gameScreen.UpdateWorld(map));
             }
         }
 
@@ -73,8 +82,7 @@ namespace UserInterface
             if (_screen is GameScreen)
             {
                 GameScreen gameScreen = _screen as GameScreen;
-                DisplayThread.Join();
-                DisplayThread = new Thread(new ParameterizedThreadStart(empty => gameScreen.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree)));
+                _actionsInQueue.Add(() => gameScreen.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree));
             }
         }
     }
