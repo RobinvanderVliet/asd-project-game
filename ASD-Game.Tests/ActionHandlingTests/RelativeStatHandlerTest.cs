@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using WorldGeneration;
 
-namespace Session.Tests
+namespace ActionHandling.Tests
 {
     [ExcludeFromCodeCoverage]
     public class RelativeStatHandlerTest
@@ -26,6 +26,8 @@ namespace Session.Tests
         {
             _mockedClientController = new Mock<IClientController>();
             _mockedWorldService = new Mock<IWorldService>();
+            _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPOCO>>();
+            _mockedMessageService = new Mock<IMessageService>();
 
             _sut = new RelativeStatHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerDatabaseService.Object, _mockedMessageService.Object);
         }
