@@ -148,7 +148,7 @@ namespace ActionHandling
                     return new HandlerResponseDTO(SendAction.SendToClients, resultMessage);
                 }
             }
-            return new HandlerResponseDTO(SendAction.SendToClients, "");
+            return new HandlerResponseDTO(SendAction.Ignore, "");
         }
 
         private void InsertToDatabase(MoveDTO moveDTO)
