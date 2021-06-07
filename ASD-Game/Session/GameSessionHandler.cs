@@ -18,6 +18,7 @@ using WorldGeneration;
 using WorldGeneration.Models;
 using WorldGeneration.StateMachine;
 
+
 namespace Session
 {
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
@@ -169,7 +170,6 @@ namespace Session
                     var playerObject = new Player(client[1], playerX, playerY, CharacterSymbol.ENEMY_PLAYER, client[0]);
                     _worldService.AddPlayerToWorld(playerObject, false);
                 }
-
                 playerX += 2;
                 playerY += 2;
             }
