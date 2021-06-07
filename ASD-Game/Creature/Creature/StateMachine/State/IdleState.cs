@@ -29,11 +29,11 @@ namespace Creature.Creature.StateMachine.State
         {
             foreach (var builderInfo in _builderInfoList)
             {
-                if (builderInfo.Action == "attack")
+                if (builderInfo.Action == "idle")
                 {
                     if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo))
                     {
-                        //TODO implement Attack logic + gather targetData
+                        //Idle state is meant for the AI to be able to do nothing, but check if it needs to do something. in Order to save CPU utilization
                     }
                 }
             }
