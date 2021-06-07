@@ -1,4 +1,3 @@
-
 namespace Session
 {
     public interface IGameSessionHandler

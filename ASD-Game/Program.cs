@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -23,7 +23,6 @@ namespace ASD_project
 {
     partial class Program
     {
-        //Setup logger and injection
         static void Main(string[] args)
         {
             var builder = new ConfigurationBuilder();
@@ -67,7 +66,6 @@ namespace ASD_project
             var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);
             svc.Run();
         }
-
         static void BuildConfig(IConfigurationBuilder builder)
         {
             builder.SetBasePath(Directory.GetCurrentDirectory())

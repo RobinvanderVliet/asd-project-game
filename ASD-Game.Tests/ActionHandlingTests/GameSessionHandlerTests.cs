@@ -4,6 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Moq;
 using Network;
+using Network.DTO;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using Session.DTO;
 using Session.GameConfiguration;
@@ -13,9 +15,10 @@ using System.IO;
 using ActionHandling;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
+using Messages;
 using WorldGeneration;
-using DatabaseHandler.Services;
-using DatabaseHandler.POCO;
+using Session.DTO;
+using UserInterface;
 
 namespace Session.Tests
 {
@@ -27,13 +30,15 @@ namespace Session.Tests
         private PacketDTO _packetDTO;
 
         //Declaration of mocks
-        private Mock<IClientController> _mockedClientController;
+        private Mock<ClientController> _mockedClientController; //change this to the interface and all test break, your choice.
         private Mock<IWorldService> _mockedWorldService;
-        private Mock<ISessionHandler> _mockedsessionHandler;
+        private Mock<ISessionHandler> _mockedSessionHandler;
         private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerDatabaseService;
         private Mock<IDatabaseService<GamePOCO>> _mockedGameDatabaseService;
         private Mock<IDatabaseService<PlayerItemPOCO>> _mockedPlayerItemDatabaseService;
         private Mock<IRelativeStatHandler> _mockedRelativeStatHandler;
+        private Mock<IScreenHandler> _mockedScreenHandler;
+        private Mock<IMessageService> _mockedMessageService;
 
         private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
         private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigDatabaseService;
@@ -42,19 +47,33 @@ namespace Session.Tests
         [SetUp]
         public void Setup()
         {
+            Mock<INetworkComponent> tmpMock = new();
+
             var standardOutput = new StreamWriter(Console.OpenStandardOutput());
             standardOutput.AutoFlush = true;
             Console.SetOut(standardOutput);
-            _mockedClientController = new Mock<IClientController>();
+            _mockedClientController = new Mock<ClientController>(tmpMock.Object);
             _mockedWorldService = new Mock<IWorldService>();
-            _mockedsessionHandler = new Mock<ISessionHandler>();
+            _mockedSessionHandler = new Mock<ISessionHandler>();
             _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
             _mockedGameConfigDatabaseService = new Mock<IDatabaseService<GameConfigurationPOCO>>();
             _mockedPlayerItemDatabaseService = new Mock<IDatabaseService<PlayerItemPOCO>>();
             _mockedRelativeStatHandler = new Mock<IRelativeStatHandler>();
             _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPOCO>>();
             _mockedGameDatabaseService = new Mock<IDatabaseService<GamePOCO>>();
-           // _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedsessionHandler.Object, _mockedPlayerServiceDb.Object, _mockedgameDatabaseService.Object, _mockedGameConfigDatabaseService.Object, _mockedGameConfigurationHandler.Object);
+            _mockedScreenHandler = new Mock<IScreenHandler>();
+            _mockedMessageService = new Mock<IMessageService>();
+            _sut = new GameSessionHandler(_mockedClientController.Object,
+                _mockedSessionHandler.Object,
+                _mockedRelativeStatHandler.Object,
+                _mockedGameConfigurationHandler.Object,
+                _mockedScreenHandler.Object,
+                _mockedPlayerDatabaseService.Object,
+                _mockedGameDatabaseService.Object,
+                _mockedGameConfigDatabaseService.Object,
+                _mockedPlayerItemDatabaseService.Object,
+                _mockedWorldService.Object,
+                _mockedMessageService.Object);
             _packetDTO = new PacketDTO();
         }
 
@@ -84,7 +103,6 @@ namespace Session.Tests
         //     // Assert ---------
         //     _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
         // }
-
-
+        
     }
 }

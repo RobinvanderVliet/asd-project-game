@@ -105,7 +105,7 @@ namespace WorldGeneration
                 Console.WriteLine("");
             }
         }
-        
+
         private string GetDisplaySymbol(ITile tile, List<Character> characters)
         {
             

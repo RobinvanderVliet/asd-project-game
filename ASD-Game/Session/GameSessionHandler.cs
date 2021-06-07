@@ -8,12 +8,11 @@ using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
 using Session.GameConfiguration;
-using System;
-using System.Collections.Generic;
 using UserInterface;
 using WorldGeneration;
 using WorldGeneration.Models;
 using Messages;
+
 
 namespace Session
 {
@@ -120,7 +119,6 @@ namespace Session
             }
         }
 
-
         private void InsertGameIntoDatabase()
         {
             var gamePOCO = new GamePOCO { GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId() };
@@ -161,7 +159,6 @@ namespace Session
                     var playerObject = new Player(client[1], playerX, playerY, CharacterSymbol.ENEMY_PLAYER, client[0]);
                     _worldService.AddPlayerToWorld(playerObject, false);
                 }
-
                 playerX += 2;
                 playerY += 2;
             }
