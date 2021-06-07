@@ -155,18 +155,20 @@ namespace Session
         {
             if (startGameDTO.ExistingPlayer != null && _clientController.GetOriginId() == startGameDTO.ExistingPlayer.PlayerGuid)
             {
-
                 _worldService.GenerateWorld(startGameDTO.Seed);
                 AddPlayersToNewGame(startGameDTO);
                 _worldService.DisplayWorld();
 
             }
 
-            if (_sessionHandler.GetSavedGame() && !_sessionHandler.GameStarted())
+            if (_sessionHandler.GetSavedGame())
             {
                 _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
                 AddPlayerToWorldSavedGame(startGameDTO.SavedPlayers);
+                _worldService.DisplayWorld();
+
             }
+            
             else
             {
                 CheckClientExists(startGameDTO);
@@ -181,9 +183,10 @@ namespace Session
                 if (_clientController.GetOriginId() == startGameDTO.ExistingPlayer.PlayerGuid)
                 {
                     _worldService.GenerateWorld(startGameDTO.Seed);
+                    _worldService.DisplayWorld();
+
                     AddPlayersToNewGame(startGameDTO);
 
-                    _worldService.DisplayWorld();
                 }
             }
             else
