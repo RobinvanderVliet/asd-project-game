@@ -5,7 +5,7 @@ namespace Session
 {
     public interface ISessionHandler
     {
-        public TrainingScenario trainingScenario { get; set; }
+        public TrainingScenario TrainingScenario { get; set; }
 
         public bool JoinSession(string sessionId, string userName);
 

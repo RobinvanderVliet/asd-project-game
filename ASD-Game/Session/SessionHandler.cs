@@ -24,7 +24,7 @@ namespace Session
         private IClientController _clientController;
         private Session _session;
         private IHeartbeatHandler _heartbeatHandler;
-        public TrainingScenario trainingScenario { get; set; } = new TrainingScenario();
+        public TrainingScenario TrainingScenario { get; set; } = new TrainingScenario();
         private readonly IScreenHandler _screenHandler;
         private readonly IMessageService _messageService;
 
@@ -107,7 +107,7 @@ namespace Session
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
             Thread traingThread = new Thread(
-            trainingScenario.StartTraining
+            TrainingScenario.StartTraining
             );
             traingThread.Start();
 
@@ -233,9 +233,9 @@ namespace Session
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
-        public  HandlerResponseDTO HandleNewBackupHost(PacketDTO packet)
+        public HandlerResponseDTO HandleNewBackupHost(PacketDTO packet)
         {
-            if(packet.Header.Target == "host")
+            if (packet.Header.Target == "host")
             {
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
@@ -445,7 +445,7 @@ namespace Session
 
         public void SwapToHost()
         {
-             _clientController.CreateHostController();
+            _clientController.CreateHostController();
             _clientController.IsBackupHost = false;
 
             _senderHeartbeatTimer.Close();

@@ -18,7 +18,6 @@ using WorldGeneration;
 using WorldGeneration.Models;
 using WorldGeneration.StateMachine;
 
-
 namespace Session
 {
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
@@ -183,23 +182,23 @@ namespace Session
                 if (i < 5)
                 {
                     Monster newMonster = new Monster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i);
-                    setStateMachine(newMonster);
+                    SetStateMachine(newMonster);
                     _worldService.AddCreatureToWorld(newMonster);
                 }
                 else
                 {
                     SmartMonster newMonster = new SmartMonster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i, new DataGatheringService(_worldService));
-                    setBrain(newMonster);
+                    SetBrain(newMonster);
                     _worldService.AddCreatureToWorld(newMonster);
                 }
             }
         }
 
-        private void setBrain(SmartMonster monster)
+        private void SetBrain(SmartMonster monster)
         {
-            if (_sessionHandler.trainingScenario.BrainTransplant() != null)
+            if (_sessionHandler.TrainingScenario.BrainTransplant() != null)
             {
-                monster.Brain = _sessionHandler.trainingScenario.BrainTransplant();
+                monster.Brain = _sessionHandler.TrainingScenario.BrainTransplant();
             }
         }
 
@@ -219,10 +218,10 @@ namespace Session
 
         public void UpdateBrain()
         {
-            _worldService.UpdateBrains(_sessionHandler.trainingScenario.BrainTransplant());
+            _worldService.UpdateBrains(_sessionHandler.TrainingScenario.BrainTransplant());
         }
 
-        private void setStateMachine(Monster monster)
+        private void SetStateMachine(Monster monster)
         {
             ICharacterStateMachine CSM = new MonsterStateMachine(monster.MonsterData, null);
             monster.MonsterStateMachine = CSM;
