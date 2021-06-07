@@ -63,7 +63,7 @@ namespace ASD_Game.Creature.World
                 ICreature player = _players[0];
                 if (Vector2.DistanceSquared(creature.CreatureStateMachine.CreatureData.Position, player.CreatureStateMachine.CreatureData.Position) < creature.CreatureStateMachine.CreatureData.VisionRange)
                 {
-                    creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.SPOTTED_PLAYER, player.CreatureStateMachine.CreatureData);
+                    creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.SpottedPlayer, player.CreatureStateMachine.CreatureData);
 
                     Vector2 monsterPosition = creature.CreatureStateMachine.CreatureData.Position;
                     Vector2 playerPosition = player.CreatureStateMachine.CreatureData.Position;
@@ -73,16 +73,16 @@ namespace ASD_Game.Creature.World
                         || (monsterPosition.Y + 1f) == playerPosition.Y && (monsterPosition.X == playerPosition.X)
                         || (monsterPosition.Y - 1f) == playerPosition.Y && (monsterPosition.X == playerPosition.X))
                     {
-                        creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.PLAYER_IN_RANGE, player.CreatureStateMachine.CreatureData);
+                        creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.PlayerInRange, player.CreatureStateMachine.CreatureData);
                     }
                     else
                     {
-                        creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.PLAYER_OUT_OF_RANGE, player.CreatureStateMachine.CreatureData);
+                        creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.PlayerOutOfRange, player.CreatureStateMachine.CreatureData);
                     }
                 }
                 else
                 {
-                    creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.LOST_PLAYER, player.CreatureStateMachine.CreatureData);
+                    creature.CreatureStateMachine.FireEvent(CreatureEvent.Event.LostPlayer, player.CreatureStateMachine.CreatureData);
                 }
             }
 
