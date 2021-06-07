@@ -18,6 +18,7 @@ namespace InputHandling.Tests
         private IInputHandler _sut;
         private Mock<Pipeline> _mockedPipeline;
         private Mock<ScreenHandler> _mockedScreenHandler;
+        private Mock<IScreenHandler> _mockedInterfaceScreenHandler;
         private Mock<ISessionHandler> _mockedSessionHandler;
         private Mock<StartScreen> _mockedStartScreen;
         private Mock<SessionScreen> _mockedSessionScreen;
@@ -30,6 +31,8 @@ namespace InputHandling.Tests
         {
             _mockedPipeline = new Mock<Pipeline>();
             _mockedPipeline.Object.Evaluator = new Mock<IEvaluator>().Object;
+
+            _mockedInterfaceScreenHandler = new Mock<IScreenHandler>();
             _mockedScreenHandler = new Mock<ScreenHandler>();
             _mockedSessionHandler = new Mock<ISessionHandler>();
             _mockedStartScreen = new Mock<StartScreen>();
@@ -63,8 +66,10 @@ namespace InputHandling.Tests
         public void Test_HandleStartScreenCommands_HandlesInput(string input)
         {
             //Arrange
-            _mockedScreenHandler.Setup(mock => mock.GetScreenInput()).Returns(input);
-            _mockedScreenHandler.Setup(mock => mock.Screen).Returns(_mockedStartScreen.Object);
+            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedInterfaceScreenHandler.Object, mockedMessagesService.Object, _mockedGameConfigurationHandler.Object);
+
+            _mockedInterfaceScreenHandler.Setup(mock => mock.GetScreenInput()).Returns(input);
+            _mockedInterfaceScreenHandler.Setup(mock => mock.Screen).Returns(_mockedStartScreen.Object);
             _mockedStartScreen.Setup(mock => mock.UpdateInputMessage(It.IsAny<string>()));
 
             //Act
@@ -73,19 +78,19 @@ namespace InputHandling.Tests
             //Assert
             if (input.Equals("1"))
             {
-                _mockedScreenHandler.Verify(mock => mock.TransitionTo(It.IsAny<ConfigurationScreen>()));
+                _mockedInterfaceScreenHandler.Verify(mock => mock.TransitionTo(It.IsAny<ConfigurationScreen>()));
             }
             else if (input.Equals("2"))
             {
-                _mockedScreenHandler.Verify(mock => mock.TransitionTo(It.IsAny<SessionScreen>()));
+                _mockedInterfaceScreenHandler.Verify(mock => mock.TransitionTo(It.IsAny<SessionScreen>()));
             }
             else if (input.Equals("3"))
             {
-                _mockedScreenHandler.Verify(mock => mock.TransitionTo(It.IsAny<LoadScreen>()));
+                _mockedInterfaceScreenHandler.Verify(mock => mock.TransitionTo(It.IsAny<LoadScreen>()));
             }
             else if (input.Equals("4"))
             {
-                _mockedScreenHandler.Verify(mock => mock.TransitionTo(It.IsAny<EditorScreen>()));
+                _mockedInterfaceScreenHandler.Verify(mock => mock.TransitionTo(It.IsAny<EditorScreen>()));
             }
             else if (input.Equals("5"))
             {
@@ -104,11 +109,13 @@ namespace InputHandling.Tests
         public void Test_HandleSessionScreenCommands_HandlesInput(string input)
         {
             //Arrange
+            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedInterfaceScreenHandler.Object, mockedMessagesService.Object, _mockedGameConfigurationHandler.Object);
+            
             var testId = "testId";
             var username = "Gerrit";
             
-            _mockedScreenHandler.Setup(mock => mock.GetScreenInput()).Returns(input);
-            _mockedScreenHandler.Setup(mock => mock.Screen).Returns(_mockedSessionScreen.Object);
+            _mockedInterfaceScreenHandler.Setup(mock => mock.GetScreenInput()).Returns(input);
+            _mockedInterfaceScreenHandler.Setup(mock => mock.Screen).Returns(_mockedSessionScreen.Object);
             _mockedSessionScreen.Setup(mock => mock.GetSessionIdByVisualNumber(0)).Returns(testId);
             _mockedSessionScreen.Setup(mock => mock.GetSessionIdByVisualNumber(1)).Returns("");
             _mockedSessionScreen.Setup(mock => mock.UpdateInputMessage(It.IsAny<string>()));
@@ -119,7 +126,7 @@ namespace InputHandling.Tests
             //Assert
             if (input.Equals("return"))
             {
-                _mockedScreenHandler.Verify(mock => mock.TransitionTo(It.IsAny<StartScreen>()), Times.Once);
+                _mockedInterfaceScreenHandler.Verify(mock => mock.TransitionTo(It.IsAny<StartScreen>()), Times.Once);
             }
             else
             {
