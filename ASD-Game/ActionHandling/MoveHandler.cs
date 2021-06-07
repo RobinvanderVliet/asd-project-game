@@ -21,7 +21,8 @@ namespace ActionHandling
         private IDatabaseService<PlayerPOCO> _servicePlayer;
 
 
-        public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService)
+        public MoveHandler(IClientController clientController, IWorldService worldService,
+            IDatabaseService<PlayerPOCO> playerDatabaseService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Move);
@@ -76,8 +77,6 @@ namespace ActionHandling
             //(_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost)
             if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
             {
-
-
                 var allLocations = _servicePlayer.GetAllAsync();
 
                 allLocations.Wait();
@@ -93,7 +92,7 @@ namespace ActionHandling
                 if (result.Any())
                 {
                     return new HandlerResponseDTO(SendAction.ReturnToSender,
-                        "Can't move to new position something is in the way");
+                        "You can't move to the new position, something is in the way");
                 }
                 else
                 {
@@ -115,17 +114,17 @@ namespace ActionHandling
 
         private void InsertToDatabase(MoveDTO moveDTO)
         {
-
             var player = _servicePlayer.GetAllAsync();
             player.Wait();
-            PlayerPOCO selectedPlayer = player.Result.First(x => x.GameGuid == _clientController.SessionId && x.PlayerGuid == moveDTO.UserId);
+            PlayerPOCO selectedPlayer = player.Result.First(x =>
+                x.GameGuid == _clientController.SessionId && x.PlayerGuid == moveDTO.UserId);
             Console.WriteLine(selectedPlayer);
 
             selectedPlayer.XPosition = moveDTO.XPosition;
             selectedPlayer.YPosition = moveDTO.YPosition;
-            var  insert = _servicePlayer.UpdateAsync(selectedPlayer);
+            var insert = _servicePlayer.UpdateAsync(selectedPlayer);
             insert.Wait();
-   }
+        }
 
         private void HandleMove(MoveDTO moveDTO)
         {
