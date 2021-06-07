@@ -101,12 +101,12 @@ namespace WorldGeneration
                 player.Stamina,
                 player.GetArmorPoints(),
                 player.RadiationLevel,
-                player.Inventory.Helmet?.ItemName ?? "Empty",
-                player.Inventory.Armor?.ItemName ?? "Empty",
-                player.Inventory.Weapon?.ItemName ?? "Empty",
-                player.Inventory.GetConsumableAtIndex(0)?.ItemName ?? "Empty",
-                player.Inventory.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
-                player.Inventory.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
+                player.Inventory?.Helmet?.ItemName ?? "Empty",
+                player.Inventory?.Armor?.ItemName ?? "Empty",
+                player.Inventory?.Weapon?.ItemName ?? "Empty",
+                player.Inventory?.GetConsumableAtIndex(0)?.ItemName ?? "Empty",
+                player.Inventory?.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
+                player.Inventory?.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
         }
 
         public List<Player> GetPlayers()
