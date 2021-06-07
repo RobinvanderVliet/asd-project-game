@@ -36,7 +36,7 @@ namespace Session
 
         public void SendGameSession()
         {
-            StartGameDTO startGameDTO = new StartGameDTO();
+            StartGameDTO startGameDTO;
             if (_sessionHandler.GetSavedGame())
             {
                 startGameDTO = LoadSave();
@@ -52,7 +52,7 @@ namespace Session
 
         private StartGameDTO LoadSave()
         {
-            StartGameDTO startGameDTO = new StartGameDTO();
+            StartGameDTO startGameDTO = new ();
 
             var allPlayers = _playerService.GetAllAsync();
             allPlayers.Wait();
@@ -89,14 +89,15 @@ namespace Session
 
             var gamePOCO = new GamePOCO
             {
-                GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId(),
+                GameGuid = _clientController.SessionId,
+                PlayerGUIDHost = _clientController.GetOriginId(),
                 Seed = _sessionHandler.GetSessionSeed(),
                 GameName = _sessionHandler.GameName
             };
             _gamePocoService.CreateAsync(gamePOCO);
 
             List<string> allClients = _sessionHandler.GetAllClients();
-            Dictionary<string, int[]> players = new Dictionary<string, int[]>();
+            Dictionary<string, int[]> players = new();
 
             players = SetupPositionsNewPlayers(allClients, gamePOCO);
 
@@ -108,7 +109,7 @@ namespace Session
 
         private Dictionary<string, int[]> SetupPositionsNewPlayers(List<string> allClients, GamePOCO gamePOCO)
         {
-            Dictionary<string, int[]> players = new Dictionary<string, int[]>();
+            Dictionary<string, int[]> players = new();
             int playerX = 26; // spawn position
             int playerY = 11; // spawn position
 
@@ -120,7 +121,10 @@ namespace Session
                 players.Add(clientId, playerPosition);
                 var tmpPlayer = new PlayerPOCO
                 {
-                    PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY,
+                    PlayerGuid = clientId,
+                    GameGuid = gamePOCO.GameGuid,
+                    XPosition = playerX,
+                    YPosition = playerY,
                     GameGUIDAndPlayerGuid = gamePOCO.GameGuid + clientId
                 };
 
@@ -149,15 +153,13 @@ namespace Session
 
         private void HandleStartGameSession(StartGameDTO startGameDTO)
         {
-            if (startGameDTO.ExistingPlayer != null)
+            if (startGameDTO.ExistingPlayer != null && _clientController.GetOriginId() == startGameDTO.ExistingPlayer.PlayerGuid)
             {
-                if (_clientController.GetOriginId() == startGameDTO.ExistingPlayer.PlayerGuid)
-                {
-                    _worldService.GenerateWorld(startGameDTO.Seed);
-                    AddPlayersToNewGame(startGameDTO);
 
-                    _worldService.DisplayWorld();
-                }
+                _worldService.GenerateWorld(startGameDTO.Seed);
+                AddPlayersToNewGame(startGameDTO);
+                _worldService.DisplayWorld();
+
             }
 
             if (_sessionHandler.GetSavedGame() && !_sessionHandler.GameStarted())
@@ -202,7 +204,7 @@ namespace Session
                 {
                     var tmpClientHistory = new DatabaseService<ClientHistoryPOCO>();
                     var tmpObject = new ClientHistoryPOCO()
-                        {PlayerId = player.Key, GameId = startGameDTO.GameGuid};
+                    { PlayerId = player.Key, GameId = startGameDTO.GameGuid };
                     tmpClientHistory.CreateAsync(tmpObject);
 
                     if (startGameDTO.ExistingPlayer is null)
@@ -215,7 +217,7 @@ namespace Session
                     {
                         // Has to be merged with feature branche to set old health and stamina etc
                         _worldService.AddPlayerToWorld(
-                            new WorldGeneration.Player("gerrit", player.Value[0], player.Value[1],
+                            new WorldGeneration.Player("gerrit", startGameDTO.ExistingPlayer.XPosition, startGameDTO.ExistingPlayer.YPosition,
                                 CharacterSymbol.CURRENT_PLAYER, player.Key), true);
                     }
                 }
