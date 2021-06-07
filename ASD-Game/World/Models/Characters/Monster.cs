@@ -7,26 +7,13 @@ namespace WorldGeneration
 {
     public class Monster : Character
     {
-        public ICharacterStateMachine _monsterStateMachine;
-        public string NextAction { get; set; }
-        public MonsterData _monsterData;
-
-        public ICharacterStateMachine CharacterStateMachine
-        {
-            get => _monsterStateMachine;
-        }
+        public ICharacterStateMachine MonsterStateMachine;
+        public MonsterData MonsterData;
 
         public Monster(string name, int xPosition, int yPosition, string symbol, string id) : base(name, xPosition, yPosition, symbol, id)
         {
             SetStats(0);
-            if (_monsterStateMachine != null)
-            {
-                _monsterStateMachine.StartStateMachine();
-            }
-        }
-
-        public void Update()
-        {
+            MonsterStateMachine = new MonsterStateMachine(MonsterData, null);
         }
 
         private void SetStats(int difficulty)
@@ -36,7 +23,7 @@ namespace WorldGeneration
 
         private void CreateMonsterData(int difficulty)
         {
-            _monsterData = new MonsterData(
+            MonsterData = new MonsterData(
                 XPosition,
                 YPosition,
                 difficulty);

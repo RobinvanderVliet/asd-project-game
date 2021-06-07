@@ -185,7 +185,7 @@ namespace Creature.Creature
 
         public void SetDifficulty(int difficulty)
         {
-            _monsterData = new MonsterData(
+            MonsterData = new MonsterData(
                 XPosition,
                 YPosition,
                 difficulty);
