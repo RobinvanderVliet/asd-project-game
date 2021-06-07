@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using ASD_project.ActionHandling.DTO;
 using ASD_project.Items.Services;
@@ -16,12 +17,15 @@ namespace ASD_project.World
         private List<Player> _players;
         public List<ItemSpawnDTO> Items;
         private readonly int _viewDistance;
-        private IScreenHandler _screenHandler;
+        private readonly IScreenHandler _screenHandler;
+        private static readonly char _separator = Path.DirectorySeparatorChar;
         private IItemService _itemService;
         
 
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService)
         {
+            var currentDirectory = Directory.GetCurrentDirectory();
+
             Items = new();
             _players = new ();
             _creatures = new ();
@@ -31,6 +35,7 @@ namespace ASD_project.World
             _screenHandler = screenHandler;
             itemService.GetSpawnHandler().SetItemSpawnDtOs(Items);
         }
+        
         public Player GetPlayer(string id)
         {
             return _players.Find(x => x.Id == id);
@@ -38,7 +43,7 @@ namespace ASD_project.World
 
         public void UpdateCharacterPosition(string id, int newXPosition, int newYPosition)
         {
-            var player = _players.FirstOrDefault(x => x.Id == id);
+            var player = GetPlayer(id);
             if (player != null)
             {
                 player.XPosition = newXPosition;
@@ -119,6 +124,11 @@ namespace ASD_project.World
         public ITile GetTileForPlayer(Player player)
         {
             return _map.GetLoadedTileByXAndY(player.XPosition, player.YPosition);
+        }
+        
+        public void LoadArea(int playerX, int playerY, int viewDistance)
+        {
+            _map.LoadArea(playerX, playerY, viewDistance);
         }
 
         public List<Player> GetAllPlayers()

@@ -13,13 +13,15 @@ namespace ASD_project.World.Models.BuildingTiles
         public string Symbol { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
+        public int StaminaCost { get; set; }
         public List<Item> ItemsOnTile { get; set; }
 
         public HouseTile()
         {
+            ItemsOnTile = new();
             Symbol = TileSymbol.HOUSE;
             IsAccessible = true;
-            ItemsOnTile = new List<Item>();
+            StaminaCost = 1;
         }
 
         public void DrawBuilding()

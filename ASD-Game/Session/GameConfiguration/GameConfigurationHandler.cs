@@ -17,7 +17,7 @@ namespace ASD_project.Session.GameConfiguration
         private readonly IScreenHandler _screenHandler;
         private readonly List<string> _configurationHeader;
         private readonly List<List<string>> _configurationChoices;
-        private IDatabaseService<GameConfigurationPOCO> _gameConfigServicesDb;
+        private IDatabaseService<GameConfigurationPOCO> _gameConfigDatabaseService;
         public MonsterDifficulty NewMonsterDifficulty { get; set; }
         public MonsterDifficulty CurrentMonsterDifficulty { get; set; }
         public ItemSpawnRate SpawnRate { get; set; }
@@ -34,7 +34,7 @@ namespace ASD_project.Session.GameConfiguration
             NewMonsterDifficulty = MonsterDifficulty.Medium;
             CurrentMonsterDifficulty = MonsterDifficulty.Medium;
             SpawnRate = ItemSpawnRate.Low;
-            _gameConfigServicesDb = gameConfigServicesDb;
+            _gameConfigDatabaseService = gameConfigServicesDb;
         }
 
         public void SetGameConfiguration()
@@ -143,19 +143,19 @@ namespace ASD_project.Session.GameConfiguration
 
         public void SetDifficulty(MonsterDifficulty monsterDifficulty, string sessionId) 
         {
-            var gameConfiguration = _gameConfigServicesDb.GetAllAsync().Result.FirstOrDefault(configuration => configuration.GameGUID == sessionId);
+            var gameConfiguration = _gameConfigDatabaseService.GetAllAsync().Result.FirstOrDefault(configuration => configuration.GameGUID == sessionId);
 
             gameConfiguration.NPCDifficultyCurrent = gameConfiguration.NPCDifficultyNew;
             gameConfiguration.NPCDifficultyNew = (int)monsterDifficulty;
-            _gameConfigServicesDb.UpdateAsync(gameConfiguration);
+            _gameConfigDatabaseService.UpdateAsync(gameConfiguration);
         }
         
         public void SetSpawnRate(ItemSpawnRate spawnRate, string sessionId) 
         {
-            var gameConfiguration = _gameConfigServicesDb.GetAllAsync().Result.FirstOrDefault(configuration => configuration.GameGUID == sessionId);
+            var gameConfiguration = _gameConfigDatabaseService.GetAllAsync().Result.FirstOrDefault(configuration => configuration.GameGUID == sessionId);
 
             gameConfiguration.ItemSpawnRate = (int) spawnRate;
-            _gameConfigServicesDb.UpdateAsync(gameConfiguration);
+            _gameConfigDatabaseService.UpdateAsync(gameConfiguration);
         }
         
         public int AdjustMonsterValue(int monsterProperty) 

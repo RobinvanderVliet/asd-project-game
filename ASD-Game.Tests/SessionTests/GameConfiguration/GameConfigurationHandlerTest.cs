@@ -5,7 +5,6 @@ using ASD_project.UserInterface;
 using DatabaseHandler.POCO;
 using Moq;
 using NUnit.Framework;
-using Session.GameConfiguration;
 
 namespace ASD_Game.Tests.SessionTests.GameConfiguration
 {

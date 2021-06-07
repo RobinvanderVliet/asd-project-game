@@ -9,6 +9,7 @@ namespace ASD_project.World.Models.Interfaces
         string Symbol { get; set; }
         int XPosition { get; set; }
         int YPosition { get; set; }
+        int StaminaCost { get; set; }
         public List<Item> ItemsOnTile { get; set; }
     }
 }

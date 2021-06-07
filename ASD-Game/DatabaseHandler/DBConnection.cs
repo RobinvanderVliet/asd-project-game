@@ -5,9 +5,10 @@ using LiteDB.Async;
 
 namespace ASD_project.DatabaseHandler
 {
-    [ExcludeFromCodeCoverage]
     public class DBConnection : IDBConnection
     {
+        private static readonly char _separator = Path.DirectorySeparatorChar;
+        
         [ExcludeFromCodeCoverage]
         public ILiteDatabaseAsync GetConnectionAsync()
         {
@@ -15,7 +16,7 @@ namespace ASD_project.DatabaseHandler
             {
                 var currentDirectory = Directory.GetCurrentDirectory();
                 var connection =
-                    new LiteDatabaseAsync(@"Filename=" + currentDirectory + "\\ASD-Game.db;connection=shared;");
+                    new LiteDatabaseAsync($"Filename={currentDirectory}{_separator}ASD-Game.db;connection=shared;");
                 return connection;
             }
             catch (Exception ex)

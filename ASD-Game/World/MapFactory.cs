@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using ASD_project.ActionHandling.DTO;
-using ASD_project.DatabaseHandler.Services;
 using ASD_project.Items.Services;
-using ASD_project.World.Models;
 
 namespace ASD_project.World
 {

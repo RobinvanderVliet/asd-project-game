@@ -101,6 +101,5 @@ namespace ASD_project.World.Models.Characters
             }
             return armorpoints;
         }
-
     }
 }

@@ -231,6 +231,7 @@ namespace ASD_project.Session
             if (!_hostActive)
             {
                 _hostInactiveCounter++;
+
                 if (_hostInactiveCounter >= 5)
                 {
                     _hostPingTimer.Dispose();

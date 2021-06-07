@@ -10,9 +10,9 @@ namespace ASD_project.World.Models
     {
         public int XPosition { get; set; }
         public int YPosition { get; set; }
-
         public string Symbol { get; set; }
         public bool IsAccessible { get; set; }
+        public int StaminaCost { get; set; }
         public List<Item> ItemsOnTile { get; set; }
     }
 }

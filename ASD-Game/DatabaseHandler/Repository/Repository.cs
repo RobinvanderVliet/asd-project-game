@@ -4,8 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using LiteDB;
 using LiteDB.Async;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace ASD_project.DatabaseHandler.Repository
 {
@@ -14,14 +12,13 @@ namespace ASD_project.DatabaseHandler.Repository
     {
         private readonly string _collection;
         private readonly ILiteDatabaseAsync _db;
-        private readonly ILogger<Repository<T>> _log;
 
+        [ExcludeFromCodeCoverage]
         public Repository(string collection = null)
         {
             IDBConnection connection = new DBConnection();
             _db = connection.GetConnectionAsync();
             _collection = collection ?? typeof(T).Name;
-            _log = new NullLogger<Repository<T>>();
         }
 
         public async Task<BsonValue> CreateAsync(T obj)

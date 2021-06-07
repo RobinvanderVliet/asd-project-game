@@ -3,8 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
-using System.Data;
-using System.Data.Common;
 using System.IO;
 using ActionHandling;
 using ASD_project.ActionHandling;
@@ -23,9 +21,7 @@ using ASD_project.Session.GameConfiguration;
 using ASD_project.UserInterface;
 using ASD_project.World.Services;
 using Messages;
-using Session;
 using Session.GameConfiguration;
-using UserInterface;
 
 namespace ASD_project
 {
@@ -56,12 +52,13 @@ namespace ASD_project
                     services.AddScoped<IChatHandler, ChatHandler>();
                     services.AddScoped<ISessionHandler, SessionHandler>();
                     services.AddScoped<IMoveHandler, MoveHandler>();
+                    services.AddScoped<IRelativeStatHandler, RelativeStatHandler>();
                     services.AddScoped<IWorldService, WorldService>();
                     services.AddScoped<IMessageService, MessageService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
+                    services.AddSingleton<IDBConnection, DBConnection>();
                     services.AddScoped<IItemService, ItemService>();
                     services.AddScoped<ISpawnHandler, SpawnHandler>();
-                    services.AddSingleton<IDBConnection, DBConnection>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
                     services.AddScoped(typeof(IDatabaseService<>), typeof(DatabaseService<>));
                     services.AddScoped<IScreenHandler, ScreenHandler>();

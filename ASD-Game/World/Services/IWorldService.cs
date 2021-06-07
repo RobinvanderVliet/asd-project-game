@@ -21,9 +21,12 @@ namespace ASD_project.World.Services
         public IList<Item> GetItemsOnCurrentTile();
         /// Returns items on tile for the specified player.
         public IList<Item> GetItemsOnCurrentTile(Player player);
-        public string SearchCurrentTile();
         public Player GetCurrentPlayer();
-        public Player GetPlayer(string userId);
+        public Player GetPlayer(string id);
+        public List<Player> GetPlayers();
+        public bool CheckIfCharacterOnTile(ITile tile);
+        public void LoadArea(int playerX, int playerY, int viewDistance);
+        public string SearchCurrentTile();
         public void DisplayStats();
     }
 }

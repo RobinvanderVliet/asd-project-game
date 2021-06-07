@@ -12,16 +12,17 @@ namespace ASD_project.World.Models.TerrainTiles
         public string Symbol { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
+        public int StaminaCost { get; set; }
         public List<Item> ItemsOnTile { get; set; }
-
+        
         public WaterTile(int x, int y)
         {
-            Symbol = TileSymbol.WATER;
             ItemsOnTile = new();
+            Symbol = TileSymbol.WATER;
             IsAccessible = false;
             XPosition = x;
             YPosition = y;
-            ItemsOnTile = new List<Item>();
         }
+
     }
 }

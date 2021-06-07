@@ -81,6 +81,7 @@ namespace ASD_project.World
 
         public ITile GetTileFromNoise(float noise, int x, int y)
         {
+            y++;
             return (noise * 10) switch
             {
                 (< -8) => new WaterTile(x, y),
