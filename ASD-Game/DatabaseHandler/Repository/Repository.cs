@@ -36,7 +36,7 @@ namespace DatabaseHandler.Repository
         public async Task<int> UpdateAsync(T obj)
         {
             var results = await _db.GetCollection<T>(_collection).UpdateAsync(obj);
-
+            
             if (results)
             {
                 return 1;

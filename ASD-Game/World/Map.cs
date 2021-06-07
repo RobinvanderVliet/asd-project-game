@@ -88,6 +88,22 @@ namespace WorldGeneration
             return chunksWithinLoadingRange;
         }
 
+        public void DisplayMap(Player currentPlayer, int viewDistance, List<Character> characters)
+        {
+            var playerX = currentPlayer.XPosition;
+            var playerY = currentPlayer.YPosition;
+            // LoadArea(playerX, playerY, viewDistance);
+            for (var y = (playerY + viewDistance); y > ((playerY + viewDistance) - (viewDistance * 2) - 1); y--)
+            {
+                for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
+                {
+                    var tile = GetLoadedTileByXAndY(x, y);
+                    Console.Write($" {GetDisplaySymbol(tile, characters)}");
+                }
+                Console.WriteLine("");
+            }
+        }
+
         private string GetDisplaySymbol(ITile tile, List<Character> characters)
         {
             var characterOnTile = characters.Find(character => character.XPosition == tile.XPosition && character.YPosition == tile.YPosition);

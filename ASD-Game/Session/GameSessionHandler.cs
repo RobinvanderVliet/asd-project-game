@@ -31,14 +31,14 @@ namespace Session
         private IDatabaseService<PlayerPOCO> _playerServicesDb;
         private IDatabaseService<GamePOCO> _gameServicesDb;
         private IDatabaseService<GameConfigurationPOCO> _gameConfigServicesDb;
-        private IDatabaseService<PlayerItemPoco> _playerItemServicesDb;
+        private IDatabaseService<PlayerItemPOCO> _playerItemServicesDb;
 
         private Random random = new Random();
         private Timer AIUpdateTimer;
 
         public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IDatabaseService<PlayerPOCO> playerServicesDb,
             IDatabaseService<GamePOCO> gameServicesDb, IDatabaseService<GameConfigurationPOCO> gameConfigservicesDb, IGameConfigurationHandler gameConfigurationHandler,
-            IScreenHandler screenHandler, IDatabaseService<PlayerItemPoco> playerItemServicesDb, IMessageService messageService)
+            IScreenHandler screenHandler, IDatabaseService<PlayerItemPOCO> playerItemServicesDb, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
@@ -107,7 +107,7 @@ namespace Session
 
         private void AddItemsToPlayer(string playerId, string gameId)
         {
-            PlayerItemPoco poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGUID = gameId };
+            PlayerItemPOCO poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGUID = gameId };
             _ = _playerItemServicesDb.CreateAsync(poco);
 
             poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetKnife().ItemName, GameGUID = gameId };
