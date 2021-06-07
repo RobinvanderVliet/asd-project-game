@@ -6,11 +6,10 @@ namespace ASD_Game.World
 {
     public interface IMap
     {
-        char[,] GetCharArrayMapAroundCharacter(Character currentPlayer, int viewDistance, List<Character> characters);
-        void DeleteMap();
-        void DisplayMap(Character currentPlayer, int viewDistance, List<Character> characters);
-        ITile GetLoadedTileByXAndY(int x, int y);
-        void LoadArea(int playerX, int playerY, int viewDistance);
+        public char[,] GetCharArrayMapAroundCharacter(Character currentPlayer, int viewDistance, List<Character> characters);
+        public void DeleteMap();
+        public ITile GetLoadedTileByXAndY(int x, int y);
+        public void LoadArea(int playerX, int playerY, int viewDistance);
 
     }
 }

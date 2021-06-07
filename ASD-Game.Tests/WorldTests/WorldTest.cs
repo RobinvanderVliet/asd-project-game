@@ -45,11 +45,11 @@ namespace ASD_Game.Tests.WorldTests
             _creature = new World.Models.Characters.Creature("B", 1, 0, "!", "2");
             //Initialisation of mocks
             _mapMock = new Mock<Map>();
-            _mapMock.Setup(Map => Map.DeleteMap()).Verifiable();
+            _mapMock.Setup(map => map.DeleteMap()).Verifiable();
             _mapMockObject = _mapMock.Object;
             
             _mapFactoryMock = new Mock<IMapFactory>();
-            //_mapFactoryMock.Setup(mapFactory => mapFactory.GenerateMap(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<IItemService>(), It.IsAny<List<ItemSpawnDTO>>())).Returns(_mapMockObject).Verifiable();
+            _mapFactoryMock.Setup(mapFactory => mapFactory.GenerateMap(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<IItemService>(), It.IsAny<List<ItemSpawnDTO>>())).Returns(_mapMockObject).Verifiable();
             _mapFactoryMock.Setup(mapFactory => mapFactory.GenerateSeed()).Returns(11246).Verifiable();
             _mapFactoryMockObject = _mapFactoryMock.Object;
 
