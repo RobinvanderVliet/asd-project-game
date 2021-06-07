@@ -49,6 +49,6 @@ namespace Creature.Creature.StateMachine.State
                     }
                     }
                 }
-            }
+        }
     }
 }

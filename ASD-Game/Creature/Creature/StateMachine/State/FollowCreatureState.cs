@@ -10,19 +10,23 @@ namespace Creature.Creature.StateMachine.State
 {
     public class FollowCreatureState : CreatureState
     {
-        public FollowCreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine, List<BuilderInfo> builderInfoList, BuilderConfigurator builderConfiguration) : base(creatureData, stateMachine, builderInfoList, builderConfiguration)
+        public FollowCreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine,
+            List<BuilderInfo> builderInfoList, BuilderConfigurator builderConfiguration) : base(creatureData,
+            stateMachine, builderInfoList, builderConfiguration)
         {
             _creatureData = creatureData;
             _stateMachine = stateMachine;
             _builderConfiguration = builderConfiguration;
             _builderInfoList = builderInfoList;
         }
-        
-        public FollowCreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base (creatureData, stateMachine)
+
+        public FollowCreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base(creatureData,
+            stateMachine)
         {
             _creatureData = creatureData;
             _stateMachine = stateMachine;
         }
+
         public override void Do()
         {
             foreach (var builderInfo in _builderInfoList)

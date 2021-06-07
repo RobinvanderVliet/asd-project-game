@@ -8,7 +8,9 @@ namespace Creature.Creature.StateMachine.State
 {
     public class IdleState : CreatureState
     {
-        public IdleState(ICreatureData creatureData, ICreatureStateMachine stateMachine, List<BuilderInfo> builderInfoList, BuilderConfigurator builderConfiguration) : base(creatureData, stateMachine, builderInfoList, builderConfiguration)
+        public IdleState(ICreatureData creatureData, ICreatureStateMachine stateMachine,
+            List<BuilderInfo> builderInfoList, BuilderConfigurator builderConfiguration) : base(creatureData,
+            stateMachine, builderInfoList, builderConfiguration)
         {
             _creatureData = creatureData;
             _stateMachine = stateMachine;
@@ -16,12 +18,13 @@ namespace Creature.Creature.StateMachine.State
             _builderInfoList = builderInfoList;
         }
 
-        public IdleState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base (creatureData, stateMachine)
+        public IdleState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base(creatureData,
+            stateMachine)
         {
             _creatureData = creatureData;
             _stateMachine = stateMachine;
         }
-        
+
         public void Do()
         {
             foreach (var builderInfo in _builderInfoList)
