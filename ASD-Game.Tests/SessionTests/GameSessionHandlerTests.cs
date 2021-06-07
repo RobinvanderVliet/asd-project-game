@@ -26,6 +26,7 @@ namespace Session.Tests
         private Mock<ISessionHandler> _mockedsessionHandler;
         private Mock<IDatabaseService<GamePOCO>> _mockedGamePOCOServices;
         private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerPOCOServices;
+        private Mock<IDatabaseService<ClientHistoryPOCO>> _mockedClientHistoryPOCOServices;
         private IDatabaseService<PlayerPOCO> _services;
 
         [SetUp]
@@ -39,9 +40,11 @@ namespace Session.Tests
             _mockedWorldService = new Mock<IWorldService>();
             _mockedsessionHandler = new Mock<ISessionHandler>();
             _mockedGamePOCOServices = new Mock<IDatabaseService<GamePOCO>>();
+            _mockedClientHistoryPOCOServices = new Mock<IDatabaseService<ClientHistoryPOCO>>();
 
             _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object,
-                _mockedsessionHandler.Object, _mockedGamePOCOServices.Object, _mockedPlayerPOCOServices.Object);
+                _mockedsessionHandler.Object, _mockedGamePOCOServices.Object, _mockedPlayerPOCOServices.Object,
+                _mockedClientHistoryPOCOServices.Object);
             _packetDTO = new PacketDTO();
         }
 
@@ -161,7 +164,49 @@ namespace Session.Tests
                 YPosition = 0
             };
             startGameDto.ExistingPlayer = player;
-        
+
+            _mockedClientController.Setup(x => x.GetOriginId()).Returns(startGameDto.ExistingPlayer.GameGuid);
+
+            string sessionId = "sessionId";
+            string hostOriginId = "Player2";
+            string originId = "Player1";
+
+            var payload = JsonConvert.SerializeObject(startGameDto);
+            _packetDTO.Payload = payload;
+            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            packetHeaderDTO.OriginID = hostOriginId;
+            packetHeaderDTO.SessionID = sessionId;
+            packetHeaderDTO.PacketType = PacketType.Session;
+            packetHeaderDTO.Target = originId;
+            _packetDTO.Header = packetHeaderDTO;
+
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
+
+            // Act
+            _sut.HandlePacket(_packetDTO);
+
+            // Assert
+            _mockedWorldService.Verify(x => x.DisplayWorld(), Times.Once);
+        }
+
+        /// <summary>
+        ///  [HandleStartGameSession(), CheckClientExists()]
+        ///
+        /// [Description of the test]
+        /// Check if the client exists, in the ELSE clause
+        /// </summary>
+        [Test]
+        public void Test_HandleStartGameSession_CheckClientExists()
+        {
+            // Arrange
+            StartGameDTO startGameDto = new StartGameDTO();
+            startGameDto.Seed = 0;
+            startGameDto.GameGuid = "GameGuid1";
+            PlayerPOCO player = new PlayerPOCO();
+            ClientHistoryPOCO clientHistoryPoco = new ClientHistoryPOCO();
+
+            startGameDto.ExistingPlayer = null;
+
             _mockedClientController.Setup(x => x.GetOriginId()).Returns(startGameDto.ExistingPlayer.GameGuid);
 
             string sessionId = "sessionId";
@@ -183,7 +228,61 @@ namespace Session.Tests
             _sut.HandlePacket(_packetDTO);
 
             // Assert
-            _mockedWorldService.Verify(x => x.DisplayWorld(), Times.Once);
+            // _mockedPlayerPOCOServices.Verify(x => x.);
+            
         }
+
+        // /// <summary>
+        // ///  [HandleStartGameSession(), AddPlayersToNewGame()]
+        // ///
+        // /// [Description of the test]
+        // /// Check if players are added to the gammeHistory.
+        // /// </summary>
+        // [Test]
+        // public void Test_HandleStartGameSession_AddPlayersToNewGame()
+        // {
+        //     // Arrange
+        //     StartGameDTO startGameDto = new StartGameDTO();
+        //     startGameDto.Seed = 0;
+        //     startGameDto.GameGuid = "GameGuid1";
+        //     PlayerPOCO player = new PlayerPOCO
+        //     {
+        //         GameGuid = "GameGuid1", Health = 1, Stamina = 1, PlayerGuid = "GameGuid1Player1",
+        //         GameGUIDAndPlayerGuid = "GameGuid1Player1", PlayerName = "Player1", TypePlayer = 1, XPosition = 0,
+        //         YPosition = 0
+        //     };
+        //
+        //     ClientHistoryPOCO clientHistoryPoco = new ClientHistoryPOCO()
+        //     {
+        //     PlayerId = "Player1", GameId = "GameGuid1"
+        //     };
+        //
+        //     startGameDto.ExistingPlayer = player;
+        //
+        //     _mockedClientController.Setup(x => x.GetOriginId()).Returns(startGameDto.ExistingPlayer.GameGuid);
+        //
+        //     string sessionId = "sessionId";
+        //     string hostOriginId = "Player2";
+        //     string originId = "Player1";
+        //
+        //     var payload = JsonConvert.SerializeObject(startGameDto);
+        //     _packetDTO.Payload = payload;
+        //     Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+        //     packetHeaderDTO.OriginID = hostOriginId;
+        //     packetHeaderDTO.SessionID = sessionId;
+        //     packetHeaderDTO.PacketType = PacketType.Session;
+        //     packetHeaderDTO.Target = originId;
+        //     _packetDTO.Header = packetHeaderDTO;
+        //
+        //     _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
+        //
+        //     _mockedClientHistoryPOCOServices.Setup(x => x.CreateAsync(clientHistoryPoco)).ReturnsAsync();
+        //
+        //     // Act
+        //     _sut.HandlePacket(_packetDTO);
+        //
+        //     // Assert
+        //     _mockedClientHistoryPOCOServices.Verify(x => x.CreateAsync(clientHistoryPoco), Times.Once);
+        // }
     }
 }

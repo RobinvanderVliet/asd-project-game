@@ -20,10 +20,11 @@ namespace Session
         private readonly IWorldService _worldService;
         private readonly IDatabaseService<PlayerPOCO> _playerService;
         private readonly IDatabaseService<GamePOCO> _gamePocoService;
+        private readonly IDatabaseService<ClientHistoryPOCO> _clientHistoryService;
 
         public GameSessionHandler(IClientController clientController, IWorldService worldService,
             ISessionHandler sessionHandler, IDatabaseService<GamePOCO> gamePocoService,
-            IDatabaseService<PlayerPOCO> playerService)
+            IDatabaseService<PlayerPOCO> playerService, IDatabaseService<ClientHistoryPOCO> clientHistoryService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
@@ -31,6 +32,7 @@ namespace Session
             _sessionHandler = sessionHandler;
             _gamePocoService = gamePocoService;
             _playerService = playerService;
+            _clientHistoryService = clientHistoryService;
         }
 
 
@@ -166,7 +168,6 @@ namespace Session
                 _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
                 AddPlayerToWorldSavedGame(startGameDTO.SavedPlayers);
                 _worldService.DisplayWorld();
-
             }
             
             else
@@ -205,10 +206,9 @@ namespace Session
             {
                 if (_clientController.GetOriginId() == player.Key)
                 {
-                    var tmpClientHistory = new DatabaseService<ClientHistoryPOCO>();
                     var tmpObject = new ClientHistoryPOCO()
                     { PlayerId = player.Key, GameId = startGameDTO.GameGuid };
-                    tmpClientHistory.CreateAsync(tmpObject);
+                    _clientHistoryService.CreateAsync(tmpObject);
 
                     if (startGameDTO.ExistingPlayer is null)
                     {
