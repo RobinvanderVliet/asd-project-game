@@ -6,6 +6,7 @@ using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using Items;
+using Messages;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
@@ -20,12 +21,15 @@ namespace ActionHandling
         private readonly IWorldService _worldService;
         private const int ATTACK_STAMINA = 10;
         private readonly IDeadHandler _deadHandler;
+        
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
         private readonly IDatabaseService<CreaturePOCO> _creatureDatabaseService;
+        private readonly IMessageService _messageService;
 
 
-        public AttackHandler(IClientController clientController, IWorldService worldService, IDeadHandler deadHandler, IDatabaseService<PlayerPOCO> playerDatabaseService, IDatabaseService<PlayerItemPOCO> playerItemDatabaseService, IDatabaseService<CreaturePOCO> creatureDatabaseService)
+
+        public AttackHandler(IClientController clientController, IWorldService worldService, IDeadHandler deadHandler, IDatabaseService<PlayerPOCO> playerDatabaseService, IDatabaseService<PlayerItemPOCO> playerItemDatabaseService, IDatabaseService<CreaturePOCO> creatureDatabaseService, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Attack);
@@ -34,13 +38,14 @@ namespace ActionHandling
             _playerDatabaseService = playerDatabaseService;
             _playerItemDatabaseService = playerItemDatabaseService;
             _creatureDatabaseService = creatureDatabaseService;
+            _messageService = messageService;
         }
 
         public void SendAttack(string direction)
         {
             if (_worldService.isDead(_worldService.GetCurrentPlayer()))
             {
-                Console.WriteLine("You can't attack, you're dead!");
+                _messageService.AddMessage("You can't attack, you're dead!");
                 return;
             }
 
@@ -102,7 +107,7 @@ namespace ActionHandling
                     {
                         if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
                         {
-                            Console.WriteLine("You can't attack this enemy, he is already dead.");
+                            _messageService.AddMessage("You can't attack this enemy, he is already dead.");
                             return new HandlerResponseDTO(SendAction.Ignore, null);
                         }
                     }
@@ -136,7 +141,7 @@ namespace ActionHandling
                     if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
                     {
                         HandleAttack(attackDto);
-                        Console.WriteLine("There is no enemy to attack");
+                        _messageService.AddMessage("There is no enemy to attack");
                     }
 
                     return new HandlerResponseDTO(SendAction.ReturnToSender,
@@ -145,7 +150,7 @@ namespace ActionHandling
             }
             else if (packet.Header.Target.Equals(_clientController.GetOriginId()))
             {
-                Console.WriteLine(packet.HandlerResponse.ResultMessage);
+                _messageService.AddMessage(packet.HandlerResponse.ResultMessage);
             }
 
             HandleAttack(attackDto);
@@ -240,7 +245,7 @@ namespace ActionHandling
 
                 if (attackedCreature.Health <= 0)
                 {
-                    Console.WriteLine("RIP"); //TODO implement death of creature
+                    _messageService.AddMessage("RIP"); //TODO implement death of creature
                 }
             }
         }
@@ -251,19 +256,20 @@ namespace ActionHandling
             {
                 if (_worldService.GetCurrentPlayer().Stamina < ATTACK_STAMINA)
                 {
-                    Console.WriteLine("You're out of stamina, you can't attack.");
+                    _messageService.AddMessage("You're out of stamina, you can't attack.");
+
                 }
                 else
                 {
-                    Console.WriteLine("Your stamina got lowered with " + ATTACK_STAMINA + ".");
                     _worldService.GetCurrentPlayer().Stamina -= ATTACK_STAMINA;
-                    Console.WriteLine("stamina: " + _worldService.GetCurrentPlayer().Stamina);    
+                    _worldService.DisplayStats();
                 }
             }
 
             if (_clientController.GetOriginId().Equals(attackDto.AttackedPlayerGuid))
             {
-                Console.WriteLine("You took a total of " + attackDto.Damage + " damage.");
+                _messageService.AddMessage("You took a total of " + attackDto.Damage + " damage.");
+
                 int ArmorPoints = 0;
                 int HelmetPoints = 0;
                 if (_worldService.GetCurrentPlayer().Inventory.Armor != null)
@@ -279,34 +285,44 @@ namespace ActionHandling
                 //Eerst wordt Damage van de helm afgehaald, vervolgens van de body armor en tot slot van de speler.
                 if (HelmetPoints - attackDto.Damage <= 0 && HelmetPoints != 0)
                 {
-                    Console.WriteLine("Your helmet has been destroyed!");
+                    _messageService.AddMessage("Your helmet has been destroyed!");
                     attackDto.Damage -= HelmetPoints;
                     _worldService.GetCurrentPlayer().Inventory.Helmet = null;
+                    _worldService.DisplayStats();
+
                 }
                 else if (HelmetPoints != 0)
                 {
-                    Console.WriteLine("Your Helmet took " + attackDto.Damage + " damage.");
+                    _messageService.AddMessage("Your Helmet took " + attackDto.Damage + " damage.");
                     attackDto.Damage = 0;
                     _worldService.GetCurrentPlayer().Inventory.Helmet.ArmorProtectionPoints -= attackDto.Damage;
+                    _worldService.DisplayStats();
+
                 }
 
                 if (ArmorPoints - attackDto.Damage <= 0 && ArmorPoints != 0)
                 {
-                    Console.WriteLine("Your armor piece has been destroyed!");
+                    _messageService.AddMessage("Your armor piece has been destroyed!");
                     attackDto.Damage -= ArmorPoints;
                     _worldService.GetCurrentPlayer().Inventory.Armor = null;
                     _worldService.GetCurrentPlayer().Health -= attackDto.Damage;
-                    Console.WriteLine("Your health took " + attackDto.Damage + " damage.");
+                    _messageService.AddMessage("Your health took " + attackDto.Damage + " damage.");
+                    _worldService.DisplayStats();
+
                 }
                 else if (ArmorPoints != 0)
                 {
-                    Console.WriteLine("Your armor took " + attackDto.Damage + " damage.");
+                    _messageService.AddMessage("Your armor took " + attackDto.Damage + " damage.");
                     _worldService.GetCurrentPlayer().Inventory.Armor.ArmorProtectionPoints -= attackDto.Damage;
+                    _worldService.DisplayStats();
+
                 }
                 else
                 {
-                    Console.WriteLine("Your health took " + attackDto.Damage + " damage.");
+                    _messageService.AddMessage("Your health took " + attackDto.Damage + " damage.");
                     _worldService.GetCurrentPlayer().Health -= attackDto.Damage;
+                    _worldService.DisplayStats();
+
                 }
 
                 if (_worldService.GetCurrentPlayer().Health <= 0)

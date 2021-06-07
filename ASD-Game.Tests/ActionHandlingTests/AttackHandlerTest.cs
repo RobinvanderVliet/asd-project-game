@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using ActionHandling.DTO;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
+using Messages;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.ObjectModel;
 using Network.DTO;
 using Session;
@@ -43,6 +44,7 @@ namespace ActionHandling.Tests
             private Mock<DatabaseService<PlayerItemPOCO>> _mockedPlayerItemPocoDatabaseService;
             private Mock<DatabaseService<CreaturePOCO>> _mockedCreaturePocoDatabaseService;
             private Mock<ISessionHandler> _mockedSessionHandler;
+            private Mock<IMessageService> _mockedMessageService;
 
             [SetUp]
             public void Setup()
@@ -53,7 +55,8 @@ namespace ActionHandling.Tests
                 _mockedPlayerPocoDatabaseService = new Mock<DatabaseService<PlayerPOCO>>();
                 _mockedPlayerItemPocoDatabaseService = new Mock<DatabaseService<PlayerItemPOCO>>();
                 _mockedCreaturePocoDatabaseService = new Mock<DatabaseService<CreaturePOCO>>();
-                _sut = new AttackHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedDeadHandler.Object, _mockedPlayerPocoDatabaseService.Object, _mockedPlayerItemPocoDatabaseService.Object, _mockedCreaturePocoDatabaseService.Object);
+                _mockedMessageService = new Mock<IMessageService>();
+                _sut = new AttackHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedDeadHandler.Object, _mockedPlayerPocoDatabaseService.Object, _mockedPlayerItemPocoDatabaseService.Object, _mockedCreaturePocoDatabaseService.Object, _mockedMessageService.Object);
                 
 
             }

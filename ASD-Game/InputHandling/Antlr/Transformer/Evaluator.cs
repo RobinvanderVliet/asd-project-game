@@ -143,7 +143,7 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformAttack(Attack attack)
         {
-            // TODO: Call AttackHandler method with (attack.Direction.DirectionValue)
+            _attackHandler.SendAttack(attack.Direction.DirectionValue);
         }
 
         private void TransformExit()
