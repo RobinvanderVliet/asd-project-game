@@ -49,7 +49,7 @@ namespace ASD_Game.World
             }
             return new Chunk(chunkX, chunkY, map, chunkRowSize, _seed);
         }
-        [ExcludeFromCodeCoverage]
+        
         private ITile CreateTileWithItemFromNoise(float worldNoise, float itemNoise, int x, int y)
         {
             var tile = GetTileFromNoise(worldNoise, x, y);
