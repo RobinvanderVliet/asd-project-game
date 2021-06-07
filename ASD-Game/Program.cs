@@ -9,6 +9,9 @@ using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using WorldGeneration;
 using ActionHandling;
+using Agent.Mapper;
+using Agent.Models;
+using Agent.Services;
 using Chat;
 using Creature;
 using InputHandling;
@@ -57,6 +60,8 @@ namespace ASD_project
                     services.AddScoped<IAgentHandler, AgentHandler>();
                     services.AddScoped<IPipeline, Pipeline>();
                     services.AddScoped<IEvaluator, Evaluator>();
+                    services.AddScoped<IConfigurationService, ConfigurationService>();
+                    services.AddScoped<IFileToConfigurationMapper, FileToConfigurationMapper>();
                 })
                 .UseSerilog()
                 .Build();

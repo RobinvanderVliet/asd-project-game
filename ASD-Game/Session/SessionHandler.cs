@@ -10,6 +10,7 @@ using Agent.Antlr.Ast;
 using Agent.Mapper;
 using Agent.Models;
 using Agent.Services;
+using Creature;
 using WorldGeneration;
 using DatabaseHandler;
 using DatabaseHandler.Services;
@@ -35,11 +36,14 @@ namespace Session
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
         private IScreenHandler _screenHandler;
-        public SessionHandler(IClientController clientController, IScreenHandler screenHandler)
+        private readonly IAgentHandler _agentHandler;
+
+        public SessionHandler(IClientController clientController, IScreenHandler screenHandler, IAgentHandler agentHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Session);
             _screenHandler = screenHandler;
+            _agentHandler = agentHandler;
         }
 
         public List<string> GetAllClients()
@@ -101,7 +105,7 @@ namespace Session
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
 
-            _heartbeatHandler = new HeartbeatHandler();
+            _heartbeatHandler = new HeartbeatHandler(_agentHandler);
             Console.WriteLine("Created session with the name: " + _session.Name);
 
             return _session.InSession;

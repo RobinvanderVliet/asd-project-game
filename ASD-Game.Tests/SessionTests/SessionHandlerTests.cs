@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
+using Creature;
 using UserInterface;
 using Timer = System.Timers.Timer;
 
@@ -28,6 +29,8 @@ namespace Session.Tests
         private Mock<IClientController> _mockedClientController;
         private Mock<Session> _mockedSession;
         private Mock<IScreenHandler> _mockedScreenHandler;
+        private Mock<IAgentHandler> _agentHandlerMock;
+
 
         [SetUp]
         public void Setup()
@@ -35,9 +38,10 @@ namespace Session.Tests
             var standardOutput = new StreamWriter(Console.OpenStandardOutput());
             standardOutput.AutoFlush = true;
             Console.SetOut(standardOutput);
+            _agentHandlerMock = new Mock<IAgentHandler>();
             _mockedClientController = new Mock<IClientController>();
             _mockedScreenHandler = new Mock<IScreenHandler>();
-            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object);
+            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object, _agentHandlerMock.Object);
             _mockedSession = new Mock<Session>();
             _packetDTO = new PacketDTO();
         }

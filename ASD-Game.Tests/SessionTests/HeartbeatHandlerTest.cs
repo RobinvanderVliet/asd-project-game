@@ -3,6 +3,8 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
+using Creature;
+using Moq;
 
 namespace Session.Tests
 {
@@ -14,11 +16,13 @@ namespace Session.Tests
         private HeartbeatHandler _sut;
         private StringWriter _stringWriter;
         private TextWriter _originalOutput;
+        private Mock<IAgentHandler> _agentHandlerMock;
 
         [SetUp]
         public void Setup()
         {
-            _sut = new HeartbeatHandler();
+            _agentHandlerMock = new Mock<IAgentHandler>();
+            _sut = new HeartbeatHandler(_agentHandlerMock.Object);
             _stringWriter = new StringWriter();
             _originalOutput = Console.Out;
             Console.SetOut(_stringWriter);
