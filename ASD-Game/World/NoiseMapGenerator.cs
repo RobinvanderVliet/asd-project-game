@@ -47,6 +47,7 @@ namespace WorldGeneration
 
         private ITile GetTileFromNoise(float noise, int x, int y)
         {
+            y++;
             return (noise * 10) switch
             {
                 (< -8) => new WaterTile(x, y),

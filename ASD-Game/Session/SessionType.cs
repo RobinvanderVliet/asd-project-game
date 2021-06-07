@@ -8,6 +8,9 @@ namespace Session
         SendPing,
         ReceivedPingResponse,
         SendHeartbeat,
+        EditMonsterDifficulty,
+        EditItemSpawnRate
+        SendHeartbeat,
         NewBackUpHost
     }
 }
