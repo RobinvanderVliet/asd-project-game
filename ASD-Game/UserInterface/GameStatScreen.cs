@@ -1,5 +1,6 @@
 namespace UserInterface
 {
+
     public class GameStatScreen : Screen, IGameStatScreen
     {
         private int _xPosition;
@@ -71,7 +72,7 @@ namespace UserInterface
                 _screenHandler.ConsoleHelper.Write(new string(' ', _width - BORDER_SIZE));
             }
         }
-
+        
         public void SetStatValues(string name, int score, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree)
         {
             int originalCursorX = _screenHandler.ConsoleHelper.GetCursorLeft();
@@ -83,6 +84,6 @@ namespace UserInterface
             DrawUserInventory(slotOne, slotTwo, slotThree);
             _screenHandler.ConsoleHelper.SetCursor(originalCursorX, originalCursorY);
         }
-
+        
     }
 }

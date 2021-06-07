@@ -1,4 +1,3 @@
-
 namespace UserInterface
 {
     public class HelpScreen : Screen

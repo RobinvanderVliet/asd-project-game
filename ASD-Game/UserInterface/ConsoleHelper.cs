@@ -10,7 +10,7 @@ namespace UserInterface
         {
             Console.Clear();
         }
-
+        
         public virtual void SetColorToGreen()
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -30,7 +30,7 @@ namespace UserInterface
         {
             return Console.CursorLeft;
         }
-
+        
         public virtual int GetCursorTop()
         {
             return Console.CursorTop;

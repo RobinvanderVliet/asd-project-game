@@ -11,7 +11,7 @@ namespace UserInterface
         private const int CONFIGURATION_X = 1;
         private const int CONFIGURATION_Y = HEADER_HEIGHT + BORDER_SIZE;
         private const int CONFIGURATION_WIDTH = SCREEN_WIDTH - BORDER_SIZE;
-
+        
         private const int INPUT_X = 0;
         private const int INPUT_Y = HEADER_HEIGHT + CONFIGURATION_Y + 2;
 
@@ -38,7 +38,7 @@ namespace UserInterface
             options = configurationChoices;
             DrawScreen();
         }
-
+        
         private string GetHeaderText()
         {
             return "Welcome to the game configuration!";
@@ -49,7 +49,7 @@ namespace UserInterface
             Console.SetCursorPosition(CONFIGURATION_X, CONFIGURATION_Y);
             Console.SetCursorPosition(CONFIGURATION_X + OFFSET_LEFT, CONFIGURATION_Y + OFFSET_TOP);
             Console.Write(configuration);
-
+            
             foreach (var option in options)
             {
                 int choicePosition = options.IndexOf(option) + 1;
@@ -57,10 +57,10 @@ namespace UserInterface
                 Console.SetCursorPosition(CONFIGURATION_X + OFFSET_LEFT, CONFIGURATION_Y + OFFSET_TOP + choicePosition);
                 Console.Write("{0}. {1}", choicePosition, option);
             }
-
+            
             DrawBox(CONFIGURATION_X - 1, CONFIGURATION_Y, CONFIGURATION_WIDTH, options.Count + 1);
         }
-
+        
         public void UpdateInputMessage(string message)
         {
             inputText = message;
