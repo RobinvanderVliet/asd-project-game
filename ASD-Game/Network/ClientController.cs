@@ -94,5 +94,11 @@ namespace ASD_Game.Network
         {
             return _hostController != null;
         }
+
+        //needed for testing, remove and all games will crash, you have been warned
+        public void SetBackupHost(bool value)
+        {
+            _isBackupHost = value;
+        }
     }
 }

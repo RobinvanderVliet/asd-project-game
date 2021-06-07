@@ -113,7 +113,6 @@ namespace ASD_Game.Session
             }
         }
 
-
         private void InsertGameIntoDatabase()
         {
             var gamePOCO = new GamePOCO { GameGUID = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId() };

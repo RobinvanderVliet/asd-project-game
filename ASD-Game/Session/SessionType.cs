@@ -9,6 +9,7 @@ namespace ASD_Game.Session
         ReceivedPingResponse,
         SendHeartbeat,
         EditMonsterDifficulty,
-        EditItemSpawnRate
+        EditItemSpawnRate,
+        NewBackUpHost
     }
 }
