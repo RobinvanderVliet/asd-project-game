@@ -60,7 +60,7 @@ namespace ASD_Game.ActionHandling
             if (_player.Stamina < 100)
             {
                 var statDto = new RelativeStatDTO();
-                statDto.Stamina = 1;
+                statDto.Stamina = 1000;
                 SendStat(statDto);
             }
         }

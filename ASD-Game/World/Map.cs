@@ -90,8 +90,10 @@ namespace ASD_Game.World
             
             var tileArray = new char[viewDistance * 2 + 1, viewDistance * 2 + 1]; // The +1 is because the view window is the view distance to each side, plus the tile the character itself uses.
             LoadArea(centerCharacter.XPosition, centerCharacter.YPosition, viewDistance);
-            
-            for (var y = tileArray.GetLength(0) - 1; y >= 0; y--) // Ignore this -1. It's fixed in a different branch.
+            // y is counting down because of writing top to bottom,
+            // x is counting up because writing left to right.
+            // x and y are NOT real world coordinates.
+            for (var y = tileArray.GetLength(0) - 1; y >= 0; y--)
             {
                 for (var x = 0; x < tileArray.GetLength(1); x++)
                 {
