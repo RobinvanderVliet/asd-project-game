@@ -309,7 +309,7 @@ namespace Session
             }
             else
             {
-                Console.WriteLine(sessionDTO.ClientIds[0] + " Has joined your session: ");
+                Console.WriteLine(sessionDTO.ClientIds[0] + " has joined your session: ");
                 _session.AddClient(sessionDTO.ClientIds[0]);
                 sessionDTO.ClientIds = new List<string>();
 
@@ -365,7 +365,7 @@ namespace Session
 
             if (result != null)
             {
-                Console.WriteLine(sessionDTO.ClientIds[0] + " Has joined your session: ");
+                Console.WriteLine(sessionDTO.ClientIds[0] + " has joined your session: ");
                 _session.AddClient(sessionDTO.ClientIds[0]);
                 sessionDTO.ClientIds = new List<string>();
 
