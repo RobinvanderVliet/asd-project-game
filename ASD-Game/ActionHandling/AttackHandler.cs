@@ -43,7 +43,7 @@ namespace ActionHandling
 
         public void SendAttack(string direction)
         {
-            if (_worldService.isDead(_worldService.GetCurrentPlayer()))
+            if (_worldService.IsDead(_worldService.GetCurrentPlayer()))
             {
                 _messageService.AddMessage("You can't attack, you're dead!");
                 return;
@@ -96,7 +96,7 @@ namespace ActionHandling
             AttackDTO attackDto = JsonConvert.DeserializeObject<AttackDTO>(packet.Payload);
             if (_clientController.IsHost() && packet.Header.Target.Equals("host") || _clientController.IsBackupHost)
             {
-                var allPlayers = _worldService.getAllPlayers();
+                var allPlayers = _worldService.GetAllPlayers();
                 var PlayerResult =
                     allPlayers.Where(x =>
                         x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition);
@@ -174,7 +174,7 @@ namespace ActionHandling
                     .FirstOrDefault(attackedPlayer => attackedPlayer.PlayerGuid == attackDto.AttackedPlayerGuid);
 
                 var attackedPlayerInArray =
-                    _worldService.getAllPlayers().Where(player => player.Id == attackDto.PlayerGuid).FirstOrDefault();
+                    _worldService.GetAllPlayers().Where(player => player.Id == attackDto.PlayerGuid).FirstOrDefault();
 
                 if (attackedPlayerInArray.Inventory.Helmet != null)
                 {

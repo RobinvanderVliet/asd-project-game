@@ -46,17 +46,17 @@ namespace WorldGeneration
             return _world.CurrentPlayer;
         }
 
-        public List<Player> getAllPlayers()
+        public List<Player> GetAllPlayers()
         {
             return _world.Players;
         }
 
-        public void playerDied(Player player)
+        public void PlayerDied(Player player)
         {
             player.Symbol = "X";
         }
 
-        public bool isDead(Player player)
+        public bool IsDead(Player player)
         {
             return player.Health <= 0;
         }

@@ -12,11 +12,11 @@ namespace WorldGeneration
         public void DeleteMap();
         public void GenerateWorld(int seed);
 
-        public List<Player> getAllPlayers();
+        public List<Player> GetAllPlayers();
 
-        public void playerDied(Player currentPlayer);
+        public void PlayerDied(Player currentPlayer);
 
-        public bool isDead(Player player);
+        public bool IsDead(Player player);
         /// <summary>
         /// Returns items on title for the player of this instance.
         /// </summary>

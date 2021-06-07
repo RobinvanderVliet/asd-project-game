@@ -39,7 +39,9 @@ namespace ActionHandling
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var deadDTO = JsonConvert.DeserializeObject<DeadDTO>(packet.Payload);
-            _worldService.playerDied(deadDTO.DeadPlayer);
+            _worldService.PlayerDied(deadDTO.DeadPlayer);
+            _worldService.GetAllPlayers().Where(player => player.Id == deadDTO.DeadPlayer.Id).FirstOrDefault().Symbol =
+                deadDTO.DeadPlayer.Symbol;
             _worldService.DisplayWorld();
             if (deadDTO.DeadPlayer.Id == _clientController.GetOriginId())
             {

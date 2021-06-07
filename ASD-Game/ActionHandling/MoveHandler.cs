@@ -31,7 +31,7 @@ namespace ActionHandling
 
         public void SendMove(string directionValue, int stepsValue)
         {
-            if (_worldService.isDead(_worldService.GetCurrentPlayer()))
+            if (_worldService.IsDead(_worldService.GetCurrentPlayer()))
             {
                 _messageService.AddMessage("You can't move, you're dead!");
                 return;
