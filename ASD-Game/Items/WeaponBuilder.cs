@@ -41,17 +41,17 @@ namespace Items
         {
             _weapon.Speed = speed;
         }
-
+        
         public void SetWeaponType(WeaponType type)
         {
             _weapon.Type = type;
         }
-
+        
         public void Reset()
         {
             _weapon = new Weapon();
         }
-
+        
         public Weapon GetItem()
         {
             return _weapon;

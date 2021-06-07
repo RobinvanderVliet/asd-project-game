@@ -8,7 +8,7 @@ namespace Items.Consumables
 
         public int getStamina()
         {
-            return (int)Stamina;
+            return (int) Stamina;
         }
     }
 }

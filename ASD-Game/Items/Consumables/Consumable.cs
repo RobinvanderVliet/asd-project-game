@@ -1,5 +1,5 @@
-﻿using Items.ItemStats;
-using System;
+﻿using System;
+using Items.ItemStats;
 
 namespace Items.Consumables
 {
@@ -11,8 +11,8 @@ namespace Items.Consumables
         {
 
         }
-
-
+        
+        
         public override string ToString()
         {
             string inspect = Description;
@@ -31,7 +31,7 @@ namespace Items.Consumables
             {
                 inspect += $"{Environment.NewLine}RPP gain: {consumableHazzard.RPP.ToString()}";
             }
-
+        
             return inspect;
         }
     }

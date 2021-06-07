@@ -9,7 +9,7 @@ namespace Messages
 
         public MessageModel()
         {
-            _messages = new();
+            _messages = new(); 
         }
 
         public void AddMessage(string message)
@@ -19,14 +19,13 @@ namespace Messages
 
         public Queue<string> GetLatestMessages(int amount)
         {
-            if (_messages.Count < amount)
+            if(_messages.Count < amount)
             {
                 amount = _messages.Count;
             }
 
             Queue<string> result = new();
-            for (int x = 1; x <= amount; x++)
-            {
+            for (int x = 1; x <= amount ; x++ ){
                 result.Enqueue(_messages.ElementAt(_messages.Count - x));
             }
             return result;
