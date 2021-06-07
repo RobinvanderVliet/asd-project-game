@@ -33,7 +33,7 @@ namespace Creature.Tests
         public void Test_ApplyDamage_DealsDamage()
         {
             // Arrange ---------
-            MonsterData monsterData = new MonsterData(new Vector2(), 50, 10, 10, null, false); //TODO fix this test
+            MonsterData monsterData = new MonsterData(new Vector2(), 50, 10, 10, null, false);
             _creatureStateMachineMock.Setup(creatureStateMachine => creatureStateMachine.CreatureData)
                 .Returns(monsterData);
 
