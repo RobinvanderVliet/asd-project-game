@@ -14,6 +14,8 @@ using UserInterface;
 using WorldGeneration;
 using WorldGeneration.Models;
 using Messages;
+using DatabaseHandler;
+using DatabaseHandler.Repository;
 
 namespace Session
 {
@@ -102,9 +104,9 @@ namespace Session
 
             if (handleInDatabase)
             {
-                InsertConfigurationIntoDatabase();
-                InsertGameIntoDatabase();
-                InsertPlayersIntoDatabase();
+                    InsertConfigurationIntoDatabase();
+                    InsertGameIntoDatabase();
+                    InsertPlayersIntoDatabase();
             }
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
@@ -119,7 +121,6 @@ namespace Session
                 AddItemsToPlayer(player.Id, _clientController.SessionId);
             }
         }
-
 
         private void InsertGameIntoDatabase()
         {
@@ -161,34 +162,24 @@ namespace Session
                     var playerObject = new Player(client[1], playerX, playerY, CharacterSymbol.ENEMY_PLAYER, client[0]);
                     _worldService.AddPlayerToWorld(playerObject, false);
                 }
-                    _worldService.AddPlayerToWorld(new WorldGeneration.Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key), false);
-                }
+                playerX += 2;
+                playerY += 2;
             }
             _worldService.DisplayWorld();
-
-            if (_clientController.IsBackupHost)
-            {
-                SaveInBackupDatabase(startGameDTO);
-            }
-        }
-Console.WriteLine("backup goes brrrrrrrrrrrrrrrrrrr");
-playerX += 2;
-playerY += 2;
-            }
             return currentPlayer;
+        }
 
-private void SaveInBackupDatabase(StartGameDTO startGameDTO)
+
+/*    private void SaveInBackupDatabase(StartGameDTO startGameDTO)
         {
-            var dbConnection = new DbConnection();
-
             //create new backup repositories.
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
-            var gameRepository = new Repository<GamePOCO>(dbConnection);
-            var gameService = new ServicesDb<GamePOCO>(gameRepository);
+            var playerRepository = new Repository<PlayerPOCO>();
+            var servicePlayer = new DatabaseService<PlayerPOCO>(playerRepository);
+            var gameRepository = new Repository<GamePOCO>();
+            var gameService = new DatabaseService<GamePOCO>(gameRepository);
 
             //Game
-            var gamePOCO = new GamePOCO { GameGuid = startGameDTO.GameGuid, PlayerGUIDHost = _sessionHandler.GetAllClients()[0]};
+            var gamePOCO = new GamePOCO { GameGuid = startGameDTO.GameGuid, PlayerGUIDHost = _sessionHandler.GetAllClients()[0][0]};
             gameService.CreateAsync(gamePOCO);
 
             //Players
@@ -198,7 +189,6 @@ private void SaveInBackupDatabase(StartGameDTO startGameDTO)
                     new PlayerPOCO{ PlayerGuid = player.Key, GameGuid = gamePOCO.GameGuid, XPosition = player.Value[0], YPosition = player.Value[1] }
                     );
             }
-            
-        }
+        }*/
     }
 }

@@ -167,7 +167,6 @@ namespace Session
                 {
                     return handlePingRequest(packet);
                 }
-            }
             else
             {
                 if ((packet.Header.Target == "client" || packet.Header.Target == "host")
@@ -181,7 +180,6 @@ namespace Session
                     return addRequestedSessions(packet);
                 }
             }
-
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
         
