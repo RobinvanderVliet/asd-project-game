@@ -9,13 +9,13 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace ASD_project.DatabaseHandler.Repository
 {
+    [ExcludeFromCodeCoverage]
     public class Repository<T> : IRepository<T>
     {
         private readonly string _collection;
         private readonly ILiteDatabaseAsync _db;
         private readonly ILogger<Repository<T>> _log;
 
-        [ExcludeFromCodeCoverage]
         public Repository(string collection = null)
         {
             IDBConnection connection = new DBConnection();
@@ -30,7 +30,6 @@ namespace ASD_project.DatabaseHandler.Repository
             return result;
         }
 
-        [ExcludeFromCodeCoverage]
         public async Task<T> ReadAsync(T obj)
         {
             var chunk = await _db.GetCollection<T>(_collection)
