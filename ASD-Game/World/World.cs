@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using WorldGeneration.Models.Interfaces;
 using System.Linq;
-using System.Timers;
 using UserInterface;
 
 namespace WorldGeneration
@@ -19,7 +18,6 @@ namespace WorldGeneration
         private readonly int _viewDistance;
         private readonly IScreenHandler _screenHandler;
         private static readonly char _separator = Path.DirectorySeparatorChar;
-        private Timer AIUpdateTimer;
 
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler)
         {
@@ -29,8 +27,6 @@ namespace WorldGeneration
             _map = MapFactory.GenerateMap(dbLocation: $"Filename={currentDirectory}{_separator}ChunkDatabase.db;connection=shared;", seed: seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
-            AIUpdateTimer = new Timer(2000);
-            CheckAITimer();
             DeleteMap();
         }
 
@@ -46,7 +42,7 @@ namespace WorldGeneration
                 CurrentPlayer.XPosition = newXPosition;
                 CurrentPlayer.YPosition = newYPosition;
             }
-            else
+            else if (GetPlayer(userId) != null)
             {
                 var player = GetPlayer(userId);
                 player.XPosition = newXPosition;
@@ -130,20 +126,6 @@ namespace WorldGeneration
                 }
             }
             UpdateMap();
-        }
-
-        private void CheckAITimer()
-        {
-            AIUpdateTimer.AutoReset = true;
-            AIUpdateTimer.Elapsed += CheckAITimerEvent;
-            AIUpdateTimer.Start();
-        }
-
-        private void CheckAITimerEvent(object sender, ElapsedEventArgs e)
-        {
-            AIUpdateTimer.Stop();
-            UpdateAI();
-            AIUpdateTimer.Start();
         }
 
         private void UpdateSmartMonster(SmartMonster smartMonster)

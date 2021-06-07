@@ -15,6 +15,8 @@ namespace WorldGeneration
         private IScreenHandler _screenHandler;
         private World _world;
 
+        public List<Character> _creatureMoves { get; set; }
+
         public WorldService(IScreenHandler screenHandler)
         {
             _screenHandler = screenHandler;
@@ -83,7 +85,12 @@ namespace WorldGeneration
 
         public List<Character> GetCreatureMoves()
         {
-            return _world.movesList;
+            if (_world != null)
+            {
+                _world.UpdateAI();
+                return _world.movesList;
+            }
+            return null;
         }
 
         public IList<Item> GetItemsOnCurrentTile()

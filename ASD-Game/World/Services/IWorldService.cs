@@ -7,6 +7,8 @@ namespace WorldGeneration
 {
     public interface IWorldService
     {
+        public List<Character> _creatureMoves { get; set; }
+
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition);
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer);

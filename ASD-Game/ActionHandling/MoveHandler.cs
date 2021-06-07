@@ -8,6 +8,7 @@ using Network.DTO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Timers;
 using WorldGeneration;
 
 namespace ActionHandling
@@ -18,7 +19,7 @@ namespace ActionHandling
         private IWorldService _worldService;
         private IMessageService _messageService;
         private IDatabaseService<PlayerPOCO> _playerServicesDb;
-
+        private Timer AIUpdateTimer;
         private List<Character> _creatureMoves = new List<Character>();
 
         public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerServicesDb, IMessageService messageService)
@@ -28,6 +29,8 @@ namespace ActionHandling
             _worldService = worldService;
             _messageService = messageService;
             _playerServicesDb = playerServicesDb;
+            AIUpdateTimer = new Timer(2000);
+            CheckAITimer();
         }
 
         public void SendMove(string directionValue, int stepsValue)
@@ -64,30 +67,46 @@ namespace ActionHandling
             MoveDTO moveDTO = new(currentPlayer.Id, currentPlayer.XPosition + x, currentPlayer.YPosition + y);
 
             SendMoveDTO(moveDTO);
-            MoveAIs();
         }
 
         public void MoveAIs()
         {
             List<MoveDTO> moveDTOs = new List<MoveDTO>();
-            GetAIMoves();
-            foreach (Character move in _creatureMoves)
+            if (_creatureMoves != null)
             {
-                if (move is SmartMonster smartMonster)
+                foreach (Character move in _creatureMoves)
                 {
-                    MoveDTO moveDTO = new(smartMonster.Id, (int)smartMonster.Destination.X, (int)smartMonster.Destination.Y);
-                    moveDTOs.Add(moveDTO);
+                    if (move is SmartMonster smartMonster)
+                    {
+                        MoveDTO moveDTO = new(smartMonster.Id, (int)smartMonster.Destination.X, (int)smartMonster.Destination.Y);
+                        moveDTOs.Add(moveDTO);
+                    }
                 }
-            }
-            foreach (MoveDTO move in moveDTOs)
-            {
-                SendMoveDTO(move);
+                foreach (MoveDTO move in moveDTOs)
+                {
+                    SendMoveDTO(move);
+                }
             }
         }
 
         public void GetAIMoves()
         {
             _creatureMoves = _worldService.GetCreatureMoves();
+            MoveAIs();
+        }
+
+        private void CheckAITimer()
+        {
+            AIUpdateTimer.AutoReset = true;
+            AIUpdateTimer.Elapsed += CheckAITimerEvent;
+            AIUpdateTimer.Start();
+        }
+
+        private void CheckAITimerEvent(object sender, ElapsedEventArgs e)
+        {
+            AIUpdateTimer.Stop();
+            GetAIMoves();
+            AIUpdateTimer.Start();
         }
 
         private void SendMoveDTO(MoveDTO moveDTO)
