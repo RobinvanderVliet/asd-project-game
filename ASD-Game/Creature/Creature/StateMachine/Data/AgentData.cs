@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Numerics;
 
 namespace Creature.Creature.StateMachine.Data
@@ -7,60 +6,64 @@ namespace Creature.Creature.StateMachine.Data
     public class AgentData : ICreatureData
     {
         private Vector2 _position;
-        private double _health;
-        private double _stamina;
-        private int _visionRange;
-        private List<KeyValuePair<string, string>> _ruleSet;
-        private bool _following;
-        
-        public bool IsAlive
-        {
-            get => _health > 0;
-        }
+        private double _health = 40;
+        private int _damage = 10;
+        private int _visionRange = 6;
+
+        public bool IsAlive { get => _health > 0; }
+        public int Stamina { get; set; }
 
         public Vector2 Position
         {
             get => _position;
             set => _position = value;
         }
-        
+
         public double Health
         {
             get => _health;
             set => _health = value;
         }
 
-        public double Stamina
+        public List<KeyValuePair<string, string>> RuleSet { get; set; }
+
+        public int Damage
         {
-            get => _stamina;
-            set => _stamina = value;
+            get => _damage;
+            set => _damage = value;
         }
-        
+
         public int VisionRange
         {
             get => _visionRange;
             set => _visionRange = value;
         }
 
-        public List<KeyValuePair<string, string>> RuleSet
+        public AgentData(int xPos, int yPos, int difficulty)
         {
-            get => _ruleSet;
+            _position = new Vector2(xPos, yPos);
+            SetStats(difficulty);
         }
 
-        public bool IsFollowing
+        private void SetStats(int diff)
         {
-            get => _following;
-            set => _following = value;
-        }
-        
-        public AgentData(Vector2 position, double health, double stamina, int visionRange, List<KeyValuePair<string, string>> agentRuleSet, bool following)
-        {
-            _position = position;
-            _health = health;
-            _stamina = stamina;
-            _visionRange = visionRange;
-            _following = following;
-            _ruleSet = agentRuleSet;
+            switch (diff)
+            {
+                case 0:
+                    Health = Health / 2;
+                    Damage = Damage / 2;
+                    break;
+
+                case 50:
+                    Health = Health;
+                    Damage = Damage;
+                    break;
+
+                case 100:
+                    Health = Health * 2;
+                    Damage = Damage * 2;
+                    break;
+            }
         }
     }
 }

@@ -18,10 +18,10 @@ namespace WorldGeneration
             _clientController.IsBackupHost = false;
         }
 
-        public ICreature CreateAgent(string sessionId)
+
+        public Player CreateAgent(string sessionId)
         {
-            _clientController.SetSessionId(sessionId);
-            return new Creature.Agent("Bob", 10, 10, "#", "random-id-totally-bad-hardcoded");
+            throw new NotImplementedException();
         }
 
         public void HandlePacket(PacketDTO packet)

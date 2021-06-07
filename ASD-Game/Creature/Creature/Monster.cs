@@ -1,31 +1,28 @@
 ﻿using Creature.Creature.StateMachine;
 using Creature.Creature.StateMachine.Data;
+using WorldGeneration;
 
 namespace Creature.Creature
 {
-    public class Monster : ICreature
+    public class Monster : Character
     {
-        private ICreatureStateMachine _monsterStateMachine;
+        public ICreatureStateMachine MonsterStateMachine { get; set; }
+        public MonsterData MonsterData { get; set; }
 
-        public ICreatureStateMachine CreatureStateMachine
+        public Monster(string name, int xPosition, int yPosition, string symbol) : base(name, xPosition, yPosition, symbol)
         {
-            get => _monsterStateMachine;
-        }
-        
-        public Monster(ICreatureStateMachine monsterStateMachine)
-        {
-            _monsterStateMachine = monsterStateMachine;
-            _monsterStateMachine.StartStateMachine();
+            SetStats(0);
+            MonsterStateMachine = new MonsterStateMachine(MonsterData);
         }
 
-        public void ApplyDamage(double amount)
+        private void SetStats(int difficulty)
         {
-            _monsterStateMachine.CreatureData.Health -= amount;
+            CreateMonsterData(difficulty);
         }
 
-        public void HealAmount(double amount)
+        private void CreateMonsterData(int difficulty)
         {
-            _monsterStateMachine.CreatureData.Health += amount;
+            MonsterData = new MonsterData(XPosition, YPosition, difficulty);
         }
     }
 }

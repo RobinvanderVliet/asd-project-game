@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
@@ -9,14 +8,11 @@ namespace Creature.Creature.StateMachine.Data
     public class MonsterData : ICreatureData
     {
         private Vector2 _position;
-        private double _health;
-        private int _damage;
-        private int _visionRange;
+        private double _health = 40;
+        private int _damage = 10;
+        private int _visionRange = 6;
 
-        private List<KeyValuePair<string, string>> _ruleSet;
-        private bool _following;
-
-        public bool IsAlive => _health > 0;
+        public bool IsAlive { get => _health > 0; }
 
         public Vector2 Position
         {
@@ -30,7 +26,7 @@ namespace Creature.Creature.StateMachine.Data
             set => _health = value;
         }
 
-        public double Stamina { get; set; }
+        public List<KeyValuePair<string, string>> RuleSet { get; set; }
 
         public int Damage
         {
@@ -43,27 +39,32 @@ namespace Creature.Creature.StateMachine.Data
             get => _visionRange;
             set => _visionRange = value;
         }
-        
 
-        public List<KeyValuePair<string, string>> RuleSet
+        public MonsterData(int xPos, int yPos, int difficulty)
         {
-            get => _ruleSet;
-        }
-        
-        public bool IsFollowing
-        {
-            get => _following;
-            set => _following = value;
+            _position = new Vector2(xPos, yPos);
+            SetStats(difficulty);
         }
 
-        public MonsterData(Vector2 position, double health, int damage, int visionRange, List<KeyValuePair<string, string>> ruleSet, bool following)
+        private void SetStats(int diff)
         {
-            _position = position;
-            _health = health;
-            _damage = damage;
-            _visionRange = visionRange;
-            _ruleSet = ruleSet;
-            _following = following;
+            switch (diff)
+            {
+                case 0:
+                    Health = Health / 2;
+                    Damage = Damage / 2;
+                    break;
+
+                case 50:
+                    Health = Health;
+                    Damage = Damage;
+                    break;
+
+                case 100:
+                    Health = Health * 2;
+                    Damage = Damage * 2;
+                    break;
+            }
         }
     }
 }

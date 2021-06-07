@@ -16,7 +16,7 @@ namespace Creature
     public class AgentHandler : IAgentHandler
     {
         private bool replaced;
-        private ICreature _creature;
+        private Player _agent;
         private IMoveHandler _moveHandler;
         private IWorldService _worldService;
         private AgentConfigurationService _agentConfigurationService;
@@ -38,6 +38,7 @@ namespace Creature
             {
                 var player = _worldService.getCurrentPlayer();
                 
+                
                 // TODO: damage and world should not be in there
                 // TODO: after roy merge into develop 
                 
@@ -49,7 +50,7 @@ namespace Creature
             }
             else
             {
-                _creature.CreatureStateMachine.StopStateMachine();
+                //_mainCreature.CreatureStateMachine.StopStateMachine();
             }
         }
     }
