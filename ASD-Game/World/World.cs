@@ -12,7 +12,7 @@ namespace WorldGeneration
 
         public World(int seed, int viewDistance)
         {
-            _players = new ();
+            _players = new();
             _map = MapFactory.GenerateMap(seed: seed);
             _viewDistance = viewDistance;
             _map.DeleteMap();
@@ -20,7 +20,7 @@ namespace WorldGeneration
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
         {
-            if (CurrentPlayer.Id == userId)
+            if (CurrentPlayer.Id.Equals(userId))
             {
                 CurrentPlayer.XPosition = newXPosition;
                 CurrentPlayer.YPosition = newYPosition;
@@ -31,7 +31,18 @@ namespace WorldGeneration
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
+            
             DisplayWorld();
+        }
+
+        public void AddExistingPlayerToWorld(Player player, bool isCurrentPlayer)
+        {
+            if (isCurrentPlayer)
+            {
+                CurrentPlayer = player;
+            }
+
+            _players.Add(player);
         }
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
@@ -59,4 +70,4 @@ namespace WorldGeneration
         }
     }
 }
-
+     

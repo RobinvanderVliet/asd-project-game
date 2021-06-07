@@ -20,5 +20,7 @@ namespace Session.DTO
         {
 
         }
+        
+        public bool SavedGame { get; set; }
     }
 }

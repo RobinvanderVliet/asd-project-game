@@ -1,11 +1,11 @@
 using System;
 using ActionHandling;
 using Chat;
+using InputCommandHandler.Antlr.Ast.Actions;
 using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Exceptions;
 using Session;
-using System;
 
 namespace InputHandling.Antlr.Transformer
 {
@@ -15,18 +15,21 @@ namespace InputHandling.Antlr.Transformer
         private IMoveHandler _moveHandler;
         private IGameSessionHandler _gameSessionHandler;
         private IChatHandler _chatHandler;
+        private IGamesSessionService _gamesSessionService;
         
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private String _commando;
 
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IGamesSessionService gamesSessionService, IChatHandler chatHandler)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
             _gameSessionHandler = gameSessionHandler;
+            _gamesSessionService = gamesSessionService;
             _chatHandler = chatHandler;
         }
+        
         public void Apply(AST ast)
         {
             TransformNode(ast.Root);
@@ -80,6 +83,12 @@ namespace InputHandling.Antlr.Transformer
                         break;
                     case StartSession:
                         TransformStartSession((StartSession)nodeBody[i]);
+                        break;
+                    case LoadGame:
+                        TransformLoadGame((LoadGame)nodeBody[i]);
+                        break;
+                    case RequestSavedGames:
+                        TransformRequestSavedGames((RequestSavedGames)nodeBody[i]);
                         break;
                 }
         }
@@ -145,7 +154,7 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformCreateSession(CreateSession createSession)
         {
-            _sessionHandler.CreateSession(createSession.Message.MessageValue);
+            _sessionHandler.CreateSession(createSession.Message.MessageValue, false, null, null);
         }
 
         private void TransformJoinSession(JoinSession joinSession)
@@ -163,5 +172,15 @@ namespace InputHandling.Antlr.Transformer
             _gameSessionHandler.SendGameSession();
         }
 
+        private void TransformLoadGame(LoadGame loadGame)
+        {
+            _gamesSessionService.LoadGame(loadGame.Message.MessageValue);
+        }
+
+        private void TransformRequestSavedGames(RequestSavedGames requestSavedGames)
+        {
+            _gamesSessionService.RequestSavedGames();
+        }
+        
     }
 }

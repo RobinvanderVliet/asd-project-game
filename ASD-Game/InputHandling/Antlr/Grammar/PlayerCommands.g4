@@ -24,6 +24,9 @@ CREATE_SESSION : 'create_session';
 JOIN_SESSION : 'join_session';
 REQUEST_SESSIONS : 'request_sessions';
 START_SESSION : 'start_session';
+REQUEST_SAVED_GAMES : 'request_saved_games';
+LOAD_GAME : 'load_game';
+START_GAME : 'start_game';
 
 FORWARD: 'forward';
 UP: 'up';
@@ -36,7 +39,7 @@ WEST: 'west';
 RIGHT: 'right';
 EAST: 'east';
 
-NUMBER: '0' | [0-9]*;
+NUMBER: '0' | [0-9]+;
 MESSAGE: '"' ~'"'+ '"';
 //MESSAGE: ~[\r\n]+;
 
@@ -61,7 +64,10 @@ command:
     CREATE_SESSION SPACE message #createSession |
     JOIN_SESSION SPACE message #joinSession |
     REQUEST_SESSIONS #requestSessions |
-    START_SESSION #startSession;
+    START_SESSION #startSession |
+    LOAD_GAME SPACE message #loadGame |
+    START_GAME #startGame |
+    REQUEST_SAVED_GAMES #requestSavedGames;
 
 forward: FORWARD | UP | NORTH;
 backward: BACKWARD | DOWN | SOUTH;

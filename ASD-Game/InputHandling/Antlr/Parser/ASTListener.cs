@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using InputCommandHandler.Antlr.Ast.Actions;
 using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Antlr.Grammar;
@@ -119,6 +120,26 @@ namespace InputHandling.Antlr.Parser
 
         public override void ExitStartSession(PlayerCommandsParser.StartSessionContext context)
         {
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+        }
+
+        public override void EnterStartGame(PlayerCommandsParser.StartGameContext context)
+        {
+            _currentContainer.Push(new StartSession());
+        }
+
+        public override void ExitStartGame(PlayerCommandsParser.StartGameContext context)
+        {
+            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
+        }
+
+        public override void EnterLoadGame(PlayerCommandsParser.LoadGameContext context)
+        {
+            _currentContainer.Push(new LoadGame());
+        }
+
+        public override void ExitLoadGame(PlayerCommandsParser.LoadGameContext context)
+        {
             _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
         }
 
@@ -188,14 +209,12 @@ namespace InputHandling.Antlr.Parser
         {
             var action = _currentContainer.Peek();
 
-            if (action is Say)
+            if (action is Say say)
             {
-                Say say = (Say)action;
                 say.AddChild(new Message(context.GetText()));
             }
-            else if (action is Shout)
+            else if (action is Shout shout)
             {
-                Shout shout = (Shout)action;
                 shout.AddChild(new Message(context.GetText()));
             }
             else if (action is CreateSession createSession)
@@ -206,6 +225,24 @@ namespace InputHandling.Antlr.Parser
             {
                 joinSession.AddChild(new Message(context.GetText()));
             }
+            else if (action is StartSession startSession)
+            {
+                startSession.AddChild(new Message(context.GetText()));
+            }
+            else if (action is LoadGame loadGame)
+            {
+                loadGame.AddChild(new Message(context.GetText()));
+            }
+        }
+
+        public override void EnterRequestSavedGames(PlayerCommandsParser.RequestSavedGamesContext context)
+        {
+            _currentContainer.Push(new RequestSavedGames());
+        }
+
+        public override void ExitRequestSavedGames(PlayerCommandsParser.RequestSavedGamesContext context)
+        {
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
     }
 }

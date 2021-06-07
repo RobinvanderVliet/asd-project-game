@@ -1,16 +1,12 @@
 ﻿using Network;
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using ActionHandling.DTO;
-using DatabaseHandler;
 using DatabaseHandler.POCO;
-using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using Network.DTO;
 using Newtonsoft.Json;
 using WorldGeneration;
-
 
 namespace ActionHandling
 {
@@ -18,12 +14,16 @@ namespace ActionHandling
     {
         private IClientController _clientController;
         private IWorldService _worldService;
+        private IDatabaseService<PlayerPOCO> _servicePlayer;
 
-        public MoveHandler(IClientController clientController, IWorldService worldService)
+
+        public MoveHandler(IClientController clientController, IWorldService worldService,
+            IDatabaseService<PlayerPOCO> playerDatabaseService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Move);
             _worldService = worldService;
+            _servicePlayer = playerDatabaseService;
         }
 
         public void SendMove(string directionValue, int stepsValue)
@@ -73,12 +73,7 @@ namespace ActionHandling
             //(_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost)
             if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
             {
-                var dbConnection = new DbConnection();
-
-                var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-                var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
-
-                var allLocations = servicePlayer.GetAllAsync();
+                var allLocations = _servicePlayer.GetAllAsync();
 
                 allLocations.Wait();
 
@@ -92,7 +87,8 @@ namespace ActionHandling
 
                 if (result.Any())
                 {
-                    return new HandlerResponseDTO(SendAction.ReturnToSender, "Can't move to new position something is in the way");
+                    return new HandlerResponseDTO(SendAction.ReturnToSender,
+                        "You can't move to the new position, something is in the way");
                 }
                 else
                 {
@@ -114,14 +110,16 @@ namespace ActionHandling
 
         private void InsertToDatabase(MoveDTO moveDTO)
         {
-            var dbConnection = new DbConnection();
+            var player = _servicePlayer.GetAllAsync();
+            player.Wait();
+            PlayerPOCO selectedPlayer = player.Result.First(x =>
+                x.GameGuid == _clientController.SessionId && x.PlayerGuid == moveDTO.UserId);
+            Console.WriteLine(selectedPlayer);
 
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var player = playerRepository.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId);
-
-            player.XPosition = moveDTO.XPosition;
-            player.YPosition = moveDTO.YPosition;
-            playerRepository.UpdateAsync(player);
+            selectedPlayer.XPosition = moveDTO.XPosition;
+            selectedPlayer.YPosition = moveDTO.YPosition;
+            var insert = _servicePlayer.UpdateAsync(selectedPlayer);
+            insert.Wait();
         }
 
         private void HandleMove(MoveDTO moveDTO)

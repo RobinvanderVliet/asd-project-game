@@ -1,6 +1,12 @@
 using System;
+using ActionHandling;
+using Chat;
 using InputHandling;
+using Microsoft.Extensions.Logging;
+using Network;
+using Session;
 using UserInterface;
+using WorldGeneration;
 
 namespace ASD_project
 {
@@ -8,12 +14,30 @@ namespace ASD_project
     {
         public class MainGame : IMainGame
         {
+            private readonly ILogger<MainGame> _log;
+            private readonly IChatHandler _chatHandler;
+            private readonly ISessionHandler _sessionHandler;
+            private readonly IMoveHandler _moveHandler;
+            private readonly IGameSessionHandler _gameSessionHandler;
+            private readonly IClientController _clientController;
+            private readonly IWorldService _worldService;
+            private readonly IGamesSessionService _gamesSessionService;
             private const bool DEBUG_INTERFACE = true; //TODO: remove when UI is complete, obviously
             private IInputHandler _inputHandler;
             private IScreenHandler _screenHandler;
 
-            public MainGame(IInputHandler inputHandler, IScreenHandler screenHandler)
+            public MainGame(ILogger<MainGame> log, IClientController clientController, IWorldService worldService,
+                IChatHandler chatHandler, ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler
+                , IGamesSessionService gamesSessionService, IInputHandler inputHandler, IScreenHandler screenHandler)
             {
+                _log = log;
+                _clientController = clientController;
+                _worldService = worldService;
+                _chatHandler = chatHandler;
+                _sessionHandler = sessionHandler;
+                _moveHandler = moveHandler;
+                _gameSessionHandler = gameSessionHandler;
+                _gamesSessionService = gamesSessionService;
                 _screenHandler = screenHandler;
                 _inputHandler = inputHandler;
             }

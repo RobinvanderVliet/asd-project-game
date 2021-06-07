@@ -19,6 +19,7 @@ namespace InputHandling.Tests
         private Mock<IMoveHandler> _mockedMoveHandler;
         private Mock<IGameSessionHandler> _mockedGameSessionHandler;
         private Mock<IChatHandler> _mockedChatHandler;
+        private Mock<IGamesSessionService> _mockedGamesSessionService;
     
         [SetUp]
         public void Setup()
@@ -27,7 +28,8 @@ namespace InputHandling.Tests
             _mockedMoveHandler = new Mock<IMoveHandler>();
             _mockedGameSessionHandler = new Mock<IGameSessionHandler>();
             _mockedChatHandler = new Mock<IChatHandler>();
-            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object);
+            _mockedGamesSessionService = new Mock<IGamesSessionService>();
+            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedGamesSessionService.Object, _mockedChatHandler.Object);
         }
     
         [Test]
@@ -141,7 +143,7 @@ namespace InputHandling.Tests
             _sut.Apply(ast);
         
             // Assert
-            _mockedSessionHandler.Verify(mockedSession => mockedSession.CreateSession(sessionName), Times.Once);
+            _mockedSessionHandler.Verify(mockedSession => mockedSession.CreateSession(sessionName, false, null, null), Times.Once);
         }
     
         private static AST CreateSessionAst(string sessionName)

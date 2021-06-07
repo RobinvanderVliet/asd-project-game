@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
+using System.Data;
+using System.Data.Common;
 using System.IO;
 using DatabaseHandler;
 using DatabaseHandler.Repository;
@@ -47,9 +49,10 @@ namespace ASD_project
                     services.AddScoped<IMoveHandler, MoveHandler>();
                     services.AddScoped<IWorldService, WorldService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
-                    services.AddSingleton<IDbConnection, DbConnection>();
+                    services.AddSingleton<IDBConnection, DBConnection>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-                    services.AddScoped(typeof(IServicesDb<>), typeof(ServicesDb<>));
+                    services.AddScoped(typeof(IDatabaseService<>), typeof(DatabaseService<>));
+                    services.AddScoped<IGamesSessionService, GamesSessionService>();
                     services.AddScoped<IScreenHandler, ScreenHandler>();
                     services.AddScoped<IInputHandler, InputHandler>();
                     services.AddScoped<IPipeline, Pipeline>();
@@ -68,7 +71,6 @@ namespace ASD_project
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIROMENT") ?? "Production"}.json", optional: true)
                 .AddEnvironmentVariables();
-
         }
     }
 }
