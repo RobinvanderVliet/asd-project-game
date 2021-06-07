@@ -55,7 +55,8 @@ namespace Creature.Creature.NeuralNetworking
                 return false;
             }
 
-            //you get it
+            //Als een node op een hogere laag zit dan de huidige node kan deze verbonden worden
+            //anders niet aangezien je geen connectie kan aanmaken met nodes op dezelfde laag.
             if (node.Layer < Layer)
             {
                 for (int i = 0; i < node.OutputConnections.Count; i++)

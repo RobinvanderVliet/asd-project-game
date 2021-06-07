@@ -25,7 +25,7 @@ namespace Creature.Creature.NeuralNetworking
         {
             for (int i = 0; i < size; i++)
             {
-                Pop.Add(new SmartMonsterForTraining("trainee", 14, 14, "D", "hkljubadfilkubh"));
+                Pop.Add(new SmartMonsterForTraining("trainee", 14, 14, "D", "id"));
                 Pop[i].Brain.GenerateNetwork();
                 Pop[i].Brain.Mutate(InnovationHistory);
             }
@@ -36,7 +36,7 @@ namespace Creature.Creature.NeuralNetworking
         {
             for (int i = 0; i < size; i++)
             {
-                Pop.Add(new SmartMonsterForTraining("trainee", 14, 14, "D", "hkljubadfilkubh"));
+                Pop.Add(new SmartMonsterForTraining("trainee", 14, 14, "D", "id"));
                 Pop[i].Brain = gene;
                 Pop[i].Brain.Mutate(InnovationHistory);
             }
@@ -62,7 +62,7 @@ namespace Creature.Creature.NeuralNetworking
             }
         }
 
-        //returns true if all the SmartMonsters are dead      sad :(
+        //returns true if all the SmartMonsters are dead
         public bool Done()
         {
             for (int i = 0; i < Pop.Count; i++)

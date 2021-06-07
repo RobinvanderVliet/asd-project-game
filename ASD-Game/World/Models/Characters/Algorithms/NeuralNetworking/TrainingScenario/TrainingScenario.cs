@@ -26,7 +26,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                 14,
                 0
             );
-            Pop = new Population(50, data);
+            Pop = new Population(5000, data);
             RunTraining = true;
         }
 

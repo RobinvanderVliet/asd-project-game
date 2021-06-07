@@ -33,8 +33,10 @@ namespace Creature.Tests
         [Test]
         public void Test_ScanMap()
         {
+            //act
             _sut.ScanMap(_smartMonster, _smartMonster.CreatureData.VisionRange);
 
+            //assert
             Assert.NotNull(_sut.ClosestPlayer);
             Assert.NotNull(_sut.ClosestMonster);
         }
@@ -42,24 +44,30 @@ namespace Creature.Tests
         [Test]
         public void Test_ScanMapPlayerAI_Adjacent()
         {
+            //arrange/act
             _player.Location = new Vector2(14, 15);
 
+            //assert
             Assert.NotNull(_sut.ScanMapPlayerAI(_player.Location, _smartMonster));
         }
 
         [Test]
         public void Test_ScanMapPlayerAI_Not_Adjacent()
         {
+            //arrange/act
             _player.Location = new Vector2(20, 20);
 
+            //assert
             Assert.Null(_sut.ScanMapPlayerAI(_player.Location, _smartMonster));
         }
 
         [Test]
         public void Test_CheckNewPosition()
         {
+            //act
             _sut.CheckNewPosition(_smartMonster);
 
+            //assert
             int expected = -13;
             int actual = _smartMonster.Score;
 
