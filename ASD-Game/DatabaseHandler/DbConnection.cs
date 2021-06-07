@@ -23,11 +23,11 @@ namespace DatabaseHandler
                 .DbRef(x => x.PlayerGUIDHost, nameof(PlayerPOCO));
 
             //FK Agent -> Game
-            BsonMapper.Global.Entity<AgentPoco>()
+            BsonMapper.Global.Entity<AgentPOCO>()
                 .DbRef(x => x.GameGUID, nameof(GamePOCO));
 
             //FK Agent -> Player
-            BsonMapper.Global.Entity<AgentPoco>()
+            BsonMapper.Global.Entity<AgentPOCO>()
                 .DbRef(x => x.PlayerGUID, nameof(PlayerPOCO));
 
             //FK PlayerItem -> Player

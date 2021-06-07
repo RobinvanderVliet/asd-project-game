@@ -3,7 +3,7 @@ using System;
 
 namespace DatabaseHandler.POCO
 {
-    public class AgentPoco
+    public class AgentPOCO
     {
         [BsonId] public string FileName { get; set; }
 

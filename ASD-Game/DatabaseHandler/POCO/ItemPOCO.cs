@@ -3,7 +3,7 @@ using System;
 
 namespace DatabaseHandler.POCO
 {
-    public class ItemPoco
+    public class ItemPOCO
     {
         [BsonId]
         public String ItemName { get; set; }
