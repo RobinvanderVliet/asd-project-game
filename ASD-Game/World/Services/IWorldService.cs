@@ -2,6 +2,7 @@
 using ASD_project.ActionHandling.DTO;
 using ASD_project.Items;
 using ASD_project.World.Models.Characters;
+using ASD_project.World.Models.Interfaces;
 
 namespace ASD_project.World.Services
 {
@@ -14,6 +15,7 @@ namespace ASD_project.World.Services
         public void GenerateWorld(int seed);
         public Player getCurrentPlayer();
         public List<ItemSpawnDTO> getAllItems();
+        public ITile GetTile(int x, int y);
         public void AddItemToWorld(ItemSpawnDTO itemSpawnDto);
         /// <summary>
         /// Returns items on title for the player of this instance.

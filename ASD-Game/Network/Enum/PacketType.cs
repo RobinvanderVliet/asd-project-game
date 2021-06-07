@@ -6,7 +6,8 @@
         Move,
         Session,
         GameSession,
+        RelativeStat,
         Spawn,
-        Inventory     
+        Inventory,        
     }
 }
