@@ -30,7 +30,7 @@ namespace Session.Tests
         private Mock<ISessionHandler> _mockedsessionHandler;
         private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerDatabaseService;
         private Mock<IDatabaseService<GamePOCO>> _mockedGameDatabaseService;
-        private Mock<IDatabaseService<PlayerItemPoco>> _mockedPlayerItemDatabaseService;
+        private Mock<IDatabaseService<PlayerItemPOCO>> _mockedPlayerItemDatabaseService;
         private Mock<IRelativeStatHandler> _mockedRelativeStatHandler;
 
         private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
@@ -47,7 +47,7 @@ namespace Session.Tests
             _mockedsessionHandler = new Mock<ISessionHandler>();
             _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
             _mockedGameConfigDatabaseService = new Mock<IDatabaseService<GameConfigurationPOCO>>();
-            _mockedPlayerItemDatabaseService = new Mock<IDatabaseService<PlayerItemPoco>>();
+            _mockedPlayerItemDatabaseService = new Mock<IDatabaseService<PlayerItemPOCO>>();
             _mockedRelativeStatHandler = new Mock<IRelativeStatHandler>();
             _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPOCO>>();
             _mockedGameDatabaseService = new Mock<IDatabaseService<GamePOCO>>();
