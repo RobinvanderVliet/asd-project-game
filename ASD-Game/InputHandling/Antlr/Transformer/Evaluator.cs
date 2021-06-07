@@ -19,26 +19,26 @@ namespace InputHandling.Antlr.Transformer
 {
     public class Evaluator : IEvaluator
     {
-        private ISessionHandler _sessionHandler;
-        private IMoveHandler _moveHandler;
-        private IGameSessionHandler _gameSessionHandler;
-        private IChatHandler _chatHandler;
-        private IClientController _clientController;
-        private IInventoryHandler _inventoryHandler;
-        private IGamesSessionService _gamesSessionService;
+        private readonly ISessionHandler _sessionHandler;
+        private readonly IMoveHandler _moveHandler;
+        private readonly IGameSessionHandler _gameSessionHandler;
+        private readonly IChatHandler _chatHandler;
+        private readonly IClientController _clientController;
+        private readonly IInventoryHandler _inventoryHandler;
+        private readonly IGamesSessionService _gamesSessionService;
         
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private string _commando;
 
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IInventoryHandler inventoryHandler, IClientController clientController)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IInventoryHandler inventoryHandler, IClientController clientController, IGamesSessionService gamesSessionService)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
             _gameSessionHandler = gameSessionHandler;
-            _gamesSessionService = gamesSessionService;
             _chatHandler = chatHandler;
             _clientController = clientController;
+            _gamesSessionService = gamesSessionService;
             _inventoryHandler = inventoryHandler;
         }
         public void Apply(AST ast)
@@ -185,7 +185,7 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformCreateSession(CreateSession createSession)
         {
-            _sessionHandler.CreateSession(createSession.Message.MessageValue, createSession.Username.UsernameValue);
+            _sessionHandler.CreateSession(createSession.Message.MessageValue, createSession.Username.UsernameValue, false, null, null);
         }
 
         private void TransformJoinSession(JoinSession joinSession)

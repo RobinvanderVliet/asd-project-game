@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace UserInterface
@@ -81,6 +83,12 @@ namespace UserInterface
                 }
                 _displaying = false;
             }
+        }
+
+        public void UpdateSavedSessionsList(IEnumerable sessions)
+        {
+            LoadScreen loadScreen = _screen as LoadScreen;
+            loadScreen.UpdateSavedSessionsList(sessions);
         }
     }
 }

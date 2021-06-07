@@ -5,6 +5,7 @@ using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
+using UserInterface;
 
 namespace Session
 {
@@ -13,13 +14,15 @@ namespace Session
         private readonly ISessionHandler _sessionHandler;
         private readonly IDatabaseService<ClientHistoryPOCO> _clientHistoryService;
         private readonly IDatabaseService<GamePOCO> _gamePocoService;
+        private readonly IScreenHandler _screenHandler;
 
         public GamesSessionService(ISessionHandler sessionHandler,
-            IDatabaseService<ClientHistoryPOCO> clientHistoryService, IDatabaseService<GamePOCO> gamePocoService)
+            IDatabaseService<ClientHistoryPOCO> clientHistoryService, IDatabaseService<GamePOCO> gamePocoService, IScreenHandler screenHandler)
         {
             _sessionHandler = sessionHandler;
             _clientHistoryService = clientHistoryService;
             _gamePocoService = gamePocoService;
+            _screenHandler = screenHandler;
         }
 
         public void RequestSavedGames()
@@ -45,10 +48,9 @@ namespace Session
             }
             else
             {
-                foreach (var element in joinedTables.Select(x => new {x.GameGuid, x.GameName}))
-                {
-                    Console.WriteLine(element.GameGuid + " " + element.GameName);
-                }
+                var sessions = joinedTables.Select(x => new {x.GameGuid, x.GameName});
+                _screenHandler.UpdateSavedSessionsList(sessions);
+                
             }
         }
 
@@ -65,8 +67,11 @@ namespace Session
                 var gameName = allGames.Result.Where(x => x.GameGuid == value).Select(x => x.GameName).First()
                     .ToString();
                 var seed = allGames.Result.Where(x => x.GameGuid == value).Select(x => x.Seed).FirstOrDefault();
-                _sessionHandler.CreateSession(gameName, true, value, seed);
+                //get host userName from somewhere.
+                _sessionHandler.CreateSession(gameName, "gerrie", true, value, seed);
             }
         }
     }
+
+    
 }

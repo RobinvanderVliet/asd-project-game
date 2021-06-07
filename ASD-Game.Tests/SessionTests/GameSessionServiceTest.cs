@@ -152,7 +152,7 @@ namespace Session.Tests
             sut.LoadGame("game1");
 
             _mockedSessionHandler.Verify(
-                x => x.CreateSession(gamePoco.GameName, true, gamePoco.GameGuid, gamePoco.Seed));
+                x => x.CreateSession(gamePoco.GameName, "gerrie", true, gamePoco.GameGuid, gamePoco.Seed));
         }
     }
 }

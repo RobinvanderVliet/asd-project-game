@@ -53,6 +53,10 @@ namespace ASD_project
                         {
                             _inputHandler.HandleLobbyScreenCommands();
                         }
+                        else if (currentScreen is LoadScreen)
+                        {
+                            _inputHandler.HandleLoadScreenCommands();
+                        }
 
                     }
                 }

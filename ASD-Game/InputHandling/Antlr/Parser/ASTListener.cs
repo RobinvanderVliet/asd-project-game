@@ -123,16 +123,6 @@ namespace InputHandling.Antlr.Parser
             _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
 
-        public override void EnterStartGame(PlayerCommandsParser.StartGameContext context)
-        {
-            _currentContainer.Push(new StartSession());
-        }
-
-        public override void ExitStartGame(PlayerCommandsParser.StartGameContext context)
-        {
-            _ast.Root.AddChild((ASTNode)_currentContainer.Pop());
-        }
-
         public override void EnterLoadGame(PlayerCommandsParser.LoadGameContext context)
         {
             _currentContainer.Push(new LoadGame());
@@ -233,23 +223,40 @@ namespace InputHandling.Antlr.Parser
 
         public override void EnterMessage(PlayerCommandsParser.MessageContext context)
         {
-            ASTNode node = (ASTNode) _currentContainer.Peek();
-            node.AddChild(new Message(context.GetText()));
-        }
-
-        public override void EnterUsername(PlayerCommandsParser.UsernameContext context)
-        {
             var action = _currentContainer.Peek();
 
             if (action is Say say)
-            
-            if (action is JoinSession joinSession)
             {
                 say.AddChild(new Message(context.GetText()));
             }
             else if (action is Shout shout)
             {
                 shout.AddChild(new Message(context.GetText()));
+            }
+            else if (action is CreateSession createSession)
+            {
+                createSession.AddChild(new Message(context.GetText()));
+            }
+            else if (action is JoinSession joinSession)
+            {
+                joinSession.AddChild(new Message(context.GetText()));
+            }
+            else if (action is StartSession startSession)
+            {
+                startSession.AddChild(new Message(context.GetText()));
+            }
+            else if (action is LoadGame loadGame)
+            {
+                loadGame.AddChild(new Message(context.GetText()));
+            }
+        }
+
+        public override void EnterUsername(PlayerCommandsParser.UsernameContext context)
+        {
+            var action = _currentContainer.Peek();
+            
+            if (action is JoinSession joinSession)
+            {
                 joinSession.AddChild(new Username(context.GetText()));
             }
             else if (action is CreateSession createSession)
@@ -276,18 +283,7 @@ namespace InputHandling.Antlr.Parser
         public override void ExitItemfrequency(PlayerCommandsParser.ItemfrequencyContext context)
         {
             _ast.Root.AddChild((ItemFrequency) _currentContainer.Pop());
-            else if (action is JoinSession joinSession)
-            {
-                joinSession.AddChild(new Message(context.GetText()));
-            }
-            else if (action is StartSession startSession)
-            {
-                startSession.AddChild(new Message(context.GetText()));
-            }
-            else if (action is LoadGame loadGame)
-            {
-                loadGame.AddChild(new Message(context.GetText()));
-            }
+        
         }
 
         public override void EnterRequestSavedGames(PlayerCommandsParser.RequestSavedGamesContext context)

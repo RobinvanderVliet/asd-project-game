@@ -9,6 +9,7 @@ using System.Timers;
 using Network.DTO;
 using WorldGeneration;
 using DatabaseHandler;
+using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using DatabaseHandler.Repository;
 using Session.GameConfiguration;
@@ -22,7 +23,7 @@ namespace Session
     {
         private const bool DEBUG_INTERFACE = false; //TODO: remove when UI is complete, obviously
 
-        private IClientController _clientController;
+        private readonly IClientController _clientController;
         private Session _session;
         private IHeartbeatHandler _heartbeatHandler;
         private readonly IScreenHandler _screenHandler;
@@ -33,31 +34,34 @@ namespace Session
         private int _hostInactiveCounter = 0;
         private Timer _hostPingTimer;
         private Timer _senderHeartbeatTimer;
-        private IGameConfigurationHandler _gameConfigurationHandler;
+        private readonly IGameConfigurationHandler _gameConfigurationHandler;
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
-        private IScreenHandler _screenHandler;
         public string GameName { get; set; }
 
-        public SessionHandler(IClientController clientController, IScreenHandler screenHandler)
+        public SessionHandler(IClientController clientController, IScreenHandler screenHandler,
+            IMessageService messageService, IGameConfigurationHandler gameConfigurationHandler)
         {
             _clientController = clientController;
-            _clientController.SubscribeToPacketType(this, PacketType.Session);
             _screenHandler = screenHandler;
-            _gameConfigurationHandler = gameConfigurationHandler;
             _messageService = messageService;
+            _gameConfigurationHandler = gameConfigurationHandler;
+            _clientController.SubscribeToPacketType(this, PacketType.Session);
         }
 
-        public SessionHandler()
+        public SessionHandler(IMessageService messageService, IScreenHandler screenHandler,
+            IGameConfigurationHandler gameConfigurationHandler)
         {
-            
+            _messageService = messageService;
+            _screenHandler = screenHandler;
+            _gameConfigurationHandler = gameConfigurationHandler;
         }
-        
+
         public List<string[]> GetAllClients()
         {
             return _session.GetAllClients();
         }
-     
+
         public bool JoinSession(string sessionId, string userName)
         {
             var joinSession = false;
@@ -80,7 +84,7 @@ namespace Session
 
                 SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
                 sessionDTO.Clients = new List<string[]>();
-                sessionDTO.Clients.Add(new []{_clientController.GetOriginId(), userName});
+                sessionDTO.Clients.Add(new[] {_clientController.GetOriginId(), userName});
                 sessionDTO.SessionSeed = receivedSessionDTO.SessionSeed;
                 SendSessionDTO(sessionDTO);
                 joinSession = true;
@@ -117,7 +121,7 @@ namespace Session
                 _session.SessionId = sessionId;
             }
 
-            _session.AddClient(_clientController.GetOriginId());
+            _session.AddClient(_clientController.GetOriginId(), userName);
 
             if (seed != null)
             {
@@ -137,6 +141,8 @@ namespace Session
             _messageService.AddMessage("Created session with the name: " + _session.Name);
             return _session.InSession;
         }
+
+
 
         public void RequestSessions()
         {
@@ -179,10 +185,12 @@ namespace Session
                     {
                         return HandleHeartbeat(packet);
                     }
+
                     if (sessionDTO.SessionType == SessionType.EditMonsterDifficulty)
                     {
                         return HandleMonsterDifficulty(packet);
                     }
+
                     if (sessionDTO.SessionType == SessionType.EditItemSpawnRate)
                     {
                         return HandleItemSpawnRate(packet);
@@ -218,8 +226,8 @@ namespace Session
 
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
-        
-        private HandlerResponseDTO  HandleMonsterDifficulty(PacketDTO packetDto)
+
+        private HandlerResponseDTO HandleMonsterDifficulty(PacketDTO packetDto)
         {
             if (_clientController.IsHost())
             {
@@ -228,15 +236,19 @@ namespace Session
                 _gameConfigurationHandler.SetDifficulty((MonsterDifficulty) difficulty, _clientController.SessionId);
                 return new HandlerResponseDTO(SendAction.SendToClients, packetDto.Payload);
             }
+
             if (_clientController.IsBackupHost)
             {
-                SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
+                SessionDTO sessionDTO =
+                    JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
                 int difficulty = int.Parse(sessionDTO.Name);
                 _gameConfigurationHandler.SetDifficulty((MonsterDifficulty) difficulty, _clientController.SessionId);
             }
+
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
-        private HandlerResponseDTO  HandleItemSpawnRate(PacketDTO packetDto)
+
+        private HandlerResponseDTO HandleItemSpawnRate(PacketDTO packetDto)
         {
             if (_clientController.IsHost())
             {
@@ -246,13 +258,16 @@ namespace Session
                 _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
                 return new HandlerResponseDTO(SendAction.SendToClients, packetDto.Payload);
             }
+
             if (_clientController.IsBackupHost)
             {
-                SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
+                SessionDTO sessionDTO =
+                    JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
                 int spawnrate = int.Parse(sessionDTO.Name);
                 Console.WriteLine(spawnrate);
                 _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
             }
+
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
@@ -342,15 +357,17 @@ namespace Session
                         hostName = "Unnamed player";
                         amountOfPlayers = "1";
                     }
-                    
-                    screen.UpdateWithNewSession(new[] {packet.Header.SessionID, sessionDTO.Name, hostName, amountOfPlayers});
+
+                    screen.UpdateWithNewSession(new[]
+                        {packet.Header.SessionID, sessionDTO.Name, hostName, amountOfPlayers});
                 }
             }
             else
             {
-                Console.WriteLine("Id: " + packet.Header.SessionID + " Name: " + sessionDTO.Name + " Host: " + sessionDTO.Clients.First()[1] + " Amount of players: " + sessionDTO.Clients.Count);
+                Console.WriteLine("Id: " + packet.Header.SessionID + " Name: " + sessionDTO.Name + " Host: " +
+                                  sessionDTO.Clients.First()[1] + " Amount of players: " + sessionDTO.Clients.Count);
             }
-            
+
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
@@ -378,9 +395,9 @@ namespace Session
             }
             else
             {
-                Console.WriteLine(sessionDTO.ClientIds[0] + " has joined your session: ");
-                _session.AddClient(sessionDTO.ClientIds[0]);
-                sessionDTO.ClientIds = new List<string>();
+                Console.WriteLine(sessionDTO.Clients[0] + " has joined your session: ");
+                _session.AddClient(sessionDTO.Clients[0].ToString(), sessionDTO.Clients[1].ToString());
+                sessionDTO.Clients = new List<string[]>();
                 if (_screenHandler.Screen is LobbyScreen screen)
                 {
                     screen.UpdateLobbyScreen(sessionDTO.Clients);
@@ -408,35 +425,39 @@ namespace Session
 
             _session.SessionSeed = sessionDTOClients.SessionSeed;
 
-                foreach (string[] client in sessionDTOClients.Clients)
-                {
-                    _session.AddClient(client[0], client[1]);
-                }
-            Console.WriteLine("Players in your session:");
-            foreach (string client in sessionDTOClients.ClientIds)
+            foreach (string[] client in sessionDTOClients.Clients)
             {
-                _session.AddClient(client);
+                _session.AddClient(client[0], client[1]);
+            }
+
+            Console.WriteLine("Players in your session:");
+            foreach (string[] client in sessionDTOClients.Clients)
+            {
+                _session.AddClient(client[0], client[1]);
                 Console.WriteLine(client);
             }
 
-                if (_screenHandler.Screen is LobbyScreen screen)
-                {
-                    screen.UpdateLobbyScreen(sessionDTOClients.Clients);
-                }
-
-                if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost) {
-                    if (sessionDTOClients.Clients[1][0].Equals(_clientController.GetOriginId()))
-                    {
-                        _clientController.IsBackupHost = true;
-                        PingHostTimer();
-                    }
-            if (sessionDTOClients.ClientIds.Count > 0 && !_clientController.IsBackupHost)
+            if (_screenHandler.Screen is LobbyScreen screen)
             {
-                if (sessionDTOClients.ClientIds[1].Equals(_clientController.GetOriginId()))
+                screen.UpdateLobbyScreen(sessionDTOClients.Clients);
+            }
+
+            if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost)
+            {
+                if (sessionDTOClients.Clients[1][0].Equals(_clientController.GetOriginId()))
                 {
                     _clientController.IsBackupHost = true;
                     PingHostTimer();
-                    Console.WriteLine("You have been marked as the backup host");
+                }
+
+                if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost)
+                {
+                    if (sessionDTOClients.Clients[1].Equals(_clientController.GetOriginId()))
+                    {
+                        _clientController.IsBackupHost = true;
+                        PingHostTimer();
+                        Console.WriteLine("You have been marked as the backup host");
+                    }
                 }
             }
         }
@@ -444,20 +465,21 @@ namespace Session
         private HandlerResponseDTO ActiveGameAddsPlayer(SessionDTO sessionDTO, PacketDTO packet)
         {
             // check if ID matches
-            var clientId = sessionDTO.ClientIds[0];
+            var clientId = sessionDTO.Clients[0];
 
             IDatabaseService<PlayerPOCO> servicePlayer = new DatabaseService<PlayerPOCO>();
 
             var allPlayerId = servicePlayer.GetAllAsync();
             allPlayerId.Wait();
             var result =
-                allPlayerId.Result.FirstOrDefault(x => x.GameGuid == _session.SessionId && x.PlayerGuid == clientId);
+                allPlayerId.Result.FirstOrDefault(x =>
+                    x.GameGuid == _session.SessionId && x.PlayerGuid == clientId[0]);
 
             if (result != null)
             {
-                Console.WriteLine(sessionDTO.ClientIds[0] + " has joined your session: ");
-                _session.AddClient(sessionDTO.ClientIds[0]);
-                sessionDTO.ClientIds = new List<string>();
+                Console.WriteLine(sessionDTO.Clients[0] + " has joined your session: ");
+                _session.AddClient(sessionDTO.Clients[0].ToString(), sessionDTO.Clients[1].ToString());
+                sessionDTO.Clients = new List<string[]>();
 
                 sessionDTO.SessionSeed = _session.SessionSeed;
 
@@ -465,11 +487,13 @@ namespace Session
                 {
                     HandlePlayerLocation(servicePlayer, result);
                 }
+
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
             else
             {
-                return new HandlerResponseDTO(SendAction.ReturnToSender, "Not allowed to join saved or running game");
+                return new HandlerResponseDTO(SendAction.ReturnToSender,
+                    "Not allowed to join saved or running game");
             }
 
             return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
@@ -586,7 +610,8 @@ namespace Session
         {
             _session.GameStarted = startSession;
         }
-        public void setSession(Session session) 
+
+        public void setSession(Session session)
         {
             this._session = session;
         }

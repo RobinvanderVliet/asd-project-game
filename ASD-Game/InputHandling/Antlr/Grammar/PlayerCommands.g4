@@ -51,6 +51,8 @@ ARMOR: 'armor';
 HELMET: 'helmet';
 WEAPON: 'weapon';
 SLOT: 'slot';
+REQUEST_SAVED_GAMES : 'request_saved_games';
+LOAD_GAME : 'load_game';
 
 NUMBER: '0' | [0-9]+;
 MESSAGE: '"' ~'"'+ '"';
@@ -84,6 +86,8 @@ command:
     SET_ITEM_FREQUENCY SPACE (LOW | MEDIUM | HIGH) #itemfrequency |
     INSPECT SPACE inventorySlot #inspect |
     USE SPACE step #use	|
+    LOAD_GAME SPACE message #loadGame |
+    REQUEST_SAVED_GAMES #requestSavedGames | 
     SEARCH #search;
 
 forward: FORWARD | UP | NORTH;

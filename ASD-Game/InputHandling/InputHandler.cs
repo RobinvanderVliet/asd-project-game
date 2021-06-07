@@ -13,24 +13,27 @@ namespace InputHandling
 {
     public class InputHandler : IInputHandler
     {
-        private IPipeline _pipeline;
-        private ISessionHandler _sessionHandler;
-        private IScreenHandler _screenHandler;
-        private IGameConfigurationHandler _gameConfigurationHandler;
-        private IMessageService _messageService;
+        private readonly IPipeline _pipeline;
+        private readonly ISessionHandler _sessionHandler;
+        private readonly IScreenHandler _screenHandler;
+        private readonly IGameConfigurationHandler _gameConfigurationHandler;
+        private readonly IMessageService _messageService;
         private static Timer aTimer;
         private const string RETURN_KEYWORD = "return";
         private string _enteredSessionName;
+        private readonly IGamesSessionService _gamesSessionService;
 
         public string START_COMMAND = "start_session";
 
-        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler, IMessageService messageService, IGameConfigurationHandler gameConfigurationHandler)
+        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler, IMessageService messageService, IGameConfigurationHandler gameConfigurationHandler, IGamesSessionService gamesSessionService)
         {
             _pipeline = pipeline;
             _sessionHandler = sessionHandler;
             _screenHandler = screenHandler;
             _gameConfigurationHandler = gameConfigurationHandler;
+            _gamesSessionService = gamesSessionService;
             _messageService = messageService;
+
         }
 
         public InputHandler()
@@ -79,6 +82,7 @@ namespace InputHandling
                     break;
                 case 3:
                     _screenHandler.TransitionTo(new LoadScreen());
+                    _gamesSessionService.RequestSavedGames();
                     break;
                 case 4:
                     _screenHandler.TransitionTo(new EditorScreen());
@@ -157,6 +161,20 @@ namespace InputHandling
             }
 
         }
+
+        public void HandleLoadScreenCommands()
+        {
+            LoadScreen loadScreen = _screenHandler.Screen as LoadScreen;
+            var input = GetCommand();
+            
+            if (input == RETURN_KEYWORD)
+            {
+                _screenHandler.TransitionTo(new StartScreen());
+                return;
+            }
+            
+        }
+
         public void HandleConfigurationScreenCommands()
         {
             var input = GetCommand();
@@ -172,7 +190,7 @@ namespace InputHandling
                 if (configurationCompleted)
                 {
                     _gameConfigurationHandler.SetGameConfiguration();
-                    _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(), _gameConfigurationHandler.GetUsername());
+                    _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(), _gameConfigurationHandler.GetUsername(), false, null, null);
                     _screenHandler.TransitionTo(new LobbyScreen());
                 }
             }

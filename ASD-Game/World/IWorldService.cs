@@ -22,7 +22,6 @@ namespace WorldGeneration
         public void LoadArea(int playerX, int playerY, int viewDistance);
         public string SearchCurrentTile();
         public void DisplayStats();
-        public Player getCurrentPlayer();
 
     }
 }
