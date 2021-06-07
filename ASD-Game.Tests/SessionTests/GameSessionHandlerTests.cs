@@ -3,15 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using Moq;
 using Network;
-using Network.DTO;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
 using DatabaseHandler.POCO;
-using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using Session.DTO;
 using WorldGeneration;
@@ -50,10 +45,15 @@ namespace Session.Tests
             _packetDTO = new PacketDTO();
         }
 
+        /// <summary>
+        ///  [SendGameSession()]
+        ///
+        /// [Description of the test]
+        /// Als game is saved dan moet StartGameDTO gevuld worden met bestaande items
+        /// </summary>
         [Test]
-        public void TestIfGameIsSavedStartGameDTOIsGettingOldSavedGameData()
+        public void Test_SendGameSession_FillsStartGameDTO()
         {
-            // Als game is saved dan moet StartGameDTO gevuld worden met betsaande items
             _mockedsessionHandler.Setup(x => x.GetSavedGame()).Returns(true);
             StartGameDTO startGameDto = new StartGameDTO();
             List<PlayerPOCO> savedPlayers = new List<PlayerPOCO>();
@@ -78,7 +78,7 @@ namespace Session.Tests
             startGameDto.PlayerLocations = dictPlayer;
 
             _mockedClientController.Setup(x => x.SessionId).Returns("GameGuid1");
-            
+
 
             StartGameDTO sendGameDTO = new StartGameDTO
             {
@@ -96,14 +96,19 @@ namespace Session.Tests
             _mockedClientController.Verify(x => x.SendPayload(payload, PacketType.GameSession), Times.Once);
         }
 
+        /// <summary>
+        ///  [SendGameSession()]
+        ///
+        /// [Description of the test]
+        /// Test If New Game Is Started Setups New Game State With New Location For Player
+        /// </summary>
         [Test]
-        public void TestIfNewGameIsStartedSetupsNewGameStateWitnNewLocationForPlayer()
+        public void Test_SendGameSession_SetupGameStateWithNewLocations()
         {
-            // Als game is saved dan moet StartGameDTO gevuld worden met betsaande items
             _mockedsessionHandler.Setup(x => x.GetSavedGame()).Returns(false);
             StartGameDTO startGameDto = new StartGameDTO();
-            
-         
+
+
             Dictionary<string, int[]> dictPlayer = new Dictionary<string, int[]>();
             int[] playerPosition = new int[2];
             playerPosition[0] = 26;
@@ -117,9 +122,9 @@ namespace Session.Tests
 
             _mockedClientController.Setup(x => x.SessionId).Returns("GameGuid1");
 
-                  List<string> allClients = new List<string>();
-                     allClients.Add("GameGuid1Player1");
-        
+            List<string> allClients = new List<string>();
+            allClients.Add("GameGuid1Player1");
+
 
             StartGameDTO sendGameDTO = new StartGameDTO
             {
@@ -127,7 +132,6 @@ namespace Session.Tests
                 PlayerLocations = dictPlayer,
                 ExistingPlayer = null,
                 GameGuid = startGameDto.GameGuid
-                
             };
             _mockedsessionHandler.Setup(x => x.GetAllClients()).Returns(allClients);
             _mockedsessionHandler.Setup(x => x.GetSessionSeed()).Returns(1);
@@ -137,8 +141,33 @@ namespace Session.Tests
             _mockedClientController.Verify(x => x.SendPayload(payload, PacketType.GameSession), Times.Once);
         }
 
-
-
-
+        /// <summary>
+        ///  [HandleStartGameSession()]
+        ///
+        /// [Description of the test]
+        /// Players toevoegen aan de game met de seed
+        /// </summary>
+        // [Test]
+        // public void Test_HandleStartGameSession()
+        // {
+        //     // Arrange
+        //     StartGameDTO startGameDto = new StartGameDTO();
+        //     startGameDto.Seed = 0;
+        //     startGameDto.GameGuid = "GameGuid1";
+        //     PlayerPOCO player = new PlayerPOCO
+        //     {
+        //         GameGuid = "GameGuid1", Health = 1, Stamina = 1, PlayerGuid = "GameGuid1Player1",
+        //         GameGUIDAndPlayerGuid = "GameGuid1Player1", PlayerName = "Player1", TypePlayer = 1, XPosition = 0,
+        //         YPosition = 0
+        //     };
+        //     startGameDto.ExistingPlayer = player;
+        //
+        //     _mockedClientController.Setup(x => x.GetOriginId()).Returns(startGameDto.ExistingPlayer.GameGuid);
+        //
+        //     // Act
+        //
+        //     // Assert
+        //     _sut.HandleStartGameSEssion(startGameDto);
+        // }
     }
 }
