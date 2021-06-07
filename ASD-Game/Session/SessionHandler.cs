@@ -19,20 +19,20 @@ namespace ASD_Game.Session
     public class SessionHandler : IPacketHandler, ISessionHandler
     {
         private const bool DEBUG_INTERFACE = false; //TODO: remove when UI is complete, obviously
-        private const int WAITTIMEPINGTIMER = 500;
-        private const int INTERVALTIMEPINGTIMER = 1000;
-        private IClientController _clientController;
-        private ASD_Game.Session.Session _session;
+        private const int WAIT_TIME_PING_TIMER = 500;
+        private const int INTERVAL_TIME_PING_TIMER = 1000;
+        private readonly IClientController _clientController;
+        private Session _session;
         private IHeartbeatHandler _heartbeatHandler;
         private readonly IScreenHandler _screenHandler;
         private readonly IMessageService _messageService;
 
-        private Dictionary<string, PacketDTO> _availableSessions = new();
+        private readonly Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;
         private int _hostInactiveCounter = 0;
         private Timer _hostPingTimer;
         private Timer _senderHeartbeatTimer;
-        private IGameConfigurationHandler _gameConfigurationHandler;
+        private readonly IGameConfigurationHandler _gameConfigurationHandler;
         public SessionHandler(IClientController clientController, IScreenHandler screenHandler, IGameConfigurationHandler gameConfigurationHandler, IMessageService messageService)
         {
             _clientController = clientController;
@@ -65,7 +65,7 @@ namespace ASD_Game.Session
                 SendHeartbeatTimer();
 
                 SessionDTO receivedSessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
-                _session = new ASD_Game.Session.Session(receivedSessionDTO.Name);
+                _session = new Session(receivedSessionDTO.Name);
 
                 _session.SessionId = sessionId;
                 _clientController.SetSessionId(sessionId);
@@ -84,7 +84,7 @@ namespace ASD_Game.Session
 
         private void SendHeartbeatTimer()
         {
-            _senderHeartbeatTimer = new Timer(INTERVALTIMEPINGTIMER);
+            _senderHeartbeatTimer = new Timer(INTERVAL_TIME_PING_TIMER);
             _senderHeartbeatTimer.Enabled = true;
             _senderHeartbeatTimer.AutoReset = true;
             _senderHeartbeatTimer.Elapsed += SenderHeartbeatEvent;
@@ -98,7 +98,7 @@ namespace ASD_Game.Session
 
         public bool CreateSession(string sessionName, string userName)
         {
-            _session = new ASD_Game.Session.Session(sessionName);
+            _session = new Session(sessionName);
             _session.GenerateSessionId();
             _session.AddClient(_clientController.GetOriginId(), userName);
             _session.SessionSeed = new MapFactory().GenerateSeed();
@@ -382,7 +382,7 @@ namespace ASD_Game.Session
 
         private void PingHostTimer()
         {
-            _hostPingTimer = new Timer(INTERVALTIMEPINGTIMER);
+            _hostPingTimer = new Timer(INTERVAL_TIME_PING_TIMER);
             _hostPingTimer.Enabled = true;
             _hostPingTimer.AutoReset = true;
             _hostPingTimer.Elapsed += HostPingEvent;
@@ -392,7 +392,7 @@ namespace ASD_Game.Session
         public void HostPingEvent(Object source, ElapsedEventArgs e)
         {
             SendPing();
-            Thread.Sleep(WAITTIMEPINGTIMER);
+            Thread.Sleep(WAIT_TIME_PING_TIMER);
             CheckIfHostActive();
         }
 
@@ -433,7 +433,7 @@ namespace ASD_Game.Session
         }
         public void setSession(ASD_Game.Session.Session session) 
         {
-            this._session = session;
+            _session = session;
         }
     }
 }
