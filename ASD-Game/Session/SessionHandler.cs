@@ -105,7 +105,7 @@ namespace Session
             _session = new Session(sessionName);
             _session.GenerateSessionId();
             _session.AddClient(_clientController.GetOriginId(), userName);
-            _session.SessionSeed = 666666; //TODO bad merge from like 3 branches let team 3 dicide what to do
+            _session.SessionSeed = new MapFactory().GenerateSeed();
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
