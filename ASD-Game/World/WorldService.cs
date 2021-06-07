@@ -1,4 +1,4 @@
-using Items;
+using WorldGeneration.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using UserInterface;
@@ -46,11 +46,6 @@ namespace WorldGeneration
             return _world.CurrentPlayer;
         }
 
-        public Player GetPlayer(string userId)
-        {
-            return _world?.GetPlayer(userId);
-        }
-
         public IList<Item> GetItemsOnCurrentTile()
         {
             return _world.GetCurrentTile().ItemsOnTile;
@@ -75,8 +70,28 @@ namespace WorldGeneration
             return result;
         }
 
-        public void DisplayStats()
+        public Player GetPlayer(string userId)
         {
+            return _world.GetPlayer(userId);
+        }
+
+        public ITile GetTile(int x, int y)
+        {
+            return _world.GetLoadedTileByXAndY(x, y);
+        }
+        
+        public bool CheckIfCharacterOnTile(ITile tile)
+        {
+            return _world.CheckIfCharacterOnTile(tile);
+        }
+
+        public void LoadArea(int playerX, int playerY, int viewDistance)
+        {
+            _world.LoadArea(playerX, playerY, viewDistance);
+        }
+
+         public void DisplayStats()
+         {
             Player player = GetCurrentPlayer();
             _screenHandler.SetStatValues(
                 player.Name,
@@ -91,6 +106,11 @@ namespace WorldGeneration
                 player.Inventory.GetConsumableAtIndex(0)?.ItemName ?? "Empty",
                 player.Inventory.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
                 player.Inventory.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
+        }
+
+        public List<Player> GetPlayers()
+        {
+            return _world.GetAllPlayers();
         }
     }
 }

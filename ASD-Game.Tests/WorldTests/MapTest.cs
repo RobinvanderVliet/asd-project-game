@@ -31,10 +31,10 @@ namespace WorldGeneration.Tests
         
         //Declaration of mocks
         private INoiseMapGenerator _noiseMapGeneratorMockObject;
-        private IServicesDb<Chunk> _databaseServiceMockObject;
+        private IDatabaseService<Chunk> _databaseServiceMockObject;
         private IConsolePrinter _consolePrinterMockObject;
         private Mock<INoiseMapGenerator> _noiseMapGeneratorMock;
-        private Mock<IServicesDb<Chunk>> _databaseServiceMock;
+        private Mock<IDatabaseService<Chunk>> _databaseServiceMock;
         private Mock<IConsolePrinter> _consolePrinterMock;
         
  

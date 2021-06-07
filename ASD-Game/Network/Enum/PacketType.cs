@@ -7,6 +7,7 @@ namespace Network
         Move,
         Session,
         GameSession,
-        Inventory,
+        RelativeStat,
+        Inventory,        
     }
 }

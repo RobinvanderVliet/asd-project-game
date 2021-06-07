@@ -33,9 +33,10 @@ namespace InputHandling
             _messageService = messageService;
         }
 
-        //Only for tests
         public InputHandler()
         {
+            //Empty constructor needed for testing purposes
+        }
 
         }
 
@@ -44,6 +45,7 @@ namespace InputHandling
             SendCommand(GetCommand());
             _screenHandler.RedrawGameInputBox();
         }
+        
         private void SendCommand(string commando)
         {
             try

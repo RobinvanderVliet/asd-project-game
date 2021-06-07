@@ -1,4 +1,23 @@
-﻿using System;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
+using System;
+using System.IO;
+using DatabaseHandler;
+using DatabaseHandler.Repository;
+using DatabaseHandler.Services;
+using WorldGeneration;
+using ActionHandling;
+using Chat;
+using InputHandling;
+using InputHandling.Antlr;
+using InputHandling.Antlr.Transformer;
+using Network;
+using Session;
+using Session.GameConfiguration;
+using UserInterface;
+using Messages;
 
 namespace ASD_Game
 {
@@ -6,7 +25,46 @@ namespace ASD_Game
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var builder = new ConfigurationBuilder();
+            BuildConfig(builder);
+            
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder.Build())
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .CreateLogger();
+            
+            Log.Logger.Information("Application starting");
+            
+            //Example of dependency injection with GreetingService
+            var host = Host.CreateDefaultBuilder()
+                .ConfigureServices((context, services) =>
+                {
+                    services.AddTransient<IMainGame, MainGame>();
+                    services.AddScoped<INetworkComponent, NetworkComponent>();
+                    services.AddScoped<IClientController, ClientController>();
+                    services.AddScoped<IInventoryHandler, InventoryHandler>();
+                    services.AddScoped<IChatHandler, ChatHandler>();
+                    services.AddScoped<ISessionHandler, SessionHandler>();
+                    services.AddScoped<IMoveHandler, MoveHandler>();
+                    services.AddScoped<IRelativeStatHandler, RelativeStatHandler>();
+                    services.AddScoped<IWorldService, WorldService>();
+                    services.AddScoped<IMessageService, MessageService>();
+                    services.AddScoped<IGameSessionHandler, GameSessionHandler>();
+                    services.AddSingleton<IDBConnection, DBConnection>();
+                    services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+                    services.AddScoped(typeof(IDatabaseService<>), typeof(DatabaseService<>));
+                    services.AddScoped<IScreenHandler, ScreenHandler>();
+                    services.AddScoped<IInputHandler, InputHandler>();
+                    services.AddScoped<IPipeline, Pipeline>();
+                    services.AddScoped<IEvaluator, Evaluator>();
+                    services.AddScoped<IGameConfigurationHandler, GameConfigurationHandler>();
+                })
+                .UseSerilog()
+                .Build();
+            
+            var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);
+            svc.Run();
         }
     }
 }
