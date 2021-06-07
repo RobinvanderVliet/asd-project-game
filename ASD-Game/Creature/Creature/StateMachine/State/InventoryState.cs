@@ -10,15 +10,18 @@ namespace Creature.Creature.StateMachine.State
 {
     public class InventoryState : CreatureState
     {
-        public InventoryState(ICreatureData creatureData, ICreatureStateMachine stateMachine, List<BuilderInfo> builderInfoList, BuilderConfigurator builderConfiguration) : base(creatureData, stateMachine, builderInfoList, builderConfiguration)
+        public InventoryState(ICreatureData creatureData, ICreatureStateMachine stateMachine,
+            List<BuilderInfo> builderInfoList, BuilderConfigurator builderConfiguration) : base(creatureData,
+            stateMachine, builderInfoList, builderConfiguration)
         {
             _creatureData = creatureData;
             _stateMachine = stateMachine;
             _builderConfiguration = builderConfiguration;
             _builderInfoList = builderInfoList;
         }
-        
-        public InventoryState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base (creatureData, stateMachine)
+
+        public InventoryState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base(creatureData,
+            stateMachine)
         {
             _creatureData = creatureData;
             _stateMachine = stateMachine;
@@ -26,15 +29,16 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do()
         {
-            // foreach (var builderInfo in _builderInfoList)
-            // {
-            // if (builderInfo.Action == "attack")
-            // {
-            //     if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo.RuleSets, "item"))
-            //     {
-            //         //TODO implement Attack logic + gather targetData
-            //     }
-            // }
+            foreach (var builderInfo in _builderInfoList)
+            {
+                if (builderInfo.Action == "attack")
+                {
+                    if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo))
+                    {
+                        //TODO implement Attack logic + gather targetData
+                    }
+                }
+            }
         }
     }
 }
