@@ -1,8 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.World;
-using ASD_project.World.Models.HazardousTiles;
-using ASD_project.World.Models.Interfaces;
-using ASD_project.World.Models.TerrainTiles;
+using ASD_Game.World;
+using ASD_Game.World.Models.HazardousTiles;
+using ASD_Game.World.Models.Interfaces;
+using ASD_Game.World.Models.TerrainTiles;
 using Moq;
 using NUnit.Framework;
 

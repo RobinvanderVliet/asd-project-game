@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using ASD_project.Items;
+using ASD_Game.Items;
 
-namespace ASD_project.World.Models.Interfaces
+namespace ASD_Game.World.Models.Interfaces
 {
     public interface ITile
     {
@@ -9,6 +9,7 @@ namespace ASD_project.World.Models.Interfaces
         string Symbol { get; set; }
         int XPosition { get; set; }
         int YPosition { get; set; }
+        int StaminaCost { get; set; }
         public List<Item> ItemsOnTile { get; set; }
     }
 }

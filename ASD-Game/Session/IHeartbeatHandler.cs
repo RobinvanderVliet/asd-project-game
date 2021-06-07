@@ -1,4 +1,4 @@
-﻿namespace ASD_project.Session
+﻿namespace ASD_Game.Session
 {
     public interface IHeartbeatHandler
     {

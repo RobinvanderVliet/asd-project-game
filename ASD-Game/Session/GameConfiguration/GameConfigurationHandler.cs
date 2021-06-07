@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ASD_project.DatabaseHandler.Services;
-using ASD_project.UserInterface;
-using DatabaseHandler.POCO;
-using Session.GameConfiguration;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.UserInterface;
 
-namespace ASD_project.Session.GameConfiguration
+namespace ASD_Game.Session.GameConfiguration
 {
     public class GameConfigurationHandler : IGameConfigurationHandler
     {
@@ -17,14 +16,14 @@ namespace ASD_project.Session.GameConfiguration
         private readonly IScreenHandler _screenHandler;
         private readonly List<string> _configurationHeader;
         private readonly List<List<string>> _configurationChoices;
-        private IDatabaseService<GameConfigurationPOCO> _gameConfigServicesDb;
+        private IDatabaseService<GameConfigurationPoco> _gameConfigDatabaseService;
         public MonsterDifficulty NewMonsterDifficulty { get; set; }
         public MonsterDifficulty CurrentMonsterDifficulty { get; set; }
         public ItemSpawnRate SpawnRate { get; set; }
         public string Username { get; set; }
         public string SessionName { get; set; }
 
-        public GameConfigurationHandler(IScreenHandler screenHandler, IDatabaseService<GameConfigurationPOCO> gameConfigServicesDb)
+        public GameConfigurationHandler(IScreenHandler screenHandler, IDatabaseService<GameConfigurationPoco> gameConfigServicesDb)
         {
             _setupConfiguration = false;
             _configurationScreen = screenHandler.Screen as ConfigurationScreen;
@@ -34,7 +33,7 @@ namespace ASD_project.Session.GameConfiguration
             NewMonsterDifficulty = MonsterDifficulty.Medium;
             CurrentMonsterDifficulty = MonsterDifficulty.Medium;
             SpawnRate = ItemSpawnRate.Low;
-            _gameConfigServicesDb = gameConfigServicesDb;
+            _gameConfigDatabaseService = gameConfigServicesDb;
         }
 
         public void SetGameConfiguration()
@@ -143,19 +142,19 @@ namespace ASD_project.Session.GameConfiguration
 
         public void SetDifficulty(MonsterDifficulty monsterDifficulty, string sessionId) 
         {
-            var gameConfiguration = _gameConfigServicesDb.GetAllAsync().Result.FirstOrDefault(configuration => configuration.GameGUID == sessionId);
+            var gameConfiguration = _gameConfigDatabaseService.GetAllAsync().Result.FirstOrDefault(configuration => configuration.GameGUID == sessionId);
 
             gameConfiguration.NPCDifficultyCurrent = gameConfiguration.NPCDifficultyNew;
             gameConfiguration.NPCDifficultyNew = (int)monsterDifficulty;
-            _gameConfigServicesDb.UpdateAsync(gameConfiguration);
+            _gameConfigDatabaseService.UpdateAsync(gameConfiguration);
         }
         
         public void SetSpawnRate(ItemSpawnRate spawnRate, string sessionId) 
         {
-            var gameConfiguration = _gameConfigServicesDb.GetAllAsync().Result.FirstOrDefault(configuration => configuration.GameGUID == sessionId);
+            var gameConfiguration = _gameConfigDatabaseService.GetAllAsync().Result.FirstOrDefault(configuration => configuration.GameGUID == sessionId);
 
             gameConfiguration.ItemSpawnRate = (int) spawnRate;
-            _gameConfigServicesDb.UpdateAsync(gameConfiguration);
+            _gameConfigDatabaseService.UpdateAsync(gameConfiguration);
         }
         
         public int AdjustMonsterValue(int monsterProperty) 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace ASD_project.Session.DTO
+namespace ASD_Game.Session.DTO
 {
     [ExcludeFromCodeCoverage]
     public class HeartbeatDTO

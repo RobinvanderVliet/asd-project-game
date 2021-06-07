@@ -1,10 +1,10 @@
 ﻿using Moq;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.World.Helpers;
-using ASD_project.World.Models;
-using ASD_project.World.Models.Interfaces;
-using ASD_project.World.Models.TerrainTiles;
+using ASD_Game.World.Helpers;
+using ASD_Game.World.Models;
+using ASD_Game.World.Models.Interfaces;
+using ASD_Game.World.Models.TerrainTiles;
 
 namespace ASD_Game.Tests.WorldTests
 {

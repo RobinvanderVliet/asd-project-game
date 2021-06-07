@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
-namespace ASD_project.InputHandling.Antlr.Ast.Actions
+namespace ASD_Game.InputHandling.Antlr.Ast.Actions
 {
     public class JoinSession : Command
     {
         private Message _message;
         private Username _username;
-        
+
         [ExcludeFromCodeCoverage]
         public Message Message { get => _message; private set => _message = value; }
         public Username Username { get => _username; private set => _username = value; }
@@ -25,11 +25,11 @@ namespace ASD_project.InputHandling.Antlr.Ast.Actions
         {
             if (child is Message)
             {
-                _message = (Message) child;
+                _message = (Message)child;
             }
             else if (child is Username)
             {
-                _username = (Username) child;
+                _username = (Username)child;
             }
 
             return this;

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
-namespace ASD_project.InputHandling.Antlr.Ast
+namespace ASD_Game.InputHandling.Antlr.Ast
 {
     public class Input : ASTNode, IEquatable<Input>
     {

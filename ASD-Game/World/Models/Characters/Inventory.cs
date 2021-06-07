@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using ASD_project.Items;
-using ASD_project.Items.ArmorStats;
-using ASD_project.Items.Consumables;
-using WorldGeneration.Exceptions;
+using ASD_Game.Items;
+using ASD_Game.Items.ArmorStats;
+using ASD_Game.Items.Consumables;
+using ASD_Game.World.Models.Characters.Exceptions;
 
-namespace ASD_project.World.Models.Characters
+namespace ASD_Game.World.Models.Characters
 {
     public class Inventory
     {

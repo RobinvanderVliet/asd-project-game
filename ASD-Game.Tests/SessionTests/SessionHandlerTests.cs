@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
-using ASD_project.Network;
-using ASD_project.Network.DTO;
-using ASD_project.Network.Enum;
-using ASD_project.Session;
-using ASD_project.Session.DTO;
-using ASD_project.Session.GameConfiguration;
-using ASD_project.UserInterface;
-using Messages;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
+using ASD_Game.Session;
+using ASD_Game.Session.DTO;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using Session.GameConfiguration;
 using Timer = System.Timers.Timer;
 
 namespace ASD_Game.Tests.SessionTests
@@ -32,7 +31,7 @@ namespace ASD_Game.Tests.SessionTests
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;
         private Mock<IMessageService> _mockedMessageService;
-        private Mock<ASD_project.Session.Session> _mockedSession;
+        private Mock<Session.Session> _mockedSession;
         private Mock<IScreenHandler> _mockedScreenHandler;
         private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
 
@@ -49,7 +48,7 @@ namespace ASD_Game.Tests.SessionTests
             _mockedMessageService = new();
             _mockedScreenHandler = new();
             _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object, _mockedGameConfigurationHandler.Object, _mockedMessageService.Object);
-            _mockedSession = new Mock<ASD_project.Session.Session>();
+            _mockedSession = new Mock<Session.Session>();
             _packetDTO = new PacketDTO();
         }
 
@@ -983,7 +982,7 @@ namespace ASD_Game.Tests.SessionTests
             packetDTO.Payload = JsonConvert.SerializeObject(sessionDTO);
             packetDTO.HandlerResponse = new HandlerResponseDTO(SendAction.Ignore, "");
 
-            ASD_project.Session.Session session = new ASD_project.Session.Session("testsession");
+            Session.Session session = new Session.Session("testsession");
             _sut.setSession(session);
 
             //Arrange the mock for lobbyscreen
@@ -1019,7 +1018,7 @@ namespace ASD_Game.Tests.SessionTests
             resultMessage.SessionSeed = 1;
             packetDTO.HandlerResponse = new HandlerResponseDTO(SendAction.Ignore, JsonConvert.SerializeObject(resultMessage));
 
-            ASD_project.Session.Session session = new ASD_project.Session.Session("testsession");
+            Session.Session session = new Session.Session("testsession");
             _sut.setSession(session);
 
             //Arrange the mock for lobbyscreen

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using ASD_project.Creature.Creature.StateMachine.Data;
-using ASD_project.Creature.Pathfinder;
+using ASD_Game.Creature.Creature.StateMachine.Data;
+using ASD_Game.Creature.Pathfinder;
 
-namespace ASD_project.Creature.Creature.StateMachine.State
+namespace ASD_Game.Creature.Creature.StateMachine.State
 {
     public class FollowPlayerState : CreatureState
     {

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using ASD_project.Agent.Mapper;
-using ASD_project.InputHandling;
-using Configuration = ASD_project.Agent.Models.Configuration;
+using ASD_Game.Agent.Mapper;
+using ASD_Game.InputHandling;
+using Configuration = ASD_Game.Agent.Models.Configuration;
 
 
-namespace ASD_project.Agent.Services
+namespace ASD_Game.Agent.Services
 {
     public abstract class BaseConfigurationService
     {

@@ -1,4 +1,4 @@
-﻿namespace ASD_project.Items.WeaponStats
+﻿namespace ASD_Game.Items.WeaponStats
 {
     public enum WeaponType
     {

@@ -1,6 +1,6 @@
-﻿using ASD_project.Items;
+﻿using ASD_Game.Items;
 
-namespace ASD_project.ActionHandling.DTO
+namespace ASD_Game.ActionHandling.DTO
 {
     public class ItemSpawnDTO
     {

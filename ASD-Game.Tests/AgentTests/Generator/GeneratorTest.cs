@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.Agent.Antlr.Ast;
-using ASD_project.Agent.Generator;
+using ASD_Game.Agent.Antlr.Ast;
+using ASD_Game.Agent.Generator;
 using Moq;
 using NUnit.Framework;
 

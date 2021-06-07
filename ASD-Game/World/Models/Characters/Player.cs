@@ -1,6 +1,6 @@
-﻿using ASD_project.Items.Consumables;
+﻿using ASD_Game.Items.Consumables;
 
-namespace ASD_project.World.Models.Characters
+namespace ASD_Game.World.Models.Characters
 {
     public class Player : Character
     {
@@ -101,6 +101,5 @@ namespace ASD_project.World.Models.Characters
             }
             return armorpoints;
         }
-
     }
 }

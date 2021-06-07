@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using ASD_project.World.Helpers;
-using ASD_project.World.Models;
-using ASD_project.World.Models.Characters;
-using ASD_project.World.Models.Interfaces;
+using ASD_Game.World.Helpers;
+using ASD_Game.World.Models;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Interfaces;
 
-namespace ASD_project.World
+namespace ASD_Game.World
 {
     public class Map : IMap
     {
@@ -31,7 +31,7 @@ namespace ASD_project.World
             _noiseMapGenerator = noiseMapGenerator;
         }
 
-        private void LoadArea(int playerX, int playerY, int viewDistance) 
+        public void LoadArea(int playerX, int playerY, int viewDistance) 
         { // Gets a list of chunks it has to load. Then generates the ones it can't find in the list of loaded chunks yet.
             var chunksWithinLoadingRange = GetListOfChunksWithinLoadingRange(playerX, playerY, viewDistance);
             foreach (var chunkCoordinates in chunksWithinLoadingRange)

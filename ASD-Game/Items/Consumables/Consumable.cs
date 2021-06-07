@@ -1,7 +1,7 @@
 ﻿using System;
-using ASD_project.Items.ItemStats;
+using ASD_Game.Items.ItemStats;
 
-namespace ASD_project.Items.Consumables
+namespace ASD_Game.Items.Consumables
 {
     public class Consumable : Item
     {

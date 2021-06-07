@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ASD_project.DatabaseHandler.Repository;
+using ASD_Game.DatabaseHandler.Repository;
 using LiteDB;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace ASD_project.DatabaseHandler.Services
+namespace ASD_Game.DatabaseHandler.Services
 {
     public class DatabaseService<T> : IDatabaseService<T>
     {

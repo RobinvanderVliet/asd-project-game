@@ -1,4 +1,4 @@
-﻿namespace ASD_project.Items.Consumables.ConsumableStats
+﻿namespace ASD_Game.Items.Consumables.ConsumableStats
 {
     public enum ConsumableType
     {

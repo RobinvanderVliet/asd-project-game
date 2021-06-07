@@ -1,10 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
 using LiteDB;
 
-namespace ASD_project.DatabaseHandler.POCO
+namespace ASD_Game.DatabaseHandler.POCO
 {
     [ExcludeFromCodeCoverage]
-    public class PlayerPOCO
+    public class PlayerPoco
     {
         public string GameGUID { get; set; }
         public string PlayerGUID { get; set; }
@@ -17,5 +17,6 @@ namespace ASD_project.DatabaseHandler.POCO
         public int RadiationLevel { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
+
     }
 }

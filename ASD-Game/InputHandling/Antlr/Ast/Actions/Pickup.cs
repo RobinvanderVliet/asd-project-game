@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace ASD_project.InputHandling.Antlr.Ast.Actions
+namespace ASD_Game.InputHandling.Antlr.Ast.Actions
 {
     public class Pickup : Command, IEquatable<Pickup>
     {
@@ -30,7 +30,7 @@ namespace ASD_project.InputHandling.Antlr.Ast.Actions
         {
             if (other == null)
                 return false;
-            
+
             return _item.Equals(other._item);
         }
         public override int GetHashCode()

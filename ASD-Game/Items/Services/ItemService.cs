@@ -1,7 +1,7 @@
-﻿using ASD_project.ActionHandling;
-using ASD_project.World;
+﻿using ASD_Game.ActionHandling;
+using ASD_Game.World;
 
-namespace ASD_project.Items.Services
+namespace ASD_Game.Items.Services
 {
     public class ItemService : IItemService
     {

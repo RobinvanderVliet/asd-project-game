@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.Items;
-using ASD_project.World.Models.Interfaces;
+using ASD_Game.Items;
+using ASD_Game.World.Models.Interfaces;
 
-namespace ASD_project.World.Models.LootableTiles
+namespace ASD_Game.World.Models.LootableTiles
 {
     [ExcludeFromCodeCoverage]
     public class ChestTile : ILootAbleTile
@@ -13,6 +13,7 @@ namespace ASD_project.World.Models.LootableTiles
         public string Symbol { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
+        public int StaminaCost { get; set; }
         public List<Item> ItemsOnTile { get; set; }
 
         public ChestTile()
@@ -20,16 +21,6 @@ namespace ASD_project.World.Models.LootableTiles
             Symbol = TileSymbol.CHEST;
             IsAccessible = true;
             ItemsOnTile = new List<Item>();
-        }
-
-        public int GenerateLoot()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void LootItem(int item)
-        {
-            throw new NotImplementedException();
         }
     }
 }

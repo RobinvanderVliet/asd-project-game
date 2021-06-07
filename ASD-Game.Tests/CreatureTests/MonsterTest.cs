@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using ASD_project.Creature.Creature;
-using ASD_project.Creature.Creature.StateMachine;
-using ASD_project.Creature.Creature.StateMachine.Data;
+using ASD_Game.Creature.Creature;
+using ASD_Game.Creature.Creature.StateMachine;
+using ASD_Game.Creature.Creature.StateMachine.Data;
 using Moq;
 using NUnit.Framework;
 

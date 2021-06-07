@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.InputHandling.Antlr.Ast;
 
-namespace InputHandling.Antlr.Ast.Actions
+namespace ASD_Game.InputHandling.Antlr.Ast.Actions
 {
-    public class Inspect: Command
+    public class Inspect : Command
     {
         private InventorySlot _inventorySlot;
         [ExcludeFromCodeCoverage]
@@ -22,7 +21,7 @@ namespace InputHandling.Antlr.Ast.Actions
         {
             if (child is InventorySlot)
             {
-                _inventorySlot = (InventorySlot) child;
+                _inventorySlot = (InventorySlot)child;
             }
 
             return this;
@@ -38,7 +37,7 @@ namespace InputHandling.Antlr.Ast.Actions
 
             return this;
         }
-        
+
         [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
@@ -50,7 +49,7 @@ namespace InputHandling.Antlr.Ast.Actions
         {
             return _inventorySlot.Equals(other.InventorySlot);
         }
-        
+
         [ExcludeFromCodeCoverage]
         public override int GetHashCode()
         {

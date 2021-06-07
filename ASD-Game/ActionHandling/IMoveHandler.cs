@@ -1,4 +1,4 @@
-﻿namespace ASD_project.ActionHandling
+﻿namespace ASD_Game.ActionHandling
 {
     public interface IMoveHandler
     {

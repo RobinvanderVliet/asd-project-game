@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.World.Models;
+using ASD_Game.World.Models;
 using AutoBogus;
 
 namespace ASD_Game.Tests.DatabaseHandlerTests

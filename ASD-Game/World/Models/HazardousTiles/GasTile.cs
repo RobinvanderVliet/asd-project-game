@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.Items;
-using ASD_project.World.Models.Interfaces;
+using ASD_Game.Items;
+using ASD_Game.World.Models.Interfaces;
 
-namespace ASD_project.World.Models.HazardousTiles
+namespace ASD_Game.World.Models.HazardousTiles
 {
     [ExcludeFromCodeCoverage]
     public class GasTile : IHazardousTile
@@ -13,6 +13,7 @@ namespace ASD_project.World.Models.HazardousTiles
         public string Symbol { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
+        public int StaminaCost { get; set; }
         public List<Item> ItemsOnTile { get; set; }
 
         public GasTile(int x, int y, int radius = 1)
@@ -22,8 +23,8 @@ namespace ASD_project.World.Models.HazardousTiles
             IsAccessible = true;
             XPosition = x;
             YPosition = y;
+            StaminaCost = 4;
             Radius = radius;
-            ItemsOnTile = new List<Item>();
         }
 
         private int Radius { get; }

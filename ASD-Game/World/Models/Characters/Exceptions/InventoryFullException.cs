@@ -1,6 +1,6 @@
 using System;
 
-namespace WorldGeneration.Exceptions
+namespace ASD_Game.World.Models.Characters.Exceptions
 {
     public class InventoryFullException : Exception
     {

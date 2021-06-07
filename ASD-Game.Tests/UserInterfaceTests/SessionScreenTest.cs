@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.UserInterface;
+using ASD_Game.UserInterface;
 using Moq;
 using NUnit.Framework;
 

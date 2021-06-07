@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using Agent.Antlr.Grammar;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using ASD_project.Agent.Antlr.Ast;
-using ASD_project.Agent.Antlr.Checker;
-using ASD_project.Agent.Antlr.Parser;
-using ASD_project.Agent.Generator;
-using SyntaxErrorException = ASD_project.Agent.Exceptions.SyntaxErrorException;
+using ASD_Game.Agent.Antlr.Ast;
+using ASD_Game.Agent.Antlr.Checker;
+using ASD_Game.Agent.Antlr.Parser;
+using ASD_Game.Agent.Generator;
+using SyntaxErrorException = ASD_Game.Agent.Exceptions.SyntaxErrorException;
 
-namespace ASD_project.Agent
+namespace ASD_Game.Agent
 {
     public class Pipeline : IAntlrErrorListener<IToken>
     {

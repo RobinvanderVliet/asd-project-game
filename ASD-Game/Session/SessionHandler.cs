@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Timers;
-using ASD_project.Network;
-using ASD_project.Network.DTO;
-using ASD_project.Network.Enum;
-using ASD_project.Session.DTO;
-using ASD_project.Session.GameConfiguration;
-using ASD_project.UserInterface;
-using ASD_project.World;
-using Messages;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
+using ASD_Game.Session.DTO;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
+using ASD_Game.World;
 using Newtonsoft.Json;
-using Session.GameConfiguration;
-using UserInterface;
 using Timer = System.Timers.Timer;
 
-namespace ASD_project.Session
+namespace ASD_Game.Session
 {
     public class SessionHandler : IPacketHandler, ISessionHandler
     {
@@ -24,7 +22,7 @@ namespace ASD_project.Session
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
         private IClientController _clientController;
-        private Session _session;
+        private ASD_Game.Session.Session _session;
         private IHeartbeatHandler _heartbeatHandler;
         private readonly IScreenHandler _screenHandler;
         private readonly IMessageService _messageService;
@@ -67,7 +65,7 @@ namespace ASD_project.Session
                 SendHeartbeatTimer();
 
                 SessionDTO receivedSessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
-                _session = new Session(receivedSessionDTO.Name);
+                _session = new ASD_Game.Session.Session(receivedSessionDTO.Name);
 
                 _session.SessionId = sessionId;
                 _clientController.SetSessionId(sessionId);
@@ -100,7 +98,7 @@ namespace ASD_project.Session
 
         public bool CreateSession(string sessionName, string userName)
         {
-            _session = new Session(sessionName);
+            _session = new ASD_Game.Session.Session(sessionName);
             _session.GenerateSessionId();
             _session.AddClient(_clientController.GetOriginId(), userName);
             _session.SessionSeed = new MapFactory().GenerateSeed();
@@ -231,6 +229,7 @@ namespace ASD_project.Session
             if (!_hostActive)
             {
                 _hostInactiveCounter++;
+
                 if (_hostInactiveCounter >= 5)
                 {
                     _hostPingTimer.Dispose();
@@ -432,7 +431,7 @@ namespace ASD_project.Session
         {
             _hostPingTimer = timer;
         }
-        public void setSession(Session session) 
+        public void setSession(ASD_Game.Session.Session session) 
         {
             this._session = session;
         }

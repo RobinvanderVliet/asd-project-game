@@ -3,19 +3,20 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using LiteDB.Async;
 
-namespace ASD_project.DatabaseHandler
+namespace ASD_Game.DatabaseHandler
 {
     [ExcludeFromCodeCoverage]
     public class DBConnection : IDBConnection
     {
-        [ExcludeFromCodeCoverage]
+        private static readonly char _separator = Path.DirectorySeparatorChar;
+        
         public ILiteDatabaseAsync GetConnectionAsync()
         {
             try
             {
                 var currentDirectory = Directory.GetCurrentDirectory();
                 var connection =
-                    new LiteDatabaseAsync(@"Filename=" + currentDirectory + "\\ASD-Game.db;connection=shared;");
+                    new LiteDatabaseAsync($"Filename={currentDirectory}{_separator}ASD-Game.db;connection=shared;");
                 return connection;
             }
             catch (Exception ex)

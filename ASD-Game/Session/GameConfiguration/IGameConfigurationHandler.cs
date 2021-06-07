@@ -1,6 +1,4 @@
-using ASD_project.Session.GameConfiguration;
-
-namespace Session.GameConfiguration
+namespace ASD_Game.Session.GameConfiguration
 {
     public interface IGameConfigurationHandler
     {

@@ -2,13 +2,13 @@ using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
-namespace ASD_project.InputHandling.Antlr.Ast.Actions
+namespace ASD_Game.InputHandling.Antlr.Ast.Actions
 {
     public class Drop : Command, IEquatable<Drop>
     {
         private InventorySlot _inventorySlot;
         public InventorySlot InventorySlot { get => _inventorySlot; private set => _inventorySlot = value; }
-        
+
         public ArrayList GetChildren()
         {
             var children = new ArrayList();
@@ -20,7 +20,7 @@ namespace ASD_project.InputHandling.Antlr.Ast.Actions
         {
             if (child is InventorySlot)
             {
-                _inventorySlot = (InventorySlot) child;
+                _inventorySlot = (InventorySlot)child;
             }
 
             return this;

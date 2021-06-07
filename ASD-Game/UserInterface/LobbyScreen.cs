@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Chat.DTO;
+using ASD_Game.Chat.DTO;
 
-namespace ASD_project.UserInterface
+namespace ASD_Game.UserInterface
 {
     public class LobbyScreen : Screen
     {

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.ActionHandling;
-using ASD_project.ActionHandling.DTO;
-using ASD_project.Items.Services;
-using ASD_project.UserInterface;
-using ASD_project.World;
-using ASD_project.World.Models.Characters;
+using ASD_Game.ActionHandling;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.Items.Services;
+using ASD_Game.UserInterface;
+using ASD_Game.World;
+using ASD_Game.World.Models.Characters;
 using Moq;
 using NUnit.Framework;
 
@@ -20,7 +20,7 @@ namespace ASD_Game.Tests.WorldTests
         //Declaration of variables
         private Player _friendlyPlayer;
         private Player _enemyPlayer;
-        private ASD_project.World.Models.Characters.Creature _creature;
+        private World.Models.Characters.Creature _creature;
         private List<ItemSpawnDTO> _itemSpawnDTOs;
  
         //Declaration of mocks
@@ -34,7 +34,7 @@ namespace ASD_Game.Tests.WorldTests
         private IItemService _itemServiceMockObject;
         private Mock<ISpawnHandler> _spawnHandlerMock;
         private ISpawnHandler _spawnHandlerMockObject;
-        private ASD_project.World.World _sut;
+        private World.World _sut;
 
         [SetUp]
         public void Setup()
@@ -42,7 +42,7 @@ namespace ASD_Game.Tests.WorldTests
             //Initialisation of variables
             _friendlyPlayer = new Player("A", 0, 0, "#", "1");
             _enemyPlayer = new Player("B", 0, 1, "!", "2");
-            _creature = new ASD_project.World.Models.Characters.Creature("B", 1, 0, "!", "2");
+            _creature = new World.Models.Characters.Creature("B", 1, 0, "!", "2");
             //Initialisation of mocks
             _mapMock = new Mock<Map>();
             _mapMock.Setup(Map => Map.DeleteMap()).Verifiable();
@@ -68,7 +68,7 @@ namespace ASD_Game.Tests.WorldTests
             _itemServiceMock.Setup(wrm => wrm.GetSpawnHandler()).Returns(_spawnHandlerMockObject);
 ;           _itemServiceMockObject = _itemServiceMock.Object;
 
-            _sut = new ASD_project.World.World(5, 2, _mapFactoryMockObject, _screenHandlerMockObject, _itemServiceMockObject);
+            _sut = new World.World(5, 2, _mapFactoryMockObject, _screenHandlerMockObject, _itemServiceMockObject);
         }
         
         [Test]
@@ -81,7 +81,7 @@ namespace ASD_Game.Tests.WorldTests
             //Assert ---------
             Assert.DoesNotThrow(() =>
             {
-                var world = new ASD_project.World.World(seed, 55, _mapFactoryMockObject, _screenHandlerMockObject, _itemServiceMockObject);
+                var world = new World.World(seed, 55, _mapFactoryMockObject, _screenHandlerMockObject, _itemServiceMockObject);
             });
             //_mapFactoryMock.Verify(mapFactory => mapFactory.GenerateMap(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<ItemService>(), It.IsAny<List<ItemSpawnDTO>>()), Times.Once);
             _mapFactoryMock.Verify(mapFactory => mapFactory.GenerateMap(_itemServiceMockObject, It.IsAny<List<ItemSpawnDTO>>(), seed), Times.Once);

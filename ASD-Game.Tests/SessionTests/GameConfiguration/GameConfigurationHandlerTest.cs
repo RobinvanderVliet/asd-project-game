@@ -1,11 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.DatabaseHandler.Services;
-using ASD_project.Session.GameConfiguration;
-using ASD_project.UserInterface;
-using DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
 using Moq;
 using NUnit.Framework;
-using Session.GameConfiguration;
 
 namespace ASD_Game.Tests.SessionTests.GameConfiguration
 {
@@ -14,13 +13,13 @@ namespace ASD_Game.Tests.SessionTests.GameConfiguration
     {
         private GameConfigurationHandler _sut;
         private Mock<ScreenHandler> _mockScreenHandler;
-        private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigServicesDb;
+        private Mock<IDatabaseService<GameConfigurationPoco>> _mockedGameConfigServicesDb;
 
         [SetUp]
         public void Setup()
         {
             _mockScreenHandler = new Mock<ScreenHandler>();
-            _mockedGameConfigServicesDb = new Mock<IDatabaseService<GameConfigurationPOCO>>();
+            _mockedGameConfigServicesDb = new Mock<IDatabaseService<GameConfigurationPoco>>();
             _sut = new GameConfigurationHandler(_mockScreenHandler.Object, _mockedGameConfigServicesDb.Object);
         }
 

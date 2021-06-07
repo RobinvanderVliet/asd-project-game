@@ -1,4 +1,4 @@
-﻿namespace ASD_project.Items
+﻿namespace ASD_Game.Items
 {
     public class Item
     {

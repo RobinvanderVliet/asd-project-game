@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using ASD_project.ActionHandling.DTO;
-using ASD_project.Items;
-using ASD_project.Items.Services;
-using ASD_project.UserInterface;
-using ASD_project.World.Models.Characters;
-using ASD_project.World.Models.Interfaces;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.Items;
+using ASD_Game.Items.Services;
+using ASD_Game.UserInterface;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Interfaces;
 
-namespace ASD_project.World.Services
+namespace ASD_Game.World.Services
 {
-    [ExcludeFromCodeCoverage]
     public class WorldService : IWorldService
     {
         private readonly IItemService _itemService;
@@ -68,11 +66,14 @@ namespace ASD_project.World.Services
             return _world.CurrentPlayer;
         }
 
+        public void LoadArea(int playerX, int playerY, int viewDistance)
+        {
+            _world.LoadArea(playerX, playerY, viewDistance);
+        }
 
         public string SearchCurrentTile()
         {
             var itemsOnCurrentTile = GetItemsOnCurrentTile();
-
 
             var result = "The following items are on the current tile:" + Environment.NewLine;
             var index = 1;
@@ -90,8 +91,7 @@ namespace ASD_project.World.Services
         {
             return _world.GetPlayer(userId);
         }
-
-
+        
         public void DisplayStats()
         {
             var player = GetCurrentPlayer();
@@ -131,7 +131,6 @@ namespace ASD_project.World.Services
         {
             return _world.GetTileForPlayer(player).ItemsOnTile;
         }
-
 
         public ITile GetTile(int x, int y)
         {

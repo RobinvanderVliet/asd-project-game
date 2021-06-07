@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using ASD_project.Creature.Creature;
-using ASD_project.Creature.Pathfinder;
-using ASD_project.Creature.World;
+using ASD_Game.Creature.Creature;
+using ASD_Game.Creature.Pathfinder;
+using ASD_Game.Creature.World;
 using Moq;
 using NUnit.Framework;
 

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using ASD_project.Creature.Pathfinder;
+using ASD_Game.Creature.Pathfinder;
 using NUnit.Framework;
 
 namespace ASD_Game.Tests.CreatureTests

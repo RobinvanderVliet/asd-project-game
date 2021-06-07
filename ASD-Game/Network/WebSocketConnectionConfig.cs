@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace ASD_project.Network
+namespace ASD_Game.Network
 {
     [ExcludeFromCodeCoverage]
     public class WebSocketConnectionConfig

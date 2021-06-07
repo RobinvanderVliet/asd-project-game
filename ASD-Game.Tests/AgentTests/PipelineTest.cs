@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using Antlr4.Runtime;
-using ASD_project.Agent;
-using ASD_project.Agent.Antlr.Ast;
-using ASD_project.Agent.Exceptions;
+using ASD_Game.Agent;
+using ASD_Game.Agent.Antlr.Ast;
+using ASD_Game.Agent.Exceptions;
 using Moq;
 using NUnit.Framework;
 

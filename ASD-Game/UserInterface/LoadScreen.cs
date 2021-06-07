@@ -1,4 +1,4 @@
-namespace ASD_project.UserInterface
+namespace ASD_Game.UserInterface
 {
     public class LoadScreen : Screen
     {

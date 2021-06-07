@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.ActionHandling.DTO;
-using ASD_project.Items.Services;
-using ASD_project.World.Models;
-using ASD_project.World.Models.HazardousTiles;
-using ASD_project.World.Models.Interfaces;
-using ASD_project.World.Models.TerrainTiles;
-
-namespace ASD_project.World
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.Items.Services;
+using ASD_Game.World.Models;
+using ASD_Game.World.Models.HazardousTiles;
+using ASD_Game.World.Models.Interfaces;
+using ASD_Game.World.Models.TerrainTiles;
+namespace ASD_Game.World
 {
-    [ExcludeFromCodeCoverage]
     public class NoiseMapGenerator : INoiseMapGenerator
     {
         private IFastNoise _worldNoise;
@@ -51,7 +49,7 @@ namespace ASD_project.World
             }
             return new Chunk(chunkX, chunkY, map, chunkRowSize, _seed);
         }
-
+        [ExcludeFromCodeCoverage]
         private ITile CreateTileWithItemFromNoise(float worldNoise, float itemNoise, int x, int y)
         {
             var tile = GetTileFromNoise(worldNoise, x, y);
@@ -81,6 +79,7 @@ namespace ASD_project.World
 
         public ITile GetTileFromNoise(float noise, int x, int y)
         {
+            y++;
             return (noise * 10) switch
             {
                 (< -8) => new WaterTile(x, y),
@@ -91,6 +90,8 @@ namespace ASD_project.World
                 _ => new GasTile(x, y)
             };
         }
+        
+        [ExcludeFromCodeCoverage]
         public void SetNoise (IFastNoise noise)
         {
             _itemNoise = noise;

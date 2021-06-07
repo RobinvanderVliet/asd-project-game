@@ -1,13 +1,13 @@
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.InputHandling;
-using ASD_project.InputHandling.Antlr;
-using ASD_project.InputHandling.Antlr.Transformer;
-using ASD_project.Session;
-using ASD_project.UserInterface;
-using Messages;
+using ASD_Game.InputHandling;
+using ASD_Game.InputHandling.Antlr;
+using ASD_Game.InputHandling.Antlr.Transformer;
+using ASD_Game.Messages;
+using ASD_Game.Session;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
 using Moq;
 using NUnit.Framework;
-using Session.GameConfiguration;
 using UserInterface;
 
 namespace ASD_Game.Tests.InputHandlingTests

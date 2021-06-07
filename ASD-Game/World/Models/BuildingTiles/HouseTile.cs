@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.Items;
-using ASD_project.World.Models.Interfaces;
+using ASD_Game.Items;
+using ASD_Game.World.Models.Interfaces;
 
-namespace ASD_project.World.Models.BuildingTiles
+namespace ASD_Game.World.Models.BuildingTiles
 {
     [ExcludeFromCodeCoverage]
     public class HouseTile : IBuildingTile
@@ -13,13 +13,15 @@ namespace ASD_project.World.Models.BuildingTiles
         public string Symbol { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
+        public int StaminaCost { get; set; }
         public List<Item> ItemsOnTile { get; set; }
 
         public HouseTile()
         {
+            ItemsOnTile = new();
             Symbol = TileSymbol.HOUSE;
             IsAccessible = true;
-            ItemsOnTile = new List<Item>();
+            StaminaCost = 1;
         }
 
         public void DrawBuilding()

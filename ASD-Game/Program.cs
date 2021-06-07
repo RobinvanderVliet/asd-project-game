@@ -1,37 +1,29 @@
-﻿using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
+using ASD_Game.ActionHandling;
+using ASD_Game.Chat;
+using ASD_Game.DatabaseHandler;
+using ASD_Game.DatabaseHandler.Repository;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.InputHandling;
+using ASD_Game.InputHandling.Antlr;
+using ASD_Game.InputHandling.Antlr.Transformer;
+using ASD_Game.Items.Services;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Session;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
+using ASD_Game.World.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using System;
-using System.Data;
-using System.Data.Common;
-using System.IO;
-using ActionHandling;
-using ASD_project.ActionHandling;
-using ASD_project.Chat;
-using ASD_project.DatabaseHandler;
-using ASD_project.DatabaseHandler.Repository;
-using ASD_project.DatabaseHandler.Services;
-using ASD_project.InputHandling;
-using ASD_project.InputHandling.Antlr;
-using ASD_project.InputHandling.Antlr.Transformer;
-using ASD_project.Items.Services;
-using ASD_project.Messages;
-using ASD_project.Network;
-using ASD_project.Session;
-using ASD_project.Session.GameConfiguration;
-using ASD_project.UserInterface;
-using ASD_project.World.Services;
-using Messages;
-using Session;
-using Session.GameConfiguration;
-using UserInterface;
 
-namespace ASD_project
+namespace ASD_Game
 {
     partial class Program
     {
-        //Setup logger and injection
         static void Main(string[] args)
         {
             var builder = new ConfigurationBuilder();
@@ -56,12 +48,13 @@ namespace ASD_project
                     services.AddScoped<IChatHandler, ChatHandler>();
                     services.AddScoped<ISessionHandler, SessionHandler>();
                     services.AddScoped<IMoveHandler, MoveHandler>();
+                    services.AddScoped<IRelativeStatHandler, RelativeStatHandler>();
                     services.AddScoped<IWorldService, WorldService>();
                     services.AddScoped<IMessageService, MessageService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
+                    services.AddSingleton<IDBConnection, DBConnection>();
                     services.AddScoped<IItemService, ItemService>();
                     services.AddScoped<ISpawnHandler, SpawnHandler>();
-                    services.AddSingleton<IDBConnection, DBConnection>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
                     services.AddScoped(typeof(IDatabaseService<>), typeof(DatabaseService<>));
                     services.AddScoped<IScreenHandler, ScreenHandler>();
@@ -76,7 +69,6 @@ namespace ASD_project
             var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);
             svc.Run();
         }
-
         static void BuildConfig(IConfigurationBuilder builder)
         {
             builder.SetBasePath(Directory.GetCurrentDirectory())

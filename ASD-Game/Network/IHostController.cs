@@ -1,6 +1,6 @@
-﻿using ASD_project.Network.DTO;
+﻿using ASD_Game.Network.DTO;
 
-namespace ASD_project.Network
+namespace ASD_Game.Network
 {
     public interface IHostController
     {

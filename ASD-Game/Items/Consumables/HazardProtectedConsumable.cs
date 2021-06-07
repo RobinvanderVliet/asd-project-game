@@ -1,4 +1,4 @@
-﻿namespace ASD_project.Items.Consumables
+﻿namespace ASD_Game.Items.Consumables
 {
     public class HazardProtectedConsumable : Consumable
     {

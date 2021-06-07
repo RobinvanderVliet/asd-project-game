@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace ASD_project.Creature.Exceptions
+namespace ASD_Game.Creature.Exceptions
 {
     [ExcludeFromCodeCoverage]
     [Serializable]
