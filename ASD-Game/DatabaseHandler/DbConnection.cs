@@ -23,11 +23,11 @@ namespace DatabaseHandler
                 .DbRef(x => x.PlayerGUIDHost, nameof(PlayerPOCO));
 
             //FK Agent -> Game
-            BsonMapper.Global.Entity<AgentPOCO>()
+            BsonMapper.Global.Entity<AgentPoco>()
                 .DbRef(x => x.GameGUID, nameof(GamePOCO));
 
             //FK Agent -> Player
-            BsonMapper.Global.Entity<AgentPOCO>()
+            BsonMapper.Global.Entity<AgentPoco>()
                 .DbRef(x => x.PlayerGUID, nameof(PlayerPOCO));
 
             //FK PlayerItem -> Player
@@ -36,15 +36,15 @@ namespace DatabaseHandler
 
             //FK PlayerItem -> Item
             BsonMapper.Global.Entity<PlayerItemPOCO>()
-                .DbRef(x => x.ItemName, nameof(ItemPOCO));
+                .DbRef(x => x.ItemName, nameof(PlayerItemPOCO));
 
             //FK Game -> WorldItem
             BsonMapper.Global.Entity<GamePOCO>()
-                .DbRef(x => x.GameGuid, nameof(WorldItemPOCO));
+                .DbRef(x => x.GameGUID, nameof(WorldItemPOCO));
 
             //FK WorldItem -> Item
             BsonMapper.Global.Entity<WorldItemPOCO>()
-                .DbRef(x => x.ItemName, nameof(ItemPOCO));
+                .DbRef(x => x.ItemName, nameof(PlayerItemPOCO));
         }
 
         [ExcludeFromCodeCoverage]
