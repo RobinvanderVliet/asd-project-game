@@ -1,5 +1,6 @@
 ﻿namespace Agent.Antlr.Ast
 {
+
     public class AST
     {
         public Configuration root;
