@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using DatabaseHandler.POCO;
-using WorldGeneration;
 
 namespace Session.DTO
 {
