@@ -12,7 +12,7 @@ namespace WorldGeneration
         public Player CurrentPlayer { get; set; }
         private List<Player> _players;
         private readonly int _viewDistance;
-        private IScreenHandler _screenHandler;
+        private readonly IScreenHandler _screenHandler;
 
         public World(int seed, int viewDistance, IScreenHandler screenHandler)
         {
@@ -21,6 +21,11 @@ namespace WorldGeneration
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
             DeleteMap();
+        }
+
+        public Player GetPlayer(string id)
+        {
+            return _players.Find(x => x.Id == id);
         }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
@@ -32,11 +37,10 @@ namespace WorldGeneration
             }
             else
             {
-                var player = _players.Find(x => x.Id == userId);
+                var player = GetPlayer(userId);
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
-            DisplayWorld();
         }
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
@@ -56,16 +60,32 @@ namespace WorldGeneration
             }
         }
 
-        public Player GetPlayer(string id)
-        {
-            return _players.Find(x => x.Id == id);
-        }
-
         public void DeleteMap()
         {
             _map.DeleteMap();
         }
 
+        public ITile GetLoadedTileByXAndY(int x, int y)
+        {
+            return _map.GetLoadedTileByXAndY(x, y);
+        }
+        
+        public bool CheckIfCharacterOnTile(ITile tile)
+        {
+            return GetAllCharacters().Exists(player => player.XPosition == tile.XPosition && player.YPosition == tile.YPosition);
+        }
+
+        private List<Character> GetAllCharacters()
+        {
+            List<Character> characters = _players.Cast<Character>().ToList();
+            return characters;
+        }
+        
+        public void LoadArea(int playerX, int playerY, int viewDistance)
+        {
+            _map.LoadArea(playerX, playerY, viewDistance);
+        }
+        
         public ITile GetCurrentTile()
         {
             return _map.GetLoadedTileByXAndY(CurrentPlayer.XPosition, CurrentPlayer.YPosition);
@@ -74,6 +94,11 @@ namespace WorldGeneration
         public ITile GetTileForPlayer(Player player)
         {
             return _map.GetLoadedTileByXAndY(player.XPosition, player.YPosition);
+        }
+
+        public List<Player> GetAllPlayers()
+        {
+            return _players;
         }
     }
 }
