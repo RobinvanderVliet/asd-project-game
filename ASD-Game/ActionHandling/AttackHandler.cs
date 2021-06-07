@@ -332,12 +332,9 @@ namespace ActionHandling
                 {
                     attackedPlayer.Health -= attackDto.Damage;
                     _worldService.DisplayStats();
-                }
+                    _worldService.DisplayWorld();
 
-                // if (attackedPlayer.Health <= 0 && _clientController.GetOriginId().Equals(attackedPlayer.Id))
-                // {
-                //     _deadHandler.SendDead(_worldService.GetCurrentPlayer());
-                // }
+                }
             }
         }
     }

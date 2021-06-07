@@ -56,6 +56,12 @@ namespace ActionHandling
         
         private void StaminaEvent(object sender, ElapsedEventArgs e)
         {
+            if (_worldService.IsDead(_worldService.GetCurrentPlayer()))
+            {
+                _staminaTimer.Stop();
+                return;
+            }
+            
             if (_player.Stamina < 100)
             {
                 var statDto = new RelativeStatDTO();
@@ -66,6 +72,12 @@ namespace ActionHandling
         
         private void RadiationEvent(object sender, ElapsedEventArgs e)
         {
+            if (_worldService.IsDead(_worldService.GetCurrentPlayer()))
+            {
+                _radiationTimer.Stop();
+                return;
+            }
+            
             var tile = _worldService.GetTile(
                 _worldService.GetCurrentPlayer().XPosition, 
                 _worldService.GetCurrentPlayer().YPosition);
