@@ -18,11 +18,10 @@ using Session;
 using Session.GameConfiguration;
 using UserInterface;
 using Messages;
-using ASD_project;
 
-namespace ASD_Game
+namespace ASD_project
 {
-    class Program
+    partial class Program
     {
         static void Main(string[] args)
         {
@@ -41,7 +40,7 @@ namespace ASD_Game
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddTransient<IMainGame, ASD_project.Program.MainGame>();
+                    services.AddTransient<IMainGame, MainGame>();
                     services.AddScoped<INetworkComponent, NetworkComponent>();
                     services.AddScoped<IClientController, ClientController>();
                     services.AddScoped<IInventoryHandler, InventoryHandler>();
@@ -64,7 +63,7 @@ namespace ASD_Game
                 .UseSerilog()
                 .Build();
             
-            var svc = ActivatorUtilities.CreateInstance<ASD_project.Program.MainGame>(host.Services);
+            var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);
             svc.Run();
         }
         static void BuildConfig(IConfigurationBuilder builder)
