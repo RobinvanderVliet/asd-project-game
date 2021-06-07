@@ -75,7 +75,11 @@ namespace ASD_Game.World
             if (CurrentPlayer != null && _players != null && _creatures != null)
             {
                 var characters = ((IEnumerable<Character>)_players).Concat(_creatures).ToList();
-                _screenHandler.UpdateWorld(_map.GetCharArrayMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
+                var a = CurrentPlayer;
+                var b = _viewDistance;
+                var c = _map;
+                var mapArray = _map.GetCharArrayMapAroundCharacter(CurrentPlayer, _viewDistance, characters);
+                _screenHandler.UpdateWorld(mapArray);
                 //_map.DisplayMap(CurrentPlayer, _viewDistance, characters); in case the UI breaks, this will do
             }
         }
