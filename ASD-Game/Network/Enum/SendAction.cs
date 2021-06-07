@@ -1,4 +1,4 @@
-namespace ASD_project.Network.Enum
+namespace ASD_Game.Network.Enum
 {
     public enum SendAction
     {

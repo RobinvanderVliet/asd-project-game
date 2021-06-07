@@ -1,8 +1,8 @@
-﻿using ASD_project.Items.ItemStats;
-using ASD_project.Items.WeaponStats;
-using System;
+﻿using System;
+using ASD_Game.Items.ItemStats;
+using ASD_Game.Items.WeaponStats;
 
-namespace ASD_project.Items
+namespace ASD_Game.Items
 {
     public class Weapon : Item
     {

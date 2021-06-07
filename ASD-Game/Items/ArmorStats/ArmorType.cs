@@ -1,4 +1,4 @@
-﻿namespace ASD_project.Items.ArmorStats
+﻿namespace ASD_Game.Items.ArmorStats
 {
     public enum ArmorType
     {

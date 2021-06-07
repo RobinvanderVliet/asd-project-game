@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using ASD_project.ActionHandling.DTO;
-using ASD_project.Items;
-using ASD_project.World.Models.Characters;
-using ASD_project.World.Models.Interfaces;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.Items;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Interfaces;
 
-namespace ASD_project.World.Services
+namespace ASD_Game.World.Services
 {
     public interface IWorldService
     {

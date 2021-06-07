@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace ASD_project.InputHandling.Antlr.Ast.Actions
+namespace ASD_Game.InputHandling.Antlr.Ast.Actions
 {
     public class Pickup : Command, IEquatable<Pickup>
     {

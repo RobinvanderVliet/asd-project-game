@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.Agent.Antlr.Ast;
+using ASD_Game.Agent.Antlr.Ast;
 using NUnit.Framework;
 
 namespace ASD_Game.Tests.AgentTests.Ast

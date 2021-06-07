@@ -1,18 +1,18 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ASD_project.ActionHandling.DTO;
-using ASD_project.Items.Services;
-using ASD_project.UserInterface;
-using ASD_project.World.Models.Characters;
-using ASD_project.World.Models.Interfaces;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.Items.Services;
+using ASD_Game.UserInterface;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Interfaces;
 
-namespace ASD_project.World
+namespace ASD_Game.World
 {
     public class World : IWorld
     {
         public Player CurrentPlayer;
-        private Map _map;
+        private IMap _map;
         private List<Models.Characters.Creature> _creatures;
         private List<Player> _players;
         public List<ItemSpawnDTO> Items;

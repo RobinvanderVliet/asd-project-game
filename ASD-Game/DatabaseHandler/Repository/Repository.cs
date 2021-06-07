@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using LiteDB;
 using LiteDB.Async;
 
-namespace ASD_project.DatabaseHandler.Repository
+namespace ASD_Game.DatabaseHandler.Repository
 {
     [ExcludeFromCodeCoverage]
     public class Repository<T> : IRepository<T>

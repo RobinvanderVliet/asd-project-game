@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Agent.Antlr.Grammar;
 using Antlr4.Runtime.Misc;
-using ASD_project.Agent.Antlr.Ast;
-using ASD_project.Agent.Antlr.Ast.Comparables;
-using ASD_project.Agent.Antlr.Ast.Comparables.Subjects;
-using Action = ASD_project.Agent.Antlr.Ast.Action;
+using ASD_Game.Agent.Antlr.Ast;
+using ASD_Game.Agent.Antlr.Ast.Comparables;
+using ASD_Game.Agent.Antlr.Ast.Comparables.Subjects;
+using Action = ASD_Game.Agent.Antlr.Ast.Action;
 
-namespace ASD_project.Agent.Antlr.Parser
+namespace ASD_Game.Agent.Antlr.Parser
 {
     public class ASTAgentListener : AgentConfigurationBaseListener
     {
@@ -285,7 +285,7 @@ namespace ASD_project.Agent.Antlr.Parser
 
         public override void EnterPlayer([NotNull] AgentConfigurationParser.PlayerContext context)
         {
-            Ast.Comparables.Subjects.Player player = new(context.PLAYER().GetText());
+            Player player = new(context.PLAYER().GetText());
             _currentContainer.Push(player);
         }
 

@@ -1,4 +1,4 @@
-﻿namespace ASD_project.Network
+﻿namespace ASD_Game.Network
 {
     public interface IWebSocketConnection
     {

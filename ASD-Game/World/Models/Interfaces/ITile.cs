@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using ASD_project.Items;
+using ASD_Game.Items;
 
-namespace ASD_project.World.Models.Interfaces
+namespace ASD_Game.World.Models.Interfaces
 {
     public interface ITile
     {

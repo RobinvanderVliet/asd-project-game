@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using ASD_project.Agent.Mapper;
-using ASD_project.Agent.Models;
-using ASD_project.InputHandling;
+using ASD_Game.Agent.Mapper;
+using ASD_Game.Agent.Models;
 
-namespace ASD_project.Agent.Services
+namespace ASD_Game.Agent.Services
 {
     public class NpcConfigurationService : BaseConfigurationService
     {

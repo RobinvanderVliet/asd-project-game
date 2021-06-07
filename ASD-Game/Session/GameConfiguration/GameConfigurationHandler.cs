@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ASD_project.DatabaseHandler.Services;
-using ASD_project.UserInterface;
-using DatabaseHandler.POCO;
-using Session.GameConfiguration;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.UserInterface;
 
-namespace ASD_project.Session.GameConfiguration
+namespace ASD_Game.Session.GameConfiguration
 {
     public class GameConfigurationHandler : IGameConfigurationHandler
     {
@@ -17,14 +16,14 @@ namespace ASD_project.Session.GameConfiguration
         private readonly IScreenHandler _screenHandler;
         private readonly List<string> _configurationHeader;
         private readonly List<List<string>> _configurationChoices;
-        private IDatabaseService<GameConfigurationPOCO> _gameConfigDatabaseService;
+        private IDatabaseService<GameConfigurationPoco> _gameConfigDatabaseService;
         public MonsterDifficulty NewMonsterDifficulty { get; set; }
         public MonsterDifficulty CurrentMonsterDifficulty { get; set; }
         public ItemSpawnRate SpawnRate { get; set; }
         public string Username { get; set; }
         public string SessionName { get; set; }
 
-        public GameConfigurationHandler(IScreenHandler screenHandler, IDatabaseService<GameConfigurationPOCO> gameConfigServicesDb)
+        public GameConfigurationHandler(IScreenHandler screenHandler, IDatabaseService<GameConfigurationPoco> gameConfigServicesDb)
         {
             _setupConfiguration = false;
             _configurationScreen = screenHandler.Screen as ConfigurationScreen;

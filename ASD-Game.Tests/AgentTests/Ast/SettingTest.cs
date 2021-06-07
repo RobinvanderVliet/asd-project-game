@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.Agent.Antlr.Ast;
+using ASD_Game.Agent.Antlr.Ast;
 using NUnit.Framework;
-using Action = ASD_project.Agent.Antlr.Ast.Action;
+using Action = ASD_Game.Agent.Antlr.Ast.Action;
 
 namespace ASD_Game.Tests.AgentTests.Ast
 {

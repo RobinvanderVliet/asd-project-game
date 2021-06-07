@@ -1,19 +1,19 @@
 using System.Linq;
 using System.Timers;
-using ActionHandling.DTO;
-using ASD_project.DatabaseHandler.POCO;
-using ASD_project.DatabaseHandler.Services;
-using ASD_project.Network;
-using ASD_project.Network.DTO;
-using ASD_project.Network.Enum;
-using ASD_project.World.Models.Characters;
-using ASD_project.World.Models.HazardousTiles;
-using ASD_project.World.Services;
-using Messages;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.HazardousTiles;
+using ASD_Game.World.Services;
 using Newtonsoft.Json;
 using Timer = System.Timers.Timer;
 
-namespace ASD_project.ActionHandling
+namespace ASD_Game.ActionHandling
 {
     public class RelativeStatHandler : IRelativeStatHandler, IPacketHandler
     {
@@ -27,10 +27,10 @@ namespace ASD_project.ActionHandling
 
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
-        private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
+        private readonly IDatabaseService<PlayerPoco> _playerDatabaseService;
         private readonly IMessageService _messageService;
 
-        public RelativeStatHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
+        public RelativeStatHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPoco> playerDatabaseService, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.RelativeStat);
@@ -144,7 +144,7 @@ namespace ASD_project.ActionHandling
         {
             if (handleInDatabase)
             {
-                PlayerPOCO playerPOCO = _playerDatabaseService.GetAllAsync().Result.FirstOrDefault(poco => poco.PlayerGUID == player.Id && poco.GameGUID == _clientController.SessionId);
+                PlayerPoco playerPOCO = _playerDatabaseService.GetAllAsync().Result.FirstOrDefault(poco => poco.PlayerGUID == player.Id && poco.GameGUID == _clientController.SessionId);
                 if (relativeStatDTO.Stamina != 0)
                 {
                     playerPOCO.Stamina = player.Stamina;

@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
-using ASD_project.Session;
+using ASD_Game.Session;
 using NUnit.Framework;
 
 namespace ASD_Game.Tests.SessionTests

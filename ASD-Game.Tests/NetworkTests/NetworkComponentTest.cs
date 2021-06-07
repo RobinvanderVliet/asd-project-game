@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using ASD_project.Network;
-using ASD_project.Network.DTO;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;

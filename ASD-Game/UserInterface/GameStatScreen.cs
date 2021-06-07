@@ -1,7 +1,4 @@
-﻿using System;
-using UserInterface;
-
-namespace ASD_project.UserInterface
+﻿namespace ASD_Game.UserInterface
 {
 
     public class GameStatScreen : Screen, IGameStatScreen

@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.World.Models.Interfaces;
-using ASD_project.World.Models.LootableTiles;
+using ASD_Game.World.Models.Interfaces;
+using ASD_Game.World.Models.LootableTiles;
 using NUnit.Framework;
 
 namespace ASD_Game.Tests.WorldTests.Models
@@ -75,31 +75,6 @@ namespace ASD_Game.Tests.WorldTests.Models
             Assert.That(_tile.Symbol, Is.EqualTo(_tileSymbol));
         }
         
-        [Test]
-        public void Test_GenerateLoot_CanGenerateLoot()
-        {
-            //arrange
-            //act
-            //assert
-            Assert.Throws<NotImplementedException>(() =>
-            {
-                _tile.GenerateLoot();
-            });
-        }
-        
-        [Test]
-        public void Test_LootItem_CanLootItem()
-        {
-            //arrange
-            //act
-            //assert
-            Assert.Throws<NotImplementedException>(() =>
-            {
-                const int itemId = 0;
-                _tile.LootItem(itemId);
-            });
-        }
-
         [Test]
         public void Test_IsAccessible_EqualsTo_True()
         {

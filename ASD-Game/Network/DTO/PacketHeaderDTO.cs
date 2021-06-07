@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using ASD_project.Network.Enum;
+using ASD_Game.Network.Enum;
 
-namespace ASD_project.Network.DTO
+namespace ASD_Game.Network.DTO
 {
     [ExcludeFromCodeCoverage]
     public class PacketHeaderDTO

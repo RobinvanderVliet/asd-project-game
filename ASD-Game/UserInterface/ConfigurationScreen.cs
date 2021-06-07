@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 
-namespace ASD_project.UserInterface
+namespace ASD_Game.UserInterface
 {
     public class ConfigurationScreen : Screen
     {
-        private string configuration;
-        private List<string> options;
-        private string inputText;
+        private string _configuration;
+        private List<string> _options;
+        private string _inputText;
         private const int CONFIGURATION_X = 1;
         private const int CONFIGURATION_Y = HEADER_HEIGHT + BORDER_SIZE;
         private const int CONFIGURATION_WIDTH = SCREEN_WIDTH - BORDER_SIZE;
@@ -17,25 +17,25 @@ namespace ASD_project.UserInterface
 
         public ConfigurationScreen()
         {
-            configuration = "Do you want to configure the game?";
-            options = new List<string>()
+            _configuration = "Do you want to configure the game?";
+            _options = new List<string>()
             {
                 "Yes", "No"
             };
-            inputText = "Choose an option";
+            _inputText = "Choose an option";
         }
         public override void DrawScreen()
         {
             Console.Clear();
             DrawHeader(GetHeaderText());
             DrawConfigurationBox();
-            DrawInputBox(INPUT_X, INPUT_Y + options.Count, inputText);
+            DrawInputBox(INPUT_X, INPUT_Y + _options.Count, _inputText);
         }
 
         public void UpdateConfigurationScreen(string configurationHeader, List<string> configurationChoices)
         {
-            configuration = configurationHeader;
-            options = configurationChoices;
+            _configuration = configurationHeader;
+            _options = configurationChoices;
             DrawScreen();
         }
         
@@ -48,22 +48,22 @@ namespace ASD_project.UserInterface
         {
             Console.SetCursorPosition(CONFIGURATION_X, CONFIGURATION_Y);
             Console.SetCursorPosition(CONFIGURATION_X + OFFSET_LEFT, CONFIGURATION_Y + OFFSET_TOP);
-            Console.Write(configuration);
+            Console.Write(_configuration);
             
-            foreach (var option in options)
+            foreach (var option in _options)
             {
-                int choicePosition = options.IndexOf(option) + 1;
+                int choicePosition = _options.IndexOf(option) + 1;
                 Console.SetCursorPosition(CONFIGURATION_X + 1, CONFIGURATION_Y + choicePosition);
                 Console.SetCursorPosition(CONFIGURATION_X + OFFSET_LEFT, CONFIGURATION_Y + OFFSET_TOP + choicePosition);
                 Console.Write("{0}. {1}", choicePosition, option);
             }
             
-            DrawBox(CONFIGURATION_X - 1, CONFIGURATION_Y, CONFIGURATION_WIDTH, options.Count + 1);
+            DrawBox(CONFIGURATION_X - 1, CONFIGURATION_Y, CONFIGURATION_WIDTH, _options.Count + 1);
         }
         
         public void UpdateInputMessage(string message)
         {
-            inputText = message;
+            _inputText = message;
             DrawScreen();
         }
     }

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using LiteDB;
 
-namespace ASD_project.DatabaseHandler.Repository
+namespace ASD_Game.DatabaseHandler.Repository
 {
     public interface IRepository<T>
     {

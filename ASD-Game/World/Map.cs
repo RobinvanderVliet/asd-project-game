@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ASD_project.DatabaseHandler.Services;
-using ASD_project.World.Helpers;
-using ASD_project.World.Models;
-using ASD_project.World.Models.Characters;
-using ASD_project.World.Models.Interfaces;
+using ASD_Game.World.Helpers;
+using ASD_Game.World.Models;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Interfaces;
 
-namespace ASD_project.World
+namespace ASD_Game.World
 {
     public class Map : IMap
     {

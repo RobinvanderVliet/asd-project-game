@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.Agent;
-using ASD_project.Agent.Mapper;
-using ASD_project.Agent.Models;
-using ASD_project.Agent.Services;
-using ASD_project.InputHandling;
+using ASD_Game.Agent;
+using ASD_Game.Agent.Mapper;
+using ASD_Game.Agent.Models;
+using ASD_Game.Agent.Services;
+using ASD_Game.InputHandling;
 using Moq;
 using NUnit.Framework;
 

@@ -1,4 +1,4 @@
-﻿namespace ASD_project.Chat
+﻿namespace ASD_Game.Chat
 {
     public interface IChatHandler
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.Items;
-using ASD_project.World.Models.Interfaces;
+using ASD_Game.Items;
+using ASD_Game.World.Models.Interfaces;
 
-namespace ASD_project.World.Models.BuildingTiles
+namespace ASD_Game.World.Models.BuildingTiles
 {
     [ExcludeFromCodeCoverage]
     public class WallTile : IBuildingTile

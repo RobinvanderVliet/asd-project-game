@@ -1,7 +1,7 @@
 ﻿using System;
-using ASD_project.Creature.Creature.StateMachine.Data;
+using ASD_Game.Creature.Creature.StateMachine.Data;
 
-namespace ASD_project.Creature.Creature.StateMachine.State
+namespace ASD_Game.Creature.Creature.StateMachine.State
 {
     public class UseConsumableState : CreatureState
     {

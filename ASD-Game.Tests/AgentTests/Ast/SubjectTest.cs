@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using ASD_project.Agent.Antlr.Ast.Comparables;
-using ASD_project.Agent.Antlr.Ast.Comparables.Subjects;
+using ASD_Game.Agent.Antlr.Ast.Comparables;
+using ASD_Game.Agent.Antlr.Ast.Comparables.Subjects;
 using NUnit.Framework;
 
 namespace ASD_Game.Tests.AgentTests.Ast

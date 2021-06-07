@@ -6,8 +6,8 @@ using System.Reflection;
 using Agent.Antlr.Grammar;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using ASD_project.Agent.Antlr.Ast;
-using ASD_project.Agent.Antlr.Parser;
+using ASD_Game.Agent.Antlr.Ast;
+using ASD_Game.Agent.Antlr.Parser;
 using NUnit.Framework;
 
 namespace ASD_Game.Tests.AgentTests.Parser

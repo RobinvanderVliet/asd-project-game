@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Chat.DTO
+﻿namespace ASD_Game.Chat.DTO
 {
     public class ChatMessageDTO
     {

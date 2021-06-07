@@ -1,6 +1,6 @@
-﻿using ASD_project.InputHandling.Antlr.Ast;
+﻿using ASD_Game.InputHandling.Antlr.Ast;
 
-namespace ASD_project.InputHandling.Antlr.Transformer
+namespace ASD_Game.InputHandling.Antlr.Transformer
 {
     public interface IEvaluator
     {

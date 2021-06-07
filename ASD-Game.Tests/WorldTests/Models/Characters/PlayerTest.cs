@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.World.Models.Characters;
+using ASD_Game.World.Models.Characters;
 using NUnit.Framework;
 
 namespace ASD_Game.Tests.WorldTests.Models.Characters

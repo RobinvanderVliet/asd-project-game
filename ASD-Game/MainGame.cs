@@ -1,8 +1,8 @@
 using System;
-using ASD_project.InputHandling;
-using ASD_project.UserInterface;
+using ASD_Game.InputHandling;
+using ASD_Game.UserInterface;
 
-namespace ASD_project
+namespace ASD_Game
 {
     partial class Program
     {

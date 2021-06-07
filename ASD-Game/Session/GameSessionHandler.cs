@@ -1,22 +1,21 @@
 using System.Collections.Generic;
-using ASD_project.ActionHandling;
-using ASD_project.DatabaseHandler.POCO;
-using ASD_project.DatabaseHandler.Services;
-using ASD_project.Items;
-using ASD_project.Network;
-using ASD_project.Network.DTO;
-using ASD_project.Network.Enum;
-using ASD_project.Session.DTO;
-using ASD_project.UserInterface;
-using ASD_project.World.Models;
-using ASD_project.World.Models.Characters;
-using ASD_project.World.Services;
-using DatabaseHandler.POCO;
-using Messages;
+using ASD_Game.ActionHandling;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Items;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
+using ASD_Game.Session.DTO;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
+using ASD_Game.World.Models;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Services;
 using Newtonsoft.Json;
-using Session.GameConfiguration;
 
-namespace ASD_project.Session
+namespace ASD_Game.Session
 {
 
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
@@ -29,15 +28,15 @@ namespace ASD_project.Session
         private IGameConfigurationHandler _gameConfigurationHandler;
         private IScreenHandler _screenHandler;
         
-        private IDatabaseService<PlayerPOCO> _playerDatabaseService;
-        private IDatabaseService<GamePOCO> _gameDatabaseService;
-        private IDatabaseService<GameConfigurationPOCO> _gameConfigDatabaseService;
-        private IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
+        private IDatabaseService<PlayerPoco> _playerDatabaseService;
+        private IDatabaseService<GamePoco> _gameDatabaseService;
+        private IDatabaseService<GameConfigurationPoco> _gameConfigDatabaseService;
+        private IDatabaseService<PlayerItemPoco> _playerItemDatabaseService;
 
         public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, 
-            IRelativeStatHandler relativeStatHandler, IDatabaseService<PlayerPOCO> playerDatabaseService,
-            IDatabaseService<GamePOCO> gameDatabaseService, IDatabaseService<GameConfigurationPOCO> gameConfigDatabaseService, IGameConfigurationHandler gameConfigurationHandler,
-            IScreenHandler screenHandler, IDatabaseService<PlayerItemPOCO> playerItemDatabaseService, IMessageService messageService)
+            IRelativeStatHandler relativeStatHandler, IDatabaseService<PlayerPoco> playerDatabaseService,
+            IDatabaseService<GamePoco> gameDatabaseService, IDatabaseService<GameConfigurationPoco> gameConfigDatabaseService, IGameConfigurationHandler gameConfigurationHandler,
+            IScreenHandler screenHandler, IDatabaseService<PlayerItemPoco> playerItemDatabaseService, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
@@ -61,7 +60,7 @@ namespace ASD_project.Session
 
         private void AddItemsToPlayer( string playerId, string gameId)
         {
-            PlayerItemPOCO poco = new() {PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGUID = gameId };
+            PlayerItemPoco poco = new() {PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGUID = gameId };
             _ = _playerItemDatabaseService.CreateAsync(poco);
 
             poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetKnife().ItemName, GameGUID = gameId };
@@ -108,7 +107,7 @@ namespace ASD_project.Session
             var players = _worldService.GetPlayers();
             foreach(Player player in players)
             {
-                PlayerPOCO playerPoco = new PlayerPOCO { PlayerGUID = player.Id, GameGUID = _clientController.SessionId, GameGUIDAndPlayerGuid = _clientController.SessionId + player.Id, XPosition = player.XPosition, YPosition = player.YPosition };
+                PlayerPoco playerPoco = new PlayerPoco { PlayerGUID = player.Id, GameGUID = _clientController.SessionId, GameGUIDAndPlayerGuid = _clientController.SessionId + player.Id, XPosition = player.XPosition, YPosition = player.YPosition };
                 _playerDatabaseService.CreateAsync(playerPoco);
                 AddItemsToPlayer(player.Id, _clientController.SessionId);
             }
@@ -117,13 +116,13 @@ namespace ASD_project.Session
 
         private void InsertGameIntoDatabase()
         {
-            var gamePOCO = new GamePOCO { GameGUID = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId() };
+            var gamePOCO = new GamePoco { GameGUID = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId() };
             _gameDatabaseService.CreateAsync(gamePOCO);
         }
 
         private void InsertConfigurationIntoDatabase()
         {
-            var gameConfigurationPOCO = new GameConfigurationPOCO
+            var gameConfigurationPOCO = new GameConfigurationPoco
             {
                 GameGUID = _clientController.SessionId,
                 NPCDifficultyCurrent = (int)_gameConfigurationHandler.GetCurrentMonsterDifficulty(),

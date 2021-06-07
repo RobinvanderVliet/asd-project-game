@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.Agent;
-using ASD_project.Agent.Mapper;
+using ASD_Game.Agent;
+using ASD_Game.Agent.Mapper;
 using NUnit.Framework;
 
 namespace ASD_Game.Tests.AgentTests.Mapper

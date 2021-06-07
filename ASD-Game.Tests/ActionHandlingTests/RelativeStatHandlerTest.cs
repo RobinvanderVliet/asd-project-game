@@ -1,12 +1,12 @@
 using System.Diagnostics.CodeAnalysis;
-using ActionHandling.DTO;
-using ASD_project.ActionHandling;
-using ASD_project.DatabaseHandler.POCO;
-using ASD_project.DatabaseHandler.Services;
-using ASD_project.Network;
-using ASD_project.Network.Enum;
-using ASD_project.World.Services;
-using Messages;
+using ASD_Game.ActionHandling;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.Enum;
+using ASD_Game.World.Services;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -18,7 +18,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
     {
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
-        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerDatabaseService;
+        private Mock<IDatabaseService<PlayerPoco>> _mockedPlayerDatabaseService;
         private RelativeStatHandler _sut;
         private Mock<IMessageService> _mockedMessageService;
 
@@ -27,7 +27,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
         {
             _mockedClientController = new Mock<IClientController>();
             _mockedWorldService = new Mock<IWorldService>();
-            _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPOCO>>();
+            _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPoco>>();
             _mockedMessageService = new Mock<IMessageService>();
 
             _sut = new RelativeStatHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerDatabaseService.Object, _mockedMessageService.Object);

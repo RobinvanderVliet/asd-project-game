@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.Agent.Antlr.Ast;
-using ASD_project.Agent.Antlr.Ast.Comparables;
-using ASD_project.Agent.Antlr.Ast.Comparables.Subjects;
+using ASD_Game.Agent.Antlr.Ast;
+using ASD_Game.Agent.Antlr.Ast.Comparables;
+using ASD_Game.Agent.Antlr.Ast.Comparables.Subjects;
 using NUnit.Framework;
-using Comparable = ASD_project.Agent.Antlr.Ast.Comparable;
+using Comparable = ASD_Game.Agent.Antlr.Ast.Comparable;
 
 namespace ASD_Game.Tests.AgentTests.Ast
 {

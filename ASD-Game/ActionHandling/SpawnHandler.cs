@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ASD_project.ActionHandling.DTO;
-using ASD_project.DatabaseHandler.POCO;
-using ASD_project.DatabaseHandler.Services;
-using ASD_project.Items;
-using ASD_project.Network;
-using ASD_project.Network.DTO;
-using ASD_project.Network.Enum;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Items;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
 using Newtonsoft.Json;
 
-namespace ASD_project.ActionHandling
+namespace ASD_Game.ActionHandling
 {
     public class SpawnHandler : ISpawnHandler, IPacketHandler
     {

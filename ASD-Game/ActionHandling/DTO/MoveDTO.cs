@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace ASD_project.ActionHandling.DTO
+namespace ASD_Game.ActionHandling.DTO
 {
     [ExcludeFromCodeCoverage]
     public class MoveDTO

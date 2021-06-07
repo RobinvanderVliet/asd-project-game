@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Timers;
-using ASD_project.InputHandling.Antlr;
-using ASD_project.InputHandling.Exceptions;
-using ASD_project.Session;
-using ASD_project.UserInterface;
-using Messages;
-using Session.GameConfiguration;
+using ASD_Game.InputHandling.Antlr;
+using ASD_Game.Messages;
+using ASD_Game.Session;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
 using WebSocketSharp;
 
-namespace ASD_project.InputHandling
+namespace ASD_Game.InputHandling
 {
     public class InputHandler : IInputHandler
     {

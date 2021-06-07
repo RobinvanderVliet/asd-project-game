@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using LiteDB.Async;
 
-namespace ASD_project.DatabaseHandler
+namespace ASD_Game.DatabaseHandler
 {
     public class DBConnection : IDBConnection
     {

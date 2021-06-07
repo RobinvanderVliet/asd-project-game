@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.DatabaseHandler.Services;
-using ASD_project.World;
-using ASD_project.World.Models;
-using ASD_project.World.Models.Characters;
-using ASD_project.World.Models.Interfaces;
-using ASD_project.World.Models.TerrainTiles;
+using ASD_Game.World;
+using ASD_Game.World.Models;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Interfaces;
+using ASD_Game.World.Models.TerrainTiles;
 using NUnit.Framework;
 using Moq;
 using Range = Moq.Range;

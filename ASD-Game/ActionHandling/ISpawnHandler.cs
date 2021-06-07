@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using ASD_project.ActionHandling.DTO;
-using ASD_project.Items;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.Items;
 
-namespace ASD_project.ActionHandling
+namespace ASD_Game.ActionHandling
 {
     public interface ISpawnHandler
     {

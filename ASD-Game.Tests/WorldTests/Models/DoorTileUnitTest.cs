@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.World.Models.BuildingTiles;
-using ASD_project.World.Models.Interfaces;
+using ASD_Game.World.Models.BuildingTiles;
+using ASD_Game.World.Models.Interfaces;
 using NUnit.Framework;
 
 namespace ASD_Game.Tests.WorldTests.Models

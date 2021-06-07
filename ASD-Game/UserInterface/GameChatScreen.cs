@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using UserInterface;
 
-namespace ASD_project.UserInterface
+namespace ASD_Game.UserInterface
 {
     public class GameChatScreen : Screen, IGameChatScreen
     {

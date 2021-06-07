@@ -1,8 +1,8 @@
-﻿using ASD_project.Creature.Creature.StateMachine;
-using ASD_project.Network;
-using ASD_project.Network.Enum;
+﻿using ASD_Game.Creature.Creature.StateMachine;
+using ASD_Game.Network;
+using ASD_Game.Network.Enum;
 
-namespace ASD_project.Creature.Creature
+namespace ASD_Game.Creature.Creature
 {
     public class Player : ICreature
     {

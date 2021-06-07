@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace ASD_project.World.Models
+namespace ASD_Game.World.Models
 {
     [ExcludeFromCodeCoverage]
     public static class CharacterSymbol

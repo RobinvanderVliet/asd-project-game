@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ASD_project.Creature.Creature.StateMachine.CustomRuleSet
+namespace ASD_Game.Creature.Creature.StateMachine.CustomRuleSet
 {
     public class RuleSet
     {

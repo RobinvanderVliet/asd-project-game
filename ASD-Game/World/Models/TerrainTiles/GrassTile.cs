@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.Items;
-using ASD_project.World.Models.Interfaces;
+using ASD_Game.Items;
+using ASD_Game.World.Models.Interfaces;
 
-namespace ASD_project.World.Models.TerrainTiles
+namespace ASD_Game.World.Models.TerrainTiles
 {
     [ExcludeFromCodeCoverage]
     public class GrassTile : ITerrainTile

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ASD_project.Agent.Antlr.Ast;
-using ASD_project.Agent.Antlr.Ast.Comparables;
+using ASD_Game.Agent.Antlr.Ast;
+using ASD_Game.Agent.Antlr.Ast.Comparables;
 
-namespace ASD_project.Agent.Antlr.Checker
+namespace ASD_Game.Agent.Antlr.Checker
 {
     public class Checking
     {

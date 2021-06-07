@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.Agent.Antlr.Ast;
-using ASD_project.Agent.Antlr.Ast.Comparables;
-using ASD_project.Agent.Antlr.Checker;
+using ASD_Game.Agent.Antlr.Ast;
+using ASD_Game.Agent.Antlr.Ast.Comparables;
+using ASD_Game.Agent.Antlr.Checker;
 using Moq;
 using NUnit.Framework;
 

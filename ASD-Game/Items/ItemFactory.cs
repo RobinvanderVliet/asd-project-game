@@ -1,10 +1,10 @@
-﻿using ASD_project.Items.ArmorStats;
-using ASD_project.Items.Consumables;
-using ASD_project.Items.Consumables.ConsumableStats;
-using ASD_project.Items.ItemStats;
-using ASD_project.Items.WeaponStats;
+﻿using ASD_Game.Items.ArmorStats;
+using ASD_Game.Items.Consumables;
+using ASD_Game.Items.Consumables.ConsumableStats;
+using ASD_Game.Items.ItemStats;
+using ASD_Game.Items.WeaponStats;
 
-namespace ASD_project.Items
+namespace ASD_Game.Items
 {
     public static class ItemFactory
     {

@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.InputHandling.Antlr.Ast;
 
-namespace InputHandling.Antlr.Ast.Actions
+namespace ASD_Game.InputHandling.Antlr.Ast.Actions
 {
     public class Inspect : Command
     {

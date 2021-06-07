@@ -2,10 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using ASD_project.InputHandling.Antlr.Ast;
-using ASD_project.InputHandling.Antlr.Ast.Actions;
-using ASD_project.InputHandling.Antlr.Parser;
-using InputHandling.Antlr.Ast.Actions;
+using ASD_Game.InputHandling.Antlr.Ast;
+using ASD_Game.InputHandling.Antlr.Ast.Actions;
+using ASD_Game.InputHandling.Antlr.Parser;
 using InputHandling.Antlr.Grammar;
 using NUnit.Framework;
 

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.Items;
-using ASD_project.World;
+using ASD_Game.Items;
+using ASD_Game.World;
 using NUnit.Framework;
 
 namespace ASD_Game.Tests.WorldTests

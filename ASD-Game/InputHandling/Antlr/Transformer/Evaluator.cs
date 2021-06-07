@@ -1,21 +1,18 @@
 using System;
-using ActionHandling;
-using ASD_project.ActionHandling;
-using ASD_project.Chat;
-using ASD_project.InputHandling.Antlr.Ast;
-using ASD_project.InputHandling.Antlr.Ast.Actions;
-using ASD_project.InputHandling.Exceptions;
-using ASD_project.Network;
-using ASD_project.Network.Enum;
-using ASD_project.Session;
-using ASD_project.Session.DTO;
-using InputHandling.Antlr.Ast.Actions;
-using InputHandling.Exceptions;
+using ASD_Game.ActionHandling;
+using ASD_Game.Chat;
+using ASD_Game.InputHandling.Antlr.Ast;
+using ASD_Game.InputHandling.Antlr.Ast.Actions;
+using ASD_Game.InputHandling.Exceptions;
+using ASD_Game.Network;
+using ASD_Game.Network.Enum;
+using ASD_Game.Session;
+using ASD_Game.Session.DTO;
+using ASD_Game.Session.GameConfiguration;
 using Newtonsoft.Json;
-using Session.GameConfiguration;
-using MonsterDifficulty = ASD_project.InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
+using MonsterDifficulty = ASD_Game.InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
-namespace ASD_project.InputHandling.Antlr.Transformer
+namespace ASD_Game.InputHandling.Antlr.Transformer
 {
     public class Evaluator : IEvaluator
     {

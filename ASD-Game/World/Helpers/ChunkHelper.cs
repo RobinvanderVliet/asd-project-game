@@ -1,8 +1,8 @@
 ﻿using System;
-using ASD_project.World.Models;
-using ASD_project.World.Models.Interfaces;
+using ASD_Game.World.Models;
+using ASD_Game.World.Models.Interfaces;
 
-namespace ASD_project.World.Helpers
+namespace ASD_Game.World.Helpers
 {
     public class ChunkHelper
     {

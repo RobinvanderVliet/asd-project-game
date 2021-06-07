@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using ASD_project.InputHandling.Antlr;
-using ASD_project.InputHandling.Antlr.Ast;
-using ASD_project.InputHandling.Antlr.Ast.Actions;
-using ASD_project.InputHandling.Antlr.Transformer;
-using ASD_project.InputHandling.Exceptions;
+using ASD_Game.InputHandling.Antlr;
+using ASD_Game.InputHandling.Antlr.Ast;
+using ASD_Game.InputHandling.Antlr.Ast.Actions;
+using ASD_Game.InputHandling.Antlr.Transformer;
+using ASD_Game.InputHandling.Exceptions;
 using Moq;
 using NUnit.Framework;
 

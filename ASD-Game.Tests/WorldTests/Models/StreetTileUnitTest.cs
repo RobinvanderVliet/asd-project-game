@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.World.Models.Interfaces;
-using ASD_project.World.Models.TerrainTiles;
+using ASD_Game.World.Models.Interfaces;
+using ASD_Game.World.Models.TerrainTiles;
 using NUnit.Framework;
 
 namespace ASD_Game.Tests.WorldTests.Models

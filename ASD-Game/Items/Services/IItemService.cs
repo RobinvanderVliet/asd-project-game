@@ -1,6 +1,6 @@
-﻿using ASD_project.ActionHandling;
+﻿using ASD_Game.ActionHandling;
 
-namespace ASD_project.Items.Services
+namespace ASD_Game.Items.Services
 {
     public interface IItemService
     {
