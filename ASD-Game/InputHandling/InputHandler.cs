@@ -43,7 +43,14 @@ namespace InputHandling
             SendCommand(GetCommand());
             _screenHandler.RedrawGameInputBox();
         }
-        
+
+        //Hack
+        public void HandleGameScreenCommands(string input)
+        {
+            SendCommand(input);
+            _screenHandler.RedrawGameInputBox();
+        }
+
         private void SendCommand(string commando)
         {
             try
@@ -151,9 +158,14 @@ namespace InputHandling
             {
                 SendCommand(input);
             }
-            else if (input.Contains("SHOUT")) 
+            else if (input.Contains("SHOUT"))
             {
                 SendCommand(input);
+            }
+            // Hack Client readLine stuck
+            else if(_screenHandler.Screen is GameScreen)
+            {
+                HandleGameScreenCommands(input);
             }
 
         }
