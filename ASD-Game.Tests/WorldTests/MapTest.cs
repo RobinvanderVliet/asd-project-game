@@ -11,7 +11,6 @@ using NUnit.Framework;
 using Moq;
 using Range = Moq.Range;
 
-
 namespace ASD_Game.Tests.WorldTests
 {
     
@@ -69,12 +68,6 @@ namespace ASD_Game.Tests.WorldTests
             _databaseServiceMock.Setup(databaseService => databaseService.DeleteAllAsync()).Verifiable();
             _databaseServiceMockObject = _databaseServiceMock.Object;
 
-            // _consolePrinterMock = new Mock<IConsolePrinter>();
-            // _consolePrinterMock.Setup(consolePrinter => consolePrinter.PrintText(It.IsAny<string>())).Verifiable();
-            // _consolePrinterMock.Setup(consolePrinter => consolePrinter.NextLine()).Verifiable();
-            // _consolePrinterMockObject = _consolePrinterMock.Object;
-            //
-
             _character1 = new Player("naam1", 0, 0, CharacterSymbol.FRIENDLY_PLAYER, "a");
             _character2 = new Player("naam2", 0, 0, CharacterSymbol.FRIENDLY_PLAYER, "b");
             
@@ -93,7 +86,7 @@ namespace ASD_Game.Tests.WorldTests
             //Assert ---------
             Assert.DoesNotThrow(() =>
             {
-                var map = new Map(_noiseMapGeneratorMockObject,21, _databaseServiceMockObject, 0, _chunks);
+                var map = new Map(_noiseMapGeneratorMockObject,21, _databaseServiceMockObject, _chunks);
             });
         }
         
