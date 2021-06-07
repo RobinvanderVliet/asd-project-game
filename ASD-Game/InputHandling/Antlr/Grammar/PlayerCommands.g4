@@ -47,7 +47,7 @@ MESSAGE: '"' ~'"'+ '"';
 
 input: command EOF;
 
-step: '0';
+step: NUMBER;
 message: MESSAGE;
 
 command:
