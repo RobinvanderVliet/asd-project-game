@@ -1,3 +1,4 @@
+using System;
 using ActionHandling;
 using Agent.Antlr.Ast;
 using Chat;
@@ -9,7 +10,6 @@ using Newtonsoft.Json;
 using Session;
 using Session.DTO;
 using Session.GameConfiguration;
-using System;
 using AST = InputHandling.Antlr.Ast.AST;
 using ItemFrequency = InputHandling.Antlr.Ast.Actions.ItemFrequency;
 using MonsterDifficulty = InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
@@ -99,7 +99,7 @@ namespace InputHandling.Antlr.Transformer
                         break;
                     case Inspect:
                         TransformInspect((Inspect)nodeBody[i]);
-                        break;
+                        break;    
                     case Use:
                         TransformUse((Use)nodeBody[i]);
                         break;
@@ -204,16 +204,16 @@ namespace InputHandling.Antlr.Transformer
             switch (monster.Difficulty)
             {
                 case "easy":
-                    difficulty = (int)Session.GameConfiguration.MonsterDifficulty.Easy;
+                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Easy;
                     break;
                 case "medium":
-                    difficulty = (int)Session.GameConfiguration.MonsterDifficulty.Medium;
+                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Medium;
                     break;
                 case "hard":
-                    difficulty = (int)Session.GameConfiguration.MonsterDifficulty.Hard;
+                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Hard;
                     break;
                 case "impossible":
-                    difficulty = (int)Session.GameConfiguration.MonsterDifficulty.Impossible;
+                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Impossible;
                     break;
             }
 
@@ -231,18 +231,18 @@ namespace InputHandling.Antlr.Transformer
             {
                 return;
             }
-
+            
             int frequency = -1;
             switch (itemFrequency.Frequency)
             {
                 case "low":
-                    frequency = (int)ItemSpawnRate.Low;
+                    frequency = (int) ItemSpawnRate.Low;
                     break;
                 case "medium":
-                    frequency = (int)ItemSpawnRate.Medium;
+                    frequency = (int) ItemSpawnRate.Medium;
                     break;
                 case "high":
-                    frequency = (int)ItemSpawnRate.High;
+                    frequency = (int) ItemSpawnRate.High;
                     break;
             }
             Console.WriteLine(frequency);
