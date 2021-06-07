@@ -28,15 +28,15 @@ namespace ASD_Game.Session
         private IGameConfigurationHandler _gameConfigurationHandler;
         private IScreenHandler _screenHandler;
         
-        private IDatabaseService<PlayerPoco> _playerDatabaseService;
-        private IDatabaseService<GamePoco> _gameDatabaseService;
-        private IDatabaseService<GameConfigurationPoco> _gameConfigDatabaseService;
-        private IDatabaseService<PlayerItemPoco> _playerItemDatabaseService;
+        private IDatabaseService<PlayerPOCO> _playerDatabaseService;
+        private IDatabaseService<GamePOCO> _gameDatabaseService;
+        private IDatabaseService<GameConfigurationPOCO> _gameConfigDatabaseService;
+        private IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
 
         public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, 
-            IRelativeStatHandler relativeStatHandler, IDatabaseService<PlayerPoco> playerDatabaseService,
-            IDatabaseService<GamePoco> gameDatabaseService, IDatabaseService<GameConfigurationPoco> gameConfigDatabaseService, IGameConfigurationHandler gameConfigurationHandler,
-            IScreenHandler screenHandler, IDatabaseService<PlayerItemPoco> playerItemDatabaseService, IMessageService messageService)
+            IRelativeStatHandler relativeStatHandler, IDatabaseService<PlayerPOCO> playerDatabaseService,
+            IDatabaseService<GamePOCO> gameDatabaseService, IDatabaseService<GameConfigurationPOCO> gameConfigDatabaseService, IGameConfigurationHandler gameConfigurationHandler,
+            IScreenHandler screenHandler, IDatabaseService<PlayerItemPOCO> playerItemDatabaseService, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
@@ -60,7 +60,7 @@ namespace ASD_Game.Session
 
         private void AddItemsToPlayer( string playerId, string gameId)
         {
-            PlayerItemPoco poco = new() {PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGUID = gameId };
+            PlayerItemPOCO poco = new() {PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGUID = gameId };
             _ = _playerItemDatabaseService.CreateAsync(poco);
 
             poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetKnife().ItemName, GameGUID = gameId };
@@ -107,7 +107,7 @@ namespace ASD_Game.Session
             var players = _worldService.GetPlayers();
             foreach(Player player in players)
             {
-                PlayerPoco playerPoco = new PlayerPoco { PlayerGUID = player.Id, GameGUID = _clientController.SessionId, GameGUIDAndPlayerGuid = _clientController.SessionId + player.Id, XPosition = player.XPosition, YPosition = player.YPosition };
+                PlayerPOCO playerPoco = new PlayerPOCO { PlayerGUID = player.Id, GameGUID = _clientController.SessionId, GameGUIDAndPlayerGuid = _clientController.SessionId + player.Id, XPosition = player.XPosition, YPosition = player.YPosition };
                 _playerDatabaseService.CreateAsync(playerPoco);
                 AddItemsToPlayer(player.Id, _clientController.SessionId);
             }
@@ -116,13 +116,13 @@ namespace ASD_Game.Session
 
         private void InsertGameIntoDatabase()
         {
-            var gamePOCO = new GamePoco { GameGUID = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId() };
+            var gamePOCO = new GamePOCO { GameGUID = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId() };
             _gameDatabaseService.CreateAsync(gamePOCO);
         }
 
         private void InsertConfigurationIntoDatabase()
         {
-            var gameConfigurationPOCO = new GameConfigurationPoco
+            var gameConfigurationPOCO = new GameConfigurationPOCO
             {
                 GameGUID = _clientController.SessionId,
                 NPCDifficultyCurrent = (int)_gameConfigurationHandler.GetCurrentMonsterDifficulty(),

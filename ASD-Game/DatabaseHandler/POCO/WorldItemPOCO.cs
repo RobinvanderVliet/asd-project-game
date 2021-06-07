@@ -5,7 +5,7 @@ using LiteDB;
 namespace ASD_Game.DatabaseHandler.POCO
 {
     [ExcludeFromCodeCoverage]
-    public class WorldItemPoco
+    public class WorldItemPOCO
     {
         [BsonId]
         public string Id = Guid.NewGuid().ToString();

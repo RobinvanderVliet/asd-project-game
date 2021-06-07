@@ -25,13 +25,13 @@ namespace ASD_Game.Tests.SessionTests
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
         private Mock<ISessionHandler> _mockedsessionHandler;
-        private Mock<IDatabaseService<PlayerPoco>> _mockedPlayerDatabaseService;
-        private Mock<IDatabaseService<GamePoco>> _mockedGameDatabaseService;
-        private Mock<IDatabaseService<PlayerItemPoco>> _mockedPlayerItemDatabaseService;
+        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerDatabaseService;
+        private Mock<IDatabaseService<GamePOCO>> _mockedGameDatabaseService;
+        private Mock<IDatabaseService<PlayerItemPOCO>> _mockedPlayerItemDatabaseService;
         private Mock<IRelativeStatHandler> _mockedRelativeStatHandler;
 
         private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
-        private Mock<IDatabaseService<GameConfigurationPoco>> _mockedGameConfigDatabaseService;
+        private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigDatabaseService;
 
 
         [SetUp]
@@ -44,11 +44,11 @@ namespace ASD_Game.Tests.SessionTests
             _mockedWorldService = new Mock<IWorldService>();
             _mockedsessionHandler = new Mock<ISessionHandler>();
             _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
-            _mockedGameConfigDatabaseService = new Mock<IDatabaseService<GameConfigurationPoco>>();
-            _mockedPlayerItemDatabaseService = new Mock<IDatabaseService<PlayerItemPoco>>();
+            _mockedGameConfigDatabaseService = new Mock<IDatabaseService<GameConfigurationPOCO>>();
+            _mockedPlayerItemDatabaseService = new Mock<IDatabaseService<PlayerItemPOCO>>();
             _mockedRelativeStatHandler = new Mock<IRelativeStatHandler>();
-            _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPoco>>();
-            _mockedGameDatabaseService = new Mock<IDatabaseService<GamePoco>>();
+            _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPOCO>>();
+            _mockedGameDatabaseService = new Mock<IDatabaseService<GamePOCO>>();
            // _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedsessionHandler.Object, _mockedPlayerServiceDb.Object, _mockedgameDatabaseService.Object, _mockedGameConfigDatabaseService.Object, _mockedGameConfigurationHandler.Object);
             _packetDTO = new PacketDTO();
         }

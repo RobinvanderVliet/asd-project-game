@@ -4,7 +4,7 @@ using LiteDB;
 namespace ASD_Game.DatabaseHandler.POCO
 {
     [ExcludeFromCodeCoverage]
-    public class ItemPoco
+    public class ItemPOCO
     {
 
         [BsonId]

@@ -16,14 +16,14 @@ namespace ASD_Game.Session.GameConfiguration
         private readonly IScreenHandler _screenHandler;
         private readonly List<string> _configurationHeader;
         private readonly List<List<string>> _configurationChoices;
-        private IDatabaseService<GameConfigurationPoco> _gameConfigDatabaseService;
+        private IDatabaseService<GameConfigurationPOCO> _gameConfigDatabaseService;
         public MonsterDifficulty NewMonsterDifficulty { get; set; }
         public MonsterDifficulty CurrentMonsterDifficulty { get; set; }
         public ItemSpawnRate SpawnRate { get; set; }
         public string Username { get; set; }
         public string SessionName { get; set; }
 
-        public GameConfigurationHandler(IScreenHandler screenHandler, IDatabaseService<GameConfigurationPoco> gameConfigServicesDb)
+        public GameConfigurationHandler(IScreenHandler screenHandler, IDatabaseService<GameConfigurationPOCO> gameConfigServicesDb)
         {
             _setupConfiguration = false;
             _configurationScreen = screenHandler.Screen as ConfigurationScreen;

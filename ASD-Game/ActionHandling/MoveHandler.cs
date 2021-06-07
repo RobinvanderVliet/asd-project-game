@@ -18,10 +18,10 @@ namespace ASD_Game.ActionHandling
     {
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
-        private readonly IDatabaseService<PlayerPoco> _playerDatabaseService;
+        private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IMessageService _messageService;
 
-        public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPoco> playerDatabaseService, IMessageService messageService)
+        public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Move);

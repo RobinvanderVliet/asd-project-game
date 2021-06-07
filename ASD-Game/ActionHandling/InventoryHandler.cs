@@ -21,12 +21,12 @@ namespace ASD_Game.ActionHandling
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
         private readonly IMessageService _messageService;
-        private readonly IDatabaseService<PlayerPoco> _playerDatabaseService;
-        private readonly IDatabaseService<PlayerItemPoco> _playerItemDatabaseService;
-        private readonly IDatabaseService<WorldItemPoco> _worldItemDatabaseService;
+        private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
+        private readonly IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
+        private readonly IDatabaseService<WorldItemPOCO> _worldItemDatabaseService;
 
 
-        public InventoryHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPoco> playerDatabaseService, IDatabaseService<PlayerItemPoco> playerItemDatabaseService, IDatabaseService<WorldItemPoco> worldItemDatabaseService, IMessageService messageService)
+        public InventoryHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IDatabaseService<PlayerItemPOCO> playerItemDatabaseService, IDatabaseService<WorldItemPOCO> worldItemDatabaseService, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Inventory);
@@ -167,7 +167,7 @@ namespace ASD_Game.ActionHandling
 
                 if (handleInDatabase)
                 {
-                    PlayerItemPoco playerItemPOCO = new PlayerItemPoco
+                    PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO
                     {
                         PlayerGUID = inventoryDTO.UserId,
                         GameGUID = _clientController.SessionId,
@@ -244,7 +244,7 @@ namespace ASD_Game.ActionHandling
                 _worldService.DisplayStats();
                 if (handleInDatabase)
                 {
-                    PlayerItemPoco playerItemPOCO = _playerItemDatabaseService.GetAllAsync().Result.FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == item.ItemName && playerItem.PlayerGUID == player.Id);
+                    PlayerItemPOCO playerItemPOCO = _playerItemDatabaseService.GetAllAsync().Result.FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == item.ItemName && playerItem.PlayerGUID == player.Id);
                     _ = _playerItemDatabaseService.DeleteAsync(playerItemPOCO);
                 }
 
@@ -278,11 +278,11 @@ namespace ASD_Game.ActionHandling
 
                 if (handleInDatabase)
                 {
-                    PlayerItemPoco playerItemPOCO = _playerItemDatabaseService.GetAllAsync().Result.FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == itemToUse.ItemName && playerItem.PlayerGUID == player.Id);
+                    PlayerItemPOCO playerItemPOCO = _playerItemDatabaseService.GetAllAsync().Result.FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == itemToUse.ItemName && playerItem.PlayerGUID == player.Id);
                     _ = _playerItemDatabaseService.DeleteAsync(playerItemPOCO);
 
                     var result = _playerDatabaseService.GetAllAsync().Result;
-                    PlayerPoco playerPOCO = result.FirstOrDefault(player => player.PlayerGUID == inventoryDTO.UserId && player.GameGUID == _clientController.SessionId );
+                    PlayerPOCO playerPOCO = result.FirstOrDefault(player => player.PlayerGUID == inventoryDTO.UserId && player.GameGUID == _clientController.SessionId );
 
                     playerPOCO.Health = player.Health;
                     //add stamina to playerPOCO
