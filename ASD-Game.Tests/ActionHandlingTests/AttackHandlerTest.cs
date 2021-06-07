@@ -31,10 +31,9 @@ namespace ActionHandling.Tests
         private Mock<IWorldService> _mockedWorldService;
         private Mock<Player> _mockedPlayer;
         private Mock<List<Player>> _mockedPlayers;
-        private Mock<IDeadHandler> _mockedDeadHandler;
-        private Mock<DatabaseService<PlayerPOCO>> _mockedPlayerPocoDatabaseService;
-        private Mock<DatabaseService<PlayerItemPOCO>> _mockedPlayerItemPocoDatabaseService;
-        private Mock<DatabaseService<CreaturePOCO>> _mockedCreaturePocoDatabaseService;
+        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerPocoDatabaseService;
+        private Mock<IDatabaseService<PlayerItemPOCO>> _mockedPlayerItemPocoDatabaseService;
+        private Mock<IDatabaseService<CreaturePOCO>> _mockedCreaturePocoDatabaseService;
         private Mock<ISessionHandler> _mockedSessionHandler;
         private Mock<IMessageService> _mockedMessageService;
 
@@ -43,13 +42,11 @@ namespace ActionHandling.Tests
         {
             _mockedClientController = new Mock<IClientController>();
             _mockedWorldService = new Mock<IWorldService>();
-            _mockedDeadHandler = new Mock<IDeadHandler>();
-            _mockedPlayerPocoDatabaseService = new Mock<DatabaseService<PlayerPOCO>>();
-            _mockedPlayerItemPocoDatabaseService = new Mock<DatabaseService<PlayerItemPOCO>>();
-            _mockedCreaturePocoDatabaseService = new Mock<DatabaseService<CreaturePOCO>>();
+            _mockedPlayerPocoDatabaseService = new Mock<IDatabaseService<PlayerPOCO>>();
+            _mockedPlayerItemPocoDatabaseService = new Mock<IDatabaseService<PlayerItemPOCO>>();
+            _mockedCreaturePocoDatabaseService = new Mock<IDatabaseService<CreaturePOCO>>();
             _mockedMessageService = new Mock<IMessageService>();
-            _sut = new AttackHandler(_mockedClientController.Object, _mockedWorldService.Object,
-                _mockedDeadHandler.Object, _mockedPlayerPocoDatabaseService.Object,
+            _sut = new AttackHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerPocoDatabaseService.Object,
                 _mockedPlayerItemPocoDatabaseService.Object, _mockedCreaturePocoDatabaseService.Object,
                 _mockedMessageService.Object);
         }

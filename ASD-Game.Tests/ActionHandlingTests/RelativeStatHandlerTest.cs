@@ -20,7 +20,6 @@ namespace ActionHandling.Tests
         private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerDatabaseService;
         private RelativeStatHandler _sut;
         private Mock<IMessageService> _mockedMessageService;
-        private Mock<IDeadHandler> _mockedDeadHandler;
 
         [SetUp]
         public void Setup()
@@ -29,9 +28,8 @@ namespace ActionHandling.Tests
             _mockedWorldService = new Mock<IWorldService>();
             _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPOCO>>();
             _mockedMessageService = new Mock<IMessageService>();
-            _mockedDeadHandler = new Mock<IDeadHandler>();
 
-            _sut = new RelativeStatHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerDatabaseService.Object, _mockedMessageService.Object, _mockedDeadHandler.Object);
+            _sut = new RelativeStatHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerDatabaseService.Object, _mockedMessageService.Object);
         }
 
         [Test]
