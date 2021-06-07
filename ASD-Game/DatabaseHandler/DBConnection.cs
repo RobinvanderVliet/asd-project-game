@@ -10,7 +10,9 @@ namespace DatabaseHandler
     [ExcludeFromCodeCoverage]
     public class DBConnection : IDBConnection
     {
-       public void SetForeignKeys()
+        private static readonly char _separator = Path.DirectorySeparatorChar;
+
+        public void SetForeignKeys()
         {
             //FK Player -> Game
             BsonMapper.Global.Entity<PlayerPOCO>()
@@ -44,6 +46,7 @@ namespace DatabaseHandler
             BsonMapper.Global.Entity<WorldItemPOCO>()
                 .DbRef(x => x.ItemName, nameof(ItemPOCO));
         }
+
         [ExcludeFromCodeCoverage]
         public ILiteDatabaseAsync GetConnectionAsync()
         {
@@ -51,7 +54,7 @@ namespace DatabaseHandler
             {
                 var currentDirectory = Directory.GetCurrentDirectory();
                 var connection =
-                    new LiteDatabaseAsync(@"Filename=" + currentDirectory + "\\ASD-Game.db;connection=shared;");
+                    new LiteDatabaseAsync($"Filename={currentDirectory}{_separator}ASD-Game.db;connection=shared;");
                 return connection;
             }
             catch (Exception ex)
