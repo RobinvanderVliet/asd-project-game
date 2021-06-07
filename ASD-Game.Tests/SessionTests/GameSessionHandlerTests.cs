@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Moq;
 using Network;
 using NUnit.Framework;
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
+using DatabaseHandler.POCO;
+using DatabaseHandler.Services;
 using WorldGeneration;
 
 namespace Session.Tests
@@ -24,6 +22,8 @@ namespace Session.Tests
         private Mock<IWorldService> _mockedWorldService;
         private Mock<ISessionHandler> _mockedsessionHandler;
         private Mock<NetworkComponent> _networkComponentMock;
+        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerService;
+        private Mock<IDatabaseService<GamePOCO>> _mockedGameService; 
 
         [SetUp]
         public void Setup()
@@ -35,7 +35,8 @@ namespace Session.Tests
             _mockedWorldService = new Mock<IWorldService>();
             _mockedsessionHandler = new Mock<ISessionHandler>();
             _networkComponentMock = new Mock<NetworkComponent>();
-            _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedsessionHandler.Object, _networkComponentMock.Object);
+            _mockedPlayerService = new Mock<IDatabaseService<PlayerPOCO>>();
+            _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedsessionHandler.Object, _networkComponentMock.Object, _mockedPlayerService.Object, _mockedGameService.Object);
             _packetDTO = new PacketDTO();
         }
 

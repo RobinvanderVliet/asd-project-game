@@ -5,7 +5,7 @@
         Chat,
         Move,
         Session,
-        GameSession
-
+        GameSession,
+        Agent
     }
 }

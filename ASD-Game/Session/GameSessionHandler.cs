@@ -19,14 +19,30 @@ namespace Session
         private ISessionHandler _sessionHandler;
         private IWorldService _worldService;
         private INetworkComponent _networkComponent;
+        private IDatabaseService<PlayerPOCO> _playerService;
+        private IDatabaseService<GamePOCO> _gameService;
 
-        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, INetworkComponent networkComponent)
+        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, INetworkComponent networkComponent, IDatabaseService<PlayerPOCO> playerService, IDatabaseService<GamePOCO> gameService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
             _worldService = worldService;
             _sessionHandler = sessionHandler;
             _networkComponent = networkComponent;
+            _playerService = playerService;
+            _gameService = gameService;
+        }
+
+        // TODO: get this config from the AgentConfigurationService
+        public void SendAgentConfiguration()
+        {
+            var agentConfigurationDto = new AgentConfigurationDTO(SessionType.SendAgentConfiguration)
+            {
+                PlayerId = _clientController.GetOriginId(),
+                AgentConfiguration = new List<ValueTuple<string, string>>()
+            };
+            var payload = JsonConvert.SerializeObject(agentConfigurationDto);
+            _clientController.SendPayload(payload, PacketType.Agent);
         }
 
         public void SendGameSession()
@@ -37,16 +53,9 @@ namespace Session
 
         public StartGameDTO SetupGameHost()
         {
-            var dbConnection = new DbConnection();
-
-            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
-            var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
-            var gameRepository = new Repository<GamePOCO>(dbConnection);
-            var gameService = new ServicesDb<GamePOCO>(gameRepository);
-
             var gamePOCO = new GamePOCO
                 {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
-            gameService.CreateAsync(gamePOCO);
+            _gameService.CreateAsync(gamePOCO);
 
             List<string> allClients = _sessionHandler.GetAllClients();
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
@@ -62,7 +71,7 @@ namespace Session
                 players.Add(clientId, playerPosition);
                 var tmpPlayer = new PlayerPOCO
                     {PlayerGuid = clientId, GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
-                servicePlayer.CreateAsync(tmpPlayer);
+                _playerService.CreateAsync(tmpPlayer);
 
                 playerX += 2; // spawn position + 2 each client
                 playerY += 2; // spawn position + 2 each client
@@ -90,6 +99,7 @@ namespace Session
 
         private void HandleStartGameSession(StartGameDTO startGameDTO)
         {
+            SendAgentConfiguration();
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
 
             // add name to players

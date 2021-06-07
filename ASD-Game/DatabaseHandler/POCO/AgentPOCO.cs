@@ -1,4 +1,6 @@
-﻿using LiteDB;
+﻿using System;
+using System.Collections.Generic;
+using LiteDB;
 using System.Diagnostics.CodeAnalysis;
 
 namespace DatabaseHandler.POCO
@@ -6,10 +8,9 @@ namespace DatabaseHandler.POCO
     [ExcludeFromCodeCoverage]
     public class AgentPOCO
     {
-
-        [BsonId]
-        public string FileName { get; set; }
-        public PlayerPOCO PlayerGUID { get; set; }
-        public GamePOCO GameGUID { get; set; }
+        public List<ValueTuple<string, string>> AgentConfiguration { get; set; }
+        [BsonId] 
+        public string id = Guid.NewGuid().ToString();
+        public string PlayerGUID { get; set; }
     }
 }

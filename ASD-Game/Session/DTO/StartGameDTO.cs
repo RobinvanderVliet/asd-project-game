@@ -8,6 +8,6 @@ namespace Session.DTO
     {
         public string GameGuid { get; set; }
         public Dictionary<string, int[]> PlayerLocations { get; set; }
-
+        public AgentConfigurationDTO AgentConfigurationDto { get; set; }
     }
 }
