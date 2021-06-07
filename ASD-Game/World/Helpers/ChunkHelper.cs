@@ -10,7 +10,7 @@ namespace WorldGeneration.Helper
 
         public ChunkHelper(Chunk chunk)
         {
-            this.Chunk = chunk;
+            Chunk = chunk;
         }
 
         public int[] GetTileCoordinatesInChunk(int indexInArray)
