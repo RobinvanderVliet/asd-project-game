@@ -5,28 +5,28 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 {
     public class TrainerAI
     {
-        public string type;
-        public int damage;
-        public int health;
+        public string Type;
+        public int Damage;
+        public int Health;
 
-        public Vector2 location;
+        public Vector2 Location;
 
-        private readonly Random random = new Random();
-        private readonly DataGatheringServiceForTraining dataGatheringService;
+        private readonly Random _random = new Random();
+        private readonly DataGatheringServiceForTraining _dataGatheringService;
         private SmartMonsterForTraining _target;
 
         public TrainerAI(Vector2 loc, string type)
         {
-            this.damage = random.Next(1, 10);
-            this.health = random.Next(1, 50);
-            this.location = loc;
-            this.type = type;
-            this.dataGatheringService = new DataGatheringServiceForTraining();
+            Damage = _random.Next(1, 10);
+            Health = _random.Next(1, 50);
+            Location = loc;
+            Type = type;
+            _dataGatheringService = new DataGatheringServiceForTraining();
         }
 
-        public void update(SmartMonsterForTraining smartMonster)
+        public void Update(SmartMonsterForTraining smartMonster)
         {
-            if (Adjecent(smartMonster))
+            if (Adjacent(smartMonster))
             {
                 Attack(_target);
             }
@@ -36,12 +36,12 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
             }
         }
 
-        private bool Adjecent(SmartMonsterForTraining smartMonster)
+        private bool Adjacent(SmartMonsterForTraining smartMonster)
         {
             TrainerAI _monsterTarget;
-            if (type.Equals("player"))
+            if (Type.Equals("player"))
             {
-                _target = dataGatheringService.ScanMapPlayerAI(location, smartMonster);
+                _target = _dataGatheringService.ScanMapPlayerAI(Location, smartMonster);
                 if (_target != null)
                 {
                     return true;
@@ -50,7 +50,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
             }
             else
             {
-                _monsterTarget = dataGatheringService.ScanMapMonsterAI(location, smartMonster);
+                _monsterTarget = _dataGatheringService.ScanMapMonsterAI(Location, smartMonster);
                 if (_monsterTarget != null)
                 {
                     return true;
@@ -61,9 +61,9 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         private void Attack(SmartMonsterForTraining smartMonster)
         {
-            if (type.Equals("player"))
+            if (Type.Equals("player"))
             {
-                smartMonster.smartactions.TakeDamage(damage, _target);
+                smartMonster.Smartactions.TakeDamage(Damage, _target);
             }
             else
             {
@@ -73,31 +73,31 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         private void Walk()
         {
-            if (location.X <= 29 && location.Y <= 29 && location.X >= 1 && location.Y >= 1)
+            if (Location.X <= 29 && Location.Y <= 29 && Location.X >= 1 && Location.Y >= 1)
             {
-                int direction = random.Next(1, 2);
+                int direction = _random.Next(1, 2);
                 if (direction < 2)
                 {
-                    int direction2 = random.Next(1, 2);
+                    int direction2 = _random.Next(1, 2);
                     if (direction2 < 2)
                     {
-                        location.Y--;
+                        Location.Y--;
                     }
                     else
                     {
-                        location.Y++;
+                        Location.Y++;
                     }
                 }
                 else
                 {
-                    int direction3 = random.Next(1, 2);
+                    int direction3 = _random.Next(1, 2);
                     if (direction3 < 2)
                     {
-                        location.X--;
+                        Location.X--;
                     }
                     else
                     {
-                        location.X++;
+                        Location.X++;
                     }
                 }
             }

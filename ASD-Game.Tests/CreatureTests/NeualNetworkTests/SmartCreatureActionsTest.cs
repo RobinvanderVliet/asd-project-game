@@ -48,11 +48,11 @@ namespace Creature.Tests
         [Test]
         public void Test_Walk1()
         {
-            float currLocation = _smartTestMonster.creatureData.Position.Y;
+            float currLocation = _smartTestMonster.CreatureData.Position.Y;
             _sut.WalkUp(_smartTestMonster);
 
             float expected = currLocation + 1;
-            float actual = _smartTestMonster.creatureData.Position.Y;
+            float actual = _smartTestMonster.CreatureData.Position.Y;
 
             Assert.AreEqual(expected, actual);
         }
@@ -60,11 +60,11 @@ namespace Creature.Tests
         [Test]
         public void Test_Walk2()
         {
-            float currLocation = _smartTestMonster.creatureData.Position.Y;
+            float currLocation = _smartTestMonster.CreatureData.Position.Y;
             _sut.WalkDown(_smartTestMonster);
 
             float expected = currLocation - 1;
-            float actual = _smartTestMonster.creatureData.Position.Y;
+            float actual = _smartTestMonster.CreatureData.Position.Y;
 
             Assert.AreEqual(expected, actual);
         }
@@ -72,11 +72,11 @@ namespace Creature.Tests
         [Test]
         public void Test_Walk3()
         {
-            float currLocation = _smartTestMonster.creatureData.Position.X;
+            float currLocation = _smartTestMonster.CreatureData.Position.X;
             _sut.WalkLeft(_smartTestMonster);
 
             float expected = currLocation - 1;
-            float actual = _smartTestMonster.creatureData.Position.X;
+            float actual = _smartTestMonster.CreatureData.Position.X;
 
             Assert.AreEqual(expected, actual);
         }
@@ -84,11 +84,11 @@ namespace Creature.Tests
         [Test]
         public void Test_Walk4()
         {
-            float currLocation = _smartTestMonster.creatureData.Position.X;
+            float currLocation = _smartTestMonster.CreatureData.Position.X;
             _sut.WalkRight(_smartTestMonster);
 
             float expected = currLocation + 1;
-            float actual = _smartTestMonster.creatureData.Position.X;
+            float actual = _smartTestMonster.CreatureData.Position.X;
 
             Assert.AreEqual(expected, actual);
         }
@@ -161,12 +161,12 @@ namespace Creature.Tests
         [Test]
         public void Test_TakeDamage_And_Die()
         {
-            _smartTestMonster.creatureData.Health = 5;
+            _smartTestMonster.CreatureData.Health = 5;
             int damage = 10;
 
             _sut.TakeDamage(damage, _smartTestMonster);
 
-            Assert.True(_smartTestMonster.dead);
+            Assert.True(_smartTestMonster.Dead);
         }
     }
 }

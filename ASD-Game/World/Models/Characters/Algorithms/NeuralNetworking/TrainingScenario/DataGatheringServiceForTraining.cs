@@ -6,10 +6,10 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 {
     public class DataGatheringServiceForTraining
     {
-        public TrainerAI closestPlayer { get; set; }
-        public Single distanceToClosestPlayer { get; set; } = 9999999999999999999;
-        public TrainerAI closestMonster { get; set; }
-        public Single distanceToClosestMonster { get; set; } = 9999999999999999999;
+        public TrainerAI ClosestPlayer { get; set; }
+        public Single DistanceToClosestPlayer { get; set; } = 9999999999999999999;
+        public TrainerAI ClosestMonster { get; set; }
+        public Single DistanceToClosestMonster { get; set; } = 9999999999999999999;
 
         public void ScanMap(SmartMonsterForTraining smartMonster, int visionRange)
         {
@@ -19,26 +19,26 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         private void SetClosestMonster(SmartMonsterForTraining smartMonster, int visionRange)
         {
-            foreach (TrainerAI monster in smartMonster.trainingMapGenerator.monsters)
+            foreach (TrainerAI monster in smartMonster.TrainingMapGenerator.monsters)
             {
-                Single distance = Vector2.Distance(smartMonster.creatureData.Position, monster.location);
-                if (distance < visionRange && distance < distanceToClosestMonster)
+                Single distance = Vector2.Distance(smartMonster.CreatureData.Position, monster.Location);
+                if (distance < visionRange && distance < DistanceToClosestMonster)
                 {
-                    closestMonster = monster;
-                    distanceToClosestMonster = distance;
+                    ClosestMonster = monster;
+                    DistanceToClosestMonster = distance;
                 }
             }
         }
 
         private void SetClosestPlayer(SmartMonsterForTraining smartMonster, int visionRange)
         {
-            foreach (TrainerAI player in smartMonster.trainingMapGenerator.players)
+            foreach (TrainerAI player in smartMonster.TrainingMapGenerator.players)
             {
-                Single distance = Vector2.Distance(smartMonster.creatureData.Position, player.location);
-                if (distance < visionRange && distance < distanceToClosestPlayer)
+                Single distance = Vector2.Distance(smartMonster.CreatureData.Position, player.Location);
+                if (distance < visionRange && distance < DistanceToClosestPlayer)
                 {
-                    closestPlayer = player;
-                    distanceToClosestPlayer = distance;
+                    ClosestPlayer = player;
+                    DistanceToClosestPlayer = distance;
                 }
             }
         }
@@ -46,7 +46,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
         //For not smart AI update
         public SmartMonsterForTraining ScanMapPlayerAI(Vector2 location, SmartMonsterForTraining smartMonster)
         {
-            if (Vector2.Distance(location, smartMonster.creatureData.Position) < 2)
+            if (Vector2.Distance(location, smartMonster.CreatureData.Position) < 2)
             {
                 return smartMonster;
             }
@@ -59,9 +59,9 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
         [ExcludeFromCodeCoverage]
         public TrainerAI ScanMapMonsterAI(Vector2 location, SmartMonsterForTraining smartMonster)
         {
-            foreach (TrainerAI player in smartMonster.trainingMapGenerator.players)
+            foreach (TrainerAI player in smartMonster.TrainingMapGenerator.players)
             {
-                Single distance = Vector2.Distance(location, player.location);
+                Single distance = Vector2.Distance(location, player.Location);
                 if (distance == 1)
                 {
                     return player;
@@ -72,25 +72,25 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         public void CheckNewPosition(SmartMonsterForTraining smartMonster)
         {
-            if (distanceToClosestPlayer < smartMonster.currDistanceToPlayer)
+            if (DistanceToClosestPlayer < smartMonster.CurrDistanceToPlayer)
             {
-                smartMonster.score = smartMonster.score + 10;
-                smartMonster.currDistanceToPlayer = distanceToClosestPlayer;
+                smartMonster.Score = smartMonster.Score + 10;
+                smartMonster.CurrDistanceToPlayer = DistanceToClosestPlayer;
             }
-            else if (distanceToClosestPlayer > smartMonster.currDistanceToPlayer)
+            else if (DistanceToClosestPlayer > smartMonster.CurrDistanceToPlayer)
             {
-                smartMonster.score = smartMonster.score - 10;
-                smartMonster.currDistanceToPlayer = distanceToClosestPlayer;
+                smartMonster.Score = smartMonster.Score - 10;
+                smartMonster.CurrDistanceToPlayer = DistanceToClosestPlayer;
             }
-            if (distanceToClosestMonster < smartMonster.currDistanceToMonster)
+            if (DistanceToClosestMonster < smartMonster.CurrDistanceToMonster)
             {
-                smartMonster.score = smartMonster.score + 3;
-                smartMonster.currDistanceToMonster = distanceToClosestMonster;
+                smartMonster.Score = smartMonster.Score + 3;
+                smartMonster.CurrDistanceToMonster = DistanceToClosestMonster;
             }
-            else if (distanceToClosestMonster > smartMonster.currDistanceToMonster)
+            else if (DistanceToClosestMonster > smartMonster.CurrDistanceToMonster)
             {
-                smartMonster.score = smartMonster.score - 3;
-                smartMonster.currDistanceToMonster = distanceToClosestMonster;
+                smartMonster.Score = smartMonster.Score - 3;
+                smartMonster.CurrDistanceToMonster = DistanceToClosestMonster;
             }
         }
     }

@@ -25,7 +25,7 @@ namespace WorldGeneration.Tests
             _chunk = new Chunk(0, 0, _tiles, 6, 2);
             _chunkHelperMock = new Mock<ChunkHelper>();
             _sut = _chunkHelperMock.Object;
-            _sut.chunk = _chunk;
+            _sut.Chunk = _chunk;
         }
 
         public void Test_GetPositionInTileArrayByWorldCoordinates()

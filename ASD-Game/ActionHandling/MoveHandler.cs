@@ -87,7 +87,7 @@ namespace ActionHandling
 
         public void GetAIMoves()
         {
-            _creatureMoves = _worldService.getCreatureMoves();
+            _creatureMoves = _worldService.GetCreatureMoves();
         }
 
         private void SendMoveDTO(MoveDTO moveDTO)

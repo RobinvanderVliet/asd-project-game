@@ -23,7 +23,7 @@ namespace WorldGeneration
 
         public IList<Item> GetItemsOnCurrentTile();
 
-        List<Character> getCreatureMoves();
+        List<Character> GetCreatureMoves();
 
         List<Character> GetMonsters();
 

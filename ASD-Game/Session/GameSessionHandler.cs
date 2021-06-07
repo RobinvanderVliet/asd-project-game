@@ -172,9 +172,9 @@ namespace Session
 
         private void setBrain(SmartMonster monster)
         {
-            if (_sessionHandler.trainingScenario.brainTransplant() != null)
+            if (_sessionHandler.trainingScenario.BrainTransplant() != null)
             {
-                monster.brain = _sessionHandler.trainingScenario.brainTransplant();
+                monster.Brain = _sessionHandler.trainingScenario.BrainTransplant();
             }
         }
 
@@ -194,7 +194,7 @@ namespace Session
 
         public void UpdateBrain()
         {
-            _worldService.UpdateBrains(_sessionHandler.trainingScenario.brainTransplant());
+            _worldService.UpdateBrains(_sessionHandler.trainingScenario.BrainTransplant());
         }
 
         private void setStateMachine(Monster monster)

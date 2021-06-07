@@ -28,7 +28,7 @@ namespace Creature.Tests
         {
             _sut = new Population(1, _MonsterData);
 
-            _sut.pop[0].dead = true;
+            _sut.Pop[0].Dead = true;
 
             Assert.True(_sut.Done());
         }
@@ -46,11 +46,11 @@ namespace Creature.Tests
         {
             _sut = new Population(10, _MonsterData);
 
-            int Expectedgen = _sut.gen + 1;
+            int Expectedgen = _sut.Gen + 1;
 
             _sut.NaturalSelection();
 
-            Assert.AreEqual(Expectedgen, _sut.gen);
+            Assert.AreEqual(Expectedgen, _sut.Gen);
         }
     }
 }

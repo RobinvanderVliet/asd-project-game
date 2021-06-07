@@ -76,12 +76,12 @@ namespace WorldGeneration
             {
                 if (monster is SmartMonster smartMonster)
                 {
-                    smartMonster.brain = genome;
+                    smartMonster.Brain = genome;
                 }
             }
         }
 
-        public List<Character> getCreatureMoves()
+        public List<Character> GetCreatureMoves()
         {
             return _world.movesList;
         }

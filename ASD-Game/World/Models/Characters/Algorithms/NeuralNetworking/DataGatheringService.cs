@@ -15,11 +15,11 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         private List<Player> _players = new List<Player>();
 
-        public List<List<Node>> mapNodes = new List<List<Node>>();
-        public Player closestPlayer { get; set; }
-        public Single distanceToClosestPlayer { get; set; } = 9999999999999999999;
-        public Character closestMonster { get; set; }
-        public Single distanceToClosestMonster { get; set; } = 9999999999999999999;
+        public List<List<Node>> MapNodes = new List<List<Node>>();
+        public Player ClosestPlayer { get; set; }
+        public Single DistanceToClosestPlayer { get; set; } = 9999999999999999999;
+        public Character ClosestMonster { get; set; }
+        public Single DistanceToClosestMonster { get; set; } = 9999999999999999999;
 
         public DataGatheringService(IWorldService worldService)
         {
@@ -40,10 +40,10 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                 Vector2 pPos = new Vector2(monster.XPosition, monster.YPosition);
                 Vector2 cPos = new Vector2(smartMonster.XPosition, smartMonster.YPosition);
                 Single distance = Vector2.Distance(pPos, cPos);
-                if (distance < distanceToClosestPlayer)
+                if (distance < DistanceToClosestPlayer)
                 {
-                    closestMonster = monster;
-                    distanceToClosestPlayer = distance;
+                    ClosestMonster = monster;
+                    DistanceToClosestPlayer = distance;
                 }
             }
         }
@@ -56,31 +56,31 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                 Vector2 pPos = new Vector2(player.XPosition, player.YPosition);
                 Vector2 cPos = new Vector2(smartMonster.XPosition, smartMonster.YPosition);
                 Single distance = Vector2.Distance(pPos, cPos);
-                if (distance < distanceToClosestPlayer)
+                if (distance < DistanceToClosestPlayer)
                 {
-                    closestPlayer = player;
-                    distanceToClosestPlayer = distance;
+                    ClosestPlayer = player;
+                    DistanceToClosestPlayer = distance;
                 }
             }
         }
 
         public void CheckNewPosition(SmartMonster smartMonster)
         {
-            if (distanceToClosestPlayer < smartMonster.currDistanceToPlayer)
+            if (DistanceToClosestPlayer < smartMonster.currDistanceToPlayer)
             {
-                smartMonster.currDistanceToPlayer = distanceToClosestPlayer;
+                smartMonster.currDistanceToPlayer = DistanceToClosestPlayer;
             }
-            else if (distanceToClosestPlayer > smartMonster.currDistanceToPlayer)
+            else if (DistanceToClosestPlayer > smartMonster.currDistanceToPlayer)
             {
-                smartMonster.currDistanceToPlayer = distanceToClosestPlayer;
+                smartMonster.currDistanceToPlayer = DistanceToClosestPlayer;
             }
-            if (distanceToClosestMonster < smartMonster.currDistanceToMonster)
+            if (DistanceToClosestMonster < smartMonster.currDistanceToMonster)
             {
-                smartMonster.currDistanceToMonster = distanceToClosestMonster;
+                smartMonster.currDistanceToMonster = DistanceToClosestMonster;
             }
-            else if (distanceToClosestMonster > smartMonster.currDistanceToMonster)
+            else if (DistanceToClosestMonster > smartMonster.currDistanceToMonster)
             {
-                smartMonster.currDistanceToMonster = distanceToClosestMonster;
+                smartMonster.currDistanceToMonster = DistanceToClosestMonster;
             }
         }
 

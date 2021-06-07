@@ -34,7 +34,7 @@ namespace Creature.Tests
             NeuralNode expected = new NeuralNode(0);
             NeuralNode actual = _sut.GetNode(0);
 
-            Assert.AreEqual(expected.number, actual.number);
+            Assert.AreEqual(expected.Number, actual.Number);
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace Creature.Tests
             _sut.GenerateNetwork();
 
             int expected = _inputs + _outputs + 1;
-            int actual = _sut.network.Count;
+            int actual = _sut.Network.Count;
 
             Assert.AreEqual(expected, actual);
         }

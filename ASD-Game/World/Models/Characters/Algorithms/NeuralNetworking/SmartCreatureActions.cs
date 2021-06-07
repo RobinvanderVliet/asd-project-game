@@ -13,9 +13,9 @@ namespace Creature.Creature.NeuralNetworking
         private readonly PathFinder _pathfinder;
         private DataGatheringService _dataGatheringService;
 
-        public Stack<Node> path = new Stack<Node>();
+        public Stack<Node> Path = new Stack<Node>();
 
-        private Vector2 startPos = new Vector2(6, 6);
+        private Vector2 _startPos = new Vector2(6, 6);
         private Vector2 _pathingOffset;
 
         public SmartCreatureActions(SmartMonster smartMonster, DataGatheringService dataGatheringService)
@@ -26,73 +26,73 @@ namespace Creature.Creature.NeuralNetworking
 
         public void Wander(SmartMonster smartMonster)
         {
-            if (path == null || path.Count == 0)
+            if (Path == null || Path.Count == 0)
             {
                 int newXLoc = _random.Next(0, 12);
                 int newYLoc = _random.Next(0, 12);
 
                 Vector2 destination = new Vector2(newXLoc, newYLoc);
-                ViewPointCalculator(smartMonster.creatureData.Position);
-                path = _pathfinder.FindPath(startPos, destination);
+                ViewPointCalculator(smartMonster.CreatureData.Position);
+                Path = _pathfinder.FindPath(_startPos, destination);
             }
-            if (path != null)
+            if (Path != null)
             {
-                smartMonster.Destination = TransformPath(path.Pop().Position);
+                smartMonster.Destination = TransformPath(Path.Pop().Position);
             }
         }
 
         public void WalkUp(SmartMonster smartMonster)
         {
-            ViewPointCalculator(smartMonster.creatureData.Position);
-            Vector2 destination = new Vector2(startPos.X, startPos.Y + 1);
+            ViewPointCalculator(smartMonster.CreatureData.Position);
+            Vector2 destination = new Vector2(_startPos.X, _startPos.Y + 1);
             if (IsValidMove(destination))
             {
-                path = _pathfinder.FindPath(startPos, destination);
-                if (path != null)
+                Path = _pathfinder.FindPath(_startPos, destination);
+                if (Path != null)
                 {
-                    smartMonster.Destination = TransformPath(path.Pop().Position);
+                    smartMonster.Destination = TransformPath(Path.Pop().Position);
                 }
             }
         }
 
         public void WalkDown(SmartMonster smartMonster)
         {
-            ViewPointCalculator(smartMonster.creatureData.Position);
-            Vector2 destination = new Vector2(startPos.X, startPos.Y - 1);
+            ViewPointCalculator(smartMonster.CreatureData.Position);
+            Vector2 destination = new Vector2(_startPos.X, _startPos.Y - 1);
             if (IsValidMove(destination))
             {
-                path = _pathfinder.FindPath(startPos, destination);
-                if (path != null)
+                Path = _pathfinder.FindPath(_startPos, destination);
+                if (Path != null)
                 {
-                    smartMonster.Destination = TransformPath(path.Pop().Position);
+                    smartMonster.Destination = TransformPath(Path.Pop().Position);
                 }
             }
         }
 
         public void WalkLeft(SmartMonster smartMonster)
         {
-            ViewPointCalculator(smartMonster.creatureData.Position);
-            Vector2 destination = new Vector2(startPos.X - 1, startPos.Y);
+            ViewPointCalculator(smartMonster.CreatureData.Position);
+            Vector2 destination = new Vector2(_startPos.X - 1, _startPos.Y);
             if (IsValidMove(destination))
             {
-                path = _pathfinder.FindPath(startPos, destination);
-                if (path != null)
+                Path = _pathfinder.FindPath(_startPos, destination);
+                if (Path != null)
                 {
-                    smartMonster.Destination = TransformPath(path.Pop().Position);
+                    smartMonster.Destination = TransformPath(Path.Pop().Position);
                 }
             }
         }
 
         public void WalkRight(SmartMonster smartMonster)
         {
-            ViewPointCalculator(smartMonster.creatureData.Position);
-            Vector2 destination = new Vector2(startPos.X + 1, startPos.Y);
+            ViewPointCalculator(smartMonster.CreatureData.Position);
+            Vector2 destination = new Vector2(_startPos.X + 1, _startPos.Y);
             if (IsValidMove(destination))
             {
-                path = _pathfinder.FindPath(startPos, destination);
-                if (path != null)
+                Path = _pathfinder.FindPath(_startPos, destination);
+                if (Path != null)
                 {
-                    smartMonster.Destination = TransformPath(path.Pop().Position);
+                    smartMonster.Destination = TransformPath(Path.Pop().Position);
                 }
             }
         }
@@ -122,12 +122,12 @@ namespace Creature.Creature.NeuralNetworking
         {
             if (monster != null)
             {
-                ViewPointCalculator(smartMonster.creatureData.Position);
+                ViewPointCalculator(smartMonster.CreatureData.Position);
                 Vector2 MPos = new Vector2(monster.XPosition - _pathingOffset.X, monster.YPosition - _pathingOffset.Y);
-                path = _pathfinder.FindPath(startPos, MPos);
-                if (path != null)
+                Path = _pathfinder.FindPath(_startPos, MPos);
+                if (Path != null)
                 {
-                    smartMonster.Destination = TransformPath(path.Pop().Position);
+                    smartMonster.Destination = TransformPath(Path.Pop().Position);
                 }
             }
         }
@@ -135,8 +135,8 @@ namespace Creature.Creature.NeuralNetworking
         public void TakeDamage(int damage, SmartMonster smartMonster)
         {
             smartMonster.DamageTaken = damage;
-            smartMonster.creatureData.Health -= damage;
-            if (smartMonster.creatureData.Health <= 0)
+            smartMonster.CreatureData.Health -= damage;
+            if (smartMonster.CreatureData.Health <= 0)
             {
                 smartMonster.dead = true;
             }

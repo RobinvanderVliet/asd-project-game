@@ -6,33 +6,33 @@ namespace Creature.Creature.NeuralNetworking
 {
     public class NeuralNode
     {
-        public int number { get; set; }
-        public float inputSum = 0;
-        public float outputValue = 0;
-        public List<ConnectionGene> outputConnections { get; set; } = new List<ConnectionGene>();
-        public int layer { get; set; }
+        public int Number { get; set; }
+        public float InputSum = 0;
+        public float OutputValue = 0;
+        public List<ConnectionGene> OutputConnections { get; set; } = new List<ConnectionGene>();
+        public int Layer { get; set; }
 
         public NeuralNode(int number)
         {
-            this.number = number;
+            Number = number;
         }
 
         //the node sends its output to the inputs of the nodes its connected to
         public void Engage()
         {
-            if (layer != 0)
+            if (Layer != 0)
             {
                 //no sigmoid for the inputs and bias
-                outputValue = Sigmoid(inputSum);
+                OutputValue = Sigmoid(InputSum);
             }
 
-            for (int i = 0; i < outputConnections.Count; i++)
+            for (int i = 0; i < OutputConnections.Count; i++)
             {
                 //for each connection
-                if (outputConnections[i].enabled)
+                if (OutputConnections[i].Enabled)
                 {
                     //add the weighted output to the sum of the inputs of whatever node this node is connected to
-                    outputConnections[i].toNode.inputSum += outputConnections[i].weight * outputValue;
+                    OutputConnections[i].ToNode.InputSum += OutputConnections[i].Weight * OutputValue;
                 }
             }
         }
@@ -47,20 +47,20 @@ namespace Creature.Creature.NeuralNetworking
 
         //returns whether this node connected to the parameter node
         //used when adding a new connection
-        public Boolean IsConnectedTo(NeuralNode node)
+        public bool IsConnectedTo(NeuralNode node)
         {
-            if (node.layer == layer)
+            if (node.Layer == Layer)
             {
                 //nodes in the same layer cannot be connected
                 return false;
             }
 
             //you get it
-            if (node.layer < layer)
+            if (node.Layer < Layer)
             {
-                for (int i = 0; i < node.outputConnections.Count; i++)
+                for (int i = 0; i < node.OutputConnections.Count; i++)
                 {
-                    if (node.outputConnections[i].toNode == this)
+                    if (node.OutputConnections[i].ToNode == this)
                     {
                         return true;
                     }
@@ -68,9 +68,9 @@ namespace Creature.Creature.NeuralNetworking
             }
             else
             {
-                for (int i = 0; i < outputConnections.Count; i++)
+                for (int i = 0; i < OutputConnections.Count; i++)
                 {
-                    if (outputConnections[i].toNode == node)
+                    if (OutputConnections[i].ToNode == node)
                     {
                         return true;
                     }
@@ -84,8 +84,8 @@ namespace Creature.Creature.NeuralNetworking
         [ExcludeFromCodeCoverage]
         public NeuralNode Clone()
         {
-            NeuralNode clone = new NeuralNode(number);
-            clone.layer = layer;
+            NeuralNode clone = new NeuralNode(Number);
+            clone.Layer = Layer;
             return clone;
         }
     }

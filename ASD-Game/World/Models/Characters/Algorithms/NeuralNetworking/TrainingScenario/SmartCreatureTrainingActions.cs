@@ -27,69 +27,69 @@ namespace Creature.Creature.NeuralNetworking
 
                 Vector2 destination = new Vector2(newXLoc, newYLoc);
 
-                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
+                path = _pathfinder.FindPath(smartMonster.CreatureData.Position, destination);
                 CheckPath(smartMonster);
             }
-            smartMonster.creatureData.Position = path.Pop().Position;
+            smartMonster.CreatureData.Position = path.Pop().Position;
         }
 
         public void WalkUp(SmartMonsterForTraining smartMonster)
         {
-            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X, smartMonster.creatureData.Position.Y + 1);
+            Vector2 destination = new Vector2(smartMonster.CreatureData.Position.X, smartMonster.CreatureData.Position.Y + 1);
             if (IsValidMove(destination))
             {
-                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
+                path = _pathfinder.FindPath(smartMonster.CreatureData.Position, destination);
                 CheckPath(smartMonster);
-                smartMonster.creatureData.Position = path.Pop().Position;
+                smartMonster.CreatureData.Position = path.Pop().Position;
             }
         }
 
         public void WalkDown(SmartMonsterForTraining smartMonster)
         {
-            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X, smartMonster.creatureData.Position.Y - 1);
+            Vector2 destination = new Vector2(smartMonster.CreatureData.Position.X, smartMonster.CreatureData.Position.Y - 1);
             if (IsValidMove(destination))
             {
-                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
+                path = _pathfinder.FindPath(smartMonster.CreatureData.Position, destination);
                 CheckPath(smartMonster);
-                smartMonster.creatureData.Position = path.Pop().Position;
+                smartMonster.CreatureData.Position = path.Pop().Position;
             }
         }
 
         public void WalkLeft(SmartMonsterForTraining smartMonster)
         {
-            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X - 1, smartMonster.creatureData.Position.Y);
+            Vector2 destination = new Vector2(smartMonster.CreatureData.Position.X - 1, smartMonster.CreatureData.Position.Y);
             if (IsValidMove(destination))
             {
-                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
+                path = _pathfinder.FindPath(smartMonster.CreatureData.Position, destination);
                 CheckPath(smartMonster);
-                smartMonster.creatureData.Position = path.Pop().Position;
+                smartMonster.CreatureData.Position = path.Pop().Position;
             }
         }
 
         public void WalkRight(SmartMonsterForTraining smartMonster)
         {
-            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X + 1, smartMonster.creatureData.Position.Y);
+            Vector2 destination = new Vector2(smartMonster.CreatureData.Position.X + 1, smartMonster.CreatureData.Position.Y);
             if (IsValidMove(destination))
             {
-                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
+                path = _pathfinder.FindPath(smartMonster.CreatureData.Position, destination);
                 CheckPath(smartMonster);
-                smartMonster.creatureData.Position = path.Pop().Position;
+                smartMonster.CreatureData.Position = path.Pop().Position;
             }
         }
 
         public void Attack(TrainerAI player, SmartMonsterForTraining smartmonster)
         {
-            if (player != null && IsAdjacent(player.location, smartmonster.creatureData.Position))
+            if (player != null && IsAdjacent(player.Location, smartmonster.CreatureData.Position))
             {
-                if (player.health < smartmonster.creatureData.Damage)
+                if (player.Health < smartmonster.CreatureData.Damage)
                 {
-                    smartmonster.DamageDealt = smartmonster.DamageDealt + smartmonster.creatureData.Damage;
+                    smartmonster.DamageDealt = smartmonster.DamageDealt + smartmonster.CreatureData.Damage;
                     smartmonster.EnemysKilled++;
                 }
                 else
                 {
-                    player.health = player.health - smartmonster.creatureData.Damage;
-                    smartmonster.DamageDealt = smartmonster.DamageDealt + smartmonster.creatureData.Damage;
+                    player.Health = player.Health - smartmonster.CreatureData.Damage;
+                    smartmonster.DamageDealt = smartmonster.DamageDealt + smartmonster.CreatureData.Damage;
                 }
             }
         }
@@ -106,19 +106,19 @@ namespace Creature.Creature.NeuralNetworking
         {
             if (monster != null)
             {
-                path = _pathfinder.FindPath(smartMonster.creatureData.Position, monster.location);
+                path = _pathfinder.FindPath(smartMonster.CreatureData.Position, monster.Location);
                 CheckPath(smartMonster);
-                smartMonster.creatureData.Position = path.Pop().Position;
+                smartMonster.CreatureData.Position = path.Pop().Position;
             }
         }
 
         public void TakeDamage(int damage, SmartMonsterForTraining smartMonster)
         {
             smartMonster.DamageTaken = damage;
-            smartMonster.creatureData.Health -= damage;
-            if (smartMonster.creatureData.Health <= 0)
+            smartMonster.CreatureData.Health -= damage;
+            if (smartMonster.CreatureData.Health <= 0)
             {
-                smartMonster.dead = true;
+                smartMonster.Dead = true;
             }
         }
 
@@ -132,7 +132,7 @@ namespace Creature.Creature.NeuralNetworking
         {
             if (path == null)
             {
-                smartMonster.score--;
+                smartMonster.Score--;
             }
         }
 

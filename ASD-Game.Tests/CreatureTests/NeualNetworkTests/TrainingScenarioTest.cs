@@ -28,7 +28,7 @@ namespace Creature.Tests
         public void Test_SetupTraining()
         {
             _sut.SetupTraining();
-            Assert.AreEqual(50, _sut.pop.pop.Count);
+            Assert.AreEqual(50, _sut.Pop.Pop.Count);
         }
     }
 }

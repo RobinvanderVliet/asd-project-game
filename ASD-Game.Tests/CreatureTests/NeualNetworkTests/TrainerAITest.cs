@@ -33,9 +33,9 @@ namespace Creature.Tests
             Vector2 location = new Vector2(15, 14);
             _sut = new TrainerAI(location, "player");
 
-            _sut.update(_smartTestMonster);
+            _sut.Update(_smartTestMonster);
 
-            int expected = _sut.damage;
+            int expected = _sut.Damage;
             int actual = _smartTestMonster.DamageTaken;
 
             Assert.AreEqual(expected, actual);
@@ -47,9 +47,9 @@ namespace Creature.Tests
             Vector2 location = new Vector2(1, 1);
             _sut = new TrainerAI(location, "player");
 
-            _sut.update(_smartTestMonster);
+            _sut.Update(_smartTestMonster);
 
-            Vector2 newLocation = _sut.location;
+            Vector2 newLocation = _sut.Location;
 
             Assert.AreNotEqual(location, newLocation);
         }

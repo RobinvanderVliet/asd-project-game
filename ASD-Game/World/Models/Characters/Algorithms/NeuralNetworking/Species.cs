@@ -6,18 +6,18 @@ namespace Creature.Creature.NeuralNetworking
 {
     public class Species
     {
-        public List<SmartMonsterForTraining> creatures = new List<SmartMonsterForTraining>();
-        public float bestFitness = 0;
-        public float averageFitness = 0;
-        public int staleness = 0;
-        public Genome rep;
-        public SmartMonsterForTraining champ;
+        public List<SmartMonsterForTraining> Creatures = new List<SmartMonsterForTraining>();
+        public float BestFitness = 0;
+        public float AverageFitness = 0;
+        public int Staleness = 0;
+        public Genome Rep;
+        public SmartMonsterForTraining Champ;
 
-        public float excessCoeff = 1;
-        public float weightDiffCoeff = 0.5f;
-        public float compatibilityThreshold = 3;
+        public float ExcessCoeff = 1;
+        public float WeightDiffCoeff = 0.5f;
+        public float CompatibilityThreshold = 3;
 
-        public readonly Random random = new Random();
+        public readonly Random Rando = new Random();
 
         [ExcludeFromCodeCoverage]
         public Species()
@@ -27,32 +27,32 @@ namespace Creature.Creature.NeuralNetworking
         [ExcludeFromCodeCoverage]
         public Species(SmartMonsterForTraining sm)
         {
-            creatures.Add(sm);
-            bestFitness = sm.fitness;
-            rep = sm.brain.Clone();
-            champ = sm.CloneForReplay();
+            Creatures.Add(sm);
+            BestFitness = sm.Fitness;
+            Rep = sm.Brain.Clone();
+            Champ = sm.CloneForReplay();
         }
 
         //add a player to the species
         public void AddToSpecies(SmartMonsterForTraining p)
         {
-            creatures.Add(p);
+            Creatures.Add(p);
         }
 
-        public Boolean SameSpecies(Genome g)
+        public bool SameSpecies(Genome g)
         {
             float compatibility;
-            float excessAndDisjoint = GetExcessDisjoint(g, rep);
-            float averageWeightDiff = AverageWeightDiff(g, rep);
+            float excessAndDisjoint = GetExcessDisjoint(g, Rep);
+            float averageWeightDiff = AverageWeightDiff(g, Rep);
 
-            float largeGenomeNormaliser = g.genes.Count - 20;
+            float largeGenomeNormaliser = g.Genes.Count - 20;
             if (largeGenomeNormaliser < 1)
             {
                 largeGenomeNormaliser = 1;
             }
 
-            compatibility = (excessCoeff * excessAndDisjoint / largeGenomeNormaliser) + (weightDiffCoeff * averageWeightDiff);//compatablilty formula
-            return (compatibilityThreshold > compatibility);
+            compatibility = (ExcessCoeff * excessAndDisjoint / largeGenomeNormaliser) + (WeightDiffCoeff * averageWeightDiff);//compatibility formula
+            return (CompatibilityThreshold > compatibility);
         }
 
         //returns the number of excess and disjoint genes between the 2 input genomes
@@ -60,38 +60,38 @@ namespace Creature.Creature.NeuralNetworking
         public static float GetExcessDisjoint(Genome brain1, Genome brain2)
         {
             float matching = 0.0f;
-            for (int i = 0; i < brain1.genes.Count; i++)
+            for (int i = 0; i < brain1.Genes.Count; i++)
             {
-                for (int j = 0; j < brain2.genes.Count; j++)
+                for (int j = 0; j < brain2.Genes.Count; j++)
                 {
-                    if (brain1.genes[i].innovationNo == brain2.genes[j].innovationNo)
+                    if (brain1.Genes[i].InnovationNo == brain2.Genes[j].InnovationNo)
                     {
                         matching++;
                         break;
                     }
                 }
             }
-            return (brain1.genes.Count + brain2.genes.Count - 2 * (matching));//return no of excess and disjoint genes
+            return (brain1.Genes.Count + brain2.Genes.Count - 2 * (matching));//return no of excess and disjoint genes
         }
 
-        //returns the avereage weight difference between matching genes in the input genomes
+        //returns the average weight difference between matching genes in the input genomes
         public static float AverageWeightDiff(Genome brain1, Genome brain2)
         {
-            if (brain1.genes.Count == 0 || brain2.genes.Count == 0)
+            if (brain1.Genes.Count == 0 || brain2.Genes.Count == 0)
             {
                 return 0;
             }
 
             float matching = 0;
             float totalDiff = 0;
-            for (int i = 0; i < brain1.genes.Count; i++)
+            for (int i = 0; i < brain1.Genes.Count; i++)
             {
-                for (int j = 0; j < brain2.genes.Count; j++)
+                for (int j = 0; j < brain2.Genes.Count; j++)
                 {
-                    if (brain1.genes[i].innovationNo == brain2.genes[j].innovationNo)
+                    if (brain1.Genes[i].InnovationNo == brain2.Genes[j].InnovationNo)
                     {
                         matching++;
-                        totalDiff += Math.Abs(brain1.genes[i].weight - brain2.genes[j].weight);
+                        totalDiff += Math.Abs(brain1.Genes[i].Weight - brain2.Genes[j].Weight);
                         break;
                     }
                 }
@@ -109,41 +109,41 @@ namespace Creature.Creature.NeuralNetworking
             List<SmartMonsterForTraining> temp = new List<SmartMonsterForTraining>();
 
             //selection short
-            for (int i = 0; i < creatures.Count; i++)
+            for (int i = 0; i < Creatures.Count; i++)
             {
                 float max = 0;
                 int maxIndex = 0;
-                for (int j = 0; j < creatures.Count; j++)
+                for (int j = 0; j < Creatures.Count; j++)
                 {
-                    if (creatures[j].fitness > max)
+                    if (Creatures[j].Fitness > max)
                     {
-                        max = creatures[j].fitness;
+                        max = Creatures[j].Fitness;
                         maxIndex = j;
                     }
                 }
-                temp.Add(creatures[maxIndex]);
-                creatures.RemoveAt(maxIndex);
+                temp.Add(Creatures[maxIndex]);
+                Creatures.RemoveAt(maxIndex);
                 i--;
             }
 
-            creatures = temp;
-            if (creatures.Count == 0)
+            Creatures = temp;
+            if (Creatures.Count == 0)
             {
-                staleness = 200;
+                Staleness = 200;
                 return;
             }
             //if new best player
-            if (creatures[0].fitness > bestFitness)
+            if (Creatures[0].Fitness > BestFitness)
             {
-                staleness = 0;
-                bestFitness = creatures[0].fitness;
-                rep = creatures[0].brain.Clone();
-                champ = creatures[0].CloneForReplay();
+                Staleness = 0;
+                BestFitness = Creatures[0].Fitness;
+                Rep = Creatures[0].Brain.Clone();
+                Champ = Creatures[0].CloneForReplay();
             }
             else
             {
                 //if no new best player
-                staleness++;
+                Staleness++;
             }
         }
 
@@ -151,11 +151,11 @@ namespace Creature.Creature.NeuralNetworking
         public void SetAverage()
         {
             float sum = 0;
-            for (int i = 0; i < creatures.Count; i++)
+            for (int i = 0; i < Creatures.Count; i++)
             {
-                sum += creatures[i].fitness;
+                sum += Creatures[i].Fitness;
             }
-            averageFitness = sum / creatures.Count;
+            AverageFitness = sum / Creatures.Count;
         }
 
         //gets baby from the players in this species
@@ -163,7 +163,7 @@ namespace Creature.Creature.NeuralNetworking
         public SmartMonsterForTraining GiveMeBaby(List<ConnectionHistory> innovationHistory)
         {
             SmartMonsterForTraining baby;
-            if ((float)random.NextDouble() < 0.25)
+            if ((float)Rando.NextDouble() < 0.25)
             {
                 //25% of the time there is no crossover and the child is simply a clone of a random(ish) player
                 baby = SelectPlayer().Clone();
@@ -177,7 +177,7 @@ namespace Creature.Creature.NeuralNetworking
                 SmartMonsterForTraining parent2 = SelectPlayer();
 
                 //the crossover function expects the highest fitness parent to be the object and the lowest as the argument
-                if (parent1.fitness < parent2.fitness)
+                if (parent1.Fitness < parent2.Fitness)
                 {
                     baby = parent2.Crossover(parent1);
                 }
@@ -186,7 +186,7 @@ namespace Creature.Creature.NeuralNetworking
                     baby = parent1.Crossover(parent2);
                 }
             }
-            baby.brain.Mutate(innovationHistory);//mutate that baby brain
+            baby.Brain.Mutate(innovationHistory);//mutate that baby brain
             return baby;
         }
 
@@ -194,34 +194,34 @@ namespace Creature.Creature.NeuralNetworking
         public SmartMonsterForTraining SelectPlayer()
         {
             float fitnessSum = 0;
-            for (int i = 0; i < creatures.Count; i++)
+            for (int i = 0; i < Creatures.Count; i++)
             {
-                fitnessSum += creatures[i].fitness;
+                fitnessSum += Creatures[i].Fitness;
             }
 
-            float rand = (float)random.NextDouble();
+            float rand = (float)Rando.NextDouble();
             float runningSum = 0;
 
-            for (int i = 0; i < creatures.Count; i++)
+            for (int i = 0; i < Creatures.Count; i++)
             {
-                runningSum += creatures[i].fitness;
+                runningSum += Creatures[i].Fitness;
                 if (runningSum > rand)
                 {
-                    return creatures[i];
+                    return Creatures[i];
                 }
             }
             //unreachable code to make the parser happy
-            return creatures[0];
+            return Creatures[0];
         }
 
         //kills off bottom half of the species
         public void Cull()
         {
-            if (creatures.Count > 2)
+            if (Creatures.Count > 2)
             {
-                for (int i = creatures.Count / 2; i < creatures.Count; i++)
+                for (int i = Creatures.Count / 2; i < Creatures.Count; i++)
                 {
-                    creatures.RemoveAt(i);
+                    Creatures.RemoveAt(i);
                     i--;
                 }
             }
@@ -230,9 +230,9 @@ namespace Creature.Creature.NeuralNetworking
         //in order to protect unique players, the fitnesses of each player is divided by the number of players in the species that that player belongs to
         public void FitnessSharing()
         {
-            for (int i = 0; i < creatures.Count; i++)
+            for (int i = 0; i < Creatures.Count; i++)
             {
-                creatures[i].fitness /= creatures.Count;
+                Creatures[i].Fitness /= Creatures.Count;
             }
         }
     }
