@@ -1,6 +1,6 @@
+using DatabaseHandler.Services;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using DatabaseHandler.Services;
 using WorldGeneration.Models;
 
 namespace WorldGeneration

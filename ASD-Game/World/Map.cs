@@ -1,7 +1,7 @@
-﻿using System;
+﻿using DatabaseHandler.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using DatabaseHandler.Services;
 using WorldGeneration.Helper;
 using WorldGeneration.Models;
 using WorldGeneration.Models.Interfaces;

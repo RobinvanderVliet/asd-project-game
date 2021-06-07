@@ -1,5 +1,4 @@
 ﻿using Creature.Creature.NeuralNetworking;
-using Moq;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 

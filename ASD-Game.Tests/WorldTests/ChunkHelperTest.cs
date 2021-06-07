@@ -1,11 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WorldGeneration.Helper;
 using WorldGeneration.Models;
 using WorldGeneration.Models.Interfaces;
@@ -13,7 +8,7 @@ using WorldGeneration.Models.TerrainTiles;
 
 namespace WorldGeneration.Tests
 {
-    [ExcludeFromCodeCoverage] 
+    [ExcludeFromCodeCoverage]
     [TestFixture]
     public class ChunkHelperTest
     {
@@ -31,10 +26,8 @@ namespace WorldGeneration.Tests
             _chunkHelperMock = new Mock<ChunkHelper>();
             _sut = _chunkHelperMock.Object;
             _sut.chunk = _chunk;
-
         }
 
-        
         public void Test_GetPositionInTileArrayByWorldCoordinates()
         {
             int x = 1;
@@ -46,8 +39,5 @@ namespace WorldGeneration.Tests
 
             //Assert ---------
         }
-
-
-
     }
 }

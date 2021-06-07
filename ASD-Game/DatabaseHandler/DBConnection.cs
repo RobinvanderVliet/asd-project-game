@@ -5,10 +5,6 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-using DatabaseHandler.POCO;
-using LiteDB;
-using LiteDB.Async;
-
 namespace DatabaseHandler
 {
     [ExcludeFromCodeCoverage]

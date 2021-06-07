@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
-using UserInterface;
-using System.IO;
 
 namespace UserInterface.Tests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
-    class GameStatScreenTest
+    internal class GameStatScreenTest
     {
-
         private GameStatScreen _sut;
         private Mock<ScreenHandler> _mockedScreenHandler;
         private Mock<ConsoleHelper> _mockedConsoleHelper;
@@ -39,7 +31,7 @@ namespace UserInterface.Tests
         [Test]
         public void Test_DrawScreen_DrawsScreen()
         {
-            //Arrange            
+            //Arrange
             var ulCorner = "╔";
             var llCorner = "╚";
             var urCorner = "╗";

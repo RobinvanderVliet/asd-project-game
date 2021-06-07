@@ -1,7 +1,5 @@
 ﻿using Creature.Creature.NeuralNetworking;
-using Moq;
 using NUnit.Framework;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Creature.Tests

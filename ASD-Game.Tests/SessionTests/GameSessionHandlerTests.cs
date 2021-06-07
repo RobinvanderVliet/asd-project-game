@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
+﻿using DatabaseHandler.POCO;
+using DatabaseHandler.Services;
 using Moq;
 using Network;
 using NUnit.Framework;
-using Session.DTO;
 using Session.GameConfiguration;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using WorldGeneration;
-using DatabaseHandler.Services;
-using DatabaseHandler.POCO;
 
 namespace Session.Tests
 {
@@ -25,6 +20,7 @@ namespace Session.Tests
 
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;
+
         private Mock<IWorldService> _mockedWorldService;
         private Mock<ISessionHandler> _mockedsessionHandler;
 
@@ -32,7 +28,6 @@ namespace Session.Tests
         private Mock<IServicesDb<PlayerPOCO>> _mockedPlayerServiceDb;
         private Mock<IServicesDb<GamePOCO>> _mockedgameServicesDb;
         private Mock<IServicesDb<GameConfigurationPOCO>> _mockedGameConfigServicesDb;
-
 
         [SetUp]
         public void Setup()
@@ -48,7 +43,7 @@ namespace Session.Tests
 
             _mockedPlayerServiceDb = new Mock<IServicesDb<PlayerPOCO>>();
             _mockedgameServicesDb = new Mock<IServicesDb<GamePOCO>>();
-           // _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedsessionHandler.Object, _mockedPlayerServiceDb.Object, _mockedgameServicesDb.Object, _mockedGameConfigServicesDb.Object, _mockedGameConfigurationHandler.Object);
+            // _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedsessionHandler.Object, _mockedPlayerServiceDb.Object, _mockedgameServicesDb.Object, _mockedGameConfigServicesDb.Object, _mockedGameConfigurationHandler.Object);
             _packetDTO = new PacketDTO();
         }
 
@@ -58,15 +53,15 @@ namespace Session.Tests
         // {
         //     //arrange
         //     Dictionary<string, int[]> players = new Dictionary<string, int[]>();
-        //     
+        //
         //     int[] playerPosition = new int[2];
         //     playerPosition[0] = 1;
         //     playerPosition[1] = 2;
         //     players.Add("player", playerPosition);
-        //     
+        //
         //     StartGameDTO startGameDTO = new StartGameDTO
         //         {GameGuid = "testGame", PlayerLocations = players};
-        //     
+        //
         //     var payload = JsonConvert.SerializeObject(startGameDTO);
         //
         //     _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Session));
@@ -78,7 +73,5 @@ namespace Session.Tests
         //     // Assert ---------
         //     _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
         // }
-
-
     }
 }

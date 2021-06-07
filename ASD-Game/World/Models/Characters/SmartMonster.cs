@@ -1,10 +1,10 @@
 ﻿using Creature.Creature.NeuralNetworking;
-using System;
 using Creature.Creature.NeuralNetworking.TrainingScenario;
+using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using WorldGeneration;
 using WorldGeneration.StateMachine.Data;
-using System.Numerics;
 
 namespace Creature.Creature
 {

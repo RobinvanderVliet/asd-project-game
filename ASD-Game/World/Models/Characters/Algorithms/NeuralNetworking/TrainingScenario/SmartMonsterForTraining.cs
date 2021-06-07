@@ -1,6 +1,6 @@
 ﻿using Creature.Creature.NeuralNetworking;
-using System;
 using Creature.Creature.NeuralNetworking.TrainingScenario;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using WorldGeneration;
 using WorldGeneration.StateMachine.Data;

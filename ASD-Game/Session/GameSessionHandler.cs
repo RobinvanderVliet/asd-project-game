@@ -1,25 +1,21 @@
 using Creature.Creature;
 using Creature.Creature.NeuralNetworking.TrainingScenario;
-using System.Collections.Generic;
-using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Items;
+using Messages;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
 using Session.GameConfiguration;
 using System;
-
 using System.Collections.Generic;
-
+using System.Timers;
 using UserInterface;
 using WorldGeneration;
 using WorldGeneration.Models;
 using WorldGeneration.StateMachine;
-using Messages;
-using System.Timers;
 
 namespace Session
 {

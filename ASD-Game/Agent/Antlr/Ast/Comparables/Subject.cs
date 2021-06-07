@@ -1,7 +1,5 @@
-﻿
-namespace Agent.Antlr.Ast.Comparables
+﻿namespace Agent.Antlr.Ast.Comparables
 {
-
     public class Subject : Comparable
     {
         public string Name { get; set; }
@@ -10,7 +8,6 @@ namespace Agent.Antlr.Ast.Comparables
         {
             Name = name;
         }
-
 
         public override string GetNodeType()
         {

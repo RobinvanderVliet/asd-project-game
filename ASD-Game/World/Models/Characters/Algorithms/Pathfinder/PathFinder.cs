@@ -1,5 +1,4 @@
-﻿using Creature.Exceptions;
-using Creature.Pathfinder;
+﻿using Creature.Pathfinder;
 using System;
 using System.Collections.Generic;
 using System.Numerics;

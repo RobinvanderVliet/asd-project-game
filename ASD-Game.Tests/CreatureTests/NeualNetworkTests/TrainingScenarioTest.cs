@@ -1,7 +1,6 @@
 ﻿using Creature.Creature.NeuralNetworking.TrainingScenario;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
 using WorldGeneration.StateMachine.Data;
 
 namespace Creature.Tests

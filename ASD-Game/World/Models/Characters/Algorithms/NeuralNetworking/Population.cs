@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
 using WorldGeneration.StateMachine.Data;
 
 namespace Creature.Creature.NeuralNetworking

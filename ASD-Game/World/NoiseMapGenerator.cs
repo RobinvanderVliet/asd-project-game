@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using Items;
+﻿using System.Diagnostics.CodeAnalysis;
 using WorldGeneration.Models;
 using WorldGeneration.Models.HazardousTiles;
 using WorldGeneration.Models.Interfaces;

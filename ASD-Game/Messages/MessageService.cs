@@ -1,5 +1,4 @@
-﻿using System;
-using UserInterface;
+﻿using UserInterface;
 
 namespace Messages
 {
@@ -7,7 +6,7 @@ namespace Messages
     {
         private MessageModel _messages;
         private IScreenHandler _screenHandler;
-        //add screenhandler 
+        //add screenhandler
 
         public MessageService(IScreenHandler screenHandler)
         {

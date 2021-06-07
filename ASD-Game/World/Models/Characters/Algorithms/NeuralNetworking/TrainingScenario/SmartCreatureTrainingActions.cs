@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
-using Creature.Creature.NeuralNetworking.TrainingScenario;
+﻿using Creature.Creature.NeuralNetworking.TrainingScenario;
 using Creature.Pathfinder;
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 
 namespace Creature.Creature.NeuralNetworking
 {

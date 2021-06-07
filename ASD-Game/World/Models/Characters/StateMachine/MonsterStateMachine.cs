@@ -1,5 +1,5 @@
-﻿using System.Threading;
-using Appccelerate.StateMachine.Machine;
+﻿using Appccelerate.StateMachine.Machine;
+using System.Threading;
 using WorldGeneration.StateMachine.CustomRuleSet;
 using WorldGeneration.StateMachine.Data;
 using WorldGeneration.StateMachine.Event;
