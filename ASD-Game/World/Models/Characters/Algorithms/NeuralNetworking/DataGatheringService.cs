@@ -1,11 +1,14 @@
 ﻿using Creature.Pathfinder;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using WorldGeneration;
 
 namespace Creature.Creature.NeuralNetworking.TrainingScenario
 {
+    //Functionality already covered in the DataGatheringServiceForTraining
+    [ExcludeFromCodeCoverage]
     public class DataGatheringService
     {
         private IWorldService WorldService;

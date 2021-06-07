@@ -2,11 +2,14 @@
 using Creature.Pathfinder;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using WorldGeneration;
 
 namespace Creature.Creature.NeuralNetworking
 {
+    //Functionality already covered in the SmartCreatureTrainingActions
+    [ExcludeFromCodeCoverage]
     public class SmartCreatureActions
     {
         private readonly Random _random = new Random();
