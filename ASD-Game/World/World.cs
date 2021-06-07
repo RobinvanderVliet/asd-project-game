@@ -11,7 +11,7 @@ namespace WorldGeneration
     {
         private Map _map;
         public Player CurrentPlayer { get; set; }
-        public List<Player> _players { get; set; }
+        public List<Player> Players { get; set; }
         private readonly int _viewDistance;
         private readonly IScreenHandler _screenHandler;
         private static readonly char _separator = Path.DirectorySeparatorChar;
@@ -20,7 +20,7 @@ namespace WorldGeneration
         {
             var currentDirectory = Directory.GetCurrentDirectory();
 
-            _players = new ();
+            Players = new ();
             _map = MapFactory.GenerateMap(dbLocation: $"Filename={currentDirectory}{_separator}ChunkDatabase.db;connection=shared;", seed: seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
@@ -29,7 +29,7 @@ namespace WorldGeneration
 
         public Player GetPlayer(string id)
         {
-            return _players.Find(x => x.Id == id);
+            return Players.Find(x => x.Id == id);
         }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
@@ -53,14 +53,14 @@ namespace WorldGeneration
             {
                 CurrentPlayer = player;
             }
-            _players.Add(player);
+            Players.Add(player);
         }
 
         public void DisplayWorld()
         {
-            if (CurrentPlayer != null && _players != null)
+            if (CurrentPlayer != null && Players != null)
             {
-                _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, new List<Character>(_players)));
+                _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, new List<Character>(Players)));
             }
         }
 
@@ -81,7 +81,7 @@ namespace WorldGeneration
 
         private List<Character> GetAllCharacters()
         {
-            List<Character> characters = _players.Cast<Character>().ToList();
+            List<Character> characters = Players.Cast<Character>().ToList();
             return characters;
         }
         
@@ -102,7 +102,7 @@ namespace WorldGeneration
 
         public List<Player> GetAllPlayers()
         {
-            return _players;
+            return Players;
         }
     }
 }

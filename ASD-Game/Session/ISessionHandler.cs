@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Session.DTO;
+﻿using System.Collections.Generic;
 
 
 namespace Session

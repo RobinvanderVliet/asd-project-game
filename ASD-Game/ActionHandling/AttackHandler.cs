@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ActionHandling.DTO;
-using DatabaseHandler;
 using DatabaseHandler.POCO;
-using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
 using Items;
 using Messages;
@@ -21,15 +19,17 @@ namespace ActionHandling
         private readonly IWorldService _worldService;
         private const int ATTACK_STAMINA = 10;
         private readonly IDeadHandler _deadHandler;
-        
+
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
         private readonly IDatabaseService<CreaturePOCO> _creatureDatabaseService;
         private readonly IMessageService _messageService;
 
 
-
-        public AttackHandler(IClientController clientController, IWorldService worldService, IDeadHandler deadHandler, IDatabaseService<PlayerPOCO> playerDatabaseService, IDatabaseService<PlayerItemPOCO> playerItemDatabaseService, IDatabaseService<CreaturePOCO> creatureDatabaseService, IMessageService messageService)
+        public AttackHandler(IClientController clientController, IWorldService worldService, IDeadHandler deadHandler,
+            IDatabaseService<PlayerPOCO> playerDatabaseService,
+            IDatabaseService<PlayerItemPOCO> playerItemDatabaseService,
+            IDatabaseService<CreaturePOCO> creatureDatabaseService, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Attack);
@@ -94,8 +94,7 @@ namespace ActionHandling
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             AttackDTO attackDto = JsonConvert.DeserializeObject<AttackDTO>(packet.Payload);
-
-            if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
+            if (_clientController.IsHost() && packet.Header.Target.Equals("host") || _clientController.IsBackupHost)
             {
                 var allPlayers = _worldService.getAllPlayers();
                 var PlayerResult =
@@ -113,7 +112,7 @@ namespace ActionHandling
                     }
                 }
 
-                
+
                 //var CreatureResult =
                 //    allCreatures.Where(x =>
                 //        x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition &&
@@ -160,19 +159,20 @@ namespace ActionHandling
         private void InsertStaminaToDatabase(AttackDTO attackDto)
         {
             var player = _playerDatabaseService.GetAllAsync().Result
-                .FirstOrDefault(player => player.PlayerGuid == attackDto.PlayerGuid && player.GameGuid == _clientController.SessionId);
+                .FirstOrDefault(player =>
+                    player.PlayerGuid == attackDto.PlayerGuid && player.GameGuid == _clientController.SessionId);
             player.Stamina -= ATTACK_STAMINA;
             _playerDatabaseService.UpdateAsync(player);
         }
 
-        private void InsertDamageToDatabase(AttackDTO attackDto, Boolean isPlayer) // both armor and health damage
+        private void InsertDamageToDatabase(AttackDTO attackDto, bool isPlayer) // both armor and health damage
         {
             int totalDamage = attackDto.Damage;
             if (isPlayer)
             {
                 var attackedPlayer = _playerDatabaseService.GetAllAsync().Result
                     .FirstOrDefault(attackedPlayer => attackedPlayer.PlayerGuid == attackDto.AttackedPlayerGuid);
-                
+
                 var attackedPlayerInArray =
                     _worldService.getAllPlayers().Where(player => player.Id == attackDto.PlayerGuid).FirstOrDefault();
 
@@ -257,7 +257,6 @@ namespace ActionHandling
                 if (_worldService.GetCurrentPlayer().Stamina < ATTACK_STAMINA)
                 {
                     _messageService.AddMessage("You're out of stamina, you can't attack.");
-
                 }
                 else
                 {
@@ -268,7 +267,8 @@ namespace ActionHandling
 
             if (_clientController.GetOriginId().Equals(attackDto.AttackedPlayerGuid))
             {
-                _messageService.AddMessage("You've been attacked! You took a total of: " + attackDto.Damage + " damage.");
+                _messageService.AddMessage(
+                    "You've been attacked! You took a total of: " + attackDto.Damage + " damage.");
 
                 int ArmorPoints = 0;
                 int HelmetPoints = 0;
@@ -282,21 +282,19 @@ namespace ActionHandling
                     HelmetPoints = _worldService.GetCurrentPlayer().Inventory.Helmet.ArmorProtectionPoints;
                 }
 
-                //Eerst wordt Damage van de helm afgehaald, vervolgens van de body armor en tot slot van de speler.
+                //First damage is substracted from the helmet, after that from body armor and finally from the player him/herself.
                 if (HelmetPoints - attackDto.Damage <= 0 && HelmetPoints != 0)
                 {
                     _messageService.AddMessage("Your helmet has been destroyed!");
                     attackDto.Damage -= HelmetPoints;
                     _worldService.GetCurrentPlayer().Inventory.Helmet = null;
                     _worldService.DisplayStats();
-
                 }
                 else if (HelmetPoints != 0)
                 {
                     attackDto.Damage = 0;
                     _worldService.GetCurrentPlayer().Inventory.Helmet.ArmorProtectionPoints -= attackDto.Damage;
                     _worldService.DisplayStats();
-
                 }
 
                 if (ArmorPoints - attackDto.Damage <= 0 && ArmorPoints != 0)
@@ -306,19 +304,16 @@ namespace ActionHandling
                     _worldService.GetCurrentPlayer().Inventory.Armor = null;
                     _worldService.GetCurrentPlayer().Health -= attackDto.Damage;
                     _worldService.DisplayStats();
-
                 }
                 else if (ArmorPoints != 0)
                 {
                     _worldService.GetCurrentPlayer().Inventory.Armor.ArmorProtectionPoints -= attackDto.Damage;
                     _worldService.DisplayStats();
-
                 }
                 else
                 {
                     _worldService.GetCurrentPlayer().Health -= attackDto.Damage;
                     _worldService.DisplayStats();
-
                 }
 
                 if (_worldService.GetCurrentPlayer().Health <= 0)

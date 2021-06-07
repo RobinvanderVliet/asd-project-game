@@ -48,7 +48,7 @@ namespace WorldGeneration
 
         public List<Player> getAllPlayers()
         {
-            return _world._players;
+            return _world.Players;
         }
 
         public void playerDied(Player player)

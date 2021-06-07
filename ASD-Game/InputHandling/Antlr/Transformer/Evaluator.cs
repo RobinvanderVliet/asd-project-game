@@ -28,7 +28,7 @@ namespace InputHandling.Antlr.Transformer
         private readonly IInventoryHandler _inventoryHandler;
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
-        private String _commando;
+        private string _commando;
 
         public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IAttackHandler attackHandler, IInventoryHandler inventoryHandler, IClientController clientController)
         {

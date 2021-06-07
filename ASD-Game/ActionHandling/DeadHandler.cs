@@ -1,11 +1,6 @@
 ﻿using Network;
-using System;
 using System.Linq;
 using ActionHandling.DTO;
-using DatabaseHandler;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Repository;
-using DatabaseHandler.Services;
 using Messages;
 using Network.DTO;
 using Newtonsoft.Json;
@@ -45,8 +40,6 @@ namespace ActionHandling
         {
             var deadDTO = JsonConvert.DeserializeObject<DeadDTO>(packet.Payload);
             _worldService.playerDied(deadDTO.DeadPlayer);
-            _worldService.getAllPlayers().Where(player => player.Id == deadDTO.DeadPlayer.Id).FirstOrDefault().Symbol =
-                deadDTO.DeadPlayer.Symbol;
             _worldService.DisplayWorld();
             if (deadDTO.DeadPlayer.Id == _clientController.GetOriginId())
             {

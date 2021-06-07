@@ -1,10 +1,5 @@
 using Network;
-using System;
-using Network;
-using System;
 using System.Collections.Generic;
-using System.Data.Common;
-﻿using System;
 using System.Linq;
 using ActionHandling.DTO;
 using DatabaseHandler.POCO;
@@ -14,7 +9,6 @@ using Network.DTO;
 using Newtonsoft.Json;
 using WorldGeneration;
 using WorldGeneration.Models.Interfaces;
-using Messages;
 
 
 namespace ActionHandling
@@ -39,7 +33,7 @@ namespace ActionHandling
         {
             if (_worldService.isDead(_worldService.GetCurrentPlayer()))
             {
-                Console.WriteLine("You can't move, you're dead!");
+                _messageService.AddMessage("You can't move, you're dead!");
                 return;
             }
             int x = 0;

@@ -1,7 +1,9 @@
-﻿using LiteDB;
+﻿using System.Diagnostics.CodeAnalysis;
+using LiteDB;
 
 namespace DatabaseHandler.POCO
 {
+    [ExcludeFromCodeCoverage]
     public class CreaturePOCO
     {
         public string GameGuid { get; set; }
