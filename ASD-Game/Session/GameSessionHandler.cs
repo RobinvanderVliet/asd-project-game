@@ -104,9 +104,9 @@ namespace Session
 
             if (handleInDatabase)
             {
-                    InsertConfigurationIntoDatabase();
-                    InsertGameIntoDatabase();
-                    InsertPlayersIntoDatabase();
+                InsertConfigurationIntoDatabase();
+                InsertGameIntoDatabase();
+                InsertPlayersIntoDatabase();
             }
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
