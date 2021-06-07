@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 using WorldGeneration;
 using WorldGeneration.Models.Interfaces;
 
-
 namespace ActionHandling
 {
     public class MoveHandler : IMoveHandler, IPacketHandler
@@ -36,6 +35,7 @@ namespace ActionHandling
                 _messageService.AddMessage("You can't move, you're dead!");
                 return;
             }
+
             int x = 0;
             int y = 0;
 
@@ -62,7 +62,6 @@ namespace ActionHandling
             }
 
             var currentPlayer = _worldService.GetCurrentPlayer();
-
             MoveDTO moveDTO = new(currentPlayer.Id, currentPlayer.XPosition + x, currentPlayer.YPosition + y);
 
             SendMoveDTO(moveDTO);

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Items;
 using UserInterface;
+
 namespace WorldGeneration
 {
     public class WorldService : IWorldService
@@ -40,7 +41,7 @@ namespace WorldGeneration
         {
             _world = new World(seed, 6, _screenHandler);
         }
-        
+
         public Player GetCurrentPlayer()
         {
             return _world.CurrentPlayer;
