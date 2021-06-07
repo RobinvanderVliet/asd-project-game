@@ -3,18 +3,15 @@ using ActionHandling;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Items;
-using Messages;
 using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
 using Session.GameConfiguration;
-using System;
-using System.Collections.Generic;
-using System.Collections.Generic;
 using UserInterface;
 using WorldGeneration;
 using WorldGeneration.Models;
+using Messages;
 
 namespace Session
 {
@@ -66,7 +63,7 @@ namespace Session
             SendGameSessionDTO(startGameDTO);
         }
 
-        private void AddItemsToPlayer(string playerId, string gameId)
+        private void AddItemsToPlayer( string playerId, string gameId)
         {
             PlayerItemPOCO poco = new() {PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGUID = gameId };
             _ = _playerItemDatabaseService.CreateAsync(poco);
@@ -74,7 +71,7 @@ namespace Session
             poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetKnife().ItemName, GameGUID = gameId };
             _ = _playerItemDatabaseService.CreateAsync(poco);
         }
-
+        
         private void SendGameSessionDTO(StartGameDTO startGameDTO)
         {
             var payload = JsonConvert.SerializeObject(startGameDTO);

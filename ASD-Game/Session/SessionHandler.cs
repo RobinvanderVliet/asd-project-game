@@ -1,20 +1,20 @@
-using DatabaseHandler;
-using DatabaseHandler.Repository;
-using DatabaseHandler.Services;
-using Messages;
 using Network;
-using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
-using Session.GameConfiguration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Timers;
-using UserInterface;
+using Network.DTO;
 using WorldGeneration;
+using DatabaseHandler;
+using DatabaseHandler.Services;
+using DatabaseHandler.Repository;
+using Session.GameConfiguration;
+using UserInterface;
 using Timer = System.Timers.Timer;
+using Messages;
 
 namespace Session
 {
@@ -46,14 +46,14 @@ namespace Session
 
         public SessionHandler()
         {
-
+            
         }
-
+        
         public List<string[]> GetAllClients()
         {
             return _session.GetAllClients();
         }
-
+     
         public bool JoinSession(string sessionId, string userName)
         {
             var joinSession = false;
@@ -75,7 +75,7 @@ namespace Session
 
                 SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
                 sessionDTO.Clients = new List<string[]>();
-                sessionDTO.Clients.Add(new[] { _clientController.GetOriginId(), userName });
+                sessionDTO.Clients.Add(new []{_clientController.GetOriginId(), userName});
                 sessionDTO.SessionSeed = receivedSessionDTO.SessionSeed;
                 sendSessionDTO(sessionDTO);
                 joinSession = true;
@@ -178,32 +178,32 @@ namespace Session
 
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
-
-        private HandlerResponseDTO HandleMonsterDifficulty(PacketDTO packetDto)
+        
+        private HandlerResponseDTO  HandleMonsterDifficulty(PacketDTO packetDto)
         {
             if (_clientController.IsHost())
             {
                 SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.Payload);
                 int difficulty = int.Parse(sessionDTO.Name);
-                _gameConfigurationHandler.SetDifficulty((MonsterDifficulty)difficulty, _clientController.SessionId);
+                _gameConfigurationHandler.SetDifficulty((MonsterDifficulty) difficulty, _clientController.SessionId);
                 return new HandlerResponseDTO(SendAction.SendToClients, packetDto.Payload);
             }
             if (_clientController.IsBackupHost)
             {
                 SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
                 int difficulty = int.Parse(sessionDTO.Name);
-                _gameConfigurationHandler.SetDifficulty((MonsterDifficulty)difficulty, _clientController.SessionId);
+                _gameConfigurationHandler.SetDifficulty((MonsterDifficulty) difficulty, _clientController.SessionId);
             }
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
-        private HandlerResponseDTO HandleItemSpawnRate(PacketDTO packetDto)
+        private HandlerResponseDTO  HandleItemSpawnRate(PacketDTO packetDto)
         {
             if (_clientController.IsHost())
             {
                 SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.Payload);
                 int spawnrate = int.Parse(sessionDTO.Name);
                 Console.WriteLine(spawnrate);
-                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate)spawnrate, _clientController.SessionId);
+                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
                 return new HandlerResponseDTO(SendAction.SendToClients, packetDto.Payload);
             }
             if (_clientController.IsBackupHost)
@@ -211,7 +211,7 @@ namespace Session
                 SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
                 int spawnrate = int.Parse(sessionDTO.Name);
                 Console.WriteLine(spawnrate);
-                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate)spawnrate, _clientController.SessionId);
+                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
             }
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
@@ -302,18 +302,18 @@ namespace Session
                         hostName = "Unnamed player";
                         amountOfPlayers = "1";
                     }
-
-                    screen.UpdateWithNewSession(new[] { packet.Header.SessionID, sessionDTO.Name, hostName, amountOfPlayers });
+                    
+                    screen.UpdateWithNewSession(new[] {packet.Header.SessionID, sessionDTO.Name, hostName, amountOfPlayers});
                 }
             }
             else
             {
                 Console.WriteLine("Id: " + packet.Header.SessionID + " Name: " + sessionDTO.Name + " Host: " + sessionDTO.Clients.First()[1] + " Amount of players: " + sessionDTO.Clients.Count);
             }
-
+            
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
-
+        
         public HandlerResponseDTO addPlayerToSession(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
@@ -354,8 +354,7 @@ namespace Session
                     screen.UpdateLobbyScreen(sessionDTOClients.Clients);
                 }
 
-                if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost)
-                {
+                if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost) {
                     if (sessionDTOClients.Clients[1][0].Equals(_clientController.GetOriginId()))
                     {
                         _clientController.IsBackupHost = true;
@@ -434,7 +433,7 @@ namespace Session
         {
             _hostPingTimer = timer;
         }
-        public void setSession(Session session)
+        public void setSession(Session session) 
         {
             this._session = session;
         }

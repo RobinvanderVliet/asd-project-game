@@ -8,7 +8,7 @@ namespace Items.Consumables
 
         public int getHealth()
         {
-            return (int)Health;
+            return (int) Health;
         }
     }
 }

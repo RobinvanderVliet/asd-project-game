@@ -15,7 +15,7 @@ namespace Session
         public string SessionId { get => _sessionId; set => _sessionId = value; }
 
         public bool InSession = false;
-
+        
         private List<string[]> _joinedClients = new();
 
         private int _sessionSeed;
@@ -33,7 +33,7 @@ namespace Session
 
         public void AddClient(string originId, string name)
         {
-            _joinedClients.Add(new[] { originId, name });
+            _joinedClients.Add(new []{ originId, name });
             // Remove possible duplicates.
             _joinedClients = _joinedClients.Distinct().ToList();
         }
