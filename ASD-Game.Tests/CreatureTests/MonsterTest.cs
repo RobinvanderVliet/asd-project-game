@@ -1,59 +1,40 @@
-﻿using Moq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
+using WorldGeneration;
+using WorldGeneration.Models;
+using WorldGeneration.StateMachine.Data;
 
 namespace Creature.Tests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
-    internal class MonsterTest
+    class MonsterTest
     {
         private Monster _sut;
-        private Mock<ICreatureStateMachine> _creatureStateMachineMock;
 
+        private int _xPosition, _yPosition;
+        
         [SetUp]
         public void Setup()
         {
-            _creatureStateMachineMock = new Mock<ICreatureStateMachine>();
-            _sut = new Monster(_creatureStateMachineMock.Object);
+            _xPosition = 15;
+            _yPosition = 20;
         }
 
         [Test]
-        public void Test_MonsterStateMachine_StartsStateMachine()
+        public void Test_Instantiate_MonsterDataGetsCreated()
         {
-            // Assert ----------
-            _creatureStateMachineMock.Verify(creatureStateMachine => creatureStateMachine.StartStateMachine());
-        }
+            //Arrange
+            MonsterData expectedCharacterData = new MonsterData(_xPosition, _yPosition, 0);
+            
+            //Act
+            _sut = new Monster("Zombie", 15, 20, CharacterSymbol.TERMINATOR, "monster1");
 
-        [Test]
-        public void Test_ApplyDamage_DealsDamage()
-        {
-            // Arrange ---------
-            MonsterData monsterData = new MonsterData(new Vector2(), 50, 10, 10, null, false);
-            _creatureStateMachineMock.Setup(creatureStateMachine => creatureStateMachine.CreatureData)
-                .Returns(monsterData);
-
-            // Act -------------
-            _sut.ApplyDamage(30);
-
-            // Assert ----------
-            Assert.AreEqual(_sut.CreatureStateMachine.CreatureData.Health, 20);
-        }
-
-        [Test]
-        public void Test_HealAmount_HealsMonster()
-        {
-            // Arrange ---------
-            MonsterData monsterData = new MonsterData(new Vector2(), 30, 10, 10, null, false);
-            _creatureStateMachineMock.Setup(creatureStateMachine => creatureStateMachine.CreatureData)
-                .Returns(monsterData);
-
-            // Act -------------
-            _sut.HealAmount(10);
-
-            // Assert ----------
-            Assert.AreEqual(_sut.CreatureStateMachine.CreatureData.Health, 40);
+            //Assert
+            Assert.AreEqual(expectedCharacterData.Position.X, _sut.MonsterData.Position.X);
+            Assert.AreEqual(expectedCharacterData.Position.Y, _sut.MonsterData.Position.Y);
+            Assert.AreEqual(expectedCharacterData.Health, _sut.MonsterData.Health);
+            Assert.AreEqual(expectedCharacterData.Damage, _sut.MonsterData.Damage);
         }
     }
 }

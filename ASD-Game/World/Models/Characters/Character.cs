@@ -23,9 +23,5 @@ namespace WorldGeneration
             Symbol = symbol;
             Id = id;
         }
-
-        public void Update()
-        {
-        }
     }
 }
