@@ -38,7 +38,7 @@ namespace Creature.Creature.StateMachine.State
             {
                 if (builderInfo.Action == "wander")
                 {
-                    if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo.RuleSets, "wander"))
+                    if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo))
                     {
                         //TODO implement Attack logic + gather targetData
                         int steps = new Random().Next(10);

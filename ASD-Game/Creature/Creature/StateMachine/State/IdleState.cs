@@ -26,11 +26,12 @@ namespace Creature.Creature.StateMachine.State
         {
             foreach (var builderInfo in _builderInfoList)
             {
-            if (builderInfo.Action == "attack")
-            {
-                if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo.RuleSets, "idle"))
+                if (builderInfo.Action == "attack")
                 {
-                    //TODO implement Attack logic + gather targetData
+                    if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo))
+                    {
+                        //TODO implement Attack logic + gather targetData
+                    }
                 }
             }
         }

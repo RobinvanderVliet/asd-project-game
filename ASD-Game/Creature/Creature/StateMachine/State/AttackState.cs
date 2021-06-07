@@ -28,7 +28,7 @@ namespace Creature.Creature.StateMachine.State
             {
                 if (builderInfo.Action == "attack")
                 {
-                    if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo.RuleSets, "attack"))
+                    if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo))
                     {
                         //TODO implement Attack logic + gather targetData
                     }
