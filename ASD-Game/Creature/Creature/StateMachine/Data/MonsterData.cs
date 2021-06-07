@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using ActionHandling;
+using WorldGeneration;
 
 namespace Creature.Creature.StateMachine.Data
 {
@@ -27,6 +29,11 @@ namespace Creature.Creature.StateMachine.Data
         }
 
         public List<KeyValuePair<string, string>> RuleSet { get; set; }
+        public Inventory Inventory { get; set; }
+        public int Team { get; set; }
+        public int RadiationLevel { get; set; }
+        public IMoveHandler MoveHandler { get; set; }
+        public IWorldService WorldService { get; set; }
 
         public int Damage
         {

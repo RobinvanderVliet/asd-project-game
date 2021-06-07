@@ -12,9 +12,6 @@ namespace Creature.Creature.StateMachine.State
 {
     public class WanderState : CreatureState
     {
-        private MoveHandler _moveHandler =
-            new MoveHandler(new ClientController(new NetworkComponent()), new WorldService());
-
         public WanderState(ICreatureData creatureData, ICreatureStateMachine stateMachine,
             List<BuilderInfo> builderInfoList, BuilderConfigurator builderConfiguration) : base(creatureData,
             stateMachine, builderInfoList, builderConfiguration)
@@ -42,7 +39,7 @@ namespace Creature.Creature.StateMachine.State
                     {
                         //TODO implement Attack logic + gather targetData
                         int steps = new Random().Next(10);
-                        _moveHandler.SendMove(pickRandomDirection(), steps);
+                        _creatureData.MoveHandler.SendMove(pickRandomDirection(), steps);
                     }
                 }
             }

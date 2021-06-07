@@ -12,8 +12,7 @@ namespace Creature.Creature.StateMachine.State
 {
     public class FleeFromCreatureState : CreatureState
     {
-        private ICreatureData _target;
-        private MoveHandler _moveHandler = new MoveHandler(new ClientController(new NetworkComponent()), new WorldService());
+        private readonly ICreatureData _target;
 
         public FleeFromCreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine, List<BuilderInfo> builderInfoList, BuilderConfigurator builderConfiguration) : base(creatureData, stateMachine, builderInfoList, builderConfiguration)
         {
@@ -46,7 +45,7 @@ namespace Creature.Creature.StateMachine.State
                         {
                             direction = "down";
                         }
-                        _moveHandler.SendMove(direction, 1);
+                        _creatureData.MoveHandler.SendMove(direction, 1);
                     }
                     }
                 }
