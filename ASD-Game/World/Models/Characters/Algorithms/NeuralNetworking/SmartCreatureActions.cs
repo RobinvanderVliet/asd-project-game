@@ -141,7 +141,7 @@ namespace Creature.Creature.NeuralNetworking
             smartMonster.CreatureData.Health -= damage;
             if (smartMonster.CreatureData.Health <= 0)
             {
-                smartMonster.dead = true;
+                smartMonster.Dead = true;
             }
         }
 

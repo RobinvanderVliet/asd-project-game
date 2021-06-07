@@ -69,21 +69,21 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         public void CheckNewPosition(SmartMonster smartMonster)
         {
-            if (DistanceToClosestPlayer < smartMonster.currDistanceToPlayer)
+            if (DistanceToClosestPlayer < smartMonster.CurrDistanceToPlayer)
             {
-                smartMonster.currDistanceToPlayer = DistanceToClosestPlayer;
+                smartMonster.CurrDistanceToPlayer = DistanceToClosestPlayer;
             }
-            else if (DistanceToClosestPlayer > smartMonster.currDistanceToPlayer)
+            else if (DistanceToClosestPlayer > smartMonster.CurrDistanceToPlayer)
             {
-                smartMonster.currDistanceToPlayer = DistanceToClosestPlayer;
+                smartMonster.CurrDistanceToPlayer = DistanceToClosestPlayer;
             }
-            if (DistanceToClosestMonster < smartMonster.currDistanceToMonster)
+            if (DistanceToClosestMonster < smartMonster.CurrDistanceToMonster)
             {
-                smartMonster.currDistanceToMonster = DistanceToClosestMonster;
+                smartMonster.CurrDistanceToMonster = DistanceToClosestMonster;
             }
-            else if (DistanceToClosestMonster > smartMonster.currDistanceToMonster)
+            else if (DistanceToClosestMonster > smartMonster.CurrDistanceToMonster)
             {
-                smartMonster.currDistanceToMonster = DistanceToClosestMonster;
+                smartMonster.CurrDistanceToMonster = DistanceToClosestMonster;
             }
         }
 

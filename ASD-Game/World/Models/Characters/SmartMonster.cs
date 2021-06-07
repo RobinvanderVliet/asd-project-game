@@ -27,17 +27,17 @@ namespace Creature.Creature
         public float[] Decision = new float[GenomeOutputs];
 
         //Data for fitnessCalculation
-        public int lifeSpan = 0;
+        public int LifeSpan = 0;
 
-        public bool dead = false;
+        public bool Dead = false;
         public int DamageDealt { get; set; } = 0;
         public int DamageTaken { get; set; } = 0;
         public int HealthHealed { get; set; } = 0;
         public int StatsGained { get; set; } = 0;
         public int EnemysKilled { get; set; } = 0;
 
-        public float currDistanceToPlayer;
-        public float currDistanceToMonster;
+        public float CurrDistanceToPlayer;
+        public float CurrDistanceToMonster;
 
         public SmartMonster(string name, int xPosition, int yPosition, string symbol, string id, DataGatheringService datagatheringservice) : base(name, xPosition, yPosition, symbol, id)
         {
@@ -50,9 +50,9 @@ namespace Creature.Creature
         {
             _dataGatheringService.CheckNewPosition(this);
             Destination = new Vector2(this.XPosition, this.YPosition);
-            if (!dead)
+            if (!Dead)
             {
-                lifeSpan++;
+                LifeSpan++;
                 Look();
                 Think();
             }
