@@ -26,7 +26,7 @@ namespace Creature.Tests
             // Assert ----------
             Assert.That(_sut.MonsterData.Position.X == 10);
             Assert.That(_sut.MonsterData.Position.Y == 10);
-         
+            _creatureStateMachineMock.Verify(creatureStateMachine => creatureStateMachine.StartStateMachine());
         }
     }
 }

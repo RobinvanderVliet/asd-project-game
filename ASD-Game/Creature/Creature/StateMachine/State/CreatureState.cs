@@ -12,11 +12,11 @@ namespace Creature.Creature.StateMachine.State
         protected ICreatureData _creatureData;
         protected ICreatureData _target;
         protected ICreatureStateMachine _stateMachine;
-        protected BuilderConfiguration _builderConfiguration;
+        protected BuilderConfigurator _builderConfiguration;
         protected List<BuilderInfo> _builderInfoList;
 
 
-        public CreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine, List<BuilderInfo> builderInfoList, BuilderConfiguration builderConfiguration)
+        public CreatureState(ICreatureData creatureData, ICreatureStateMachine stateMachine, List<BuilderInfo> builderInfoList, BuilderConfigurator builderConfiguration)
         {
             _creatureData = creatureData;
             _stateMachine = stateMachine;

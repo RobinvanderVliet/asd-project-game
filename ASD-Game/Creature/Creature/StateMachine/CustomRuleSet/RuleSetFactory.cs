@@ -7,27 +7,14 @@ namespace Creature.Creature.StateMachine.CustomRuleSet
 {
     public class RuleSetFactory
     {
-        public static List<RuleSet> GetRuleSetListFromSettingsList(List<KeyValuePair<string, string>> rulesetSettingsList)
+        public List<RuleSet> GetRuleSetListFromSettingsList(List<KeyValuePair<string, string>> rulesetSettingsList)
         {
             List<RuleSet> rulesetList = new();
             RuleSet ruleset = new();
 
             foreach (var currentSetting in rulesetSettingsList)
             {
-                if (currentSetting.Key.EndsWith("aggressiveness") ||
-                    currentSetting.Key.EndsWith("explore") ||
-                    currentSetting.Key.EndsWith("combat"))
-                {
-                    if (!string.IsNullOrEmpty(ruleset.Setting))
-                    {
-                        rulesetList.Add(ruleset);
-                    }
-
-                    ruleset = new();
-                    ruleset.Setting = currentSetting.Key;
-                    ruleset.ComparisonTrue = currentSetting.Value;
-                }
-                else if (currentSetting.Key.EndsWith("comparable"))
+                if (currentSetting.Key.EndsWith("comparable"))
                 {
                     if (!string.IsNullOrEmpty(ruleset.Setting))
                     {
@@ -54,6 +41,25 @@ namespace Creature.Creature.StateMachine.CustomRuleSet
                 else if (currentSetting.Key.EndsWith("false"))
                 {
                     ruleset.ComparisonFalse = currentSetting.Value;
+                }
+            }
+
+            rulesetList.Add(ruleset);
+
+            return rulesetList;
+        }
+
+        public List<KeyValuePair<string, string>> GetSimpleRuleSetListFromSettingsList(List<KeyValuePair<string, string>> rulesetSettingsList)
+        {
+            List<KeyValuePair<string, string>> rulesetList = new();
+
+            foreach (var currentSetting in rulesetSettingsList)
+            {
+                if (currentSetting.Key.EndsWith("aggressiveness") ||
+                    currentSetting.Key.EndsWith("explore") ||
+                    currentSetting.Key.EndsWith("combat"))
+                {
+                    rulesetList.Add(new(currentSetting.Key, currentSetting.Value));
                 }
             }
 

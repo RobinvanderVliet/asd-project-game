@@ -8,7 +8,7 @@ namespace Creature.Creature.StateMachine.State
 {
     public class CollectState : CreatureState
     {
-        public CollectState(ICreatureData creatureData, ICreatureStateMachine stateMachine, List<BuilderInfo> builderInfoList, BuilderConfiguration builderConfiguration) : base(creatureData, stateMachine, builderInfoList, builderConfiguration)
+        public CollectState(ICreatureData creatureData, ICreatureStateMachine stateMachine, List<BuilderInfo> builderInfoList, BuilderConfigurator builderConfiguration) : base(creatureData, stateMachine, builderInfoList, builderConfiguration)
         {
             _creatureData = creatureData;
             _stateMachine = stateMachine;

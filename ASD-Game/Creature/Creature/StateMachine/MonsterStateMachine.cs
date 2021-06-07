@@ -46,27 +46,28 @@ namespace Creature.Creature.StateMachine
         public void StartStateMachine()
         {
             var builder = new StateMachineDefinitionBuilder<CreatureState, CreatureEvent.Event>();
-            List<RuleSet> rulesetList = RuleSetFactory.GetRuleSetListFromSettingsList(CreatureData.RuleSet);
-            var builderConfiguration = new BuilderConfiguration(rulesetList, CreatureData, this);
-            List<BuilderInfo> builderInfoList = builderConfiguration.GetBuilderInfoList();
+            RuleSetFactory ruleSetFactory = new RuleSetFactory();
+            List<RuleSet> rulesetList = ruleSetFactory.GetRuleSetListFromSettingsList(CreatureData.RuleSet);
+            var builderConfigurator = new BuilderConfigurator(rulesetList, CreatureData, this);
+            List<BuilderInfo> builderInfoList = builderConfigurator.GetBuilderInfoList();
             
-            _followPlayerState = new FollowCreatureState(CreatureData, this,builderInfoList, builderConfiguration);
-            _wanderState = new WanderState(CreatureData, this, builderInfoList, builderConfiguration);
-            _useConsumableState = new UseConsumableState(CreatureData, this, builderInfoList, builderConfiguration);
-            _attackPlayerState = new AttackState(CreatureData, this, builderInfoList, builderConfiguration);
-            _fleeFromCreatureState = new FleeFromCreatureState(CreatureData, this, builderInfoList, builderConfiguration);
+            _followPlayerState = new FollowCreatureState(CreatureData, this,builderInfoList, builderConfigurator);
+            _wanderState = new WanderState(CreatureData, this, builderInfoList, builderConfigurator);
+            _useConsumableState = new UseConsumableState(CreatureData, this, builderInfoList, builderConfigurator);
+            _attackPlayerState = new AttackState(CreatureData, this, builderInfoList, builderConfigurator);
+            _fleeFromCreatureState = new FleeFromCreatureState(CreatureData, this, builderInfoList, builderConfigurator);
 
             foreach (BuilderInfo builderInfo in builderInfoList)
             {
                 foreach (var initialState in builderInfo.InitialStates)
                 {
                     builder.In(initialState).On(builderInfo.Event).
-                        If<object>((targetData) => builderConfiguration.GetGuard(CreatureData, targetData, builderInfo.RuleSets, builderInfo.Action)).
+                        If<object>((targetData) => builderConfigurator.GetGuard(CreatureData, targetData, builderInfo)).
                         Goto(builderInfo.TargetState).Execute<ICreatureData>(builderInfo.TargetState.SetTargetData);
                 }
             }
 
-            foreach (var action in builderConfiguration.GetActionWithStateList())
+            foreach (var action in builderConfigurator.GetActionWithStateList())
             {
                 if (!builderInfoList.Any(x => x.Action == action.Key))
                 {

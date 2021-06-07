@@ -8,7 +8,7 @@ namespace Creature.Creature.StateMachine.State
 {
     public class EngageState : CreatureState
     {
-        public EngageState(ICreatureData creatureData, ICreatureStateMachine stateMachine, List<BuilderInfo> builderInfoList, BuilderConfiguration builderConfiguration) : base(creatureData, stateMachine, builderInfoList, builderConfiguration)
+        public EngageState(ICreatureData creatureData, ICreatureStateMachine stateMachine, List<BuilderInfo> builderInfoList, BuilderConfigurator builderConfiguration) : base(creatureData, stateMachine, builderInfoList, builderConfiguration)
         {
             _creatureData = creatureData;
             _stateMachine = stateMachine;
