@@ -104,34 +104,34 @@ namespace Session.Tests
         //     _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
         // }
 
-        [Test]
-        public void Test_SaveInBackupDatabase()
-        {
-            //Arrange
-            var tmp = new StartGameDTO();
-            int[] arr = new int[2] { 1, 1};
-            tmp.GameGuid = "test";
-            tmp.PlayerLocations = new();
-            tmp.PlayerLocations.Add("player", arr);
-
-            PacketDTO packet = new()
-            {
-                Header = new PacketHeaderDTO(),
-                Payload = JsonConvert.SerializeObject(tmp)
-            };
-            
-            _sut.ClientController.SetBackupHost(true);
-
-            //mocked setup
-            _mockedSessionHandler.Setup(x => x.GetAllClients()).Returns(new List<string> {"een super cool ID"});
-
-            //Act
-            var result = _sut.HandlePacket(packet);
-
-            //Assert
-            _mockedSessionHandler.Verify(x => x.GetAllClients(), Times.Once);
-            Assert.AreEqual(result.GetType(), new HandlerResponseDTO(It.IsAny<SendAction>(), It.IsAny<string>()).GetType());
-
-        }
+        // [Test]
+        // public void Test_SaveInBackupDatabase()
+        // {
+        //     //Arrange
+        //     var tmp = new StartGameDTO();
+        //     int[] arr = new int[2] { 1, 1};
+        //     tmp.GameGuid = "test";
+        //     tmp.PlayerLocations = new();
+        //     tmp.PlayerLocations.Add("player", arr);
+        //
+        //     PacketDTO packet = new()
+        //     {
+        //         Header = new PacketHeaderDTO(),
+        //         Payload = JsonConvert.SerializeObject(tmp)
+        //     };
+        //     
+        //     _sut.ClientController.SetBackupHost(true);
+        //
+        //     //mocked setup
+        //     _mockedSessionHandler.Setup(x => x.GetAllClients()).Returns(new List<string> {"een super cool ID"});
+        //
+        //     //Act
+        //     var result = _sut.HandlePacket(packet);
+        //
+        //     //Assert
+        //     _mockedSessionHandler.Verify(x => x.GetAllClients(), Times.Once);
+        //     Assert.AreEqual(result.GetType(), new HandlerResponseDTO(It.IsAny<SendAction>(), It.IsAny<string>()).GetType());
+        //
+        // }
     }
 }

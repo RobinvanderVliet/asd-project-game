@@ -143,31 +143,39 @@ namespace Session
                     {
                         return addPlayerToSession(packet);
                     }
+
                     if (sessionDTO.SessionType == SessionType.SendHeartbeat)
                     {
                         return HandleHeartbeat(packet);
                     }
+
                     if (sessionDTO.SessionType == SessionType.NewBackUpHost)
                     {
                         return HandleNewBackupHost(packet);
                     }
                 }
-                if ((packet.Header.Target == "client" || packet.Header.Target == "host" || packet.Header.Target == _clientController.GetOriginId()) )
+
+                if ((packet.Header.Target == "client" || packet.Header.Target == "host" ||
+                     packet.Header.Target == _clientController.GetOriginId()))
                 {
                     if (sessionDTO.SessionType == SessionType.EditMonsterDifficulty)
                     {
                         return HandleMonsterDifficulty(packet);
                     }
+
                     if (sessionDTO.SessionType == SessionType.EditItemSpawnRate)
                     {
                         return HandleItemSpawnRate(packet);
                     }
                 }
-                if ((packet.Header.Target == "client" || packet.Header.Target == "host" || packet.Header.Target == _clientController.GetOriginId())
+
+                if ((packet.Header.Target == "client" || packet.Header.Target == "host" ||
+                     packet.Header.Target == _clientController.GetOriginId())
                     && sessionDTO.SessionType == SessionType.SendPing)
                 {
                     return handlePingRequest(packet);
                 }
+            }
             else
             {
                 if ((packet.Header.Target == "client" || packet.Header.Target == "host")

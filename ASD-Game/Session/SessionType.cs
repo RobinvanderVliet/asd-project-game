@@ -9,8 +9,7 @@ namespace Session
         ReceivedPingResponse,
         SendHeartbeat,
         EditMonsterDifficulty,
-        EditItemSpawnRate
-        SendHeartbeat,
+        EditItemSpawnRate,
         NewBackUpHost
     }
 }
