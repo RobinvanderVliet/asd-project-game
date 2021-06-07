@@ -8,7 +8,7 @@ namespace ASD_project.InputHandling.Antlr.Ast.Actions
     {
         private InventorySlot _inventorySlot;
         public InventorySlot InventorySlot { get => _inventorySlot; private set => _inventorySlot = value; }
-        
+
         public ArrayList GetChildren()
         {
             var children = new ArrayList();
@@ -20,7 +20,7 @@ namespace ASD_project.InputHandling.Antlr.Ast.Actions
         {
             if (child is InventorySlot)
             {
-                _inventorySlot = (InventorySlot) child;
+                _inventorySlot = (InventorySlot)child;
             }
 
             return this;

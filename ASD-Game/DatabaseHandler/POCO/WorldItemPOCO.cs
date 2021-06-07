@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using LiteDB;
 using System.Diagnostics.CodeAnalysis;
 
