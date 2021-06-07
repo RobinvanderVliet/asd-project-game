@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Moq;
@@ -28,8 +27,14 @@ namespace Session.Tests
                 _mockedDatabaseGameService.Object);
         }
 
+        /// <summary>
+        ///  [RequestSavedGames()]
+        ///
+        /// [Description of the test]
+        /// If Request Saved Games Gives Back A List Where I Am Host
+        /// </summary>
         [Test]
-        public void TestIfRequestSavedGamesGivesBackAListWhereIAmHost()
+        public void Test_RequestSavedGames_IfRequestSavedGamesGivesBackAListWhereIAmHost()
         {
             // Arrange
             List<ClientHistoryPOCO> clientList = new List<ClientHistoryPOCO>();
@@ -69,8 +74,14 @@ namespace Session.Tests
             }
         }
 
+        /// <summary>
+        ///  [RequestSavedGames()]
+        ///
+        /// [Description of the test]
+        /// If Request Saved Games Gives Back An Empty List
+        /// </summary> 
         [Test]
-        public void TestIfRequestSavedGamesGivesBackAnEmptyList()
+        public void Test_RequestSavedGames_IfRequestSavedGamesGivesBackAnEmptyList()
         {
             // Arrange
             List<ClientHistoryPOCO> clientList = new List<ClientHistoryPOCO>();
@@ -92,15 +103,21 @@ namespace Session.Tests
             }
         }
 
+        /// <summary>
+        ///  [LoadGame()]
+        ///
+        /// [Description of the test]
+        /// Load Game When Game Does Not Exist
+        /// </summary> 
         [Test]
-        public void TestLoadGameWhenGameDoesNotExist()
+        public void Test_LoadGame_LoadGameWhenGameDoesNotExist()
         {
             // Arrange
             List<GamePOCO> gameList = new List<GamePOCO>();
             gameList.Clear();
-            
+
             _mockedDatabaseGameService.Setup(x => x.GetAllAsync()).ReturnsAsync(gameList);
-            
+
             using (StringWriter sw = new StringWriter())
             {
                 // Act
@@ -112,23 +129,30 @@ namespace Session.Tests
                 Assert.AreEqual(expected, sw.ToString());
             }
         }
-        
+
+        /// <summary>
+        ///  [LoadGame()]
+        ///
+        /// [Description of the test]
+        /// If Create Session Is Being Called When Load Game Success
+        /// </summary> 
         [Test]
-        public void TestIfCreateSessionIsBeingCalledWhenLoadGameSuccess()
+        public void Test_LoadGame_IfCreateSessionIsBeingCalledWhenLoadGameSuccess()
         {
             // Arrange
             List<GamePOCO> gameList = new List<GamePOCO>();
 
-            GamePOCO gamePoco = new GamePOCO {GameGuid = "game1", PlayerGUIDHost = "player1", GameName = "gameName1", Seed = 1};
+            GamePOCO gamePoco = new GamePOCO
+                {GameGuid = "game1", PlayerGUIDHost = "player1", GameName = "gameName1", Seed = 1};
 
             gameList.Add(gamePoco);
 
             _mockedDatabaseGameService.Setup(x => x.GetAllAsync()).ReturnsAsync(gameList);
-           
+
             sut.LoadGame("game1");
 
-            _mockedSessionHandler.Verify(x => x.CreateSession(gamePoco.GameName, true, gamePoco.GameGuid, gamePoco.Seed));
+            _mockedSessionHandler.Verify(
+                x => x.CreateSession(gamePoco.GameName, true, gamePoco.GameGuid, gamePoco.Seed));
         }
-        
     }
 }
