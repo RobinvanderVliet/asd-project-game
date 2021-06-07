@@ -27,10 +27,10 @@ namespace ASD_Game.ActionHandling
 
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
-        private readonly IDatabaseService<PlayerPoco> _playerDatabaseService;
+        private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IMessageService _messageService;
 
-        public RelativeStatHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPoco> playerDatabaseService, IMessageService messageService)
+        public RelativeStatHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.RelativeStat);
@@ -144,7 +144,7 @@ namespace ASD_Game.ActionHandling
         {
             if (handleInDatabase)
             {
-                PlayerPoco playerPOCO = _playerDatabaseService.GetAllAsync().Result.FirstOrDefault(poco => poco.PlayerGUID == player.Id && poco.GameGUID == _clientController.SessionId);
+                PlayerPOCO playerPOCO = _playerDatabaseService.GetAllAsync().Result.FirstOrDefault(poco => poco.PlayerGUID == player.Id && poco.GameGUID == _clientController.SessionId);
                 if (relativeStatDTO.Stamina != 0)
                 {
                     playerPOCO.Stamina = player.Stamina;

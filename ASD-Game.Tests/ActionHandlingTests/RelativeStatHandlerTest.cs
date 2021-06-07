@@ -18,7 +18,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
     {
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
-        private Mock<IDatabaseService<PlayerPoco>> _mockedPlayerDatabaseService;
+        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerDatabaseService;
         private RelativeStatHandler _sut;
         private Mock<IMessageService> _mockedMessageService;
 
@@ -27,7 +27,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
         {
             _mockedClientController = new Mock<IClientController>();
             _mockedWorldService = new Mock<IWorldService>();
-            _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPoco>>();
+            _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPOCO>>();
             _mockedMessageService = new Mock<IMessageService>();
 
             _sut = new RelativeStatHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerDatabaseService.Object, _mockedMessageService.Object);

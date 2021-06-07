@@ -44,11 +44,9 @@ namespace ASD_Game.Tests.SessionTests
             _mockedClientController = new Mock<IClientController>();
             _mockedScreenHandler = new Mock<IScreenHandler>();
             _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
-            _mockedClientController = new();
             _mockedMessageService = new();
-            _mockedScreenHandler = new();
             _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object, _mockedGameConfigurationHandler.Object, _mockedMessageService.Object);
-            _mockedSession = new Mock<Session.Session>();
+            _mockedSession = new Mock<Session.Session>("test");
             _packetDTO = new PacketDTO();
         }
 
@@ -983,7 +981,7 @@ namespace ASD_Game.Tests.SessionTests
             packetDTO.HandlerResponse = new HandlerResponseDTO(SendAction.Ignore, "");
 
             Session.Session session = new Session.Session("testsession");
-            _sut.setSession(session);
+            _sut.SetSession(session);
 
             //Arrange the mock for lobbyscreen
             Mock<LobbyScreen> lobbyMock = new Mock<LobbyScreen>();
@@ -1019,7 +1017,7 @@ namespace ASD_Game.Tests.SessionTests
             packetDTO.HandlerResponse = new HandlerResponseDTO(SendAction.Ignore, JsonConvert.SerializeObject(resultMessage));
 
             Session.Session session = new Session.Session("testsession");
-            _sut.setSession(session);
+            _sut.SetSession(session);
 
             //Arrange the mock for lobbyscreen
             Mock<LobbyScreen> lobbyMock = new Mock<LobbyScreen>();
@@ -1033,5 +1031,105 @@ namespace ASD_Game.Tests.SessionTests
             //Assert
             lobbyMock.Verify(mock => mock.UpdateLobbyScreen(It.IsAny<List<string[]>>()), Times.Once());
         }
+
+        [Test]
+        public void Test_HandleNewBackupHost_Host()
+        {
+            //Arrange
+            PacketDTO packet = new()
+            {
+                Header = new PacketHeaderDTO() {Target = "host"},
+                Payload = ""
+            };
+
+            //Act
+            var result = _sut.HandleNewBackupHost(packet);
+            
+            //Assert
+            Assert.AreEqual(SendAction.SendToClients, result.Action);
+        }
+
+        [Test]
+        public void Test_HandleNewBackupHost_Client_Next()
+        {
+            //Arrange
+            PacketDTO packet = new()
+            {
+                Header = new PacketHeaderDTO() { OriginID = "2", Target = "client" },
+                Payload = ""
+            };
+
+            _sut.SetSession(new Session.Session("test game"));
+            _mockedClientController.Setup(x => x.GetOriginId()).Returns("3");
+
+            _sut.GetAllClients().Add(new []{"1", "gerrit"});
+            _sut.GetAllClients().Add(new[]{"2","henk"});
+            _sut.GetAllClients().Add(new[]{"3","jan"});
+
+            //Act
+            var result = _sut.HandleNewBackupHost(packet);
+
+            //Assert
+            Assert.AreEqual(result.Action, SendAction.Ignore);
+
+            //Remove all clients for other test
+            _sut.GetAllClients().RemoveRange(0, 3);
+        }
+
+        [Test]
+        public void Test_HandleNewBackupHost_Client_NotNext()
+        {
+            //Arrange
+            PacketDTO packet = new()
+            {
+                Header = new PacketHeaderDTO() {OriginID = "2", Target = "client" },
+                Payload = ""
+            };
+
+            _sut.SetSession(new Session.Session("test game"));
+            _mockedClientController.Setup(x => x.GetOriginId()).Returns("1");
+
+            _sut.GetAllClients().Add(new []{"1", "gerrit"});
+            _sut.GetAllClients().Add(new[]{"2","henk"});
+            _sut.GetAllClients().Add(new[]{"3","jan"});
+
+            //Act
+            var result = _sut.HandleNewBackupHost(packet);
+
+            //Assert
+            Assert.AreEqual(result.Action, SendAction.Ignore);
+
+            //Remove all clients for other test
+            _sut.GetAllClients().RemoveRange(0, 3);
+        }
+
+        [Test]
+        public void Test_HandlePacket_NewBackupHost()
+        {
+            //Arrange
+            PacketDTO packet = new()
+            {
+                Header = new PacketHeaderDTO() { OriginID = "1", Target = "client" },
+                Payload = JsonConvert.SerializeObject(new SessionDTO() {
+                    SessionType = SessionType.NewBackUpHost,
+                    SessionSeed = 0,
+                    Clients = new List<String[]>(),
+                    Name = ""
+                })
+            };
+
+            //needed for list
+            _sut.SetSession(_mockedSession.Object);
+            _sut.GetAllClients().Add(new []{"1", "gerrit"});
+            _sut.GetAllClients().Add(new[]{"2","henk"});
+            _sut.GetAllClients().Add(new[]{"3","jan"});
+
+            //Act
+            var result = _sut.HandlePacket(packet);
+
+            //Assert
+            Assert.AreEqual(result.Action, SendAction.Ignore);
+        }
+
     }
 }

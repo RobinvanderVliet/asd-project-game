@@ -5,7 +5,7 @@ using LiteDB;
 namespace ASD_Game.DatabaseHandler.POCO
 {
     [ExcludeFromCodeCoverage]
-    public class PlayerItemPoco
+    public class PlayerItemPOCO
     {
         public string PlayerGUID { get; set; }
         public string GameGUID { get; set; }

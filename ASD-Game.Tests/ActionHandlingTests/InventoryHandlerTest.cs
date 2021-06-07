@@ -29,9 +29,9 @@ namespace ASD_Game.Tests.ActionHandlingTests
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
         private Mock<IMessageService> _mockedMessageService;
-        private Mock<IDatabaseService<PlayerPoco>> _mockedPlayerDatabaseService;
-        private Mock<IDatabaseService<PlayerItemPoco>> _mockedPlayerItemDatabaseService;
-        private Mock<IDatabaseService<WorldItemPoco>> _mockedWorldItemDatabaseService;
+        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerDatabaseService;
+        private Mock<IDatabaseService<PlayerItemPOCO>> _mockedPlayerItemDatabaseService;
+        private Mock<IDatabaseService<WorldItemPOCO>> _mockedWorldItemDatabaseService;
         private static readonly string _thisIsNotAnItemYouCanDrop = "This is not an item you can drop!";
 
         [SetUp]
@@ -122,12 +122,12 @@ namespace ASD_Game.Tests.ActionHandlingTests
         {
             // Arrange
             string originId = "origin1";
-            PlayerItemPoco playerItemPOCO = new PlayerItemPoco();
+            PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO();
             // playerItemPOCO.ItemName = inventoryDTO. TODO: Add correct item name.
             playerItemPOCO.PlayerGUID = originId;
-            List<PlayerItemPoco> playerItemPOCOs = new();
+            List<PlayerItemPOCO> playerItemPOCOs = new();
             playerItemPOCOs.Add(playerItemPOCO);
-            IEnumerable<PlayerItemPoco> enumerable = playerItemPOCOs;
+            IEnumerable<PlayerItemPOCO> enumerable = playerItemPOCOs;
             
             _mockedClientController.Setup(mock => mock.IsHost()).Returns(false);
             _mockedPlayerItemDatabaseService.Setup(mock => mock.GetAllAsync()).Returns(Task.FromResult(enumerable));
@@ -153,7 +153,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
             _mockedMessageService.Verify(mock => mock.AddMessage(message), Times.Once);
             if (!message.Equals(_thisIsNotAnItemYouCanDrop))
             {
-                _mockedPlayerItemDatabaseService.Verify(mock => mock.DeleteAsync(It.IsAny<PlayerItemPoco>()), Times.Once);
+                _mockedPlayerItemDatabaseService.Verify(mock => mock.DeleteAsync(It.IsAny<PlayerItemPOCO>()), Times.Once);
             }
         }
         
@@ -295,7 +295,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
             Assert.AreEqual(expectedHandlerResponseDTO, handlerResponseDTO);
             if (handlerResponseDTO.Action == SendAction.SendToClients)
             {
-                _mockedPlayerItemDatabaseService.Verify(mock => mock.CreateAsync(It.IsAny<PlayerItemPoco>()), Times.Once());
+                _mockedPlayerItemDatabaseService.Verify(mock => mock.CreateAsync(It.IsAny<PlayerItemPOCO>()), Times.Once());
             }
         }
 
@@ -382,10 +382,10 @@ namespace ASD_Game.Tests.ActionHandlingTests
             var item = ItemFactory.GetBandage();
             player.Inventory.AddConsumableItem(item);
 
-            PlayerPoco playerPOCO = new() { PlayerGUID = originId, Health = 50 };
-            List<PlayerPoco> playerPOCOList = new();
+            PlayerPOCO playerPOCO = new() { PlayerGUID = originId, Health = 50 };
+            List<PlayerPOCO> playerPOCOList = new();
             playerPOCOList.Add(playerPOCO);
-            IEnumerable<PlayerPoco> en = playerPOCOList;
+            IEnumerable<PlayerPOCO> en = playerPOCOList;
             var task = Task.FromResult(en);
             
 
@@ -406,7 +406,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
             Assert.IsTrue(player.Health == 75);
             Assert.AreEqual(expectedResult, result);
             _mockedPlayerDatabaseService.Verify(mock => mock.UpdateAsync(playerPOCO), Times.Once);
-            _mockedPlayerItemDatabaseService.Verify(mock => mock.DeleteAsync(It.IsAny<PlayerItemPoco>()), Times.Once);
+            _mockedPlayerItemDatabaseService.Verify(mock => mock.DeleteAsync(It.IsAny<PlayerItemPOCO>()), Times.Once);
         }
 
         [Test]
@@ -429,10 +429,10 @@ namespace ASD_Game.Tests.ActionHandlingTests
             Player player = new("arie", 0, 0, "#", originId);
             player.Health = 50;
 
-            PlayerPoco playerPOCO = new() { PlayerGUID = originId, Health = 50 };
-            List<PlayerPoco> playerPOCOList = new();
+            PlayerPOCO playerPOCO = new() { PlayerGUID = originId, Health = 50 };
+            List<PlayerPOCO> playerPOCOList = new();
             playerPOCOList.Add(playerPOCO);
-            IEnumerable<PlayerPoco> en = playerPOCOList;
+            IEnumerable<PlayerPOCO> en = playerPOCOList;
             var task = Task.FromResult(en);
 
 
@@ -451,7 +451,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
             Assert.IsTrue(player.Health == 50);
             Assert.AreEqual(expectedResult, result);
             _mockedPlayerDatabaseService.Verify(mock => mock.UpdateAsync(playerPOCO), Times.Never);
-            _mockedPlayerItemDatabaseService.Verify(mock => mock.DeleteAsync(It.IsAny<PlayerItemPoco>()), Times.Never);
+            _mockedPlayerItemDatabaseService.Verify(mock => mock.DeleteAsync(It.IsAny<PlayerItemPOCO>()), Times.Never);
         }
         
         [Test]

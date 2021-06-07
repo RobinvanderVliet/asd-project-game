@@ -5,7 +5,7 @@ using LiteDB;
 namespace ASD_Game.DatabaseHandler.POCO
 {
     [ExcludeFromCodeCoverage]
-    public class AgentPoco
+    public class AgentPOCO
     {
         [BsonId] public string FileName { get; set; }
 

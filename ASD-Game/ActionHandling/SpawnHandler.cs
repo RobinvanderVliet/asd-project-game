@@ -64,8 +64,8 @@ namespace ASD_Game.ActionHandling
 
         private void InsertToDatabase(ItemSpawnDTO itemSpawnDto)
         {
-            var ItemService = new DatabaseService<ItemPoco>();
-            var item = new ItemPoco()
+            var ItemService = new DatabaseService<ItemPOCO>();
+            var item = new ItemPOCO()
                 {ItemName = itemSpawnDto.Item.ItemName, Xposition = itemSpawnDto.XPosition, Yposition = itemSpawnDto.YPosition};
             ItemService.CreateAsync(item);
         }

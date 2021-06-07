@@ -4,10 +4,12 @@ using System.IO;
 using ASD_Game.ActionHandling;
 using ASD_Game.DatabaseHandler.POCO;
 using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Messages;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
 using ASD_Game.Session;
 using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
 using ASD_Game.World.Services;
 using Moq;
 using NUnit.Framework;
@@ -22,34 +24,50 @@ namespace ASD_Game.Tests.SessionTests
         private PacketDTO _packetDTO;
 
         //Declaration of mocks
-        private Mock<IClientController> _mockedClientController;
+        private Mock<ClientController> _mockedClientController; //change this to the interface and all test break, your choice.
         private Mock<IWorldService> _mockedWorldService;
-        private Mock<ISessionHandler> _mockedsessionHandler;
-        private Mock<IDatabaseService<PlayerPoco>> _mockedPlayerDatabaseService;
-        private Mock<IDatabaseService<GamePoco>> _mockedGameDatabaseService;
-        private Mock<IDatabaseService<PlayerItemPoco>> _mockedPlayerItemDatabaseService;
+        private Mock<ISessionHandler> _mockedSessionHandler;
+        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerDatabaseService;
+        private Mock<IDatabaseService<GamePOCO>> _mockedGameDatabaseService;
+        private Mock<IDatabaseService<PlayerItemPOCO>> _mockedPlayerItemDatabaseService;
         private Mock<IRelativeStatHandler> _mockedRelativeStatHandler;
+        private Mock<IScreenHandler> _mockedScreenHandler;
+        private Mock<IMessageService> _mockedMessageService;
 
         private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
-        private Mock<IDatabaseService<GameConfigurationPoco>> _mockedGameConfigDatabaseService;
+        private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigDatabaseService;
 
 
         [SetUp]
         public void Setup()
         {
+            Mock<INetworkComponent> tmpMock = new();
+
             var standardOutput = new StreamWriter(Console.OpenStandardOutput());
             standardOutput.AutoFlush = true;
             Console.SetOut(standardOutput);
-            _mockedClientController = new Mock<IClientController>();
+            _mockedClientController = new Mock<ClientController>(tmpMock.Object);
             _mockedWorldService = new Mock<IWorldService>();
-            _mockedsessionHandler = new Mock<ISessionHandler>();
+            _mockedSessionHandler = new Mock<ISessionHandler>();
             _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
-            _mockedGameConfigDatabaseService = new Mock<IDatabaseService<GameConfigurationPoco>>();
-            _mockedPlayerItemDatabaseService = new Mock<IDatabaseService<PlayerItemPoco>>();
+            _mockedGameConfigDatabaseService = new Mock<IDatabaseService<GameConfigurationPOCO>>();
+            _mockedPlayerItemDatabaseService = new Mock<IDatabaseService<PlayerItemPOCO>>();
             _mockedRelativeStatHandler = new Mock<IRelativeStatHandler>();
-            _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPoco>>();
-            _mockedGameDatabaseService = new Mock<IDatabaseService<GamePoco>>();
-           // _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedsessionHandler.Object, _mockedPlayerServiceDb.Object, _mockedgameDatabaseService.Object, _mockedGameConfigDatabaseService.Object, _mockedGameConfigurationHandler.Object);
+            _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPOCO>>();
+            _mockedGameDatabaseService = new Mock<IDatabaseService<GamePOCO>>();
+            _mockedScreenHandler = new Mock<IScreenHandler>();
+            _mockedMessageService = new Mock<IMessageService>();
+            _sut = new GameSessionHandler(_mockedClientController.Object,
+                _mockedWorldService.Object,
+                _mockedSessionHandler.Object,
+                _mockedRelativeStatHandler.Object,
+                _mockedPlayerDatabaseService.Object,
+                _mockedGameDatabaseService.Object,
+                _mockedGameConfigDatabaseService.Object,
+                _mockedGameConfigurationHandler.Object,
+                _mockedScreenHandler.Object,
+                _mockedPlayerItemDatabaseService.Object,
+                _mockedMessageService.Object);
             _packetDTO = new PacketDTO();
         }
 
@@ -79,7 +97,6 @@ namespace ASD_Game.Tests.SessionTests
         //     // Assert ---------
         //     _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
         // }
-
-
+        
     }
 }
