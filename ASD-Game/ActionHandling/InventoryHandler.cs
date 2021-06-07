@@ -26,7 +26,12 @@ namespace ASD_Game.ActionHandling
         private readonly IDatabaseService<WorldItemPOCO> _worldItemDatabaseService;
 
 
-        public InventoryHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IDatabaseService<PlayerItemPOCO> playerItemDatabaseService, IDatabaseService<WorldItemPOCO> worldItemDatabaseService, IMessageService messageService)
+        public InventoryHandler(IClientController clientController, 
+                                IWorldService worldService, 
+                                IDatabaseService<PlayerPOCO> playerDatabaseService, 
+                                IDatabaseService<PlayerItemPOCO> playerItemDatabaseService, 
+                                IDatabaseService<WorldItemPOCO> worldItemDatabaseService, 
+                                IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Inventory);
@@ -244,7 +249,8 @@ namespace ASD_Game.ActionHandling
                 _worldService.DisplayStats();
                 if (handleInDatabase)
                 {
-                    PlayerItemPOCO playerItemPOCO = _playerItemDatabaseService.GetAllAsync().Result.FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == item.ItemName && playerItem.PlayerGUID == player.Id);
+                    PlayerItemPOCO playerItemPOCO = _playerItemDatabaseService.GetAllAsync().Result
+                        .FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == item.ItemName && playerItem.PlayerGUID == player.Id);
                     _ = _playerItemDatabaseService.DeleteAsync(playerItemPOCO);
                 }
 
@@ -278,7 +284,8 @@ namespace ASD_Game.ActionHandling
 
                 if (handleInDatabase)
                 {
-                    PlayerItemPOCO playerItemPOCO = _playerItemDatabaseService.GetAllAsync().Result.FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == itemToUse.ItemName && playerItem.PlayerGUID == player.Id);
+                    PlayerItemPOCO playerItemPOCO = _playerItemDatabaseService.GetAllAsync().Result
+                        .FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == itemToUse.ItemName && playerItem.PlayerGUID == player.Id);
                     _ = _playerItemDatabaseService.DeleteAsync(playerItemPOCO);
 
                     var result = _playerDatabaseService.GetAllAsync().Result;

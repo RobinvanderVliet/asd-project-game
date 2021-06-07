@@ -150,7 +150,7 @@ namespace ASD_Game.ActionHandling
 
         private MoveDTO ChangeMoveDTOToNewLocation(MoveDTO moveDTO, List<ITile> movableTiles, Player player)
         {
-            if (movableTiles.Count != 0)
+            if (movableTiles.Any())
             {
                 moveDTO.XPosition = movableTiles.Last().XPosition;
                 moveDTO.YPosition = movableTiles.Last().YPosition;

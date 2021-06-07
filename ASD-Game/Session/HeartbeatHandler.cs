@@ -60,7 +60,7 @@ namespace ASD_Game.Session
 
         private void CheckStatus()
         {
-            var leavers = _players.FindAll(x => !x.online);
+            var leavers = _players.FindAll(x => !x.IsOnline);
             if (leavers.Count != 0)
             {
                 EnablePlayerAgent(leavers);
@@ -78,20 +78,20 @@ namespace ASD_Game.Session
 
         private bool PlayerKnown(string clientID)
         {
-            return _players.Exists(player => player.clientID == clientID);
+            return _players.Exists(player => player.ClientID == clientID);
         }
 
         private void UpdateStatus()
         {
             foreach (HeartbeatDTO player in _players)
             {
-                if (DateTime.Now - player.time >= waitTime)
+                if (DateTime.Now - player.Time >= waitTime)
                 {
-                    player.online = false;
+                    player.IsOnline = false;
                 }
                 else
                 {
-                    player.online = true;
+                    player.IsOnline = true;
                 }
             }
             CheckStatus();
@@ -99,8 +99,8 @@ namespace ASD_Game.Session
 
         private void UpdatePlayer(string clientID)
         {
-            var player = _players.Find(x => x.clientID == clientID);
-            player.time = DateTime.Now;
+            var player = _players.Find(x => x.ClientID == clientID);
+            player.Time = DateTime.Now;
         }
     }
 }

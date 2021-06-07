@@ -18,9 +18,6 @@ namespace ASD_Game.World
         public List<ItemSpawnDTO> Items;
         private readonly int _viewDistance;
         private readonly IScreenHandler _screenHandler;
-        private static readonly char _separator = Path.DirectorySeparatorChar;
-        private IItemService _itemService;
-        
 
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService)
         {
@@ -29,11 +26,10 @@ namespace ASD_Game.World
             Items = new();
             _players = new ();
             _creatures = new ();
-            _itemService = itemService;
             _map = mapFactory.GenerateMap(itemService, Items, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
-            itemService.GetSpawnHandler().SetItemSpawnDtos(Items);
+            itemService.GetSpawnHandler().SetItemSpawnDTOS(Items);
         }
         
         public Player GetPlayer(string id)

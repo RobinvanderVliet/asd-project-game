@@ -8,6 +8,6 @@ namespace ASD_Game.ActionHandling
     {
         public void SendSpawn(int x, int y, Item item);
         
-        public void SetItemSpawnDtos(List<ItemSpawnDTO> itemSpawnDTOs);
+        public void SetItemSpawnDTOS(List<ItemSpawnDTO> itemSpawnDTOs);
     }
 }
