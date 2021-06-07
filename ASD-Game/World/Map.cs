@@ -16,13 +16,11 @@ namespace ASD_project.World
         private readonly IDatabaseService<Chunk> _chunkDBService;
         private ChunkHelper _chunkHelper;
         private readonly INoiseMapGenerator _noiseMapGenerator;
-        private int _seed;
 
         public Map(
             INoiseMapGenerator noiseMapGenerator
             , int chunkSize
             , IDatabaseService<Chunk> chunkDbServices
-            , int seed
             , IList<Chunk> chunks = null
         )
         {
@@ -34,7 +32,6 @@ namespace ASD_project.World
             _chunks = chunks ?? new List<Chunk>();
             _noiseMapGenerator = noiseMapGenerator;
             _chunkDBService = chunkDbServices;
-            _seed = seed;
         }
 
         public void LoadArea(int playerX, int playerY, int viewDistance) 
