@@ -1,4 +1,4 @@
-namespace InputHandling.Antlr
+namespace ASD_project.InputHandling.Antlr
 {
     public interface IPipeline
     {

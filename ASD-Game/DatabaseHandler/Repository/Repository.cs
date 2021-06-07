@@ -7,7 +7,7 @@ using LiteDB.Async;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace DatabaseHandler.Repository
+namespace ASD_project.DatabaseHandler.Repository
 {
     public class Repository<T> : IRepository<T>
     {

@@ -1,10 +1,10 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using ASD_project.World.Models.Interfaces;
+using ASD_project.World.Models.LootableTiles;
 using NUnit.Framework;
-using WorldGeneration.Models.Interfaces;
-using WorldGeneration.Models.LootableTiles;
 
-namespace WorldGeneration.Tests
+namespace ASD_Game.Tests.WorldTests.Models
 {
     [ExcludeFromCodeCoverage]
     public class ChestTileUnitTest

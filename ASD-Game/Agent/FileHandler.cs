@@ -1,14 +1,15 @@
-﻿using Agent.Exceptions;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
+using ASD_project.Agent.Exceptions;
 
-namespace Agent
+namespace ASD_project.Agent
 {
     public class FileHandler
     {
         private string[] _allowedTypes = new[] { ".txt", ".cfg" };
-
+        private static readonly char _separator = Path.DirectorySeparatorChar;
+        
         public virtual string ImportFile(string filepath)
         {
             if (!File.Exists(filepath))
@@ -36,7 +37,7 @@ namespace Agent
 
         public virtual void ExportFile(string content, string fileName)
         {
-            string safeFileLocation = GetBaseDirectory() + "Resource/" + fileName;
+            string safeFileLocation = GetBaseDirectory() + $"{_separator}Resource{_separator}{fileName}";
 
             CreateDirectory(safeFileLocation);
 

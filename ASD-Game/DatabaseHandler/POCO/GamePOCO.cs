@@ -1,8 +1,7 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using LiteDB;
 
-namespace DatabaseHandler.POCO
+namespace ASD_project.DatabaseHandler.POCO
 {
     [ExcludeFromCodeCoverage]
     public class GamePOCO

@@ -1,17 +1,12 @@
 ﻿using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WorldGeneration.Helper;
-using WorldGeneration.Models;
-using WorldGeneration.Models.Interfaces;
-using WorldGeneration.Models.TerrainTiles;
+using ASD_project.World.Helpers;
+using ASD_project.World.Models;
+using ASD_project.World.Models.Interfaces;
+using ASD_project.World.Models.TerrainTiles;
 
-namespace WorldGeneration.Tests
+namespace ASD_Game.Tests.WorldTests
 {
     [ExcludeFromCodeCoverage] 
     [TestFixture]

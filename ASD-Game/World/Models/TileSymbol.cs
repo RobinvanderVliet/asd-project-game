@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace WorldGeneration.Models
+namespace ASD_project.World.Models
 {
     [ExcludeFromCodeCoverage]
     public static class TileSymbol 

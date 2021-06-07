@@ -1,11 +1,12 @@
 using System.Diagnostics.CodeAnalysis;
+using ASD_project.World;
+using ASD_project.World.Models.HazardousTiles;
+using ASD_project.World.Models.Interfaces;
+using ASD_project.World.Models.TerrainTiles;
 using Moq;
 using NUnit.Framework;
-using WorldGeneration.Models.HazardousTiles;
-using WorldGeneration.Models.Interfaces;
-using WorldGeneration.Models.TerrainTiles;
 
-namespace WorldGeneration.Tests
+namespace ASD_Game.Tests.WorldTests
 {
     [ExcludeFromCodeCoverage]  
     [TestFixture]
@@ -21,20 +22,19 @@ namespace WorldGeneration.Tests
         //Declaration of mocks
         private Mock<IFastNoise> _mockedNoise;
         private IFastNoise _mockedNoiseObject;
- 
+
         [SetUp]
         public void Setup()
         {
             //Initialisation of variables
-            _sut = new NoiseMapGenerator(0);
+            _sut = new NoiseMapGenerator(0, null, null);
             //Initialisation of mocks
             _mockedNoise = new Mock<IFastNoise>();
             _mockedNoiseObject = _mockedNoise.Object;
-            
+
             _sut.SetNoise(_mockedNoiseObject);
         }
-        
-        
+
         [Test]
         public void Test_Function_GetWaterTileFromNoise() 
         {

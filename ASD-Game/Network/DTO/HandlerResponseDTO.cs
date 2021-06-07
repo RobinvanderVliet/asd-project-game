@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using ASD_project.Network.Enum;
 
-namespace Network.DTO
+namespace ASD_project.Network.DTO
 {
     [ExcludeFromCodeCoverage]
     public class HandlerResponseDTO

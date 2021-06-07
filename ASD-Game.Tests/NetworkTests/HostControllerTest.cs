@@ -1,9 +1,11 @@
-﻿using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
-using Network.DTO;
+﻿using System.Diagnostics.CodeAnalysis;
+using ASD_project.Network;
+using ASD_project.Network.DTO;
+using ASD_project.Network.Enum;
 using Moq;
+using NUnit.Framework;
 
-namespace Network.Tests
+namespace ASD_Game.Tests.NetworkTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]

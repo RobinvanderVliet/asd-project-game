@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Agent
+namespace ASD_project.Agent
 {
     class InlineConfig
     {

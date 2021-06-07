@@ -1,7 +1,7 @@
-﻿using Creature.Creature.StateMachine.Data;
-using Creature.Creature.StateMachine.Event;
+﻿using ASD_project.Creature.Creature.StateMachine.Data;
+using ASD_project.Creature.Creature.StateMachine.Event;
 
-namespace Creature.Creature.StateMachine
+namespace ASD_project.Creature.Creature.StateMachine
 {
     public interface ICreatureStateMachine
     {

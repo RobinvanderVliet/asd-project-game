@@ -1,26 +1,24 @@
-using Network;
-using Network.DTO;
-using Newtonsoft.Json;
-using Session.DTO;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Timers;
-using WorldGeneration;
-using DatabaseHandler;
-using DatabaseHandler.Services;
-using DatabaseHandler.Repository;
-using UserInterface;
+using ASD_project.Network;
+using ASD_project.Network.DTO;
+using ASD_project.Network.Enum;
+using ASD_project.Session.DTO;
+using ASD_project.UserInterface;
+using ASD_project.World;
+using Newtonsoft.Json;
 using Timer = System.Timers.Timer;
 
-namespace Session
+namespace ASD_project.Session
 {
     public class SessionHandler : IPacketHandler, ISessionHandler
     {
         private const bool DEBUG_INTERFACE = true; //TODO: remove when UI is complete, obviously
         
         private IClientController _clientController;
-        private Session _session;
+        private ASD_project.Session.Session _session;
         private IHeartbeatHandler _heartbeatHandler;
         private Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;
@@ -55,7 +53,7 @@ namespace Session
                 SendHeartbeatTimer();
 
                 SessionDTO receivedSessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
-                _session = new Session(receivedSessionDTO.Name);
+                _session = new ASD_project.Session.Session(receivedSessionDTO.Name);
 
                 _session.SessionId = sessionId;
                 _clientController.SetSessionId(sessionId);
@@ -88,7 +86,7 @@ namespace Session
 
         public bool CreateSession(string sessionName)
         {
-            _session = new Session(sessionName);
+            _session = new ASD_project.Session.Session(sessionName);
             _session.GenerateSessionId();
             _session.AddClient(_clientController.GetOriginId());
             _session.SessionSeed = new MapFactory().GenerateSeed();

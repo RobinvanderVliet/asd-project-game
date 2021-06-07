@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
-namespace InputHandling.Antlr.Ast
+namespace ASD_project.InputHandling.Antlr.Ast
 {
     public class Input : ASTNode, IEquatable<Input>
     {

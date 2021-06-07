@@ -1,11 +1,11 @@
-﻿using Agent.Antlr.Ast;
-using Agent.Antlr.Ast.Comparables;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Action = Agent.Antlr.Ast.Action;
+using ASD_project.Agent.Antlr.Ast;
+using ASD_project.Agent.Antlr.Ast.Comparables;
+using Action = ASD_project.Agent.Antlr.Ast.Action;
 
-namespace Agent.Generator
+namespace ASD_project.Agent.Generator
 {
     public class Generating
     {

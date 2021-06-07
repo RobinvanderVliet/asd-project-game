@@ -1,11 +1,12 @@
-﻿namespace Network
+﻿namespace ASD_project.Network.Enum
 {
     public enum PacketType
     {
         Chat,
         Move,
         Session,
-        GameSession
+        GameSession,
+        Spawn
 
     }
 }

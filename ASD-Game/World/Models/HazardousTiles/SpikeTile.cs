@@ -1,10 +1,10 @@
-﻿using Items;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using WorldGeneration.Models.Interfaces;
+using ASD_project.Items;
+using ASD_project.World.Models.Interfaces;
 
-namespace WorldGeneration.Models.HazardousTiles
+namespace ASD_project.World.Models.HazardousTiles
 {
     [ExcludeFromCodeCoverage]
     public class SpikeTile : IHazardousTile

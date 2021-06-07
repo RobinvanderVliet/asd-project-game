@@ -1,8 +1,8 @@
-﻿using Items.ArmorStats;
-using Items.ItemStats;
-using System;
+﻿using System;
+using ASD_project.Items.ArmorStats;
+using ASD_project.Items.ItemStats;
 
-namespace Items
+namespace ASD_project.Items
 {
     public class ArmorBuilder : IBuilder
     {

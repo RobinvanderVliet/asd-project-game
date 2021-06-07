@@ -1,9 +1,10 @@
+using System;
+using ASD_project.Network.DTO;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System;
 using WebSocketSharp;
 
-namespace Network
+namespace ASD_project.Network
 {
     public class WebSocketConnection : IWebSocketConnection
     {

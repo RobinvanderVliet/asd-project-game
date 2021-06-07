@@ -1,12 +1,12 @@
-﻿using Creature.Creature.StateMachine;
-using Creature.Creature.StateMachine.Data;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
+using ASD_project.Creature.Creature;
+using ASD_project.Creature.Creature.StateMachine;
+using ASD_project.Creature.Creature.StateMachine.Data;
 using Moq;
 using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
-using Creature.Creature;
 
-namespace Creature.Tests
+namespace ASD_Game.Tests.CreatureTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]

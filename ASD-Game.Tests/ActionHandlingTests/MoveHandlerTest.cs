@@ -1,10 +1,13 @@
 using System.Diagnostics.CodeAnalysis;
+using ASD_project.ActionHandling;
+using ASD_project.Network;
+using ASD_project.Network.Enum;
+using ASD_project.World.Models.Characters;
+using ASD_project.World.Services;
 using Moq;
-using Network;
 using NUnit.Framework;
-using WorldGeneration;
 
-namespace ActionHandling.Tests
+namespace ASD_Game.Tests.ActionHandlingTests
 {
     [ExcludeFromCodeCoverage]
     public class MoveHandlerTest

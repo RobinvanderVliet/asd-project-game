@@ -1,4 +1,4 @@
-﻿namespace Agent.Models
+﻿namespace ASD_project.Agent.Models
 {
     public class NpcConfiguration : Configuration
     {

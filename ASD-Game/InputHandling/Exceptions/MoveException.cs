@@ -1,6 +1,6 @@
 using System;
 
-namespace InputHandling.Exceptions
+namespace ASD_project.InputHandling.Exceptions
 {
     public class MoveException : Exception
     {

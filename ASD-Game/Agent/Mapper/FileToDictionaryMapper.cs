@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using Agent;
 
-namespace Agent.Mapper
+namespace ASD_project.Agent.Mapper
 {
     public class FileToDictionaryMapper
     {

@@ -1,8 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
-using Moq;
+using ASD_project.World;
 using NUnit.Framework;
 
-namespace WorldGeneration.Tests
+namespace ASD_Game.Tests.WorldTests
 {
     [ExcludeFromCodeCoverage]  
     [TestFixture]

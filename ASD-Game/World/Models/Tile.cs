@@ -1,9 +1,9 @@
-﻿using Items;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using WorldGeneration.Models.Interfaces;
+using ASD_project.Items;
+using ASD_project.World.Models.Interfaces;
 
-namespace WorldGeneration.Models
+namespace ASD_project.World.Models
 {
     [ExcludeFromCodeCoverage]
     public abstract class Tile : ITile

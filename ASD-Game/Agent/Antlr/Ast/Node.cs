@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace Agent.Antlr.Ast
+namespace ASD_project.Agent.Antlr.Ast
 {
 
     public class Node

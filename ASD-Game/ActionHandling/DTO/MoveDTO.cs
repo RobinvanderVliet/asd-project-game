@@ -1,13 +1,13 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace ActionHandling.DTO
+namespace ASD_project.ActionHandling.DTO
 {
     [ExcludeFromCodeCoverage]
     public class MoveDTO
     {
-        public string UserId { get; set; }
-        public int XPosition { get; set; }
-        public int YPosition { get; set; }
+        public string UserId;
+        public int XPosition;
+        public int YPosition;
 
         public MoveDTO(string userId, int xPosition, int yPosition)
         {

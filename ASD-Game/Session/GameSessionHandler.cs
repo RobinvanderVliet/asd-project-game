@@ -1,14 +1,16 @@
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using Network;
-using Network.DTO;
-using Newtonsoft.Json;
-using Session.DTO;
 using System.Collections.Generic;
-using WorldGeneration;
-using WorldGeneration.Models;
+using ASD_project.DatabaseHandler.POCO;
+using ASD_project.DatabaseHandler.Services;
+using ASD_project.Network;
+using ASD_project.Network.DTO;
+using ASD_project.Network.Enum;
+using ASD_project.Session.DTO;
+using ASD_project.World.Models;
+using ASD_project.World.Models.Characters;
+using ASD_project.World.Services;
+using Newtonsoft.Json;
 
-namespace Session
+namespace ASD_project.Session
 {
 
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
@@ -89,11 +91,11 @@ namespace Session
                 if (_clientController.GetOriginId() == player.Key)
                 {
                     // add name to players
-                    _worldService.AddPlayerToWorld(new WorldGeneration.Player("gerrit", player.Value[0], player.Value[1], CharacterSymbol.CURRENT_PLAYER, player.Key), true);
+                    _worldService.AddPlayerToWorld(new Player("gerrit", player.Value[0], player.Value[1], CharacterSymbol.CURRENT_PLAYER, player.Key), true);
                 } 
                 else 
                 {
-                    _worldService.AddPlayerToWorld(new WorldGeneration.Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key), false);
+                    _worldService.AddPlayerToWorld(new Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key), false);
                 }
             }
 

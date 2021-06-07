@@ -1,8 +1,7 @@
-﻿using Network.DTO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Network
+namespace ASD_project.Network.DTO
 {
     [ExcludeFromCodeCoverage]
     public class PacketDTO

@@ -1,7 +1,7 @@
-﻿using Items.ArmorStats;
-using Items.ItemStats;
+﻿using ASD_project.Items.ArmorStats;
+using ASD_project.Items.ItemStats;
 
-namespace Items
+namespace ASD_project.Items
 {
     public class Armor : Item
     {

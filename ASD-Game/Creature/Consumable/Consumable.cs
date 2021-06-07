@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Creature.Consumable
+namespace ASD_project.Creature.Consumable
 {
     [ExcludeFromCodeCoverage]
     public class Consumable : IConsumable

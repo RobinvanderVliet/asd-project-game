@@ -1,4 +1,4 @@
-﻿namespace Agent.Antlr.Ast.Comparables
+﻿namespace ASD_project.Agent.Antlr.Ast.Comparables
 {
     public class Int : Comparable
     {

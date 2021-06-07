@@ -1,12 +1,14 @@
-﻿using Agent.Exceptions;
-using Agent.Mapper;
-using Agent.Models;
+﻿using System;
+using System.Collections.Generic;
+using Agent;
+using ASD_project.Agent.Exceptions;
+using ASD_project.Agent.Mapper;
+using ASD_project.Agent.Models;
+using ASD_project.InputHandling;
 using InputHandling;
 using Serilog;
-using System;
-using System.Collections.Generic;
 
-namespace Agent.Services
+namespace ASD_project.Agent.Services
 {
     public class NpcConfigurationService : BaseConfigurationService
     {

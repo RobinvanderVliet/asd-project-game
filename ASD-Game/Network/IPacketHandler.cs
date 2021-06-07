@@ -1,6 +1,6 @@
-﻿using Network.DTO;
+﻿using ASD_project.Network.DTO;
 
-namespace Network
+namespace ASD_project.Network
 {
     public interface IPacketHandler
     {

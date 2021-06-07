@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace WorldGeneration
+namespace ASD_project.World.Models.Characters
 {
     [ExcludeFromCodeCoverage]
     public class Character

@@ -1,4 +1,4 @@
-namespace InputHandling
+namespace ASD_project.InputHandling
 {
     public interface IInputHandler
     {

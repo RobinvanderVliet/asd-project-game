@@ -1,4 +1,4 @@
-namespace UserInterface
+namespace ASD_project.UserInterface
 {
     public class EditorScreen : Screen
     {

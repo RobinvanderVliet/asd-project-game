@@ -1,9 +1,12 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+using ASD_project.Network;
+using ASD_project.Network.DTO;
+using ASD_project.Network.Enum;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
-namespace Network.Tests
+namespace ASD_Game.Tests.NetworkTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]

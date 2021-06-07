@@ -1,9 +1,9 @@
-﻿using Agent.Antlr.Ast;
-using Agent.Antlr.Ast.Comparables;
-using Agent.Antlr.Ast.Comparables.Subjects;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using ASD_project.Agent.Antlr.Ast;
+using ASD_project.Agent.Antlr.Ast.Comparables;
+using ASD_project.Agent.Antlr.Ast.Comparables.Subjects;
 
-namespace Agent.Tests.Parser
+namespace ASD_Game.Tests.AgentTests.Parser
 {
 
     [ExcludeFromCodeCoverage]
@@ -33,9 +33,9 @@ namespace Agent.Tests.Parser
             configuration.AddChild((new Setting("combat"))
                     .AddChild((new Condition())
                         .AddChild((new When())
-                            .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                            .AddChild(new Player("player"))
                             .AddChild(new Comparison("nearby"))
-                            .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                            .AddChild(new Player("player"))
                             .AddChild(new ActionReference("attack"))
                         )
                 )
@@ -43,9 +43,9 @@ namespace Agent.Tests.Parser
             configuration.AddChild((new Setting("combat"))
                 .AddChild((new Condition())
                     .AddChild((new When())
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                        .AddChild(new Player("player"))
                         .AddChild(new Comparison("nearby"))
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                        .AddChild(new Player("player"))
                         .AddChild(new ActionReference("attack"))
                     )
                 )
@@ -53,9 +53,9 @@ namespace Agent.Tests.Parser
             configuration.AddChild((new Setting("combat"))
                 .AddChild((new Condition())
                     .AddChild((new When())
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                        .AddChild(new Player("player"))
                         .AddChild(new Comparison("nearby"))
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                        .AddChild(new Player("player"))
                         .AddChild(new ActionReference("attack"))
                     )
                 )
@@ -72,9 +72,9 @@ namespace Agent.Tests.Parser
             configuration.AddChild((new Setting("combat"))
                 .AddChild((new Condition())
                     .AddChild((new When())
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                        .AddChild(new Player("player"))
                         .AddChild(new Comparison("nearby"))
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                        .AddChild(new Player("player"))
                         .AddChild(new ActionReference("attack"))
                     )
                 )
@@ -112,9 +112,9 @@ namespace Agent.Tests.Parser
             configuration.AddChild((new Setting("combat"))
                 .AddChild((new Condition())
                     .AddChild((new When())
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                        .AddChild(new Player("player"))
                         .AddChild(new Comparison("nearby"))
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                        .AddChild(new Player("player"))
                         .AddChild(new ActionReference("attack"))
                     )
                 )
@@ -145,7 +145,7 @@ namespace Agent.Tests.Parser
             configuration.AddChild((new Setting("explore"))
                 .AddChild((new Condition())
                     .AddChild((new When())
-                        .AddChild(new Antlr.Ast.Comparables.Subjects.Player("player"))
+                        .AddChild(new Player("player"))
                         .AddChild(new Comparison("finds"))
                         .AddChild(new Item("item"))
                         .AddChild(new ActionReference("collect"))

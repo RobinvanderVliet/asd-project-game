@@ -1,12 +1,12 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using InputHandling.Antlr.Ast;
+using ASD_project.InputHandling.Antlr.Ast;
+using ASD_project.InputHandling.Antlr.Parser;
+using ASD_project.InputHandling.Antlr.Transformer;
+using ASD_project.InputHandling.Exceptions;
 using InputHandling.Antlr.Grammar;
-using InputHandling.Antlr.Parser;
-using InputHandling.Antlr.Transformer;
-using InputHandling.Exceptions;
 
-namespace InputHandling.Antlr
+namespace ASD_project.InputHandling.Antlr
 {
     public class Pipeline : IAntlrErrorListener<IToken>, IPipeline
     {

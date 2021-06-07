@@ -1,5 +1,5 @@
 
-namespace Session
+namespace ASD_project.Session
 {
     public interface IGameSessionHandler
     {

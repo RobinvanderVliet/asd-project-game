@@ -1,10 +1,10 @@
-using Agent.Antlr.Ast;
-using Agent.Antlr.Ast.Comparables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ASD_project.Agent.Antlr.Ast;
+using ASD_project.Agent.Antlr.Ast.Comparables;
 
-namespace Agent.Antlr.Checker
+namespace ASD_project.Agent.Antlr.Checker
 {
     public class Checking
     {

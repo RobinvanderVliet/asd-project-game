@@ -1,18 +1,15 @@
-﻿using Network;
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using ActionHandling.DTO;
-using DatabaseHandler;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Repository;
-using DatabaseHandler.Services;
-using Network.DTO;
+using ASD_project.ActionHandling.DTO;
+using ASD_project.DatabaseHandler.POCO;
+using ASD_project.DatabaseHandler.Services;
+using ASD_project.Network;
+using ASD_project.Network.DTO;
+using ASD_project.Network.Enum;
+using ASD_project.World.Services;
 using Newtonsoft.Json;
-using WorldGeneration;
 
-
-namespace ActionHandling
+namespace ASD_project.ActionHandling
 {
     public class MoveHandler : IMoveHandler, IPacketHandler
     {
@@ -123,7 +120,6 @@ namespace ActionHandling
         private void HandleMove(MoveDTO moveDTO)
         {
             _worldService.UpdateCharacterPosition(moveDTO.UserId, moveDTO.XPosition, moveDTO.YPosition);
-            _worldService.DisplayWorld();
         }
     }
 }

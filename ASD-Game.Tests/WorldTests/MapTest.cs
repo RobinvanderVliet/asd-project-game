@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using DatabaseHandler.Services;
+using ASD_project.DatabaseHandler.Services;
+using ASD_project.World;
+using ASD_project.World.Models;
+using ASD_project.World.Models.Characters;
+using ASD_project.World.Models.Interfaces;
+using ASD_project.World.Models.TerrainTiles;
 using NUnit.Framework;
 using Moq;
-using WorldGeneration.Models;
-using WorldGeneration.Models.Interfaces;
-using WorldGeneration.Models.TerrainTiles;
 using Range = Moq.Range;
 
-//using WorldGeneration.DatabaseFunctions;
 
-namespace WorldGeneration.Tests
+namespace ASD_Game.Tests.WorldTests
 {
     
     [ExcludeFromCodeCoverage]  
@@ -104,7 +105,7 @@ namespace WorldGeneration.Tests
             //Assert ---------
             Assert.DoesNotThrow(() =>
             {
-                _sut.GetMapAroundCharacter(_character1, 1, _characterList);
+                _sut.GetCharArrayMapAroundCharacter(_character1, 1, _characterList);
             });
         }
         
@@ -113,7 +114,7 @@ namespace WorldGeneration.Tests
         {
             //Arrange ---------
             //Act ---------
-            _sut.GetMapAroundCharacter(_character1,2, _characterList);
+            _sut.GetCharArrayMapAroundCharacter(_character1,2, _characterList);
             //Assert ---------
             // _consolePrinterMock.Verify(consolePrinterMock => consolePrinterMock.PrintText(It.IsAny<string>()), Times.Exactly(25));
 
@@ -126,7 +127,7 @@ namespace WorldGeneration.Tests
             var viewDistance = 2;
             var maxLoadingLimit = (int)(Math.Pow(viewDistance, 4)  * _chunkSize / _chunkSize * 4);
             //Act ---------
-            _sut.GetMapAroundCharacter(_character1,viewDistance, _characterList);
+            _sut.GetCharArrayMapAroundCharacter(_character1,viewDistance, _characterList);
             //Assert ---------
             _databaseServiceMock.Verify(databaseService => databaseService.CreateAsync(It.IsAny<Chunk>()), Times.Between(0, maxLoadingLimit, Range.Inclusive));
         }
@@ -135,7 +136,7 @@ namespace WorldGeneration.Tests
         public void Test_DeleteMap_PassesCommandThrough() 
         {
             //Arrange ---------
-            _sut.GetMapAroundCharacter(_character1,1, _characterList);
+            _sut.GetCharArrayMapAroundCharacter(_character1,1, _characterList);
             //Act ---------
             _sut.DeleteMap();
             //Assert ---------
@@ -162,7 +163,7 @@ namespace WorldGeneration.Tests
             //Assert ---------
             Assert.Throws<InvalidOperationException>(() =>
             {
-                _sut.GetMapAroundCharacter(_character1,-1, _characterList);
+                _sut.GetCharArrayMapAroundCharacter(_character1,-1, _characterList);
             });
         }
         
@@ -171,7 +172,7 @@ namespace WorldGeneration.Tests
         {
             //Arrange ---------
             //Act ---------
-            _sut.GetMapAroundCharacter(_character1,2, _characterList);
+            _sut.GetCharArrayMapAroundCharacter(_character1,2, _characterList);
             //Assert ---------
             // _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText("  " + _chunks[0].Map[0].Symbol), Times.AtLeast(1));
             // _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText("  " + _chunks[1].Map[0].Symbol), Times.AtLeast(1));

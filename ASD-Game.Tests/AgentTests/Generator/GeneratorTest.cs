@@ -1,11 +1,11 @@
-﻿using Agent.Antlr.Ast;
-using Agent.Generator;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using ASD_project.Agent.Antlr.Ast;
+using ASD_project.Agent.Generator;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Diagnostics.CodeAnalysis;
 
-namespace Agent.Tests.Generator
+namespace ASD_Game.Tests.AgentTests.Generator
 {
     [ExcludeFromCodeCoverage]
     public class GeneratorTest

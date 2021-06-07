@@ -4,18 +4,21 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.IO;
-using DatabaseHandler;
-using DatabaseHandler.Repository;
-using DatabaseHandler.Services;
-using WorldGeneration;
-using ActionHandling;
-using Chat;
+using ASD_project.ActionHandling;
+using ASD_project.Chat;
+using ASD_project.DatabaseHandler;
+using ASD_project.DatabaseHandler.Repository;
+using ASD_project.DatabaseHandler.Services;
+using ASD_project.InputHandling;
+using ASD_project.InputHandling.Antlr;
+using ASD_project.InputHandling.Antlr.Transformer;
+using ASD_project.Items.Services;
+using ASD_project.Network;
+using ASD_project.Session;
+using ASD_project.UserInterface;
+using ASD_project.World.Services;
 using InputHandling;
 using InputHandling.Antlr;
-using InputHandling.Antlr.Transformer;
-using Network;
-using Session;
-using UserInterface;
 
 namespace ASD_project
 {
@@ -47,6 +50,8 @@ namespace ASD_project
                     services.AddScoped<IMoveHandler, MoveHandler>();
                     services.AddScoped<IWorldService, WorldService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
+                    services.AddScoped<IItemService, ItemService>();
+                    services.AddScoped<ISpawnHandler, SpawnHandler>();
                     services.AddSingleton<IDBConnection, DBConnection>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
                     services.AddScoped(typeof(IDatabaseService<>), typeof(DatabaseService<>));

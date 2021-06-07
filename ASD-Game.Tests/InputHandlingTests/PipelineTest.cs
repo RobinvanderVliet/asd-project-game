@@ -1,13 +1,13 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using InputHandling.Antlr;
-using InputHandling.Antlr.Ast;
-using InputHandling.Antlr.Ast.Actions;
-using InputHandling.Antlr.Transformer;
-using InputHandling.Exceptions;
+using ASD_project.InputHandling.Antlr;
+using ASD_project.InputHandling.Antlr.Ast;
+using ASD_project.InputHandling.Antlr.Ast.Actions;
+using ASD_project.InputHandling.Antlr.Transformer;
+using ASD_project.InputHandling.Exceptions;
 using Moq;
 using NUnit.Framework;
 
-namespace InputHandling.Tests
+namespace ASD_Game.Tests.InputHandlingTests
 {
     [ExcludeFromCodeCoverage]
     public class PipelineTest

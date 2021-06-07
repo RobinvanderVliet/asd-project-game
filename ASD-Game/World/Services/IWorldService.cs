@@ -1,4 +1,8 @@
-﻿namespace WorldGeneration
+﻿using System.Collections.Generic;
+using ASD_project.ActionHandling.DTO;
+using ASD_project.World.Models.Characters;
+
+namespace ASD_project.World.Services
 {
     public interface IWorldService
     {
@@ -8,5 +12,7 @@
         public void DeleteMap();
         public void GenerateWorld(int seed);
         public Player getCurrentPlayer();
+        public List<ItemSpawnDTO> getAllItems();
+        public void AddItemToWorld(ItemSpawnDTO itemSpawnDto);
     }
 }

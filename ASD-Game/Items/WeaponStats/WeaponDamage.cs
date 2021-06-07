@@ -1,4 +1,4 @@
-namespace Items.WeaponStats
+namespace ASD_project.Items.WeaponStats
 {
     public enum WeaponDamage
     {
