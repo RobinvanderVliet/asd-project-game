@@ -1,4 +1,3 @@
-
 namespace Session.GameConfiguration
 {
     public interface IGameConfigurationHandler

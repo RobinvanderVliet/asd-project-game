@@ -1,5 +1,4 @@
-﻿
-namespace Network
+﻿namespace Network
 {
     public interface INetworkComponent
     {

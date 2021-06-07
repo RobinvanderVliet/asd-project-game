@@ -1,4 +1,3 @@
-
 namespace UserInterface
 {
     public class GameStatScreen : Screen, IGameStatScreen

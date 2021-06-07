@@ -1,5 +1,4 @@
-﻿
-namespace Items
+﻿namespace Items
 {
     public abstract class Item
     {

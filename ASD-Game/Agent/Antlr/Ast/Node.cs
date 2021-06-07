@@ -3,6 +3,7 @@ using System.Text;
 
 namespace Agent.Antlr.Ast
 {
+
     public class Node
     {
 

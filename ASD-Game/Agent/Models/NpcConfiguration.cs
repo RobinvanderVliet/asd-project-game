@@ -1,5 +1,4 @@
-﻿
-namespace Agent.Models
+﻿namespace Agent.Models
 {
     public class NpcConfiguration : Configuration
     {

@@ -1,4 +1,3 @@
-
 namespace InputHandling
 {
     public interface IInputHandler

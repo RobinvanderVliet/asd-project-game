@@ -1,5 +1,4 @@
-﻿
-namespace Creature.Creature.StateMachine.Event
+﻿namespace Creature.Creature.StateMachine.Event
 {
     public class CreatureEvent
     {

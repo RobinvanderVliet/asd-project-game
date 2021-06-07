@@ -1,4 +1,3 @@
-
 namespace Items.Consumables.ConsumableStats
 {
     public enum Health

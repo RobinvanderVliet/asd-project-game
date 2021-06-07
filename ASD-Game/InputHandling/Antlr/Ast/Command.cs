@@ -1,5 +1,4 @@
-﻿
-namespace InputHandling.Antlr.Ast
+﻿namespace InputHandling.Antlr.Ast
 {
     public abstract class Command : ASTNode
     {

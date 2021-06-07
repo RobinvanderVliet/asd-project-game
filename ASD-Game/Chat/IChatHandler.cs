@@ -1,5 +1,4 @@
-﻿
-namespace Chat
+﻿namespace Chat
 {
     public interface IChatHandler
     {

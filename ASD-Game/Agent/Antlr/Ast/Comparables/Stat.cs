@@ -1,6 +1,7 @@
 ﻿
 namespace Agent.Antlr.Ast.Comparables
 {
+
     public class Stat : Comparable
     {
         public string Name { get; set; }

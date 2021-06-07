@@ -1,5 +1,4 @@
-﻿
-namespace Session.GameConfiguration
+﻿namespace Session.GameConfiguration
 {
     public enum ItemSpawnRate
     {

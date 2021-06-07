@@ -1,5 +1,4 @@
-﻿
-namespace Chat
+﻿namespace Chat
 {
     public enum ChatType
     {

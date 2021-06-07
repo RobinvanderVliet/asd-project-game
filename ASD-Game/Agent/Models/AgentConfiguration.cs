@@ -1,4 +1,3 @@
-
 namespace Agent.Models
 {
     public class AgentConfiguration : Configuration

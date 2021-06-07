@@ -1,7 +1,5 @@
 using Network;
 using System;
-using Network;
-using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
@@ -11,13 +9,8 @@ using DatabaseHandler.Services;
 using Messages;
 using Network.DTO;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
 using WorldGeneration;
 using WorldGeneration.Models.Interfaces;
-using Messages;
 
 namespace ActionHandling
 {

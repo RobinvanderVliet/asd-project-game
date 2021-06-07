@@ -1,4 +1,3 @@
-
 using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
 using Agent.Antlr.Ast.Comparables.Subjects;

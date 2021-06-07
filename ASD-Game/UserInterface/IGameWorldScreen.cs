@@ -1,5 +1,4 @@
-﻿
-namespace UserInterface
+﻿namespace UserInterface
 {
     public interface IGameWorldScreen : IScreen
     {

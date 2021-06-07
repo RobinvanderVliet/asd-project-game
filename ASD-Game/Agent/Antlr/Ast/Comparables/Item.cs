@@ -2,6 +2,7 @@
 
 namespace Agent.Antlr.Ast.Comparables
 {
+
     public class Item : Comparable
     {
 

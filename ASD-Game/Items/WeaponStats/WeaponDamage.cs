@@ -1,4 +1,3 @@
-
 namespace Items.WeaponStats
 {
     public enum WeaponDamage

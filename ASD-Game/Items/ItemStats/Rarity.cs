@@ -1,5 +1,4 @@
-﻿
-namespace Items.ItemStats
+﻿namespace Items.ItemStats
 {
     public enum Rarity
     {

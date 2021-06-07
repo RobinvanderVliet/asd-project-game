@@ -1,8 +1,8 @@
 using WorldGeneration.Models.Interfaces;
 using System;
 using System.Collections.Generic;
-using UserInterface;
 using Items;
+using UserInterface;
 
 namespace WorldGeneration
 {

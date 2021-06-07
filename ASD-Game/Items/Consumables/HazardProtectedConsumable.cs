@@ -1,5 +1,4 @@
-﻿
-namespace Items.Consumables
+﻿namespace Items.Consumables
 {
     public class HazardProtectedConsumable : Consumable
     {

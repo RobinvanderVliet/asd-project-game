@@ -1,5 +1,4 @@
-﻿
-namespace Agent.Antlr.Ast
+﻿namespace Agent.Antlr.Ast
 {
     public class AST
     {

@@ -1,5 +1,4 @@
-﻿
-namespace InputHandling.Antlr.Ast.Actions
+﻿namespace InputHandling.Antlr.Ast.Actions
 {
     public class ItemFrequency : Command
     {

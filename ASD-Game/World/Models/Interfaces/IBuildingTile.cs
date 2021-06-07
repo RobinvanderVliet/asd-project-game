@@ -1,5 +1,4 @@
-﻿
-namespace WorldGeneration.Models.Interfaces
+﻿namespace WorldGeneration.Models.Interfaces
 {
     public interface IBuildingTile : ITile
     {
