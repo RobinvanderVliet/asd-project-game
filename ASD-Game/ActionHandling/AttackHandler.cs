@@ -160,7 +160,7 @@ namespace ActionHandling
         private void InsertStaminaToDatabase(AttackDTO attackDto)
         {
             var player = _playerDatabaseService.GetAllAsync().Result
-                .FirstOrDefault(player => player.PlayerGuid == attackDto.PlayerGuid);
+                .FirstOrDefault(player => player.PlayerGuid == attackDto.PlayerGuid && player.GameGuid == _clientController.SessionId);
             player.Stamina -= ATTACK_STAMINA;
             _playerDatabaseService.UpdateAsync(player);
         }

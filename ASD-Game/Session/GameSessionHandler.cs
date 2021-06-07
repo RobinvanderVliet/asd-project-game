@@ -88,7 +88,7 @@ namespace Session
                 playerPosition[1] = playerY;
                 players.Add(client[0], playerPosition);
                 var tmpPlayer = new PlayerPOCO
-                    {PlayerGuid = client[0], GameGUIDAndPlayerGuid = gamePOCO.GameGuid+_clientController.GetOriginId(), PlayerName = client[1], GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY};
+                    {PlayerGuid = client[0], GameGUIDAndPlayerGuid = gamePOCO.GameGuid+_clientController.GetOriginId(), PlayerName = client[1], GameGuid = gamePOCO.GameGuid, XPosition = playerX, YPosition = playerY, Stamina = 100, Health = 100};
                 _playerServicesDb.CreateAsync(tmpPlayer);
                 var playerHelmet = new PlayerItemPOCO()
                 {

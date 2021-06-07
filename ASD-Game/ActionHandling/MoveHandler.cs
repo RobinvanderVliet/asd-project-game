@@ -114,9 +114,11 @@ namespace ActionHandling
 
         private void InsertToDatabase(MoveDTO moveDTO)
         {
-            
-            var player = _playerDatabaseService.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId);
 
+            var allplayer = _playerDatabaseService.GetAllAsync();
+            allplayer.Wait();   
+            var player = allplayer.Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId && player.GameGuid == _clientController.SessionId);
+            
             player.XPosition = moveDTO.XPosition;
             player.YPosition = moveDTO.YPosition;
             _playerDatabaseService.UpdateAsync(player);
