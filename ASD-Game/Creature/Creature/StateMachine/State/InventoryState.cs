@@ -26,15 +26,15 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do()
         {
-            foreach (var builderInfo in _builderInfoList)
-            {
-            if (builderInfo.Action == "attack")
-            {
-                if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo.RuleSets, "item"))
-                {
-                    //TODO implement Attack logic + gather targetData
-                }
-            }
+            // foreach (var builderInfo in _builderInfoList)
+            // {
+            // if (builderInfo.Action == "attack")
+            // {
+            //     if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo.RuleSets, "item"))
+            //     {
+            //         //TODO implement Attack logic + gather targetData
+            //     }
+            // }
         }
     }
 }

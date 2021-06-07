@@ -29,5 +29,15 @@ namespace Creature.Tests
             _sut = new Agent(Name, XPosition, YPosition, Symbol, Id);
         }
         
+        [Test]
+        public void Test_CreateMonster_ObjectValuesAreSet()
+        {
+            // Assert ----------
+            Assert.That(_sut.AgentStateMachine != null);
+            Assert.That(_sut.Id == Id);
+            Assert.That(_sut.Name == Name);
+            Assert.That(_sut.Symbol == Symbol);
+        }
+        
     }
 }

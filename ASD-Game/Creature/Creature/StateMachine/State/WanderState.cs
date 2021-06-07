@@ -34,18 +34,18 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do()
         {
-            foreach (var builderInfo in _builderInfoList)
-            {
-                if (builderInfo.Action == "wander")
-                {
-                    if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo.RuleSets, "wander"))
-                    {
-                        //TODO implement Attack logic + gather targetData
-                        int steps = new Random().Next(10);
-                        _moveHandler.SendMove(pickRandomDirection(), steps);
-                    }
-                }
-            }
+            // foreach (var builderInfo in _builderInfoList)
+            // {
+            //     if (builderInfo.Action == "wander")
+            //     {
+            //         if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo.RuleSets, "wander"))
+            //         {
+            //             //TODO implement Attack logic + gather targetData
+            //             int steps = new Random().Next(10);
+            //             _moveHandler.SendMove(pickRandomDirection(), steps);
+            //         }
+            //     }
+            // }
         }
 
         private string pickRandomDirection()

@@ -30,26 +30,26 @@ namespace Creature.Creature.StateMachine.State
         }
         public override void Do()
         {
-            foreach (var builderInfo in _builderInfoList)
-            {
-                if (builderInfo.Action == "attack")
-                {
-                    if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo.RuleSets, "flee"))
-                    {
-                        //TODO implement Attack logic + gather targetData
-                        String direction = "";
-                        if (Vector2.DistanceSquared(_creatureData.Position, _target.Position) <= Vector2.DistanceSquared(new Vector2(_creatureData.Position.X + 1, _creatureData.Position.Y + 1), _target.Position))
-                        {
-                            direction = "up";
-                        }
-                        else if (Vector2.DistanceSquared(_creatureData.Position, _target.Position) <= Vector2.DistanceSquared(new Vector2(_creatureData.Position.X - 1, _creatureData.Position.Y - 1), _target.Position))
-                        {
-                            direction = "down";
-                        }
-                        _moveHandler.SendMove(direction, 1);
-                    }
-                    }
-                }
+            // foreach (var builderInfo in _builderInfoList)
+            // {
+            //     if (builderInfo.Action == "attack")
+            //     {
+            //         if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo.RuleSets, "flee"))
+            //         {
+            //             //TODO implement Attack logic + gather targetData
+            //             String direction = "";
+            //             if (Vector2.DistanceSquared(_creatureData.Position, _target.Position) <= Vector2.DistanceSquared(new Vector2(_creatureData.Position.X + 1, _creatureData.Position.Y + 1), _target.Position))
+            //             {
+            //                 direction = "up";
+            //             }
+            //             else if (Vector2.DistanceSquared(_creatureData.Position, _target.Position) <= Vector2.DistanceSquared(new Vector2(_creatureData.Position.X - 1, _creatureData.Position.Y - 1), _target.Position))
+            //             {
+            //                 direction = "down";
+            //             }
+            //             _moveHandler.SendMove(direction, 1);
+            //         }
+            //         }
+            //     }
             }
     }
 }
