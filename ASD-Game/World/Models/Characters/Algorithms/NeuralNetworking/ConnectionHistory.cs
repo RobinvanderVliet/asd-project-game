@@ -22,7 +22,7 @@ namespace Creature.Creature.NeuralNetworking
         }
 
         //returns whether the genome matches the original genome and the connection is between the same nodes
-        public Boolean Matches(Genome genome, NeuralNode from, NeuralNode to)
+        public bool Matches(Genome genome, NeuralNode from, NeuralNode to)
         {
             if (genome.Genes.Count == InnovationNumbers.Count && (from.Number == FromNode && to.Number == ToNode))
             {
