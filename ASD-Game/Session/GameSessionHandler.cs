@@ -8,8 +8,6 @@ using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
 using Session.GameConfiguration;
-using System;
-using System.Collections.Generic;
 using UserInterface;
 using WorldGeneration;
 using WorldGeneration.Models;
