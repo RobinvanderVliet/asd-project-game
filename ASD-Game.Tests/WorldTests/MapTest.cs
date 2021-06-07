@@ -30,9 +30,7 @@ namespace ASD_Game.Tests.WorldTests
         
         //Declaration of mocks
         private INoiseMapGenerator _noiseMapGeneratorMockObject;
-        private IDatabaseService<Chunk> _databaseServiceMockObject;
         private Mock<INoiseMapGenerator> _noiseMapGeneratorMock;
-        private Mock<IDatabaseService<Chunk>> _databaseServiceMock;
 
 
         [SetUp]
@@ -61,12 +59,6 @@ namespace ASD_Game.Tests.WorldTests
             _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(It.IsAny<int>(),It.IsAny<int>(), 2))
                 .Returns((int x, int y, int size) => new Chunk(x, y, map5, _chunkSize, 0)).Verifiable();
             _noiseMapGeneratorMockObject = _noiseMapGeneratorMock.Object;
-            
-            _databaseServiceMock = new Mock<IDatabaseService<Chunk>>();
-            _databaseServiceMock.Setup(databaseService => databaseService.CreateAsync(It.IsAny<Chunk>())).Verifiable();
-            _databaseServiceMock.Setup(databaseService => databaseService.GetAllAsync()).ReturnsAsync(_chunks);
-            _databaseServiceMock.Setup(databaseService => databaseService.DeleteAllAsync()).Verifiable();
-            _databaseServiceMockObject = _databaseServiceMock.Object;
 
             _character1 = new Player("naam1", 0, 0, CharacterSymbol.FRIENDLY_PLAYER, "a");
             _character2 = new Player("naam2", 0, 0, CharacterSymbol.FRIENDLY_PLAYER, "b");
@@ -75,7 +67,7 @@ namespace ASD_Game.Tests.WorldTests
             _characterList.Add(_character1);
             _characterList.Add(_character2);
             
-            _sut = new Map(_noiseMapGeneratorMockObject, _chunkSize, _databaseServiceMockObject, 0);
+            _sut = new Map(_noiseMapGeneratorMockObject, _chunkSize, _chunks);
         }
         
         [Test]
@@ -86,7 +78,7 @@ namespace ASD_Game.Tests.WorldTests
             //Assert ---------
             Assert.DoesNotThrow(() =>
             {
-                var map = new Map(_noiseMapGeneratorMockObject,21, _databaseServiceMockObject, _chunks);
+                var map = new Map(_noiseMapGeneratorMockObject,21, _chunks);
             });
         }
         
@@ -122,7 +114,7 @@ namespace ASD_Game.Tests.WorldTests
             //Act ---------
             _sut.GetCharArrayMapAroundCharacter(_character1,viewDistance, _characterList);
             //Assert ---------
-            _databaseServiceMock.Verify(databaseService => databaseService.CreateAsync(It.IsAny<Chunk>()), Times.Between(0, maxLoadingLimit, Range.Inclusive));
+            _noiseMapGeneratorMock.Verify(noiseMapGenerator => noiseMapGenerator.GenerateChunk(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()), Times.Between(0, maxLoadingLimit, Range.Inclusive));
         }
         
         [Test]
@@ -133,7 +125,7 @@ namespace ASD_Game.Tests.WorldTests
             //Act ---------
             _sut.DeleteMap();
             //Assert ---------
-            _databaseServiceMock.Verify( databaseService => databaseService.DeleteAllAsync(), Times.Once);
+            Assert.That(_chunks.Count == 0);
         }
         
         [Test]
@@ -144,7 +136,7 @@ namespace ASD_Game.Tests.WorldTests
             //Assert ---------
             Assert.Throws<InvalidOperationException>(() =>
             {
-                // var map = new Map(_noiseMapGeneratorMockObject,-21, _consolePrinterMockObject, _databaseServiceMockObject, 0, _chunks);
+                var map = new Map(_noiseMapGeneratorMockObject,-21);
             });
         }
         

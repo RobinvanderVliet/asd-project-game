@@ -13,14 +13,12 @@ namespace ASD_project.World
     {
         private readonly int _chunkSize;
         private IList<Chunk> _chunks;
-        private readonly IDatabaseService<Chunk> _chunkDBService;
         private ChunkHelper _chunkHelper;
         private readonly INoiseMapGenerator _noiseMapGenerator;
 
         public Map(
             INoiseMapGenerator noiseMapGenerator
             , int chunkSize
-            , IDatabaseService<Chunk> chunkDbServices
             , IList<Chunk> chunks = null
         )
         {
@@ -31,10 +29,9 @@ namespace ASD_project.World
             _chunkSize = chunkSize;
             _chunks = chunks ?? new List<Chunk>();
             _noiseMapGenerator = noiseMapGenerator;
-            _chunkDBService = chunkDbServices;
         }
 
-        public void LoadArea(int playerX, int playerY, int viewDistance) 
+        private void LoadArea(int playerX, int playerY, int viewDistance) 
         { // Gets a list of chunks it has to load. Then generates the ones it can't find in the list of loaded chunks yet.
             var chunksWithinLoadingRange = GetListOfChunksWithinLoadingRange(playerX, playerY, viewDistance);
             foreach (var chunkCoordinates in chunksWithinLoadingRange)
@@ -46,7 +43,7 @@ namespace ASD_project.World
             }
         }
 
-        public List<int[]> GetListOfChunksWithinLoadingRange(int playerX, int playerY, int viewDistance)
+        private List<int[]> GetListOfChunksWithinLoadingRange(int playerX, int playerY, int viewDistance)
         {
             var maxX = (playerX + viewDistance * 2 + _chunkSize) / _chunkSize; 
             var minX = (playerX - viewDistance * 2 - _chunkSize) / _chunkSize;
@@ -104,7 +101,7 @@ namespace ASD_project.World
             return tileArray;
         }
         
-        public string GetDisplaySymbolForSpecificTile(ITile tile, List<Character> characters)
+        private string GetDisplaySymbolForSpecificTile(ITile tile, List<Character> characters)
         { // Returns a string with whichever symbol it can find first in this order:
           // 1. Character symbol, 2 Item symbol (shows a chest tile), 3 Tile symbol.
             var characterOnTile = characters.FirstOrDefault(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
@@ -119,12 +116,12 @@ namespace ASD_project.World
             return tile.Symbol;                    
         }
 
-        public Chunk GenerateNewChunk(int chunkX, int chunkY)
+        private Chunk GenerateNewChunk(int chunkX, int chunkY)
         { // Calls upon the noise map generator to generate a chunk based on a seed. This will ensure the chunk is the same for a given seed every time you generate it.
             return _noiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize);
         }
 
-        public Chunk GetLoadedChunkForTileXAndY(int x, int y)
+        private Chunk GetLoadedChunkForTileXAndY(int x, int y)
         { // Tries to find a chunk in the already generated chunks. If it cannot be found it returns null.
           // It works by converting each chunk's chunk coordinates to standard coordinates. This is done by multiplying the chunk coordinates by the size of the chunk.
           // Then it checks if the x and y of the coordinates you're looking for fall within the chunk.

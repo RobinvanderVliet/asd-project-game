@@ -26,7 +26,7 @@ namespace ASD_project.World
                 seed = GenerateSeed();
             }
 
-            return new Map(new NoiseMapGenerator(seed, itemService, items), chunkSize, new DatabaseService<Chunk>());
+            return new Map(new NoiseMapGenerator(seed, itemService, items), chunkSize);
         }
 
         public int GenerateSeed()

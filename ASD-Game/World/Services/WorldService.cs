@@ -142,14 +142,7 @@ namespace ASD_project.World.Services
         {
             return _world.CheckIfCharacterOnTile(tile);
         }
-
-
-        public void LoadArea(int playerX, int playerY, int viewDistance)
-        {
-            _world.LoadArea(playerX, playerY, viewDistance);
-        }
-
-
+        
         public List<Player> GetPlayers()
         {
             return _world.GetAllPlayers();

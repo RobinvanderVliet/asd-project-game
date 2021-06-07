@@ -110,12 +110,7 @@ namespace ASD_project.World
             List<Character> characters = _players.Cast<Character>().ToList();
             return characters;
         }
-        
-        public void LoadArea(int playerX, int playerY, int viewDistance)
-        {
-            _map.LoadArea(playerX, playerY, viewDistance);
-        }
-        
+
         public ITile GetCurrentTile()
         {
             return _map.GetLoadedTileByXAndY(CurrentPlayer.XPosition, CurrentPlayer.YPosition);

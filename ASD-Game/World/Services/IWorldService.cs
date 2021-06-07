@@ -17,16 +17,9 @@ namespace ASD_project.World.Services
         public List<ItemSpawnDTO> getAllItems();
         public ITile GetTile(int x, int y);
         public void AddItemToWorld(ItemSpawnDTO itemSpawnDto);
-        /// <summary>
         /// Returns items on title for the player of this instance.
-        /// </summary>
-        /// <returns></returns>
         public IList<Item> GetItemsOnCurrentTile();
-        /// <summary>
         /// Returns items on tile for the specified player.
-        /// </summary>
-        /// <param name="player"></param>
-        /// <returns></returns>
         public IList<Item> GetItemsOnCurrentTile(Player player);
         public string SearchCurrentTile();
         public Player GetCurrentPlayer();
