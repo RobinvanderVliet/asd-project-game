@@ -28,17 +28,17 @@ namespace Session
         private IGameConfigurationHandler _gameConfigurationHandler;
         private IScreenHandler _screenHandler;
 
-        private IServicesDb<PlayerPOCO> _playerServicesDb;
-        private IServicesDb<GamePOCO> _gameServicesDb;
-        private IServicesDb<GameConfigurationPOCO> _gameConfigServicesDb;
-        private IServicesDb<PlayerItemPoco> _playerItemServicesDb;
+        private IDatabaseService<PlayerPOCO> _playerServicesDb;
+        private IDatabaseService<GamePOCO> _gameServicesDb;
+        private IDatabaseService<GameConfigurationPOCO> _gameConfigServicesDb;
+        private IDatabaseService<PlayerItemPoco> _playerItemServicesDb;
 
         private Random random = new Random();
         private Timer AIUpdateTimer;
 
-        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IServicesDb<PlayerPOCO> playerServicesDb,
-            IServicesDb<GamePOCO> gameServicesDb, IServicesDb<GameConfigurationPOCO> gameConfigservicesDb, IGameConfigurationHandler gameConfigurationHandler,
-            IScreenHandler screenHandler, IServicesDb<PlayerItemPoco> playerItemServicesDb, IMessageService messageService)
+        public GameSessionHandler(IClientController clientController, IWorldService worldService, ISessionHandler sessionHandler, IDatabaseService<PlayerPOCO> playerServicesDb,
+            IDatabaseService<GamePOCO> gameServicesDb, IDatabaseService<GameConfigurationPOCO> gameConfigservicesDb, IGameConfigurationHandler gameConfigurationHandler,
+            IScreenHandler screenHandler, IDatabaseService<PlayerItemPoco> playerItemServicesDb, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
@@ -199,8 +199,8 @@ namespace Session
 
         private void setStateMachine(Monster monster)
         {
-            ICharacterStateMachine CSM = new MonsterStateMachine(monster._monsterData, null);
-            monster._monsterStateMachine = CSM;
+            ICharacterStateMachine CSM = new MonsterStateMachine(monster.MonsterData, null);
+            monster.MonsterStateMachine = CSM;
         }
     }
 }

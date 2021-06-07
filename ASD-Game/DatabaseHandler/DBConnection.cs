@@ -1,15 +1,17 @@
-using DatabaseHandler.POCO;
-using LiteDB;
-using LiteDB.Async;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using DatabaseHandler.POCO;
+using LiteDB;
+using LiteDB.Async;
 
 namespace DatabaseHandler
 {
     [ExcludeFromCodeCoverage]
     public class DBConnection : IDBConnection
     {
+        private static readonly char _separator = Path.DirectorySeparatorChar;
+
         public void SetForeignKeys()
         {
             //FK Player -> Game
@@ -52,7 +54,7 @@ namespace DatabaseHandler
             {
                 var currentDirectory = Directory.GetCurrentDirectory();
                 var connection =
-                    new LiteDatabaseAsync(@"Filename=" + currentDirectory + "\\ASD-Game.db;connection=shared;");
+                    new LiteDatabaseAsync($"Filename={currentDirectory}{_separator}ASD-Game.db;connection=shared;");
                 return connection;
             }
             catch (Exception ex)

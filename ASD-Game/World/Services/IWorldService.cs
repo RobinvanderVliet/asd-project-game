@@ -1,6 +1,7 @@
-﻿using Creature.Creature.NeuralNetworking;
-using Items;
+using Creature.Creature.NeuralNetworking;
+using WorldGeneration.Models.Interfaces;
 using System.Collections.Generic;
+using Items;
 
 namespace WorldGeneration
 {
@@ -18,11 +19,11 @@ namespace WorldGeneration
 
         public void GenerateWorld(int seed);
 
+        public IList<Item> GetItemsOnCurrentTile(Player player);
+
         public IList<Item> GetItemsOnCurrentTile();
 
         List<Character> getCreatureMoves();
-
-        List<Player> GetPlayers();
 
         List<Character> GetMonsters();
 
@@ -30,13 +31,19 @@ namespace WorldGeneration
 
         public char[,] GetMapAroundCharacter(Character character);
 
-        public IList<Item> GetItemsOnCurrentTile(Player player);
+        public Player GetCurrentPlayer();
+
+        public Player GetPlayer(string id);
+
+        public List<Player> GetPlayers();
+
+        public ITile GetTile(int x, int y);
+
+        public bool CheckIfCharacterOnTile(ITile tile);
+
+        public void LoadArea(int playerX, int playerY, int viewDistance);
 
         public string SearchCurrentTile();
-
-        public Player getCurrentPlayer();
-
-        public Player GetPlayer(string userId);
 
         public void DisplayStats();
     }

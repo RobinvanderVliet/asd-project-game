@@ -51,7 +51,7 @@ namespace WorldGeneration
 
         public ITile GetTileFromNoise(float noise, int x, int y)
         {
-            // this function is public for unit testing purposes only.
+            y++;
             return (noise * 10) switch
             {
                 (< -8) => new WaterTile(x, y),

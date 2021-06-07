@@ -1,6 +1,7 @@
 using Creature.Creature;
 using Creature.Creature.NeuralNetworking;
 using Items;
+using WorldGeneration.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -49,7 +50,7 @@ namespace WorldGeneration
             _world = new World(seed, 6, new MapFactory(), _screenHandler);
         }
 
-        public Player getCurrentPlayer()
+        public Player GetCurrentPlayer()
         {
             return _world.CurrentPlayer;
         }
@@ -62,11 +63,6 @@ namespace WorldGeneration
         public char[,] GetMapAroundCharacter(Character character)
         {
             return _world.GetMapAroundCharacter(character);
-        }
-
-        public List<Player> GetPlayers()
-        {
-            return _world._players;
         }
 
         public List<Character> GetMonsters()
@@ -88,11 +84,6 @@ namespace WorldGeneration
         public List<Character> getCreatureMoves()
         {
             return _world.movesList;
-        }
-
-        public Player GetPlayer(string userId)
-        {
-            return _world?.GetPlayer(userId);
         }
 
         public IList<Item> GetItemsOnCurrentTile()
@@ -119,9 +110,29 @@ namespace WorldGeneration
             return result;
         }
 
+        public Player GetPlayer(string userId)
+        {
+            return _world.GetPlayer(userId);
+        }
+
+        public ITile GetTile(int x, int y)
+        {
+            return _world.GetLoadedTileByXAndY(x, y);
+        }
+
+        public bool CheckIfCharacterOnTile(ITile tile)
+        {
+            return _world.CheckIfCharacterOnTile(tile);
+        }
+
+        public void LoadArea(int playerX, int playerY, int viewDistance)
+        {
+            _world.LoadArea(playerX, playerY, viewDistance);
+        }
+
         public void DisplayStats()
         {
-            Player player = getCurrentPlayer();
+            Player player = GetCurrentPlayer();
             _screenHandler.SetStatValues(
                 player.Name,
                 0,
@@ -135,6 +146,11 @@ namespace WorldGeneration
                 player.Inventory.GetConsumableAtIndex(0)?.ItemName ?? "Empty",
                 player.Inventory.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
                 player.Inventory.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
+        }
+
+        public List<Player> GetPlayers()
+        {
+            return _world.GetAllPlayers();
         }
     }
 }

@@ -17,9 +17,9 @@ namespace DatabaseHandler.Tests
         private ChunkFaker _chunkFaker;
         private MockRepository _mockRepository;
         private Mock<IRepository<Chunk>> _repository;
-        private IServicesDb<Chunk> _services;
+        private IDatabaseService<Chunk> _services;
         private IList<Chunk> _chunkInMemoryDatabase;
-        
+
         [SetUp]
         public void Setup()
         {
@@ -27,7 +27,7 @@ namespace DatabaseHandler.Tests
             _repository = _mockRepository.Create<IRepository<Chunk>>();
             _chunkFaker = new ChunkFaker();
             _chunkInMemoryDatabase = _chunkFaker.Generate(50);
-            
+
             _repository.Setup(repo => repo.GetAllAsync())
                 .ReturnsAsync(() => _chunkInMemoryDatabase);
         }
@@ -39,7 +39,7 @@ namespace DatabaseHandler.Tests
             var r = rnd.Next(_chunkInMemoryDatabase.Count);
             return _chunkInMemoryDatabase[r];
         }
-        
+
         /// <summary>
         /// CreateAsync(Chunk)
         ///
@@ -57,7 +57,7 @@ namespace DatabaseHandler.Tests
                 return "succeeded";
             });
             _services = new DatabaseService<Chunk>(_repository.Object);
-            
+
             // Act
             var createChunk = _services.CreateAsync(chunk).Result;
             var result = _services.GetAllAsync().Result.FirstOrDefault(c => c.X == chunk.X && c.Y == chunk.Y);
@@ -67,7 +67,7 @@ namespace DatabaseHandler.Tests
             Assert.AreEqual(chunk.Y, result.Y);
             Assert.AreEqual(chunk.RowSize, result.RowSize);
         }
-        
+
         /// <summary>
         /// CreateAsync(Chunk)
         ///
@@ -90,7 +90,7 @@ namespace DatabaseHandler.Tests
                 return "succeeded";
             });
             _services = new DatabaseService<Chunk>(_repository.Object);
-            
+
             // Act
             var createChunk = _services.CreateAsync(chunk).Result;
 
@@ -100,8 +100,6 @@ namespace DatabaseHandler.Tests
                 var errorChunk = _services.CreateAsync(chunk).Result;
             });
         }
-
-        
 
         /// <summary>
         /// ReadAsync(Chunk)
@@ -115,10 +113,10 @@ namespace DatabaseHandler.Tests
             // Arrange
             var chunk = GetRandomChunk();
             _services = new DatabaseService<Chunk>(_repository.Object);
-            
+
             // Act
             var result = _services.GetAllAsync().Result.FirstOrDefault(c => c.X == chunk.X && c.Y == chunk.Y);
-        
+
             // Assert
             Assert.AreEqual(chunk.X, result.X);
             Assert.AreEqual(chunk.Y, result.Y);
@@ -126,7 +124,7 @@ namespace DatabaseHandler.Tests
             // arrays not supported
             // Assert.AreSame(chunk.Map, result.Map);
         }
-        
+
         /// <summary>
         /// ReadAsync(Chunk)
         ///
@@ -145,7 +143,7 @@ namespace DatabaseHandler.Tests
             };
             _services = new DatabaseService<Chunk>(_repository.Object);
             var result = _services.GetAllAsync().Result.FirstOrDefault(c => c.X == chunk.X && c.Y == chunk.Y);
-            
+
             // Act & Assert
             Assert.AreEqual(null, result);
         }
@@ -171,7 +169,7 @@ namespace DatabaseHandler.Tests
                 }
             );
             _services = new DatabaseService<Chunk>(_repository.Object);
-            
+
             // Act
             chunk.RowSize = 1337;
             var updateChunk = _services.UpdateAsync(chunk).Result;
@@ -184,7 +182,7 @@ namespace DatabaseHandler.Tests
             // arrays not supported
             // Assert.AreSame(chunk.Map, result.Map);
         }
-        
+
         /// <summary>
         /// UpdateAsync(Chunk)
         ///
@@ -205,7 +203,7 @@ namespace DatabaseHandler.Tests
                 }
             );
             _services = new DatabaseService<Chunk>(_repository.Object);
-            
+
             // Act & Assert
             Assert.Throws<InvalidOperationException>(() =>
             {
@@ -216,7 +214,7 @@ namespace DatabaseHandler.Tests
                 }).Result;
             });
         }
-        
+
         /// <summary>
         /// DeleteAsync(Chunk)
         ///
@@ -232,16 +230,16 @@ namespace DatabaseHandler.Tests
             _repository.Setup(chunkRepo => chunkRepo.DeleteAsync(It.IsAny<Chunk>())).ReturnsAsync(
                 (Chunk item) => _chunkInMemoryDatabase.Remove(item) ? 1 : 0);
             _services = new DatabaseService<Chunk>(_repository.Object);
-            
+
             // Act
             var result = _services.DeleteAsync(chunk).Result;
             var checkChunk = _services.GetAllAsync().Result.FirstOrDefault(c => c.X == chunk.X && c.Y == chunk.Y);
-            
+
             // Assert
             Assert.AreEqual(1, result);
             Assert.AreEqual(null, checkChunk);
         }
-        
+
         /// <summary>
         /// DeleteAsync(Chunk)
         ///
@@ -256,7 +254,7 @@ namespace DatabaseHandler.Tests
             _repository.Setup(chunkRepo => chunkRepo.DeleteAsync(It.IsAny<Chunk>())).ReturnsAsync(
                 (Chunk item) => _chunkInMemoryDatabase.Remove(item) ? 1 : throw new InvalidOperationException());
             _services = new DatabaseService<Chunk>(_repository.Object);
-            
+
             // Act & Assert
             Assert.Throws<InvalidOperationException>(() =>
             {
@@ -267,7 +265,7 @@ namespace DatabaseHandler.Tests
                 }).Result;
             });
         }
-        
+
         /// <summary>
         /// GetAllAsync()
         ///
@@ -280,7 +278,7 @@ namespace DatabaseHandler.Tests
             // Arrange
             _repository.Setup(chunkRepo => chunkRepo.GetAllAsync()).ReturnsAsync(_chunkInMemoryDatabase);
             _services = new DatabaseService<Chunk>(_repository.Object);
-            
+
             // Act
             var expected = _chunkInMemoryDatabase;
             var result = _services.GetAllAsync().Result;
@@ -291,7 +289,7 @@ namespace DatabaseHandler.Tests
                 f.Y == e.Y &&
                 f.RowSize == e.RowSize)));
         }
-        
+
         /// <summary>
         /// DeleteAllAsync()
         ///
@@ -303,13 +301,13 @@ namespace DatabaseHandler.Tests
         {
             // Arrange
             _repository.Setup(chunkRepo => chunkRepo.GetAllAsync()).ReturnsAsync(_chunkInMemoryDatabase);
-            _repository.Setup(chunkRepo => chunkRepo.DeleteAllAsync()).ReturnsAsync(() => 
+            _repository.Setup(chunkRepo => chunkRepo.DeleteAllAsync()).ReturnsAsync(() =>
             {
                 _chunkInMemoryDatabase.Clear();
                 return 1;
             });
             _services = new DatabaseService<Chunk>(_repository.Object);
-            
+
             // Act
             var deleteAction = _services.DeleteAllAsync().Result;
             var getAllAction = _services.GetAllAsync().Result;

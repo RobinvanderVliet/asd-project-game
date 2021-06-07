@@ -17,11 +17,11 @@ namespace ActionHandling
         private IClientController _clientController;
         private IWorldService _worldService;
         private IMessageService _messageService;
-        private IServicesDb<PlayerPOCO> _playerServicesDb;
+        private IDatabaseService<PlayerPOCO> _playerServicesDb;
 
         private List<Character> _creatureMoves = new List<Character>();
 
-        public MoveHandler(IClientController clientController, IWorldService worldService, IServicesDb<PlayerPOCO> playerServicesDb, IMessageService messageService)
+        public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerServicesDb, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Move);
@@ -59,7 +59,7 @@ namespace ActionHandling
                     break;
             }
 
-            var currentPlayer = _worldService.getCurrentPlayer();
+            var currentPlayer = _worldService.GetCurrentPlayer();
 
             MoveDTO moveDTO = new(currentPlayer.Id, currentPlayer.XPosition + x, currentPlayer.YPosition + y);
 
