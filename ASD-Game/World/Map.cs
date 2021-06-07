@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using ASD_project.DatabaseHandler.Services;
 using ASD_project.World.Helpers;
 using ASD_project.World.Models;
 using ASD_project.World.Models.Characters;
@@ -62,6 +62,7 @@ namespace ASD_project.World
         }
         
         [Obsolete("DisplayMap is deprecated, please implement GetCharArrayMapAroundCharacter as soon as possible.")]
+        [ExcludeFromCodeCoverage]
         public void DisplayMap(Character currentPlayer, int viewDistance, List<Character> characters)
         {
             var playerX = currentPlayer.XPosition;
@@ -104,7 +105,7 @@ namespace ASD_project.World
         private string GetDisplaySymbolForSpecificTile(ITile tile, List<Character> characters)
         { // Returns a string with whichever symbol it can find first in this order:
           // 1. Character symbol, 2 Item symbol (shows a chest tile), 3 Tile symbol.
-            var characterOnTile = characters.FirstOrDefault(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
+            var characterOnTile = characters.FirstOrDefault(character => character.XPosition == tile.XPosition && character.YPosition == tile.YPosition);
             if(characterOnTile != null)
             {
                 return characterOnTile.Symbol;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using ASD_project.DatabaseHandler.Services;
 using ASD_project.World;
 using ASD_project.World.Models;
@@ -61,7 +62,7 @@ namespace ASD_Game.Tests.WorldTests
             _noiseMapGeneratorMockObject = _noiseMapGeneratorMock.Object;
 
             _character1 = new Player("naam1", 0, 0, CharacterSymbol.FRIENDLY_PLAYER, "a");
-            _character2 = new Player("naam2", 0, 0, CharacterSymbol.FRIENDLY_PLAYER, "b");
+            _character2 = new Player("naam2", 1, 1, CharacterSymbol.ENEMY_PLAYER, "b");
             
             _characterList = new List<Character>();
             _characterList.Add(_character1);
@@ -83,7 +84,7 @@ namespace ASD_Game.Tests.WorldTests
         }
         
         [Test]
-        public void Test_GetMapAroundCharacter_DoesntThrowException() 
+        public void Test_GetCharArrayMapAroundCharacter_DoesntThrowException() 
         {
             //Arrange ---------
             //Act ---------
@@ -95,18 +96,21 @@ namespace ASD_Game.Tests.WorldTests
         }
         
         [Test]
-        public void Test_GetMapAroundCharacter_DisplaysRightSize() 
+        public void Test_GetCharArrayMapAroundCharacter_DisplaysRightSize() 
         {
             //Arrange ---------
+            var viewDistance = 4;
+            var screenSize = viewDistance * 2 + 1;
             //Act ---------
             _sut.GetCharArrayMapAroundCharacter(_character1,2, _characterList);
+            var mapLength = _sut.GetCharArrayMapAroundCharacter(_character1, viewDistance, _characterList).Length;
             //Assert ---------
-            // _consolePrinterMock.Verify(consolePrinterMock => consolePrinterMock.PrintText(It.IsAny<string>()), Times.Exactly(25));
+            Assert.That(mapLength == screenSize * screenSize);
 
         }
         
         [Test]
-        public void Test_GetMapAroundCharacter_DoesntLoadTooBigArea() 
+        public void Test_GetCharArrayMapAroundCharacter_DoesntLoadTooBigArea() 
         {
             //Arrange ---------
             var viewDistance = 2;
@@ -141,7 +145,7 @@ namespace ASD_Game.Tests.WorldTests
         }
         
         [Test]
-        public void Test_GetMapAroundCharacter_ThrowsWhenGivenNegativeDisplaySize() 
+        public void Test_GetCharArrayMapAroundCharacter_ThrowsWhenGivenNegativeDisplaySize() 
         {
             //Arrange ---------
             //Act ---------
@@ -153,16 +157,39 @@ namespace ASD_Game.Tests.WorldTests
         }
         
         [Test]
-        public void Test_GetMapAroundCharacter_UsesChunksIfTheyAreFoundInDatabase() 
+        public void Test_GetCharArrayMapAroundCharacter_DisplaysCharactersOnTiles() 
         {
             //Arrange ---------
             //Act ---------
-            _sut.GetCharArrayMapAroundCharacter(_character1,2, _characterList);
+            var tileMap = _sut.GetCharArrayMapAroundCharacter(_character1,1, _characterList);
+            var tileMapList = tileMap.Cast<char>().ToList();
             //Assert ---------
-            // _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText("  " + _chunks[0].Map[0].Symbol), Times.AtLeast(1));
-            // _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText("  " + _chunks[1].Map[0].Symbol), Times.AtLeast(1));
-            // _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText("  " + _chunks[2].Map[0].Symbol), Times.AtLeast(1));
-            // _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText("  " + _chunks[3].Map[0].Symbol), Times.AtLeast(1));
+            Assert.That(tileMap[1, 1].ToString() == _character1.Symbol);
+            //Assert.That(tileMapList.Exists(c => c.ToString().Equals(_character1.Symbol)));
         }
+        
+        [Test]
+        public void Test_GetCharArrayMapAroundCharacter_DisplaysItemsOnTiles() 
+        {
+            //Arrange ---------
+            //Act ---------
+            //Assert ---------
+        }
+        
+        [Test]
+        public void Test_GetCharArrayMapAroundCharacter_() 
+        {
+            //Arrange ---------
+            //Act ---------
+            //Assert ---------
+        }
+        /*
+        [Test]
+        public void Test_GetCharArrayMapAroundCharacter_() 
+        {
+            //Arrange ---------
+            //Act ---------
+            //Assert ---------
+        }*/
     }
 }
