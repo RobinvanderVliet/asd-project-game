@@ -15,8 +15,10 @@ using System.IO;
 using ActionHandling;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
+using Messages;
 using WorldGeneration;
 using Session.DTO;
+using UserInterface;
 
 namespace Session.Tests
 {
@@ -30,11 +32,13 @@ namespace Session.Tests
         //Declaration of mocks
         private Mock<ClientController> _mockedClientController; //change this to the interface and all test break, your choice.
         private Mock<IWorldService> _mockedWorldService;
-        private Mock<ISessionHandler> _mockedsessionHandler;
+        private Mock<ISessionHandler> _mockedSessionHandler;
         private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerDatabaseService;
         private Mock<IDatabaseService<GamePOCO>> _mockedGameDatabaseService;
         private Mock<IDatabaseService<PlayerItemPOCO>> _mockedPlayerItemDatabaseService;
         private Mock<IRelativeStatHandler> _mockedRelativeStatHandler;
+        private Mock<IScreenHandler> _mockedScreenHandler;
+        private Mock<IMessageService> _mockedMessageService;
 
         private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
         private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigDatabaseService;
@@ -50,14 +54,26 @@ namespace Session.Tests
             Console.SetOut(standardOutput);
             _mockedClientController = new Mock<ClientController>(tmpMock.Object);
             _mockedWorldService = new Mock<IWorldService>();
-            _mockedsessionHandler = new Mock<ISessionHandler>();
+            _mockedSessionHandler = new Mock<ISessionHandler>();
             _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
             _mockedGameConfigDatabaseService = new Mock<IDatabaseService<GameConfigurationPOCO>>();
             _mockedPlayerItemDatabaseService = new Mock<IDatabaseService<PlayerItemPOCO>>();
             _mockedRelativeStatHandler = new Mock<IRelativeStatHandler>();
             _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPOCO>>();
             _mockedGameDatabaseService = new Mock<IDatabaseService<GamePOCO>>();
-           // _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedsessionHandler.Object, _mockedPlayerServiceDb.Object, _mockedgameDatabaseService.Object, _mockedGameConfigDatabaseService.Object, _mockedGameConfigurationHandler.Object);
+            _mockedScreenHandler = new Mock<IScreenHandler>();
+            _mockedMessageService = new Mock<IMessageService>();
+            _sut = new GameSessionHandler(_mockedClientController.Object,
+                _mockedSessionHandler.Object,
+                _mockedRelativeStatHandler.Object,
+                _mockedGameConfigurationHandler.Object,
+                _mockedScreenHandler.Object,
+                _mockedPlayerDatabaseService.Object,
+                _mockedGameDatabaseService.Object,
+                _mockedGameConfigDatabaseService.Object,
+                _mockedPlayerItemDatabaseService.Object,
+                _mockedWorldService.Object,
+                _mockedMessageService.Object);
             _packetDTO = new PacketDTO();
         }
 
@@ -103,17 +119,17 @@ namespace Session.Tests
                 Header = new PacketHeaderDTO(),
                 Payload = JsonConvert.SerializeObject(tmp)
             };
-
+            
             _sut.ClientController.SetBackupHost(true);
 
             //mocked setup
-            _mockedsessionHandler.Setup(x => x.GetAllClients()).Returns(new List<string> {"een super cool ID"});
+            _mockedSessionHandler.Setup(x => x.GetAllClients()).Returns(new List<string> {"een super cool ID"});
 
             //Act
             var result = _sut.HandlePacket(packet);
 
             //Assert
-            _mockedsessionHandler.Verify(x => x.GetAllClients(), Times.Once);
+            _mockedSessionHandler.Verify(x => x.GetAllClients(), Times.Once);
             Assert.AreEqual(result.GetType(), new HandlerResponseDTO(It.IsAny<SendAction>(), It.IsAny<string>()).GetType());
 
         }

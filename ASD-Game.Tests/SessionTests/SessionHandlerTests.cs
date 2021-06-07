@@ -1060,9 +1060,9 @@ namespace Session.Tests
             _sut.SetSession(new Session("test game"));
             _mockedClientController.Setup(x => x.GetOriginId()).Returns("3");
 
-            _sut.GetAllClients().Add("1");
-            _sut.GetAllClients().Add("2");
-            _sut.GetAllClients().Add("3");
+            _sut.GetAllClients().Add(new []{"1", "gerrit"});
+            _sut.GetAllClients().Add(new[]{"2","henk"});
+            _sut.GetAllClients().Add(new[]{"3","jan"});
 
             //Act
             var result = _sut.HandleNewBackupHost(packet);
@@ -1087,9 +1087,9 @@ namespace Session.Tests
             _sut.SetSession(new Session("test game"));
             _mockedClientController.Setup(x => x.GetOriginId()).Returns("1");
 
-            _sut.GetAllClients().Add("1");
-            _sut.GetAllClients().Add("2");
-            _sut.GetAllClients().Add("3");
+            _sut.GetAllClients().Add(new []{"1", "gerrit"});
+            _sut.GetAllClients().Add(new[]{"2","henk"});
+            _sut.GetAllClients().Add(new[]{"3","jan"});
 
             //Act
             var result = _sut.HandleNewBackupHost(packet);
@@ -1111,16 +1111,16 @@ namespace Session.Tests
                 Payload = JsonConvert.SerializeObject(new SessionDTO() {
                     SessionType = SessionType.NewBackUpHost,
                     SessionSeed = 0,
-                    ClientIds = new List<String>(),
+                    Clients = new List<String[]>(),
                     Name = ""
                 })
             };
 
             //needed for list
             _sut.SetSession(_mockedSession.Object);
-            _sut.GetAllClients().Add("1");
-            _sut.GetAllClients().Add("2");
-            _sut.GetAllClients().Add("3");
+            _sut.GetAllClients().Add(new []{"1", "gerrit"});
+            _sut.GetAllClients().Add(new[]{"2","henk"});
+            _sut.GetAllClients().Add(new[]{"3","jan"});
 
             //Act
             var result = _sut.HandlePacket(packet);

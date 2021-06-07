@@ -152,7 +152,8 @@ namespace Session
                         return HandleNewBackupHost(packet);
                     }
                 }
-                if ((packet.Header.Target == "client" || packet.Header.Target == "host" || packet.Header.Target == _clientController.GetOriginId()) 
+                if ((packet.Header.Target == "client" || packet.Header.Target == "host" || packet.Header.Target == _clientController.GetOriginId()) )
+                {
                     if (sessionDTO.SessionType == SessionType.EditMonsterDifficulty)
                     {
                         return HandleMonsterDifficulty(packet);
@@ -230,7 +231,13 @@ namespace Session
             } 
             else
             {
-                if (!_clientController.IsBackupHost && GetAllClients().ElementAt(GetAllClients().IndexOf(packet.Header.OriginID) + 1).Equals(_clientController.GetOriginId())) {
+                bool nextBackupHost = GetAllClients().ElementAt(
+                        GetAllClients().IndexOf(
+                            GetAllClients().FirstOrDefault(i => i[0] == packet.Header.OriginID)) + 1)
+                    .Equals(_clientController.GetOriginId());
+                
+                if (!_clientController.IsBackupHost && nextBackupHost) 
+                {
                     _clientController.IsBackupHost = true;
                     PingHostTimer();
                     Console.WriteLine("I'm Mr. BackupHost! Look at me!");
