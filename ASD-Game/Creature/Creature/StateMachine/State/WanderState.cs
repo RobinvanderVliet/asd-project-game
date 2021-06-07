@@ -12,17 +12,21 @@ namespace Creature.Creature.StateMachine.State
 {
     public class WanderState : CreatureState
     {
-        private MoveHandler _moveHandler = new MoveHandler(new ClientController(new NetworkComponent()), new WorldService());
+        private MoveHandler _moveHandler =
+            new MoveHandler(new ClientController(new NetworkComponent()), new WorldService());
 
-        public WanderState(ICreatureData creatureData, ICreatureStateMachine stateMachine, List<BuilderInfo> builderInfoList, BuilderConfigurator builderConfiguration) : base(creatureData, stateMachine, builderInfoList, builderConfiguration)
+        public WanderState(ICreatureData creatureData, ICreatureStateMachine stateMachine,
+            List<BuilderInfo> builderInfoList, BuilderConfigurator builderConfiguration) : base(creatureData,
+            stateMachine, builderInfoList, builderConfiguration)
         {
             _creatureData = creatureData;
             _stateMachine = stateMachine;
             _builderConfiguration = builderConfiguration;
             _builderInfoList = builderInfoList;
         }
-        
-        public WanderState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base (creatureData, stateMachine)
+
+        public WanderState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base(creatureData,
+            stateMachine)
         {
             _creatureData = creatureData;
             _stateMachine = stateMachine;
@@ -30,10 +34,20 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do()
         {
-            int steps = new Random().Next(10);
-            _moveHandler.SendMove(pickRandomDirection(), steps);
+            foreach (var builderInfo in _builderInfoList)
+            {
+                if (builderInfo.Action == "wander")
+                {
+                    if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo.RuleSets, "wander"))
+                    {
+                        //TODO implement Attack logic + gather targetData
+                        int steps = new Random().Next(10);
+                        _moveHandler.SendMove(pickRandomDirection(), steps);
+                    }
+                }
+            }
         }
-        
+
         private string pickRandomDirection()
         {
             String _direction = "";
@@ -53,6 +67,7 @@ namespace Creature.Creature.StateMachine.State
                     _direction += "left";
                     break;
             }
+
             return _direction;
         }
     }

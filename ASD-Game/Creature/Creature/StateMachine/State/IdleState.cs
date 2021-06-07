@@ -24,10 +24,15 @@ namespace Creature.Creature.StateMachine.State
         
         public void Do()
         {
-           
-               
-                
-            
+            foreach (var builderInfo in _builderInfoList)
+            {
+            if (builderInfo.Action == "attack")
+            {
+                if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo.RuleSets, "idle"))
+                {
+                    //TODO implement Attack logic + gather targetData
+                }
+            }
         }
     }
 }

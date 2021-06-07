@@ -24,8 +24,16 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do()
         {
-            //TODO implement logic
-            throw new NotImplementedException();
+            foreach (var builderInfo in _builderInfoList)
+            {
+                if (builderInfo.Action == "attack")
+                {
+                    if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo.RuleSets, "collect"))
+                    {
+                        //TODO implement Attack logic + gather targetData
+                    }
+                }
+            }
         }
     }
 }
