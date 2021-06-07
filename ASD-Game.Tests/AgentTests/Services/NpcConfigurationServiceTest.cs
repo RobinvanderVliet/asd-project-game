@@ -45,18 +45,18 @@ namespace Agent.Tests.Services
             Assert.AreEqual(_sut.GetConfigurations()[0].GetSetting("aggressiveness"), "high");
         }
 
-        [Test]
-        public void Test_Configure_CatchesSyntaxError()
-        {
-            //Arrange
-            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns("incorrect:code").Returns("cancel");
+        //[Test]
+        //public void Test_Configure_CatchesSyntaxError()
+        //{
+        //    //Arrange
+        //    _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns("incorrect:code").Returns("cancel");
 
-            //Act
-            _sut.Configure();
+        //    //Act
+        //    _sut.Configure();
 
-            //Assert
-            Assert.AreEqual("missing '=' at 'code'", _sut.LastError);
-        }
+        //    //Assert
+        //    Assert.AreEqual("missing '=' at 'code'", _sut.LastError);
+        //}
 
         //Deze test moet getest worden zodra er een checker is
         //[Test]
@@ -77,17 +77,17 @@ namespace Agent.Tests.Services
         //    Assert.AreEqual(error, _sut.LastError);
         //}
 
-        [Test]
-        public void Test_Configure_SavesFileInNpcFolder()
-        {
-            //Arrange
-            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns("aggressiveness=high");
+        //[Test]
+        //public void Test_Configure_SavesFileInNpcFolder()
+        //{
+        //    //Arrange
+        //    _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns("aggressiveness=high");
 
-            //Act
-            _sut.Configure();
+        //    //Act
+        //    _sut.Configure();
 
-            //Assert
-            _fileHandlerMock.Verify(x => x.ExportFile(It.IsAny<String>(), It.IsAny<String>()), Times.Exactly(1));
-        }
+        //    //Assert
+        //    _fileHandlerMock.Verify(x => x.ExportFile(It.IsAny<String>(), It.IsAny<String>()), Times.Exactly(1));
+        //}
     }
 }
