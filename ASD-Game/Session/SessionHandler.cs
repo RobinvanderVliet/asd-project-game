@@ -239,9 +239,9 @@ namespace Session
             {
                 bool nextBackupHost = GetAllClients().ElementAt(
                         GetAllClients().IndexOf(
-                            GetAllClients().FirstOrDefault(i => i[0] == packet.Header.OriginID)) + 1)
+                            GetAllClients().FirstOrDefault(i => i[0] == packet.Header.OriginID)) + 1)[0]
                     .Equals(_clientController.GetOriginId());
-                
+
                 if (!_clientController.IsBackupHost && nextBackupHost) 
                 {
                     _clientController.IsBackupHost = true;
