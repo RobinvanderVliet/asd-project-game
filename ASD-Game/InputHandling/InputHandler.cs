@@ -33,10 +33,10 @@ namespace InputHandling
             _messageService = messageService;
         }
 
-        // public InputHandler()
-        // {
-        //
-        // }
+        public InputHandler()
+        {
+            //constructor for testing
+        }
 
         public void HandleGameScreenCommands()
         {
