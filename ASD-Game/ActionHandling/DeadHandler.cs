@@ -6,6 +6,7 @@ using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
+using Messages;
 using Network.DTO;
 using Newtonsoft.Json;
 using WorldGeneration;
@@ -17,12 +18,14 @@ namespace ActionHandling
     {
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
+        private readonly IMessageService _messageService;
 
-        public DeadHandler(IClientController clientController, IWorldService worldService)
+        public DeadHandler(IClientController clientController, IWorldService worldService, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Dead);
             _worldService = worldService;
+            _messageService = messageService;
         }
 
         public void SendDead(Player deadPlayer)
@@ -47,7 +50,9 @@ namespace ActionHandling
             _worldService.DisplayWorld();
             if (deadDTO.DeadPlayer.Id == _clientController.GetOriginId())
             {
-                Console.WriteLine("You died.");
+                _messageService.AddMessage("Your health reached 0, you died!");
+                _worldService.GetCurrentPlayer().Health = 0;
+                _worldService.DisplayStats();
             }
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }

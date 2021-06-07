@@ -268,7 +268,7 @@ namespace ActionHandling
 
             if (_clientController.GetOriginId().Equals(attackDto.AttackedPlayerGuid))
             {
-                _messageService.AddMessage("You took a total of " + attackDto.Damage + " damage.");
+                _messageService.AddMessage("You've been attacked! You took a total of: " + attackDto.Damage + " damage.");
 
                 int ArmorPoints = 0;
                 int HelmetPoints = 0;
@@ -293,7 +293,6 @@ namespace ActionHandling
                 }
                 else if (HelmetPoints != 0)
                 {
-                    _messageService.AddMessage("Your Helmet took " + attackDto.Damage + " damage.");
                     attackDto.Damage = 0;
                     _worldService.GetCurrentPlayer().Inventory.Helmet.ArmorProtectionPoints -= attackDto.Damage;
                     _worldService.DisplayStats();
@@ -306,20 +305,17 @@ namespace ActionHandling
                     attackDto.Damage -= ArmorPoints;
                     _worldService.GetCurrentPlayer().Inventory.Armor = null;
                     _worldService.GetCurrentPlayer().Health -= attackDto.Damage;
-                    _messageService.AddMessage("Your health took " + attackDto.Damage + " damage.");
                     _worldService.DisplayStats();
 
                 }
                 else if (ArmorPoints != 0)
                 {
-                    _messageService.AddMessage("Your armor took " + attackDto.Damage + " damage.");
                     _worldService.GetCurrentPlayer().Inventory.Armor.ArmorProtectionPoints -= attackDto.Damage;
                     _worldService.DisplayStats();
 
                 }
                 else
                 {
-                    _messageService.AddMessage("Your health took " + attackDto.Damage + " damage.");
                     _worldService.GetCurrentPlayer().Health -= attackDto.Damage;
                     _worldService.DisplayStats();
 

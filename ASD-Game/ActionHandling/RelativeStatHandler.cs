@@ -28,14 +28,16 @@ namespace ActionHandling
         private readonly IWorldService _worldService;
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IMessageService _messageService;
+        private readonly IDeadHandler _deadHandler;
 
-        public RelativeStatHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
+            public RelativeStatHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService, IDeadHandler deadHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.RelativeStat);
             _worldService = worldService;
             _playerDatabaseService = playerDatabaseService;
             _messageService = messageService;
+            _deadHandler = deadHandler;
         }
         
         public void CheckStaminaTimer()
@@ -81,6 +83,10 @@ namespace ActionHandling
                 else if (_player.Health > 0)
                 {
                     statDto.Health = -1;
+                }
+                else
+                {
+                    _deadHandler.SendDead(_player);
                 }
             
                 SendStat(statDto);
