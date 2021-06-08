@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using NUnit.Framework;
 using WorldGeneration;
 using WorldGeneration.Models;
@@ -41,6 +42,9 @@ namespace Character.Tests.StateMachineTests
 
             //Act
             _monsterStateMachine.FireEvent(CharacterEvent.Event.SPOTTED_PLAYER);
+            // FireEvent works with a queue which gets cleared on a interval. There was a possibility that the event 
+            // was not yet completed before doing the assertion and thus making the test fail.            
+            Thread.Sleep(1000);
 
             //Assert
             Assert.IsTrue(_correctlyTransitioned);
@@ -74,6 +78,9 @@ namespace Character.Tests.StateMachineTests
 
             //Act
             _monsterStateMachine.FireEvent(CharacterEvent.Event.PLAYER_IN_RANGE);
+            // FireEvent works with a queue which gets cleared on a interval. There was a possibility that the event 
+            // was not yet completed before doing the assertion and thus making the test fail.            
+            Thread.Sleep(1000);
 
             //Assert
             Assert.IsFalse(_correctlyTransitioned);
@@ -99,7 +106,9 @@ namespace Character.Tests.StateMachineTests
 
             //Act
             _monsterStateMachine.FireEvent(CharacterEvent.Event.SPOTTED_PLAYER, _monster.MonsterData);
-
+            // FireEvent works with a queue which gets cleared on a interval. There was a possibility that the event 
+            // was not yet completed before doing the assertion and thus making the test fail.            
+            Thread.Sleep(1000);
             //Assert
             Assert.IsTrue(_correctlyTransitioned);
 
@@ -130,6 +139,9 @@ namespace Character.Tests.StateMachineTests
 
             //Act
             _monsterStateMachine.FireEvent(CharacterEvent.Event.PLAYER_IN_RANGE, _monster.MonsterData);
+            // FireEvent works with a queue which gets cleared on a interval. There was a possibility that the event 
+            // was not yet completed before doing the assertion and thus making the test fail.
+            Thread.Sleep(1000);
 
             //Assert
             Assert.IsFalse(_correctlyTransitioned);
