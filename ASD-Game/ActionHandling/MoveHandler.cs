@@ -12,6 +12,8 @@ using WorldGeneration.Models.Interfaces;
 using System.Timers;
 using Characters;
 
+using WorldGeneration;
+
 namespace ActionHandling
 {
     public class MoveHandler : IMoveHandler, IPacketHandler
@@ -280,12 +282,12 @@ namespace ActionHandling
             return movableTiles;
         }
 
-        public void MoveAIs(List<Character> creatureMoves)
+        public void MoveAIs(List<WorldGeneration.Character> creatureMoves)
         {
             List<MoveDTO> moveDTOs = new List<MoveDTO>();
             if (creatureMoves != null)
             {
-                foreach (Character move in creatureMoves)
+                foreach (WorldGeneration.Character move in creatureMoves)
                 {
                     if (move is SmartMonster smartMonster)
                     {

@@ -52,12 +52,11 @@ namespace WorldGeneration
                 player.YPosition = newYPosition;
             }
             var creature = _creatures.FirstOrDefault(x => x.Id == userId);
-            if (creature != null)
+            if (GetAI(userId) != null)
             {
                 creature.XPosition = newXPosition;
                 creature.YPosition = newYPosition;
             }
-            UpdateMap();
         }
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer = false)
@@ -72,7 +71,6 @@ namespace WorldGeneration
         public void AddCreatureToWorld(Character character)
         {
             _creatures.Add(character);
-            UpdateMap();
         }
 
         public void UpdateMap()
@@ -139,14 +137,7 @@ namespace WorldGeneration
 
         public Character GetAI(string id)
         {
-            foreach (Character ai in _creatures)
-            {
-                if (ai.Id == id)
-                {
-                    return ai;
-                }
-            }
-            return null;
+            return _creatures.Find(x => x.Id == id);
         }
 
         public ITile GetCurrentTile()
