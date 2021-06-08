@@ -28,7 +28,7 @@ namespace Items
             armorBuilder.SetArmorProtectionPoints(1);
             return armorBuilder.GetItem();
         }
-        
+
         public static Armor GetJacket()
         {
             ArmorBuilder armorBuilder = new(ArmorStats.ArmorType.DefaultArmor);
@@ -123,17 +123,6 @@ namespace Items
             armorBuilder.SetDescription("Bob the builder, can we fix it.");
             armorBuilder.SetArmorPartType(ArmorStats.ArmorPartType.Helmet);
             armorBuilder.SetRarity(ItemStats.Rarity.Uncommon);
-            armorBuilder.SetArmorProtectionPoints(10);
-            return armorBuilder.GetItem();
-        }
-
-        public static Armor GetJacket()
-        {
-            ArmorBuilder armorBuilder = new(ArmorStats.ArmorType.DefaultArmor);
-            armorBuilder.SetName("Jacket");
-            armorBuilder.SetDescription("My new jacket is reversible, as it turns out.");
-            armorBuilder.SetArmorPartType(ArmorStats.ArmorPartType.Body);
-            armorBuilder.SetRarity(ItemStats.Rarity.Common);
             armorBuilder.SetArmorProtectionPoints(10);
             return armorBuilder.GetItem();
         }
