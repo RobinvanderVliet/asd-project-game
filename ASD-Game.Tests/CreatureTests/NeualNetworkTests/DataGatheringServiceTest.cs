@@ -52,7 +52,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_ScanMapPlayerAI_Not_Adjacent()
+        public void Test_ScanMapPlayerAI_NotAdjacent()
         {
             //arrange/act
             _player.Location = new Vector2(20, 20);
@@ -62,7 +62,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_CheckNewPosition()
+        public void Test_CheckNewPosition_IsNewPosition()
         {
             //act
             _sut.CheckNewPosition(_smartMonster);

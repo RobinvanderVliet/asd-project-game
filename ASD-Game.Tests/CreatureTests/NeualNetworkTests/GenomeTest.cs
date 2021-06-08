@@ -48,7 +48,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_FeedForward()
+        public void Test_FeedForward_FeedForwardInput()
         {
             //arrange
             _sut = new Genome(_inputs, _outputs);
@@ -63,7 +63,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_GenerateNetwork()
+        public void Test_GenerateNetwork_GenerateANetwork()
         {
             //arrange
             _sut = new Genome(_inputs, _outputs);

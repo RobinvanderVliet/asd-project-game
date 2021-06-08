@@ -25,7 +25,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_SetupTraining()
+        public void Test_SetupTraining_SetupATraining()
         {
             //act
             _sut.SetupTraining();

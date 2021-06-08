@@ -17,7 +17,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_Engage()
+        public void Test_Engage_EngageNode()
         {
             //arrange
             _sut = new NeuralNode(0);

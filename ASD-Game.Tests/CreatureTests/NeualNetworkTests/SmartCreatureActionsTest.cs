@@ -38,7 +38,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_Wander()
+        public void Test_Wander_WanderABit()
         {
             //act
             _sut.Wander(_smartTestMonster);
@@ -48,7 +48,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_Walk1()
+        public void Test_Walk1_Walkup()
         {
             //arrange
             float currLocation = _smartTestMonster.CreatureData.Position.Y;
@@ -64,7 +64,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_Walk2()
+        public void Test_Walk2_WalkDown()
         {
             //arrange
             float currLocation = _smartTestMonster.CreatureData.Position.Y;
@@ -80,7 +80,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_Walk3()
+        public void Test_Walk3_WalkLeft()
         {
             //arrange
             float currLocation = _smartTestMonster.CreatureData.Position.X;
@@ -96,7 +96,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_Walk4()
+        public void Test_Walk4_WalkRight()
         {
             //arrange
             float currLocation = _smartTestMonster.CreatureData.Position.X;
@@ -146,7 +146,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_Flee()
+        public void Test_Flee_Run()
         {
             //arrange
             Vector2 AIloc = new Vector2(15, 15);
@@ -160,7 +160,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_RunToMonster()
+        public void Test_RunToMonster_WalkTowardsIt()
         {
             //arrange
             Vector2 AIloc = new Vector2(20, 20);
@@ -177,7 +177,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_TakeDamage()
+        public void Test_TakeDamage_AndDontDie()
         {
             //arrange
             int damage = 10;
