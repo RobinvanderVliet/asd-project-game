@@ -1,10 +1,11 @@
-﻿using Agent.Mapper;
-using NUnit.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
+using ASD_Game.Agent;
+using ASD_Game.Agent.Mapper;
+using NUnit.Framework;
 
-namespace Agent.Tests.Mapper
+namespace ASD_Game.Tests.AgentTests.Mapper
 {
     [ExcludeFromCodeCoverage]
     public class FileToDictionaryMapperTest
@@ -28,7 +29,7 @@ namespace Agent.Tests.Mapper
             expectedDictionary.Add("aggressiveness", "high");
             expectedDictionary.Add("explore", "random");
             expectedDictionary.Add("combat", "offensive");
-            var filepath = _handler.GetBaseDirectory() + "/AgentTests/Resource/npcFileTest.txt";
+            var filepath = _handler.GetBaseDirectory() + "/Resource/npcFileTest.txt";
             
             //Act
             var actualDictionary = _sut.MapFileToConfiguration(filepath);
@@ -44,7 +45,7 @@ namespace Agent.Tests.Mapper
         public void Test_MapFileToConfiguration_Unsuccessful()
         {
             //Arrange
-            var filepath = _handler.GetBaseDirectory() + "/AgentTests/Resource/npcFileTest_2.txt";
+            var filepath = _handler.GetBaseDirectory() + "/Resource/npcFileTest_2.txt";
             
             //Act & Assert
             Assert.Throws<SyntaxErrorException>(() => _sut.MapFileToConfiguration(filepath));

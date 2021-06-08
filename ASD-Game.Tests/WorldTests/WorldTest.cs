@@ -1,11 +1,15 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using ASD_Game.ActionHandling;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.Items.Services;
+using ASD_Game.UserInterface;
+using ASD_Game.World;
+using ASD_Game.World.Models.Characters;
 using Moq;
 using NUnit.Framework;
-using UserInterface;
 
-namespace WorldGeneration.Tests
+namespace ASD_Game.Tests.WorldTests
 {
     [ExcludeFromCodeCoverage]  
     [TestFixture]
@@ -16,7 +20,8 @@ namespace WorldGeneration.Tests
         //Declaration of variables
         private Player _friendlyPlayer;
         private Player _enemyPlayer;
-        private Creature _creature;
+        private World.Models.Characters.Creature _creature;
+        private List<ItemSpawnDTO> _itemSpawnDTOs;
  
         //Declaration of mocks
         private IMapFactory _mapFactoryMockObject;
@@ -25,46 +30,61 @@ namespace WorldGeneration.Tests
         private Mock<IMap> _mapMock;
         private Mock<IScreenHandler> _screenHandlerMock;
         private IScreenHandler _screenHandlerMockObject;
-
-        private World _sut;
-
+        private Mock<IItemService> _itemServiceMock;
+        private IItemService _itemServiceMockObject;
+        private Mock<ISpawnHandler> _spawnHandlerMock;
+        private ISpawnHandler _spawnHandlerMockObject;
+        private World.World _sut;
 
         [SetUp]
         public void Setup()
         {
             //Initialisation of variables
             _friendlyPlayer = new Player("A", 0, 0, "#", "1");
-            _enemyPlayer = new Player("B", 0, 1, "!", "2");
-            _creature = new Creature("B", 1, 0, "!", "2");
+            _enemyPlayer = new Player("B", 1, 1, "!", "2");
+            _creature = new World.Models.Characters.Creature("B", 1, 0, "!", "2");
             //Initialisation of mocks
             _mapMock = new Mock<IMap>();
-            _mapMock.Setup(Map => Map.DeleteMap()).Verifiable();
+            _mapMock.Setup(map => map.DeleteMap()).Verifiable();
+            _mapMock.Setup(map => map.GetCharArrayMapAroundCharacter(It.IsAny<Character>(), It.IsAny<int>(), It.IsAny<List<Character>>())).Verifiable();
             _mapMockObject = _mapMock.Object;
             
             _mapFactoryMock = new Mock<IMapFactory>();
-            _mapFactoryMock.Setup(mapFactory => mapFactory.GenerateMap(It.IsAny<int>())).Returns(_mapMockObject).Verifiable();
+            _mapFactoryMock.Setup(mapFactory => mapFactory.GenerateMap(It.IsAny<IItemService>(), It.IsAny<List<ItemSpawnDTO>>(), It.IsAny<int>())).Returns(_mapMockObject).Verifiable();
             _mapFactoryMock.Setup(mapFactory => mapFactory.GenerateSeed()).Returns(11246).Verifiable();
             _mapFactoryMockObject = _mapFactoryMock.Object;
 
             _screenHandlerMock = new Mock<IScreenHandler>();
-            // _screenHandlerMock.Setup(handler => handler.UpdateWorld(It.IsAny<Char[,]>())).Verifiable();
+            _screenHandlerMock.Setup(handler => handler.UpdateWorld(It.IsAny<char[,]>())).Verifiable();
             _screenHandlerMockObject = _screenHandlerMock.Object;
 
-            _sut = new World(5, 2, _mapFactoryMockObject, _screenHandlerMockObject);
+            _spawnHandlerMock = new Mock<ISpawnHandler>();
+            _spawnHandlerMock.Setup(wat => wat.SetItemSpawnDTOS(It.IsAny<List<ItemSpawnDTO>>())).Callback((List<ItemSpawnDTO> list) =>
+            {
+                _itemSpawnDTOs = list;
+            });
+            _spawnHandlerMockObject = _spawnHandlerMock.Object;
+            
+            _itemServiceMock = new Mock<IItemService>();
+            _itemServiceMock.Setup(wrm => wrm.GetSpawnHandler()).Returns(_spawnHandlerMockObject);
+;           _itemServiceMockObject = _itemServiceMock.Object;
+
+            _sut = new World.World(5, 2, _mapFactoryMockObject, _screenHandlerMockObject, _itemServiceMockObject);
         }
         
         [Test]
         public void Test_WorldConstructor_SetsMapUpCorrectly() 
         {
             //Arrange ---------
+            var chunkSize = 8;
             var seed = 10;
             //Act ---------
             //Assert ---------
             Assert.DoesNotThrow(() =>
             {
-                var world = new World(seed, 55, _mapFactoryMockObject, _screenHandlerMockObject);
+                var world = new World.World(seed, 55, _mapFactoryMockObject, _screenHandlerMockObject, _itemServiceMockObject);
             });
-            _mapFactoryMock.Verify(mapFactory => mapFactory.GenerateMap(seed), Times.Once);
+            _mapFactoryMock.Verify(mapFactory => mapFactory.GenerateMap(_itemServiceMockObject, It.IsAny<List<ItemSpawnDTO>>(), seed), Times.Once);
         }
 
         [Test]
@@ -74,7 +94,7 @@ namespace WorldGeneration.Tests
             //Act ---------
             _sut.UpdateMap();
             //Assert ---------
-            _mapMock.Verify(map => map.GetMapAroundCharacter(It.IsAny<Player>(), It.IsAny<int>(), It.IsAny<List<Character>>()), Times.AtMost(0));
+            _mapMock.Verify(map => map.GetCharArrayMapAroundCharacter(It.IsAny<Player>(), It.IsAny<int>(), It.IsAny<List<Character>>()), Times.AtMost(0));
         }
         
         [Test]
@@ -85,7 +105,7 @@ namespace WorldGeneration.Tests
             _sut.AddPlayerToWorld(_friendlyPlayer, true);
             _sut.UpdateMap();
             //Assert ---------
-            _mapMock.Verify(map => map.GetMapAroundCharacter(It.IsAny<Player>(), It.IsAny<int>(), It.IsAny<List<Character>>()), Times.Exactly(2));
+            _mapMock.Verify(map => map.GetCharArrayMapAroundCharacter(It.IsAny<Player>(), It.IsAny<int>(), It.IsAny<List<Character>>()), Times.Exactly(2));
 
         }
         
@@ -157,6 +177,7 @@ namespace WorldGeneration.Tests
             _sut.AddCreatureToWorld(_creature);
             //Act ---------
             _sut.UpdateCharacterPosition(_creature.Id, _creature.XPosition, _creature.YPosition);
+            _sut.AddPlayerToWorld(_friendlyPlayer, true);
             //Assert ---------
             Assert.That(_sut.CurrentPlayer.XPosition != _enemyPlayer.XPosition);
         }

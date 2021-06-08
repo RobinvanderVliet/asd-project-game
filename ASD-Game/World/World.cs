@@ -1,39 +1,45 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using ActionHandling.DTO;
-using ASD_project.World.Models.Characters;
-using ASD_project.World.Services;
-using UserInterface;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.Items.Services;
+using ASD_Game.UserInterface;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Interfaces;
 
-namespace ASD_project.World
+namespace ASD_Game.World
 {
     public class World : IWorld
     {
-        private IMap _map;
         public Player CurrentPlayer;
-        public List<Player> _players;
-        public List<ItemSpawnDTO> _items;
-        public List<Models.Characters.Creature> _creatures;
+        private IMap _map;
+        private List<Models.Characters.Creature> _creatures;
+        private List<Player> _players;
+        public List<ItemSpawnDTO> Items;
         private readonly int _viewDistance;
-        private IScreenHandler _screenHandler;
-        private IItemService _itemService;
-        
+        private readonly IScreenHandler _screenHandler;
 
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService)
         {
-            _items = new();
+            var currentDirectory = Directory.GetCurrentDirectory();
+
+            Items = new();
             _players = new ();
             _creatures = new ();
-            _itemService = itemService;
-            _map = mapFactory.GenerateMap(itemService, _items, seed);
+            _map = mapFactory.GenerateMap(itemService, Items, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
-            itemService.GetSpawnHandler().setItemSpawnDTOs(_items);
+            itemService.GetSpawnHandler().SetItemSpawnDTOS(Items);
+        }
+        
+        public Player GetPlayer(string id)
+        {
+            return _players.Find(x => x.Id == id);
         }
 
         public void UpdateCharacterPosition(string id, int newXPosition, int newYPosition)
         {
-            var player = _players.FirstOrDefault(x => x.Id == id);
+            var player = GetPlayer(id);
             if (player != null)
             {
                 player.XPosition = newXPosition;
@@ -69,15 +75,19 @@ namespace ASD_project.World
             if (CurrentPlayer != null && _players != null && _creatures != null)
             {
                 var characters = ((IEnumerable<Character>)_players).Concat(_creatures).ToList();
-                //_screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
-                _map.DisplayMap(CurrentPlayer, _viewDistance, characters);
+                var a = CurrentPlayer;
+                var b = _viewDistance;
+                var c = _map;
+                var mapArray = _map.GetCharArrayMapAroundCharacter(CurrentPlayer, _viewDistance, characters);
+                _screenHandler.UpdateWorld(mapArray);
+                //_map.DisplayMap(CurrentPlayer, _viewDistance, characters); in case the UI breaks, this will do
             }
         }
 
         public char[,] GetMapAroundCharacter(Character character)
         {
             var characters = ((IEnumerable<Character>)_players).Concat(_creatures).ToList();
-            return _map.GetMapAroundCharacter(character, _viewDistance, characters);
+            return _map.GetCharArrayMapAroundCharacter(character, _viewDistance, characters);
         }
 
         public void DeleteMap()
@@ -87,8 +97,43 @@ namespace ASD_project.World
 
         public void AddItemToWorld(ItemSpawnDTO itemSpawnDto)
         {
-            _items.Add(itemSpawnDto);
+            Items.Add(itemSpawnDto);
             UpdateMap();
+        }
+        public ITile GetLoadedTileByXAndY(int x, int y)
+        {
+            return _map.GetLoadedTileByXAndY(x, y);
+        }
+        
+        public bool CheckIfCharacterOnTile(ITile tile)
+        {
+            return GetAllCharacters().Exists(player => player.XPosition == tile.XPosition && player.YPosition == tile.YPosition);
+        }
+
+        private List<Character> GetAllCharacters()
+        {
+            List<Character> characters = _players.Cast<Character>().ToList();
+            return characters;
+        }
+
+        public ITile GetCurrentTile()
+        {
+            return _map.GetLoadedTileByXAndY(CurrentPlayer.XPosition, CurrentPlayer.YPosition);
+        }
+
+        public ITile GetTileForPlayer(Player player)
+        {
+            return _map.GetLoadedTileByXAndY(player.XPosition, player.YPosition);
+        }
+        
+        public void LoadArea(int playerX, int playerY, int viewDistance)
+        {
+            _map.LoadArea(playerX, playerY, viewDistance);
+        }
+
+        public List<Player> GetAllPlayers()
+        {
+            return _players;
         }
     }
 }

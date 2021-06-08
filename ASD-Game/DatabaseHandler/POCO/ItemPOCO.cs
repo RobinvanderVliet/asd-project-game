@@ -1,13 +1,14 @@
-﻿using System;
+﻿using System.Diagnostics.CodeAnalysis;
 using LiteDB;
 
-namespace DatabaseHandler.POCO
+namespace ASD_Game.DatabaseHandler.POCO
 {
-    public class ItemPoco
+    [ExcludeFromCodeCoverage]
+    public class ItemPOCO
     {
 
         [BsonId]
-        public String ItemName { get; set; }
+        public string ItemName { get; set; }
         public int Xposition { get; set; }
         public int Yposition { get; set; }
     }

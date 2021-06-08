@@ -1,11 +1,13 @@
-﻿using Items;
+﻿using System.Diagnostics.CodeAnalysis;
+using ASD_Game.Items;
 
-namespace ActionHandling.DTO
+namespace ASD_Game.ActionHandling.DTO
 {
+    [ExcludeFromCodeCoverage]
     public class ItemSpawnDTO
     {
-        public int XPosition { get; set; }
-        public int YPosition { get; set; }
-        public Item Item { get; set; }
+        public int XPosition;
+        public int YPosition;
+        public Item Item;
     }
 }

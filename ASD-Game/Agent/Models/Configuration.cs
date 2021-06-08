@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Agent.Models
+namespace ASD_Game.Agent.Models
 {
     public abstract class Configuration
     {

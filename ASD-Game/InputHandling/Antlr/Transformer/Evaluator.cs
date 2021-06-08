@@ -1,13 +1,18 @@
 using System;
-using ActionHandling;
-using Chat;
-using InputHandling.Antlr.Ast;
-using InputHandling.Antlr.Ast.Actions;
-using InputHandling.Exceptions;
-using Session;
-using System;
+using ASD_Game.ActionHandling;
+using ASD_Game.Chat;
+using ASD_Game.InputHandling.Antlr.Ast;
+using ASD_Game.InputHandling.Antlr.Ast.Actions;
+using ASD_Game.InputHandling.Exceptions;
+using ASD_Game.Network;
+using ASD_Game.Network.Enum;
+using ASD_Game.Session;
+using ASD_Game.Session.DTO;
+using ASD_Game.Session.GameConfiguration;
+using Newtonsoft.Json;
+using MonsterDifficulty = ASD_Game.InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
-namespace InputHandling.Antlr.Transformer
+namespace ASD_Game.InputHandling.Antlr.Transformer
 {
     public class Evaluator : IEvaluator
     {
@@ -15,17 +20,20 @@ namespace InputHandling.Antlr.Transformer
         private IMoveHandler _moveHandler;
         private IGameSessionHandler _gameSessionHandler;
         private IChatHandler _chatHandler;
-        
+        private IClientController _clientController;
+        private IInventoryHandler _inventoryHandler;
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
-        private String _commando;
+        private string _commando;
 
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IInventoryHandler inventoryHandler, IClientController clientController)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
             _gameSessionHandler = gameSessionHandler;
             _chatHandler = chatHandler;
+            _clientController = clientController;
+            _inventoryHandler = inventoryHandler;
         }
         public void Apply(AST ast)
         {
@@ -55,7 +63,7 @@ namespace InputHandling.Antlr.Transformer
                         TransformPause();
                         break;
                     case Pickup:
-                        TransformPickup();
+                        TransformPickup((Pickup)nodeBody[i]);
                         break;
                     case Replace:
                         TransformReplace();
@@ -81,7 +89,27 @@ namespace InputHandling.Antlr.Transformer
                     case StartSession:
                         TransformStartSession((StartSession)nodeBody[i]);
                         break;
+                    case MonsterDifficulty:
+                        TransformMonsterDifficulty((MonsterDifficulty)nodeBody[i]);
+                        break;
+                    case ItemFrequency:
+                        TransformItemFrequency((ItemFrequency)nodeBody[i]);
+                        break;
+                    case Inspect:
+                        TransformInspect((Inspect)nodeBody[i]);
+                        break;    
+                    case Use:
+                        TransformUse((Use)nodeBody[i]);
+                        break;
+                    case Search:
+                        TransformSearch();
+                        break;
                 }
+        }
+
+        private void TransformUse(Use use)
+        {
+            _inventoryHandler.UseItem(use.Step.StepValue);
         }
 
         private void TransformMove(Move move)
@@ -98,14 +126,14 @@ namespace InputHandling.Antlr.Transformer
             }
         }
 
-        private void TransformPickup()
+        private void TransformPickup(Pickup pickup)
         {
-            // TODO: Call InventoryHandler method
+            _inventoryHandler.PickupItem(pickup.Item.StepValue);
         }
 
         private void TransformDrop(Drop drop)
         {
-            // TODO: Call InventoryHandler method with (drop.ItemName.MessageValue)
+            _inventoryHandler.DropItem(drop.InventorySlot.InventorySlotValue);
         }
 
         private void TransformAttack(Attack attack)
@@ -145,12 +173,12 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformCreateSession(CreateSession createSession)
         {
-            _sessionHandler.CreateSession(createSession.Message.MessageValue);
+            _sessionHandler.CreateSession(createSession.Message.MessageValue, createSession.Username.UsernameValue);
         }
 
         private void TransformJoinSession(JoinSession joinSession)
         {
-            _sessionHandler.JoinSession(joinSession.Message.MessageValue);
+            _sessionHandler.JoinSession(joinSession.Message.MessageValue, joinSession.Username.UsernameValue);
         }
 
         private void TransformRequestSessions(RequestSessions requestSessions)
@@ -163,5 +191,87 @@ namespace InputHandling.Antlr.Transformer
             _gameSessionHandler.SendGameSession();
         }
 
+        private void TransformMonsterDifficulty(MonsterDifficulty monster)
+        {
+            if (!_clientController.IsHost())//TODO Check GameStarted wordt toegevoegd in andere feature
+            {
+                return;
+            }
+
+            int difficulty = -1;
+            switch (monster.Difficulty)
+            {
+                case "easy":
+                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Easy;
+                    break;
+                case "medium":
+                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Medium;
+                    break;
+                case "hard":
+                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Hard;
+                    break;
+                case "impossible":
+                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Impossible;
+                    break;
+            }
+
+            SessionDTO sessionDto = new SessionDTO
+            {
+                SessionType = SessionType.EditMonsterDifficulty,
+                Name = difficulty.ToString()
+            };
+            SendPayload(sessionDto);
+        }
+
+        private void TransformItemFrequency(ItemFrequency itemFrequency)
+        {
+            if (!_clientController.IsHost()) //TODO Check GameStarted wordt toegevoegd in andere feature
+            {
+                return;
+            }
+            
+            int frequency = -1;
+            switch (itemFrequency.Frequency)
+            {
+                case "low":
+                    frequency = (int) ItemSpawnRate.Low;
+                    break;
+                case "medium":
+                    frequency = (int) ItemSpawnRate.Medium;
+                    break;
+                case "high":
+                    frequency = (int) ItemSpawnRate.High;
+                    break;
+            }
+            SessionDTO sessionDto = new SessionDTO
+            {
+                SessionType = SessionType.EditItemSpawnRate,
+                Name = frequency.ToString()
+            };
+            SendPayload(sessionDto);
+        }
+
+        private void SendPayload(SessionDTO sessionDto)
+        {
+            var jsonObject = JsonConvert.SerializeObject(sessionDto);
+            _clientController.SendPayload(jsonObject, PacketType.Session);
+        }
+        private void TransformInspect(Inspect inspect)
+        {
+            string slot = inspect.InventorySlot.InventorySlotValue;
+            if (slot == "armor" | slot == "weapon" | slot == "helmet" | slot == "slot 1" | slot == "slot 2" | slot == "slot 3")
+            {
+                _inventoryHandler.InspectItem(inspect.InventorySlot.InventorySlotValue);
+            }
+            else
+            {
+                throw new SlotException($"The slot you provided {slot} is not valid.");
+            }
+        }
+
+        private void TransformSearch()
+        {
+            _inventoryHandler.Search();
+        }
     }
 }

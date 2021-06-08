@@ -1,11 +1,10 @@
 ﻿using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
-using Creature.Creature.StateMachine.CustomRuleSet;
-using Creature.Creature.StateMachine.Data;
-using Creature.Creature.StateMachine.Event;
-using Creature.Creature.StateMachine.State;
+using ASD_Game.Creature.Creature.StateMachine.Data;
+using ASD_Game.Creature.Creature.StateMachine.Event;
+using ASD_Game.Creature.Creature.StateMachine.State;
 
-namespace Creature.Creature.StateMachine
+namespace ASD_Game.Creature.Creature.StateMachine
 {
     public class PlayerStateMachine : ICreatureStateMachine
     {

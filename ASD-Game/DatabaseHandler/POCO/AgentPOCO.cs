@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using LiteDB;
 
-namespace DatabaseHandler.POCO
+namespace ASD_Game.DatabaseHandler.POCO
 {
-    public class AgentPoco
+    [ExcludeFromCodeCoverage]
+    public class AgentPOCO
     {
         [BsonId] public string FileName { get; set; }
 

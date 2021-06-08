@@ -1,6 +1,6 @@
-﻿using Creature.Creature.StateMachine;
+﻿using ASD_Game.Creature.Creature.StateMachine;
 
-namespace Creature.Creature
+namespace ASD_Game.Creature.Creature
 {
     public class Monster : ICreature
     {

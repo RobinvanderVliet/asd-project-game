@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Session.DTO
+namespace ASD_Game.Session.DTO
 {
     [ExcludeFromCodeCoverage]
     public class SessionDTO
     {
         public SessionType SessionType { get; set; }
         public string Name { get; set; }
-        public List<string> ClientIds { get; set; }
-
+        public List<string[]> Clients { get; set; }
+        
         public int SessionSeed { get; set; }
 
         public SessionDTO(SessionType sessionType)

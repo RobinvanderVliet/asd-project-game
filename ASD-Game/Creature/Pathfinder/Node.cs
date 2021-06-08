@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace Creature.Pathfinder
+namespace ASD_Game.Creature.Pathfinder
 {
     public class Node : IComparable<Node>
     {

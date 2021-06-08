@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Creature.Consumable
+namespace ASD_Game.Creature.Consumable
 {
     public interface IConsumable
     {

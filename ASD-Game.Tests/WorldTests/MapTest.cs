@@ -1,19 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.World;
-using ASD_project.World.Models;
-using ASD_project.World.Models.Characters;
-using ASD_project.World.Models.Interfaces;
-using ASD_project.World.Models.TerrainTiles;
-using DatabaseHandler.Services;
+using System.Linq;
+using ASD_Game.Items;
+using ASD_Game.World;
+using ASD_Game.World.Models;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Interfaces;
+using ASD_Game.World.Models.TerrainTiles;
 using NUnit.Framework;
 using Moq;
 using Range = Moq.Range;
 
-//using WorldGeneration.DatabaseFunctions;
-
-namespace WorldGeneration.Tests
+namespace ASD_Game.Tests.WorldTests
 {
     
     [ExcludeFromCodeCoverage]  
@@ -32,9 +31,7 @@ namespace WorldGeneration.Tests
         
         //Declaration of mocks
         private INoiseMapGenerator _noiseMapGeneratorMockObject;
-        private IDatabaseService<Chunk> _databaseServiceMockObject;
         private Mock<INoiseMapGenerator> _noiseMapGeneratorMock;
-        private Mock<IDatabaseService<Chunk>> _databaseServiceMock;
 
 
         [SetUp]
@@ -42,12 +39,16 @@ namespace WorldGeneration.Tests
         {
             //Initialisation of variables
             _chunkSize = 2;
+
+            var tileWithItem = new GrassTile(1, -1);
+            tileWithItem.ItemsOnTile.Add(new Armor());
             
-            var map1 = new ITile[] {new GrassTile(1,1), new GrassTile(1,2), new GrassTile(1,3), new GrassTile(1,4)};
-            var map2 = new ITile[] {new StreetTile(1,1), new StreetTile(1,2), new StreetTile(1,3), new StreetTile(1,4)};
-            var map3 = new ITile[] {new WaterTile(1,1), new WaterTile(1,2), new WaterTile(1,3), new WaterTile(1,4)};
-            var map4 = new ITile[] {new DirtTile(1,1), new DirtTile(1,2), new DirtTile(1,3), new DirtTile(1,4)};
+            var map1 = new ITile[] {new GrassTile(0,0), tileWithItem, new GrassTile(0,0), new GrassTile(1,-1)};
+            var map2 = new ITile[] {new StreetTile(-2,0), new StreetTile(-1,-1), new StreetTile(-2,0), new StreetTile(-2,-1)};
+            var map3 = new ITile[] {new WaterTile(0,-2), new WaterTile(1,-2), new WaterTile(0,-2), new WaterTile(1,-3)};
+            var map4 = new ITile[] {new DirtTile(-2,-2), new DirtTile(-1,-2), new DirtTile(-2,-2), new DirtTile(-1,-2)};
             var map5 = new ITile[] {new DirtTile(1,1), new DirtTile(1,2), new DirtTile(1,3), new DirtTile(1,4)};
+
             var chunk1 = new Chunk(0, 0, map1, _chunkSize, 0);
             var chunk2 = new Chunk(-1, 0, map2, _chunkSize, 0);
             var chunk3 = new Chunk(0, -1, map3, _chunkSize, 0);
@@ -63,27 +64,15 @@ namespace WorldGeneration.Tests
             _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(It.IsAny<int>(),It.IsAny<int>(), 2))
                 .Returns((int x, int y, int size) => new Chunk(x, y, map5, _chunkSize, 0)).Verifiable();
             _noiseMapGeneratorMockObject = _noiseMapGeneratorMock.Object;
-            
-            _databaseServiceMock = new Mock<IDatabaseService<Chunk>>();
-            _databaseServiceMock.Setup(databaseService => databaseService.CreateAsync(It.IsAny<Chunk>())).Verifiable();
-            _databaseServiceMock.Setup(databaseService => databaseService.GetAllAsync()).ReturnsAsync(_chunks);
-            _databaseServiceMock.Setup(databaseService => databaseService.DeleteAllAsync()).Verifiable();
-            _databaseServiceMockObject = _databaseServiceMock.Object;
 
-            // _consolePrinterMock = new Mock<IConsolePrinter>();
-            // _consolePrinterMock.Setup(consolePrinter => consolePrinter.PrintText(It.IsAny<string>())).Verifiable();
-            // _consolePrinterMock.Setup(consolePrinter => consolePrinter.NextLine()).Verifiable();
-            // _consolePrinterMockObject = _consolePrinterMock.Object;
-            //
-
-            _character1 = new Player("naam1", 0, 0, CharacterSymbol.FRIENDLY_PLAYER, "a");
-            _character2 = new Player("naam2", 0, 0, CharacterSymbol.FRIENDLY_PLAYER, "b");
+            _character1 = new Player("naam1", 0, 0, CharacterSymbol.CURRENT_PLAYER, "a");
+            _character2 = new Player("naam2", 1, 1, CharacterSymbol.ENEMY_PLAYER, "b");
             
             _characterList = new List<Character>();
             _characterList.Add(_character1);
             _characterList.Add(_character2);
             
-            _sut = new Map(_noiseMapGeneratorMockObject, _chunkSize, _databaseServiceMockObject, 0);
+            _sut = new Map(_noiseMapGeneratorMockObject, _chunkSize, _chunks);
         }
         
         [Test]
@@ -94,54 +83,57 @@ namespace WorldGeneration.Tests
             //Assert ---------
             Assert.DoesNotThrow(() =>
             {
-                var map = new Map(_noiseMapGeneratorMockObject,21, _databaseServiceMockObject, 0, _chunks);
+                var map = new Map(_noiseMapGeneratorMockObject,21, _chunks);
             });
         }
         
         [Test]
-        public void Test_GetMapAroundCharacter_DoesntThrowException() 
+        public void Test_GetCharArrayMapAroundCharacter_DoesntThrowException() 
         {
             //Arrange ---------
             //Act ---------
             //Assert ---------
             Assert.DoesNotThrow(() =>
             {
-                _sut.GetMapAroundCharacter(_character1, 1, _characterList);
+                _sut.GetCharArrayMapAroundCharacter(_character1, 1, _characterList);
             });
         }
         
         [Test]
-        public void Test_GetMapAroundCharacter_DisplaysRightSize() 
+        public void Test_GetCharArrayMapAroundCharacter_DisplaysRightSize() 
         {
             //Arrange ---------
+            var viewDistance = 4;
+            var screenSize = viewDistance * 2 + 1;
             //Act ---------
-            _sut.GetMapAroundCharacter(_character1,2, _characterList);
+            _sut.GetCharArrayMapAroundCharacter(_character1,2, _characterList);
+            var mapLength = _sut.GetCharArrayMapAroundCharacter(_character1, viewDistance, _characterList).Length;
             //Assert ---------
-            // _consolePrinterMock.Verify(consolePrinterMock => consolePrinterMock.PrintText(It.IsAny<string>()), Times.Exactly(25));
+            Assert.That(mapLength == screenSize * screenSize);
 
         }
         
         [Test]
-        public void Test_GetMapAroundCharacter_DoesntLoadTooBigArea() 
+        public void Test_GetCharArrayMapAroundCharacter_DoesntLoadTooBigArea() 
         {
             //Arrange ---------
             var viewDistance = 2;
             var maxLoadingLimit = (int)(Math.Pow(viewDistance, 4)  * _chunkSize / _chunkSize * 4);
             //Act ---------
-            _sut.GetMapAroundCharacter(_character1,viewDistance, _characterList);
+            _sut.GetCharArrayMapAroundCharacter(_character1,viewDistance, _characterList);
             //Assert ---------
-            _databaseServiceMock.Verify(databaseService => databaseService.CreateAsync(It.IsAny<Chunk>()), Times.Between(0, maxLoadingLimit, Range.Inclusive));
+            _noiseMapGeneratorMock.Verify(noiseMapGenerator => noiseMapGenerator.GenerateChunk(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()), Times.Between(0, maxLoadingLimit, Range.Inclusive));
         }
         
         [Test]
         public void Test_DeleteMap_PassesCommandThrough() 
         {
             //Arrange ---------
-            _sut.GetMapAroundCharacter(_character1,1, _characterList);
+            _sut.GetCharArrayMapAroundCharacter(_character1,1, _characterList);
             //Act ---------
             _sut.DeleteMap();
             //Assert ---------
-            _databaseServiceMock.Verify( databaseService => databaseService.DeleteAllAsync(), Times.Once);
+            Assert.That(_chunks.Count == 0);
         }
         
         [Test]
@@ -152,33 +144,69 @@ namespace WorldGeneration.Tests
             //Assert ---------
             Assert.Throws<InvalidOperationException>(() =>
             {
-                // var map = new Map(_noiseMapGeneratorMockObject,-21, _consolePrinterMockObject, _databaseServiceMockObject, 0, _chunks);
+                var map = new Map(_noiseMapGeneratorMockObject,-21);
             });
         }
         
         [Test]
-        public void Test_GetMapAroundCharacter_ThrowsWhenGivenNegativeDisplaySize() 
+        public void Test_GetCharArrayMapAroundCharacter_ThrowsWhenGivenNegativeDisplaySize() 
         {
             //Arrange ---------
             //Act ---------
             //Assert ---------
             Assert.Throws<InvalidOperationException>(() =>
             {
-                _sut.GetMapAroundCharacter(_character1,-1, _characterList);
+                _sut.GetCharArrayMapAroundCharacter(_character1,-1, _characterList);
             });
         }
         
         [Test]
-        public void Test_GetMapAroundCharacter_UsesChunksIfTheyAreFoundInDatabase() 
+        public void Test_GetCharArrayMapAroundCharacter_DisplaysCurrentCharacterOnTile() 
         {
             //Arrange ---------
             //Act ---------
-            _sut.GetMapAroundCharacter(_character1,2, _characterList);
+            var tileMap = _sut.GetCharArrayMapAroundCharacter(_character1,2, _characterList);
+            var tileMapList = tileMap.Cast<char>().ToList();
             //Assert ---------
-            // _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText("  " + _chunks[0].Map[0].Symbol), Times.AtLeast(1));
-            // _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText("  " + _chunks[1].Map[0].Symbol), Times.AtLeast(1));
-            // _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText("  " + _chunks[2].Map[0].Symbol), Times.AtLeast(1));
-            // _consolePrinterMock.Verify( consolePrinter => consolePrinter.PrintText("  " + _chunks[3].Map[0].Symbol), Times.AtLeast(1));
+            Assert.That(tileMapList.Exists(c => c.ToString().Equals(_character1.Symbol)));
         }
+        
+        [Test]
+        public void Test_GetCharArrayMapAroundCharacter_DisplaysNotCurrentCharacterOnTile() 
+        {
+            //Arrange ---------
+            //Act ---------
+            var tileMap = _sut.GetCharArrayMapAroundCharacter(_character1,2, _characterList);
+            var tileMapList = tileMap.Cast<char>().ToList();
+            //Assert ---------
+            Assert.That(tileMapList.Exists(c => c.ToString().Equals(_character2.Symbol)));
+        }
+        
+        [Test]
+        public void Test_GetCharArrayMapAroundCharacter_DisplaysItemsOnTiles() 
+        {
+            //Arrange ---------
+            //Act ---------
+            var tileMap = _sut.GetCharArrayMapAroundCharacter(_character1,1, _characterList);
+            var tileMapList = tileMap.Cast<char>().ToList();
+            //Assert ---------
+            Assert.That(tileMapList.Exists(c => c.ToString().Equals(TileSymbol.CHEST)));
+        }
+        
+        [Test]
+        public void Test_GetCharArrayMapAroundCharacter_() 
+        {
+            //Arrange ---------
+            //Act ---------
+            //Assert ---------
+        }
+        /*
+        [Test]
+        public void Test_GetCharArrayMapAroundCharacter_() 
+        {
+            //Arrange ---------
+            //Act ---------
+            //Assert ---------
+        }*/
     }
 }

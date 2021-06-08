@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
-using Network;
 using System.Linq;
-using ActionHandling.DTO;
-using ASD_project.World.Services;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using Items;
-using Network.DTO;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Items;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
 using Newtonsoft.Json;
 
-
-namespace ActionHandling
+namespace ASD_Game.ActionHandling
 {
     public class SpawnHandler : ISpawnHandler, IPacketHandler
     {
@@ -23,7 +22,7 @@ namespace ActionHandling
             _clientController.SubscribeToPacketType(this, PacketType.Spawn);
         }
 
-        public void setItemSpawnDTOs(List<ItemSpawnDTO> itemSpawnDTOs)
+        public void SetItemSpawnDTOS(List<ItemSpawnDTO> itemSpawnDTOs)
         {
             _itemSpawnDTOs = itemSpawnDTOs;
         }
@@ -65,8 +64,8 @@ namespace ActionHandling
 
         private void InsertToDatabase(ItemSpawnDTO itemSpawnDto)
         {
-            var ItemService = new DatabaseService<ItemPoco>();
-            var item = new ItemPoco()
+            var ItemService = new DatabaseService<ItemPOCO>();
+            var item = new ItemPOCO()
                 {ItemName = itemSpawnDto.Item.ItemName, Xposition = itemSpawnDto.XPosition, Yposition = itemSpawnDto.YPosition};
             ItemService.CreateAsync(item);
         }

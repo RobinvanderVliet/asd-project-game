@@ -1,10 +1,10 @@
-﻿using Creature.Pathfinder;
-using NUnit.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using ASD_Game.Creature.Pathfinder;
+using NUnit.Framework;
 
-namespace Creature.Tests
+namespace ASD_Game.Tests.CreatureTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]

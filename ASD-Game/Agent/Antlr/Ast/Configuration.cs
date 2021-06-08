@@ -1,4 +1,4 @@
-﻿namespace Agent.Antlr.Ast
+﻿namespace ASD_Game.Agent.Antlr.Ast
 {
 
     public class Configuration : Node

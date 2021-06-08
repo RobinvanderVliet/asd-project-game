@@ -1,6 +1,6 @@
-﻿using Items.ItemStats;
+﻿using ASD_Game.Items.ItemStats;
 
-namespace Items
+namespace ASD_Game.Items
 {
     public interface IBuilder
     {

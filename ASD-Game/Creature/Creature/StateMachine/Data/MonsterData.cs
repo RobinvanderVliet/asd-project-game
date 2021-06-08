@@ -1,8 +1,8 @@
-﻿using Creature.World;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using ASD_Game.Creature.World;
 
-namespace Creature.Creature.StateMachine.Data
+namespace ASD_Game.Creature.Creature.StateMachine.Data
 {
     [ExcludeFromCodeCoverage]
     public class MonsterData : ICreatureData

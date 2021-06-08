@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Creature.Pathfinder
+namespace ASD_Game.Creature.Pathfinder
 {
     public class PriorityQueue<T> where T : IComparable<T>
     {

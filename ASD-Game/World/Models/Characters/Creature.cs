@@ -1,4 +1,4 @@
-namespace ASD_project.World.Models.Characters
+namespace ASD_Game.World.Models.Characters
 {
     public class Creature : Character
     {

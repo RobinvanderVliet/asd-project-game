@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using ActionHandling.DTO;
-using ASD_project.World.Services;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.Items.Services;
 
-namespace ASD_project.World
+namespace ASD_Game.World
 {
     public interface IMapFactory
     {

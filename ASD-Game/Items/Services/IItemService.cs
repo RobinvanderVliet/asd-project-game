@@ -1,8 +1,6 @@
-﻿using ActionHandling;
-using ASD_project.World.Models.Interfaces;
-using Items;
+﻿using ASD_Game.ActionHandling;
 
-namespace ASD_project.World.Services
+namespace ASD_Game.Items.Services
 {
     public interface IItemService
     {

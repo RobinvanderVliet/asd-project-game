@@ -1,8 +1,8 @@
-﻿using Creature.Pathfinder;
-using System.Collections.Generic;
-using Creature.Creature;
+﻿using System.Collections.Generic;
+using ASD_Game.Creature.Creature;
+using ASD_Game.Creature.Pathfinder;
 
-namespace Creature.World
+namespace ASD_Game.Creature.World
 {
     public interface IWorld
     {

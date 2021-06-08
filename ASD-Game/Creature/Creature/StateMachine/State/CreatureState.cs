@@ -1,7 +1,7 @@
-﻿using Creature.Creature.StateMachine.Data;
-using System;
+﻿using System;
+using ASD_Game.Creature.Creature.StateMachine.Data;
 
-namespace Creature.Creature.StateMachine.State
+namespace ASD_Game.Creature.Creature.StateMachine.State
 {
     public abstract class CreatureState : IComparable
     {

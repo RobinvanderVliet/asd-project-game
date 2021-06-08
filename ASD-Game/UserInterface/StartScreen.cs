@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 
-namespace UserInterface
+namespace ASD_Game.UserInterface
 {
     public class StartScreen : Screen
     {
@@ -26,7 +25,7 @@ namespace UserInterface
 
         public override void DrawScreen()
         {
-            Console.ForegroundColor = ConsoleColor.Green;
+            _screenHandler.ConsoleHelper.SetColorToGreen();
             DrawHeader(HEADER_TEXT);
             DrawOptionBox();
             DrawInputBox(INPUT_X, INPUT_Y + _options.Count, INPUT_MESSAGE);
@@ -38,12 +37,12 @@ namespace UserInterface
             foreach (var option in _options)
             {
                 int optionNumber = _options.IndexOf(option) + 1;
-                Console.SetCursorPosition(OFFSET_LEFT, OPTIONS_Y + optionNumber);
-                Console.Write(optionNumber + ": " + option);
+                _screenHandler.ConsoleHelper.SetCursor(OFFSET_LEFT, OPTIONS_Y + optionNumber);
+                _screenHandler.ConsoleHelper.Write(optionNumber + ": " + option);
             }
         }
 
-        public void UpdateInputMessage(string message)
+        public virtual void UpdateInputMessage(string message)
         {
             DrawInputBox(INPUT_X, INPUT_Y + _options.Count, message);
         }

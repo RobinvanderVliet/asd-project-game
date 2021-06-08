@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ASD_project.World.Models.Interfaces;
-using Items;
+using ASD_Game.Items;
+using ASD_Game.World.Models.Interfaces;
 
-namespace ASD_project.World.Models.TerrainTiles
+namespace ASD_Game.World.Models.TerrainTiles
 {
     [ExcludeFromCodeCoverage]
     public class StreetTile : ITerrainTile
@@ -13,15 +13,19 @@ namespace ASD_project.World.Models.TerrainTiles
         public string Symbol { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
+        public int StaminaCost { get; set; }
         public List<Item> ItemsOnTile { get; set; }
+
+        
 
         public StreetTile(int x, int y)
         {
+            ItemsOnTile = new();
             Symbol = TileSymbol.STREET;
             IsAccessible = true;
             XPosition = x;
             YPosition = y;
-            ItemsOnTile = new List<Item>();
+            StaminaCost = 1;
         }
     }
 }

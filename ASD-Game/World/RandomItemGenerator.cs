@@ -1,7 +1,6 @@
-﻿using ASD_project.World.Models;
-using Items;
+﻿using ASD_Game.Items;
 
-namespace ASD_project.World
+namespace ASD_Game.World
 {
     public static class RandomItemGenerator
     {

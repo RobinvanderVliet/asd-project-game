@@ -1,10 +1,9 @@
-﻿using Creature.Exceptions;
-using Creature.Pathfinder;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using ASD_Game.Creature.Exceptions;
 
-namespace Creature
+namespace ASD_Game.Creature.Pathfinder
 {
     public class PathFinder
     {

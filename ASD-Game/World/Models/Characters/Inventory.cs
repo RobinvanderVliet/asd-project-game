@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
-using Items;
-using Items.Consumables;
+﻿using System;
+using System.Collections.Generic;
+using ASD_Game.Items;
+using ASD_Game.Items.ArmorStats;
+using ASD_Game.Items.Consumables;
+using ASD_Game.World.Models.Characters.Exceptions;
 
-namespace ASD_project.World.Models.Characters
+namespace ASD_Game.World.Models.Characters
 {
     public class Inventory
     {
@@ -32,13 +35,45 @@ namespace ASD_project.World.Models.Characters
 
         public void AddConsumableItem(Consumable consumable)
         {
-            if (_consumableItems.Count <= 3)
+            if (_consumableItems.Count < 3)
             {
                 _consumableItems.Add(consumable);
             }
             else
             {
-                System.Console.WriteLine("You already have 3 consumable items in your inventory!");
+                throw new InventoryFullException("You already have 3 consumable items in your inventory!");
+            }
+        }
+
+        public void AddItem(Item item)
+        {
+            if (item is Weapon weapon)
+            {
+                if (_weapon != null) throw new InventoryFullException("You already have a weapon!");
+                _weapon = weapon;
+                return;
+            }
+
+            if (item is Armor armor)
+            {
+                if (armor.ArmorPartType == ArmorPartType.Body)
+                {
+                    if (_armor != null) throw new InventoryFullException("You already have body armor!");
+                    _armor = armor;
+                    return;
+                }
+
+                if (armor.ArmorPartType == ArmorPartType.Helmet)
+                {
+                    if (_helmet != null) throw new InventoryFullException("You already have a helmet!");
+                    _helmet = armor;
+                    return;
+                }
+            }
+
+            if (item is Consumable consumable)
+            {
+                AddConsumableItem(consumable);
             }
         }
 
@@ -50,6 +85,18 @@ namespace ASD_project.World.Models.Characters
         public void EmptyConsumableItemList()
         {
             _consumableItems.Clear();
+        }
+
+        public Consumable GetConsumableAtIndex(int i)
+        {
+            try
+            {
+                return ConsumableItemList[i];
+            }
+            catch(Exception e)
+            {
+                return null;
+            }
         }
     }
 }

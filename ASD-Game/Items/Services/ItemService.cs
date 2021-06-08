@@ -1,11 +1,7 @@
-﻿using ActionHandling;
-using ASD_project.World;
-using ASD_project.World.Models.Interfaces;
-using ASD_project.World.Services;
-using Items;
-using MathNet.Numerics.Optimization;
+﻿using ASD_Game.ActionHandling;
+using ASD_Game.World;
 
-namespace ASD_project.Items.Services
+namespace ASD_Game.Items.Services
 {
     public class ItemService : IItemService
     {

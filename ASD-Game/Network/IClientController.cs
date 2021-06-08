@@ -1,4 +1,6 @@
-﻿namespace Network
+﻿using ASD_Game.Network.Enum;
+
+namespace ASD_Game.Network
 {
     public interface IClientController
     {
@@ -10,5 +12,6 @@
         public void CreateHostController();
         public string GetOriginId();
         public bool IsHost();
+        public void SetBackupHost(bool value);
     }
 }

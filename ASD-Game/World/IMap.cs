@@ -1,13 +1,15 @@
 using System.Collections.Generic;
-using ASD_project.World.Models.Characters;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Interfaces;
 
-namespace ASD_project.World
+namespace ASD_Game.World
 {
     public interface IMap
     {
-        char[,] GetMapAroundCharacter(Character currentPlayer, int viewDistance, List<Character> characters);
-        void DeleteMap();
-        void DisplayMap(Character currentPlayer, int viewDistance, List<Character> characters);
+        public char[,] GetCharArrayMapAroundCharacter(Character currentPlayer, int viewDistance, List<Character> characters);
+        public void DeleteMap();
+        public ITile GetLoadedTileByXAndY(int x, int y);
+        public void LoadArea(int playerX, int playerY, int viewDistance);
 
     }
 }

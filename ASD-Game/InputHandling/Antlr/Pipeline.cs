@@ -1,22 +1,28 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using InputHandling.Antlr.Ast;
+using ASD_Game.InputHandling.Antlr.Ast;
+using ASD_Game.InputHandling.Antlr.Parser;
+using ASD_Game.InputHandling.Antlr.Transformer;
+using ASD_Game.InputHandling.Exceptions;
 using InputHandling.Antlr.Grammar;
-using InputHandling.Antlr.Parser;
-using InputHandling.Antlr.Transformer;
-using InputHandling.Exceptions;
 
-namespace InputHandling.Antlr
+namespace ASD_Game.InputHandling.Antlr
 {
     public class Pipeline : IAntlrErrorListener<IToken>, IPipeline
     {
         private IEvaluator _evaluator;
+        public IEvaluator Evaluator { get => _evaluator; set => _evaluator = value; }
         private AST _ast;
         public AST Ast { get => _ast; private set => _ast = value; }
 
         public Pipeline(IEvaluator evaluator)
         {
             _evaluator = evaluator;
+        }
+
+        public Pipeline()
+        {
+            
         }
         public void SyntaxError(IRecognizer recognizer, 
                                 IToken offendingSymbol, 
@@ -28,7 +34,7 @@ namespace InputHandling.Antlr
             throw new CommandSyntaxException(msg);
         }
 
-        public void ParseCommand(string input)
+        public virtual void ParseCommand(string input)
         {
             //Lex (with Antlr's generated lexer)
             if (!input.StartsWith("say") && !input.StartsWith("whisper") && !input.StartsWith("shout"))

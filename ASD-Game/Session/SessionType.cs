@@ -1,4 +1,4 @@
-namespace Session
+namespace ASD_Game.Session
 {
     public enum SessionType
     {
@@ -7,6 +7,9 @@ namespace Session
         RequestToJoinSession,
         SendPing,
         ReceivedPingResponse,
-        SendHeartbeat
+        SendHeartbeat,
+        EditMonsterDifficulty,
+        EditItemSpawnRate,
+        NewBackUpHost
     }
 }

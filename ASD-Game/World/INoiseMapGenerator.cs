@@ -1,6 +1,6 @@
-using ASD_project.World.Models;
+using ASD_Game.World.Models;
 
-namespace ASD_project.World
+namespace ASD_Game.World
 {
     public interface INoiseMapGenerator
     {

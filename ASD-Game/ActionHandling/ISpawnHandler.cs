@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using ActionHandling.DTO;
-using Items;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.Items;
 
-namespace ActionHandling
+namespace ASD_Game.ActionHandling
 {
     public interface ISpawnHandler
     {
         public void SendSpawn(int x, int y, Item item);
         
-        public void setItemSpawnDTOs(List<ItemSpawnDTO> itemSpawnDTOs);
+        public void SetItemSpawnDTOS(List<ItemSpawnDTO> itemSpawnDTOs);
     }
 }

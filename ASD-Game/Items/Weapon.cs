@@ -1,7 +1,8 @@
-﻿using Items.ItemStats;
-using Items.WeaponStats;
+﻿using System;
+using ASD_Game.Items.ItemStats;
+using ASD_Game.Items.WeaponStats;
 
-namespace Items
+namespace ASD_Game.Items
 {
     public class Weapon : Item
     {
@@ -11,20 +12,14 @@ namespace Items
         public WeaponDamage Damage { get; set; }
         public WeaponDistance Distance { get; set; }
 
-        public int GetWeaponSpeed()
+        public override string ToString()
         {
-            return (int) Speed;
+            string inspect = Description;
+            inspect += $"{Environment.NewLine}Type: {Type.ToString()}";
+            inspect += $"{Environment.NewLine}Rarity: {Rarity.ToString()}";
+            inspect += $"{Environment.NewLine}Damage: {Damage.ToString()}";
+            inspect += $"{Environment.NewLine}Attack speed: {Speed.ToString()}";
+            return inspect;
         }
-
-        public int GetWeaponDamage()
-        {
-            return (int) Damage;
-        }
-        
-        public int GetWeaponDistance()
-        {
-            return (int) Distance;
-        }
-        
     }
 }

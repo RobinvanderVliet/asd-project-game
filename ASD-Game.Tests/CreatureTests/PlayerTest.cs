@@ -1,27 +1,28 @@
-﻿using Creature.Creature.StateMachine;
-using Creature.Creature.StateMachine.Data;
-using Moq;
-using Network;
-using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using ASD_Game.Creature.Creature;
+using ASD_Game.Creature.Creature.StateMachine;
+using ASD_Game.Creature.Creature.StateMachine.Data;
+using ASD_Game.Network;
+using Moq;
+using NUnit.Framework;
 
-namespace Creature.Tests
+namespace ASD_Game.Tests.CreatureTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
     class PlayerTest
     {
-        private Creature.Player _sut;
+        private Player _sut;
         private Mock<ICreatureStateMachine> _creatureStateMachineMock;
-        private Mock<Network.IClientController> _clientControllerMock;
+        private Mock<IClientController> _clientControllerMock;
 
         [SetUp]
         public void Setup()
         {
             _creatureStateMachineMock = new Mock<ICreatureStateMachine>();
             _clientControllerMock = new Mock<IClientController>();
-            _sut = new Creature.Player(_creatureStateMachineMock.Object, _clientControllerMock.Object);
+            _sut = new Player(_creatureStateMachineMock.Object, _clientControllerMock.Object);
         }
 
         [Test]

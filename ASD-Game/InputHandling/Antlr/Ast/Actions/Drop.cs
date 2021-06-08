@@ -2,25 +2,25 @@ using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
-namespace InputHandling.Antlr.Ast.Actions
+namespace ASD_Game.InputHandling.Antlr.Ast.Actions
 {
     public class Drop : Command, IEquatable<Drop>
     {
-        private Message _itemName;
-        public Message ItemName { get => _itemName; private set => _itemName = value; }
+        private InventorySlot _inventorySlot;
+        public InventorySlot InventorySlot { get => _inventorySlot; private set => _inventorySlot = value; }
 
         public ArrayList GetChildren()
         {
             var children = new ArrayList();
-            children.Add(_itemName);
+            children.Add(_inventorySlot);
             return children;
         }
 
         public override ASTNode AddChild(ASTNode child)
         {
-            if (child is Message)
+            if (child is InventorySlot)
             {
-                _itemName = (Message)child;
+                _inventorySlot = (InventorySlot)child;
             }
 
             return this;
@@ -28,9 +28,9 @@ namespace InputHandling.Antlr.Ast.Actions
 
         public ASTNode RemoveChild(ASTNode child)
         {
-            if (child is Message && child == _itemName)
+            if (child is InventorySlot && child == _inventorySlot)
             {
-                _itemName = null;
+                _inventorySlot = null;
             }
 
             return this;
@@ -46,10 +46,6 @@ namespace InputHandling.Antlr.Ast.Actions
         public bool Equals(Drop other)
         {
             return true;
-        }
-        public override int GetHashCode()
-        {
-            return _itemName.GetHashCode();
         }
     }
 }
