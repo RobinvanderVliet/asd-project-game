@@ -17,7 +17,6 @@ using Messages;
 
 namespace Session
 {
-
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
     {
         private readonly IClientController _clientController;
@@ -33,17 +32,17 @@ namespace Session
         private readonly IMessageService _messageService;
 
         public GameSessionHandler(
-            IClientController clientController, 
-            ISessionHandler sessionHandler, 
+            IClientController clientController,
+            ISessionHandler sessionHandler,
             IRelativeStatHandler relativeStatHandler,
             IGameConfigurationHandler gameConfigurationHandler,
             IScreenHandler screenHandler,
-            IDatabaseService<PlayerPOCO> playerDatabaseService, 
-            IDatabaseService<GamePOCO> gameDatabaseService, 
+            IDatabaseService<PlayerPOCO> playerDatabaseService,
+            IDatabaseService<GamePOCO> gameDatabaseService,
             IDatabaseService<GameConfigurationPOCO> gameConfigDatabaseService,
-            IDatabaseService<PlayerItemPOCO> playerItemDatabaseService, 
+            IDatabaseService<PlayerItemPOCO> playerItemDatabaseService,
             IWorldService worldService,
-            IMessageService messageService 
+            IMessageService messageService
         )
         {
             _clientController = clientController;
@@ -68,17 +67,18 @@ namespace Session
             {
                 startGameDTO = LoadSave();
             }
-      
+
             SendGameSessionDTO(startGameDTO);
             _sessionHandler.SetGameStarted(true);
         }
 
-        private void AddItemsToPlayer( string playerId, string gameId)
+        private void AddItemsToPlayer(string playerId, string gameId)
         {
-            PlayerItemPOCO poco = new() {PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGUID = gameId };
+            PlayerItemPOCO poco = new()
+                {PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGUID = gameId};
             _ = _playerItemDatabaseService.CreateAsync(poco);
 
-            poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetKnife().ItemName, GameGUID = gameId };
+            poco = new() {PlayerGUID = playerId, ItemName = ItemFactory.GetKnife().ItemName, GameGUID = gameId};
             _ = _playerItemDatabaseService.CreateAsync(poco);
         }
 
@@ -90,37 +90,32 @@ namespace Session
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-            bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
+            bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) ||
+                                    _clientController.IsBackupHost;
             var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
-
 
             _screenHandler.TransitionTo(new GameScreen());
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
 
             Player currentPlayer;
-            
-            if (startGameDTO.ExistingPlayer != null && _clientController.GetOriginId() == startGameDTO.ExistingPlayer.PlayerGuid)
+
+            if (startGameDTO.ExistingPlayer != null &&
+                _clientController.GetOriginId() == startGameDTO.ExistingPlayer.PlayerGuid)
             {
-
                 _worldService.GenerateWorld(startGameDTO.Seed);
-                 currentPlayer = AddRejoinedPlayerToGame(startGameDTO);
+                currentPlayer = AddRejoinedPlayerToGame(startGameDTO);
                 _worldService.DisplayWorld();
-
-            } 
+            }
             else if (_sessionHandler.GetSavedGame() && !_sessionHandler.GameStarted())
             {
                 _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
                 currentPlayer = AddPlayerToWorldSavedGame(startGameDTO.SavedPlayers);
-            } 
-            else if (handleInDatabase)
-            {
-                currentPlayer = AddPlayersToWorld();
-            } 
+            }
             else
             {
-                currentPlayer = AddPlayersToNewGame(startGameDTO);
+                currentPlayer = AddPlayersToWorld();
             }
-            
+
             if (currentPlayer != null)
             {
                 _worldService.LoadArea(currentPlayer.XPosition, currentPlayer.YPosition, 10);
@@ -136,37 +131,17 @@ namespace Session
             if (handleInDatabase)
             {
                 InsertConfigurationIntoDatabase();
-                if (startGameDTO.SavedPlayers == null) 
+                if (startGameDTO.SavedPlayers == null)
                 {
                     InsertGameIntoDatabase();
 
                     InsertPlayersIntoDatabase();
                 }
             }
+
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
-        private Player AddPlayersToNewGame(StartGameDTO startGameDTO)
-        {
-            Player currentPlayer = null;
-            foreach (var player in startGameDTO.PlayerLocations)
-            {
-                if (_clientController.GetOriginId() == player.Key)
-                {
-                    currentPlayer = new Player("arie", player.Value[0], player.Value[1],
-                    CharacterSymbol.ENEMY_PLAYER, player.Key);
-                    _worldService.AddPlayerToWorld(currentPlayer, true);
-                }
-                else
-                {
-                    var playerObect = new Player("gerrit", startGameDTO.ExistingPlayer.XPosition,
-                    startGameDTO.ExistingPlayer.YPosition,
-                    CharacterSymbol.CURRENT_PLAYER, player.Key);
-                    _worldService.AddPlayerToWorld(playerObect, false);
-                }
-            }
-            return currentPlayer;
-        }
 
         private Player AddPlayerToWorldSavedGame(List<PlayerPOCO> savedPlayers)
         {
@@ -178,23 +153,20 @@ namespace Session
                     currentPlayer = new Player(player.PlayerName, player.XPosition, player.YPosition,
                         CharacterSymbol.CURRENT_PLAYER, player.PlayerGuid);
                     _worldService.AddPlayerToWorld(currentPlayer, true);
-
                 }
                 else
                 {
-                    var playerObject = new Player(player.PlayerName, player.XPosition, player.YPosition, CharacterSymbol.ENEMY_PLAYER, player.PlayerGuid);
+                    var playerObject = new Player(player.PlayerName, player.XPosition, player.YPosition,
+                        CharacterSymbol.ENEMY_PLAYER, player.PlayerGuid);
                     _worldService.AddPlayerToWorld(playerObject, false);
                 }
-                
             }
 
             return currentPlayer;
         }
-        
+
         private Player AddRejoinedPlayerToGame(StartGameDTO startGameDTO)
         {
-
-
             Player currentPlayer = null;
 
             foreach (var player in startGameDTO.PlayerLocations)
@@ -203,12 +175,11 @@ namespace Session
                 {
                     var tmpClientHistory = new DatabaseService<ClientHistoryPOCO>();
                     var tmpObject = new ClientHistoryPOCO()
-                        { PlayerId = player.Key, GameId = startGameDTO.GameGuid };
+                        {PlayerId = player.Key, GameId = startGameDTO.GameGuid};
                     tmpClientHistory.CreateAsync(tmpObject);
 
                     if (startGameDTO.ExistingPlayer is null)
                     {
-
                         currentPlayer = new Player("gerrit", player.Value[0], player.Value[1],
                             CharacterSymbol.CURRENT_PLAYER, player.Key);
                         _worldService.AddPlayerToWorld(currentPlayer, true);
@@ -219,7 +190,7 @@ namespace Session
                             startGameDTO.ExistingPlayer.YPosition,
                             CharacterSymbol.CURRENT_PLAYER, player.Key);
                         // Has to be merged with feature branche to set old health and stamina etc
-                        _worldService.AddPlayerToWorld(playerObect, false); 
+                        _worldService.AddPlayerToWorld(playerObect, false);
                     }
                 }
                 else
@@ -229,15 +200,21 @@ namespace Session
                             CharacterSymbol.ENEMY_PLAYER, player.Key), false);
                 }
             }
+
             return currentPlayer;
         }
 
         private void InsertPlayersIntoDatabase()
         {
             var players = _worldService.GetPlayers();
-            foreach(Player player in players)
+            foreach (Player player in players)
             {
-                PlayerPOCO playerPoco = new PlayerPOCO { PlayerGuid = player.Id, GameGuid = _clientController.SessionId, GameGUIDAndPlayerGuid = _clientController.SessionId + player.Id, XPosition = player.XPosition, YPosition = player.YPosition };
+                PlayerPOCO playerPoco = new PlayerPOCO
+                {
+                    PlayerGuid = player.Id, GameGuid = _clientController.SessionId,
+                    GameGUIDAndPlayerGuid = _clientController.SessionId + player.Id, XPosition = player.XPosition,
+                    YPosition = player.YPosition
+                };
                 _playerDatabaseService.CreateAsync(playerPoco);
                 AddItemsToPlayer(player.Id, _clientController.SessionId);
             }
@@ -246,34 +223,15 @@ namespace Session
 
         private void InsertGameIntoDatabase()
         {
-            var gamePOCO = new GamePOCO { GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId(), GameName = _sessionHandler.GameName, Seed = _sessionHandler.GetSessionSeed()};
-            _gameDatabaseService.CreateAsync(gamePOCO);
-        }
-        
-        public StartGameDTO SetupGameHost()
-        {
-            StartGameDTO startGameDTO = new StartGameDTO();
-
             var gamePOCO = new GamePOCO
             {
-                GameGuid = _clientController.SessionId,
-                PlayerGUIDHost = _clientController.GetOriginId(),
-                Seed = _sessionHandler.GetSessionSeed(),
-                GameName = _sessionHandler.GameName
+                GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId(),
+                GameName = _sessionHandler.GameName, Seed = _sessionHandler.GetSessionSeed()
             };
             _gameDatabaseService.CreateAsync(gamePOCO);
-
-            List<string[]> allClients = _sessionHandler.GetAllClients();
-            Dictionary<string, int[]> players = new();
-
-            players = SetupPositionsNewPlayers(allClients, gamePOCO);
-
-            startGameDTO.GameGuid = gamePOCO.GameGuid;
-            startGameDTO.PlayerLocations = players;
-
-            return startGameDTO;
         }
-        
+
+
         private Dictionary<string, int[]> SetupPositionsNewPlayers(List<string[]> allClients, GamePOCO gamePOCO)
         {
             Dictionary<string, int[]> players = new();
@@ -310,9 +268,9 @@ namespace Session
             var gameConfigurationPOCO = new GameConfigurationPOCO
             {
                 GameGUID = _clientController.SessionId,
-                NPCDifficultyCurrent = (int)_gameConfigurationHandler.GetCurrentMonsterDifficulty(),
-                NPCDifficultyNew = (int)_gameConfigurationHandler.GetNewMonsterDifficulty(),
-                ItemSpawnRate = (int)_gameConfigurationHandler.GetSpawnRate()
+                NPCDifficultyCurrent = (int) _gameConfigurationHandler.GetCurrentMonsterDifficulty(),
+                NPCDifficultyNew = (int) _gameConfigurationHandler.GetNewMonsterDifficulty(),
+                ItemSpawnRate = (int) _gameConfigurationHandler.GetSpawnRate()
             };
             _gameConfigDatabaseService.CreateAsync(gameConfigurationPOCO);
         }
@@ -346,21 +304,21 @@ namespace Session
 
             return currentPlayer;
         }
-        
+
         private StartGameDTO LoadSave()
         {
-            StartGameDTO startGameDTO = new ();
+            StartGameDTO startGameDTO = new();
 
             var allPlayers = _playerDatabaseService.GetAllAsync();
             allPlayers.Wait();
             var allPlayersInGame = allPlayers.Result.Where(x => x.GameGuid == _clientController.SessionId);
-            
+
 
             startGameDTO = SetLoadedGameInfo(startGameDTO, allPlayersInGame);
 
             return startGameDTO;
         }
-        
+
         private StartGameDTO SetLoadedGameInfo(StartGameDTO startGameDTO, IEnumerable<PlayerPOCO> allPlayersInGame)
         {
             startGameDTO.SavedPlayers = new List<PlayerPOCO>();
@@ -380,8 +338,5 @@ namespace Session
             startGameDTO.PlayerLocations = players;
             return startGameDTO;
         }
-        
-        
-        
     }
 }

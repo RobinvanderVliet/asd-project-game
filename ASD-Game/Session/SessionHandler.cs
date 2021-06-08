@@ -463,13 +463,6 @@ namespace Session
                 _session.AddClient(client[0], client[1]);
             }
 
-            Console.WriteLine("Players in your session:");
-            foreach (string[] client in sessionDTOClients.Clients)
-            {
-                _session.AddClient(client[0], client[1]);
-                Console.WriteLine(client);
-            }
-
             if (_screenHandler.Screen is LobbyScreen screen)
             {
                 screen.UpdateLobbyScreen(sessionDTOClients.Clients);
