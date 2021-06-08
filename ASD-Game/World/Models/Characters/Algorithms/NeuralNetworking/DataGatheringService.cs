@@ -43,7 +43,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                 Vector2 pPos = new Vector2(monster.XPosition, monster.YPosition);
                 Vector2 cPos = new Vector2(smartMonster.XPosition, smartMonster.YPosition);
                 Single distance = Vector2.Distance(pPos, cPos);
-                if (distance < DistanceToClosestPlayer)
+                if (distance < DistanceToClosestPlayer || ClosestMonster == null)
                 {
                     ClosestMonster = monster;
                     DistanceToClosestPlayer = distance;
@@ -59,7 +59,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                 Vector2 pPos = new Vector2(player.XPosition, player.YPosition);
                 Vector2 cPos = new Vector2(smartMonster.XPosition, smartMonster.YPosition);
                 Single distance = Vector2.Distance(pPos, cPos);
-                if (distance < DistanceToClosestPlayer)
+                if (distance < DistanceToClosestPlayer || ClosestPlayer == null)
                 {
                     ClosestPlayer = player;
                     DistanceToClosestPlayer = distance;
