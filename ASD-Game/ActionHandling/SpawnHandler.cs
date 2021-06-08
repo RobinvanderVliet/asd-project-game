@@ -11,63 +11,26 @@ using Newtonsoft.Json;
 
 namespace ASD_Game.ActionHandling
 {
-    public class SpawnHandler : ISpawnHandler, IPacketHandler
+    public class SpawnHandler : ISpawnHandler
     {
         private IClientController _clientController;
-        private List<ItemSpawnDTO> _itemSpawnDTOs;
+        private readonly IDatabaseService<WorldItemPOCO> _worldItemDatabaseService;
 
-        public SpawnHandler(IClientController clientController)
+        public SpawnHandler(IClientController clientController, IDatabaseService<WorldItemPOCO> worldItemDatabaseService)
         {
             _clientController = clientController;
-            _clientController.SubscribeToPacketType(this, PacketType.Spawn);
-        }
-
-        public void SetItemSpawnDTOS(List<ItemSpawnDTO> itemSpawnDTOs)
-        {
-            _itemSpawnDTOs = itemSpawnDTOs;
+            _worldItemDatabaseService = worldItemDatabaseService;
         }
 
         public void SendSpawn(int x, int y, Item item)
         {
-            ItemSpawnDTO itemSpawnDto = new ItemSpawnDTO();
-            itemSpawnDto.XPosition = x;
-            itemSpawnDto.YPosition = y;
-            itemSpawnDto.Item = item;
-            SendSpawnDTO(itemSpawnDto);
-        }
+            bool handleInDatabase = _clientController.IsHost() || _clientController.IsBackupHost;
 
-        private void SendSpawnDTO(ItemSpawnDTO itemSpawnDto)
-        {
-            var payload = JsonConvert.SerializeObject(itemSpawnDto);
-            _clientController.SendPayload(payload, PacketType.Spawn);
-        }
-
-        public HandlerResponseDTO HandlePacket(PacketDTO packet)
-        {
-            var itemSpawnDto = JsonConvert.DeserializeObject<ItemSpawnDTO>(packet.Payload);
-            
-            if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
+            if (handleInDatabase)
             {
-                ItemSpawnDTO item = _itemSpawnDTOs
-                    .FirstOrDefault(item => item.Equals(itemSpawnDto));
-                if (item == null)
-                {
-                    InsertToDatabase(itemSpawnDto);
-                }
-                else
-                {
-                    return new HandlerResponseDTO(SendAction.Ignore, null);
-                }
+                WorldItemPOCO worldItem = new() { ItemName = item.ItemName, GameGUID = _clientController.SessionId, XPosition = x, YPosition = y };
+                _worldItemDatabaseService.CreateAsync(worldItem);
             }
-            return new HandlerResponseDTO(SendAction.SendToClients, null);
-        }
-
-        private void InsertToDatabase(ItemSpawnDTO itemSpawnDto)
-        {
-            var ItemService = new DatabaseService<ItemPOCO>();
-            var item = new ItemPOCO()
-                {ItemName = itemSpawnDto.Item.ItemName, Xposition = itemSpawnDto.XPosition, Yposition = itemSpawnDto.YPosition};
-            ItemService.CreateAsync(item);
         }
     }
 }
