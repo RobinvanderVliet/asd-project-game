@@ -75,6 +75,7 @@ namespace ActionHandling
         {
             if (_worldService.IsDead(_worldService.GetCurrentPlayer()))
             {
+                _messageService.AddMessage("You died");
                 _worldService.DisplayWorld();
                 _radiationTimer.Stop();
                 return;

@@ -1,4 +1,4 @@
-﻿using Moq;
+using Moq;
 using Network;
 using Newtonsoft.Json;
 using NUnit.Framework;
