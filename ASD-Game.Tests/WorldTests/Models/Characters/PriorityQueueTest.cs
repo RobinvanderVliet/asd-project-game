@@ -1,9 +1,9 @@
-using Character.Pathfinder;
-using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using ASD_Game.World.Models.Characters.Algorithms.Pathfinder;
+using NUnit.Framework;
 
-namespace Character.Tests
+namespace ASD_Game.Tests.WorldTests.Models.Characters
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]

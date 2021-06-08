@@ -78,7 +78,7 @@ namespace ASD_Game.World
                 Console.WriteLine("");
             }
         }
-        
+
         public char[,] GetCharArrayMapAroundCharacter(Character centerCharacter, int viewDistance, List<Character> allCharacters)
         { // Returns a 2d char array centered around a character.
           // The view distance is how far the map is rendered to all sides from the character.

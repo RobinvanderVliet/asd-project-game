@@ -1,13 +1,12 @@
-﻿using Character.Pathfinder;
-using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
+using ASD_Game.World.Models.Characters.Algorithms.Pathfinder;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
+using NUnit.Framework;
 using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
-using WorldGeneration.StateMachine.Data;
 
-namespace World.Models.Character.Tests.NeuralNetworkTest
+namespace ASD_Game.Tests.WorldTests.Models.Characters.NeuralNetworkTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]

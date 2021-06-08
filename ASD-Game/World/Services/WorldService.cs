@@ -162,11 +162,6 @@ namespace ASD_Game.World.Services
             return _world.CheckIfCharacterOnTile(tile);
         }
 
-        public void LoadArea(int playerX, int playerY, int viewDistance)
-        {
-            _world.LoadArea(playerX, playerY, viewDistance);
-        }
-
         public void DisplayStats()
         {
             Player player = GetCurrentPlayer();
@@ -184,18 +179,6 @@ namespace ASD_Game.World.Services
                 player.Inventory.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
                 player.Inventory.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
         }
-
-        public World GetWorld()
-        {
-            return _world;
-        }
-
-        public char[,] GetMapAroundCharacter(Character character)
-        {
-            return _world.GetMapAroundCharacter(character);
-        }
-
-
         public IList<Item> GetItemsOnCurrentTile()
         {
             return _world.GetCurrentTile().ItemsOnTile;
@@ -205,21 +188,6 @@ namespace ASD_Game.World.Services
         public IList<Item> GetItemsOnCurrentTile(Player player)
         {
             return _world.GetTileForPlayer(player).ItemsOnTile;
-        }
-
-        public ITile GetTile(int x, int y)
-        {
-            return _world.GetLoadedTileByXAndY(x, y);
-        }
-
-        public bool CheckIfCharacterOnTile(ITile tile)
-        {
-            return _world.CheckIfCharacterOnTile(tile);
-        }
-        
-        public List<Player> GetAllPlayers()
-        {
-            return _world.GetAllPlayers();
         }
     }
 }

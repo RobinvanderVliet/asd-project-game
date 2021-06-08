@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using ASD_Game.Character.Pathfinder;
 
 namespace ASD_Game.World.Models.Characters.Algorithms.Pathfinder
 {

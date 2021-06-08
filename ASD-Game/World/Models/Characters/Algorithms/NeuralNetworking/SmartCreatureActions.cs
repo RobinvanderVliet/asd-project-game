@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using ASD_Game.Character.Pathfinder;
 using ASD_Game.World.Models.Characters.Algorithms.Pathfinder;
 
 namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking

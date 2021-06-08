@@ -12,7 +12,7 @@ namespace ASD_Game.World
 {
     public class World : IWorld
     {
-        private Map _map;
+        private IMap _map;
         public Player CurrentPlayer { get; set; }
         public List<Player> Players { get; set; }
         public List<Character> _creatures { get; set; }
@@ -23,17 +23,22 @@ namespace ASD_Game.World
         private readonly IScreenHandler _screenHandler;
         private static readonly char _separator = Path.DirectorySeparatorChar;
 
-        public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler)
+        public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService)
         {
-            Players = new();
-            _creatures = new();
-            var currentDirectory = Directory.GetCurrentDirectory();
-
-            Players = new();
-            _map = MapFactory.GenerateMap(dbLocation: $"Filename={currentDirectory}{_separator}ChunkDatabase.db;connection=shared;", seed: seed);
+            // Players = new();
+            // _creatures = new();
+            // var currentDirectory = Directory.GetCurrentDirectory();
+            //
+            // Players = new();
+            // _viewDistance = viewDistance;
+            // _screenHandler = screenHandler;
+            // DeleteMap();
+            Items = new();
+            Players = new ();
+            _creatures = new ();
+            _map = mapFactory.GenerateMap(itemService, Items, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
-            DeleteMap();
         }
         
         public Player GetPlayer(string id)
@@ -80,7 +85,7 @@ namespace ASD_Game.World
         {
             if (CurrentPlayer != null && Players != null && _creatures != null)
             {
-                _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, GetAllCharacters()));
+                _screenHandler.UpdateWorld(_map.GetCharArrayMapAroundCharacter(CurrentPlayer, _viewDistance, GetAllCharacters()));
             }
         }
 
@@ -106,7 +111,7 @@ namespace ASD_Game.World
 
         public char[,] GetMapAroundCharacter(Character character)
         {
-            return _map.GetMapAroundCharacter(character, _viewDistance, GetAllCharacters());
+            return _map.GetCharArrayMapAroundCharacter(character, _viewDistance, GetAllCharacters());
         }
 
         private List<Character> GetAllCharacters()

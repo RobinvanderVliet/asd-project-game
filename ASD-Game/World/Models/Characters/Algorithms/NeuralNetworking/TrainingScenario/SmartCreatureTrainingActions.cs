@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using ASD_Game.Character.Pathfinder;
 using ASD_Game.World.Models.Characters.Algorithms.Pathfinder;
 using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
