@@ -57,6 +57,11 @@ namespace ASD_Game.UserInterface
 
         public void RedrawInputBox()
         {
+            for(int i = INPUT_Y; i < _screenHandler.ConsoleHelper.GetConsoleHeight(); i++)
+            {
+                _screenHandler.ConsoleHelper.SetCursor(INPUT_X, i);
+                _screenHandler.ConsoleHelper.Write(new string(' ', _screenHandler.ConsoleHelper.GetConsoleWidth()));
+            }           
             DrawInputBox(INPUT_X, INPUT_Y, "Insert an option");
         }
 

@@ -45,11 +45,12 @@
 
         private void ClearWorld()
         {
-            for (int i = 0; i <= _height - OFFSET_TOP; i++)
+            for (int i = 0; i <= _height + 1; i++)
             {
-                _screenHandler.ConsoleHelper.SetCursor(_xPosition + OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
-                _screenHandler.ConsoleHelper.Write(new string(' ', _width - 1));
+                _screenHandler.ConsoleHelper.SetCursor(_xPosition, _yPosition + i);
+                _screenHandler.ConsoleHelper.Write(new string(' ', _width + BORDER_SIZE));
             }
+            DrawScreen();
         }
         
 

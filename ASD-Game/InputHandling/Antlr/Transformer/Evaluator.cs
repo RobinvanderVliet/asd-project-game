@@ -243,7 +243,6 @@ namespace ASD_Game.InputHandling.Antlr.Transformer
                     frequency = (int) ItemSpawnRate.High;
                     break;
             }
-            Console.WriteLine(frequency);
             SessionDTO sessionDto = new SessionDTO
             {
                 SessionType = SessionType.EditItemSpawnRate,

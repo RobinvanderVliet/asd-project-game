@@ -40,5 +40,15 @@ namespace ASD_Game.UserInterface
         {
             return Console.ReadLine();
         }
+        
+        public virtual int GetConsoleHeight()
+        {
+            return Console.WindowHeight;
+        }
+
+        public virtual int GetConsoleWidth()
+        {
+            return Console.WindowWidth;
+        }
     }
 }

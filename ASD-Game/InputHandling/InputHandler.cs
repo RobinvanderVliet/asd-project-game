@@ -41,7 +41,14 @@ namespace ASD_Game.InputHandling
             SendCommand(GetCommand());
             _screenHandler.RedrawGameInputBox();
         }
-        
+
+        // Needed to handle input on client when host has started session
+        public void HandleGameScreenCommands(string input)
+        {
+            SendCommand(input);
+            _screenHandler.RedrawGameInputBox();
+        }
+
         private void SendCommand(string commando)
         {
             try
@@ -131,27 +138,33 @@ namespace ASD_Game.InputHandling
         public void HandleLobbyScreenCommands()
         {
             var input = GetCommand();
-
-            if (input == RETURN_KEYWORD)
+            // Needed to handle input on client when host has started session
+            if (_screenHandler.Screen is GameScreen)
             {
-                _screenHandler.TransitionTo(new StartScreen());
-                return;
+                HandleGameScreenCommands(input);
             }
+            else
+            {
+                if (input == RETURN_KEYWORD)
+                {
+                    _screenHandler.TransitionTo(new StartScreen());
+                    return;
+                }
 
-            //TODO add if to check if you are the host
-            if (input == START_COMMAND) 
-            {
-                //_screenHandler.TransitionTo(new GameScreen());
-                SendCommand(START_COMMAND);
-            }
+                if (input == START_COMMAND)
+                {
+                    SendCommand(START_COMMAND);
+                }
 
-            if (input.Contains("SAY"))
-            {
-                SendCommand(input);
-            }
-            else if (input.Contains("SHOUT")) 
-            {
-                SendCommand(input);
+                if (input.Contains("SAY"))
+                {
+                    SendCommand(input);
+                }
+                else if (input.Contains("SHOUT"))
+                {
+                    SendCommand(input);
+                }
+               
             }
 
         }
