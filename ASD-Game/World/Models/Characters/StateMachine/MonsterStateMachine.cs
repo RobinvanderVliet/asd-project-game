@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using Appccelerate.StateMachine.Machine;
 using WorldGeneration.StateMachine.CustomRuleSet;
 using WorldGeneration.StateMachine.Data;
@@ -15,6 +16,7 @@ namespace WorldGeneration.StateMachine
         {
         }
 
+        [ExcludeFromCodeCoverage]
         public ICharacterData CharacterData
         {
             get => _characterData;

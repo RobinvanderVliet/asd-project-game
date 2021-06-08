@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
@@ -12,9 +13,10 @@ namespace WorldGeneration.StateMachine
     public abstract class DefaultStateMachine : ICharacterStateMachine
     {
         protected RuleSet _ruleset;
-        protected PassiveStateMachine<CharacterState, CharacterEvent.Event> _passiveStateMachine;
+        public PassiveStateMachine<CharacterState, CharacterEvent.Event> _passiveStateMachine;
         protected ICharacterData _characterData;
 
+        [ExcludeFromCodeCoverage]
         public ICharacterData CharacterData
         {
             get => _characterData;
@@ -29,6 +31,7 @@ namespace WorldGeneration.StateMachine
             _ruleset = ruleset;
         }
 
+        [ExcludeFromCodeCoverage]
         public virtual void StartStateMachine()
         {
             _passiveStateMachine.Start();
@@ -40,11 +43,6 @@ namespace WorldGeneration.StateMachine
             {
                 FireEvent(CharacterEvent.Event.DO);
             }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(1000));
-        }
-
-        protected void KillLoop()
-        {
-            _timer.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
         public void FireEvent(CharacterEvent.Event creatureEvent, object argument)
