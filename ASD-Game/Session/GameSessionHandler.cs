@@ -96,7 +96,7 @@ namespace Session
 
             
             
-            if (startGameDTO.ExistingPlayer == null)
+            if (startGameDTO.ExistingPlayer == null && !_sessionHandler.GameStarted())
             {
                 _screenHandler.TransitionTo(new GameScreen());
                 _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
@@ -105,7 +105,7 @@ namespace Session
             Player currentPlayer;
 
             if (startGameDTO.ExistingPlayer != null &&
-                _clientController.GetOriginId() == startGameDTO.ExistingPlayer.PlayerGuid)
+                _clientController.GetOriginId() == startGameDTO.ExistingPlayer.PlayerGuid && !_sessionHandler.GameStarted() )
             {
                 _screenHandler.TransitionTo(new GameScreen());
                 _worldService.GenerateWorld(startGameDTO.Seed);
