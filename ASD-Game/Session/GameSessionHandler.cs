@@ -93,7 +93,6 @@ namespace Session
             bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) ||
                                     _clientController.IsBackupHost;
             var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
-
             
             
             if (startGameDTO.ExistingPlayer == null && !_sessionHandler.GameStarted())
@@ -133,7 +132,7 @@ namespace Session
             _worldService.DisplayStats();
             _messageService.DisplayMessages();
 
-            if (handleInDatabase)
+            if (handleInDatabase && !_sessionHandler.GameStarted())
             {
                 InsertConfigurationIntoDatabase();
                 if (startGameDTO.SavedPlayers == null)
