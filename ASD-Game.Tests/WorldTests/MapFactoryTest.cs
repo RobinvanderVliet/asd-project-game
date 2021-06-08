@@ -4,14 +4,14 @@ using NUnit.Framework;
 
 namespace WorldGeneration.Tests
 {
-    [ExcludeFromCodeCoverage]  
+    [ExcludeFromCodeCoverage]
     [TestFixture]
     public class MapFactoryTest
     {
         //Declaration and initialisation of constant variables
- 
+
         //Declaration of variables
- 
+
         //Declaration of mocks
         private MapFactory _sut;
 
@@ -22,9 +22,9 @@ namespace WorldGeneration.Tests
             //Initialisation of mocks
             _sut = new MapFactory();
         }
-        
+
         [Test]
-        public void Test_GenerateSeed_GeneratesARandomSeed() 
+        public void Test_GenerateSeed_GeneratesARandomSeed()
         {
             //Arrange ---------
             //Act ---------

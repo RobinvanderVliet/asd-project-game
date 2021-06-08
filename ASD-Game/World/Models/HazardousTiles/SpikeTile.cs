@@ -25,6 +25,7 @@ namespace WorldGeneration.Models.HazardousTiles
             YPosition = y;
             StaminaCost = 5;
             Damage = new Random().Next(2, 11);
+            ItemsOnTile = new List<Item>();
         }
 
         public int Damage { get; set; }

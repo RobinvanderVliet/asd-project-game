@@ -1,26 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using WorldGeneration.Models.Interfaces;
 using System.Linq;
 using UserInterface;
 
+using Characters;
+
 namespace WorldGeneration
 {
-    public class World
+    public class World : IWorld
     {
         private Map _map;
         public Player CurrentPlayer { get; set; }
         public List<Player> Players { get; set; }
+        public List<Character> _creatures { get; set; }
+        public List<Character> movesList = new List<Character>();
+
         private readonly int _viewDistance;
         private readonly IScreenHandler _screenHandler;
         private static readonly char _separator = Path.DirectorySeparatorChar;
 
-        public World(int seed, int viewDistance, IScreenHandler screenHandler)
+        public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler)
         {
+            Players = new();
+            _creatures = new();
             var currentDirectory = Directory.GetCurrentDirectory();
 
-            Players = new ();
+            Players = new();
             _map = MapFactory.GenerateMap(dbLocation: $"Filename={currentDirectory}{_separator}ChunkDatabase.db;connection=shared;", seed: seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
@@ -39,15 +45,21 @@ namespace WorldGeneration
                 CurrentPlayer.XPosition = newXPosition;
                 CurrentPlayer.YPosition = newYPosition;
             }
-            else
+            else if (GetPlayer(userId) != null)
             {
                 var player = GetPlayer(userId);
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
+            var creature = _creatures.FirstOrDefault(x => x.Id == userId);
+            if (GetAI(userId) != null)
+            {
+                creature.XPosition = newXPosition;
+                creature.YPosition = newYPosition;
+            }
         }
 
-        public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
+        public void AddPlayerToWorld(Player player, bool isCurrentPlayer = false)
         {
             if (isCurrentPlayer)
             {
@@ -56,11 +68,16 @@ namespace WorldGeneration
             Players.Add(player);
         }
 
-        public void DisplayWorld()
+        public void AddCreatureToWorld(Character character)
         {
-            if (CurrentPlayer != null && Players != null)
+            _creatures.Add(character);
+        }
+
+        public void UpdateMap()
+        {
+            if (CurrentPlayer != null && Players != null && _creatures != null)
             {
-                _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, new List<Character>(Players)));
+                _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, GetAllCharacters()));
             }
         }
 
@@ -73,23 +90,55 @@ namespace WorldGeneration
         {
             return _map.GetLoadedTileByXAndY(x, y);
         }
-        
+
         public bool CheckIfCharacterOnTile(ITile tile)
         {
             return GetAllCharacters().Exists(player => player.XPosition == tile.XPosition && player.YPosition == tile.YPosition);
         }
 
+        public char[,] GetMapAroundCharacter(Character character)
+        {
+            return _map.GetMapAroundCharacter(character, _viewDistance, GetAllCharacters());
+        }
+
         private List<Character> GetAllCharacters()
         {
             List<Character> characters = Players.Cast<Character>().ToList();
+            characters.AddRange(_creatures);
             return characters;
         }
-        
+
         public void LoadArea(int playerX, int playerY, int viewDistance)
         {
             _map.LoadArea(playerX, playerY, viewDistance);
         }
-        
+
+        public void UpdateAI()
+        {
+            movesList = new List<Character>();
+            foreach (Character monster in _creatures)
+            {
+                if (monster is SmartMonster smartMonster)
+                {
+                    if (smartMonster.Brain != null)
+                    {
+                        UpdateSmartMonster(smartMonster);
+                    }
+                }
+            }
+        }
+
+        private void UpdateSmartMonster(SmartMonster smartMonster)
+        {
+            smartMonster.Update();
+            movesList.Add(smartMonster);
+        }
+
+        public Character GetAI(string id)
+        {
+            return _creatures.Find(x => x.Id == id);
+        }
+
         public ITile GetCurrentTile()
         {
             return _map.GetLoadedTileByXAndY(CurrentPlayer.XPosition, CurrentPlayer.YPosition);

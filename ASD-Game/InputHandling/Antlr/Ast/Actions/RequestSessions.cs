@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
 namespace InputHandling.Antlr.Ast.Actions

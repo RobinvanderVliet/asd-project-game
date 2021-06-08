@@ -1,6 +1,4 @@
-using System;
 using ActionHandling;
-using Agent.Antlr.Ast;
 using Chat;
 using InputHandling.Antlr.Ast;
 using InputHandling.Antlr.Ast.Actions;
@@ -10,6 +8,7 @@ using Newtonsoft.Json;
 using Session;
 using Session.DTO;
 using Session.GameConfiguration;
+using System;
 using AST = InputHandling.Antlr.Ast.AST;
 using ItemFrequency = InputHandling.Antlr.Ast.Actions.ItemFrequency;
 using MonsterDifficulty = InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
@@ -18,7 +17,6 @@ namespace InputHandling.Antlr.Transformer
 {
     public class Evaluator : IEvaluator
     {
-        
         private readonly IAttackHandler _attackHandler;
         private readonly ISessionHandler _sessionHandler;
         private readonly IMoveHandler _moveHandler;
@@ -40,6 +38,7 @@ namespace InputHandling.Antlr.Transformer
             _clientController = clientController;
             _inventoryHandler = inventoryHandler;
         }
+
         public void Apply(AST ast)
         {
             TransformNode(ast.Root);
@@ -55,57 +54,75 @@ namespace InputHandling.Antlr.Transformer
                     case Attack:
                         TransformAttack((Attack)nodeBody[i]);
                         break;
+
                     case CreateSession:
                         TransformCreateSession((CreateSession)nodeBody[i]);
                         break;
+
                     case Drop:
                         TransformDrop((Drop)nodeBody[i]);
                         break;
+
                     case Exit:
                         TransformExit();
                         break;
+
                     case Move:
                         TransformMove((Move)nodeBody[i]);
                         break;
+
                     case Pause:
                         TransformPause();
                         break;
+
                     case Pickup:
                         TransformPickup((Pickup)nodeBody[i]);
                         break;
+
                     case Replace:
                         TransformReplace();
                         break;
+
                     case Resume:
                         TransformResume();
                         break;
+
                     case Say:
                         TransformSay((Say)nodeBody[i]);
                         break;
+
                     case Shout:
                         TransformShout((Shout)nodeBody[i]);
                         break;
+
                     case JoinSession:
                         TransformJoinSession((JoinSession)nodeBody[i]);
                         break;
+
                     case RequestSessions:
                         TransformRequestSessions((RequestSessions)nodeBody[i]);
                         break;
+
                     case StartSession:
                         TransformStartSession((StartSession)nodeBody[i]);
                         break;
+
                     case MonsterDifficulty:
                         TransformMonsterDifficulty((MonsterDifficulty)nodeBody[i]);
                         break;
+
                     case ItemFrequency:
                         TransformItemFrequency((ItemFrequency)nodeBody[i]);
                         break;
+
                     case Inspect:
                         TransformInspect((Inspect)nodeBody[i]);
-                        break;    
+                        break;
+
                     case Use:
                         TransformUse((Use)nodeBody[i]);
                         break;
+
                     case Search:
                         TransformSearch();
                         break;
@@ -207,16 +224,19 @@ namespace InputHandling.Antlr.Transformer
             switch (monster.Difficulty)
             {
                 case "easy":
-                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Easy;
+                    difficulty = (int)Session.GameConfiguration.MonsterDifficulty.Easy;
                     break;
+
                 case "medium":
-                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Medium;
+                    difficulty = (int)Session.GameConfiguration.MonsterDifficulty.Medium;
                     break;
+
                 case "hard":
-                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Hard;
+                    difficulty = (int)Session.GameConfiguration.MonsterDifficulty.Hard;
                     break;
+
                 case "impossible":
-                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Impossible;
+                    difficulty = (int)Session.GameConfiguration.MonsterDifficulty.Impossible;
                     break;
             }
 
@@ -234,18 +254,20 @@ namespace InputHandling.Antlr.Transformer
             {
                 return;
             }
-            
+
             int frequency = -1;
             switch (itemFrequency.Frequency)
             {
                 case "low":
-                    frequency = (int) ItemSpawnRate.Low;
+                    frequency = (int)ItemSpawnRate.Low;
                     break;
+
                 case "medium":
-                    frequency = (int) ItemSpawnRate.Medium;
+                    frequency = (int)ItemSpawnRate.Medium;
                     break;
+
                 case "high":
-                    frequency = (int) ItemSpawnRate.High;
+                    frequency = (int)ItemSpawnRate.High;
                     break;
             }
             SessionDTO sessionDto = new SessionDTO
@@ -261,6 +283,7 @@ namespace InputHandling.Antlr.Transformer
             var jsonObject = JsonConvert.SerializeObject(sessionDto);
             _clientController.SendPayload(jsonObject, PacketType.Session);
         }
+
         private void TransformInspect(Inspect inspect)
         {
             string slot = inspect.InventorySlot.InventorySlotValue;

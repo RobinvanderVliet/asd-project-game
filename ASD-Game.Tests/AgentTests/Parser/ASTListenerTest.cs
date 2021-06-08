@@ -1,13 +1,8 @@
 using Agent.Antlr.Ast;
-using NUnit.Framework;
 using Agent.Antlr.Grammar;
 using Agent.Antlr.Parser;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using System.Linq;
-using Agent.Antlr.Grammar;
 using NUnit.Framework;
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -20,10 +15,8 @@ namespace Agent.Tests.Parser
     [ExcludeFromCodeCoverage]
     public class ASTListenerTest
     {
-
-        AST ParseTestFile(String resourse)
+        private AST ParseTestFile(String resourse)
         {
-
             String fileContext;
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = assembly.GetManifestResourceNames().Single(s => s.EndsWith(resourse));
@@ -33,7 +26,6 @@ namespace Agent.Tests.Parser
             {
                 fileContext = sr.ReadToEnd();
             }
-
 
             AntlrInputStream charStream = new AntlrInputStream(fileContext);
             AgentConfigurationLexer lexer = new AgentConfigurationLexer(charStream);
@@ -62,7 +54,6 @@ namespace Agent.Tests.Parser
             }
 
             return listener.GetAST();
-
         }
 
         [Test]
@@ -81,6 +72,5 @@ namespace Agent.Tests.Parser
             //Assert
             Assert.AreEqual(expected.root.ToString(), sut.root.ToString());
         }
-
     }
 }

@@ -1,11 +1,12 @@
-using System.Reflection;
+using System.Collections.Generic;
 
 namespace WorldGeneration
 {
     public interface IMapFactory
     {
-        IMap GenerateMap(int chunkSize, int seed);
-        IMap GenerateMap(int seed);
+        Map GenerateMap(int chunkSize, int seed/*, IItemService itemService, List<ItemSpawnDTO> items*/);
+
+        //Map GenerateMap(IItemService itemService, List<ItemSpawnDTO> items, int seed);
         int GenerateSeed();
     }
 }

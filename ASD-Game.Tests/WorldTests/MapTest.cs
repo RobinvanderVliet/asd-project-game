@@ -13,13 +13,12 @@ using Range = Moq.Range;
 
 namespace WorldGeneration.Tests
 {
-    
-    [ExcludeFromCodeCoverage]  
+    [ExcludeFromCodeCoverage]
     [TestFixture]
     public class MapTest
     {
         //Declaration and initialisation of constant variables
- 
+
         //Declaration of variables
         private int _seed;
         private int _chunkSize;
@@ -28,7 +27,7 @@ namespace WorldGeneration.Tests
         private Player _mapCharacter2DTO;
         private IList<Chunk> _chunks;
         private Map _sut;
-        
+
         //Declaration of mocks
         private INoiseMapGenerator _noiseMapGeneratorMockObject;
         private IDatabaseService<Chunk> _databaseServiceMockObject;
@@ -36,15 +35,14 @@ namespace WorldGeneration.Tests
         private Mock<INoiseMapGenerator> _noiseMapGeneratorMock;
         private Mock<IDatabaseService<Chunk>> _databaseServiceMock;
         private Mock<IConsolePrinter> _consolePrinterMock;
-        
- 
+
         [SetUp]
         public void Setup()
         {
             //Initialisation of variables
             _seed = 5;
             _chunkSize = 2;
-            
+
             var map1 = new ITile[] {new GrassTile(1,1), new GrassTile(1,2), new GrassTile(1,3), new GrassTile(1,4)};
             var map2 = new ITile[] {new StreetTile(1,1), new StreetTile(1,2), new StreetTile(1,3), new StreetTile(1,4)};
             var map3 = new ITile[] {new WaterTile(1,1), new WaterTile(1,2), new WaterTile(1,3), new WaterTile(1,4)};
@@ -65,7 +63,7 @@ namespace WorldGeneration.Tests
             _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(It.IsAny<int>(),It.IsAny<int>(), 2, _seed))
                 .Returns((int x, int y, int size, int seed) => new Chunk(x, y, map5, _chunkSize)).Verifiable();
             _noiseMapGeneratorMockObject = _noiseMapGeneratorMock.Object;
-            
+
             _databaseServiceMock = new Mock<IDatabaseService<Chunk>>();
             _databaseServiceMock.Setup(databaseService => databaseService.CreateAsync(It.IsAny<Chunk>())).Verifiable();
             _databaseServiceMock.Setup(databaseService => databaseService.GetAllAsync()).ReturnsAsync(_chunks);
@@ -76,20 +74,19 @@ namespace WorldGeneration.Tests
             _consolePrinterMock.Setup(consolePrinter => consolePrinter.PrintText(It.IsAny<string>())).Verifiable();
             _consolePrinterMock.Setup(consolePrinter => consolePrinter.NextLine()).Verifiable();
             _consolePrinterMockObject = _consolePrinterMock.Object;
-            
 
             _mapCharacter1DTO = new Player("naam1", 0, 0, CharacterSymbol.FRIENDLY_PLAYER, "a");
             _mapCharacter2DTO = new Player("naam2", 0, 0, CharacterSymbol.FRIENDLY_PLAYER, "b");
-            
+
             _mapCharacterDTOList = new List<Player>();
             _mapCharacterDTOList.Add(_mapCharacter1DTO);
             _mapCharacterDTOList.Add(_mapCharacter2DTO);
-            
+
             _sut = new Map(_noiseMapGeneratorMockObject, _chunkSize, _seed, _consolePrinterMockObject, _databaseServiceMockObject);
         }
-        
+
         [Test]
-        public void Test_MapConstructor_DoesntThrowException() 
+        public void Test_MapConstructor_DoesntThrowException()
         {
             //Arrange ---------
             //Act ---------
@@ -99,9 +96,9 @@ namespace WorldGeneration.Tests
                 var map = new Map(_noiseMapGeneratorMockObject,21,51, _consolePrinterMockObject, _databaseServiceMockObject, _chunks);
             });
         }
-        
+
         [Test]
-        public void Test_DisplayMap_DoesntThrowException() 
+        public void Test_DisplayMap_DoesntThrowException()
         {
             //Arrange ---------
             //Act ---------
@@ -111,20 +108,19 @@ namespace WorldGeneration.Tests
                 _sut.DisplayMap(_mapCharacter1DTO, 1, _mapCharacterDTOList);
             });
         }
-        
+
         [Test]
-        public void Test_DisplayMap_DisplaysRightSize() 
+        public void Test_DisplayMap_DisplaysRightSize()
         {
             //Arrange ---------
             //Act ---------
             _sut.DisplayMap(_mapCharacter1DTO,2, _mapCharacterDTOList);
             //Assert ---------
             _consolePrinterMock.Verify(consolePrinterMock => consolePrinterMock.PrintText(It.IsAny<string>()), Times.Exactly(25));
-
         }
-        
+
         [Test]
-        public void Test_DisplayMap_DoesntLoadTooBigArea() 
+        public void Test_DisplayMap_DoesntLoadTooBigArea()
         {
             //Arrange ---------
             var viewDistance = 2;
@@ -134,9 +130,9 @@ namespace WorldGeneration.Tests
             //Assert ---------
             _databaseServiceMock.Verify(databaseService => databaseService.CreateAsync(It.IsAny<Chunk>()), Times.Between(0, maxLoadingLimit, Range.Inclusive));
         }
-        
+
         [Test]
-        public void Test_DeleteMap_PassesCommandThrough() 
+        public void Test_DeleteMap_PassesCommandThrough()
         {
             //Arrange ---------
             _sut.DisplayMap(_mapCharacter1DTO,1, _mapCharacterDTOList);
@@ -145,9 +141,9 @@ namespace WorldGeneration.Tests
             //Assert ---------
             _databaseServiceMock.Verify( databaseService => databaseService.DeleteAllAsync(), Times.Once);
         }
-        
+
         [Test]
-        public void Test_MapConstructor_ThrowsWhenGivenNegativeChunkSize() 
+        public void Test_MapConstructor_ThrowsWhenGivenNegativeChunkSize()
         {
             //Arrange ---------
             //Act ---------
@@ -157,9 +153,9 @@ namespace WorldGeneration.Tests
                 var map = new Map(_noiseMapGeneratorMockObject,-21,51, _consolePrinterMockObject, _databaseServiceMockObject, _chunks);
             });
         }
-        
+
         [Test]
-        public void Test_DisplayMap_ThrowsWhenGivenNegativeDisplaySize() 
+        public void Test_DisplayMap_ThrowsWhenGivenNegativeDisplaySize()
         {
             //Arrange ---------
             //Act ---------
@@ -169,9 +165,9 @@ namespace WorldGeneration.Tests
                 _sut.DisplayMap(_mapCharacter1DTO,-1, _mapCharacterDTOList);
             });
         }
-        
+
         [Test]
-        public void Test_DisplayMap_UsesChunksIfTheyAreFoundInDatabase() 
+        public void Test_DisplayMap_UsesChunksIfTheyAreFoundInDatabase()
         {
             //Arrange ---------
             //Act ---------

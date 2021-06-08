@@ -1,6 +1,6 @@
-﻿using System;
-using Items.ItemStats;
+﻿using Items.ItemStats;
 using Items.WeaponStats;
+using System;
 
 namespace Items
 {
