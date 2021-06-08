@@ -251,6 +251,9 @@ namespace InputHandling
 
             AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
             List<string> errors = agentConfigurationService.Configure(finalString);
+
+/*            AgentService agentService = new AgentService();
+            List<string> errors = agentService.Configure(finalString);*/
             string errorsCombined = string.Empty;
 
             if (errors.Count != 0)
