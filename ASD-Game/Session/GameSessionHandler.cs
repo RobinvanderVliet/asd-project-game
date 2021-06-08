@@ -62,16 +62,13 @@ namespace Session
 
         public void SendGameSession()
         {
-            StartGameDTO startGameDTO;
+            //If startGameDTO is null then it will create new database in handlepacket, else it will get old saveddata. 
+            StartGameDTO startGameDTO = new StartGameDTO();
             if (_sessionHandler.GetSavedGame())
             {
                 startGameDTO = LoadSave();
             }
-            else
-            {
-                startGameDTO = SetupGameHost();
-            }
-
+      
             SendGameSessionDTO(startGameDTO);
             _sessionHandler.SetGameStarted(true);
         }
@@ -135,8 +132,12 @@ namespace Session
             if (handleInDatabase)
             {
                 InsertConfigurationIntoDatabase();
-                InsertGameIntoDatabase();
-                InsertPlayersIntoDatabase();
+                if (startGameDTO.SavedPlayers == null) 
+                {
+                    InsertGameIntoDatabase();
+
+                    InsertPlayersIntoDatabase();
+                }
             }
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
@@ -221,7 +222,7 @@ namespace Session
 
         private void InsertGameIntoDatabase()
         {
-            var gamePOCO = new GamePOCO { GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId() };
+            var gamePOCO = new GamePOCO { GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId(), GameName = _sessionHandler.GameName, Seed = _sessionHandler.GetSessionSeed()};
             _gameDatabaseService.CreateAsync(gamePOCO);
         }
         
@@ -329,6 +330,7 @@ namespace Session
             var allPlayers = _playerDatabaseService.GetAllAsync();
             allPlayers.Wait();
             var allPlayersInGame = allPlayers.Result.Where(x => x.GameGuid == _clientController.SessionId);
+            
 
             startGameDTO = SetLoadedGameInfo(startGameDTO, allPlayersInGame);
 

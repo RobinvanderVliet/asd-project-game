@@ -6,6 +6,7 @@ using DatabaseHandler;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
+using Network;
 using UserInterface;
 
 namespace Session
@@ -16,40 +17,33 @@ namespace Session
         private readonly IDatabaseService<ClientHistoryPOCO> _clientHistoryService;
         private readonly IDatabaseService<GamePOCO> _gamePocoService;
         private readonly IScreenHandler _screenHandler;
+        private readonly IClientController _clientController; 
 
         public GamesSessionService(ISessionHandler sessionHandler,
-            IDatabaseService<ClientHistoryPOCO> clientHistoryService, IDatabaseService<GamePOCO> gamePocoService, IScreenHandler screenHandler)
+            IDatabaseService<ClientHistoryPOCO> clientHistoryService, IDatabaseService<GamePOCO> gamePocoService, IScreenHandler screenHandler, IClientController clientController)
         {
             _sessionHandler = sessionHandler;
             _clientHistoryService = clientHistoryService;
             _gamePocoService = gamePocoService;
             _screenHandler = screenHandler;
+            _clientController = clientController;
         }
 
         public void RequestSavedGames()
         {
-            var allHistory = _clientHistoryService.GetAllAsync();
             var allGames = _gamePocoService.GetAllAsync();
-            allHistory.Wait();
             allGames.Wait();
+            var result = allGames.Result.Where(x => x.PlayerGUIDHost.Equals(_clientController.GetOriginId()));
 
-            var joinedTables = from p in allGames.Result
-                join pi in allHistory.Result
-                    on p.PlayerGUIDHost equals pi.PlayerId
-                select new
-                {
-                    p.PlayerGUIDHost,
-                    p.GameGuid,
-                    p.GameName
-                };
+        
 
-            if (!joinedTables.IsNullOrEmpty())
+            if (result.IsNullOrEmpty())
             {
                 _screenHandler.UpdateInputMessage("No saved sessions found, type 'return' to go back to main menu!");
             }
             else
             {
-                var sessions = joinedTables.Select(x => new string[] {x.GameGuid, x.GameName}).ToList();
+                var sessions = result.Select(x => new string[] {x.GameGuid, x.GameName}).ToList();
 
                 _screenHandler.UpdateSavedSessionsList(sessions);
             }
