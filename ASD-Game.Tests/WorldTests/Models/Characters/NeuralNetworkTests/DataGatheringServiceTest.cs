@@ -32,15 +32,12 @@ namespace World.Models.Character.Tests.NeuralNetworkTest
         [Test]
         public void Test_ScanMap_ScanMapForNearbyCharacters()
         {
-            //arrange
-            _player.Location = new Vector2(29, 29);
-
             //act
-            _sut.ScanMap(_smartMonster, _smartMonster.CreatureData.VisionRange);
+            _sut.ScanMap(_smartMonster, 200);
 
             //assert
-            Assert.Null(_sut.ClosestPlayer);
-            Assert.Null(_sut.ClosestMonster);
+            Assert.NotNull(_sut.ClosestPlayer);
+            Assert.NotNull(_sut.ClosestMonster);
         }
 
         [Test]
