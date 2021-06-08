@@ -28,11 +28,16 @@ namespace ASD_Game.ActionHandling
             _worldService = worldService;
             _playerDatabaseService = playerDatabaseService;
             _messageService = messageService;
-            _playerDatabaseService = playerDatabaseService;
         }
 
         public void SendMove(string directionValue, int stepsValue)
         {
+            if (_worldService.IsDead(_worldService.GetCurrentPlayer()))
+            {
+                _messageService.AddMessage("You can't move, you're dead!");
+                return;
+            }
+
             int x = 0;
             int y = 0;
 

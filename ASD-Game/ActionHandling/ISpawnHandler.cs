@@ -7,7 +7,5 @@ namespace ASD_Game.ActionHandling
     public interface ISpawnHandler
     {
         public void SendSpawn(int x, int y, Item item);
-        
-        public void SetItemSpawnDTOS(List<ItemSpawnDTO> itemSpawnDTOs);
     }
 }

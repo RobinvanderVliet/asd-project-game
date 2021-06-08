@@ -1,4 +1,5 @@
-﻿using ASD_Game.Items.Consumables;
+﻿using System.Diagnostics.CodeAnalysis;
+using ASD_Game.Items.Consumables;
 
 namespace ASD_Game.World.Models.Characters
 {
@@ -8,6 +9,7 @@ namespace ASD_Game.World.Models.Characters
         public int Stamina { get; set; }
         public Inventory Inventory { get; set; }
         public int RadiationLevel { get; set; }
+        [ExcludeFromCodeCoverage]
         public int Team { get; set; }
 
         //random default values for health&stamina for now
@@ -32,7 +34,6 @@ namespace ASD_Game.World.Models.Characters
         {
             if(consumable is HealthConsumable)
             {
-
                 AddHealth((consumable as HealthConsumable).getHealth());
             }
             else if (consumable is StaminaConsumable)
@@ -87,7 +88,7 @@ namespace ASD_Game.World.Models.Characters
                     break;
             }
         }
-        
+
         public int GetArmorPoints()
         {
             int armorpoints = 0;
@@ -101,5 +102,7 @@ namespace ASD_Game.World.Models.Characters
             }
             return armorpoints;
         }
+
+
     }
 }

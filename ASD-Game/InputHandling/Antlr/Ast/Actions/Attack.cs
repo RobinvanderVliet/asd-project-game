@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace ASD_Game.InputHandling.Antlr.Ast.Actions

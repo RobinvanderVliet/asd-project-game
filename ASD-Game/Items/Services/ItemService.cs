@@ -10,6 +10,7 @@ namespace ASD_Game.Items.Services
         {
             _spawnHandler = spawnHandler;
         }
+        
         public Item GenerateItemFromNoise(float noiseResult, int x, int y)
         {
             var item = RandomItemGenerator.GetRandomItem(noiseResult);

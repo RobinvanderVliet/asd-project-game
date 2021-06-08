@@ -521,7 +521,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
             Player result = new(null, 0, 0, null, null);
             result.Inventory.ConsumableItemList.Add(ItemFactory.GetBandage());
             _mockedWorldService.Setup(mock => mock.GetCurrentPlayer()).Returns(result);
-            string exp = $"Let me patch you together{Environment.NewLine}Name: Bandage{Environment.NewLine}Rarity: Common{Environment.NewLine}Health gain: Low";
+            string exp = $"Let me patch you together.{Environment.NewLine}Name: Bandage{Environment.NewLine}Rarity: Common{Environment.NewLine}Health gain: Low";
             
             //act
             _sut.InspectItem("slot 1");
