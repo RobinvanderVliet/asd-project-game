@@ -44,7 +44,7 @@ namespace InputHandling
             _screenHandler.RedrawGameInputBox();
         }
 
-        //Hack
+        // Needed to handle input on client when host has started session
         public void HandleGameScreenCommands(string input)
         {
             SendCommand(input);
@@ -140,7 +140,7 @@ namespace InputHandling
         public void HandleLobbyScreenCommands()
         {
             var input = GetCommand();
-            // Hack Client readLine stuck
+            // Needed to handle input on client when host has started session
             if (_screenHandler.Screen is GameScreen)
             {
                 HandleGameScreenCommands(input);
@@ -153,10 +153,8 @@ namespace InputHandling
                     return;
                 }
 
-                //TODO add if to check if you are the host
                 if (input == START_COMMAND)
                 {
-                    //_screenHandler.TransitionTo(new GameScreen());
                     SendCommand(START_COMMAND);
                 }
 
