@@ -262,7 +262,7 @@ namespace ActionHandling
 
             var player = _worldService.GetPlayer(attackDto.PlayerGuid);
             bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
-            
+
             var attackedPlayer = _worldService.GetPlayer(attackDto.AttackedPlayerGuid);
             bool printAttackedMessage = _clientController.GetOriginId().Equals(attackedPlayer.Id);
             {

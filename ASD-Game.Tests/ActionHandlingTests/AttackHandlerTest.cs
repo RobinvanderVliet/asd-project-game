@@ -5,6 +5,8 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading.Tasks;
 using ActionHandling.DTO;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
@@ -19,11 +21,9 @@ namespace ActionHandling.Tests
     [TestFixture]
     public class AttackHandlerTests
     {
-        //Declaration and initialisation of constant variables
         //Declaration of variables
         private AttackHandler _sut;
         private AttackDTO _attackDTO;
-
         private PacketDTO _packetDTO;
 
         //Declaration of mocks
@@ -46,9 +46,12 @@ namespace ActionHandling.Tests
             _mockedPlayerItemPocoDatabaseService = new Mock<IDatabaseService<PlayerItemPOCO>>();
             _mockedCreaturePocoDatabaseService = new Mock<IDatabaseService<CreaturePOCO>>();
             _mockedMessageService = new Mock<IMessageService>();
-            _sut = new AttackHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerPocoDatabaseService.Object,
+            _sut = new AttackHandler(_mockedClientController.Object, _mockedWorldService.Object,
+                _mockedPlayerPocoDatabaseService.Object,
                 _mockedPlayerItemPocoDatabaseService.Object, _mockedCreaturePocoDatabaseService.Object,
                 _mockedMessageService.Object);
+            _packetDTO = new PacketDTO();
+            _attackDTO = new AttackDTO();
         }
 
         [TestCase("up")]
@@ -67,7 +70,6 @@ namespace ActionHandling.Tests
 
             _mockedWorldService.Setup(WorldService => WorldService.GetCurrentPlayer())
                 .Returns(player);
-            _attackDTO = new AttackDTO();
             _attackDTO.XPosition = 26;
             _attackDTO.YPosition = 11;
             _attackDTO.Damage = 20;
@@ -92,115 +94,82 @@ namespace ActionHandling.Tests
         [TestCase("left")]
         [TestCase("right")]
         [Test]
-        public void TestHandlePacket_HandleAttack(String direction)
+        public void Test_HandlePacket_HandleAttack(String direction)
         {
             //Arrange
             string GameGuid = Guid.NewGuid().ToString();
             string PlayerGuid = Guid.NewGuid().ToString();
             string AttackedPlayerGuid = Guid.NewGuid().ToString();
 
-            List<string> allClients = new List<string>();
-            allClients.Add("a");
-            allClients.Add("b");
-
-            Dictionary<string, int[]> players = new Dictionary<string, int[]>();
-
-
-            int playerX = 26; // spawn position
-            int playerY = 11; // spawn position
-            foreach (string element in allClients)
-            {
-                int[] playerPosition = new int[2];
-                playerPosition[0] = playerX;
-                playerPosition[1] = playerY;
-                players.Add(element, playerPosition);
-                playerX += 2; // spawn position + 2 each client
-                playerY += 2; // spawn position + 2 each client
-            }
-
-
-            PlayerPOCO player = new PlayerPOCO
+            PlayerPOCO playerPOCO = new PlayerPOCO
             {
                 PlayerGuid = PlayerGuid,
                 Health = 100,
                 Stamina = 100,
-                GameGuid = GameGuid,
+                GameGuid = null,
                 XPosition = 10,
                 YPosition = 20
             };
 
-            PlayerPOCO attackedPlayer = new PlayerPOCO
+            Player player = new Player("Gert", 10, 20, "#", PlayerGuid);
+
+            PlayerPOCO attackedPlayerPOCO = new PlayerPOCO
             {
                 PlayerGuid = AttackedPlayerGuid,
                 Health = 100,
                 Stamina = 100,
-                GameGuid = GameGuid,
-                XPosition = 10,
-                YPosition = 21
+                GameGuid = null,
+                XPosition = 26,
+                YPosition = 11
             };
 
-            AttackDTO attackDto = new AttackDTO();
-            var attackDTO = new AttackDTO();
-            attackDTO.Damage = 20;
-            attackDTO.Stamina = 100;
-            attackDTO.PlayerGuid = PlayerGuid;
+            Player attackedPlayer = new Player("Henk", 26, 11, "E", AttackedPlayerGuid);
+
+
+            _attackDTO.Damage = 20;
+            _attackDTO.Stamina = 100;
+            _attackDTO.PlayerGuid = PlayerGuid;
+            _attackDTO.AttackedPlayerGuid = AttackedPlayerGuid;
             
-
-            PacketDTO packetDto = new PacketDTO();
-            packetDto.Header.Target = "host";
-            packetDto.Header.PacketType = PacketType.Attack;
-            packetDto.Header.OriginID = PlayerGuid;
-            packetDto.Header.SessionID = GameGuid;
-            packetDto.Payload = JsonConvert.SerializeObject(attackDto);
-
-            attackDto = JsonConvert.DeserializeObject<AttackDTO>(packetDto.Payload);
             _mockedClientController.Setup(x => x.IsBackupHost).Returns(true);
-            
-           
-            //_packetDTO.Payload = payload;
-            // PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
-            // packetHeaderDTO.OriginID = PlayerGuid;
-            // packetHeaderDTO.SessionID = null;
-            // packetHeaderDTO.PacketType = PacketType.Attack;
-            // packetHeaderDTO.Target = "host";
-            // _packetDTO.Header = packetHeaderDTO;
+            _mockedClientController.Setup(x => x.GetOriginId()).Returns(PlayerGuid);
+            _mockedClientController.Object.SetSessionId(GameGuid);
+
+            _mockedWorldService.Setup(mock => mock.GetPlayer(player.Id)).Returns(player);
+            _mockedWorldService.Setup(mock => mock.GetPlayer(attackedPlayer.Id)).Returns(attackedPlayer);
+
+
+            var payload = JsonConvert.SerializeObject(_attackDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            packetHeaderDTO.OriginID = PlayerGuid;
+            packetHeaderDTO.SessionID = null;
+            packetHeaderDTO.PacketType = PacketType.Attack;
+            packetHeaderDTO.Target = "host";
+            _packetDTO.Header = packetHeaderDTO;
+
+            List<Player> list = new List<Player>();
+            list.Add(player);
+            list.Add(attackedPlayer);
+
+
+            _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(list);
+
+            List<PlayerPOCO> playerPOCOList = new();
+            playerPOCOList.Add(attackedPlayerPOCO);
+            playerPOCOList.Add(playerPOCO);
+            IEnumerable<PlayerPOCO> en = playerPOCOList;
+            var task = Task.FromResult(en);
+
+            _mockedPlayerPocoDatabaseService.Setup(mock => mock.GetAllAsync())
+                .Returns(task);
 
 
             //Act
             var actualResult = _sut.HandlePacket(_packetDTO);
 
-           // payload = JsonConvert.SerializeObject(_attackDTO);
-
-//            _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Attack));
-
-
             //Assert
-            HandlerResponseDTO ExpectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
-            Assert.AreEqual(ExpectedResult, actualResult);
+            _mockedWorldService.Verify(mock => mock.DisplayWorld(), Times.Once);
         }
-
-
-        //     [Test]
-        // public void Test_HandlePacket_HandleMoveProperly()
-        // {
-        //     //Arrange ---------
-        //     string playerGuid = new Guid().ToString();
-        //     string GameGuid = new Guid().ToString();
-        //     //Arrange ---------
-        //     _mapCharacterDTO = new MapCharacterDTO(10, 10, playerGuid, GameGuid);
-        //     _moveDTO = new MoveDTO(_mapCharacterDTO);
-        //     var payload = JsonConvert.SerializeObject(_moveDTO);
-        //     _packetDTO.Payload = payload;
-        //     _packetDTO.Header.Target = playerGuid;
-        //     //_mockedNetworkComponent.
-        //     {
-        //         //Act ---------
-        //         HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
-        //
-        //         //Assert ---------
-        //         HandlerResponseDTO ExpectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
-        //         Assert.AreEqual(ExpectedResult, actualResult);
-        //     }
-        // }
     }
 }
