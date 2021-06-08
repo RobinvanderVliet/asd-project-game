@@ -46,22 +46,31 @@ namespace ASD_project.Creature.Creature.StateMachine.Builder
                             CreatureEvent.Event creatureEvent = GetEvent(ruleSet, action.Key);
                             builderInfo.Event = creatureEvent;
                             builderInfo.RuleSets.Add(ruleSet);
+                            builderInfoList.Add(builderInfo);
                         }
                         else
                         {
                             foreach (RuleSet ruleSet2 in _rulesetList)
                             {
-                                if (ruleSet2.Action == "default" && (ruleSet2.ComparisonTrue == ruleSet.Action || ruleSet2.ComparisonFalse == ruleSet.Action))
+                                if (ruleSet2.Setting == ruleSet.Setting && 
+                                    ruleSet2.Action == "default" && 
+                                    (ruleSet2.ComparisonTrue == ruleSet.Action || ruleSet2.ComparisonFalse == ruleSet.Action))
                                 {
+                                    builderInfo = new();
+                                    builderInfo.Action = action.Key;
+                                    builderInfo.TargetState = action.Value;
+
+                                    // Temporary
+                                    builderInfo.InitialStates = GetActionWithStateList().Select(state => state.Value).ToList();
+
                                     CreatureEvent.Event creatureEvent = GetEvent(ruleSet2, ruleSet.Action);
                                     builderInfo.Event = creatureEvent;
                                     builderInfo.RuleSets.Add(ruleSet2);
                                     builderInfo.RuleSets.Add(ruleSet);
+                                    builderInfoList.Add(builderInfo);
                                 }
                             }
                         }
-
-                        builderInfoList.Add(builderInfo);
                     }
                 }
             }
