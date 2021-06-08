@@ -13,6 +13,7 @@ using WorldGeneration;
 using WorldGeneration.Models;
 using Messages;
 
+
 namespace Session
 {
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
@@ -118,7 +119,6 @@ namespace Session
             }
         }
 
-
         private void InsertGameIntoDatabase()
         {
             var gamePOCO = new GamePOCO { GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId() };
@@ -159,7 +159,6 @@ namespace Session
                     var playerObject = new Player(client[1], playerX, playerY, CharacterSymbol.ENEMY_PLAYER, client[0]);
                     _worldService.AddPlayerToWorld(playerObject, false);
                 }
-
                 playerX += 2;
                 playerY += 2;
             }
