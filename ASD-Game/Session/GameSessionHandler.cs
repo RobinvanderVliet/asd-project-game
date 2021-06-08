@@ -144,8 +144,7 @@ namespace Session
         private void InsertConfigurationIntoDatabase()
         {
             SendAgentConfiguration();
-            _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
-            
+
             var gameConfigurationPOCO = new GameConfigurationPOCO
             {
                 GameGUID = _clientController.SessionId,
