@@ -1,9 +1,10 @@
-using WorldGeneration.Models.Interfaces;
-using System.Collections.Generic;
-using Items;
+﻿using System.Collections.Generic;
+using ASD_Game.Items;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Interfaces;
 using World.Models.Characters.Algorithms.NeuralNetworking;
 
-namespace WorldGeneration
+namespace ASD_Game.World.Services
 {
     public interface IWorldService
     {
@@ -13,7 +14,7 @@ namespace WorldGeneration
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer);
 
-        public void AddCreatureToWorld(Character character);
+        public void AddCreatureToWorld(Monster character);
 
         public void DisplayWorld();
 
@@ -31,7 +32,7 @@ namespace WorldGeneration
 
         List<Character> GetCreatureMoves();
 
-        List<Character> GetMonsters();
+        List<Monster> GetMonsters();
 
         public void UpdateBrains(Genome genome);
 

@@ -1,10 +1,10 @@
-﻿using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
-using WorldGeneration;
-using WorldGeneration.Models;
-using WorldGeneration.StateMachine.Data;
+﻿using System.Diagnostics.CodeAnalysis;
+using ASD_Game.World.Models;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Characters.StateMachine.Data;
+using NUnit.Framework;
 
-namespace Character.Tests
+namespace ASD_Game.Tests.WorldTests.Models.Characters
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]

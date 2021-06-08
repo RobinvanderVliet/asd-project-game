@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace UserInterface
+namespace ASD_Game.UserInterface
 {
     public class ScreenHandler : IScreenHandler
     {
@@ -13,7 +13,7 @@ namespace UserInterface
         public ConsoleHelper ConsoleHelper { get => _consoleHelper; set => _consoleHelper = value; }
         private Thread _displayThread { get; set; }
         private BlockingCollection<Action> _actionsInQueue;
-
+        
         public ScreenHandler()
         {
             _consoleHelper = new ConsoleHelper();
@@ -38,7 +38,6 @@ namespace UserInterface
             _screen.SetScreen(this);
             DisplayScreen();
         }
-
         public void DisplayScreen()
         {
             _actionsInQueue.Add(_screen.DrawScreen);
@@ -46,6 +45,7 @@ namespace UserInterface
 
         public void ShowMessages(Queue<string> messages)
         {
+            
             if (_screen is GameScreen)
             {
                 var gameScreen = Screen as GameScreen;

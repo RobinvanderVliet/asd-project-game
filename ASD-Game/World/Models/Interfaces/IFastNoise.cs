@@ -1,4 +1,4 @@
-﻿namespace WorldGeneration.Models.Interfaces
+﻿namespace ASD_Game.World.Models.Interfaces
 {
     public interface IFastNoise
     {

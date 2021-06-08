@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace WorldGeneration.StateMachine.CustomRuleSet
+namespace ASD_Game.Creature.Creature.StateMachine.CustomRuleSet
 {
     public class RuleSet
     {
-        private Dictionary<string, string> _ruleSet { get; }
+        Dictionary<string, string> _ruleSet { get; }
 
         public RuleSet(Dictionary<string, string> RuleSet)
         {

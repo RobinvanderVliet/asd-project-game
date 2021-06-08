@@ -1,9 +1,10 @@
-﻿using Network.DTO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
 
-namespace Network
+namespace ASD_Game.Network
 {
     public class ClientController : IPacketHandler, IClientController
     {

@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace WorldGeneration.StateMachine.Data
+namespace ASD_Game.World.Models.Characters.StateMachine.Data
 {
     public interface ICharacterData
     {
@@ -9,8 +9,7 @@ namespace WorldGeneration.StateMachine.Data
         int VisionRange { get; set; }
         int Damage { get; set; }
         double Health { get; set; }
-        // TODO:: Fix integration with world
-        // IWorld World { get; set;  }
+        IWorld World { get; set; }
 
     }
 }

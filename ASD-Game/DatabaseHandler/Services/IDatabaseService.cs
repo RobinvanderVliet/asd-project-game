@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using LiteDB;
 
-namespace DatabaseHandler.Services
+namespace ASD_Game.DatabaseHandler.Services
 {
     public interface IDatabaseService<T>
     {

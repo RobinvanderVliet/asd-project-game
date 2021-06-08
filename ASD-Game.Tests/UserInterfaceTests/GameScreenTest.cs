@@ -1,14 +1,20 @@
-﻿using Moq;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Moq;
+using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
+using UserInterface;
+using System.IO;
+using ASD_Game.UserInterface;
 
 namespace UserInterface.Tests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
-    internal class GameScreenTest
+    class GameScreenTest
     {
         private GameScreen _sut;
         private Mock<ScreenHandler> _mockedScreenHandler;
@@ -69,7 +75,7 @@ namespace UserInterface.Tests
             //Act
             _sut.RedrawInputBox();
 
-            //Assert
+            //Assert        
             _mockedConsoleHelper.Verify(mock => mock.Write(ulCorner), Times.Exactly(1));
             _mockedConsoleHelper.Verify(mock => mock.Write(urCorner), Times.Exactly(1));
             _mockedConsoleHelper.Verify(mock => mock.Write(llCorner), Times.Exactly(1));
@@ -88,7 +94,7 @@ namespace UserInterface.Tests
             //Act
             _sut.ShowMessages(messages);
 
-            //Assert
+            //Assert        
             _mockedGameChatScreen.Verify(mock => mock.ShowMessages(messages), Times.Once);
         }
 
@@ -102,7 +108,7 @@ namespace UserInterface.Tests
             //Act
             _sut.UpdateWorld(map);
 
-            //Assert
+            //Assert        
             _mockedGameWorldScreen.Verify(mock => mock.UpdateWorld(map), Times.Once);
         }
 
@@ -127,7 +133,7 @@ namespace UserInterface.Tests
             //Act
             _sut.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree);
 
-            //Assert
+            //Assert        
             _mockedGameStatScreen.Verify(mock => mock.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree), Times.Once);
         }
     }

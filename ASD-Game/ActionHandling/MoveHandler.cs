@@ -1,20 +1,19 @@
-using Network;
 using System.Collections.Generic;
 using System.Linq;
-using ActionHandling.DTO;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using Messages;
-using Network.DTO;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Interfaces;
+using ASD_Game.World.Services;
 using Newtonsoft.Json;
-using WorldGeneration;
-using WorldGeneration.Models.Interfaces;
 using System.Timers;
-using Characters;
 
-using WorldGeneration;
-
-namespace ActionHandling
+namespace ASD_Game.ActionHandling
 {
     public class MoveHandler : IMoveHandler, IPacketHandler
     {
@@ -52,18 +51,15 @@ namespace ActionHandling
                 case "east":
                     x = stepsValue;
                     break;
-
                 case "left":
                 case "west":
                     x = -stepsValue;
                     break;
-
                 case "forward":
                 case "up":
                 case "north":
                     y = +stepsValue;
                     break;
-
                 case "backward":
                 case "down":
                 case "south":
@@ -159,7 +155,7 @@ namespace ActionHandling
 
         private void InsertToDatabase(MoveDTO moveDTO)
         {
-            var player = _playerDatabaseService.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGuid == moveDTO.UserId && player.GameGuid == _clientController.SessionId);
+            var player = _playerDatabaseService.GetAllAsync().Result.FirstOrDefault(player => player.PlayerGUID == moveDTO.UserId && player.GameGUID == _clientController.SessionId);
             player.XPosition = moveDTO.XPosition;
             player.YPosition = moveDTO.YPosition;
             player.Stamina = moveDTO.Stamina;
@@ -168,7 +164,7 @@ namespace ActionHandling
 
         private MoveDTO ChangeMoveDTOToNewLocation(MoveDTO moveDTO, List<ITile> movableTiles, Player player)
         {
-            if (movableTiles.Count != 0)
+            if (movableTiles.Any())
             {
                 moveDTO.XPosition = movableTiles.Last().XPosition;
                 moveDTO.YPosition = movableTiles.Last().YPosition;
@@ -244,12 +240,12 @@ namespace ActionHandling
         private int GetStaminaCostForTiles(List<ITile> tiles)
         {
             var staminaCosts = 0;
-
+            
             foreach (var tile in tiles)
             {
                 staminaCosts += tile.StaminaCost;
             }
-
+            
             return staminaCosts;
         }
 
@@ -282,12 +278,12 @@ namespace ActionHandling
             return movableTiles;
         }
 
-        public void MoveAIs(List<WorldGeneration.Character> creatureMoves)
+        public void MoveAIs(List<Character> creatureMoves)
         {
             List<MoveDTO> moveDTOs = new List<MoveDTO>();
             if (creatureMoves != null)
             {
-                foreach (WorldGeneration.Character move in creatureMoves)
+                foreach (Character move in creatureMoves)
                 {
                     if (move is SmartMonster smartMonster)
                     {

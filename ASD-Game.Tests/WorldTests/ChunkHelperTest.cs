@@ -1,12 +1,12 @@
 ﻿using Moq;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
-using WorldGeneration.Helper;
-using WorldGeneration.Models;
-using WorldGeneration.Models.Interfaces;
-using WorldGeneration.Models.TerrainTiles;
+using ASD_Game.World.Helpers;
+using ASD_Game.World.Models;
+using ASD_Game.World.Models.Interfaces;
+using ASD_Game.World.Models.TerrainTiles;
 
-namespace WorldGeneration.Tests
+namespace ASD_Game.Tests.WorldTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
@@ -38,6 +38,7 @@ namespace WorldGeneration.Tests
             //Act ---------
 
             //Assert ---------
+            Assert.That(true);
         }
     }
 }

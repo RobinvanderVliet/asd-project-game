@@ -1,8 +1,8 @@
-﻿using WorldGeneration.Models;
+﻿using ASD_Game.World.Models;
 
-namespace WorldGeneration
+namespace ASD_Game.World
 {
-    public class EnemySpawner : ISpawner
+    public class EnemySpawner
     {
         public void Spawn(Chunk chunk)
         {

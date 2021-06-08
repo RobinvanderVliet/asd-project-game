@@ -1,12 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+using ASD_Game.World.Models;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Characters.StateMachine;
 using NUnit.Framework;
-using WorldGeneration;
-using WorldGeneration.Models;
-using WorldGeneration.StateMachine;
 using WorldGeneration.StateMachine.Event;
 
-namespace Character.Tests.StateMachineTests
+namespace ASD_Game.Tests.WorldTests.Models.Characters.StateMachineTests
 {
     [TestFixture]
     [ExcludeFromCodeCoverage]

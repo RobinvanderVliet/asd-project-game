@@ -1,4 +1,4 @@
-﻿namespace Network
+﻿namespace ASD_Game.Network.Enum
 {
     public enum PacketType
     {
@@ -6,6 +6,7 @@
         Move,
         Session,
         RelativeStat,
+        Spawn,
         Inventory,        
         GameSession,
         Attack,
