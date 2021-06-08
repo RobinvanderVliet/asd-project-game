@@ -37,7 +37,6 @@ namespace Creature.Creature.StateMachine.State
                 {
                     if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo))
                     {
-                        //TODO implement Attack logic + gather targetData
                         int steps = new Random().Next(10);
                         _creatureData.MoveHandler.SendMove(pickRandomDirection(), steps);
                     }
@@ -47,7 +46,7 @@ namespace Creature.Creature.StateMachine.State
 
         private string pickRandomDirection()
         {
-            String _direction = "";
+            string _direction = "";
             int CaseSwitch = new Random().Next(1, 4);
             switch (CaseSwitch)
             {
@@ -64,7 +63,6 @@ namespace Creature.Creature.StateMachine.State
                     _direction += "left";
                     break;
             }
-
             return _direction;
         }
     }

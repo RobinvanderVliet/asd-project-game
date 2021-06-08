@@ -2,19 +2,22 @@
 using System;
 using System.Collections.Generic;
 using System.Timers;
+using Creature;
 
 namespace Session
 {
     public class HeartbeatHandler : IHeartbeatHandler
     {
+        private readonly IAgentHandler _agentHandler;
         private List<HeartbeatDTO> _players;
         TimeSpan waitTime = TimeSpan.FromMilliseconds(1000);
 
         private int TIMER = 1000;
         private Timer _heartbeatTimer;
 
-        public HeartbeatHandler()
+        public HeartbeatHandler(IAgentHandler agentHandler)
         {
+            _agentHandler = agentHandler;
             _players = new List<HeartbeatDTO>();
             _heartbeatTimer = new Timer(TIMER);
             CheckHeartbeatTimer();

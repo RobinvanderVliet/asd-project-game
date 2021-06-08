@@ -9,13 +9,13 @@ namespace Agent.Tests.Mapper
     [ExcludeFromCodeCoverage]
     public class FileToDictionaryMapperTest
     {
-        private FileToDictionaryMapper _sut;
+        private FileToConfigurationMapper _sut;
         private FileHandler _handler;
 
         [SetUp]
         public void Setup()
         {
-            _sut = new FileToDictionaryMapper();
+            _sut = new FileToConfigurationMapper();
             _handler = new FileHandler();
 
         }

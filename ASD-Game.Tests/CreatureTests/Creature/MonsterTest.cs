@@ -11,12 +11,10 @@ namespace Creature.Tests
     class MonsterTest
     {
         private Monster _sut;
-        private Mock<ICreatureStateMachine> _creatureStateMachineMock;
 
         [SetUp]
         public void Setup()
         {
-            _creatureStateMachineMock = new Mock<ICreatureStateMachine>();
             _sut = new Monster("monster", 10, 10, "$");
         }
 
@@ -26,7 +24,6 @@ namespace Creature.Tests
             // Assert ----------
             Assert.That(_sut.MonsterData.Position.X == 10);
             Assert.That(_sut.MonsterData.Position.Y == 10);
-            _creatureStateMachineMock.Verify(creatureStateMachine => creatureStateMachine.StartStateMachine());
         }
     }
 }

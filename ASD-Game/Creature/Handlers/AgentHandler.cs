@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ActionHandling;
+using Agent.Mapper;
+using Agent.Models;
 using Agent.Services;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
@@ -20,17 +22,15 @@ namespace Creature
         private readonly IMoveHandler _moveHandler;
         private readonly IClientController _clientController;
         private readonly IDatabaseService<AgentPOCO> _databaseService;
-        private AgentConfigurationService _agentConfigurationService;
-
+        private readonly IConfigurationService _configurationService;
+        
         // TODO: add attack handler when that is on develop
-        public AgentHandler(IWorldService worldService, IMoveHandler moveHandler, IClientController clientController, IDatabaseService<AgentPOCO> databaseService)
+        public AgentHandler(IWorldService worldService, IMoveHandler moveHandler, IClientController clientController, IDatabaseService<AgentPOCO> databaseService, IConfigurationService configurationService)
         {
             _worldService = worldService;
             _moveHandler = moveHandler;
-            
-            // TODO: create agent and use correct configuration service
-            //_agentConfigurationService.CreateConfiguration("piet", Directory.GetCurrentDirectory() + "\\Resource\\agentfile.cfg");
-
+            _configurationService = configurationService;
+            _configurationService.CreateConfiguration("agent");
             _clientController = clientController;
             _databaseService = databaseService;
             _clientController.SubscribeToPacketType(this, PacketType.Agent);
@@ -54,13 +54,14 @@ namespace Creature
         private void CreateAgent()
         {
             var player = _worldService.getCurrentPlayer();
+            var configuration = _configurationService.Configuration;
             _agent = new Agent(player.Name, player.XPosition, player.YPosition, player.Symbol, player.Id)
             {
                 AgentData =
                 {
                     MoveHandler = _moveHandler, WorldService = _worldService, Health = player.Health,
                     Inventory = player.Inventory, Stamina = player.Stamina, Team = player.Team,
-                    RadiationLevel = player.RadiationLevel, VisionRange = 6, RuleSet = new List<KeyValuePair<string, string>>()
+                    RadiationLevel = player.RadiationLevel, VisionRange = 6, RuleSet = configuration.Settings
                 }
             };
         }

@@ -4,7 +4,7 @@ using System.Data;
 
 namespace Agent.Mapper
 {
-    public class FileToDictionaryMapper
+    public class FileToConfigurationMapper : IFileToConfigurationMapper
     {
         public FileHandler FileHandler;
         public List<KeyValuePair<string, string>> MapFileToConfiguration(string filepath)

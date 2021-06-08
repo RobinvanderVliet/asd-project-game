@@ -31,7 +31,7 @@ namespace Creature.Creature.StateMachine.State
         {
             foreach (var builderInfo in _builderInfoList)
             {
-                if (builderInfo.Action == "attack")
+                if (builderInfo.Action == "follow")
                 {
                     if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo))
                     {
