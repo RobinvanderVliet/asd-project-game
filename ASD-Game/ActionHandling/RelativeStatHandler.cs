@@ -154,6 +154,10 @@ namespace ActionHandling
                 InsertToDatabase(relativeStatDTO, handleInDatabase, player);
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
+            else
+            {
+                _worldService.DisplayWorld();
+            }
 
             return new HandlerResponseDTO(SendAction.ReturnToSender, null);
         }
