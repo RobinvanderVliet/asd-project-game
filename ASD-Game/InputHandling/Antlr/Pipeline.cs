@@ -11,12 +11,18 @@ namespace InputHandling.Antlr
     public class Pipeline : IAntlrErrorListener<IToken>, IPipeline
     {
         private IEvaluator _evaluator;
+        public IEvaluator Evaluator { get => _evaluator; set => _evaluator = value; }
         private AST _ast;
         public AST Ast { get => _ast; private set => _ast = value; }
 
         public Pipeline(IEvaluator evaluator)
         {
             _evaluator = evaluator;
+        }
+
+        public Pipeline()
+        {
+            
         }
         public void SyntaxError(IRecognizer recognizer, 
                                 IToken offendingSymbol, 
@@ -28,7 +34,7 @@ namespace InputHandling.Antlr
             throw new CommandSyntaxException(msg);
         }
 
-        public void ParseCommand(string input)
+        public virtual void ParseCommand(string input)
         {
             //Lex (with Antlr's generated lexer)
             if (!input.StartsWith("say") && !input.StartsWith("whisper") && !input.StartsWith("shout"))

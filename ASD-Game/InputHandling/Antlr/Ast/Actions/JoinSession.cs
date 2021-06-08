@@ -6,14 +6,18 @@ namespace InputHandling.Antlr.Ast.Actions
     public class JoinSession : Command
     {
         private Message _message;
+        private Username _username;
+
         [ExcludeFromCodeCoverage]
         public Message Message { get => _message; private set => _message = value; }
+        public Username Username { get => _username; private set => _username = value; }
 
         [ExcludeFromCodeCoverage]
         public ArrayList GetChildren()
         {
             var children = new ArrayList();
             children.Add(_message);
+            children.Add(_username);
             return children;
         }
 
@@ -22,6 +26,10 @@ namespace InputHandling.Antlr.Ast.Actions
             if (child is Message)
             {
                 _message = (Message)child;
+            }
+            else if (child is Username)
+            {
+                _username = (Username)child;
             }
 
             return this;

@@ -6,6 +6,8 @@
         Move,
         Session,
         GameSession,
-        Agent
+        Agent,
+        RelativeStat,
+        Inventory
     }
 }

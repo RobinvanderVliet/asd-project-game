@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WorldGeneration.Models;
@@ -31,7 +31,7 @@ namespace WorldGeneration
         }
 
         // checks if there are new chunks that have to be loaded
-        private void LoadArea(int playerX, int playerY, int viewDistance)
+        public void LoadArea(int playerX, int playerY, int viewDistance)
         {
             _chunksWithinLoadingRange = CalculateChunksToLoad(playerX, playerY, viewDistance);
             ForgetUnloadedChunks();
@@ -94,7 +94,7 @@ namespace WorldGeneration
         {
             var playerX = currentPlayer.XPosition;
             var playerY = currentPlayer.YPosition;
-            LoadArea(playerX, playerY, viewDistance);
+            // LoadArea(playerX, playerY, viewDistance);
             for (var y = (playerY + viewDistance); y > ((playerY + viewDistance) - (viewDistance * 2) - 1); y--)
             {
                 for (var x = (playerX - viewDistance); x < ((playerX - viewDistance) + (viewDistance * 2) + 1); x++)
@@ -105,18 +105,16 @@ namespace WorldGeneration
                 Console.WriteLine("");
             }
         }
-        
+
         private string GetDisplaySymbol(ITile tile, List<Character> characters)
         {
-            var characterOnTile = characters.Find(character => character.XPosition == tile.XPosition && character.YPosition - 1 == tile.YPosition);
+            
+            var characterOnTile = characters.Find(character => character.XPosition == tile.XPosition && character.YPosition == tile.YPosition);
             if(characterOnTile != null)
             {
                 return characterOnTile.Symbol;
             }
-            else
-            {
-                return tile.Symbol;
-            }
+            return tile.Symbol;
         }
 
         private Chunk GenerateNewChunk(int chunkX, int chunkY)
@@ -149,8 +147,30 @@ namespace WorldGeneration
         // find a LOADED tile by the coordinates
         public ITile GetLoadedTileByXAndY(int x, int y)
         {
-            var tile = GetChunkForTileXAndY(x, y).GetTileByWorldCoordinates(x, y);
-            return tile;
+            return GetChunkForTileXAndY(x, y).GetTileByWorldCoordinates(x, y);
+        }
+
+        public char[,] GetMapAroundCharacter(Player centerCharacter, int viewDistance, List<Character> allCharacters)
+        {
+            if (viewDistance < 0)
+            {
+                throw new InvalidOperationException("viewDistance smaller than 0.");
+            }
+
+            var tileArray = new char[viewDistance * 2 + 1, viewDistance * 2 + 1];
+            var centerCharacterXPosition = centerCharacter.XPosition;
+            var centerCharacterYPosition = centerCharacter.YPosition;
+            LoadArea(centerCharacterXPosition, centerCharacterYPosition, viewDistance);
+
+            for (var y = tileArray.GetLength(0) - 1; y >= 0; y--)
+            {
+                for (var x = 0; x < tileArray.GetLength(1); x++)
+                {
+                    var tile = GetLoadedTileByXAndY(x + (centerCharacterXPosition - viewDistance), (centerCharacterYPosition + viewDistance) - y);
+                    tileArray[y, x] = GetDisplaySymbol(tile, allCharacters).ToCharArray()[0];
+                }
+            }
+            return tileArray;
         }
     }
 }

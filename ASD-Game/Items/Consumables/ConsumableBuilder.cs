@@ -8,7 +8,7 @@ namespace Items.Consumables
     {
         private Consumable _consumable;
 
-        private ConsumableBuilder(ConsumableType type)
+        public ConsumableBuilder(ConsumableType type)
         {
             _consumable = InitializeConsumable(type);
         }

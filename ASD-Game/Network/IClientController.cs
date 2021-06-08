@@ -12,5 +12,6 @@
         public void AddAgentController(IAgentController agentController);
         public string GetOriginId();
         public bool IsHost();
+        public void SetBackupHost(bool value);
     }
 }

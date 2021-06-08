@@ -14,13 +14,16 @@ namespace WorldGeneration.Models.HazardousTiles
         public int XPosition { get; set; }
         public int YPosition { get; set; }
         public List<Item> ItemsOnTile { get; set; }
+        public int StaminaCost { get; set; }
 
         public GasTile(int x, int y, int radius = 1)
         {
+            ItemsOnTile = new();
             Symbol = TileSymbol.GAS;
             IsAccessible = true;
             XPosition = x;
             YPosition = y;
+            StaminaCost = 4;
 
             Radius = radius;
         }

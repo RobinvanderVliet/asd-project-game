@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -19,14 +19,15 @@ using InputHandling.Antlr;
 using InputHandling.Antlr.Transformer;
 using Network;
 using Session;
+using Session.GameConfiguration;
 using UserInterface;
+using Messages;
 
 
 namespace ASD_project
 {
     partial class Program
     {
-        //Setup logger and injection
         static void Main(string[] args)
         {
             var builder = new ConfigurationBuilder();
@@ -47,10 +48,13 @@ namespace ASD_project
                     services.AddTransient<IMainGame, MainGame>();
                     services.AddScoped<INetworkComponent, NetworkComponent>();
                     services.AddScoped<IClientController, ClientController>();
+                    services.AddScoped<IInventoryHandler, InventoryHandler>();
                     services.AddScoped<IChatHandler, ChatHandler>();
                     services.AddScoped<ISessionHandler, SessionHandler>();
                     services.AddScoped<IMoveHandler, MoveHandler>();
+                    services.AddScoped<IRelativeStatHandler, RelativeStatHandler>();
                     services.AddScoped<IWorldService, WorldService>();
+                    services.AddScoped<IMessageService, MessageService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
                     services.AddSingleton<IDBConnection, DBConnection>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -62,6 +66,7 @@ namespace ASD_project
                     services.AddScoped<IEvaluator, Evaluator>();
                     services.AddScoped<IConfigurationService, ConfigurationService>();
                     services.AddScoped<IFileToConfigurationMapper, FileToConfigurationMapper>();
+                    services.AddScoped<IGameConfigurationHandler, GameConfigurationHandler>();
                 })
                 .UseSerilog()
                 .Build();
@@ -69,7 +74,6 @@ namespace ASD_project
             var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);
             svc.Run();
         }
-
         static void BuildConfig(IConfigurationBuilder builder)
         {
             builder.SetBasePath(Directory.GetCurrentDirectory())

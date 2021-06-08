@@ -42,7 +42,6 @@ namespace Agent.Antlr.Parser
         public override void EnterActionSubject([NotNull] AgentConfigurationParser.ActionSubjectContext context)
         {
             ActionReference reference = new ActionReference(context.action().STRING().GetText());
-            Console.WriteLine("");
             _currentContainer.Push(reference);
         }
 
