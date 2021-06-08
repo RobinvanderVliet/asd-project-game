@@ -20,7 +20,7 @@ namespace WorldGeneration
             Symbol = symbol;
         }
         
-        public string getSymbol()
+        public string GetSymbol()
         {
             if (Health <= 0)
             {

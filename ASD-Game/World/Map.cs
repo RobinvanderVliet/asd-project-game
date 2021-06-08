@@ -112,7 +112,7 @@ namespace WorldGeneration
             var characterOnTile = characters.Find(character => character.XPosition == tile.XPosition && character.YPosition == tile.YPosition);
             if(characterOnTile != null)
             {
-                return characterOnTile.getSymbol();
+                return characterOnTile.GetSymbol();
             }
             return tile.Symbol;
         }

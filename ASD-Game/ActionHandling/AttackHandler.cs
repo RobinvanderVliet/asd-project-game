@@ -229,8 +229,16 @@ namespace ActionHandling
                 }
                 else
                 {
-                    attackedPlayer.Health -= totalDamage;
-                    _playerDatabaseService.UpdateAsync(attackedPlayer);
+                    if (attackedPlayer.Health - totalDamage >= 0)
+                    {
+                        attackedPlayer.Health -= totalDamage;
+                        _playerDatabaseService.UpdateAsync(attackedPlayer);
+                    }
+                    else
+                    {
+                        attackedPlayer.Health = 0;
+                        _playerDatabaseService.UpdateAsync(attackedPlayer);
+                    }
                 }
             }
             else
@@ -254,6 +262,9 @@ namespace ActionHandling
 
             var player = _worldService.GetPlayer(attackDto.PlayerGuid);
             bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
+            
+            var attackedPlayer = _worldService.GetPlayer(attackDto.AttackedPlayerGuid);
+            bool printAttackedMessage = _clientController.GetOriginId().Equals(attackedPlayer.Id);
             {
                 if (player.Stamina < ATTACK_STAMINA && printAttackMessage)
                 {
@@ -270,10 +281,8 @@ namespace ActionHandling
                     _worldService.DisplayStats();
                 }
             }
-            if (attackDto.AttackedPlayerGuid != null)
+            if (attackDto.AttackedPlayerGuid != null && attackedPlayer.Health != 0)
             {
-                var attackedPlayer = _worldService.GetPlayer(attackDto.AttackedPlayerGuid);
-                bool printAttackedMessage = _clientController.GetOriginId().Equals(attackedPlayer.Id);
                 if (printAttackedMessage)
                 {
                     _messageService.AddMessage(
@@ -330,10 +339,17 @@ namespace ActionHandling
                 }
                 else
                 {
-                    attackedPlayer.Health -= attackDto.Damage;
+                    if (attackedPlayer.Health - attackDto.Damage >= 0)
+                    {
+                        attackedPlayer.Health -= attackDto.Damage;
+                    }
+                    else
+                    {
+                        attackedPlayer.Health = 0;
+                    }
+
                     _worldService.DisplayStats();
                     _worldService.DisplayWorld();
-
                 }
             }
         }
