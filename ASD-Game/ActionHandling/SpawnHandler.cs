@@ -46,7 +46,7 @@ namespace ASD_Game.ActionHandling
         {
             var itemSpawnDto = JsonConvert.DeserializeObject<ItemSpawnDTO>(packet.Payload);
             
-            if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
+            if (_clientController.IsHost() && packet.Header.Target.Equals("host") || _clientController.IsBackupHost)
             {
                 ItemSpawnDTO item = _itemSpawnDTOs
                     .FirstOrDefault(item => item.Equals(itemSpawnDto));
