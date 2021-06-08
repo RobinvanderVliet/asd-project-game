@@ -102,15 +102,11 @@ namespace Session
 
             var gamePOCO = new GamePOCO
             {
-                GameGuid = _clientController.SessionId,
-                PlayerGUIDHost = _clientController.GetOriginId(),
-                Seed = _sessionHandler.GetSessionSeed(),
-                GameName = _sessionHandler.GameName
+                GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId(),
+                GameName = _sessionHandler.GameName, Seed = _sessionHandler.GetSessionSeed()
             };
             _gamePocoService.CreateAsync(gamePOCO);
 
-            List<string[]> allClients = _sessionHandler.GetAllClients();
-            Dictionary<string, int[]> players = new();
 
             players = SetupPositionsNewPlayers(allClients, gamePOCO);
 

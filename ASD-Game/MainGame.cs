@@ -5,6 +5,7 @@ using InputHandling;
 using Microsoft.Extensions.Logging;
 using Network;
 using Session;
+using System;
 using UserInterface;
 using WorldGeneration;
 
@@ -49,7 +50,7 @@ namespace ASD_project
                         {
                             _inputHandler.HandleGameScreenCommands();
                         }
-                        else if (currentScreen is LobbyScreen) 
+                        else if (currentScreen is LobbyScreen)
                         {
                             _inputHandler.HandleLobbyScreenCommands();
                         }
