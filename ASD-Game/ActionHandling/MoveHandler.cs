@@ -149,7 +149,7 @@ namespace ActionHandling
                 }
             }
             ChangeAIPosition(moveDTO);
-            return new HandlerResponseDTO(SendAction.Ignore, "");
+            return new HandlerResponseDTO(SendAction.SendToClients, "");
         }
 
         private void InsertToDatabase(MoveDTO moveDTO)
@@ -292,7 +292,7 @@ namespace ActionHandling
                 }
                 foreach (MoveDTO move in moveDTOs)
                 {
-                    //SendMoveDTO(move);
+                    SendMoveDTO(move);
                 }
             }
         }
