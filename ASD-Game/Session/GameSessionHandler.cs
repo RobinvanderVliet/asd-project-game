@@ -109,8 +109,7 @@ namespace Session
             {
                 _screenHandler.TransitionTo(new GameScreen());
                 _worldService.GenerateWorld(startGameDTO.Seed);
-                currentPlayer = AddRejoinedPlayerToGame(startGameDTO);
-                _worldService.DisplayWorld();
+                currentPlayer = AddOldPlayersToNewGame(startGameDTO);
             }
             else if (_sessionHandler.GetSavedGame() && !_sessionHandler.GameStarted())
             {
@@ -146,6 +145,28 @@ namespace Session
             }
 
             return new HandlerResponseDTO(SendAction.SendToClients, null);
+        }
+        
+        private Player AddOldPlayersToNewGame(StartGameDTO startGameDTO)
+        {
+            Player currentPlayer = null;
+            foreach (var player in startGameDTO.PlayerLocations)
+            {
+                if (_clientController.GetOriginId() == player.Key)
+                {
+                    currentPlayer = new Player("arie", player.Value[0], player.Value[1],
+                        CharacterSymbol.ENEMY_PLAYER, player.Key);
+                    _worldService.AddPlayerToWorld(currentPlayer, true);
+                }
+                else
+                {
+                    var playerObect = new Player("gerrit", startGameDTO.ExistingPlayer.XPosition,
+                        startGameDTO.ExistingPlayer.YPosition,
+                        CharacterSymbol.CURRENT_PLAYER, player.Key);
+                    _worldService.AddPlayerToWorld(playerObect, false);
+                }
+            }
+            return currentPlayer;
         }
 
 
