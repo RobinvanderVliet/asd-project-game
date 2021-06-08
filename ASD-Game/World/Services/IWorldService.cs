@@ -41,9 +41,6 @@ namespace WorldGeneration
 
         public Player GetPlayer(string id);
 
-        //TODO merge with other
-        public List<Player> GetPlayers();
-
         public ITile GetTile(int x, int y);
 
         public bool CheckIfCharacterOnTile(ITile tile);

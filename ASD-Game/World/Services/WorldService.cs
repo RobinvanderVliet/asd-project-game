@@ -172,10 +172,5 @@ namespace WorldGeneration
                 player.Inventory.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
                 player.Inventory.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
         }
-
-        public List<Player> GetPlayers()
-        {
-            return _world.GetAllPlayers();
-        }
     }
 }

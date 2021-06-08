@@ -53,7 +53,7 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         private void SetClosestPlayer(SmartMonster smartMonster, int visionRange)
         {
-            List<Player> players = WorldService.GetPlayers();
+            List<Player> players = WorldService.GetAllPlayers();
             foreach (Player player in players)
             {
                 Vector2 pPos = new Vector2(player.XPosition, player.YPosition);
