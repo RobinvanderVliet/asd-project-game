@@ -5,8 +5,11 @@
         Chat,
         Move,
         Session,
-        GameSession,
         RelativeStat,
         Inventory,        
+        GameSession,
+        Attack,
+        Dead
+        
     }
 }

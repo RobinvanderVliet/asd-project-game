@@ -33,6 +33,17 @@ namespace Items
             armorBuilder.SetArmorProtectionPoints(1);
             return armorBuilder.GetItem();
         }
+        
+        public static Armor GetJacket()
+        {
+            ArmorBuilder armorBuilder = new(ArmorStats.ArmorType.DefaultArmor);
+            armorBuilder.SetName("Jacket");
+            armorBuilder.SetDescription("Default body armor jacket, plain but good looking");
+            armorBuilder.SetArmorPartType(ArmorStats.ArmorPartType.Body);
+            armorBuilder.SetRarity(ItemStats.Rarity.Common);
+            armorBuilder.SetArmorProtectionPoints(20);
+            return armorBuilder.GetItem();
+        }
 
         public static Consumable GetBandage()
         {

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Session.DTO;
+﻿using System.Collections.Generic;
 
 
 namespace Session
@@ -10,7 +8,6 @@ namespace Session
         public bool JoinSession(string sessionId, string userName);
         public bool CreateSession(string sessionName, string userName);
         public void RequestSessions();
-        public void SendHeartbeat();
         public int GetSessionSeed();
         public List<string[]> GetAllClients();
     }

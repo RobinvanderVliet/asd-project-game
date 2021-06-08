@@ -1,7 +1,5 @@
 using Network;
-using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
 using ActionHandling.DTO;
 using DatabaseHandler.POCO;
@@ -32,6 +30,12 @@ namespace ActionHandling
 
         public void SendMove(string directionValue, int stepsValue)
         {
+            if (_worldService.IsDead(_worldService.GetCurrentPlayer()))
+            {
+                _messageService.AddMessage("You can't move, you're dead!");
+                return;
+            }
+
             int x = 0;
             int y = 0;
 
