@@ -108,6 +108,8 @@ namespace Session
                     var playerObject = new Player(client[1], playerX, playerY, CharacterSymbol.ENEMY_PLAYER, client[0]);
                     _worldService.AddPlayerToWorld(playerObject, false);
                 }
+                playerX += 2;
+                playerY += 2;
             }
 
             return currentPlayer;
@@ -142,10 +144,6 @@ namespace Session
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
-
-            if (startGameDTO.ExistingPlayer == null)
-            {
-            }
 
             HandleStartGameSession(startGameDTO);
             return new HandlerResponseDTO(SendAction.SendToClients, null);
@@ -203,8 +201,7 @@ namespace Session
             _screenHandler.TransitionTo(new GameScreen());
             Player currentPlayer = null;
 
-
-            if (startGameDTO.GameGuid == null)
+            if (startGameDTO.GameGuid == null && !_sessionHandler.GameStarted())
             {
                 _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
                 currentPlayer = AddPlayersToWorld();
