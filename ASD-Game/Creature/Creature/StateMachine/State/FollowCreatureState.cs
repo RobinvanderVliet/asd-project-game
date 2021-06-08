@@ -3,7 +3,6 @@ using Creature.Creature.StateMachine.Data;
 using Creature.Pathfinder;
 using System.Collections.Generic;
 using System.Numerics;
-using ASD_project.Creature.Creature.StateMachine.Builder;
 using Creature.Creature.StateMachine.Builder;
 
 namespace Creature.Creature.StateMachine.State

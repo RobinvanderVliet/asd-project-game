@@ -1,5 +1,4 @@
-﻿using ASD_project.Creature.Creature.StateMachine.Builder;
-using Creature.Creature.StateMachine;
+﻿using Creature.Creature.StateMachine;
 using Creature.Creature.StateMachine.Builder;
 using Creature.Creature.StateMachine.CustomRuleSet;
 using Creature.Creature.StateMachine.Data;
@@ -11,7 +10,6 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Numerics;
 using WorldGeneration;
 
 namespace Creature.Tests.Creature.StateMachine.Builder

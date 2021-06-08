@@ -1,6 +1,4 @@
-﻿using Creature.Creature.StateMachine;
-using Creature.Creature.StateMachine.Builder;
-using Creature.Creature.StateMachine.CustomRuleSet;
+﻿using Creature.Creature.StateMachine.CustomRuleSet;
 using Creature.Creature.StateMachine.Data;
 using Creature.Creature.StateMachine.Event;
 using Creature.Creature.StateMachine.State;
@@ -9,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WorldGeneration;
 
-namespace ASD_project.Creature.Creature.StateMachine.Builder
+namespace Creature.Creature.StateMachine.Builder
 {
     public class BuilderConfigurator
     {

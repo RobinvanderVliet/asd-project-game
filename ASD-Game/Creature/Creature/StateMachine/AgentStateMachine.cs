@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
-using ASD_project.Creature.Creature.StateMachine.Builder;
+using Creature.Creature.StateMachine.Builder;
 using Creature.Creature.StateMachine.Builder;
 using Creature.Creature.StateMachine.CustomRuleSet;
 using Creature.Creature.StateMachine.Data;

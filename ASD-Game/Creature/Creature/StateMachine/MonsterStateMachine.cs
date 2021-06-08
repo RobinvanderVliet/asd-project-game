@@ -7,7 +7,6 @@ using Creature.Creature.StateMachine.CustomRuleSet;
 using Creature.Creature.StateMachine.Builder;
 using Creature.Creature.StateMachine.State;
 using System.Linq;
-using ASD_project.Creature.Creature.StateMachine.Builder;
 
 namespace Creature.Creature.StateMachine
 {

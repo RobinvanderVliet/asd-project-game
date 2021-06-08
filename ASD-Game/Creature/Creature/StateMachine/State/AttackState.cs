@@ -1,5 +1,4 @@
-﻿using ASD_project.Creature.Creature.StateMachine.Builder;
-using Creature.Creature.StateMachine.Builder;
+﻿using Creature.Creature.StateMachine.Builder;
 using Creature.Creature.StateMachine.Data;
 using System.Collections.Generic;
 
