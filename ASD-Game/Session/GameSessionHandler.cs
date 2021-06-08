@@ -97,7 +97,7 @@ namespace Session
             
             
             _screenHandler.TransitionTo(new GameScreen());
-            if (startGameDTO.ExistingPlayer != null)
+            if (startGameDTO.ExistingPlayer == null)
             {
                 _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
             }
