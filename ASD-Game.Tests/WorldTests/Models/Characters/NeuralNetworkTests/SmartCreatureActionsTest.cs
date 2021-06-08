@@ -1,11 +1,11 @@
-﻿using NeuralNetworking.TrainingScenario;
-using Character.Pathfinder;
+﻿using Character.Pathfinder;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 using WorldGeneration.StateMachine.Data;
 
-namespace Character.Tests.NeuralNetworkTest
+namespace World.Models.Character.Tests.NeuralNetworkTest
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]

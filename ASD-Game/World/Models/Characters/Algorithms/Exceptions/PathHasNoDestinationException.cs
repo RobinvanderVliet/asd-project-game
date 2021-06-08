@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Character.Algorithms.Exceptions
+namespace World.Models.Character.Algorithms.Exceptions
 {
     [ExcludeFromCodeCoverage]
     [Serializable]

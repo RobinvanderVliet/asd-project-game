@@ -1,8 +1,8 @@
-﻿using NeuralNetworking;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
+using World.Models.Characters.Algorithms.NeuralNetworking;
 
-namespace Character.Tests.NeuralNetworkTest
+namespace World.Models.Character.Tests.NeuralNetworkTest
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
