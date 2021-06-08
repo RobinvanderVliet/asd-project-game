@@ -215,7 +215,7 @@ namespace Session
             {
                 SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.Payload);
                 int spawnrate = int.Parse(sessionDTO.Name);
-                Console.WriteLine(spawnrate);
+                _messageService.AddMessage(spawnrate + "");
                 _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
                 return new HandlerResponseDTO(SendAction.SendToClients, packetDto.Payload);
             }
@@ -223,7 +223,7 @@ namespace Session
             {
                 SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
                 int spawnrate = int.Parse(sessionDTO.Name);
-                Console.WriteLine(spawnrate);
+                _messageService.AddMessage(spawnrate + "");
                 _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
             }
             return new HandlerResponseDTO(SendAction.Ignore, null);
@@ -348,7 +348,7 @@ namespace Session
             }
             else
             {
-                Console.WriteLine("Id: " + packet.Header.SessionID + " Name: " + sessionDTO.Name + " Host: " + sessionDTO.Clients.First()[1] + " Amount of players: " + sessionDTO.Clients.Count);
+                _messageService.AddMessage("Id: " + packet.Header.SessionID + " Name: " + sessionDTO.Name + " Host: " + sessionDTO.Clients.First()[1] + " Amount of players: " + sessionDTO.Clients.Count);
             }
             
             return new HandlerResponseDTO(SendAction.Ignore, null);
@@ -445,7 +445,7 @@ namespace Session
 
             _senderHeartbeatTimer.Close();
 
-            Console.WriteLine("Look at me, I'm the captain (Host) now!");
+            _messageService.AddMessage("Look at me, I'm the captain (Host) now!");
 
             var clients = _session.GetAllClients().Select(client => client.First()).ToArray();
             List<string> heartbeatSenders = new List<string>(clients);
