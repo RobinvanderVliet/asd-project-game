@@ -160,12 +160,11 @@ namespace Session
                 _worldService.GenerateWorld(startGameDTO.Seed);
                 AddPlayersToNewGame(startGameDTO);
                 _worldService.DisplayWorld();
-
             }
 
-            if (_sessionHandler.GetSavedGame())
+            if (_sessionHandler.GetSavedGame() && !_sessionHandler.GameStarted())
             {
-                _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
+                _worldService.GenerateWorld(startGameDTO.Seed);
                 AddPlayerToWorldSavedGame(startGameDTO.SavedPlayers);
                 _worldService.DisplayWorld();
             }
