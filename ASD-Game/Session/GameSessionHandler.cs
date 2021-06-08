@@ -108,6 +108,9 @@ namespace Session
             _gamePocoService.CreateAsync(gamePOCO);
 
 
+            List<string[]> allClients = _sessionHandler.GetAllClients();
+            Dictionary<string, int[]> players = new();
+
             players = SetupPositionsNewPlayers(allClients, gamePOCO);
 
             startGameDTO.GameGuid = gamePOCO.GameGuid;
