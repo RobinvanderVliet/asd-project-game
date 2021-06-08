@@ -1,9 +1,8 @@
 ﻿using System.Numerics;
-using ASD_Game.Creature.World;
 
-namespace ASD_Game.Creature.Creature.StateMachine.Data
+namespace ASD_Game.World.Models.Characters.StateMachine.Data
 {
-    public interface ICreatureData
+    public interface ICharacterData
     {
         bool IsAlive { get; }
         Vector2 Position { get; set; }

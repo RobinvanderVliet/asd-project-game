@@ -1,20 +1,21 @@
-using Messages;
-using Network;
-using Network.DTO;
-using Newtonsoft.Json;
-using Session.DTO;
-using Session.GameConfiguration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Timers;
-using UserInterface;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
+using ASD_Game.Session.DTO;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
+using ASD_Game.World;
+using Newtonsoft.Json;
 using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
-using WorldGeneration;
 using Timer = System.Timers.Timer;
 
-namespace Session
+namespace ASD_Game.Session
 {
     public class SessionHandler : IPacketHandler, ISessionHandler
     {

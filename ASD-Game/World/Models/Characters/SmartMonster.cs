@@ -1,11 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
+using ASD_Game.World.Models.Characters.StateMachine.Data;
 using World.Models.Characters.Algorithms.NeuralNetworking;
-using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
-using WorldGeneration;
-using WorldGeneration.StateMachine.Data;
 
-namespace Characters
+namespace ASD_Game.World.Models.Characters
 {
     [ExcludeFromCodeCoverage]
     public class SmartMonster : Monster

@@ -6,7 +6,6 @@ using ASD_Game.Items.Services;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Interfaces;
-using System.Diagnostics.CodeAnalysis;
 using World.Models.Characters.Algorithms.NeuralNetworking;
 
 namespace ASD_Game.World.Services
@@ -16,7 +15,6 @@ namespace ASD_Game.World.Services
         private readonly IItemService _itemService;
         private readonly IScreenHandler _screenHandler;
         private World _world;
-
         public List<Character> _creatureMoves { get; set; }
         
         public WorldService(IScreenHandler screenHandler, IItemService itemService)

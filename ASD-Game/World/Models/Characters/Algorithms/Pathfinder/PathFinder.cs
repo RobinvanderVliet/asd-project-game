@@ -1,9 +1,9 @@
-using Character.Pathfinder;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using ASD_Game.Character.Pathfinder;
 
-namespace Character
+namespace ASD_Game.World.Models.Characters.Algorithms.Pathfinder
 {
     public class PathFinder
     {

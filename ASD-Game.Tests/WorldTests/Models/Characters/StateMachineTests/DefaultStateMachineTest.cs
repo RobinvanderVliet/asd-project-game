@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Characters.StateMachine;
 using NUnit.Framework;
 using WorldGeneration;
 using WorldGeneration.Models;
