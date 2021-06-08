@@ -5,7 +5,6 @@ using Creature.Creature.StateMachine.Data;
 using Creature.Creature.StateMachine.Event;
 using Creature.Creature.StateMachine.State;
 using Items;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using WorldGeneration;
@@ -118,6 +117,7 @@ namespace ASD_project.Creature.Creature.StateMachine.Builder
         {
             bool firstRulesetCondition = true;
 
+            // This checks if the creature that interacts with another creature is of the right instance (because the events for it aren't specific for a monster or an agent)
             if (builderInfo.RuleSets[0].Comparison == "sees" || builderInfo.RuleSets[0].Comparison == "nearby" || builderInfo.RuleSets[0].Comparison == "lost")
             {
                 firstRulesetCondition = IsInstanceOf(comparableData, builderInfo.RuleSets[0].Comparable) && IsInstanceOf(thresholdData, builderInfo.RuleSets[0].Threshold);
@@ -144,16 +144,27 @@ namespace ASD_project.Creature.Creature.StateMachine.Builder
                 }
                 else if (builderInfo.RuleSets[1].Comparison == "contains")
                 {
-                    Inventory inventory = (Inventory)comparableData;
-                    Item item = (Item)thresholdData;
-                    secondRulesetCondition = inventory.GetConsumableItem(item.ItemName) != null;
+                    // This checks if the creature that has inventory data is an agent (because a monster can't have an inventory)
+                    secondRulesetCondition = IsInstanceOf(comparableData, "agent");
+                    if (secondRulesetCondition == true)
+                    {
+                        Inventory inventory = (Inventory)comparableObject;
+                        Item item = (Item)thresholdObject;
+                        secondRulesetCondition = inventory.GetConsumableItem(item.ItemName) != null;
+                    }
                 }
                 else if (builderInfo.RuleSets[1].Comparison == "does not contain")
                 {
-                    Inventory inventory = (Inventory)comparableData;
-                    Item item = (Item)thresholdData;
-                    secondRulesetCondition = inventory.GetConsumableItem(item.ItemName) == null;
+                    // This checks if the creature that has inventory data is an agent (because a monster can't have an inventory)
+                    secondRulesetCondition = IsInstanceOf(comparableData, "agent");
+                    if (secondRulesetCondition == true)
+                    {
+                        Inventory inventory = (Inventory)comparableObject;
+                        Item item = (Item)thresholdObject;
+                        secondRulesetCondition = inventory.GetConsumableItem(item.ItemName) == null;
+                    }
                 }
+                // If the action that needs to be executed when the comparison is false, invert the condition
                 if (builderInfo.RuleSets[1].ComparisonFalse == builderInfo.Action)
                 {
                     secondRulesetCondition = !secondRulesetCondition;
