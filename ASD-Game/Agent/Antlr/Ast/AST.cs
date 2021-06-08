@@ -3,20 +3,21 @@
 
     public class AST
     {
-        public Configuration root;
+        private Configuration _root;
+        public Configuration root { get => _root; set => _root = value; }
 
         public AST()
         {
-            root = new Configuration();
+            _root = new Configuration();
         }
         public AST(Configuration root)
         {
-            this.root = root;
+            _root = root;
         }
 
         public void SetRoot(Configuration configuration)
         {
-            root = configuration;
+            _root = configuration;
         }
     }
 }

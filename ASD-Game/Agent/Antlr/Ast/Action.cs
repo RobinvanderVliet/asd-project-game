@@ -4,7 +4,7 @@ namespace Agent.Antlr.Ast
 {
     public class Action : Node
     {
-        private List<Node> _conditions = new List<Node>();
+        private readonly List<Node> _conditions = new List<Node>();
 
         public string Name { get; set; }
 

@@ -2,6 +2,7 @@
 using Agent.Antlr.Ast.Comparables;
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Action = Agent.Antlr.Ast.Action;
 
@@ -9,7 +10,13 @@ namespace Agent.Generator
 {
     public class Generating
     {
-        private string _stringBuilder = "";
+        protected StringBuilder _stringBuilder;
+
+        public Generating()
+        {
+            _stringBuilder = new StringBuilder();
+        }
+
         public string Execute(AST ast)
         {
             try
@@ -21,35 +28,38 @@ namespace Agent.Generator
                     text += GenerateConfiguration(node);
                     lock (_stringBuilder)
                     {
-                        _stringBuilder += text;
+                        _stringBuilder.Append(text);
                     }
                 });
             }
             catch (Exception e)
             {
-                _stringBuilder += e.Message;
+                _stringBuilder.Append(e.Message);
             }
-            return _stringBuilder;
+            return _stringBuilder.ToString();
         }
         public string GenerateConfiguration(Node parent)
         {
-            string text = "";
-            if (parent is Rule)
+            StringBuilder builder = new();
+
+            var parentRule = parent as Rule;
+            if (parentRule != null)
             {
-                text += GenerateRule((Rule)parent);
+                builder.Append(GenerateRule((Rule)parent));
             }
+
             foreach (Node child in parent.GetChildren())
             {
                 if (child is Action)
                 {
-                    text += GenerateAction((Action)child, ((Setting)parent).SettingName);
+                    builder.Append(GenerateAction((Action)child, ((Setting)parent).SettingName));
                 }
                 else
                 {
-                    text += GenerateCondition(child, ((Setting)parent).SettingName, "default");
+                    builder.Append(GenerateCondition(child, ((Setting)parent).SettingName, "default"));
                 }
             }
-            return text;
+            return builder.ToString();
         }
         private string GenerateRule(Rule parent)
         {
@@ -57,58 +67,59 @@ namespace Agent.Generator
         }
         private string GenerateCondition(Node parent, string setting, string action)
         {
-            string text = "";
+            StringBuilder builder = new();
             foreach (Node child in parent.GetChildren())
             {
                 string subject = GenerateCompareble(((Condition)parent).GetWhenClause().GetComparableL());
-                text += GenerateClause(child, setting, action, subject);
+                builder.Append(GenerateClause(child, setting, action, subject));
             }
-            return text;
+            return builder.ToString();
         }
         private string GenerateAction(Action parent, string settingName)
         {
-            string text = settingName + "_" + parent.Name + "=" + parent.Name + Environment.NewLine;
+            StringBuilder builder = new(); 
+            builder.Append(settingName + "_" + parent.Name + "=" + parent.Name + Environment.NewLine);
             foreach (Node child in parent.GetChildren())
             {
-                text += GenerateCondition(child, settingName, parent.Name);
+                builder.Append(GenerateCondition(child, settingName, parent.Name));
             }
-            return text;
+            return builder.ToString();
         }
         private string GenerateClause(Node parent, string settingName, string action, string subject)
         {
-            string text = "";
+            StringBuilder builder = new();
             if (parent is When)
             {
-                text += generateWhen(parent, settingName, action, subject, "true");
-                if (parent.GetChildren().Where(c => c.GetNodeType() == "Otherwise").FirstOrDefault() != null)
+                builder.Append(generateWhen(parent, settingName, action, subject, "true"));
+                if (parent.GetChildren().FirstOrDefault(c => c.GetNodeType() == "Otherwise") != null)
                 {
-                    text += generateOther(parent.GetChildren().Where(c => c.GetNodeType() == "Otherwise").FirstOrDefault(), settingName, action, subject, "false");
+                    builder.Append(generateOther(parent.GetChildren().FirstOrDefault(c => c.GetNodeType() == "Otherwise"), settingName, action, subject, "false"));
                 }
             }
-            return text;
+            return builder.ToString();
         }
         private string generateWhen(Node parent, string settingName, string action, string subject, string status)
         {
-            string text = "";
+            StringBuilder builder = new();
             for (int i = 0; i < 4; i++)
             {
                 switch (i)
                 {
                     case 0:
-                        text += settingName + "_" + action + "_" + subject + "_" + "comparable" + "=" + GenerateCompareble(((When)parent).GetComparableL()) + Environment.NewLine;
+                        builder.Append(settingName + "_" + action + "_" + subject + "_" + "comparable" + "=" + GenerateCompareble(((When)parent).GetComparableL()) + Environment.NewLine);
                         break;
                     case 1:
-                        text += settingName + "_" + action + "_" + subject + "_" + "treshold" + "=" + GenerateCompareble(((When)parent).GetComparableR()) + Environment.NewLine;
+                        builder.Append(settingName + "_" + action + "_" + subject + "_" + "treshold" + "=" + GenerateCompareble(((When)parent).GetComparableR()) + Environment.NewLine);
                         break;
                     case 2:
-                        text += settingName + "_" + action + "_" + subject + "_" + "comparision" + "=" + ((When)parent).GetComparison().ComparisonType + Environment.NewLine;
+                        builder.Append(settingName + "_" + action + "_" + subject + "_" + "comparision" + "=" + ((When)parent).GetComparison().ComparisonType + Environment.NewLine);
                         break;
                     case 3:
-                        text += settingName + "_" + action + "_" + subject + "_" + "comparision" + "_" + status + "=" + ((When)parent).GetThen().Name + Environment.NewLine;
+                        builder.Append(settingName + "_" + action + "_" + subject + "_" + "comparision" + "_" + status + "=" + ((When)parent).GetThen().Name + Environment.NewLine);
                         break;
                 }
             }
-            return text;
+            return builder.ToString();
         }
         private string generateOther(Node parent, string settingName, string action, string subject, string status)
         {

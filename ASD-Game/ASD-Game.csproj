@@ -61,4 +61,8 @@
 		<Content Include="InputHandling\Antlr\Grammar\PlayerCommands.g4" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Agent\Antlr\Exception\" />
+	</ItemGroup>
+
 </Project>

@@ -5,7 +5,7 @@ namespace Agent.Exceptions
 {
     [Serializable]
     [ExcludeFromCodeCoverage]
-    public class SyntaxErrorException : Exception
+    public sealed class SyntaxErrorException : Exception
     {
         public SyntaxErrorException(string message) : base(message)
         {

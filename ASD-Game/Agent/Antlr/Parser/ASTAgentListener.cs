@@ -12,8 +12,8 @@ namespace Agent.Antlr.Parser
 {
     public class ASTAgentListener : AgentConfigurationBaseListener
     {
-        private AST _ast;
-        private Stack<Node> _currentContainer;
+        private readonly AST _ast;
+        private readonly Stack<Node> _currentContainer;
         private bool _itemStat;
 
         public ASTAgentListener()
@@ -47,7 +47,7 @@ namespace Agent.Antlr.Parser
 
         public override void EnterComparison([NotNull] AgentConfigurationParser.ComparisonContext context)
         {
-            Comparison comparison = new Comparison(context.children.Where(c => c.GetText() != null).FirstOrDefault().GetText());
+            Comparison comparison = new Comparison(context.children.FirstOrDefault(c => c.GetText() != null).GetText());
             _currentContainer.Push(comparison);
         }
 
@@ -89,26 +89,20 @@ namespace Agent.Antlr.Parser
 
         public override void EnterSettingBlock([NotNull] AgentConfigurationParser.SettingBlockContext context)
         {
-            Setting block = new Setting(context.setting().children.Where(c => c.GetText() != null).FirstOrDefault().GetText());
+            Setting block = new Setting(context.setting().children.FirstOrDefault(c => c.GetText() != null).GetText());
             _currentContainer.Push(block);
         }
 
         public override void EnterStat([NotNull] AgentConfigurationParser.StatContext context)
         {
-            Stat stat = new Stat(context.children.Where(c => c.GetText() != null).FirstOrDefault().GetText());
+            Stat stat = new Stat(context.children.FirstOrDefault(c => c.GetText() != null).GetText());
             _currentContainer.Push(stat);
         }
 
         public override void EnterSubject([NotNull] AgentConfigurationParser.SubjectContext context)
         {
-            Subject subject = (Subject)context.children.Where(c => c.GetText() != null).FirstOrDefault();
+            Subject subject = (Subject)context.children.FirstOrDefault(c => c.GetText() != null);
             _currentContainer.Push(subject);
-        }
-
-
-        public override void EnterSubjectStat([NotNull] AgentConfigurationParser.SubjectStatContext context)
-        {
-            base.EnterSubjectStat(context);
         }
 
         public override void EnterWhenClause([NotNull] AgentConfigurationParser.WhenClauseContext context)
@@ -210,17 +204,6 @@ namespace Agent.Antlr.Parser
 
             _itemStat = false;
         }
-
-        public override void ExitSubjectStat([NotNull] AgentConfigurationParser.SubjectStatContext context)
-        {
-            base.ExitSubjectStat(context);
-        }
-
-        public override void ExitSubject([NotNull] AgentConfigurationParser.SubjectContext context)
-        {
-            base.ExitSubject(context);
-        }
-
 
         public override void EnterNpc([NotNull] AgentConfigurationParser.NpcContext context)
         {

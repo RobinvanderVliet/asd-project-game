@@ -5,7 +5,7 @@ namespace Agent.Exceptions
 {
     [Serializable]
     [ExcludeFromCodeCoverage]
-    public class SemanticErrorException : Exception
+    public sealed class SemanticErrorException : Exception
     {
         public SemanticErrorException(string message) : base(message)
         {

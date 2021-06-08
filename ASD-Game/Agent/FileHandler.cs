@@ -7,7 +7,7 @@ namespace Agent
 {
     public class FileHandler
     {
-        private string[] _allowedTypes = new[] { ".txt", ".cfg" };
+        private readonly string[] _allowedTypes = new[] { ".txt", ".cfg" };
         private static readonly char _separator = Path.DirectorySeparatorChar;
 
         public virtual string ImportFile(string filepath)
@@ -41,12 +41,20 @@ namespace Agent
 
             CreateDirectory(safeFileLocation);
 
-            using (FileStream fileStream = File.Open(safeFileLocation, FileMode.OpenOrCreate))
+            FileStream stream = null;
+            try
             {
-                using (StreamWriter streamWriter = new StreamWriter(fileStream))
+                stream = new FileStream(safeFileLocation, FileMode.OpenOrCreate);
+                using (StreamWriter streamWriter = new StreamWriter(stream))
                 {
+                    stream = null;
                     streamWriter.Write(content);
                 }
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Dispose();
             }
         }
 
@@ -61,13 +69,13 @@ namespace Agent
 
         public string GetBaseDirectory()
         {
-            string currentDirectory = string.Format(Path.GetFullPath(Path.Combine(GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory))));
+            string currentDirectory = string.Format(Path.GetFullPath(Path.Combine(GoBackToRoot())));
             string childDirectory = Directory.GetDirectories(currentDirectory, "*Agent*")[0].ToString();
 
             return childDirectory;
         }
 
-        private string GoBackToRoot(String path)
+        private string GoBackToRoot()
         {
             return Directory.GetParent
                 (Directory.GetParent

@@ -2,7 +2,7 @@
 {
     public class ASTError
     {
-        private string _message;
+        private readonly string _message;
 
 
         public ASTError(string message)

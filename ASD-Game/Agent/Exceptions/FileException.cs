@@ -6,7 +6,7 @@ namespace Agent.Exceptions
 {
     [Serializable]
     [ExcludeFromCodeCoverage]
-    public class FileException : IOException
+    public sealed class FileException : IOException
     {
         public FileException() { }
         public FileException(string message) : base(string.Format(message)) { }

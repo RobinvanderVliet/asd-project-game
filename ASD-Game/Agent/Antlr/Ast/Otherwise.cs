@@ -19,7 +19,7 @@ namespace Agent.Antlr.Ast
             if (_action != null)
             {
                 children.Add(_action);
-            };
+            }
             children.AddRange(body);
             return children;
         }
