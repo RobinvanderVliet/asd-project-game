@@ -17,6 +17,7 @@ namespace WorldGeneration.Models.TerrainTiles
         public WaterTile(int x, int y)
         {
             Symbol = TileSymbol.WATER;
+            ItemsOnTile = new();
             IsAccessible = false;
             XPosition = x;
             YPosition = y;

@@ -5,6 +5,7 @@ using Agent.Antlr.Parser;
 using Agent.Generator;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using SyntaxErrorException = Agent.Exceptions.SyntaxErrorException;
@@ -22,40 +23,49 @@ namespace Agent
         public Pipeline()
         {
             _errors = new List<string>();
-            // transformer = new Transformer();
             _generating = new Generating();
+            _checking = new Checking();
         }
 
-        public void ParseString(String input)
+        public virtual void ParseString(String input)
         {
             AntlrInputStream inputStream = new AntlrInputStream(input);
             AgentConfigurationLexer lexer = new AgentConfigurationLexer(inputStream);
             lexer.RemoveErrorListeners();
             _errors.Clear();
 
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
-            AgentConfigurationParser parser = new AgentConfigurationParser(tokens);
-            parser.RemoveErrorListeners();
-            parser.AddErrorListener(this);
-            var parseTree = parser.configuration();
-            ParseTreeWalker walker = new ParseTreeWalker();
+            try
+            {
+                CommonTokenStream tokens = new CommonTokenStream(lexer);
+                AgentConfigurationParser parser = new AgentConfigurationParser(tokens);
+                parser.RemoveErrorListeners();
+                parser.AddErrorListener(this);
+                var parseTree = parser.configuration();
+                ParseTreeWalker walker = new ParseTreeWalker();
+            
+                ASTAgentListener astAgentListener = new ASTAgentListener();
+                walker.Walk(astAgentListener, parseTree);
+                _ast = astAgentListener.GetAST();
 
-            ASTAgentListener astAgentListener = new ASTAgentListener();
-            walker.Walk(astAgentListener, parseTree);
-            _ast = astAgentListener.GetAST();
-
+            }
+            catch (Exception e)
+            {
+                Log.Logger.Information("Syntax error: " + e.Message);
+                _errors.Add(e.Message);
+            }
         }
 
         public virtual void CheckAst()
         {
-            if (_checking == null)
+            _checking.Check(_ast.Root);
+            foreach (var error in _ast.GetErrors())
             {
-                _checking = new Checking(_ast);
+                Log.Logger.Information("Semantic error: " + error.ToString());
+                _errors.Add(error.ToString());
             }
-            _checking.Check(_ast);
         }
 
-        public string GenerateAst()
+        public virtual string GenerateAst()
         {
             return _generating.Execute(_ast);
         }
@@ -66,7 +76,14 @@ namespace Agent
             set => _ast = value;
         }
 
-        public List<string> Errors => _errors;
+        public List<string> Errors
+        {
+            get => _errors;
+        }
+        public virtual List<string> GetErrors()
+        {
+            return _errors;
+        }
 
         public void ClearErrors()
         {
@@ -75,6 +92,7 @@ namespace Agent
 
         public Checking Checking
         {
+            get => _checking;
             set => _checking = value;
         }
 
@@ -84,5 +102,6 @@ namespace Agent
         {
             throw new SyntaxErrorException(msg);
         }
+
     }
 }

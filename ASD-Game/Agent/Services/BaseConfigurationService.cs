@@ -7,7 +7,7 @@ namespace Agent.Services
 {
     public abstract class BaseConfigurationService
     {
-        public FileToDictionaryMapper FileToDictionaryMapper;
+        public FileToSettingListMapper FileToSettingListMapper;
 
         private FileHandler _fileHandler;
         private Pipeline _pipeline;
@@ -19,12 +19,12 @@ namespace Agent.Services
         
         protected const string CANCEL_COMMAND = "cancel";
         protected const string LOAD_COMMAND = "load";
+        protected const string EDITOR_COMMAND = "editor";
         public string LastError = "";
 
         public abstract void CreateConfiguration(string configurationName, string filepath);
 
         public abstract List<Configuration> GetConfigurations();
 
-        public abstract void Configure();
     }
 }

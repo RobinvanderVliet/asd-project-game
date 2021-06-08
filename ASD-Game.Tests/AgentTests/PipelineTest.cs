@@ -1,10 +1,11 @@
-﻿using Agent.Antlr.Ast;
-using Agent.Exceptions;
-using Antlr4.Runtime;
+﻿using System;
+using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using System;
 using System.Diagnostics.CodeAnalysis;
+using Agent.Antlr.Ast;
+using Agent.Exceptions;
+using Antlr4.Runtime;
 
 namespace Agent.Tests
 {
@@ -38,40 +39,55 @@ namespace Agent.Tests
         public void Test_ParseString_SadPath()
         {
             //Arrange
-            Mock<Configuration> mockedAst = new();
-            mockedAst.Setup(x => x.GetChildren()).Throws(new Exception());
-
-            _sut.ParseString(SCRIPT);
-            _sut.Ast.SetRoot(mockedAst.Object);
-
             //Act
-            var result = _sut.GenerateAst();
+            _sut.ParseString("TEST =TEST");
 
             //Assert
-            Assert.NotNull(result);
-            Assert.AreEqual(result, new Exception().Message);
-            Assert.IsEmpty(_sut.Errors);
+            Assert.IsNotEmpty(_sut.Errors);
         }
 
-        //Deze test moet getest worden zodra de checker is geimplementeerd
-        //[Test]
-        //public void Test_CheckAst()
-        //{
-        //    //Arrange
-        //    AST ast = new AST();
-        //    _sut.Ast = ast;
+        [Test]
+        public void Test_CheckAst_NoError()
+        {
+            //Arrange
+            Mock<AST> mockedAst = new Mock<AST>();
+            mockedAst.Setup(x => x.GetErrors()).Returns(new List<ASTError>());
+            
+            Mock<Antlr.Checker.Checking> mockedChecker = new Mock<Antlr.Checker.Checking>();
+            mockedChecker.Setup(x => x.Check(It.IsAny<Node>())).Verifiable();
+            
+            _sut.Ast = mockedAst.Object;
+            _sut.Checking = mockedChecker.Object;
 
-        //    Mock<Antlr.Checker.Checking> mockedChecker = new Mock<Antlr.Checker.Checking>(ast);
-        //    mockedChecker.Setup(x => x.Check(ast)).Verifiable();
+            //Act
+            _sut.CheckAst();
 
-        //    _sut.Checking = mockedChecker.Object;
+            //Assert
+            mockedChecker.Verify(x => x.Check(It.IsAny<Node>()), Times.Once);
+            Assert.IsEmpty(_sut.Errors);
+        }
+        
+        
+        [Test]
+        public void Test_CheckAst_Error()
+        {
+            //Arrange
+            Mock<AST> mockedAst = new Mock<AST>();
+            mockedAst.Setup(x => x.GetErrors()).Returns(new List<ASTError>{new ("TEST")});
+            
+            Mock<Antlr.Checker.Checking> mockedChecker = new Mock<Antlr.Checker.Checking>();
+            mockedChecker.Setup(x => x.Check(It.IsAny<Node>())).Verifiable();
+            
+            _sut.Ast = mockedAst.Object;
+            _sut.Checking = mockedChecker.Object;
 
-        //    //Act
-        //    _sut.CheckAst();
+            //Act
+            _sut.CheckAst();
 
-        //    //Assert
-        //    mockedChecker.Verify(x => x.Check(ast), Times.Once);
-        //}
+            //Assert
+            mockedChecker.Verify(x => x.Check(It.IsAny<Node>()), Times.Once);
+            Assert.IsNotEmpty(_sut.Errors);
+        }
 
         [Test]
         public void Test_Pipeline_Exception()

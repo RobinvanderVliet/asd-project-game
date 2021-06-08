@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using UserInterface;
+using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
 {
@@ -9,13 +12,15 @@ namespace WorldGeneration
         public Player CurrentPlayer { get; set; }
         private List<Player> _players;
         private readonly int _viewDistance;
+        private IScreenHandler _screenHandler;
 
-        public World(int seed, int viewDistance)
+        public World(int seed, int viewDistance, IScreenHandler screenHandler)
         {
             _players = new ();
             _map = MapFactory.GenerateMap(seed: seed);
             _viewDistance = viewDistance;
-            _map.DeleteMap();
+            _screenHandler = screenHandler;
+            DeleteMap();
         }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
@@ -31,7 +36,7 @@ namespace WorldGeneration
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
-            DisplayWorld();
+            UpdateMapInConsole();
         }
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
@@ -47,15 +52,34 @@ namespace WorldGeneration
         {
             if (CurrentPlayer != null && _players != null)
             {
-                Console.Clear();
-                _map.DisplayMap(CurrentPlayer, _viewDistance, new List<Character>(_players));
+                UpdateMapInConsole();
             }
-            
         }
 
-        public void deleteMap()
+        public void DeleteMap()
         {
             _map.DeleteMap();
+        }
+
+        public Player GetPlayer(string id)
+        {
+            return _players.Find(x => x.Id == id);
+        }
+
+        
+        private void UpdateMapInConsole()
+        {
+            _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, new List<Character>(_players)));
+        }
+
+        public ITile GetCurrentTile()
+        {
+            return _map.GetLoadedTileByXAndY(CurrentPlayer.XPosition, CurrentPlayer.YPosition);
+        }
+
+        public ITile GetTileForPlayer(Player player)
+        {
+            return _map.GetLoadedTileByXAndY(player.XPosition, player.YPosition);
         }
     }
 }
