@@ -110,13 +110,13 @@ namespace Session
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
             
+            _heartbeatHandler = new HeartbeatHandler();
+            _messageService.AddMessage("Created session with the name: " + _session.Name);
+
             if (_screenHandler.Screen is LobbyScreen screen)
             {
                 screen.UpdateLobbyScreen(_session.GetAllClients());
             }
-
-            _heartbeatHandler = new HeartbeatHandler();
-            _messageService.AddMessage("Created session with the name: " + _session.Name);
 
             return _session.InSession;
         }
