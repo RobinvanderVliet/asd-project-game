@@ -243,7 +243,7 @@ namespace Session
             if (packet.HandlerResponse.ResultMessage != null)
             {
                 StartGameDTO startGameDto = JsonConvert.DeserializeObject<StartGameDTO>(packet.HandlerResponse.ResultMessage);
-                PacketDTO newPacket = new PacketBuilder().SetTarget("client")
+                PacketDTO newPacket = new PacketBuilder().SetTarget("client").SetSessionID(_clientController.SessionId)
                     .SetPayload(packet.HandlerResponse.ResultMessage).SetPacketType(PacketType.GameSession).Build();
                 ((IPacketHandler) _clientController).HandlePacket(newPacket);
             }
