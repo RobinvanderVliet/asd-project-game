@@ -125,12 +125,16 @@ namespace Session
                 _worldService.LoadArea(currentPlayer.XPosition, currentPlayer.YPosition, 10);
             }
 
-            _relativeStatHandler.SetCurrentPlayer(_worldService.GetCurrentPlayer());
-            _relativeStatHandler.CheckStaminaTimer();
-            _relativeStatHandler.CheckRadiationTimer();
-            _worldService.DisplayWorld();
-            _worldService.DisplayStats();
-            _messageService.DisplayMessages();
+            if (!_sessionHandler.GameStarted())
+            {
+                _relativeStatHandler.SetCurrentPlayer(_worldService.GetCurrentPlayer());
+                _relativeStatHandler.CheckStaminaTimer();
+                _relativeStatHandler.CheckRadiationTimer();
+                _worldService.DisplayWorld();
+                _worldService.DisplayStats();
+                _messageService.DisplayMessages();
+            }
+     
 
             if (handleInDatabase && !_sessionHandler.GameStarted())
             {
