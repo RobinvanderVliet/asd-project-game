@@ -396,16 +396,12 @@ namespace Session
             else
             {
                 Console.WriteLine(sessionDTO.Clients[0] + " has joined your session: ");
-                _session.AddClient(sessionDTO.Clients[0].ToString(), sessionDTO.Clients[1].ToString());
+                _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
                 sessionDTO.Clients = new List<string[]>();
                 if (_screenHandler.Screen is LobbyScreen screen)
                 {
                     screen.UpdateLobbyScreen(sessionDTO.Clients);
                 }
-
-                _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
-                sessionDTO.Clients = new List<string[]>();
-
                 sessionDTO.SessionSeed = _session.SessionSeed;
 
                 foreach (string[] client in _session.GetAllClients())
@@ -478,7 +474,7 @@ namespace Session
             if (result != null)
             {
                 Console.WriteLine(sessionDTO.Clients[0] + " has joined your session: ");
-                _session.AddClient(sessionDTO.Clients[0].ToString(), sessionDTO.Clients[1].ToString());
+                _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
                 sessionDTO.Clients = new List<string[]>();
 
                 sessionDTO.SessionSeed = _session.SessionSeed;
