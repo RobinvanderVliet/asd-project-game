@@ -106,15 +106,19 @@ namespace Session
                  currentPlayer = AddRejoinedPlayerToGame(startGameDTO);
                 _worldService.DisplayWorld();
 
-            }
-            if (_sessionHandler.GetSavedGame() && !_sessionHandler.GameStarted())
+            } 
+            else if (_sessionHandler.GetSavedGame() && !_sessionHandler.GameStarted())
             {
                 _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
                 currentPlayer = AddPlayerToWorldSavedGame(startGameDTO.SavedPlayers);
-            }
-            else
+            } 
+            else if (handleInDatabase)
             {
                 currentPlayer = AddPlayersToWorld();
+            } 
+            else
+            {
+                currentPlayer = AddPlayersToNewGame(startGameDTO);
             }
             
             if (currentPlayer != null)
@@ -141,9 +145,29 @@ namespace Session
             }
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
-       
-      
-        
+
+        private Player AddPlayersToNewGame(StartGameDTO startGameDTO)
+        {
+            Player currentPlayer = null;
+            foreach (var player in startGameDTO.PlayerLocations)
+            {
+                if (_clientController.GetOriginId() == player.Key)
+                {
+                    currentPlayer = new Player("arie", player.Value[0], player.Value[1],
+                    CharacterSymbol.ENEMY_PLAYER, player.Key);
+                    _worldService.AddPlayerToWorld(currentPlayer, true);
+                }
+                else
+                {
+                    var playerObect = new Player("gerrit", startGameDTO.ExistingPlayer.XPosition,
+                    startGameDTO.ExistingPlayer.YPosition,
+                    CharacterSymbol.CURRENT_PLAYER, player.Key);
+                    _worldService.AddPlayerToWorld(playerObect, false);
+                }
+            }
+            return currentPlayer;
+        }
+
         private Player AddPlayerToWorldSavedGame(List<PlayerPOCO> savedPlayers)
         {
             Player currentPlayer = null;
