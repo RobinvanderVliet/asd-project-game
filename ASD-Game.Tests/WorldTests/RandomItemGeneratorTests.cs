@@ -21,61 +21,61 @@ namespace ASD_Game.Tests.WorldTests
             // However, considering the static nature of ItemGeneratorTest, it seems better to do it this way.
             
             expected.Add(ItemFactory.GetAK47());
-            result.Add(RandomItemGenerator.GetRandomItem(0.91f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.999f));
 
             expected.Add(ItemFactory.GetBandage());
-            result.Add(RandomItemGenerator.GetRandomItem(0.85f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.992f));
             
             expected.Add(ItemFactory.GetMorphine());
-            result.Add(RandomItemGenerator.GetRandomItem(0.75f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.989f));
 
             expected.Add(ItemFactory.GetBaseballBat());
-            result.Add(RandomItemGenerator.GetRandomItem(0.65f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.982f));
 
             expected.Add(ItemFactory.GetBigMac());
-            result.Add(RandomItemGenerator.GetRandomItem(0.53f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.979f));
 
             expected.Add(ItemFactory.GetFlakVest());
-            result.Add(RandomItemGenerator.GetRandomItem(0.42f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.972f));
 
             expected.Add(ItemFactory.GetGasMask());
-            result.Add(RandomItemGenerator.GetRandomItem(0.31f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.969f));
 
             expected.Add(ItemFactory.GetGlock());
-            result.Add(RandomItemGenerator.GetRandomItem(0.2f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.962f));
 
             expected.Add(ItemFactory.GetHardHat());
-            result.Add(RandomItemGenerator.GetRandomItem(0.1f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.959f));
 
             expected.Add(ItemFactory.GetHazmatSuit());
-            result.Add(RandomItemGenerator.GetRandomItem(-0.1f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.952f));
 
             expected.Add(ItemFactory.GetIodineTablets());
-            result.Add(RandomItemGenerator.GetRandomItem(-0.15f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.949f));
 
             expected.Add(ItemFactory.GetJacket());
-            result.Add(RandomItemGenerator.GetRandomItem(-0.24f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.942f));
 
             expected.Add(ItemFactory.GetKatana());
-            result.Add(RandomItemGenerator.GetRandomItem(-0.35f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.939f));
 
             expected.Add(ItemFactory.GetTacticalVest());
-            result.Add(RandomItemGenerator.GetRandomItem(-0.48f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.932f));
 
             expected.Add(ItemFactory.GetMedkit());           
-            result.Add(RandomItemGenerator.GetRandomItem(-0.58f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.929f));
 
             expected.Add(ItemFactory.GetMilitaryHelmet());            
-            result.Add(RandomItemGenerator.GetRandomItem(-0.7f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.922f));
 
             expected.Add(ItemFactory.GetMonsterEnergy());
-            result.Add(RandomItemGenerator.GetRandomItem(-0.81f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.919f));
 
             expected.Add(ItemFactory.GetSuspiciousWhitePowder());
-            result.Add(RandomItemGenerator.GetRandomItem(-0.91f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.912f));
 
             expected.Add(ItemFactory.GetP90());
-            result.Add(RandomItemGenerator.GetRandomItem(-0.94f));
+            result.Add(RandomItemGenerator.GetRandomItem(0.909f));
 
             for (int i = 0; i < expected.Count; i++)
             {
@@ -86,7 +86,7 @@ namespace ASD_Game.Tests.WorldTests
         [Test]
         public void ItemGeneratorResultsNullTest()
         {
-            Item result = RandomItemGenerator.GetRandomItem(1f);
+            Item result = RandomItemGenerator.GetRandomItem(0.0001f);
             Assert.IsNull(result);
         }
         
