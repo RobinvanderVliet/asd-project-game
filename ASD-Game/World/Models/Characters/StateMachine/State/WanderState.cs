@@ -22,7 +22,7 @@ namespace WorldGeneration.StateMachine.State
 
         public override void Do(ICharacterData characterData)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Ik doe iets");
         }
 
         public override void Exit()
