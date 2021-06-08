@@ -1,7 +1,9 @@
 ﻿using ASD_Game.Items;
+using ASD_Game.Items.Consumables;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.Exceptions;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -194,5 +196,33 @@ namespace ASD_Game.Tests.WorldTests.Models.Characters
 
             Assert.That(consumableOnIndex == consumable2);
         }
+
+        public void GetComsumableAtIndexIfTheIndexDoesntExists()
+        {
+            var consumable1 = ItemFactory.GetBigMac();
+            _sut.AddConsumableItem(consumable1);
+
+            var consumableOnIndex = _sut.GetConsumableAtIndex(1);
+
+            Assert.That(consumableOnIndex == null);
+        }
+
+        [Test]
+        public void SetConsumableItemList()
+        {
+            var consumable1 = ItemFactory.GetBigMac();
+            var consumable2 = ItemFactory.GetMorphine();
+            var itemList = new List<Consumable>
+            {
+                consumable2,
+                consumable1
+            };
+
+            _sut.ConsumableItemList = itemList;
+
+            Assert.That(_sut.ConsumableItemList.ToArray().GetValue(0) == consumable2);
+            Assert.That(_sut.ConsumableItemList.ToArray().GetValue(1) == consumable1);
+        }
+
     }
 }
