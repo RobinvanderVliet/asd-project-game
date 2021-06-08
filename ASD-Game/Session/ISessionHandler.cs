@@ -12,9 +12,6 @@ namespace Session
         public bool CreateSession(string sessionName, string userName);
 
         public void RequestSessions();
-
-        public void SendHeartbeat();
-
         public int GetSessionSeed();
 
         public List<string[]> GetAllClients();

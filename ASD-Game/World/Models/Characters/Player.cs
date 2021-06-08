@@ -102,5 +102,7 @@ namespace WorldGeneration
             }
             return armorpoints;
         }
+
+
     }
 }

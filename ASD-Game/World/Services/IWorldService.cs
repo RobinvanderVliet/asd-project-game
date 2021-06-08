@@ -21,6 +21,10 @@ namespace WorldGeneration
 
         public void GenerateWorld(int seed);
 
+        public List<Player> GetAllPlayers();
+
+        public bool IsDead(Player player);
+
         public IList<Item> GetItemsOnCurrentTile(Player player);
 
         public IList<Item> GetItemsOnCurrentTile();
@@ -37,6 +41,7 @@ namespace WorldGeneration
 
         public Player GetPlayer(string id);
 
+        //TODO merge with other
         public List<Player> GetPlayers();
 
         public ITile GetTile(int x, int y);

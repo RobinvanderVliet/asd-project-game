@@ -66,11 +66,12 @@ namespace UserInterface
 
         private void ClearAllStats()
         {
-            for (int i = 0; i <= _height - OFFSET_TOP; i++)
+            for (int i = 0; i <= _height + 1; i++)
             {
-                _screenHandler.ConsoleHelper.SetCursor(OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
-                _screenHandler.ConsoleHelper.Write(new string(' ', _width - BORDER_SIZE));
+                _screenHandler.ConsoleHelper.SetCursor(_xPosition, _yPosition + i);
+                _screenHandler.ConsoleHelper.Write(new string(' ', _width + BORDER_SIZE));
             }
+            DrawScreen();
         }
         
         public void SetStatValues(string name, int score, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree)

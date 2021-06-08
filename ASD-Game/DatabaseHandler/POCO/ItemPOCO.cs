@@ -10,5 +10,6 @@ namespace DatabaseHandler.POCO
         public string ItemName { get; set; }
 
         public int ItemType { get; set; }
+        public int ArmorPoints { get; set; }
     }
 }

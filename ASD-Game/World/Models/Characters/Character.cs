@@ -23,5 +23,15 @@ namespace WorldGeneration
             Symbol = symbol;
             Id = id;
         }
+
+        public string GetSymbol()
+        {
+            if (Health <= 0)
+            {
+                return "X";
+            }
+
+            return Symbol;
+        }
     }
 }

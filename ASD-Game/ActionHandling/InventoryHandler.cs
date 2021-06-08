@@ -36,17 +36,32 @@ namespace ActionHandling
 
         public void UseItem(int index)
         {
+            if (_worldService.IsDead(_worldService.GetCurrentPlayer()))
+            {
+                _messageService.AddMessage("You can't use an item, you're dead!");
+                return;
+            }
             InventoryDTO inventoryDTO = new(_clientController.GetOriginId(), InventoryType.Use, index);
             SendInventoryDTO(inventoryDTO);
         }
 
         public void Search()
         {
+            if (_worldService.IsDead(_worldService.GetCurrentPlayer()))
+            {
+                _messageService.AddMessage("You can't search, you're dead!");
+                return;
+            }
             _messageService.AddMessage(_worldService.SearchCurrentTile());
         }
 
         public void PickupItem(int index)
         {
+            if (_worldService.IsDead(_worldService.GetCurrentPlayer()))
+            {
+                _messageService.AddMessage("You can't pick up an item, you're dead!");
+                return;
+            }
             // Compensate for index starting at 0.
             index -= 1;
 
@@ -57,6 +72,11 @@ namespace ActionHandling
 
         public void DropItem(string inventorySlot)
         {
+            if (_worldService.IsDead(_worldService.GetCurrentPlayer()))
+            {
+                _messageService.AddMessage("You can't drop an item, you're dead!");
+                return;
+            }
             int index = inventorySlot switch
             {
                 "helmet" => 0,

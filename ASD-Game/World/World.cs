@@ -9,9 +9,9 @@ namespace WorldGeneration
 {
     public class World : IWorld
     {
-        private IMap _map;
-        public Player CurrentPlayer;
-        public List<Player> _players { get; set; }
+        private Map _map;
+        public Player CurrentPlayer { get; set; }
+        public List<Player> Players { get; set; }
         public List<Character> _creatures { get; set; }
         public List<Character> movesList = new List<Character>();
 
@@ -21,9 +21,11 @@ namespace WorldGeneration
 
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler)
         {
-            _players = new();
+            Players = new();
             _creatures = new();
             var currentDirectory = Directory.GetCurrentDirectory();
+
+            Players = new();
             _map = MapFactory.GenerateMap(dbLocation: $"Filename={currentDirectory}{_separator}ChunkDatabase.db;connection=shared;", seed: seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
@@ -32,7 +34,7 @@ namespace WorldGeneration
 
         public Player GetPlayer(string id)
         {
-            return _players.Find(x => x.Id == id);
+            return Players.Find(x => x.Id == id);
         }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
@@ -63,8 +65,7 @@ namespace WorldGeneration
             {
                 CurrentPlayer = player;
             }
-            _players.Add(player);
-            UpdateMap();
+            Players.Add(player);
         }
 
         public void AddCreatureToWorld(Character character)
@@ -75,9 +76,9 @@ namespace WorldGeneration
 
         public void UpdateMap()
         {
-            if (CurrentPlayer != null && _players != null && _creatures != null)
+            if (CurrentPlayer != null && Players != null && _creatures != null)
             {
-                var characters = ((IEnumerable<Character>)_players).Concat(_creatures).ToList();
+                var characters = ((IEnumerable<Character>)Players).Concat(_creatures).ToList();
                 _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
             }
         }
@@ -99,13 +100,13 @@ namespace WorldGeneration
 
         public char[,] GetMapAroundCharacter(Character character)
         {
-            var characters = ((IEnumerable<Character>)_players).Concat(_creatures).ToList();
+            var characters = ((IEnumerable<Character>)Players).Concat(_creatures).ToList();
             return _map.GetMapAroundCharacter(character, _viewDistance, characters);
         }
 
         private List<Character> GetAllCharacters()
         {
-            List<Character> characters = _players.Cast<Character>().ToList();
+            List<Character> characters = Players.Cast<Character>().ToList();
             return characters;
         }
 
@@ -159,7 +160,7 @@ namespace WorldGeneration
 
         public List<Player> GetAllPlayers()
         {
-            return _players;
+            return Players;
         }
     }
 }
