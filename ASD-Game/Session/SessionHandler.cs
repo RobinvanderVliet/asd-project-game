@@ -432,7 +432,7 @@ namespace Session
             }
             else
             {
-                Console.WriteLine(sessionDTO.Clients[0] + " has joined your session: ");
+               // Console.WriteLine(sessionDTO.Clients[0] + " has joined your session: ");
                 _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
                 sessionDTO.Clients = new List<string[]>();
                 if (_screenHandler.Screen is LobbyScreen screen)

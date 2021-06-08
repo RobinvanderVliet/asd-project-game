@@ -133,7 +133,7 @@ namespace Session
                 players.Add(clientId[0], playerPosition);
                 var tmpPlayer = new PlayerPOCO
                 {
-                    PlayerGuid = clientId[0],
+                    PlayerGuid = clientId[0][0].ToString(),
                     GameGuid = gamePOCO.GameGuid,
                     XPosition = playerX,
                     YPosition = playerY,
