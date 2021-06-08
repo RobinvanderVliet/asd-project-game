@@ -104,7 +104,7 @@ namespace ASD_Game.Session
 
         private void InsertPlayersIntoDatabase()
         {
-            var players = _worldService.GetPlayers();
+            var players = _worldService.GetAllPlayers();
             foreach(Player player in players)
             {
                 PlayerPOCO playerPoco = new PlayerPOCO { PlayerGUID = player.Id, GameGUID = _clientController.SessionId, GameGUIDAndPlayerGuid = _clientController.SessionId + player.Id, XPosition = player.XPosition, YPosition = player.YPosition };

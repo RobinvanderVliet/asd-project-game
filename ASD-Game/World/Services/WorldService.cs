@@ -146,7 +146,7 @@ namespace ASD_Game.World.Services
             return _world.CheckIfCharacterOnTile(tile);
         }
         
-        public List<Player> GetPlayers()
+        public List<Player> GetAllPlayers()
         {
             return _world.GetAllPlayers();
         }
