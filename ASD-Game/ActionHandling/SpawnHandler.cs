@@ -27,6 +27,7 @@ namespace ASD_Game.ActionHandling
             bool handleInDatabase = _clientController.IsHost() || _clientController.IsBackupHost;
 
             if (handleInDatabase)
+
             {
                 WorldItemPOCO worldItem = new() { ItemName = item.ItemName, GameGUID = _clientController.SessionId, XPosition = x, YPosition = y };
                 _worldItemDatabaseService.CreateAsync(worldItem);
