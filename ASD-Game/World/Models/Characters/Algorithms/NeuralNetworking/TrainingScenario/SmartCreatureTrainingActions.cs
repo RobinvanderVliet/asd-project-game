@@ -92,6 +92,10 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
                     player.Health = player.Health - smartmonster.CreatureData.Damage;
                     smartmonster.DamageDealt = smartmonster.DamageDealt + smartmonster.CreatureData.Damage;
                 }
+                if (player.Health <= 0)
+                {
+                    smartmonster.Score -= 100;
+                }
             }
         }
 
