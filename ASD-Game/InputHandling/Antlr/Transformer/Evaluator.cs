@@ -137,7 +137,7 @@ namespace ASD_Game.InputHandling.Antlr.Transformer
 
         private void TransformDrop(Drop drop)
         {
-            // TODO: Call InventoryHandler method with (drop.ItemName.MessageValue)
+            _inventoryHandler.DropItem(drop.InventorySlot.InventorySlotValue);
         }
 
         private void TransformAttack(Attack attack)
