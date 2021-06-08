@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace UserInterface
@@ -27,7 +28,7 @@ namespace UserInterface
             DrawBox(_xPosition, _yPosition, _width, _height);
         }
 
-        private void DrawMessages(Queue<string> messageQueue)
+        private void DrawMessages(Stack<string> messageQueue)
         {
             int originalCursorX = _screenHandler.ConsoleHelper.GetCursorLeft();
             int originalCursorY = _screenHandler.ConsoleHelper.GetCursorTop();
@@ -35,65 +36,79 @@ namespace UserInterface
             int messageCount = messageQueue.Count;
             for (int i = 0; i < messageCount; i++)
             {
-                string message = messageQueue.Peek();
+                string message = messageQueue.Pop();
                 _screenHandler.ConsoleHelper.SetCursor(_xPosition + OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
                 _screenHandler.ConsoleHelper.Write(message);
-                messageQueue.Dequeue();
             }
             _screenHandler.ConsoleHelper.SetCursor(originalCursorX, originalCursorY);
         }
 
         private void ClearMessages()
         {
-            for (int i = 0; i <= _height - OFFSET_TOP; i++)
+            for (int i = 0; i <= _height + 1; i++)
             {
-                _screenHandler.ConsoleHelper.SetCursor(_xPosition + OFFSET_LEFT, _yPosition + OFFSET_TOP + i);
-                _screenHandler.ConsoleHelper.Write(new string(' ', _width - BORDER_SIZE));
+                _screenHandler.ConsoleHelper.SetCursor(_xPosition, _yPosition + i);
+                _screenHandler.ConsoleHelper.Write(new string(' ', _width + BORDER_SIZE));
             }
+            DrawScreen();
         }
 
         public void ShowMessages(Queue<string> messages)
         {
-            Queue<string> messageQueue = new Queue<string>();
-            int messageCount = messages.Count;
-            for (int i = 0; i < messageCount; i++)
+            Stack<string> messageStack = new();
+            int totalMessage = messages.Count;
+            for (int i = 0; i < totalMessage; i++)
             {
                 string message = messages.Dequeue();
-                if (message.Length >= _width - BORDER_SIZE)
+                var messageSplitted = message.Split(Environment.NewLine);
+
+                for (int k = messageSplitted.Length - 1; k >= 0; k--)
                 {
-                    int chunkSize = _width - BORDER_SIZE;
-                    int stringLength = message.Length;
-                    int maxSize = chunkSize * _height;
-                    if (stringLength > maxSize)
+                    message = messageSplitted[k];
+                    if (message.Length >= _width - BORDER_SIZE)
                     {
-                        message = message.Substring(0, maxSize - 3) + "...";
-                        stringLength = maxSize;
+                        int stringLength = message.Length;
+                        int chunkSize = _width - BORDER_SIZE;
+                        int maxSize = chunkSize * _height;
+
+                        if (stringLength > maxSize)
+                        {
+                            message = message.Substring(0, maxSize - 3) + "...";
+                            stringLength = maxSize;
+                        }
+
+                        Stack<string> tempStack = new();
+                        for (int j = 0; j < stringLength; j += chunkSize)
+                        {
+                            if (j + chunkSize > stringLength)
+                            {
+                                chunkSize = stringLength - j;
+                            }
+                            tempStack.Push(message.Substring(j, chunkSize));
+
+                            if (messageStack.Count + tempStack.Count > _height)
+                            {
+                                tempStack.Pop();
+                            }
+                        }
+                        foreach(string line in tempStack)
+                        {
+                            messageStack.Push(line);
+                        }
+                    }
+                    else
+                    {
+                        messageStack.Push(message);
                     }
 
-                    for (int j = 0; j < stringLength; j += chunkSize)
+                    if (messageStack.Count > _height)
                     {
-                        if (j + chunkSize > stringLength)
-                        {
-                            chunkSize = stringLength - j;
-                        }
-                        messageQueue.Enqueue(message.Substring(j, chunkSize));
-
-                        if (messageQueue.Count > _height)
-                        {
-                            messageQueue.Dequeue();
-                        }
+                        messageStack.Pop();
                     }
-                }
-                else
-                {
-                    messageQueue.Enqueue(message);
-                }
-                if (messageQueue.Count > _height)
-                {
-                    messageQueue.Dequeue();
+
                 }
             }
-            DrawMessages(messageQueue);
+            DrawMessages(messageStack);
         }
     }
 }

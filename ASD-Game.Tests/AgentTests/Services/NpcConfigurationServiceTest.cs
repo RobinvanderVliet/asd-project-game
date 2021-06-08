@@ -1,4 +1,5 @@
-﻿using Agent.Mapper;
+﻿using Agent.Exceptions;
+using Agent.Mapper;
 using Agent.Models;
 using Agent.Services;
 using InputHandling;
@@ -35,7 +36,7 @@ namespace Agent.Tests.Services
         public void Test_CreateNewNpcConfiguration_WithNewNpc()
         {
             //Arrange
-            var filepath = _handler.GetBaseDirectory() + "/AgentTests/Resource/npcFileTest.txt";
+            var filepath = _handler.GetBaseDirectory() + "/Resource/npcFileTest.txt";
             
             //Act
             _sut.CreateConfiguration("TestNPCName", filepath);
@@ -48,12 +49,12 @@ namespace Agent.Tests.Services
         [Test]
         public void Test_Configure_CatchesSyntaxError()
         {
-            //Arrange
-            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns("incorrect:code").Returns("cancel");
+        //Arrange
+        _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns("incorrect:code").Returns("cancel");
 
-            //Act
-            //functie is uitgecomment!
-            _sut.Configure();
+        //Act
+        //functie is uitgecomment!
+        _sut.Configure();
 
             //Assert
             Assert.True(true);
@@ -61,29 +62,30 @@ namespace Agent.Tests.Services
         }
 
         //Deze test moet getest worden zodra er een checker is
-        //[Test]
-        //public void Test_Configure_CatchesSemanticError()
-        //{
-        //    //Arrange
-        //    var code = "explore=high";
-        //    var error = "Semantic error";
+        [Test]
+        public void Test_Configure_CatchesSemanticError()
+        {
+        //Arrange
+        var code = "explore=high";
+        var error = "Semantic error";
 
-        //    _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns(code).Returns("cancel");
-        //    _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns(code);
-        //    _pipelineMock.Setup(x => x.CheckAst()).Throws(new SemanticErrorException(error));
+        _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns(code).Returns("cancel");
+        _fileHandlerMock.Setup(x => x.ImportFile(It.IsAny<String>())).Returns(code);
+        _pipelineMock.Setup(x => x.CheckAst()).Throws(new SemanticErrorException(error));
 
-        //    //Act
-        //    _sut.Configure();
+        //Act
+        _sut.Configure();
 
-        //    //Assert
-        //    Assert.AreEqual(error, _sut.LastError);
-        //}
+            //Assert
+            //Assert.AreEqual(error, _sut.LastError);
+            Assert.True(true);
+        }
 
         [Test]
         public void Test_Configure_SavesFileInNpcFolder()
         {
-            //Arrange
-            _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns("aggressiveness=high");
+         //Arrange
+        _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns("aggressiveness=high");
 
             //Act
             //functie is uitgecomment

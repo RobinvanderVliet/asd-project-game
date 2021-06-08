@@ -80,10 +80,9 @@ command:
     CREATE_SESSION SPACE message SPACE username #createSession |
     JOIN_SESSION SPACE message SPACE username #joinSession |
     REQUEST_SESSIONS #requestSessions |
-
+    START_SESSION #startSession |
     SET_MONSTER_DIFFICULTY SPACE (EASY | MEDIUM | HARD | IMPOSSIBLE) #monsterdifficulty | 
     SET_ITEM_FREQUENCY SPACE (LOW | MEDIUM | HIGH) #itemfrequency |
-    START_SESSION #startSession |
     INSPECT SPACE inventorySlot #inspect |
     USE SPACE step #use	|
     SEARCH #search;

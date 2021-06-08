@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Items;
 using Items.ArmorStats;
 using Items.Consumables;
@@ -84,6 +85,18 @@ namespace WorldGeneration
         public void EmptyConsumableItemList()
         {
             _consumableItems.Clear();
+        }
+
+        public Consumable GetConsumableAtIndex(int i)
+        {
+            try
+            {
+                return ConsumableItemList[i];
+            }
+            catch(Exception e)
+            {
+                return null;
+            }
         }
     }
 }

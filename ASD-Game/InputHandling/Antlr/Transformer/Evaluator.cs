@@ -23,15 +23,12 @@ namespace InputHandling.Antlr.Transformer
         private IGameSessionHandler _gameSessionHandler;
         private IChatHandler _chatHandler;
         private IClientController _clientController;
-        
         private IInventoryHandler _inventoryHandler;
-
-
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
-        private String _commando;
+        private string _commando;
 
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IClientController clientController, IInventoryHandler inventoryHandler)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IInventoryHandler inventoryHandler, IClientController clientController)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
@@ -248,7 +245,6 @@ namespace InputHandling.Antlr.Transformer
                     frequency = (int) ItemSpawnRate.High;
                     break;
             }
-            Console.WriteLine(frequency);
             SessionDTO sessionDto = new SessionDTO
             {
                 SessionType = SessionType.EditItemSpawnRate,

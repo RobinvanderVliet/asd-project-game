@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using WorldGeneration.Models.Interfaces;
 using System.Linq;
 using UserInterface;
-using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration
 {
@@ -12,15 +13,23 @@ namespace WorldGeneration
         public Player CurrentPlayer { get; set; }
         private List<Player> _players;
         private readonly int _viewDistance;
-        private IScreenHandler _screenHandler;
+        private readonly IScreenHandler _screenHandler;
+        private static readonly char _separator = Path.DirectorySeparatorChar;
 
         public World(int seed, int viewDistance, IScreenHandler screenHandler)
         {
+            var currentDirectory = Directory.GetCurrentDirectory();
+
             _players = new ();
-            _map = MapFactory.GenerateMap(seed: seed);
+            _map = MapFactory.GenerateMap(dbLocation: $"Filename={currentDirectory}{_separator}ChunkDatabase.db;connection=shared;", seed: seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
             DeleteMap();
+        }
+
+        public Player GetPlayer(string id)
+        {
+            return _players.Find(x => x.Id == id);
         }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
@@ -32,11 +41,10 @@ namespace WorldGeneration
             }
             else
             {
-                var player = _players.Find(x => x.Id == userId);
+                var player = GetPlayer(userId);
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
-            UpdateMapInConsole();
         }
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
@@ -52,7 +60,7 @@ namespace WorldGeneration
         {
             if (CurrentPlayer != null && _players != null)
             {
-                UpdateMapInConsole();
+                _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, new List<Character>(_players)));
             }
         }
 
@@ -61,17 +69,27 @@ namespace WorldGeneration
             _map.DeleteMap();
         }
 
-        public Player GetPlayer(string id)
+        public ITile GetLoadedTileByXAndY(int x, int y)
         {
-            return _players.Find(x => x.Id == id);
+            return _map.GetLoadedTileByXAndY(x, y);
         }
-
         
-        private void UpdateMapInConsole()
+        public bool CheckIfCharacterOnTile(ITile tile)
         {
-            _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, new List<Character>(_players)));
+            return GetAllCharacters().Exists(player => player.XPosition == tile.XPosition && player.YPosition == tile.YPosition);
         }
 
+        private List<Character> GetAllCharacters()
+        {
+            List<Character> characters = _players.Cast<Character>().ToList();
+            return characters;
+        }
+        
+        public void LoadArea(int playerX, int playerY, int viewDistance)
+        {
+            _map.LoadArea(playerX, playerY, viewDistance);
+        }
+        
         public ITile GetCurrentTile()
         {
             return _map.GetLoadedTileByXAndY(CurrentPlayer.XPosition, CurrentPlayer.YPosition);
@@ -81,6 +99,10 @@ namespace WorldGeneration
         {
             return _map.GetLoadedTileByXAndY(player.XPosition, player.YPosition);
         }
+
+        public List<Player> GetAllPlayers()
+        {
+            return _players;
+        }
     }
 }
-

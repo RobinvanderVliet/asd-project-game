@@ -1,6 +1,6 @@
 ﻿namespace Items.ArmorStats
 {
-public enum ArmorType
+    public enum ArmorType
     {
         HazardProtectedArmor, DefaultArmor
     }

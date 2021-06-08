@@ -2,7 +2,7 @@
 
 namespace UserInterface
 {
-    public interface IGameChatScreen: IScreen
+    public interface IGameChatScreen : IScreen
     {
         public void ShowMessages(Queue<string> messages);
     }

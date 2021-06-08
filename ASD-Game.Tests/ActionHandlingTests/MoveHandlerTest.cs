@@ -1,10 +1,14 @@
 using System.Diagnostics.CodeAnalysis;
+using DatabaseHandler.POCO;
+using DatabaseHandler.Services;
+using Messages;
 using Moq;
 using Network;
 using NUnit.Framework;
 using WorldGeneration;
 using DatabaseHandler.Services;
 using DatabaseHandler.POCO;
+using Messages;
 
 namespace ActionHandling.Tests
 {
@@ -14,15 +18,17 @@ namespace ActionHandling.Tests
         private MoveHandler _sut;
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
-        private Mock<IServicesDb<PlayerPOCO>> _mockedServicesDb;
+        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerDatabaseService;
+        private Mock<IMessageService> _mockedMessageService;
 
         [SetUp]
         public void Setup()
         {
             _mockedClientController = new Mock<IClientController>();
             _mockedWorldService = new Mock<IWorldService>();
-            _mockedServicesDb = new Mock<IServicesDb<PlayerPOCO>>();
-            _sut = new MoveHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedServicesDb.Object);
+            _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPOCO>>();
+            _mockedMessageService = new Mock<IMessageService>();
+            _sut = new MoveHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerDatabaseService.Object, _mockedMessageService.Object);
         }
 
         [TestCase("up")]

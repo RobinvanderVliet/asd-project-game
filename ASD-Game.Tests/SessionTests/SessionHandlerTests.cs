@@ -39,13 +39,13 @@ namespace Session.Tests
             var standardOutput = new StreamWriter(Console.OpenStandardOutput());
             standardOutput.AutoFlush = true;
             Console.SetOut(standardOutput);
+            _mockedClientController = new Mock<IClientController>();
             _mockedScreenHandler = new Mock<IScreenHandler>();
             _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
-            _mockedClientController = new();
             _mockedMessageService = new();
             _mockedScreenHandler = new();
             _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object, _mockedGameConfigurationHandler.Object, _mockedMessageService.Object);
-            _mockedSession = new Mock<Session>();
+            _mockedSession = new Mock<Session>("test");
             _packetDTO = new PacketDTO();
         }
 
@@ -56,12 +56,8 @@ namespace Session.Tests
             string invalidSessionId = "invalid";
             string userName = "Gerrit";
 
-            using (StringWriter sw = new StringWriter())
-            {
-                //Act ---------
-                Console.SetOut(sw);
-                _sut.JoinSession(invalidSessionId, userName);
-            }
+            //Act ---------
+            _sut.JoinSession(invalidSessionId, "");
 
             //Assert ---------
             string expected = "Could not find game!";
@@ -298,7 +294,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
             packetHeaderDTO.OriginID = hostOriginId;
             packetHeaderDTO.SessionID = "sessionId";
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -396,7 +392,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
             packetHeaderDTO.OriginID = "testOriginId";
             packetHeaderDTO.SessionID = "otherSessionId";
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -509,7 +505,7 @@ namespace Session.Tests
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
 
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO
+            PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO
             {
                 OriginID = originId,
                 SessionID = generatedSessionId,
@@ -561,7 +557,7 @@ namespace Session.Tests
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO
+            PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO
             {
                 OriginID = originId,
                 SessionID = generatedSessionId,
@@ -681,7 +677,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.SendHeartbeat);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
             packetHeaderDTO.PacketType = PacketType.Session;
             packetHeaderDTO.Target = "host";
             _packetDTO.Header = packetHeaderDTO;
@@ -988,7 +984,7 @@ namespace Session.Tests
             packetDTO.HandlerResponse = new HandlerResponseDTO(SendAction.Ignore, "");
 
             Session session = new Session("testsession");
-            _sut.setSession(session);
+            _sut.SetSession(session);
 
             //Arrange the mock for lobbyscreen
             Mock<LobbyScreen> lobbyMock = new Mock<LobbyScreen>();
@@ -1024,7 +1020,7 @@ namespace Session.Tests
             packetDTO.HandlerResponse = new HandlerResponseDTO(SendAction.Ignore, JsonConvert.SerializeObject(resultMessage));
 
             Session session = new Session("testsession");
-            _sut.setSession(session);
+            _sut.SetSession(session);
 
             //Arrange the mock for lobbyscreen
             Mock<LobbyScreen> lobbyMock = new Mock<LobbyScreen>();
@@ -1038,5 +1034,105 @@ namespace Session.Tests
             //Assert
             lobbyMock.Verify(mock => mock.UpdateLobbyScreen(It.IsAny<List<string[]>>()), Times.Once());
         }
+
+        [Test]
+        public void Test_HandleNewBackupHost_Host()
+        {
+            //Arrange
+            PacketDTO packet = new()
+            {
+                Header = new PacketHeaderDTO() {Target = "host"},
+                Payload = ""
+            };
+
+            //Act
+            var result = _sut.HandleNewBackupHost(packet);
+            
+            //Assert
+            Assert.AreEqual(SendAction.SendToClients, result.Action);
+        }
+
+        [Test]
+        public void Test_HandleNewBackupHost_Client_Next()
+        {
+            //Arrange
+            PacketDTO packet = new()
+            {
+                Header = new PacketHeaderDTO() { OriginID = "2", Target = "client" },
+                Payload = ""
+            };
+
+            _sut.SetSession(new Session("test game"));
+            _mockedClientController.Setup(x => x.GetOriginId()).Returns("3");
+
+            _sut.GetAllClients().Add(new []{"1", "gerrit"});
+            _sut.GetAllClients().Add(new[]{"2","henk"});
+            _sut.GetAllClients().Add(new[]{"3","jan"});
+
+            //Act
+            var result = _sut.HandleNewBackupHost(packet);
+
+            //Assert
+            Assert.AreEqual(result.Action, SendAction.Ignore);
+
+            //Remove all clients for other test
+            _sut.GetAllClients().RemoveRange(0, 3);
+        }
+
+        [Test]
+        public void Test_HandleNewBackupHost_Client_NotNext()
+        {
+            //Arrange
+            PacketDTO packet = new()
+            {
+                Header = new PacketHeaderDTO() {OriginID = "2", Target = "client" },
+                Payload = ""
+            };
+
+            _sut.SetSession(new Session("test game"));
+            _mockedClientController.Setup(x => x.GetOriginId()).Returns("1");
+
+            _sut.GetAllClients().Add(new []{"1", "gerrit"});
+            _sut.GetAllClients().Add(new[]{"2","henk"});
+            _sut.GetAllClients().Add(new[]{"3","jan"});
+
+            //Act
+            var result = _sut.HandleNewBackupHost(packet);
+
+            //Assert
+            Assert.AreEqual(result.Action, SendAction.Ignore);
+
+            //Remove all clients for other test
+            _sut.GetAllClients().RemoveRange(0, 3);
+        }
+
+        [Test]
+        public void Test_HandlePacket_NewBackupHost()
+        {
+            //Arrange
+            PacketDTO packet = new()
+            {
+                Header = new PacketHeaderDTO() { OriginID = "1", Target = "client" },
+                Payload = JsonConvert.SerializeObject(new SessionDTO() {
+                    SessionType = SessionType.NewBackUpHost,
+                    SessionSeed = 0,
+                    Clients = new List<String[]>(),
+                    Name = ""
+                })
+            };
+
+            //needed for list
+            _sut.SetSession(_mockedSession.Object);
+            _sut.GetAllClients().Add(new []{"1", "gerrit"});
+            _sut.GetAllClients().Add(new[]{"2","henk"});
+            _sut.GetAllClients().Add(new[]{"3","jan"});
+
+            //Act
+            var result = _sut.HandlePacket(packet);
+
+            //Assert
+            Assert.AreEqual(result.Action, SendAction.Ignore);
+        }
+
     }
 }

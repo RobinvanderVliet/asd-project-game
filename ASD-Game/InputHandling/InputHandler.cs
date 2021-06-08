@@ -40,11 +40,19 @@ namespace InputHandling
 
         public InputHandler()
         {
+            //Empty constructor needed for testing purposes
         }
 
         public void HandleGameScreenCommands()
         {
             SendCommand(GetCommand());
+            _screenHandler.RedrawGameInputBox();
+        }
+
+        // Needed to handle input on client when host has started session
+        public void HandleGameScreenCommands(string input)
+        {
+            SendCommand(input);
             _screenHandler.RedrawGameInputBox();
         }
 
@@ -136,12 +144,18 @@ namespace InputHandling
         public void HandleLobbyScreenCommands()
         {
             var input = GetCommand();
-
-            if (input == RETURN_KEYWORD)
+            // Needed to handle input on client when host has started session
+            if (_screenHandler.Screen is GameScreen)
             {
-                _screenHandler.TransitionTo(new StartScreen());
-                return;
+                HandleGameScreenCommands(input);
             }
+            else
+            {
+                if (input == RETURN_KEYWORD)
+                {
+                    _screenHandler.TransitionTo(new StartScreen());
+                    return;
+                }
 
             //TODO add if to check if you are the host
             if (input == START_COMMAND) 
@@ -149,13 +163,15 @@ namespace InputHandling
                 SendCommand(START_COMMAND);
             }
 
-            if (input.Contains("SAY"))
-            {
-                SendCommand(input);
-            }
-            else if (input.Contains("SHOUT")) 
-            {
-                SendCommand(input);
+                if (input.Contains("SAY"))
+                {
+                    SendCommand(input);
+                }
+                else if (input.Contains("SHOUT"))
+                {
+                    SendCommand(input);
+                }
+               
             }
 
         }

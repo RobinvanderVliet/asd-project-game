@@ -14,14 +14,19 @@ namespace Session.Tests.GameConfiguration
     {
         private GameConfigurationHandler _sut;
         private Mock<ScreenHandler> _mockScreenHandler;
-        private Mock<IServicesDb<GameConfigurationPOCO>> _mockedGameConfigServicesDb;
+        private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigDatabaseService;
 
         [SetUp]
         public void Setup()
         {
             _mockScreenHandler = new Mock<ScreenHandler>();
-            _mockedGameConfigServicesDb = new Mock<IServicesDb<GameConfigurationPOCO>>();
-            _sut = new GameConfigurationHandler(_mockScreenHandler.Object, _mockedGameConfigServicesDb.Object);
+            _mockedGameConfigDatabaseService = new Mock<IDatabaseService<GameConfigurationPOCO>>();
+
+            Mock<ConfigurationScreen> _screen = new Mock<ConfigurationScreen>();
+            _mockScreenHandler.Object.Screen = _screen.Object;
+            _screen.Setup(x => x.UpdateInputMessage(""));
+
+            _sut = new GameConfigurationHandler(_mockScreenHandler.Object, _mockedGameConfigDatabaseService.Object);
         }
 
         [Test]
@@ -100,13 +105,10 @@ namespace Session.Tests.GameConfiguration
         public void Test_UpdateMonsterDifficultyDoesntExist(string input)
         {
             //Arrange
-            Mock<ConfigurationScreen> _screen = new Mock<ConfigurationScreen>();
-            _mockScreenHandler.Object.Screen = _screen.Object;
-            _screen.Setup(x => x.UpdateInputMessage(""));
-            GameConfigurationHandler _gameConfiguration = new GameConfigurationHandler(_mockScreenHandler.Object, _mockedGameConfigServicesDb.Object);
+
 
             //Act
-            _gameConfiguration.UpdateMonsterDifficulty(input);
+            _sut.UpdateMonsterDifficulty(input);
             
             //Assert
             Assert.False(_sut.NextScreen);
