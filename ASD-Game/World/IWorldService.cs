@@ -11,6 +11,8 @@ namespace WorldGeneration
         public void DisplayWorld();
         public void DeleteMap();
         public void GenerateWorld(int seed);
+        public List<Player> GetAllPlayers();
+        public bool IsDead(Player player);
         public IList<Item> GetItemsOnCurrentTile(Player player);
         public IList<Item> GetItemsOnCurrentTile();
         public Player GetCurrentPlayer();

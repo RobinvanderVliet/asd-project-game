@@ -31,7 +31,6 @@ namespace DatabaseHandler.Services
                 throw;
             }
         }
-        
 
         public Task<int> UpdateAsync(T obj)
         {
@@ -45,6 +44,8 @@ namespace DatabaseHandler.Services
                 throw;
             }
         }
+
+
 
         public Task<int> DeleteAsync(T obj)
         {

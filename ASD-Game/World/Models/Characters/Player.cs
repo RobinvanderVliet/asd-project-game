@@ -34,7 +34,6 @@ namespace WorldGeneration
         {
             if(consumable is HealthConsumable)
             {
-
                 AddHealth((consumable as HealthConsumable).getHealth());
             }
             else if (consumable is StaminaConsumable)
@@ -89,7 +88,7 @@ namespace WorldGeneration
                     break;
             }
         }
-        
+
         public int GetArmorPoints()
         {
             int armorpoints = 0;
@@ -103,5 +102,7 @@ namespace WorldGeneration
             }
             return armorpoints;
         }
+
+
     }
 }

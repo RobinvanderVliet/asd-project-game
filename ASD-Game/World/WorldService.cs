@@ -47,6 +47,16 @@ namespace WorldGeneration
             return _world.CurrentPlayer;
         }
 
+        public List<Player> GetAllPlayers()
+        {
+            return _world.Players;
+        }
+
+        public bool IsDead(Player player)
+        {
+            return player.Health <= 0;
+        }
+
         public IList<Item> GetItemsOnCurrentTile()
         {
             return _world.GetCurrentTile().ItemsOnTile;

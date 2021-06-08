@@ -19,6 +19,16 @@ namespace WorldGeneration
             YPosition = yPosition;
             Symbol = symbol;
         }
+        
+        public string GetSymbol()
+        {
+            if (Health <= 0)
+            {
+                return "X";
+            }
+
+            return Symbol;
+        }
 
     }
 
