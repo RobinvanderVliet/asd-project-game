@@ -29,7 +29,6 @@ namespace ASD_Game.World
             _map = mapFactory.GenerateMap(itemService, Items, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
-            itemService.GetSpawnHandler().SetItemSpawnDTOS(Items);
         }
         
         public Player GetPlayer(string id)

@@ -59,10 +59,6 @@ namespace ASD_Game.Tests.WorldTests
             _screenHandlerMockObject = _screenHandlerMock.Object;
 
             _spawnHandlerMock = new Mock<ISpawnHandler>();
-            _spawnHandlerMock.Setup(wat => wat.SetItemSpawnDTOS(It.IsAny<List<ItemSpawnDTO>>())).Callback((List<ItemSpawnDTO> list) =>
-            {
-                _itemSpawnDTOs = list;
-            });
             _spawnHandlerMockObject = _spawnHandlerMock.Object;
             
             _itemServiceMock = new Mock<IItemService>();

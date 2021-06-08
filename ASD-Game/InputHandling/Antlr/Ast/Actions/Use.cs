@@ -6,7 +6,7 @@ namespace ASD_Game.InputHandling.Antlr.Ast.Actions
 {
     public class Use : Command, IEquatable<Use>
     {
-        public Step Step { get => Step; private set => Step = value; }
+        public Step Step { get; set; }
 
         public Use()
         {
