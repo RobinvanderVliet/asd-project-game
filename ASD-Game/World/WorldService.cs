@@ -46,7 +46,7 @@ namespace WorldGeneration
         {
             _world = new World(seed, 6, _screenHandler);
         }
-        
+
         public Player GetCurrentPlayer()
         {
             return _world.CurrentPlayer;

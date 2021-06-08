@@ -55,6 +55,12 @@ namespace Session
             _messageService = messageService;
             _screenHandler = screenHandler;
             _gameConfigurationHandler = gameConfigurationHandler;
+            _messageService = messageService;
+        }
+
+        public SessionHandler()
+        {
+            
         }
 
         public List<string[]> GetAllClients()
@@ -186,6 +192,16 @@ namespace Session
                         return HandleHeartbeat(packet);
                     }
 
+
+                    if (sessionDTO.SessionType == SessionType.NewBackUpHost)
+                    {
+                        return HandleNewBackupHost(packet);
+                    }
+                }
+
+                if ((packet.Header.Target == "client" || packet.Header.Target == "host" ||
+                     packet.Header.Target == _clientController.GetOriginId()))
+                {
                     if (sessionDTO.SessionType == SessionType.EditMonsterDifficulty)
                     {
                         return HandleMonsterDifficulty(packet);
@@ -195,11 +211,6 @@ namespace Session
                     {
                         return HandleItemSpawnRate(packet);
                     }
-                }
-
-                if (packet.Header.Target.Equals(_clientController.GetOriginId()))
-                {
-                    Console.WriteLine(packet.HandlerResponse.ResultMessage);
                 }
 
                 if ((packet.Header.Target == "client" || packet.Header.Target == "host" ||
@@ -254,21 +265,47 @@ namespace Session
             {
                 SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.Payload);
                 int spawnrate = int.Parse(sessionDTO.Name);
-                Console.WriteLine(spawnrate);
+                _messageService.AddMessage(spawnrate + "");
                 _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
                 return new HandlerResponseDTO(SendAction.SendToClients, packetDto.Payload);
             }
-
             if (_clientController.IsBackupHost)
             {
                 SessionDTO sessionDTO =
                     JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
                 int spawnrate = int.Parse(sessionDTO.Name);
-                Console.WriteLine(spawnrate);
+                _messageService.AddMessage(spawnrate + "");
                 _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
             }
 
             return new HandlerResponseDTO(SendAction.Ignore, null);
+        }
+
+        public  HandlerResponseDTO HandleNewBackupHost(PacketDTO packet)
+        {
+            if(packet.Header.Target == "host")
+            {
+                return new HandlerResponseDTO(SendAction.SendToClients, null);
+            } 
+            else
+            {
+                bool nextBackupHost = GetAllClients().ElementAt(
+                        GetAllClients().IndexOf(
+                            GetAllClients().FirstOrDefault(i => i[0] == packet.Header.OriginID)) + 1)[0]
+                    .Equals(_clientController.GetOriginId());
+
+                if (!_clientController.IsBackupHost && nextBackupHost) 
+                {
+                    //TODO reanable this after datatransfer is done
+                    /*
+                    _clientController.IsBackupHost = true;
+                    PingHostTimer();
+                    */
+                    Console.WriteLine("I'm Mr. BackupHost! Look at me!");
+                    return new HandlerResponseDTO(SendAction.Ignore, null);
+                }
+                return new HandlerResponseDTO(SendAction.Ignore, null);
+            }
         }
 
         private HandlerResponseDTO HandleHeartbeat(PacketDTO packet)
@@ -286,6 +323,7 @@ namespace Session
             if (!_hostActive)
             {
                 _hostInactiveCounter++;
+
                 if (_hostInactiveCounter >= 5)
                 {
                     _hostPingTimer.Dispose();
@@ -364,8 +402,7 @@ namespace Session
             }
             else
             {
-                Console.WriteLine("Id: " + packet.Header.SessionID + " Name: " + sessionDTO.Name + " Host: " +
-                                  sessionDTO.Clients.First()[1] + " Amount of players: " + sessionDTO.Clients.Count);
+                _messageService.AddMessage("Id: " + packet.Header.SessionID + " Name: " + sessionDTO.Name + " Host: " + sessionDTO.Clients.First()[1] + " Amount of players: " + sessionDTO.Clients.Count);
             }
 
             return new HandlerResponseDTO(SendAction.Ignore, null);
@@ -553,18 +590,26 @@ namespace Session
 
         public void SwapToHost()
         {
-            _clientController.CreateHostController();
+             _clientController.CreateHostController();
             _clientController.IsBackupHost = false;
 
             _senderHeartbeatTimer.Close();
 
-            Console.WriteLine("Look at me, I'm the captain (Host) now!");
+            _messageService.AddMessage("Look at me, I'm the captain (Host) now!");
 
             var clients = _session.GetAllClients().Select(client => client.First()).ToArray();
             List<string> heartbeatSenders = new List<string>(clients);
             heartbeatSenders.Remove(_clientController.GetOriginId());
 
             _heartbeatHandler = new HeartbeatHandler(heartbeatSenders);
+
+            SessionDTO sessionDTO = new SessionDTO
+            {
+                SessionType = SessionType.NewBackUpHost,
+                Name = "you'are our co-captain (back up host) now!"
+            };
+            var jsonObject = JsonConvert.SerializeObject(sessionDTO);
+            _clientController.SendPayload(jsonObject, PacketType.Session);
         }
 
         public Timer getHostPingTimer()
@@ -607,9 +652,10 @@ namespace Session
             _session.GameStarted = startSession;
         }
 
-        public void setSession(Session session)
+
+        public void SetSession(Session ses)
         {
-            this._session = session;
+            _session = ses;
         }
     }
 }
