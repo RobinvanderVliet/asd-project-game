@@ -37,7 +37,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
 
         private void SetClosestMonster(SmartMonster smartMonster, int visionRange)
         {
-            List<Character> monsters = WorldService.GetMonsters();
+            List<Monster> monsters = WorldService.GetMonsters();
             foreach (Character monster in monsters)
             {
                 Vector2 pPos = new Vector2(monster.XPosition, monster.YPosition);

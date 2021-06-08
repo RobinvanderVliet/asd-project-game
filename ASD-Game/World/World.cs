@@ -15,7 +15,7 @@ namespace ASD_Game.World
         private IMap _map;
         public Player CurrentPlayer { get; set; }
         public List<Player> Players { get; set; }
-        public List<Character> _creatures { get; set; }
+        public List<Monster> _creatures { get; set; }
         public List<Character> movesList = new List<Character>();
         public List<ItemSpawnDTO> Items;
         
@@ -48,7 +48,7 @@ namespace ASD_Game.World
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
         {
-            if (CurrentPlayer.Id == userId)
+            if (CurrentPlayer != null && CurrentPlayer.Id == userId)
             {
                 CurrentPlayer.XPosition = newXPosition;
                 CurrentPlayer.YPosition = newYPosition;
@@ -74,9 +74,10 @@ namespace ASD_Game.World
                 CurrentPlayer = player;
             }
             Players.Add(player);
+            UpdateMap();
         }
 
-        public void AddCreatureToWorld(Character character)
+        public void AddCreatureToWorld(Monster character)
         {
             _creatures.Add(character);
         }

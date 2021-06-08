@@ -33,7 +33,7 @@ namespace ASD_Game.World.Services
             _world.AddPlayerToWorld(player, isCurrentPlayer);
         }
 
-        public void AddCreatureToWorld(Character character)
+        public void AddCreatureToWorld(Monster character)
         {
             _world.AddCreatureToWorld(character);
         }
@@ -83,7 +83,7 @@ namespace ASD_Game.World.Services
             return _world.GetMapAroundCharacter(character);
         }
 
-        public List<Character> GetMonsters()
+        public List<Monster> GetMonsters()
         {
             return _world._creatures;
         }
