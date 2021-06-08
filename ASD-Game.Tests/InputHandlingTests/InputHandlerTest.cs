@@ -21,6 +21,7 @@ namespace InputHandling.Tests
         private Mock<SessionScreen> _mockedSessionScreen;
         private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
         private Mock<IMessageService> _mockedMessageService;
+        private Mock<IGamesSessionService> _mockedGamesSessionService;
         
         [SetUp]
         public void SetUp()
@@ -34,8 +35,9 @@ namespace InputHandling.Tests
             _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
             _mockedScreenHandler.Object.ConsoleHelper = new Mock<ConsoleHelper>().Object;
             _mockedMessageService = new Mock<IMessageService>();
+            _mockedGamesSessionService = new Mock<IGamesSessionService>();
 
-            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedScreenHandler.Object, _mockedMessageService.Object, _mockedGameConfigurationHandler.Object);
+            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedScreenHandler.Object, _mockedMessageService.Object, _mockedGameConfigurationHandler.Object, _mockedGamesSessionService.Object);
         }
 
         [Test]
@@ -130,6 +132,44 @@ namespace InputHandling.Tests
                 else
                 {
                     _mockedSessionScreen.Verify(mock=> mock.UpdateInputMessage("Not a valid session, try again!"));
+                }
+            }
+        }
+        
+        [TestCase("1")]
+        [TestCase("")]
+        [TestCase("error")]
+        [TestCase("return")]
+        public void Test_HandleLoadScreenCommands_HandlesInput(string input)
+        {
+            //Arrange
+            var testId = "testId";
+            _mockedScreenHandler.Setup(mock => mock.GetScreenInput()).Returns(input);
+            _mockedScreenHandler.Setup(mock => mock.GetSessionByPosition(0)).Returns(testId);
+            _mockedScreenHandler.Setup(mock => mock.GetSessionByPosition(-1)).Returns("");
+            _mockedSessionScreen.Setup(mock => mock.UpdateInputMessage(It.IsAny<string>()));
+            
+            //Act
+            _sut.HandleLoadScreenCommands();
+            
+            //Assert
+            if (input.Equals("return"))
+            {
+                _mockedScreenHandler.Verify(mock => mock.TransitionTo(It.IsAny<StartScreen>()), Times.Once);
+            }
+            else
+            {
+                if (input.Equals("1"))
+                {
+                    _mockedGamesSessionService.Verify(mock => mock.LoadGame(testId));
+                }
+                else if (input.Equals(""))
+                {
+                    _mockedScreenHandler.Verify(mock=> mock.UpdateInputMessage("Session number cannot be left blank, please try again!"));
+                }
+                else
+                {
+                    _mockedScreenHandler.Verify(mock=> mock.UpdateInputMessage("Not a valid session number, please try again!"));
                 }
             }
         }

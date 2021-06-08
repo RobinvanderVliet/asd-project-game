@@ -6,6 +6,7 @@ using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Moq;
 using NUnit.Framework;
+using UserInterface;
 
 namespace Session.Tests
 {
@@ -15,6 +16,7 @@ namespace Session.Tests
         private Mock<IDatabaseService<GamePOCO>> _mockedDatabaseGameService;
         private Mock<IDatabaseService<ClientHistoryPOCO>> _mockedDatabaseClientHistory;
         private Mock<ISessionHandler> _mockedSessionHandler;
+        private Mock<IScreenHandler> _mockedScreenHandler;
 
         [SetUp]
         public void GameSessionServiceSetup()
@@ -22,9 +24,10 @@ namespace Session.Tests
             _mockedSessionHandler = new Mock<ISessionHandler>();
             _mockedDatabaseClientHistory = new Mock<IDatabaseService<ClientHistoryPOCO>>();
             _mockedDatabaseGameService = new Mock<IDatabaseService<GamePOCO>>();
+            _mockedScreenHandler = new Mock<IScreenHandler>();
 
             sut = new GamesSessionService(_mockedSessionHandler.Object, _mockedDatabaseClientHistory.Object,
-                _mockedDatabaseGameService.Object);
+                _mockedDatabaseGameService.Object, _mockedScreenHandler.Object);
         }
 
         /// <summary>

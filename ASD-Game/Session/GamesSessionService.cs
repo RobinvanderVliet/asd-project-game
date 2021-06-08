@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using DatabaseHandler;
@@ -42,15 +43,15 @@ namespace Session
                     p.GameName
                 };
 
-            if (joinedTables.IsNullOrEmpty())
+            if (!joinedTables.IsNullOrEmpty())
             {
-                Console.WriteLine("There are no saved games");
+                _screenHandler.UpdateInputMessage("No saved sessions found, type 'return' to go back to main menu!");
             }
             else
             {
-                var sessions = joinedTables.Select(x => new {x.GameGuid, x.GameName});
+                var sessions = joinedTables.Select(x => new string[] {x.GameGuid, x.GameName}).ToList();
+
                 _screenHandler.UpdateSavedSessionsList(sessions);
-                
             }
         }
 

@@ -173,6 +173,27 @@ namespace InputHandling
                 return;
             }
             
+            if (input.Length > 0)
+            {
+                int sessionNumber = 0;
+                int.TryParse(input, out sessionNumber);
+
+                string sessionId = _screenHandler.GetSessionByPosition(sessionNumber - 1);
+        
+                if (sessionId.IsNullOrEmpty())
+                {
+                    _screenHandler.UpdateInputMessage("Not a valid session number, please try again!");
+                }
+                else
+                {
+                    _screenHandler.TransitionTo(new LobbyScreen());
+                    _gamesSessionService.LoadGame(sessionId);
+                }
+            }
+            else
+            {
+                _screenHandler.UpdateInputMessage("Session number cannot be left blank, please try again!");
+            }
         }
 
         public void HandleConfigurationScreenCommands()

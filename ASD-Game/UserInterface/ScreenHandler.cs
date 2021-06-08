@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace UserInterface
@@ -85,10 +84,31 @@ namespace UserInterface
             }
         }
 
-        public void UpdateSavedSessionsList(IEnumerable sessions)
+        public void UpdateSavedSessionsList(List<string[]> sessions)
         {
-            LoadScreen loadScreen = _screen as LoadScreen;
-            loadScreen.UpdateSavedSessionsList(sessions);
+            if (_screen is LoadScreen)
+            {
+                LoadScreen loadScreen = _screen as LoadScreen;
+                loadScreen.UpdateSavedSessionsList(sessions);
+            }
+        }
+
+        public void UpdateInputMessage(string message)
+        {
+            if (_screen is LoadScreen screen)
+            {
+                screen.UpdateInputMessage(message);
+            }
+        }
+
+        public string GetSessionByPosition(int sessionNumber)
+        {
+            if (_screen is LoadScreen screen)
+            {
+                return screen.GetSessionByPosition(sessionNumber);
+            }
+            
+            return String.Empty;
         }
     }
 }
