@@ -31,37 +31,45 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_ScanMap()
+        public void Test_ScanMap_ScanMapForNearbyCharacters()
         {
-            _sut.ScanMap(_smartMonster, _smartMonster.creatureData.VisionRange);
+            //act
+            _sut.ScanMap(_smartMonster, _smartMonster.CreatureData.VisionRange);
 
-            Assert.NotNull(_sut.closestPlayer);
-            Assert.NotNull(_sut.closestMonster);
+            //assert
+            Assert.NotNull(_sut.ClosestPlayer);
+            Assert.NotNull(_sut.ClosestMonster);
         }
 
         [Test]
         public void Test_ScanMapPlayerAI_Adjacent()
         {
-            _player.location = new Vector2(14, 15);
+            //arrange/act
+            _player.Location = new Vector2(14, 15);
 
-            Assert.NotNull(_sut.ScanMapPlayerAI(_player.location, _smartMonster));
+            //assert
+            Assert.NotNull(_sut.ScanMapPlayerAI(_player.Location, _smartMonster));
         }
 
         [Test]
         public void Test_ScanMapPlayerAI_Not_Adjacent()
         {
-            _player.location = new Vector2(20, 20);
+            //arrange/act
+            _player.Location = new Vector2(20, 20);
 
-            Assert.Null(_sut.ScanMapPlayerAI(_player.location, _smartMonster));
+            //assert
+            Assert.Null(_sut.ScanMapPlayerAI(_player.Location, _smartMonster));
         }
 
         [Test]
         public void Test_CheckNewPosition()
         {
+            //act
             _sut.CheckNewPosition(_smartMonster);
 
+            //assert
             int expected = -13;
-            int actual = _smartMonster.score;
+            int actual = _smartMonster.Score;
 
             Assert.AreEqual(expected, actual);
         }

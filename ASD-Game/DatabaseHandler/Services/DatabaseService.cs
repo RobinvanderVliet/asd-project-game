@@ -8,15 +8,15 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace DatabaseHandler.Services
 {
-    public class ServicesDb<T> : IServicesDb<T>
+    public class DatabaseService<T> : IDatabaseService<T>
     {
-        private readonly ILogger<ServicesDb<T>> _log;
+        private readonly ILogger<DatabaseService<T>> _log;
         private readonly IRepository<T> _repository;
 
-        public ServicesDb(IRepository<T> repository = null)
+        public DatabaseService(IRepository<T> repository = null)
         {
             _repository = repository ?? new Repository<T>();
-            _log = new NullLogger<ServicesDb<T>>();
+            _log = new NullLogger<DatabaseService<T>>();
         }
 
         public Task<BsonValue> CreateAsync(T obj)

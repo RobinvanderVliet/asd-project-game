@@ -6,57 +6,57 @@ namespace Creature.Creature.NeuralNetworking
 {
     public class Genome
     {
-        public List<ConnectionGene> genes = new List<ConnectionGene>();
-        public List<NeuralNode> nodes = new List<NeuralNode>();
+        public List<ConnectionGene> Genes = new List<ConnectionGene>();
+        public List<NeuralNode> Nodes = new List<NeuralNode>();
 
-        public int inputs;
-        public int outputs;
-        public int layers = 2;
-        public int nextNode = 0;
-        public int biasNode;
+        public int Inputs;
+        public int Outputs;
+        public int Layers = 2;
+        public int NextNode = 0;
+        public int BiasNode;
 
-        public int nextConnectionNo = 1000;
+        public int NextConnectionNo = 1000;
 
-        public List<NeuralNode> network = new List<NeuralNode>();
+        public List<NeuralNode> Network = new List<NeuralNode>();
 
-        private readonly Random random = new Random();
+        private readonly Random _random = new Random();
 
         public Genome(int inputs, int outputs)
         {
-            this.inputs = inputs;
-            this.outputs = outputs;
+            Inputs = inputs;
+            Outputs = outputs;
 
             //create input nodes
             for (int i = 0; i < inputs; i++)
             {
-                nodes.Add(new NeuralNode(i));
-                nextNode++;
-                nodes[i].layer = 0;
+                Nodes.Add(new NeuralNode(i));
+                NextNode++;
+                Nodes[i].Layer = 0;
             }
 
             //create output nodes
             for (int i = 0; i < outputs; i++)
             {
-                nodes.Add(new NeuralNode(i + inputs));
-                nodes[i].layer = 1;
-                nextNode++;
+                Nodes.Add(new NeuralNode(i + inputs));
+                Nodes[i].Layer = 1;
+                NextNode++;
             }
 
             //bias node
-            nodes.Add(new NeuralNode(nextNode));
-            biasNode = nextNode;
-            nextNode++;
-            nodes[biasNode].layer = 0;
+            Nodes.Add(new NeuralNode(NextNode));
+            BiasNode = NextNode;
+            NextNode++;
+            Nodes[BiasNode].Layer = 0;
         }
 
         //return node that matches number
         public NeuralNode GetNode(int nodeNumber)
         {
-            for (int i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < Nodes.Count; i++)
             {
-                if (nodes[i].number == nodeNumber)
+                if (Nodes[i].Number == nodeNumber)
                 {
-                    return nodes[i];
+                    return Nodes[i];
                 }
             }
             return null;
@@ -66,14 +66,14 @@ namespace Creature.Creature.NeuralNetworking
         [ExcludeFromCodeCoverage]
         public void ConnectNodes()
         {
-            for (int i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < Nodes.Count; i++)
             {
-                nodes[i].outputConnections.Clear();
+                Nodes[i].OutputConnections.Clear();
             }
 
-            for (int i = 0; i < genes.Count; i++)
+            for (int i = 0; i < Genes.Count; i++)
             {
-                genes[i].fromNode.outputConnections.Add(genes[i]);
+                Genes[i].FromNode.OutputConnections.Add(Genes[i]);
             }
         }
 
@@ -81,29 +81,29 @@ namespace Creature.Creature.NeuralNetworking
         public float[] FeedForward(float[] inputValues)
         //set output
         {
-            for (int i = 0; i < inputs; i++)
+            for (int i = 0; i < Inputs; i++)
             {
-                nodes[outputs + i].outputValue = inputValues[i];
+                Nodes[Outputs + i].OutputValue = inputValues[i];
             }
-            nodes[biasNode].outputValue = 1;//output of bias is 1
+            Nodes[BiasNode].OutputValue = 1;//output of bias is 1
 
-            for (int i = 0; i < network.Count; i++)
+            for (int i = 0; i < Network.Count; i++)
             {
                 //for each node in the network engage it(see node class for what this does)
-                network[i].Engage();
+                Network[i].Engage();
             }
 
             //the outputs are nodes[inputs] to nodes [inputs+outputs-1]
-            float[] outs = new float[outputs];
-            for (int i = 0; i < outputs; i++)
+            float[] outs = new float[Outputs];
+            for (int i = 0; i < Outputs; i++)
             {
-                outs[i] = nodes[i].outputValue;
+                outs[i] = Nodes[i].OutputValue;
             }
 
-            for (int i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < Nodes.Count; i++)
             {
                 //reset all the nodes for the next feed forward
-                nodes[i].inputSum = 0;
+                Nodes[i].InputSum = 0;
             }
 
             return outs;
@@ -114,19 +114,19 @@ namespace Creature.Creature.NeuralNetworking
         public void GenerateNetwork()
         {
             ConnectNodes();
-            network = new List<NeuralNode>();
+            Network = new List<NeuralNode>();
             //for each layer add the node in that layer, since layers cannot connect to themselves there is no need to order the nodes within a layer
 
-            for (int l = 0; l < layers; l++)
+            for (int l = 0; l < Layers; l++)
             {
                 //for each layer
-                for (int i = 0; i < nodes.Count; i++)
+                for (int i = 0; i < Nodes.Count; i++)
                 {
                     //for each node
-                    if (nodes[i].layer == l)
+                    if (Nodes[i].Layer == l)
                     {
                         //if that node is in that layer
-                        network.Add(nodes[i]);
+                        Network.Add(Nodes[i]);
                     }
                 }
             }
@@ -140,50 +140,50 @@ namespace Creature.Creature.NeuralNetworking
         public void AddNode(List<ConnectionHistory> innovationHistory)
         {
             //pick a random connection to create a node between
-            if (genes.Count == 0)
+            if (Genes.Count == 0)
             {
                 AddConnection(innovationHistory);
                 return;
             }
-            int randomConnection = (random.Next(genes.Count));
+            int randomConnection = (_random.Next(Genes.Count));
 
-            while (genes[randomConnection].fromNode == nodes[biasNode] && genes.Count != 1)
+            while (Genes[randomConnection].FromNode == Nodes[BiasNode] && Genes.Count != 1)
             {
                 //dont disconnect bias
-                randomConnection = (random.Next(genes.Count));
+                randomConnection = (_random.Next(Genes.Count));
             }
 
-            genes[randomConnection].enabled = false;//disable it
+            Genes[randomConnection].Enabled = false;//disable it
 
-            int newNodeNo = nextNode;
-            nodes.Add(new NeuralNode(newNodeNo));
-            nextNode++;
+            int newNodeNo = NextNode;
+            Nodes.Add(new NeuralNode(newNodeNo));
+            NextNode++;
             //add a new connection to the new node with a weight of 1
-            int connectionInnovationNumber = GetInnovationNumber(innovationHistory, genes[randomConnection].fromNode, GetNode(newNodeNo));
-            genes.Add(new ConnectionGene(genes[randomConnection].fromNode, GetNode(newNodeNo), 1, connectionInnovationNumber));
+            int connectionInnovationNumber = GetInnovationNumber(innovationHistory, Genes[randomConnection].FromNode, GetNode(newNodeNo));
+            Genes.Add(new ConnectionGene(Genes[randomConnection].FromNode, GetNode(newNodeNo), 1, connectionInnovationNumber));
 
-            connectionInnovationNumber = GetInnovationNumber(innovationHistory, GetNode(newNodeNo), genes[randomConnection].toNode);
+            connectionInnovationNumber = GetInnovationNumber(innovationHistory, GetNode(newNodeNo), Genes[randomConnection].ToNode);
             //add a new connection from the new node with a weight the same as the disabled connection
-            genes.Add(new ConnectionGene(GetNode(newNodeNo), genes[randomConnection].toNode, genes[randomConnection].weight, connectionInnovationNumber));
-            GetNode(newNodeNo).layer = genes[randomConnection].fromNode.layer + 1;
+            Genes.Add(new ConnectionGene(GetNode(newNodeNo), Genes[randomConnection].ToNode, Genes[randomConnection].Weight, connectionInnovationNumber));
+            GetNode(newNodeNo).Layer = Genes[randomConnection].FromNode.Layer + 1;
 
-            connectionInnovationNumber = GetInnovationNumber(innovationHistory, nodes[biasNode], GetNode(newNodeNo));
+            connectionInnovationNumber = GetInnovationNumber(innovationHistory, Nodes[BiasNode], GetNode(newNodeNo));
             //connect the bias to the new node with a weight of 0
-            genes.Add(new ConnectionGene(nodes[biasNode], GetNode(newNodeNo), 0, connectionInnovationNumber));
+            Genes.Add(new ConnectionGene(Nodes[BiasNode], GetNode(newNodeNo), 0, connectionInnovationNumber));
 
             //if the layer of the new node is equal to the layer of the output node of the old connection then a new layer needs to be created
             //more accurately the layer numbers of all layers equal to or greater than this new node need to be incrimented
-            if (GetNode(newNodeNo).layer == genes[randomConnection].toNode.layer)
+            if (GetNode(newNodeNo).Layer == Genes[randomConnection].ToNode.Layer)
             {
-                for (int i = 0; i < nodes.Count - 1; i++)
+                for (int i = 0; i < Nodes.Count - 1; i++)
                 {
                     //dont include this newest node
-                    if (nodes[i].layer >= GetNode(newNodeNo).layer)
+                    if (Nodes[i].Layer >= GetNode(newNodeNo).Layer)
                     {
-                        nodes[i].layer++;
+                        Nodes[i].Layer++;
                     }
                 }
-                layers++;
+                Layers++;
             }
             ConnectNodes();
         }
@@ -200,17 +200,17 @@ namespace Creature.Creature.NeuralNetworking
             }
 
             //get random nodes
-            int randomNode1 = (random.Next(nodes.Count));
-            int randomNode2 = (random.Next(nodes.Count));
+            int randomNode1 = (_random.Next(Nodes.Count));
+            int randomNode2 = (_random.Next(Nodes.Count));
             while (BadConnectionNodeHasBeenMade(randomNode1, randomNode2))
             {
                 //while the random nodes are no good
                 //get new ones
-                randomNode1 = (random.Next(nodes.Count));
-                randomNode2 = (random.Next(nodes.Count));
+                randomNode1 = (_random.Next(Nodes.Count));
+                randomNode2 = (_random.Next(Nodes.Count));
             }
             int temp;
-            if (nodes[randomNode1].layer > nodes[randomNode2].layer)
+            if (Nodes[randomNode1].Layer > Nodes[randomNode2].Layer)
             {
                 //if the first random node is after the second then switch
                 temp = randomNode2;
@@ -220,18 +220,18 @@ namespace Creature.Creature.NeuralNetworking
 
             //get the innovation number of the connection
             //this will be a new number if no identical genome has mutated in the same way
-            int connectionInnovationNumber = GetInnovationNumber(innovationHistory, nodes[randomNode1], nodes[randomNode2]);
+            int connectionInnovationNumber = GetInnovationNumber(innovationHistory, Nodes[randomNode1], Nodes[randomNode2]);
             //add the connection with a random array
 
-            genes.Add(new ConnectionGene(nodes[randomNode1], nodes[randomNode2], random.Next(-1, 1), connectionInnovationNumber));//changed this so if error here
+            Genes.Add(new ConnectionGene(Nodes[randomNode1], Nodes[randomNode2], _random.Next(-1, 1), connectionInnovationNumber));//changed this so if error here
             ConnectNodes();
         }
 
         [ExcludeFromCodeCoverage]
-        public Boolean BadConnectionNodeHasBeenMade(int r1, int r2)
+        public bool BadConnectionNodeHasBeenMade(int r1, int r2)
         {
-            if (nodes[r1].layer == nodes[r2].layer) return true; // if the nodes are in the same layer
-            if (nodes[r1].IsConnectedTo(nodes[r2])) return true; //if the nodes are already connected
+            if (Nodes[r1].Layer == Nodes[r2].Layer) return true; // if the nodes are in the same layer
+            if (Nodes[r1].IsConnectedTo(Nodes[r2])) return true; //if the nodes are already connected
 
             return false;
         }
@@ -242,8 +242,8 @@ namespace Creature.Creature.NeuralNetworking
         [ExcludeFromCodeCoverage]
         public int GetInnovationNumber(List<ConnectionHistory> innovationHistory, NeuralNode from, NeuralNode to)
         {
-            Boolean isNew = true;
-            int connectionInnovationNumber = nextConnectionNo;
+            bool isNew = true;
+            int connectionInnovationNumber = NextConnectionNo;
             for (int i = 0; i < innovationHistory.Count; i++)
             {
                 //for each previous mutation
@@ -251,7 +251,7 @@ namespace Creature.Creature.NeuralNetworking
                 {
                     //if match found
                     isNew = false;//its not a new mutation
-                    connectionInnovationNumber = innovationHistory[i].innovationNumber; //set the innovation number as the innovation number of the match
+                    connectionInnovationNumber = innovationHistory[i].InnovationNumber; //set the innovation number as the innovation number of the match
                     break;
                 }
             }
@@ -260,38 +260,38 @@ namespace Creature.Creature.NeuralNetworking
             {
                 //if the mutation is new then create an arrayList of integers representing the current state of the genome
                 List<int> innoNumbers = new List<int>();
-                for (int i = 0; i < genes.Count; i++)
+                for (int i = 0; i < Genes.Count; i++)
                 {
                     //set the innovation numbers
-                    innoNumbers.Add(genes[i].innovationNo);
+                    innoNumbers.Add(Genes[i].InnovationNo);
                 }
 
                 //then add this mutation to the innovationHistory
-                innovationHistory.Add(new ConnectionHistory(from.number, to.number, connectionInnovationNumber, innoNumbers));
-                nextConnectionNo++;
+                innovationHistory.Add(new ConnectionHistory(from.Number, to.Number, connectionInnovationNumber, innoNumbers));
+                NextConnectionNo++;
             }
             return connectionInnovationNumber;
         }
 
         //returns whether the network is fully connected or not
         [ExcludeFromCodeCoverage]
-        public Boolean FullyConnected()
+        public bool FullyConnected()
         {
             int maxConnections = 0;
-            int[] nodesInLayers = new int[layers];//array which stored the amount of nodes in each layer
+            int[] nodesInLayers = new int[Layers];//array which stored the amount of nodes in each layer
 
             //populate array
-            for (int i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < Nodes.Count; i++)
             {
-                nodesInLayers[nodes[i].layer] += 1;
+                nodesInLayers[Nodes[i].Layer] += 1;
             }
 
             //for each layer the maximum amount of connections is the number in this layer * the number of nodes infront of it
             //so lets add the max for each layer together and then we will get the maximum amount of connections in the network
-            for (int i = 0; i < layers - 1; i++)
+            for (int i = 0; i < Layers - 1; i++)
             {
                 int nodesInFront = 0;
-                for (int j = i + 1; j < layers; j++)
+                for (int j = i + 1; j < Layers; j++)
                 {
                     //for each layer infront of this layer
                     nodesInFront += nodesInLayers[j];//add up nodes
@@ -300,7 +300,7 @@ namespace Creature.Creature.NeuralNetworking
                 maxConnections += nodesInLayers[i] * nodesInFront;
             }
 
-            if (maxConnections == genes.Count)
+            if (maxConnections == Genes.Count)
             {
                 //if the number of connections is equal to the max number of connections possible then it is full
                 return true;
@@ -312,29 +312,29 @@ namespace Creature.Creature.NeuralNetworking
         [ExcludeFromCodeCoverage]
         public void Mutate(List<ConnectionHistory> innovationHistory)
         {
-            if (genes.Count == 0)
+            if (Genes.Count == 0)
             {
                 AddConnection(innovationHistory);
             }
 
-            float rand1 = (float)(random.NextDouble());
+            float rand1 = (float)(_random.NextDouble());
             if (rand1 < 0.8)
             {
                 // 80% of the time mutate weights
-                for (int i = 0; i < genes.Count; i++)
+                for (int i = 0; i < Genes.Count; i++)
                 {
-                    genes[i].MutateWeight();
+                    Genes[i].MutateWeight();
                 }
             }
             //5% of the time add a new connection
-            float rand2 = (float)(random.NextDouble());
+            float rand2 = (float)(_random.NextDouble());
             if (rand2 < 0.05)
             {
                 AddConnection(innovationHistory);
             }
 
             //1% of the time add a node
-            float rand3 = (float)(random.NextDouble());
+            float rand3 = (float)(_random.NextDouble());
             if (rand3 < 0.01)
             {
                 AddNode(innovationHistory);
@@ -345,64 +345,64 @@ namespace Creature.Creature.NeuralNetworking
         [ExcludeFromCodeCoverage]
         public Genome Crossover(Genome parent2)
         {
-            Genome child = new Genome(inputs, outputs, true);
-            child.genes.Clear();
-            child.nodes.Clear();
-            child.layers = layers;
-            child.nextNode = nextNode;
-            child.biasNode = biasNode;
+            Genome child = new Genome(Inputs, Outputs, true);
+            child.Genes.Clear();
+            child.Nodes.Clear();
+            child.Layers = Layers;
+            child.NextNode = NextNode;
+            child.BiasNode = BiasNode;
             List<ConnectionGene> childGenes = new List<ConnectionGene>();//list of genes to be inherrited form the parents
-            List<Boolean> isEnabled = new List<Boolean>();
+            List<bool> isEnabled = new List<bool>();
             //all inherrited genes
-            for (int i = 0; i < genes.Count; i++)
+            for (int i = 0; i < Genes.Count; i++)
             {
-                Boolean setEnabled = true;//is this node in the chlid going to be enabled
+                bool setEnabled = true;//is this node in the chlid going to be enabled
 
-                int parent2gene = MatchingGene(parent2, genes[i].innovationNo);
+                int parent2gene = MatchingGene(parent2, Genes[i].InnovationNo);
                 if (parent2gene != -1)
                 {
                     //if the genes match
-                    if (!genes[i].enabled || !parent2.genes[parent2gene].enabled && ((float)random.NextDouble() < 0.75))
+                    if (!Genes[i].Enabled || !parent2.Genes[parent2gene].Enabled && ((float)_random.NextDouble() < 0.75))
                     {
                         //if either of the matching genes are disabled
                         //75% of the time disabel the childs gene
                         setEnabled = false;
                     }
-                    float rand = (float)random.NextDouble();
+                    float rand = (float)_random.NextDouble();
                     if (rand < 0.5)
                     {
-                        childGenes.Add(genes[i]);
+                        childGenes.Add(Genes[i]);
 
-                        //get gene from this fucker
+                        //get gene from this respectable creature
                     }
                     else
                     {
                         //get gene from parent2
-                        childGenes.Add(parent2.genes[parent2gene]);
+                        childGenes.Add(parent2.Genes[parent2gene]);
                     }
                 }
                 else
                 {
                     //disjoint or excess gene
-                    childGenes.Add(genes[i]);
-                    setEnabled = genes[i].enabled;
+                    childGenes.Add(Genes[i]);
+                    setEnabled = Genes[i].Enabled;
                 }
                 isEnabled.Add(setEnabled);
             }
 
             //since all excess and disjoint genes are inherrited from the more fit parent (this Genome) the childs structure is no different from this parent | with exception of dormant connections being enabled but this wont effect nodes
             //so all the nodes can be inherrited from this parent
-            for (int i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < Nodes.Count; i++)
             {
-                child.nodes.Add(nodes[i].Clone());
+                child.Nodes.Add(Nodes[i].Clone());
             }
 
             //clone all the connections so that they connect the childs new nodes
 
             for (int i = 0; i < childGenes.Count; i++)
             {
-                child.genes.Add(childGenes[i].Clone(child.GetNode(childGenes[i].fromNode.number), child.GetNode(childGenes[i].toNode.number)));
-                child.genes[i].enabled = isEnabled[i];
+                child.Genes.Add(childGenes[i].Clone(child.GetNode(childGenes[i].FromNode.Number), child.GetNode(childGenes[i].ToNode.Number)));
+                child.Genes[i].Enabled = isEnabled[i];
             }
 
             child.ConnectNodes();
@@ -411,19 +411,19 @@ namespace Creature.Creature.NeuralNetworking
 
         //create an empty genome
         [ExcludeFromCodeCoverage]
-        public Genome(int input, int output, Boolean crossover)
+        public Genome(int input, int output, bool crossover)
         {
             //set input number and output number
-            inputs = input;
-            outputs = output;
+            Inputs = input;
+            Outputs = output;
         }
 
         //returns whether or not there is a gene matching the input innovation number  in the input genome
         public static int MatchingGene(Genome parent2, int innovationNumber)
         {
-            for (int i = 0; i < parent2.genes.Count; i++)
+            for (int i = 0; i < parent2.Genes.Count; i++)
             {
-                if (parent2.genes[i].innovationNo == innovationNumber)
+                if (parent2.Genes[i].InnovationNo == innovationNumber)
                 {
                     return i;
                 }
@@ -435,25 +435,25 @@ namespace Creature.Creature.NeuralNetworking
         [ExcludeFromCodeCoverage]
         public Genome Clone()
         {
-            Genome clone = new Genome(inputs, outputs, true);
+            Genome clone = new Genome(Inputs, Outputs, true);
 
-            for (int i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < Nodes.Count; i++)
             {
                 //copy nodes
-                clone.nodes.Add(nodes[i].Clone());
+                clone.Nodes.Add(Nodes[i].Clone());
             }
 
             //copy all the connections so that they connect the clone new nodes
 
-            for (int i = 0; i < genes.Count; i++)
+            for (int i = 0; i < Genes.Count; i++)
             {
                 //copy genes
-                clone.genes.Add(genes[i].Clone(clone.GetNode(genes[i].fromNode.number), clone.GetNode(genes[i].toNode.number)));
+                clone.Genes.Add(Genes[i].Clone(clone.GetNode(Genes[i].FromNode.Number), clone.GetNode(Genes[i].ToNode.Number)));
             }
 
-            clone.layers = layers;
-            clone.nextNode = nextNode;
-            clone.biasNode = biasNode;
+            clone.Layers = Layers;
+            clone.NextNode = NextNode;
+            clone.BiasNode = BiasNode;
             clone.ConnectNodes();
 
             return clone;
@@ -464,19 +464,19 @@ namespace Creature.Creature.NeuralNetworking
         public void PrintGenome()
         {
             Console.Clear();
-            Console.WriteLine("Print genome  layers: " + layers);
-            Console.WriteLine("bias node: " + biasNode);
+            Console.WriteLine("Print genome  layers: " + Layers);
+            Console.WriteLine("bias node: " + BiasNode);
             Console.WriteLine("nodes");
-            for (int i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < Nodes.Count; i++)
             {
-                Console.WriteLine(nodes[i].number + " is : " + GetNodeName(nodes[i].number));
+                Console.WriteLine(Nodes[i].Number + " is : " + GetNodeName(Nodes[i].Number));
             }
             Console.WriteLine("Genes");
-            for (int i = 0; i < genes.Count; i++)
+            for (int i = 0; i < Genes.Count; i++)
             {
                 //for each connectionGene
-                Console.WriteLine("gene " + genes[i].innovationNo + " From node " + GetNodeName(genes[i].fromNode.number) + " To node " + GetNodeName(genes[i].toNode.number) +
-                  " is enabled " + genes[i].enabled + " from layer " + genes[i].fromNode.layer + " to layer " + genes[i].toNode.layer + " weight: " + genes[i].weight);
+                Console.WriteLine("gene " + Genes[i].InnovationNo + " From node " + GetNodeName(Genes[i].FromNode.Number) + " To node " + GetNodeName(Genes[i].ToNode.Number) +
+                  " is enabled " + Genes[i].Enabled + " from layer " + Genes[i].FromNode.Layer + " to layer " + Genes[i].ToNode.Layer + " weight: " + Genes[i].Weight);
             }
 
             Console.WriteLine();

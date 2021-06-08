@@ -1,7 +1,6 @@
 ﻿using Creature.Creature.NeuralNetworking.TrainingScenario;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
 using WorldGeneration.StateMachine.Data;
 
 namespace Creature.Tests
@@ -28,8 +27,10 @@ namespace Creature.Tests
         [Test]
         public void Test_SetupTraining()
         {
+            //act
             _sut.SetupTraining();
-            Assert.AreEqual(50, _sut.pop.pop.Count);
+            //assert
+            Assert.AreEqual(50, _sut.Pop.Pop.Count);
         }
     }
 }

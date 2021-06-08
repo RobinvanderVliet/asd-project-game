@@ -1,11 +1,14 @@
 ﻿using Creature.Pathfinder;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using WorldGeneration;
 
 namespace Creature.Creature.NeuralNetworking.TrainingScenario
 {
+    //Functionality already covered in the DataGatheringServiceForTraining
+    [ExcludeFromCodeCoverage]
     public class DataGatheringService
     {
         private IWorldService WorldService;
@@ -15,11 +18,11 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
 
         private List<Player> _players = new List<Player>();
 
-        public List<List<Node>> mapNodes = new List<List<Node>>();
-        public Player closestPlayer { get; set; }
-        public Single distanceToClosestPlayer { get; set; } = 9999999999999999999;
-        public Character closestMonster { get; set; }
-        public Single distanceToClosestMonster { get; set; } = 9999999999999999999;
+        public List<List<Node>> MapNodes = new List<List<Node>>();
+        public Player ClosestPlayer { get; set; }
+        public Single DistanceToClosestPlayer { get; set; } = 9999999999999999999;
+        public Character ClosestMonster { get; set; }
+        public Single DistanceToClosestMonster { get; set; } = 9999999999999999999;
 
         public DataGatheringService(IWorldService worldService)
         {
@@ -40,10 +43,10 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                 Vector2 pPos = new Vector2(monster.XPosition, monster.YPosition);
                 Vector2 cPos = new Vector2(smartMonster.XPosition, smartMonster.YPosition);
                 Single distance = Vector2.Distance(pPos, cPos);
-                if (distance < distanceToClosestPlayer)
+                if (distance < DistanceToClosestPlayer || ClosestMonster == null)
                 {
-                    closestMonster = monster;
-                    distanceToClosestPlayer = distance;
+                    ClosestMonster = monster;
+                    DistanceToClosestPlayer = distance;
                 }
             }
         }
@@ -56,31 +59,31 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                 Vector2 pPos = new Vector2(player.XPosition, player.YPosition);
                 Vector2 cPos = new Vector2(smartMonster.XPosition, smartMonster.YPosition);
                 Single distance = Vector2.Distance(pPos, cPos);
-                if (distance < distanceToClosestPlayer)
+                if (distance < DistanceToClosestPlayer || ClosestPlayer == null)
                 {
-                    closestPlayer = player;
-                    distanceToClosestPlayer = distance;
+                    ClosestPlayer = player;
+                    DistanceToClosestPlayer = distance;
                 }
             }
         }
 
         public void CheckNewPosition(SmartMonster smartMonster)
         {
-            if (distanceToClosestPlayer < smartMonster.currDistanceToPlayer)
+            if (DistanceToClosestPlayer < smartMonster.CurrDistanceToPlayer)
             {
-                smartMonster.currDistanceToPlayer = distanceToClosestPlayer;
+                smartMonster.CurrDistanceToPlayer = DistanceToClosestPlayer;
             }
-            else if (distanceToClosestPlayer > smartMonster.currDistanceToPlayer)
+            else if (DistanceToClosestPlayer > smartMonster.CurrDistanceToPlayer)
             {
-                smartMonster.currDistanceToPlayer = distanceToClosestPlayer;
+                smartMonster.CurrDistanceToPlayer = DistanceToClosestPlayer;
             }
-            if (distanceToClosestMonster < smartMonster.currDistanceToMonster)
+            if (DistanceToClosestMonster < smartMonster.CurrDistanceToMonster)
             {
-                smartMonster.currDistanceToMonster = distanceToClosestMonster;
+                smartMonster.CurrDistanceToMonster = DistanceToClosestMonster;
             }
-            else if (distanceToClosestMonster > smartMonster.currDistanceToMonster)
+            else if (DistanceToClosestMonster > smartMonster.CurrDistanceToMonster)
             {
-                smartMonster.currDistanceToMonster = distanceToClosestMonster;
+                smartMonster.CurrDistanceToMonster = DistanceToClosestMonster;
             }
         }
 

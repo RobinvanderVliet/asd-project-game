@@ -1,5 +1,4 @@
-﻿using Creature.Creature.NeuralNetworking;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace WorldGeneration

@@ -13,8 +13,8 @@ namespace WorldGeneration.Models.HazardousTiles
         public string Symbol { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
+        public int StaminaCost { get; set; }
         public List<Item> ItemsOnTile { get; set; }
-
 
         public SpikeTile(int x, int y)
         {
@@ -23,6 +23,7 @@ namespace WorldGeneration.Models.HazardousTiles
             IsAccessible = true;
             XPosition = x;
             YPosition = y;
+            StaminaCost = 5;
             Damage = new Random().Next(2, 11);
             ItemsOnTile = new List<Item>();
         }

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Appccelerate.StateMachine.Machine;
 using WorldGeneration.StateMachine.CustomRuleSet;

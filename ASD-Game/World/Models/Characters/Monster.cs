@@ -1,6 +1,4 @@
-﻿using Creature.Creature.NeuralNetworking;
-using System;
-using WorldGeneration.StateMachine;
+﻿using WorldGeneration.StateMachine;
 using WorldGeneration.StateMachine.Data;
 
 namespace WorldGeneration

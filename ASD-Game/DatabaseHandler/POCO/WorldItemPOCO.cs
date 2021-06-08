@@ -1,10 +1,11 @@
-﻿using System;
+﻿using LiteDB;
+using System;
 using System.Diagnostics.CodeAnalysis;
-using LiteDB;
 
 namespace DatabaseHandler.POCO
 {
-    public class WorldItemPoco
+    [ExcludeFromCodeCoverage]
+    public class WorldItemPOCO
     {
         [BsonId]
         public string Id = Guid.NewGuid().ToString();

@@ -1,10 +1,6 @@
-using DatabaseHandler.POCO;
-using LiteDB;
-using LiteDB.Async;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-
 using DatabaseHandler.POCO;
 using LiteDB;
 using LiteDB.Async;
@@ -14,6 +10,8 @@ namespace DatabaseHandler
     [ExcludeFromCodeCoverage]
     public class DBConnection : IDBConnection
     {
+        private static readonly char _separator = Path.DirectorySeparatorChar;
+
         public void SetForeignKeys()
         {
             //FK Player -> Game
@@ -25,28 +23,28 @@ namespace DatabaseHandler
                 .DbRef(x => x.PlayerGUIDHost, nameof(PlayerPOCO));
 
             //FK Agent -> Game
-            BsonMapper.Global.Entity<AgentPoco>()
+            BsonMapper.Global.Entity<AgentPOCO>()
                 .DbRef(x => x.GameGUID, nameof(GamePOCO));
 
             //FK Agent -> Player
-            BsonMapper.Global.Entity<AgentPoco>()
+            BsonMapper.Global.Entity<AgentPOCO>()
                 .DbRef(x => x.PlayerGUID, nameof(PlayerPOCO));
 
             //FK PlayerItem -> Player
-            BsonMapper.Global.Entity<PlayerItemPoco>()
+            BsonMapper.Global.Entity<PlayerItemPOCO>()
                 .DbRef(x => x.PlayerGUID, nameof(PlayerPOCO));
 
             //FK PlayerItem -> Item
-            BsonMapper.Global.Entity<PlayerItemPoco>()
-                .DbRef(x => x.ItemName, nameof(ItemPoco));
+            BsonMapper.Global.Entity<PlayerItemPOCO>()
+                .DbRef(x => x.ItemName, nameof(PlayerItemPOCO));
 
             //FK Game -> WorldItem
             BsonMapper.Global.Entity<GamePOCO>()
-                .DbRef(x => x.GameGUID, nameof(WorldItemPoco));
+                .DbRef(x => x.GameGUID, nameof(WorldItemPOCO));
 
             //FK WorldItem -> Item
-            BsonMapper.Global.Entity<WorldItemPoco>()
-                .DbRef(x => x.ItemName, nameof(ItemPoco));
+            BsonMapper.Global.Entity<WorldItemPOCO>()
+                .DbRef(x => x.ItemName, nameof(PlayerItemPOCO));
         }
 
         [ExcludeFromCodeCoverage]
@@ -56,7 +54,7 @@ namespace DatabaseHandler
             {
                 var currentDirectory = Directory.GetCurrentDirectory();
                 var connection =
-                    new LiteDatabaseAsync(@"Filename=" + currentDirectory + "\\ASD-Game.db;connection=shared;");
+                    new LiteDatabaseAsync($"Filename={currentDirectory}{_separator}ASD-Game.db;connection=shared;");
                 return connection;
             }
             catch (Exception ex)

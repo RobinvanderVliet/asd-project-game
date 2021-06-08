@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Agent.Mapper;
+﻿using Agent.Mapper;
+using System.Collections.Generic;
 using Configuration = Agent.Models.Configuration;
 
 namespace Agent.Services

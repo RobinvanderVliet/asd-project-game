@@ -1,7 +1,5 @@
 ﻿using Creature.Creature.NeuralNetworking;
-using Moq;
 using NUnit.Framework;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Creature.Tests
@@ -14,63 +12,68 @@ namespace Creature.Tests
 
         private int _inputs;
         private int _outputs;
-        private int _layers;
-        private int _nextNode;
-        private int _nextConnectionNo;
 
         [SetUp]
         public void Setup()
         {
             _inputs = 2;
             _outputs = 2;
-            _layers = 2;
-            _nextNode = 0;
-            _nextConnectionNo = 1000;
         }
 
         [Test]
         public void Test_GetNode_NodeFound()
         {
+            //arrange
             _sut = new Genome(_inputs, _outputs);
-
             NeuralNode expected = new NeuralNode(0);
+
+            //act
             NeuralNode actual = _sut.GetNode(0);
 
-            Assert.AreEqual(expected.number, actual.number);
+            //assert
+            Assert.AreEqual(expected.Number, actual.Number);
         }
 
         [Test]
         public void Test_GetNode_NodeNotFound()
         {
+            //arrange
             _sut = new Genome(_inputs, _outputs);
 
+            //act
             NeuralNode actual = _sut.GetNode(_inputs + _outputs + 1);
 
+            //assert
             Assert.Null(actual);
         }
 
         [Test]
         public void Test_FeedForward()
         {
+            //arrange
             _sut = new Genome(_inputs, _outputs);
-
             float[] inputvalues = new float[] { 1, 2 };
-
             int expected = _outputs;
+
+            //act
             float[] output = _sut.FeedForward(inputvalues);
 
+            //assert
             Assert.AreEqual(expected, output.Length);
         }
 
         [Test]
         public void Test_GenerateNetwork()
         {
+            //arrange
             _sut = new Genome(_inputs, _outputs);
 
+            //act
             _sut.GenerateNetwork();
 
+            //assert
             int expected = _inputs + _outputs + 1;
-            int actual = _sut.network.Count;
+            int actual = _sut.Network.Count;
 
             Assert.AreEqual(expected, actual);
         }

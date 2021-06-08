@@ -7,18 +7,18 @@ namespace Creature.Creature.NeuralNetworking
     [ExcludeFromCodeCoverage]
     public class ConnectionGene
     {
-        public NeuralNode fromNode;
-        public NeuralNode toNode;
-        public float weight;
-        public Boolean enabled = true;
-        public int innovationNo;
+        public NeuralNode FromNode;
+        public NeuralNode ToNode;
+        public float Weight;
+        public bool Enabled = true;
+        public int InnovationNo;
 
         public ConnectionGene(NeuralNode from, NeuralNode to, float weight, int inno)
         {
-            this.fromNode = from;
-            this.toNode = to;
-            this.weight = weight;
-            this.innovationNo = inno;
+            FromNode = from;
+            ToNode = to;
+            Weight = weight;
+            InnovationNo = inno;
         }
 
         public void MutateWeight()
@@ -27,23 +27,24 @@ namespace Creature.Creature.NeuralNetworking
             float rand2 = (float)random.NextDouble();
             if (rand2 < 0.3)
             {//30% of the time completely change the weight
-                weight = random.Next(-1, 1);
+                Weight = random.Next(-1, 1);
             }
             else
             {//otherwise slightly change it
-                weight += NextGaussian() / 50;
+                Weight += NextGaussian() / 50;
                 //keep weight between bounds
-                if (weight > 1)
+                if (Weight > 1)
                 {
-                    weight = 1;
+                    Weight = 1;
                 }
-                if (weight < -1)
+                if (Weight < -1)
                 {
-                    weight = -1;
+                    Weight = -1;
                 }
             }
         }
 
+        //P (X<=x) = 1/2 erfc((μ - x)/(sqrt(2) σ))
         private static float NextGaussian()
         {
             double mean = 100;
@@ -57,8 +58,8 @@ namespace Creature.Creature.NeuralNetworking
         //returns a copy of this connectionGene
         public ConnectionGene Clone(NeuralNode from, NeuralNode to)
         {
-            ConnectionGene clone = new ConnectionGene(from, to, weight, innovationNo);
-            clone.enabled = enabled;
+            ConnectionGene clone = new ConnectionGene(from, to, Weight, InnovationNo);
+            clone.Enabled = Enabled;
 
             return clone;
         }

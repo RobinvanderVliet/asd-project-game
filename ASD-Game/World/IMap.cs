@@ -12,5 +12,7 @@ namespace WorldGeneration
         void DeleteMap();
 
         ITile GetLoadedTileByXAndY(int x, int y);
+
+        void LoadArea(int playerX, int playerY, int viewDistance);
     }
 }

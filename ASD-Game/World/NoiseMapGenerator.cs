@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using Items;
+﻿using System.Diagnostics.CodeAnalysis;
 using WorldGeneration.Models;
 using WorldGeneration.Models.HazardousTiles;
 using WorldGeneration.Models.Interfaces;
@@ -53,7 +51,7 @@ namespace WorldGeneration
 
         public ITile GetTileFromNoise(float noise, int x, int y)
         {
-            // this function is public for unit testing purposes only.
+            y++;
             return (noise * 10) switch
             {
                 (< -8) => new WaterTile(x, y),

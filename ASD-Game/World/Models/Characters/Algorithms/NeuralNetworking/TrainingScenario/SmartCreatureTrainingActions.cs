@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
-using Creature.Creature.NeuralNetworking.TrainingScenario;
+﻿using Creature.Creature.NeuralNetworking.TrainingScenario;
 using Creature.Pathfinder;
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 
 namespace Creature.Creature.NeuralNetworking
 {
@@ -12,7 +11,7 @@ namespace Creature.Creature.NeuralNetworking
         private readonly Random _random = new Random();
         private readonly PathFinder _pathfinder;
 
-        public Stack<Node> path = new Stack<Node>();
+        public Stack<Node> Path = new Stack<Node>();
 
         public SmartCreatureTrainingActions(List<List<Node>> map)
         {
@@ -21,76 +20,77 @@ namespace Creature.Creature.NeuralNetworking
 
         public void Wander(SmartMonsterForTraining smartMonster)
         {
-            if (path == null || path.Count == 0)
+            if (Path == null || Path.Count == 0)
             {
-                int newXLoc = _random.Next(0, 29);
-                int newYLoc = _random.Next(0, 29);
+                int maxMapSize = 29;
+                int newXLoc = _random.Next(0, maxMapSize);
+                int newYLoc = _random.Next(0, maxMapSize);
 
                 Vector2 destination = new Vector2(newXLoc, newYLoc);
 
-                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
+                Path = _pathfinder.FindPath(smartMonster.CreatureData.Position, destination);
                 CheckPath(smartMonster);
             }
-            smartMonster.creatureData.Position = path.Pop().Position;
+            smartMonster.CreatureData.Position = Path.Pop().Position;
         }
 
         public void WalkUp(SmartMonsterForTraining smartMonster)
         {
-            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X, smartMonster.creatureData.Position.Y + 1);
+            Vector2 destination = new Vector2(smartMonster.CreatureData.Position.X, smartMonster.CreatureData.Position.Y + 1);
             if (IsValidMove(destination))
             {
-                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
+                Path = _pathfinder.FindPath(smartMonster.CreatureData.Position, destination);
                 CheckPath(smartMonster);
-                smartMonster.creatureData.Position = path.Pop().Position;
+                smartMonster.CreatureData.Position = Path.Pop().Position;
             }
         }
 
         public void WalkDown(SmartMonsterForTraining smartMonster)
         {
-            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X, smartMonster.creatureData.Position.Y - 1);
+            Vector2 destination = new Vector2(smartMonster.CreatureData.Position.X, smartMonster.CreatureData.Position.Y - 1);
             if (IsValidMove(destination))
             {
-                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
+                Path = _pathfinder.FindPath(smartMonster.CreatureData.Position, destination);
                 CheckPath(smartMonster);
-                smartMonster.creatureData.Position = path.Pop().Position;
+                smartMonster.CreatureData.Position = Path.Pop().Position;
             }
         }
 
         public void WalkLeft(SmartMonsterForTraining smartMonster)
         {
-            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X - 1, smartMonster.creatureData.Position.Y);
+            Vector2 destination = new Vector2(smartMonster.CreatureData.Position.X - 1, smartMonster.CreatureData.Position.Y);
             if (IsValidMove(destination))
             {
-                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
+                Path = _pathfinder.FindPath(smartMonster.CreatureData.Position, destination);
                 CheckPath(smartMonster);
-                smartMonster.creatureData.Position = path.Pop().Position;
+                smartMonster.CreatureData.Position = Path.Pop().Position;
             }
         }
 
         public void WalkRight(SmartMonsterForTraining smartMonster)
         {
-            Vector2 destination = new Vector2(smartMonster.creatureData.Position.X + 1, smartMonster.creatureData.Position.Y);
+            Vector2 destination = new Vector2(smartMonster.CreatureData.Position.X + 1, smartMonster.CreatureData.Position.Y);
             if (IsValidMove(destination))
             {
-                path = _pathfinder.FindPath(smartMonster.creatureData.Position, destination);
+                Path = _pathfinder.FindPath(smartMonster.CreatureData.Position, destination);
                 CheckPath(smartMonster);
-                smartMonster.creatureData.Position = path.Pop().Position;
+                smartMonster.CreatureData.Position = Path.Pop().Position;
             }
         }
 
         public void Attack(TrainerAI player, SmartMonsterForTraining smartmonster)
         {
-            if (player != null && IsAdjacent(player.location, smartmonster.creatureData.Position))
+            if (player != null && IsAdjacent(player.Location, smartmonster.CreatureData.Position))
             {
-                if (player.health < smartmonster.creatureData.Damage)
+                if (player.Health < smartmonster.CreatureData.Damage)
                 {
-                    smartmonster.DamageDealt = smartmonster.DamageDealt + smartmonster.creatureData.Damage;
+                    smartmonster.DamageDealt = smartmonster.DamageDealt + smartmonster.CreatureData.Damage;
                     smartmonster.EnemysKilled++;
                 }
                 else
                 {
-                    player.health = player.health - smartmonster.creatureData.Damage;
-                    smartmonster.DamageDealt = smartmonster.DamageDealt + smartmonster.creatureData.Damage;
+                    player.Health = player.Health - smartmonster.CreatureData.Damage;
+                    smartmonster.DamageDealt = smartmonster.DamageDealt + smartmonster.CreatureData.Damage;
                 }
             }
         }
@@ -107,19 +107,19 @@ namespace Creature.Creature.NeuralNetworking
         {
             if (monster != null)
             {
-                path = _pathfinder.FindPath(smartMonster.creatureData.Position, monster.location);
+                Path = _pathfinder.FindPath(smartMonster.CreatureData.Position, monster.Location);
                 CheckPath(smartMonster);
-                smartMonster.creatureData.Position = path.Pop().Position;
+                smartMonster.CreatureData.Position = Path.Pop().Position;
             }
         }
 
         public void TakeDamage(int damage, SmartMonsterForTraining smartMonster)
         {
             smartMonster.DamageTaken = damage;
-            smartMonster.creatureData.Health -= damage;
-            if (smartMonster.creatureData.Health <= 0)
+            smartMonster.CreatureData.Health -= damage;
+            if (smartMonster.CreatureData.Health <= 0)
             {
-                smartMonster.dead = true;
+                smartMonster.Dead = true;
             }
         }
 
@@ -131,9 +131,9 @@ namespace Creature.Creature.NeuralNetworking
 
         private void CheckPath(SmartMonsterForTraining smartMonster)
         {
-            if (path == null)
+            if (Path == null)
             {
-                smartMonster.score--;
+                smartMonster.Score--;
             }
         }
 

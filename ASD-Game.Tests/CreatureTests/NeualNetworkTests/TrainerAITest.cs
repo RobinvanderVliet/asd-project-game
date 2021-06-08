@@ -30,12 +30,15 @@ namespace Creature.Tests
         [Test]
         public void Test_Update_Attack()
         {
+            //arrange
             Vector2 location = new Vector2(15, 14);
             _sut = new TrainerAI(location, "player");
 
-            _sut.update(_smartTestMonster);
+            //act
+            _sut.Update(_smartTestMonster);
 
-            int expected = _sut.damage;
+            //assert
+            int expected = _sut.Damage;
             int actual = _smartTestMonster.DamageTaken;
 
             Assert.AreEqual(expected, actual);
@@ -44,12 +47,15 @@ namespace Creature.Tests
         [Test]
         public void Test_Update_Walk()
         {
+            //arrange
             Vector2 location = new Vector2(1, 1);
             _sut = new TrainerAI(location, "player");
 
-            _sut.update(_smartTestMonster);
+            //act
+            _sut.Update(_smartTestMonster);
 
-            Vector2 newLocation = _sut.location;
+            //assert
+            Vector2 newLocation = _sut.Location;
 
             Assert.AreNotEqual(location, newLocation);
         }

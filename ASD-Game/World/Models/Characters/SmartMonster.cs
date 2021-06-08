@@ -1,58 +1,58 @@
 ﻿using Creature.Creature.NeuralNetworking;
-using System;
 using Creature.Creature.NeuralNetworking.TrainingScenario;
+using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using WorldGeneration;
 using WorldGeneration.StateMachine.Data;
-using System.Numerics;
 
 namespace Creature.Creature
 {
     [ExcludeFromCodeCoverage]
     public class SmartMonster : Monster
     {
-        public MonsterData creatureData;
+        public MonsterData CreatureData;
         private DataGatheringService _dataGatheringService;
-        public SmartCreatureActions smartactions;
+        public SmartCreatureActions Smartactions;
 
         public Vector2 Destination { get; set; }
 
-        public Genome brain;
-        public Boolean replay = false;
+        public Genome Brain;
+        public bool Replay = false;
 
-        public static readonly int genomeInputs = 14;
-        public static readonly int genomeOutputs = 7;
+        public static readonly int GenomeInputs = 14;
+        public static readonly int GenomeOutputs = 7;
 
-        public float[] vision = new float[genomeInputs];
-        public float[] decision = new float[genomeOutputs];
+        public float[] Vision = new float[GenomeInputs];
+        public float[] Decision = new float[GenomeOutputs];
 
         //Data for fitnessCalculation
-        public int lifeSpan = 0;
+        public int LifeSpan = 0;
 
-        public Boolean dead = false;
+        public bool Dead = false;
         public int DamageDealt { get; set; } = 0;
         public int DamageTaken { get; set; } = 0;
         public int HealthHealed { get; set; } = 0;
         public int StatsGained { get; set; } = 0;
         public int EnemysKilled { get; set; } = 0;
 
-        public float currDistanceToPlayer;
-        public float currDistanceToMonster;
+        public float CurrDistanceToPlayer;
+        public float CurrDistanceToMonster;
 
         public SmartMonster(string name, int xPosition, int yPosition, string symbol, string id, DataGatheringService datagatheringservice) : base(name, xPosition, yPosition, symbol, id)
         {
-            creatureData = CreateMonsterData(0);
-            this._dataGatheringService = datagatheringservice;
-            this.smartactions = new SmartCreatureActions(this, datagatheringservice);
+            CreatureData = CreateMonsterData(0);
+            _dataGatheringService = datagatheringservice;
+            Smartactions = new SmartCreatureActions(this, datagatheringservice);
         }
 
         public void Update()
         {
             _dataGatheringService.CheckNewPosition(this);
             Destination = new Vector2(this.XPosition, this.YPosition);
-            if (!dead)
+            if (!Dead)
             {
-                lifeSpan++;
+                LifeSpan++;
                 Look();
                 Think();
             }
@@ -60,66 +60,42 @@ namespace Creature.Creature
 
         public void Look()
         {
-            //get smartMonster x cord
-            vision[0] = creatureData.Position.X;
-            //get smartMonster y cord
-            vision[1] = creatureData.Position.Y;
-            //get smartMonster damage
-            vision[2] = creatureData.Damage;
-            //get smartMonster health
-            vision[3] = (float)creatureData.Health;
-            //calculate closest player and monster
-            _dataGatheringService.ScanMap(this, creatureData.VisionRange);
-            //Needs to be player location in X and Y
-            //get distance to player
-            vision[4] = _dataGatheringService.distanceToClosestPlayer;
-            //get distance to monster
-            vision[5] = _dataGatheringService.distanceToClosestMonster;
+            Vision[0] = CreatureData.Position.X;
+            Vision[1] = CreatureData.Position.Y;
+            Vision[2] = CreatureData.Damage;
+            Vision[3] = (float)CreatureData.Health;
+            _dataGatheringService.ScanMap(this, CreatureData.VisionRange);
+            Vision[4] = _dataGatheringService.DistanceToClosestPlayer;
+            Vision[5] = _dataGatheringService.DistanceToClosestMonster;
 
-            if (_dataGatheringService.closestPlayer == null)
+            if (_dataGatheringService.ClosestPlayer == null)
             {
-                vision[6] = 0;
-                vision[7] = 0;
-                vision[8] = 0;
-                vision[9] = 0;
+                Vision[6] = 0;
+                Vision[7] = 0;
+                Vision[8] = 0;
+                Vision[9] = 0;
             }
             else
             {
-                //getplayerhealth
-                vision[6] = (float)_dataGatheringService.closestPlayer.Health;
-                //get player damage
-                vision[7] = 10;//TODO _dataGatheringService.closestPlayer.Damage;
-                //get player x location
-                vision[8] = _dataGatheringService.closestPlayer.XPosition;
-                //get player y location
-                vision[9] = _dataGatheringService.closestPlayer.YPosition;
+                Vision[6] = (float)_dataGatheringService.ClosestPlayer.Health;
+                Vision[7] = 10;//TODO _dataGatheringService.closestPlayer.Damage;
+                Vision[8] = _dataGatheringService.ClosestPlayer.XPosition;
+                Vision[9] = _dataGatheringService.ClosestPlayer.YPosition;
             }
-            if (_dataGatheringService.closestMonster == null)
+            if (_dataGatheringService.ClosestMonster == null)
             {
-                vision[10] = 0;
-                vision[11] = 0;
-                vision[12] = 0;
-                vision[13] = 0;
+                Vision[10] = 0;
+                Vision[11] = 0;
+                Vision[12] = 0;
+                Vision[13] = 0;
             }
             else
             {
-                //TODO
-                //getplayerhealth
-                vision[10] = (float)_dataGatheringService.closestMonster.Health;
-                //get player damage
-                vision[11] = 10;//TODO _dataGatheringService.closestMonster.Damage;
-                //get player x location
-                vision[12] = _dataGatheringService.closestMonster.XPosition;
-                //get player y location
-                vision[13] = _dataGatheringService.closestMonster.YPosition;
+                Vision[10] = (float)_dataGatheringService.ClosestMonster.Health;
+                Vision[11] = 10;//TODO _dataGatheringService.closestMonster.Damage;
+                Vision[12] = _dataGatheringService.ClosestMonster.XPosition;
+                Vision[13] = _dataGatheringService.ClosestMonster.YPosition;
             }
-            //get player stamina
-            //get monster stamina?
-            //get usabel item
-            //get distance to items
-            //get total player stats
-            //get total monster stats
-            //get attack range
         }
 
         public void Think()
@@ -127,58 +103,52 @@ namespace Creature.Creature
             float max = 0;
             int maxIndex = 0;
             //get the output of the neural network
-            decision = brain.FeedForward(vision);
+            Decision = Brain.FeedForward(Vision);
 
-            for (int i = 0; i < decision.Length; i++)
+            for (int i = 0; i < Decision.Length; i++)
             {
-                if (decision[i] > max)
+                if (Decision[i] > max)
                 {
-                    max = decision[i];
+                    max = Decision[i];
                     maxIndex = i;
                 }
             }
 
             if (max < 0.7)
             {
-                smartactions.Wander(this);
+                Smartactions.Wander(this);
                 return;
             }
 
             switch (maxIndex)
             {
                 case 0:
-                    //Attack action
-                    smartactions.Attack(_dataGatheringService.closestPlayer, this);
+                    Smartactions.Attack(_dataGatheringService.ClosestPlayer, this);
+                    Smartactions.Wander(this);
                     break;
 
                 case 1:
-                    //Flee action
-                    smartactions.Flee(_dataGatheringService.closestPlayer, this);
+                    Smartactions.Flee(_dataGatheringService.ClosestPlayer, this);
                     break;
 
                 case 2:
-                    smartactions.RunToMonster(_dataGatheringService.closestMonster, this);
-                    //Run to Monster action
+                    Smartactions.RunToMonster(_dataGatheringService.ClosestMonster, this);
                     break;
 
                 case 3:
-                    //Move up action
-                    smartactions.WalkUp(this);
+                    Smartactions.WalkUp(this);
                     break;
 
                 case 4:
-                    //Move down action
-                    smartactions.WalkDown(this);
+                    Smartactions.WalkDown(this);
                     break;
 
                 case 5:
-                    //Move left action
-                    smartactions.WalkLeft(this);
+                    Smartactions.WalkLeft(this);
                     break;
 
                 case 6:
-                    //Move right action
-                    smartactions.WalkRight(this);
+                    Smartactions.WalkRight(this);
                     break;
             }
         }

@@ -1,10 +1,9 @@
 ﻿using Creature.Creature;
 using System.Collections.Generic;
-using System.Numerics;
+using System.IO;
 using WorldGeneration.Models.Interfaces;
 using System.Linq;
 using UserInterface;
-using System.Timers;
 
 namespace WorldGeneration
 {
@@ -17,30 +16,39 @@ namespace WorldGeneration
         public List<Character> movesList = new List<Character>();
 
         private readonly int _viewDistance;
-        private IScreenHandler _screenHandler;
-        private Timer AIUpdateTimer;
+        private readonly IScreenHandler _screenHandler;
+        private static readonly char _separator = Path.DirectorySeparatorChar;
 
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler)
         {
             _players = new();
             _creatures = new();
-            _map = mapFactory.GenerateMap(seed);
+            var currentDirectory = Directory.GetCurrentDirectory();
+            _map = MapFactory.GenerateMap(dbLocation: $"Filename={currentDirectory}{_separator}ChunkDatabase.db;connection=shared;", seed: seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
-            AIUpdateTimer = new Timer(2000);
-            CheckAITimer();
             DeleteMap();
         }
 
-        public void UpdateCharacterPosition(string id, int newXPosition, int newYPosition)
+        public Player GetPlayer(string id)
         {
-            var player = _players.FirstOrDefault(x => x.Id == id);
-            if (player != null)
+            return _players.Find(x => x.Id == id);
+        }
+
+        public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
+        {
+            if (CurrentPlayer.Id == userId)
             {
+                CurrentPlayer.XPosition = newXPosition;
+                CurrentPlayer.YPosition = newYPosition;
+            }
+            else if (GetPlayer(userId) != null)
+            {
+                var player = GetPlayer(userId);
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
-            var creature = _creatures.FirstOrDefault(x => x.Id == id);
+            var creature = _creatures.FirstOrDefault(x => x.Id == userId);
             if (creature != null)
             {
                 creature.XPosition = newXPosition;
@@ -70,9 +78,23 @@ namespace WorldGeneration
             if (CurrentPlayer != null && _players != null && _creatures != null)
             {
                 var characters = ((IEnumerable<Character>)_players).Concat(_creatures).ToList();
-                //_screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
-                _map.DisplayMap(CurrentPlayer, _viewDistance, characters);
+                _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
             }
+        }
+
+        public void DeleteMap()
+        {
+            _map.DeleteMap();
+        }
+
+        public ITile GetLoadedTileByXAndY(int x, int y)
+        {
+            return _map.GetLoadedTileByXAndY(x, y);
+        }
+
+        public bool CheckIfCharacterOnTile(ITile tile)
+        {
+            return GetAllCharacters().Exists(player => player.XPosition == tile.XPosition && player.YPosition == tile.YPosition);
         }
 
         public char[,] GetMapAroundCharacter(Character character)
@@ -81,9 +103,15 @@ namespace WorldGeneration
             return _map.GetMapAroundCharacter(character, _viewDistance, characters);
         }
 
-        public void DeleteMap()
+        private List<Character> GetAllCharacters()
         {
-            _map.DeleteMap();
+            List<Character> characters = _players.Cast<Character>().ToList();
+            return characters;
+        }
+
+        public void LoadArea(int playerX, int playerY, int viewDistance)
+        {
+            _map.LoadArea(playerX, playerY, viewDistance);
         }
 
         public void UpdateAI()
@@ -93,24 +121,12 @@ namespace WorldGeneration
             {
                 if (monster is SmartMonster smartMonster)
                 {
-                    UpdateSmartMonster(smartMonster);
+                    if (smartMonster.Brain != null)
+                    {
+                        UpdateSmartMonster(smartMonster);
+                    }
                 }
             }
-            UpdateMap();
-        }
-
-        private void CheckAITimer()
-        {
-            AIUpdateTimer.AutoReset = true;
-            AIUpdateTimer.Elapsed += CheckAITimerEvent;
-            AIUpdateTimer.Start();
-        }
-
-        private void CheckAITimerEvent(object sender, ElapsedEventArgs e)
-        {
-            AIUpdateTimer.Stop();
-            UpdateAI();
-            AIUpdateTimer.Start();
         }
 
         private void UpdateSmartMonster(SmartMonster smartMonster)
@@ -119,9 +135,16 @@ namespace WorldGeneration
             movesList.Add(smartMonster);
         }
 
-        public Player GetPlayer(string id)
+        public Character GetAI(string id)
         {
-            return _players.Find(x => x.Id == id);
+            foreach (Character ai in _creatures)
+            {
+                if (ai.Id == id)
+                {
+                    return ai;
+                }
+            }
+            return null;
         }
 
         public ITile GetCurrentTile()
@@ -132,6 +155,11 @@ namespace WorldGeneration
         public ITile GetTileForPlayer(Player player)
         {
             return _map.GetLoadedTileByXAndY(player.XPosition, player.YPosition);
+        }
+
+        public List<Player> GetAllPlayers()
+        {
+            return _players;
         }
     }
 }

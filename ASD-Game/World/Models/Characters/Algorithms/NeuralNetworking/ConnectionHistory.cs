@@ -7,29 +7,29 @@ namespace Creature.Creature.NeuralNetworking
     [ExcludeFromCodeCoverage]
     public class ConnectionHistory
     {
-        public int fromNode;
-        public int toNode;
-        public int innovationNumber;
+        public int FromNode;
+        public int ToNode;
+        public int InnovationNumber;
 
-        public List<int> innovationNumbers;
+        public List<int> InnovationNumbers;
 
         public ConnectionHistory(int from, int to, int inno, List<int> innovationNos)
         {
-            fromNode = from;
-            toNode = to;
-            innovationNumber = inno;
-            innovationNumbers = innovationNos;
+            FromNode = from;
+            ToNode = to;
+            InnovationNumber = inno;
+            InnovationNumbers = innovationNos;
         }
 
         //returns whether the genome matches the original genome and the connection is between the same nodes
-        public Boolean Matches(Genome genome, NeuralNode from, NeuralNode to)
+        public bool Matches(Genome genome, NeuralNode from, NeuralNode to)
         {
-            if (genome.genes.Count == innovationNumbers.Count && (from.number == fromNode && to.number == toNode))
+            if (genome.Genes.Count == InnovationNumbers.Count && (from.Number == FromNode && to.Number == ToNode))
             {
                 //next check if all the innovation numbers match from the genome
-                for (int i = 0; i < genome.genes.Count; i++)
+                for (int i = 0; i < genome.Genes.Count; i++)
                 {
-                    if (!innovationNumbers.Contains(genome.genes[i].innovationNo))
+                    if (!InnovationNumbers.Contains(genome.Genes[i].InnovationNo))
                     {
                         return false;
                     }

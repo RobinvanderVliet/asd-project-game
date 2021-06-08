@@ -1,34 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
 using WorldGeneration.StateMachine.Data;
 
 namespace Creature.Creature.NeuralNetworking
 {
     public class Population
     {
-        public List<SmartMonsterForTraining> pop = new List<SmartMonsterForTraining>();
-        public SmartMonsterForTraining bestSmartMonster;//the best ever SmartMonster
-        public int bestScore = 0;//the score of the best ever SmartMonster
-        public int gen;
-        public List<ConnectionHistory> innovationHistory = new List<ConnectionHistory>();
-        public List<SmartMonsterForTraining> genSmartMonsters = new List<SmartMonsterForTraining>();
-        public List<Species> species = new List<Species>();
+        public List<SmartMonsterForTraining> Pop = new List<SmartMonsterForTraining>();
+        public SmartMonsterForTraining BestSmartMonster;//the best ever SmartMonster
+        public int BestScore = 0;//the score of the best ever SmartMonster
+        public int Gen;
+        public List<ConnectionHistory> InnovationHistory = new List<ConnectionHistory>();
+        public List<SmartMonsterForTraining> GenSmartMonsters = new List<SmartMonsterForTraining>();
+        public List<Species> Species = new List<Species>();
 
-        public Boolean massExtinctionEvent = false;
-        public Boolean newStage = false;
-        public readonly Boolean showNothing = false;
-        public int populationLife = 0;
+        public bool MassExtinctionEvent = false;
+        public bool NewStage = false;
+        public readonly bool ShowNothing = false;
+        public int PopulationLife = 0;
 
         //constructor
         public Population(int size, MonsterData creatureData)
         {
             for (int i = 0; i < size; i++)
             {
-                pop.Add(new SmartMonsterForTraining("trainee", 14, 14, "D", "hkljubadfilkubh"));
-                pop[i].brain.GenerateNetwork();
-                pop[i].brain.Mutate(innovationHistory);
+                Pop.Add(new SmartMonsterForTraining("trainee", 14, 14, "D", "id"));
+                Pop[i].Brain.GenerateNetwork();
+                Pop[i].Brain.Mutate(InnovationHistory);
             }
         }
 
@@ -37,9 +36,9 @@ namespace Creature.Creature.NeuralNetworking
         {
             for (int i = 0; i < size; i++)
             {
-                pop.Add(new SmartMonsterForTraining("trainee", 14, 14, "D", "hkljubadfilkubh"));
-                pop[i].brain = gene;
-                pop[i].brain.Mutate(innovationHistory);
+                Pop.Add(new SmartMonsterForTraining("trainee", 14, 14, "D", "id"));
+                Pop[i].Brain = gene;
+                Pop[i].Brain.Mutate(InnovationHistory);
             }
         }
 
@@ -47,28 +46,28 @@ namespace Creature.Creature.NeuralNetworking
         [ExcludeFromCodeCoverage]
         public void UpdateAlive()
         {
-            populationLife++;
-            for (int i = 0; i < pop.Count; i++)
+            PopulationLife++;
+            for (int i = 0; i < Pop.Count; i++)
             {
-                if (!pop[i].dead)
+                if (!Pop[i].Dead)
                 {
-                    pop[i].Look();//get inputs for brain
-                    pop[i].Think();//use outputs from neural network
-                    pop[i].Update();//move the SmartMonster according to the outputs from the neural network
-                    if (!showNothing)
+                    Pop[i].Look();//get inputs for brain
+                    Pop[i].Think();//use outputs from neural network
+                    Pop[i].Update();//move the SmartMonster according to the outputs from the neural network
+                    if (!ShowNothing)
                     {
-                        pop[i].Show();
+                        Pop[i].Show();
                     }
                 }
             }
         }
 
-        //returns true if all the SmartMonsters are dead      sad
-        public Boolean Done()
+        //returns true if all the SmartMonsters are dead
+        public bool Done()
         {
-            for (int i = 0; i < pop.Count; i++)
+            for (int i = 0; i < Pop.Count; i++)
             {
-                if (!pop[i].dead)
+                if (!Pop[i].Dead)
                 {
                     return false;
                 }
@@ -79,18 +78,16 @@ namespace Creature.Creature.NeuralNetworking
         //sets the best SmartMonster globally and for this gen
         private void SetBestSmartMonster()
         {
-            SmartMonsterForTraining tempBest = species[0].creatures[0];
-            tempBest.gen = gen;
+            SmartMonsterForTraining tempBest = Species[0].Creatures[0];
+            tempBest.Gen = Gen;
 
             //if best this gen is better than the global best score then set the global best as the best this gen
 
-            if (tempBest.score > bestScore)
+            if (tempBest.Score > BestScore)
             {
-                genSmartMonsters.Add(tempBest.CloneForReplay());
-                bestScore = tempBest.score;
-                bestSmartMonster = tempBest.CloneForReplay();
-                //bestSmartMonster.brain.PrintGenome();
-                //Console.WriteLine("bestscore = " + bestScore);
+                GenSmartMonsters.Add(tempBest.CloneForReplay());
+                BestScore = tempBest.Score;
+                BestSmartMonster = tempBest.CloneForReplay(); ;
             }
         }
 
@@ -100,10 +97,10 @@ namespace Creature.Creature.NeuralNetworking
             Speciate();//seperate the population into species
             CalculateFitness();//calculate the fitness of each SmartMonster
             SortSpecies();//sort the species to be ranked in fitness order, best first
-            if (massExtinctionEvent)
+            if (MassExtinctionEvent)
             {
                 MassExtinction();
-                massExtinctionEvent = false;
+                MassExtinctionEvent = false;
             }
             CullSpecies();//kill off the bottom half of each species
             SetBestSmartMonster();//save the best SmartMonster of this gen
@@ -112,60 +109,60 @@ namespace Creature.Creature.NeuralNetworking
 
             float averageSum = GetAvgFitnessSum();
             List<SmartMonsterForTraining> children = new List<SmartMonsterForTraining>();//the next generation
-            for (int j = 0; j < species.Count; j++)
+            for (int j = 0; j < Species.Count; j++)
             {
                 //for each species
-                children.Add(species[j].champ.Clone());//add champion without any mutation
+                children.Add(Species[j].Champ.Clone());//add champion without any mutation
 
-                int NoOfChildren = (int)((species[j].averageFitness / averageSum * pop.Count) - 1);//the number of children this species is allowed, note -1 is because the champ is already added
+                int NoOfChildren = (int)((Species[j].AverageFitness / averageSum * Pop.Count) - 1);//the number of children this species is allowed, note -1 is because the champ is already added
                 for (int i = 0; i < NoOfChildren; i++)
                 {//get the calculated amount of children from this species
-                    children.Add(species[j].GiveMeBaby(innovationHistory));
+                    children.Add(Species[j].GiveMeBaby(InnovationHistory));
                 }
             }
 
-            while (children.Count < pop.Count)
+            while (children.Count < Pop.Count)
             {//if not enough babies (due to flooring the number of children to get a whole int)
-                children.Add(species[0].GiveMeBaby(innovationHistory));//get babies from the best species
+                children.Add(Species[0].GiveMeBaby(InnovationHistory));//get babies from the best species
             }
-            pop.Clear();
-            pop = children; //set the children as the current population
-            foreach (SmartMonsterForTraining child in pop)
+            Pop.Clear();
+            Pop = children; //set the children as the current population
+            foreach (SmartMonsterForTraining child in Pop)
             {
-                child.creatureData = RestoreMonster();
+                child.CreatureData = RestoreMonster();
             }
-            gen += 1;
-            for (int i = 0; i < pop.Count; i++)
+            Gen += 1;
+            for (int i = 0; i < Pop.Count; i++)
             {
                 //generate networks for each of the children
-                pop[i].brain.GenerateNetwork();
+                Pop[i].Brain.GenerateNetwork();
             }
 
-            populationLife = 0;
+            PopulationLife = 0;
         }
 
         //seperate population into species based on how similar they are to the leaders of each species in the previous gen
         private void Speciate()
         {
-            foreach (Species s in species)
+            foreach (Species s in Species)
             {//empty species
-                s.creatures.Clear();
+                s.Creatures.Clear();
             }
-            for (int i = 0; i < pop.Count; i++)
+            for (int i = 0; i < Pop.Count; i++)
             {//for each SmartMonster
                 Boolean speciesFound = false;
-                foreach (Species s in species)
+                foreach (Species s in Species)
                 {//for each species
-                    if (s.SameSpecies(pop[i].brain))
+                    if (s.SameSpecies(Pop[i].Brain))
                     {//if the SmartMonster is similar enough to be considered in the same species
-                        s.AddToSpecies(pop[i]);//add it to the species
+                        s.AddToSpecies(Pop[i]);//add it to the species
                         speciesFound = true;
                         break;
                     }
                 }
                 if (!speciesFound)
                 {//if no species was similar enough then add a new species with this as its champion
-                    species.Add(new Species(pop[i]));
+                    Species.Add(new Species(Pop[i]));
                 }
             }
         }
@@ -173,9 +170,9 @@ namespace Creature.Creature.NeuralNetworking
         //calculates the fitness of all of the SmartMonsters
         private void CalculateFitness()
         {
-            for (int i = 1; i < pop.Count; i++)
+            for (int i = 1; i < Pop.Count; i++)
             {
-                pop[i].CalculateFitness();
+                Pop[i].CalculateFitness();
             }
         }
 
@@ -183,41 +180,41 @@ namespace Creature.Creature.NeuralNetworking
         private void SortSpecies()
         {
             //sort the SmartMonsters within a species
-            foreach (Species s in species)
+            foreach (Species s in Species)
             {
                 s.SortSpecies();
             }
 
             //sort the species by the fitness of its best SmartMonster
-            //using selection sort like a loser
+            //using selection sort like a bad programmer :)
             List<Species> temp = new List<Species>();
-            for (int i = 0; i < species.Count; i++)
+            for (int i = 0; i < Species.Count; i++)
             {
                 float max = 0;
                 int maxIndex = 0;
-                for (int j = 0; j < species.Count; j++)
+                for (int j = 0; j < Species.Count; j++)
                 {
-                    if (species[j].bestFitness > max)
+                    if (Species[j].BestFitness > max)
                     {
-                        max = species[j].bestFitness;
+                        max = Species[j].BestFitness;
                         maxIndex = j;
                     }
                 }
-                temp.Add(species[maxIndex]);
-                species.RemoveAt(maxIndex);
+                temp.Add(Species[maxIndex]);
+                Species.RemoveAt(maxIndex);
                 i--;
             }
-            species = temp;
+            Species = temp;
         }
 
         //kills all species which haven't improved in 15 generations
         private void KillStaleSpecies()
         {
-            for (int i = 2; i < species.Count; i++)
+            for (int i = 2; i < Species.Count; i++)
             {
-                if (species[i].staleness >= 15)
+                if (Species[i].Staleness >= 15)
                 {
-                    species.RemoveAt(i);
+                    Species.RemoveAt(i);
                     i--;
                 }
             }
@@ -228,11 +225,11 @@ namespace Creature.Creature.NeuralNetworking
         {
             float averageSum = GetAvgFitnessSum();
 
-            for (int i = 1; i < species.Count; i++)
+            for (int i = 1; i < Species.Count; i++)
             {
-                if (species[i].averageFitness / averageSum * pop.Count < 1)
+                if (Species[i].AverageFitness / averageSum * Pop.Count < 1)
                 {//if wont be given a single child
-                    species.RemoveAt(i);//sad
+                    Species.RemoveAt(i);//sad
                     i--;
                 }
             }
@@ -242,9 +239,9 @@ namespace Creature.Creature.NeuralNetworking
         private float GetAvgFitnessSum()
         {
             float averageSum = 0;
-            foreach (Species s in species)
+            foreach (Species s in Species)
             {
-                averageSum += s.averageFitness;
+                averageSum += s.AverageFitness;
             }
             return averageSum;
         }
@@ -252,7 +249,7 @@ namespace Creature.Creature.NeuralNetworking
         //kill the bottom half of each species
         private void CullSpecies()
         {
-            foreach (Species s in species)
+            foreach (Species s in Species)
             {
                 s.Cull(); //kill bottom half
                 s.FitnessSharing();//also while we're at it lets do fitness sharing
@@ -262,9 +259,9 @@ namespace Creature.Creature.NeuralNetworking
 
         private void MassExtinction()
         {
-            for (int i = 5; i < species.Count; i++)
+            for (int i = 5; i < Species.Count; i++)
             {
-                species.RemoveAt(i);//sad
+                Species.RemoveAt(i);//sad
                 i--;
             }
         }

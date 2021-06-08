@@ -1,6 +1,5 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
 using LiteDB;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DatabaseHandler.POCO
 {
@@ -9,6 +8,7 @@ namespace DatabaseHandler.POCO
     {
         [BsonId]
         public string GameGUID { get; set; }
+
         public string PlayerGUIDHost { get; set; }
         public int Seed { get; set; }
     }

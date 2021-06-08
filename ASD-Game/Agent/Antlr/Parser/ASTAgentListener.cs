@@ -1,12 +1,11 @@
-
-using Antlr4.Runtime.Misc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Agent.Antlr.Ast;
 using Agent.Antlr.Ast.Comparables;
 using Agent.Antlr.Ast.Comparables.Subjects;
 using Agent.Antlr.Grammar;
+using Antlr4.Runtime.Misc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Action = Agent.Antlr.Ast.Action;
 
 namespace Agent.Antlr.Parser
@@ -23,7 +22,10 @@ namespace Agent.Antlr.Parser
             _currentContainer = new Stack<Node>();
         }
 
-        public AST GetAST() { return _ast; }
+        public AST GetAST()
+        {
+            return _ast;
+        }
 
         public override void EnterAction([NotNull] AgentConfigurationParser.ActionContext context)
         {
@@ -106,7 +108,6 @@ namespace Agent.Antlr.Parser
             Subject subject = (Subject)context.children.Where(c => c.GetText() != null).FirstOrDefault();
             _currentContainer.Push(subject);
         }
-
 
         public override void EnterSubjectStat([NotNull] AgentConfigurationParser.SubjectStatContext context)
         {
@@ -222,7 +223,6 @@ namespace Agent.Antlr.Parser
         {
             base.ExitSubject(context);
         }
-
 
         public override void EnterNpc([NotNull] AgentConfigurationParser.NpcContext context)
         {

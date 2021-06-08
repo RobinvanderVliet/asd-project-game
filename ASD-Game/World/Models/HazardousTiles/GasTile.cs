@@ -8,12 +8,12 @@ namespace WorldGeneration.Models.HazardousTiles
     [ExcludeFromCodeCoverage]
     public class GasTile : IHazardousTile
     {
-        
         public bool IsAccessible { get; set; }
         public string Symbol { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
         public List<Item> ItemsOnTile { get; set; }
+        public int StaminaCost { get; set; }
 
         public GasTile(int x, int y, int radius = 1)
         {
@@ -22,6 +22,8 @@ namespace WorldGeneration.Models.HazardousTiles
             IsAccessible = true;
             XPosition = x;
             YPosition = y;
+            StaminaCost = 4;
+
             Radius = radius;
             ItemsOnTile = new List<Item>();
         }

@@ -17,6 +17,7 @@ namespace WorldGeneration.Models
         public Chunk()
         {
         }
+
         public Chunk(int x, int y, ITile[] map, int rowSize, int seed)
         {
             X = x;
@@ -24,6 +25,25 @@ namespace WorldGeneration.Models
             Map = map;
             RowSize = rowSize;
             Seed = seed;
+        }
+
+        public int GetPositionInTileArrayByWorldCoordinates(int x, int y)
+        {
+            var yPos = Math.Abs(y);
+            var chunkYPos = Math.Abs(Y);
+            while (x < 0)
+            {
+                x = x + RowSize;
+            }
+            var y1 = (RowSize * RowSize - RowSize) - (Math.Abs(chunkYPos * RowSize - yPos) * RowSize);
+            var x1 = x % RowSize;
+
+            return x1 + y1;
+        }
+
+        public ITile GetTileByWorldCoordinates(int x, int y)
+        {
+            return Map[GetPositionInTileArrayByWorldCoordinates(x, y)];
         }
 
         public bool Equals(Chunk other)
@@ -48,7 +68,7 @@ namespace WorldGeneration.Models
             if (obj.GetType() != GetType())
                 return false;
 
-            return Equals((Chunk) obj);
+            return Equals((Chunk)obj);
         }
 
         public override int GetHashCode()

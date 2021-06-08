@@ -6,10 +6,10 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
     [ExcludeFromCodeCoverage]
     public class TrainingScenario
     {
-        public Population pop;
-        public Genome bestGene;
-        public bool runTraining = false;
-        public bool runOnce = false;
+        public Population Pop;
+        public Genome BestGene;
+        public bool RunTraining = false;
+        public bool RunOnce = false;
 
         public void StartTraining()
         {
@@ -26,8 +26,8 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                 14,
                 0
             );
-            pop = new Population(50, data);
-            runTraining = true;
+            Pop = new Population(50, data);
+            RunTraining = true;
         }
 
         public void ContinueTraining(Genome gene)
@@ -39,36 +39,36 @@ namespace Creature.Creature.NeuralNetworking.TrainingScenario
                 14,
                 0
             );
-            pop = new Population(50, data, gene);
-            runTraining = true;
+            Pop = new Population(50, data, gene);
+            RunTraining = true;
         }
 
         public void RunTrainingScenarios()
         {
-            while (runTraining || runOnce)
+            while (RunTraining || RunOnce)
             {
-                if (!pop.Done())
+                if (!Pop.Done())
                 {
                     //if any players are alive then update them
-                    pop.UpdateAlive();
+                    Pop.UpdateAlive();
                 }
                 else
                 {
                     //all dead
                     //genetic algorithm
-                    pop.NaturalSelection();
-                    if (pop.bestSmartMonster != null)
+                    Pop.NaturalSelection();
+                    if (Pop.BestSmartMonster != null)
                     {
-                        bestGene = pop.bestSmartMonster.brain;
+                        BestGene = Pop.BestSmartMonster.Brain;
                     }
                 }
-                runOnce = false;
+                RunOnce = false;
             }
         }
 
-        public Genome brainTransplant()
+        public Genome BrainTransplant()
         {
-            return bestGene;
+            return BestGene;
         }
 
         public MonsterData SetMonsterData()

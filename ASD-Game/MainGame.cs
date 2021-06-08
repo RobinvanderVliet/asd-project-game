@@ -1,5 +1,5 @@
-using System;
 using InputHandling;
+using System;
 using UserInterface;
 
 namespace ASD_project
@@ -20,7 +20,6 @@ namespace ASD_project
 
             public void Run()
             {
-
                 if (!DEBUG_INTERFACE)
                 {
                     _screenHandler.TransitionTo(new StartScreen());
@@ -44,7 +43,7 @@ namespace ASD_project
                         {
                             _inputHandler.HandleGameScreenCommands();
                         }
-                        else if (currentScreen is LobbyScreen) 
+                        else if (currentScreen is LobbyScreen)
                         {
                             _inputHandler.HandleLobbyScreenCommands();
                         }

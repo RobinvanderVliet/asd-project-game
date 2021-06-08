@@ -4,7 +4,7 @@ namespace WorldGeneration.StateMachine.CustomRuleSet
 {
     public class RuleSet
     {
-        Dictionary<string, string> _ruleSet { get; }
+        private Dictionary<string, string> _ruleSet { get; }
 
         public RuleSet(Dictionary<string, string> RuleSet)
         {

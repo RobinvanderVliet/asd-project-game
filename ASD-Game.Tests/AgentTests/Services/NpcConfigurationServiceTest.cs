@@ -1,8 +1,7 @@
 ﻿using Agent.Mapper;
 using Agent.Models;
 using Agent.Services;
-
-//using InputHandling;
+using InputHandling;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -14,12 +13,10 @@ namespace Agent.Tests.Services
     [ExcludeFromCodeCoverage]
     public class NpcConfigurationServiceTest
     {
-        private object _mockedRetriever;
         private NpcConfigurationService _sut;
         private Mock<FileHandler> _fileHandlerMock;
         private Mock<Pipeline> _pipelineMock;
-
-        //private Mock<InputHandler> _mockedRetriever;
+        private Mock<InputHandler> _mockedRetriever;
         private FileHandler _handler;
 
         [SetUp]
@@ -39,7 +36,7 @@ namespace Agent.Tests.Services
         {
             //Arrange
             var filepath = _handler.GetBaseDirectory() + "/Resource/npcFileTest.txt";
-
+            
             //Act
             _sut.CreateConfiguration("TestNPCName", filepath);
 
@@ -48,18 +45,18 @@ namespace Agent.Tests.Services
             Assert.AreEqual(_sut.GetConfigurations()[0].GetSetting("aggressiveness"), "high");
         }
 
-        [Test]
-        public void Test_Configure_CatchesSyntaxError()
-        {
-            //Arrange
-            //_mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns("incorrect:code").Returns("cancel");
+        //[Test]
+        //public void Test_Configure_CatchesSyntaxError()
+        //{
+        //    //Arrange
+        //    _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns("incorrect:code").Returns("cancel");
 
-            //Act
-            _sut.Configure();
+        //    //Act
+        //    _sut.Configure();
 
-            //Assert
-            Assert.AreEqual("missing '=' at 'code'", _sut.LastError);
-        }
+        //    //Assert
+        //    Assert.AreEqual("missing '=' at 'code'", _sut.LastError);
+        //}
 
         //Deze test moet getest worden zodra er een checker is
         //[Test]
@@ -80,17 +77,17 @@ namespace Agent.Tests.Services
         //    Assert.AreEqual(error, _sut.LastError);
         //}
 
-        [Test]
-        public void Test_Configure_SavesFileInNpcFolder()
-        {
-            //Arrange
-            //_mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns("aggressiveness=high");
+        //[Test]
+        //public void Test_Configure_SavesFileInNpcFolder()
+        //{
+        //    //Arrange
+        //    _mockedRetriever.SetupSequence(x => x.GetCommand()).Returns("zombie").Returns("aggressiveness=high");
 
-            //Act
-            _sut.Configure();
+        //    //Act
+        //    _sut.Configure();
 
-            //Assert
-            _fileHandlerMock.Verify(x => x.ExportFile(It.IsAny<String>(), It.IsAny<String>()), Times.Exactly(1));
-        }
+        //    //Assert
+        //    _fileHandlerMock.Verify(x => x.ExportFile(It.IsAny<String>(), It.IsAny<String>()), Times.Exactly(1));
+        //}
     }
 }

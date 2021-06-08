@@ -1,8 +1,5 @@
-﻿using Agent.Exceptions;
-using Agent.Mapper;
+﻿using Agent.Mapper;
 using Agent.Models;
-using Serilog;
-using System;
 using System.Collections.Generic;
 
 namespace Agent.Services

@@ -7,11 +7,11 @@ namespace InputHandling.Antlr.Ast.Actions
     {
         private Message _message;
         private Username _username;
-        
+
         [ExcludeFromCodeCoverage]
         public Message Message { get => _message; private set => _message = value; }
         public Username Username { get => _username; private set => _username = value; }
-        
+
         [ExcludeFromCodeCoverage]
         public ArrayList GetChildren()
         {
@@ -25,11 +25,11 @@ namespace InputHandling.Antlr.Ast.Actions
         {
             if (child is Message)
             {
-                _message = (Message) child;
-            } 
+                _message = (Message)child;
+            }
             else if (child is Username)
             {
-                _username = (Username) child;
+                _username = (Username)child;
             }
 
             return this;
