@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace NeuralNetworking
+namespace World.Models.Characters.Algorithms.NeuralNetworking
 {
     public class NeuralNode
     {

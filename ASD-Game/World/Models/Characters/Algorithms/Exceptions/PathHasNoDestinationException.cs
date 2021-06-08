@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Character.Exceptions
+namespace Character.Algorithms.Exceptions
 {
     [ExcludeFromCodeCoverage]
     [Serializable]
@@ -9,7 +9,6 @@ namespace Character.Exceptions
     {
         public PathHasNoDestinationException() : base()
         {
-
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using NeuralNetworking.TrainingScenario;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
-namespace NeuralNetworking
+namespace World.Models.Characters.Algorithms.NeuralNetworking
 {
     public class Species
     {

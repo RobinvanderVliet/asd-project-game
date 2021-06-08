@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UserInterface;
 using Characters;
-using NeuralNetworking;
+using World.Models.Characters.Algorithms.NeuralNetworking;
 
 namespace WorldGeneration
 {

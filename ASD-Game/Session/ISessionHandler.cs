@@ -1,5 +1,5 @@
-﻿using NeuralNetworking.TrainingScenario;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
 namespace Session
 {

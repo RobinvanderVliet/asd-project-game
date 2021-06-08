@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using WorldGeneration;
 
-namespace NeuralNetworking.TrainingScenario
+namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
 {
     //Functionality already covered in the DataGatheringServiceForTraining
     [ExcludeFromCodeCoverage]

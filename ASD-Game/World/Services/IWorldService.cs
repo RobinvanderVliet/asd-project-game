@@ -1,9 +1,7 @@
-using NeuralNetworking;
 using WorldGeneration.Models.Interfaces;
 using System.Collections.Generic;
 using Items;
-
-using NeuralNetworking;
+using World.Models.Characters.Algorithms.NeuralNetworking;
 
 namespace WorldGeneration
 {

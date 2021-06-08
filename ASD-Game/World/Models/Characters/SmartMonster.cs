@@ -1,7 +1,7 @@
-﻿using NeuralNetworking;
-using NeuralNetworking.TrainingScenario;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using World.Models.Characters.Algorithms.NeuralNetworking;
+using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 using WorldGeneration;
 using WorldGeneration.StateMachine.Data;
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Character;
 
-namespace NeuralNetworking.TrainingScenario
+namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
 {
     public class SmartCreatureTrainingActions
     {

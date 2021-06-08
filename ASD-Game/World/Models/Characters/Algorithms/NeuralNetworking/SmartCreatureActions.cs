@@ -1,14 +1,13 @@
-﻿using NeuralNetworking.TrainingScenario;
-using Character.Pathfinder;
+﻿using Character.Pathfinder;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using WorldGeneration;
 using Characters;
 using Character;
+using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
-namespace NeuralNetworking
+namespace World.Models.Characters.Algorithms.NeuralNetworking
 {
     //Functionality already covered in the SmartCreatureTrainingActions
     [ExcludeFromCodeCoverage]

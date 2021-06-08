@@ -1,4 +1,3 @@
-using NeuralNetworking.TrainingScenario;
 using Messages;
 using Network;
 using Network.DTO;
@@ -11,6 +10,7 @@ using System.Linq;
 using System.Threading;
 using System.Timers;
 using UserInterface;
+using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 using WorldGeneration;
 using Timer = System.Timers.Timer;
 

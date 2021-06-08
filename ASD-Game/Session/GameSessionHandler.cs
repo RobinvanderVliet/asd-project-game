@@ -1,5 +1,4 @@
 using ActionHandling;
-using NeuralNetworking.TrainingScenario;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Items;
@@ -17,6 +16,7 @@ using WorldGeneration;
 using WorldGeneration.Models;
 using WorldGeneration.StateMachine;
 using Characters;
+using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
 namespace Session
 {

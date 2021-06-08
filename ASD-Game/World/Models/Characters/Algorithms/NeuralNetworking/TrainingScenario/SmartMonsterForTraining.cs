@@ -1,10 +1,8 @@
-﻿using NeuralNetworking;
-using NeuralNetworking.TrainingScenario;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using WorldGeneration;
 using WorldGeneration.StateMachine.Data;
 
-namespace NeuralNetworking.TrainingScenario
+namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
 {
     [ExcludeFromCodeCoverage]
     public class SmartMonsterForTraining : Monster
