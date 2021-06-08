@@ -12,5 +12,6 @@ namespace DatabaseHandler.POCO
         [BsonId] 
         public string id = Guid.NewGuid().ToString();
         public string PlayerGUID { get; set; }
+        public string GameGUID { get; set; }
     }
 }

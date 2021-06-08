@@ -9,7 +9,6 @@
         public void SubscribeToPacketType(IPacketHandler packetHandler, PacketType packetType);
         public void SetSessionId(string sessionId);
         public void CreateHostController();
-        public void AddAgentController(IAgentController agentController);
         public string GetOriginId();
         public bool IsHost();
         public void SetBackupHost(bool value);

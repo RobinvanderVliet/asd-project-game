@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ActionHandling;
-using Agent.Mapper;
-using Agent.Models;
 using Agent.Services;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
@@ -53,7 +51,7 @@ namespace Creature
 
         private void CreateAgent()
         {
-            var player = _worldService.getCurrentPlayer();
+            var player = _worldService.GetCurrentPlayer();
             var configuration = _configurationService.Configuration;
             _agent = new Agent(player.Name, player.XPosition, player.YPosition, player.Symbol, player.Id)
             {
