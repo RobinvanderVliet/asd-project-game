@@ -74,11 +74,14 @@ namespace WorldGeneration
 
         public void UpdateBrains(Genome genome)
         {
-            foreach (Character monster in _world._creatures)
+            if (_world != null)
             {
-                if (monster is SmartMonster smartMonster)
+                foreach (Character monster in _world._creatures)
                 {
-                    smartMonster.Brain = genome;
+                    if (monster is SmartMonster smartMonster)
+                    {
+                        smartMonster.Brain = genome;
+                    }
                 }
             }
         }
