@@ -47,7 +47,7 @@ namespace Creature.Tests
         }
 
         [Test]
-        public void Test_NaturalSelection()
+        public void Test_NaturalSelection_ApplyNaturalSelectionToAPopulation()
         {
             //arrange
             _sut = new Population(10, _MonsterData);
