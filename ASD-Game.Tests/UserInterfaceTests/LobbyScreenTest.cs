@@ -2,10 +2,12 @@
 using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace UserInterface.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class LobbyScreenTest
     {
         private LobbyScreen _sut;
