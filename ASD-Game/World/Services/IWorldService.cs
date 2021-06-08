@@ -48,5 +48,7 @@ namespace WorldGeneration
         public string SearchCurrentTile();
 
         public void DisplayStats();
+
+        public Character GetAI(string id);
     }
 }

@@ -148,6 +148,7 @@ namespace ActionHandling
                     return new HandlerResponseDTO(SendAction.SendToClients, resultMessage);
                 }
             }
+            ChangeAIPosition(moveDTO);
             return new HandlerResponseDTO(SendAction.Ignore, "");
         }
 
@@ -183,6 +184,14 @@ namespace ActionHandling
             player.XPosition = moveDTO.XPosition;
             player.YPosition = moveDTO.YPosition;
             _worldService.DisplayStats();
+            _worldService.DisplayWorld();
+        }
+
+        private void ChangeAIPosition(MoveDTO moveDTO)
+        {
+            var character = _worldService.GetAI(moveDTO.UserId);
+            character.XPosition = moveDTO.XPosition;
+            character.YPosition = moveDTO.YPosition;
             _worldService.DisplayWorld();
         }
 
@@ -283,7 +292,7 @@ namespace ActionHandling
                 }
                 foreach (MoveDTO move in moveDTOs)
                 {
-                    SendMoveDTO(move);
+                    //SendMoveDTO(move);
                 }
             }
         }

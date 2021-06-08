@@ -124,6 +124,7 @@ namespace Creature.Creature
             {
                 case 0:
                     Smartactions.Attack(_dataGatheringService.ClosestPlayer, this);
+                    Smartactions.Wander(this);
                     break;
 
                 case 1:

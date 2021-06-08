@@ -122,6 +122,11 @@ namespace WorldGeneration
             return _world.GetPlayer(userId);
         }
 
+        public Character GetAI(string id)
+        {
+            return _world.GetAI(id);
+        }
+
         public ITile GetTile(int x, int y)
         {
             return _world.GetLoadedTileByXAndY(x, y);

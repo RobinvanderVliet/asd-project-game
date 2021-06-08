@@ -121,16 +121,30 @@ namespace WorldGeneration
             {
                 if (monster is SmartMonster smartMonster)
                 {
-                    UpdateSmartMonster(smartMonster);
+                    if (smartMonster.Brain != null)
+                    {
+                        UpdateSmartMonster(smartMonster);
+                    }
                 }
             }
-            UpdateMap();
         }
 
         private void UpdateSmartMonster(SmartMonster smartMonster)
         {
             smartMonster.Update();
             movesList.Add(smartMonster);
+        }
+
+        public Character GetAI(string id)
+        {
+            foreach (Character ai in _creatures)
+            {
+                if (ai.Id == id)
+                {
+                    return ai;
+                }
+            }
+            return null;
         }
 
         public ITile GetCurrentTile()

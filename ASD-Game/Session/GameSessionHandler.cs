@@ -62,7 +62,6 @@ namespace Session
             _playerItemDatabaseService = playerItemDatabaseService;
             _worldService = worldService;
             _messageService = messageService;
-
             AIUpdateTimer = new Timer(60000);
             CheckAITimer();
         }
@@ -95,8 +94,10 @@ namespace Session
             _screenHandler.TransitionTo(new GameScreen());
 
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
-            Player currentPlayer = AddPlayersToWorld();
             CreateMonsters();
+
+            Player currentPlayer = AddPlayersToWorld();
+
             if (currentPlayer != null)
             {
                 _worldService.LoadArea(currentPlayer.XPosition, currentPlayer.YPosition, 10);
@@ -115,6 +116,7 @@ namespace Session
                 InsertGameIntoDatabase();
                 InsertPlayersIntoDatabase();
             }
+
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
@@ -179,7 +181,7 @@ namespace Session
         {
             for (int i = 0; i < 10; i++)
             {
-                if (i < 5)
+                if (i < 0)
                 {
                     Monster newMonster = new Monster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i);
                     SetStateMachine(newMonster);
@@ -218,7 +220,10 @@ namespace Session
 
         public void UpdateBrain()
         {
-            _worldService.UpdateBrains(_sessionHandler.TrainingScenario.BrainTransplant());
+            if (_sessionHandler.TrainingScenario.BrainTransplant() != null)
+            {
+                _worldService.UpdateBrains(_sessionHandler.TrainingScenario.BrainTransplant());
+            }
         }
 
         private void SetStateMachine(Monster monster)
