@@ -38,6 +38,12 @@ namespace Session.Tests
             _packetDTO = new PacketDTO();
         }
 
+        [Test]
+        public void PlayerSpawnTest()
+        {
+            
+        }
+
         //Test below fails, not worth fixing atm since no other functions get tested
         // [Test]
         // public void Test_SendGameSession_CallsSendPayloadWithCorrectPayload()
