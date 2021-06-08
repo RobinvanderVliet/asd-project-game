@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace UserInterface
 {
@@ -12,10 +13,13 @@ namespace UserInterface
 
         public override void DrawScreen()
         {
+            Thread.Sleep(50);
             DrawHeader("Editor!");
+            Thread.Sleep(50);
             DrawBox(X_START, 3, SCREEN_WIDTH - BORDER_SIZE, Y_VALUE);
             _screenHandler.ConsoleHelper.SetCursor(X_VALUE, Y_VALUE);
-            _screenHandler.ConsoleHelper.WriteLine(_displayedQuestions);
+            _screenHandler.ConsoleHelper.Write(_displayedQuestions);
+            Thread.Sleep(50);
             DrawInputBox(X_START, 10, "Enter an answer");
         }
 

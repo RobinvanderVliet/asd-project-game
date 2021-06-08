@@ -12,6 +12,7 @@ using System.Text;
 using Agent.Services;
 using InputHandling.Models;
 using Timer = System.Timers.Timer;
+using System.Threading;
 
 namespace InputHandling
 {
@@ -208,9 +209,8 @@ namespace InputHandling
             answers.Add("");
             answers.Add("");
 
-            editorScreen.DrawHeader(questions.WELCOME);
-
             int i = 0;
+            Thread.Sleep(100);
             while (i < questions.EditorQuestions.Count)
             {
                 editorScreen.UpdateLastQuestion(questions.EditorQuestions.ElementAt(i));
