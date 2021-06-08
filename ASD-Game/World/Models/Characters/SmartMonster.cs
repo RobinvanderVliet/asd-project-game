@@ -15,6 +15,7 @@ namespace Characters
         public SmartCreatureActions Smartactions;
 
         public Vector2 Destination { get; set; }
+        public string MoveType { get; set; }
 
         public Genome Brain;
         public bool Replay = false;
@@ -113,7 +114,8 @@ namespace Characters
                 }
             }
 
-            if (max < 0.7)
+            //TODO setback to 0.7 or maybe try 0.6 hhhmmmmmm...
+            if (max < 0.1)
             {
                 Smartactions.Wander(this);
                 return;
@@ -123,7 +125,6 @@ namespace Characters
             {
                 case 0:
                     Smartactions.Attack(_dataGatheringService.ClosestPlayer, this);
-                    Smartactions.Wander(this);
                     break;
 
                 case 1:

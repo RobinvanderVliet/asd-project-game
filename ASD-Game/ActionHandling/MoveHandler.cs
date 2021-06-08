@@ -291,8 +291,11 @@ namespace ActionHandling
                 {
                     if (move is SmartMonster smartMonster)
                     {
-                        MoveDTO moveDTO = new(smartMonster.Id, (int)smartMonster.Destination.X, (int)smartMonster.Destination.Y);
-                        moveDTOs.Add(moveDTO);
+                        if (smartMonster.MoveType == "Move")
+                        {
+                            MoveDTO moveDTO = new(smartMonster.Id, (int)smartMonster.Destination.X, (int)smartMonster.Destination.Y);
+                            moveDTOs.Add(moveDTO);
+                        }
                     }
                 }
                 foreach (MoveDTO move in moveDTOs)

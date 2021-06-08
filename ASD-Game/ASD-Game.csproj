@@ -61,4 +61,10 @@
 		<Content Include="InputHandling\Antlr\Grammar\PlayerCommands.g4" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="World\Models\Character.cs">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Compile>
+	</ItemGroup>
+
 </Project>

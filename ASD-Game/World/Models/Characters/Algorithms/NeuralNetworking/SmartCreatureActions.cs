@@ -41,6 +41,7 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking
             }
             if (Path != null)
             {
+                smartMonster.MoveType = "Move";
                 smartMonster.Destination = TransformPath(Path.Pop().Position);
             }
         }
@@ -54,6 +55,7 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking
                 Path = _pathfinder.FindPath(_startPos, destination);
                 if (Path != null)
                 {
+                    smartMonster.MoveType = "Move";
                     smartMonster.Destination = TransformPath(Path.Pop().Position);
                 }
             }
@@ -82,6 +84,7 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking
                 Path = _pathfinder.FindPath(_startPos, destination);
                 if (Path != null)
                 {
+                    smartMonster.MoveType = "Move";
                     smartMonster.Destination = TransformPath(Path.Pop().Position);
                 }
             }
@@ -96,29 +99,32 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking
                 Path = _pathfinder.FindPath(_startPos, destination);
                 if (Path != null)
                 {
+                    smartMonster.MoveType = "Move";
                     smartMonster.Destination = TransformPath(Path.Pop().Position);
                 }
             }
         }
 
-        public void Attack(WorldGeneration.Character player, SmartMonster smartmonster)
+        public void Attack(WorldGeneration.Character player, SmartMonster smartMonster)
         {
             if (player != null)
             {
                 Vector2 PPos = new Vector2(player.XPosition, player.YPosition);
-                Vector2 SMPos = new Vector2(smartmonster.XPosition, smartmonster.YPosition);
+                Vector2 SMPos = new Vector2(smartMonster.XPosition, smartMonster.YPosition);
                 if (IsAdjacent(PPos, SMPos))
                 {
-                    //TODO attack for AI
+                    smartMonster.MoveType = "Attack";
+                    smartMonster.Destination = PPos;
                 }
             }
         }
 
-        public void Flee(WorldGeneration.Character player, SmartMonster smartmonster)
+        public void Flee(WorldGeneration.Character player, SmartMonster smartMonster)
         {
             if (player != null)
             {
-                Wander(smartmonster);
+                smartMonster.MoveType = "Move";
+                Wander(smartMonster);
             }
         }
 
@@ -131,6 +137,7 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking
                 Path = _pathfinder.FindPath(_startPos, MPos);
                 if (Path != null)
                 {
+                    smartMonster.MoveType = "Move";
                     smartMonster.Destination = TransformPath(Path.Pop().Position);
                 }
             }
@@ -142,6 +149,7 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking
             smartMonster.CreatureData.Health -= damage;
             if (smartMonster.CreatureData.Health <= 0)
             {
+                smartMonster.MoveType = "Move";
                 smartMonster.Dead = true;
             }
         }
@@ -149,7 +157,7 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking
         private static bool IsAdjacent(Vector2 loc1, Vector2 loc2)
         {
             float distance = Vector2.Distance(loc1, loc2);
-            return (distance < 2);
+            return (distance == 1);
         }
 
         private static bool IsValidMove(Vector2 destination)

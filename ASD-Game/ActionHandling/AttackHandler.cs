@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Timers;
 using ActionHandling.DTO;
+using Characters;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Items;
@@ -23,6 +26,8 @@ namespace ActionHandling
         private readonly IDatabaseService<CreaturePOCO> _creatureDatabaseService;
         private readonly IMessageService _messageService;
 
+        private Timer AIUpdateTimer;
+        private int _updateTime = 500;
 
         public AttackHandler(IClientController clientController, IWorldService worldService,
             IDatabaseService<PlayerPOCO> playerDatabaseService,
@@ -36,6 +41,7 @@ namespace ActionHandling
             _playerItemDatabaseService = playerItemDatabaseService;
             _creatureDatabaseService = creatureDatabaseService;
             _messageService = messageService;
+            CheckAITimer();
         }
 
         public void SendAttack(string direction)
@@ -47,7 +53,7 @@ namespace ActionHandling
             }
 
             Weapon weapon = _worldService.GetCurrentPlayer().Inventory.Weapon;
-            int weaponDistance = (int) weapon.Distance;
+            int weaponDistance = (int)weapon.Distance;
             int x = 0;
             int y = 0;
             switch (direction)
@@ -56,15 +62,18 @@ namespace ActionHandling
                 case "east":
                     x = weaponDistance;
                     break;
+
                 case "left":
                 case "west":
                     x = -weaponDistance;
                     break;
+
                 case "forward":
                 case "up":
                 case "north":
                     y = weaponDistance;
                     break;
+
                 case "backward":
                 case "down":
                 case "south":
@@ -76,7 +85,7 @@ namespace ActionHandling
             AttackDTO attackDto = new AttackDTO();
             attackDto.XPosition = currentPlayer.XPosition + x;
             attackDto.YPosition = currentPlayer.YPosition + y;
-            attackDto.Damage = (int) weapon.Damage;
+            attackDto.Damage = (int)weapon.Damage;
             attackDto.Stamina = currentPlayer.Stamina;
             attackDto.PlayerGuid = _clientController.GetOriginId();
             SendAttackDTO(attackDto);
@@ -97,6 +106,14 @@ namespace ActionHandling
                 var playerToAttack =
                     allPlayers.Where(x =>
                         x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition);
+
+                if (attackDto.PlayerGuid.StartsWith("monst"))
+                {
+                    attackDto.AttackedPlayerGuid = playerToAttack.FirstOrDefault().Id;
+                    HandleAttack(attackDto);
+                    return new HandlerResponseDTO(SendAction.SendToClients, null);
+                }
+
                 if (playerToAttack.FirstOrDefault() != null)
                 {
                     if (playerToAttack.FirstOrDefault().Health <= 0)
@@ -108,7 +125,6 @@ namespace ActionHandling
                         }
                     }
                 }
-
 
                 // var creatureToAttack =
                 //     allCreatures.Where(x =>
@@ -259,26 +275,27 @@ namespace ActionHandling
         {
             // var playerIsDead = false;
             // if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
-
-            var player = _worldService.GetPlayer(attackDto.PlayerGuid);
-            bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
-            
             var attackedPlayer = _worldService.GetPlayer(attackDto.AttackedPlayerGuid);
             bool printAttackedMessage = _clientController.GetOriginId().Equals(attackedPlayer.Id);
+            if (attackDto.PlayerGuid.StartsWith("Monst"))
             {
-                if (player.Stamina < ATTACK_STAMINA && printAttackMessage)
+                var player = _worldService.GetPlayer(attackDto.PlayerGuid);
+                bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
                 {
-                    _messageService.AddMessage("You're out of stamina, you can't attack.");
-                }
-                else
-                {
-                    player.Stamina -= ATTACK_STAMINA;
-                    if (printAttackMessage)
+                    if (player.Stamina < ATTACK_STAMINA && printAttackMessage)
                     {
-                        _messageService.AddMessage("You attacked an enemy.");
+                        _messageService.AddMessage("You're out of stamina, you can't attack.");
                     }
+                    else
+                    {
+                        player.Stamina -= ATTACK_STAMINA;
+                        if (printAttackMessage)
+                        {
+                            _messageService.AddMessage("You attacked an enemy.");
+                        }
 
-                    _worldService.DisplayStats();
+                        _worldService.DisplayStats();
+                    }
                 }
             }
             if (attackDto.AttackedPlayerGuid != null && attackedPlayer.Health != 0)
@@ -353,6 +370,56 @@ namespace ActionHandling
                     _worldService.DisplayWorld();
                 }
             }
+        }
+
+        public void AIAttack(List<WorldGeneration.Character> creatureMoves)
+        {
+            List<AttackDTO> attackDTOs = new List<AttackDTO>();
+            if (creatureMoves != null)
+            {
+                foreach (WorldGeneration.Character move in creatureMoves)
+                {
+                    if (move is SmartMonster smartMonster)
+                    {
+                        if (smartMonster.MoveType == "Attack")
+                        {
+                            AttackDTO attackDTO = new();
+                            attackDTO.XPosition = (int)smartMonster.Destination.X;
+                            attackDTO.YPosition = (int)smartMonster.Destination.Y;
+                            attackDTO.Stamina = 100;
+                            attackDTO.Damage = smartMonster.CreatureData.Damage;
+                            attackDTO.PlayerGuid = smartMonster.Id;
+                            attackDTOs.Add(attackDTO);
+                        }
+                    }
+                }
+                foreach (AttackDTO attack in attackDTOs)
+                {
+                    SendAttackDTO(attack);
+                }
+            }
+        }
+
+        public void GetAIMoves()
+        {
+            AIAttack(_worldService.GetCreatureMoves());
+        }
+
+        private void CheckAITimer()
+        {
+            AIUpdateTimer = new Timer(_updateTime)
+            {
+                AutoReset = true
+            };
+            AIUpdateTimer.Elapsed += CheckAITimerEvent;
+            AIUpdateTimer.Start();
+        }
+
+        private void CheckAITimerEvent(object sender, ElapsedEventArgs e)
+        {
+            AIUpdateTimer.Stop();
+            GetAIMoves();
+            AIUpdateTimer.Start();
         }
     }
 }
