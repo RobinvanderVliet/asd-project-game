@@ -7,11 +7,11 @@ using Session.DTO;
 using System.Collections.Generic;
 using ASD_project.World.Models;
 using ASD_project.World.Models.Characters;
+using ASD_project.World.Models.Interfaces;
 using ASD_project.World.Services;
 
 namespace Session
 {
-
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
     {
         private IClientController _clientController;
@@ -25,7 +25,7 @@ namespace Session
             _worldService = worldService;
             _sessionHandler = sessionHandler;
         }
-        
+
         public void SendGameSession()
         {
             var StartGameDTO = SetupGameHost();
@@ -44,12 +44,42 @@ namespace Session
             Dictionary<string, int[]> players = new Dictionary<string, int[]>();
 
             // Have refactored into something a bit more exciting.
-            
+
             int spawnSeed = _sessionHandler.GetSessionSeed();
             int playerX = spawnSeed % 50; // spawn position first person.
             int playerY = spawnSeed % 50;
+
             foreach (string clientId in allClients)
             {
+                while (true)
+                {
+                    if (playerX % 2 == 0)
+                    {
+                        playerX += spawnSeed % 3;
+                    }
+                    else
+                    {
+                        playerX -= spawnSeed % 3;
+                    }
+
+                    if (playerY % 2 == 0)
+                    {
+                        playerY += spawnSeed % 5;
+                    }
+                    else
+                    {
+                        playerY -= spawnSeed % 5;
+                    }
+
+                    _worldService.LoadArea(playerX, playerY, 0);
+                    var tile = _worldService.GetTile(playerX, playerY);
+
+                    if (tile is ITerrainTile && tile.IsAccessible && !_worldService.CheckIfCharacterOnTile(tile))
+                    {
+                        break;
+                    }
+                }
+
                 int[] playerPosition = new int[2];
                 playerPosition[0] = playerX;
                 playerPosition[1] = playerY;
@@ -57,23 +87,6 @@ namespace Session
                 var tmpPlayer = new PlayerPOCO
                     {PlayerGUID = clientId, GameGUID = gamePOCO.GameGUID, XPosition = playerX, YPosition = playerY};
                 servicePlayer.CreateAsync(tmpPlayer);
-
-                if (playerX % 2 == 0)
-                {
-                    playerX += spawnSeed % 3;
-                }
-                else
-                {
-                    playerX -= spawnSeed % 3;
-                }
-                if (playerY % 2 == 0)
-                {
-                    playerY += spawnSeed % 5;
-                }
-                else
-                {
-                    playerY -= spawnSeed % 5;
-                }
             }
 
             StartGameDTO startGameDTO = new StartGameDTO();
@@ -105,10 +118,9 @@ namespace Session
             {
                 if (_clientController.GetOriginId() == player.Key)
                 {
-                    // add name to players
                     _worldService.AddPlayerToWorld(new Player("gerrit", player.Value[0], player.Value[1], CharacterSymbol.CURRENT_PLAYER, player.Key), true);
-                } 
-                else 
+                }
+                else
                 {
                     _worldService.AddPlayerToWorld(new Player("arie", player.Value[0], player.Value[1], CharacterSymbol.ENEMY_PLAYER, player.Key), false);
                 }
