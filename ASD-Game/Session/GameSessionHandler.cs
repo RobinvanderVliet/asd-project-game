@@ -206,7 +206,7 @@ namespace Session
             _screenHandler.TransitionTo(new GameScreen());
             Player currentPlayer = null;
 
-            if (startGameDTO == null)
+            if (startGameDTO.GameGuid == null)
             {
                 _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
                 currentPlayer = AddPlayersToWorld();
@@ -226,11 +226,11 @@ namespace Session
                 currentPlayer = AddPlayerToWorldSavedGame(startGameDTO.SavedPlayers);
             }
 
-            else
-            {
-                _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
-                currentPlayer = CheckClientExists(startGameDTO);
-            }
+            // else
+            // {
+            //     _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
+            //     currentPlayer = CheckClientExists(startGameDTO);
+            // }
 
             _relativeStatHandler.SetCurrentPlayer(_worldService.GetCurrentPlayer());
             _relativeStatHandler.CheckStaminaTimer();
