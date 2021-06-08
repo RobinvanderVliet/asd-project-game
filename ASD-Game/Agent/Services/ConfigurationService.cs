@@ -1,11 +1,6 @@
-﻿using Agent.Exceptions;
-using Agent.Mapper;
+﻿using Agent.Mapper;
 using Agent.Models;
-using Agent.Exceptions;
-using InputHandling;
-using Serilog;
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace Agent.Services
@@ -21,7 +16,16 @@ namespace Agent.Services
             get => _configuration;
             set => _configuration = value;
         }
+        private Pipeline _pipeline;
+        public Pipeline Pipeline { get => _pipeline; set => _pipeline = value; }
+        public string LastError = "";
 
+        public ConfigurationService()
+        {
+            FileHandler = new FileHandler();
+            Pipeline = new Pipeline();
+        }
+        
         public ConfigurationService(IFileToConfigurationMapper fileToConfigurationMapper)
         {
             _fileToConfigurationMapper = fileToConfigurationMapper;
@@ -51,8 +55,39 @@ namespace Agent.Services
             configuration.Settings = _fileToConfigurationMapper.MapFileToConfiguration(_fileHandler.GetBaseDirectory() + Path.DirectorySeparatorChar + "resource" + Path.DirectorySeparatorChar + configurationFileLocation);
             Configuration = configuration;
         }
-
+        
+        // public virtual List<string> Configure(string input)
+        // {
+        //     // try
+        //     // {
+        //     //     Pipeline.ParseString(input);
+        //     //     if (Pipeline.GetErrors().Count <= 0)
+        //     //     {
+        //     //         Pipeline.CheckAst();
+        //     //     }
+        //     //     if (Pipeline.GetErrors().Count > 0)
+        //     //     {
+        //     //         return Pipeline.GetErrors();
+        //     //     }
+        //     //
+        //     //
+        //     //
+        //     //     if (Pipeline.GetErrors().Count <= 0)
+        //     //     {
+        //     //         var output = Pipeline.GenerateAst();
+        //     //         string fileName = "agent/agent-config.cfg";
+        //     //
+        //     //         FileHandler.ExportFile(output, fileName);
+        //     //
+        //     //
+        //     //     }
+        //     // }
+        //     // catch (FileException e)
+        //     // {
+        //     //     LastError = e.Message;
+        //     //     Log.Logger.Information("File error: " + e.Message);
+        //     // }
+        //     // return Pipeline.GetErrors();
+        // }
     }
-
-
 }

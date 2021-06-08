@@ -109,9 +109,10 @@ namespace Network
             return _hostController != null;
         }
 
-        public void AddAgentController(IAgentController agentController)
+        //needed for testing, remove and all games will crash, you have been warned
+        public void SetBackupHost(bool value)
         {
-            _hostController.AddAgentController(agentController);
+            _isBackupHost = value;
         }
     }
 }

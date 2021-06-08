@@ -3,17 +3,24 @@ using Network;
 using Newtonsoft.Json;
 using System;
 using Network.DTO;
+using WorldGeneration;
+using Messages;
 
 namespace Chat
 {
     public class ChatHandler : IPacketHandler, IChatHandler
     {
-        private IClientController _clientController;
+        private readonly IClientController _clientController;
+        private readonly IWorldService _worldService;
+        private readonly IMessageService _messageService;
 
-        public ChatHandler(IClientController clientController)
+
+        public ChatHandler(IClientController clientController, IWorldService worldService, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Chat);
+            _worldService = worldService;
+            _messageService = messageService;
         }
 
         public void SendSay(string message)
@@ -54,12 +61,25 @@ namespace Chat
 
         private void HandleSay(string message, string originId)
         {
-            Console.WriteLine($"{originId} said: {message}");
+            _messageService.AddMessage($"{GetUserIdentifier(originId)} said: {message}");
         }
 
         private void HandleShout(string message, string originId)
         {
-            Console.WriteLine($"{originId} shouted: {message}");
+            _messageService.AddMessage($"{GetUserIdentifier(originId)} shouted: {message}");
+        }
+
+        private string GetUserIdentifier(string userId)
+        {
+            var player = _worldService.GetPlayer(userId);
+            if (player?.Name != null)
+            {
+                return player.Name;
+            }
+            else
+            {
+                return $"player with id '{userId}'";
+            }
         }
     }
 }

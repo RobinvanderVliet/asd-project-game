@@ -8,6 +8,7 @@ namespace Agent
     public class FileHandler
     {
         private string[] _allowedTypes = new[] { ".txt", ".cfg" };
+        private static readonly char _separator = Path.DirectorySeparatorChar;
 
         public virtual string ImportFile(string filepath)
         {
@@ -36,7 +37,7 @@ namespace Agent
 
         public virtual void ExportFile(string content, string fileName)
         {
-            string safeFileLocation = GetBaseDirectory() + Path.DirectorySeparatorChar + "Resource" + Path.DirectorySeparatorChar + fileName;
+            string safeFileLocation = GetBaseDirectory() + $"{_separator}Resource{_separator}{fileName}";
 
             CreateDirectory(safeFileLocation);
 
@@ -60,7 +61,10 @@ namespace Agent
 
         public virtual string GetBaseDirectory()
         {
-            return string.Format(Path.GetFullPath(Path.Combine(GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory))));
+            string currentDirectory = string.Format(Path.GetFullPath(Path.Combine(GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory))));
+            string childDirectory = Directory.GetDirectories(currentDirectory, "*Agent*")[0].ToString();
+
+            return childDirectory;
         }
 
         private string GoBackToRoot(String path)
