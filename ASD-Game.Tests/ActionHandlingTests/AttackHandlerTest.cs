@@ -95,7 +95,9 @@ namespace ActionHandling.Tests
         public void TestHandlePacket_HandleAttack(String direction)
         {
             //Arrange
-            string GameGuid = new Guid().ToString();
+            string GameGuid = Guid.NewGuid().ToString();
+            string PlayerGuid = Guid.NewGuid().ToString();
+            string AttackedPlayerGuid = Guid.NewGuid().ToString();
 
             List<string> allClients = new List<string>();
             allClients.Add("a");
@@ -117,45 +119,60 @@ namespace ActionHandling.Tests
             }
 
 
-            PlayerPOCO player1 = new PlayerPOCO
+            PlayerPOCO player = new PlayerPOCO
             {
+                PlayerGuid = PlayerGuid,
                 Health = 100,
                 Stamina = 100,
                 GameGuid = GameGuid,
                 XPosition = 10,
-                YPosition = 20,
-                PlayerGuid = "idPlayer1"
+                YPosition = 20
             };
 
-            PlayerPOCO player2 = new PlayerPOCO
+            PlayerPOCO attackedPlayer = new PlayerPOCO
             {
+                PlayerGuid = AttackedPlayerGuid,
                 Health = 100,
                 Stamina = 100,
                 GameGuid = GameGuid,
                 XPosition = 10,
-                YPosition = 21,
-                PlayerGuid = "idPlayer2"
+                YPosition = 21
             };
 
             AttackDTO attackDto = new AttackDTO();
+            var attackDTO = new AttackDTO();
+            attackDTO.Damage = 20;
+            attackDTO.Stamina = 100;
+            attackDTO.PlayerGuid = PlayerGuid;
+            
+            
 
+            PacketDTO packetDto = new PacketDTO();
+            packetDto.Header.Target = "host";
+            packetDto.Header.PacketType = PacketType.Attack;
+            packetDto.Header.OriginID = PlayerGuid;
+            packetDto.Header.SessionID = GameGuid;
+            packetDto.Payload = JsonConvert.SerializeObject(attackDto);
 
-            var payload = JsonConvert.SerializeObject(attackDto);
-            _packetDTO.Payload = payload;
-            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
-            packetHeaderDTO.OriginID = "testOriginId";
-            packetHeaderDTO.SessionID = null;
-            packetHeaderDTO.PacketType = PacketType.Attack;
-            packetHeaderDTO.Target = "host";
-            _packetDTO.Header = packetHeaderDTO;
+            attackDto = JsonConvert.DeserializeObject<AttackDTO>(packetDto.Payload);
+            _mockedClientController.Setup(x => x.IsBackupHost).Returns(true);
+            
+           
+            //_packetDTO.Payload = payload;
+            // PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            // packetHeaderDTO.OriginID = PlayerGuid;
+            // packetHeaderDTO.SessionID = null;
+            // packetHeaderDTO.PacketType = PacketType.Attack;
+            // packetHeaderDTO.Target = "host";
+            // _packetDTO.Header = packetHeaderDTO;
 
 
             //Act
             var actualResult = _sut.HandlePacket(_packetDTO);
 
-            payload = JsonConvert.SerializeObject(_attackDTO);
+           // payload = JsonConvert.SerializeObject(_attackDTO);
 
-            _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Attack));
+//            _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Attack));
 
 
             //Assert
