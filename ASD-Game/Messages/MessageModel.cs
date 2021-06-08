@@ -25,8 +25,8 @@ namespace ASD_Game.Messages
             }
 
             Queue<string> result = new();
-            for (int x = 1; x <= amount ; x++ ){
-                result.Enqueue(_messages.ElementAt(_messages.Count - x));
+            for (int x = 0; x < amount ; x++ ){
+                result.Enqueue(_messages.ElementAt(_messages.Count - 1 - x));
             }
             return result;
         }
