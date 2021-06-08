@@ -10,6 +10,7 @@ using System.Linq;
 namespace ASD_Game.Tests.WorldTests.Models.Characters
 {
     [ExcludeFromCodeCoverage]
+    [TestFixture]
     public class InventoryTest
     {
         private Inventory _sut;

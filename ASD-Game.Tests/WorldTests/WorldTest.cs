@@ -1,11 +1,16 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Text.Unicode;
 using ASD_Game.ActionHandling;
 using ASD_Game.ActionHandling.DTO;
+using ASD_Game.Items;
 using ASD_Game.Items.Services;
 using ASD_Game.UserInterface;
 using ASD_Game.World;
+using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.TerrainTiles;
 using Moq;
 using NUnit.Framework;
 
@@ -40,13 +45,15 @@ namespace ASD_Game.Tests.WorldTests
         public void Setup()
         {
             //Initialisation of variables
-            _friendlyPlayer = new Player("A", 0, 0, "#", "1");
-            _enemyPlayer = new Player("B", 1, 1, "!", "2");
+            _friendlyPlayer = new Player("A", 0, 0, CharacterSymbol.CURRENT_PLAYER, "1");
+            _enemyPlayer = new Player("B", 1, 1, CharacterSymbol.ENEMY_PLAYER, "2");
             _creature = new World.Models.Characters.Creature("B", 1, 0, "!", "2");
             //Initialisation of mocks
             _mapMock = new Mock<IMap>();
             _mapMock.Setup(map => map.DeleteMap()).Verifiable();
-            _mapMock.Setup(map => map.GetCharArrayMapAroundCharacter(It.IsAny<Character>(), It.IsAny<int>(), It.IsAny<List<Character>>())).Verifiable();
+            _mapMock.Setup(map => map.GetCharArrayMapAroundCharacter(It.IsAny<Character>(), It.IsAny<int>(), It.IsAny<List<Character>>()))
+                .Returns(new char[5,5]).Verifiable();
+            _mapMock.Setup(map => map.GetLoadedTileByXAndY(It.IsAny<int>(), It.IsAny<int>())).Verifiable();
             _mapMockObject = _mapMock.Object;
             
             _mapFactoryMock = new Mock<IMapFactory>();
@@ -176,6 +183,90 @@ namespace ASD_Game.Tests.WorldTests
             _sut.AddPlayerToWorld(_friendlyPlayer, true);
             //Assert ---------
             Assert.That(_sut.CurrentPlayer.XPosition != _enemyPlayer.XPosition);
+        }
+        
+        [Test]
+        public void Test_GetMapAroundCharacter_WithListOfPlayersAndCreatures() 
+        {
+            //Arrange ---------
+            var characters = new List<Character> {_friendlyPlayer, _enemyPlayer, _creature};
+            _sut.AddPlayerToWorld(_friendlyPlayer);
+            _sut.AddPlayerToWorld(_enemyPlayer);
+            _sut.AddCreatureToWorld(_creature);
+            //Act ---------
+            var results = _sut.GetMapAroundCharacter(_friendlyPlayer);
+            //Assert ---------
+            _mapMock.Verify(map => map.GetCharArrayMapAroundCharacter(_friendlyPlayer, 2, characters));
+        }
+        
+        [Test]
+        public void Test_DeleteMap_DeleteEntireMap() 
+        {
+            //Arrange ---------
+            //Act ---------
+            _sut.DeleteMap();
+            //Assert ---------
+            _mapMock.Verify(map => map.DeleteMap());
+        }
+        
+        [Test]
+        public void Test_AddItemToWorld_AddsItemToMap() 
+        {
+            //Arrange ---------
+            var itemSpawnDto = new ItemSpawnDTO
+            {
+                Item = ItemFactory.GetMilitaryHelmet()
+            };
+            //Act ---------
+            _sut.AddItemToWorld(itemSpawnDto);
+            //Assert ---------
+            Assert.That(1 == _sut.Items.Count);
+        }
+        
+        [Test]
+        public void Test_GetLoadedTileByXAndY_ExecutesGetLoadedTileByXAndYInsideMap() 
+        {
+            //Arrange ---------
+            const int x = 0;
+            const int y = 0;
+            //Act ---------
+            var result = _sut.GetLoadedTileByXAndY(x, y);
+            //Assert ---------
+            _mapMock.Verify(map => map.GetLoadedTileByXAndY(x, y));
+        }
+        
+        [Test]
+        public void Test_CheckIfCharacterOnTile_ChecksIfCharacterIsOnTile() 
+        {
+            //Arrange ---------
+            var tile = new StreetTile(0, 0);
+            _sut.AddPlayerToWorld(_friendlyPlayer);
+            //Act ---------
+            var result = _sut.CheckIfCharacterOnTile(tile);
+            //Assert ---------
+            Assert.AreEqual(true, result);
+        }
+        
+        [Test]
+        public void Test_GetAllPlayers_GetsAllThePlayersInTheWorld() 
+        {
+            //Arrange ---------
+            _sut.AddPlayerToWorld(_friendlyPlayer);
+            _sut.AddPlayerToWorld(_enemyPlayer);
+            //Act ---------
+            var result = _sut.GetAllPlayers().Count;
+            //Assert ---------
+            Assert.AreEqual(2, result);
+        }
+        [Test]
+        public void Test_GetCurrentTile_GetsTileByPlayerXAndY() 
+        {
+            //Arrange ---------
+            _sut.AddPlayerToWorld(_friendlyPlayer,true);
+            //Act ---------
+            var result = _sut.GetCurrentTile();
+            //Assert ---------
+            _mapMock.Verify(map => map.GetLoadedTileByXAndY(_friendlyPlayer.XPosition, _friendlyPlayer.YPosition));
         }
     }
 }
