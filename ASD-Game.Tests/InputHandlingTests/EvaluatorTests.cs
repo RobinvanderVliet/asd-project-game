@@ -13,6 +13,7 @@ using NUnit.Framework;
 using Session;
 using Session.DTO;
 using Session.GameConfiguration;
+using WorldGeneration;
 using ItemFrequency = InputHandling.Antlr.Ast.Actions.ItemFrequency;
 using MonsterDifficulty = InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
@@ -29,6 +30,8 @@ namespace InputHandling.Tests
         private Mock<IAgentHandler> _agentHandlerMock;
         private Mock<IClientController> _mockedClientController;
         private Mock<IInventoryHandler> _mockedInventoryHandler;
+        private Mock<IWorldService> _mockedWorldService;
+        
         [SetUp]
         public void Setup()
         {
@@ -39,7 +42,9 @@ namespace InputHandling.Tests
             _agentHandlerMock = new Mock<IAgentHandler>();
             _mockedClientController = new Mock<IClientController>();
             _mockedInventoryHandler = new Mock<IInventoryHandler>();
-            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedInventoryHandler.Object, _mockedClientController.Object, _agentHandlerMock.Object);
+            _mockedWorldService = new Mock<IWorldService>();
+            
+            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedInventoryHandler.Object, _mockedClientController.Object, _agentHandlerMock.Object, _mockedWorldService.Object);
         }
     
         [Test]

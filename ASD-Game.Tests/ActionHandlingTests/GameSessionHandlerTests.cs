@@ -13,6 +13,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using ActionHandling;
+using Agent.Services;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Messages;
@@ -43,6 +44,7 @@ namespace ActionHandling.Tests
         private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
         private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigDatabaseService;
         private Mock<INetworkComponent> _mockedNetworkComponent;
+        private Mock<IConfigurationService> _mockedConfigurationService;
 
 
         [SetUp]
@@ -65,6 +67,7 @@ namespace ActionHandling.Tests
             _mockedScreenHandler = new Mock<IScreenHandler>();
             _mockedMessageService = new Mock<IMessageService>();
             _mockedNetworkComponent = new Mock<INetworkComponent>();
+            _mockedConfigurationService = new Mock<IConfigurationService>();
             _sut = new GameSessionHandler(_mockedClientController.Object,
                 _mockedSessionHandler.Object,
                 _mockedRelativeStatHandler.Object,
@@ -76,7 +79,8 @@ namespace ActionHandling.Tests
                 _mockedPlayerItemDatabaseService.Object,
                 _mockedWorldService.Object,
                 _mockedMessageService.Object,
-                _mockedNetworkComponent.Object
+                _mockedNetworkComponent.Object,
+                _mockedConfigurationService.Object
                 );
             _packetDTO = new PacketDTO();
         }

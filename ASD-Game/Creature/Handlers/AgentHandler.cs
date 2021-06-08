@@ -14,16 +14,15 @@ namespace Creature
 {
     public class AgentHandler : IAgentHandler, IPacketHandler
     {
-        private bool replaced;
-        private Agent _agent;
         private readonly IWorldService _worldService;
         private readonly IMoveHandler _moveHandler;
         private readonly IClientController _clientController;
         private readonly IDatabaseService<AgentPOCO> _databaseService;
         private readonly IConfigurationService _configurationService;
-        
+
         // TODO: add attack handler when that is on develop
-        public AgentHandler(IWorldService worldService, IMoveHandler moveHandler, IClientController clientController, IDatabaseService<AgentPOCO> databaseService, IConfigurationService configurationService)
+        public AgentHandler(IWorldService worldService, IMoveHandler moveHandler, IClientController clientController,
+            IDatabaseService<AgentPOCO> databaseService, IConfigurationService configurationService)
         {
             _worldService = worldService;
             _moveHandler = moveHandler;
@@ -34,26 +33,21 @@ namespace Creature
             _clientController.SubscribeToPacketType(this, PacketType.Agent);
         }
 
-        public void Replace()
+        public void Replace(string playerId)
         {
-            if (_agent == null) CreateAgent();
-            
-            replaced = !replaced;
-            if (replaced)
-            {
-                _agent.AgentStateMachine.StartStateMachine();
-            }
-            else
-            {
-                _agent.AgentStateMachine.StopStateMachine();
-            }
+            // If player in database
+            // Get agent configuration from database for this player
+            // If agent is activated
+            // Deactivate agent
+            // Else
+            // Activate agent
         }
 
-        private void CreateAgent()
+        private Agent CreateAgent()
         {
             var player = _worldService.GetCurrentPlayer();
             var configuration = _configurationService.Configuration;
-            _agent = new Agent(player.Name, player.XPosition, player.YPosition, player.Symbol, player.Id)
+            return new Agent(player.Name, player.XPosition, player.YPosition, player.Symbol, player.Id)
             {
                 AgentData =
                 {
@@ -68,7 +62,7 @@ namespace Creature
         {
             var configurationDto = JsonConvert.DeserializeObject<AgentConfigurationDTO>(packet.Payload);
             if (packet.Header.Target != "host") return new HandlerResponseDTO(SendAction.Ignore, null);
-            
+
             var allAgents = _databaseService.GetAllAsync();
             allAgents.Wait();
             if (allAgents.Result.Any(x => x.PlayerGUID == configurationDto.PlayerId))
@@ -79,6 +73,7 @@ namespace Creature
             {
                 InsertAgentConfiguration(configurationDto);
             }
+
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
@@ -86,12 +81,14 @@ namespace Creature
         {
             var agentPoco = new AgentPOCO
             {
-                PlayerGUID = configurationDto.PlayerId, AgentConfiguration = configurationDto.AgentConfiguration
+                PlayerGUID = configurationDto.PlayerId, AgentConfiguration = configurationDto.AgentConfiguration,
+                GameGUID = configurationDto.GameGUID, Activated = configurationDto.Activated
             };
             _databaseService.CreateAsync(agentPoco);
         }
 
-        private void UpdateAgentConfiguration(AgentConfigurationDTO agentConfigurationDto, IEnumerable<AgentPOCO> allAgentsResult)
+        private void UpdateAgentConfiguration(AgentConfigurationDTO agentConfigurationDto,
+            IEnumerable<AgentPOCO> allAgentsResult)
         {
             var agentPoco = allAgentsResult.First(x => x.PlayerGUID == agentConfigurationDto.PlayerId);
             agentPoco.AgentConfiguration = agentConfigurationDto.AgentConfiguration;

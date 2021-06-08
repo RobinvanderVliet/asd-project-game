@@ -9,6 +9,7 @@ using Session;
 using Creature;
 using Session.DTO;
 using Session.GameConfiguration;
+using WorldGeneration;
 using AST = InputHandling.Antlr.Ast.AST;
 using ItemFrequency = InputHandling.Antlr.Ast.Actions.ItemFrequency;
 using MonsterDifficulty = InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
@@ -23,20 +24,22 @@ namespace InputHandling.Antlr.Transformer
         private IGameSessionHandler _gameSessionHandler;
         private IChatHandler _chatHandler;
         private IAgentHandler _agentHandler;
-        
+        private readonly IWorldService _worldService;
+
         private IClientController _clientController;
         private IInventoryHandler _inventoryHandler;
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private string _commando;
 
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IInventoryHandler inventoryHandler, IClientController clientController, IAgentHandler agentHandler)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IInventoryHandler inventoryHandler, IClientController clientController, IAgentHandler agentHandler, IWorldService worldService)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
             _gameSessionHandler = gameSessionHandler;
             _chatHandler = chatHandler;
             _agentHandler = agentHandler;
+            _worldService = worldService;
             _clientController = clientController;
             _inventoryHandler = inventoryHandler;
         }
@@ -158,7 +161,7 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformReplace()
         {
-            _agentHandler.Replace();
+            _agentHandler.Replace(_worldService.GetCurrentPlayer().Id);
         }
 
         private void TransformResume()

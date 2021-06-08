@@ -2,6 +2,6 @@
 {
     public interface IAgentHandler
     {
-        public void Replace();
+        public void Replace(string playerId);
     }
 }

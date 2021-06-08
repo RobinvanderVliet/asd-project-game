@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ActionHandling;
+using Agent.Services;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Items;
@@ -20,6 +21,7 @@ namespace Session
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
     {
         private readonly INetworkComponent _networkComponent;
+        private readonly IConfigurationService _configurationService;
         private readonly IClientController _clientController;
         private readonly ISessionHandler _sessionHandler;
         private readonly IRelativeStatHandler _relativeStatHandler;
@@ -44,7 +46,8 @@ namespace Session
             IDatabaseService<PlayerItemPOCO> playerItemDatabaseService, 
             IWorldService worldService,
             IMessageService messageService,
-            INetworkComponent networkComponent
+            INetworkComponent networkComponent,
+            IConfigurationService configurationService
         )
         {
             _clientController = clientController;
@@ -60,15 +63,19 @@ namespace Session
             _worldService = worldService;
             _messageService = messageService;
             _networkComponent = networkComponent;
+            _configurationService = configurationService;
         }
 
         // TODO: get this config from the AgentConfigurationService
         public void SendAgentConfiguration()
-        {
+        { 
+            _configurationService.CreateConfiguration("agent");
+            var configuration = _configurationService.Configuration;
             var agentConfigurationDto = new AgentConfigurationDTO(SessionType.SendAgentConfiguration)
             {
                 PlayerId = _clientController.GetOriginId(),
-                AgentConfiguration = new List<ValueTuple<string, string>>()
+                AgentConfiguration = configuration.Settings,
+                GameGUID = _clientController.SessionId
             };
             var payload = JsonConvert.SerializeObject(agentConfigurationDto);
             _clientController.SendPayload(payload, PacketType.Agent);
