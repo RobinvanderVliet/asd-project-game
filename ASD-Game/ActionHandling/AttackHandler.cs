@@ -345,6 +345,7 @@ namespace ActionHandling
                     }
                     else
                     {
+                        _messageService.AddMessage("You died");
                         attackedPlayer.Health = 0;
                     }
 
