@@ -145,7 +145,6 @@ namespace ActionHandling.Tests
             attackDTO.Stamina = 100;
             attackDTO.PlayerGuid = PlayerGuid;
             
-            
 
             PacketDTO packetDto = new PacketDTO();
             packetDto.Header.Target = "host";
