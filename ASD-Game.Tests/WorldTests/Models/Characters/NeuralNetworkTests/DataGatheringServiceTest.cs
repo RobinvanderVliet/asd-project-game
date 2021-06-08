@@ -1,11 +1,10 @@
-﻿using Creature.Creature;
-using Creature.Creature.NeuralNetworking.TrainingScenario;
+﻿using NeuralNetworking.TrainingScenario;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using WorldGeneration.StateMachine.Data;
 
-namespace Creature.Tests
+namespace Character.Tests.NeuralNetworkTest
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]

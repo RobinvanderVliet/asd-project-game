@@ -1,9 +1,10 @@
-﻿using Creature.Creature;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using WorldGeneration.Models.Interfaces;
 using System.Linq;
 using UserInterface;
+
+using Characters;
 
 namespace WorldGeneration
 {

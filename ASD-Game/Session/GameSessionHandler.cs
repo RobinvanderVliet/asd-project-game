@@ -1,6 +1,5 @@
 using ActionHandling;
-using Creature.Creature;
-using Creature.Creature.NeuralNetworking.TrainingScenario;
+using NeuralNetworking.TrainingScenario;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
 using Items;
@@ -17,6 +16,7 @@ using UserInterface;
 using WorldGeneration;
 using WorldGeneration.Models;
 using WorldGeneration.StateMachine;
+using Characters;
 
 namespace Session
 {
@@ -34,6 +34,7 @@ namespace Session
         private readonly IWorldService _worldService;
         private readonly IMessageService _messageService;
         private Timer AIUpdateTimer;
+        private int _brainUpdateTime = 60000;
         private Random _random = new Random();
 
         public GameSessionHandler(
@@ -62,7 +63,6 @@ namespace Session
             _playerItemDatabaseService = playerItemDatabaseService;
             _worldService = worldService;
             _messageService = messageService;
-            AIUpdateTimer = new Timer(60000);
             CheckAITimer();
         }
 
@@ -206,6 +206,7 @@ namespace Session
 
         private void CheckAITimer()
         {
+            AIUpdateTimer = new Timer(_brainUpdateTime);
             AIUpdateTimer.AutoReset = true;
             AIUpdateTimer.Elapsed += CheckAITimerEvent;
             AIUpdateTimer.Start();

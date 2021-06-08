@@ -1,9 +1,10 @@
-﻿using System;
+﻿using NeuralNetworking.TrainingScenario;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using WorldGeneration.StateMachine.Data;
 
-namespace Creature.Creature.NeuralNetworking
+namespace NeuralNetworking
 {
     public class Population
     {

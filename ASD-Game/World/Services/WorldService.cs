@@ -1,11 +1,11 @@
-using Creature.Creature;
-using Creature.Creature.NeuralNetworking;
 using Items;
 using WorldGeneration.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UserInterface;
+using Characters;
+using NeuralNetworking;
 
 namespace WorldGeneration
 {

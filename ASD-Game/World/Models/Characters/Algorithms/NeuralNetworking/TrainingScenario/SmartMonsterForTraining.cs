@@ -1,10 +1,10 @@
-﻿using Creature.Creature.NeuralNetworking;
-using Creature.Creature.NeuralNetworking.TrainingScenario;
+﻿using NeuralNetworking;
+using NeuralNetworking.TrainingScenario;
 using System.Diagnostics.CodeAnalysis;
 using WorldGeneration;
 using WorldGeneration.StateMachine.Data;
 
-namespace Creature.Creature
+namespace NeuralNetworking.TrainingScenario
 {
     [ExcludeFromCodeCoverage]
     public class SmartMonsterForTraining : Monster

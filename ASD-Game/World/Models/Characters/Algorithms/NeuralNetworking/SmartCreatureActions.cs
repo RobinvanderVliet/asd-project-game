@@ -1,12 +1,14 @@
-﻿using Creature.Creature.NeuralNetworking.TrainingScenario;
-using Creature.Pathfinder;
+﻿using NeuralNetworking.TrainingScenario;
+using Character.Pathfinder;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using WorldGeneration;
+using Characters;
+using Character;
 
-namespace Creature.Creature.NeuralNetworking
+namespace NeuralNetworking
 {
     //Functionality already covered in the SmartCreatureTrainingActions
     [ExcludeFromCodeCoverage]
@@ -100,7 +102,7 @@ namespace Creature.Creature.NeuralNetworking
             }
         }
 
-        public void Attack(Character player, SmartMonster smartmonster)
+        public void Attack(WorldGeneration.Character player, SmartMonster smartmonster)
         {
             if (player != null)
             {
@@ -113,7 +115,7 @@ namespace Creature.Creature.NeuralNetworking
             }
         }
 
-        public void Flee(Character player, SmartMonster smartmonster)
+        public void Flee(WorldGeneration.Character player, SmartMonster smartmonster)
         {
             if (player != null)
             {
@@ -121,7 +123,7 @@ namespace Creature.Creature.NeuralNetworking
             }
         }
 
-        public void RunToMonster(Character monster, SmartMonster smartMonster)
+        public void RunToMonster(WorldGeneration.Character monster, SmartMonster smartMonster)
         {
             if (monster != null)
             {

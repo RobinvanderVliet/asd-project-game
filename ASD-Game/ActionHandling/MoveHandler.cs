@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using WorldGeneration;
 using WorldGeneration.Models.Interfaces;
 using System.Timers;
-using Creature.Creature;
+using Characters;
 
 namespace ActionHandling
 {
@@ -20,8 +20,8 @@ namespace ActionHandling
         private readonly IWorldService _worldService;
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IMessageService _messageService;
-        private List<Character> _creatureMoves = new List<Character>();
         private Timer AIUpdateTimer;
+        private int _updateTime = 2000;
 
         public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
         {
@@ -30,7 +30,6 @@ namespace ActionHandling
             _worldService = worldService;
             _playerDatabaseService = playerDatabaseService;
             _messageService = messageService;
-            AIUpdateTimer = new Timer(2000);
             CheckAITimer();
         }
 
@@ -153,7 +152,7 @@ namespace ActionHandling
                 }
             }
             ChangeAIPosition(moveDTO);
-            return new HandlerResponseDTO(SendAction.SendToClients, "");
+            return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
         private void InsertToDatabase(MoveDTO moveDTO)
@@ -281,12 +280,12 @@ namespace ActionHandling
             return movableTiles;
         }
 
-        public void MoveAIs()
+        public void MoveAIs(List<Character> creatureMoves)
         {
             List<MoveDTO> moveDTOs = new List<MoveDTO>();
-            if (_creatureMoves != null)
+            if (creatureMoves != null)
             {
-                foreach (Character move in _creatureMoves)
+                foreach (Character move in creatureMoves)
                 {
                     if (move is SmartMonster smartMonster)
                     {
@@ -303,12 +302,12 @@ namespace ActionHandling
 
         public void GetAIMoves()
         {
-            _creatureMoves = _worldService.GetCreatureMoves();
-            MoveAIs();
+            MoveAIs(_worldService.GetCreatureMoves());
         }
 
         private void CheckAITimer()
         {
+            AIUpdateTimer = new Timer(_updateTime);
             AIUpdateTimer.AutoReset = true;
             AIUpdateTimer.Elapsed += CheckAITimerEvent;
             AIUpdateTimer.Start();

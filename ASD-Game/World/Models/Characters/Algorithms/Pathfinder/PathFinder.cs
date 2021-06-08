@@ -1,9 +1,9 @@
-﻿using Creature.Pathfinder;
+﻿using Character.Pathfinder;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace Creature
+namespace Character
 {
     public class PathFinder
     {

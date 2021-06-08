@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using WorldGeneration.StateMachine.Data;
 
-namespace Creature.Creature.NeuralNetworking.TrainingScenario
+namespace NeuralNetworking.TrainingScenario
 {
     [ExcludeFromCodeCoverage]
     public class TrainingScenario

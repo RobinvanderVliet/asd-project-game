@@ -2,7 +2,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Creature.Creature.NeuralNetworking
+namespace NeuralNetworking
 {
     [ExcludeFromCodeCoverage]
     public class ConnectionGene

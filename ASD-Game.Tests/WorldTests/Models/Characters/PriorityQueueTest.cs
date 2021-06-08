@@ -1,9 +1,9 @@
-﻿using Creature.Pathfinder;
+﻿using Character.Pathfinder;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
-namespace Creature.Tests
+namespace Character.Tests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]

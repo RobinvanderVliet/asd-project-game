@@ -29,14 +29,14 @@ namespace World.Tests.Models.Characters
             _sut.AddHealth(5);
             Assert.AreEqual(75, _sut.Health);
         }
-        
+
         [Test]
         public void Test_AddHealth_ExceedingHealthMin()
         {
             _sut.AddHealth(-500);
             Assert.AreEqual(0, _sut.Health);
         }
-        
+
         [Test]
         public void Test_AddHealth_ExceedingHealthMax()
         {
@@ -58,14 +58,14 @@ namespace World.Tests.Models.Characters
             _sut.AddStamina(5);
             Assert.AreEqual(75, _sut.Stamina);
         }
-        
+
         [Test]
         public void Test_AddStamina_ExceedingStaminaMin()
         {
             _sut.AddStamina(-500);
             Assert.AreEqual(0, _sut.Stamina);
         }
-        
+
         [Test]
         public void Test_AddStamina_ExceedingStaminaMax()
         {
@@ -89,14 +89,14 @@ namespace World.Tests.Models.Characters
             _sut.AddRadiationLevel(5);
             Assert.AreEqual(75, _sut.RadiationLevel);
         }
-        
+
         [Test]
         public void Test_AddRadiationLevel_ExceedingRadiationLevelMin()
         {
             _sut.AddRadiationLevel(-500);
             Assert.AreEqual(0, _sut.RadiationLevel);
         }
-        
+
         [Test]
         public void Test_AddRadiationLevel_ExceedingRadiationLevelMax()
         {

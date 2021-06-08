@@ -4,16 +4,16 @@ using WorldGeneration;
 using WorldGeneration.Models;
 using WorldGeneration.StateMachine.Data;
 
-namespace Creature.Tests
+namespace Character.Tests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
-    class MonsterTest
+    internal class MonsterTest
     {
         private Monster _sut;
 
         private int _xPosition, _yPosition;
-        
+
         [SetUp]
         public void Setup()
         {
@@ -26,7 +26,7 @@ namespace Creature.Tests
         {
             //Arrange
             MonsterData expectedCharacterData = new MonsterData(_xPosition, _yPosition, 0);
-            
+
             //Act
             _sut = new Monster("Zombie", 15, 20, CharacterSymbol.TERMINATOR, "monster1");
 

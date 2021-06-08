@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
-namespace Creature.Creature.NeuralNetworking.TrainingScenario
+namespace NeuralNetworking.TrainingScenario
 {
     public class DataGatheringServiceForTraining
     {

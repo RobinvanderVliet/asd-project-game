@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace Creature.Creature.NeuralNetworking.TrainingScenario
+namespace NeuralNetworking.TrainingScenario
 {
     public class TrainerAI
     {

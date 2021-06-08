@@ -1,10 +1,10 @@
-﻿using Creature.Creature.NeuralNetworking.TrainingScenario;
-using Creature.Pathfinder;
+﻿using Character.Pathfinder;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Character;
 
-namespace Creature.Creature.NeuralNetworking
+namespace NeuralNetworking.TrainingScenario
 {
     public class SmartCreatureTrainingActions
     {

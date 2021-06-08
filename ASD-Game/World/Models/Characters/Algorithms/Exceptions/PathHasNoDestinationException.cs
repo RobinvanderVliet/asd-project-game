@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Creature.Exceptions
+namespace Character.Exceptions
 {
     [ExcludeFromCodeCoverage]
     [Serializable]

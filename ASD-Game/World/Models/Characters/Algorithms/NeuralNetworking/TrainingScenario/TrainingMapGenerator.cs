@@ -1,10 +1,10 @@
-﻿using Creature.Pathfinder;
+﻿using Character.Pathfinder;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
-namespace Creature.Creature.NeuralNetworking.TrainingScenario
+namespace NeuralNetworking.TrainingScenario
 {
     public class TrainingMapGenerator
     {
