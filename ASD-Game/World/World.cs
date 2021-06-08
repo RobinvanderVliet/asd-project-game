@@ -77,8 +77,7 @@ namespace WorldGeneration
         {
             if (CurrentPlayer != null && Players != null && _creatures != null)
             {
-                var characters = ((IEnumerable<Character>)Players).Concat(_creatures).ToList();
-                _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, characters));
+                _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, GetAllCharacters()));
             }
         }
 
@@ -99,13 +98,13 @@ namespace WorldGeneration
 
         public char[,] GetMapAroundCharacter(Character character)
         {
-            var characters = ((IEnumerable<Character>)Players).Concat(_creatures).ToList();
-            return _map.GetMapAroundCharacter(character, _viewDistance, characters);
+            return _map.GetMapAroundCharacter(character, _viewDistance, GetAllCharacters());
         }
 
         private List<Character> GetAllCharacters()
         {
             List<Character> characters = Players.Cast<Character>().ToList();
+            characters.AddRange(_creatures);
             return characters;
         }
 
