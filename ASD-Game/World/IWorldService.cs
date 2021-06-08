@@ -14,8 +14,6 @@ namespace WorldGeneration
 
         public List<Player> GetAllPlayers();
 
-        public void PlayerDied(Player currentPlayer);
-
         public bool IsDead(Player player);
         /// <summary>
         /// Returns items on title for the player of this instance.

@@ -52,11 +52,6 @@ namespace WorldGeneration
             return _world.Players;
         }
 
-        public void PlayerDied(Player player)
-        {
-            player.Symbol = "X";
-        }
-
         public bool IsDead(Player player)
         {
             return player.Health <= 0;
