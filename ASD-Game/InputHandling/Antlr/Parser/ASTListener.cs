@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using ASD_Game.InputHandling.Antlr.Ast;
 using ASD_Game.InputHandling.Antlr.Ast.Actions;

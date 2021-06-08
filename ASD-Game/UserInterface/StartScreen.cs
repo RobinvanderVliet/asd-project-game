@@ -10,13 +10,13 @@ namespace ASD_Game.UserInterface
 
         private const int INPUT_X = 0;
         private const int INPUT_Y = HEADER_HEIGHT + BORDER_SIZE * 2;
-        
+
         private List<string> _options = new()
         {
-            "Host a new session", 
-            "Join a session", 
-            "Load a session", 
-            "Agent editor", 
+            "Host a new session",
+            "Join a session",
+            "Load a session",
+            "Agent editor",
             "Leave game"
         };
 
@@ -30,6 +30,7 @@ namespace ASD_Game.UserInterface
             DrawOptionBox();
             DrawInputBox(INPUT_X, INPUT_Y + _options.Count, INPUT_MESSAGE);
         }
+
         private void DrawOptionBox()
         {
             DrawBox(OPTIONS_X, OPTIONS_Y, OPTIONS_WIDTH, _options.Count);

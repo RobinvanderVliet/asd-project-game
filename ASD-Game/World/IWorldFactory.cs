@@ -1,4 +1,4 @@
-﻿namespace ASD_Game.World
+namespace ASD_Game.World
 {
     public interface IWorldFactory
     {

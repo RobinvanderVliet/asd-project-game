@@ -1,4 +1,4 @@
-﻿using ASD_Game.UserInterface;
+using ASD_Game.UserInterface;
 
 namespace ASD_Game.Messages
 {

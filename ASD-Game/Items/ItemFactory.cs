@@ -1,4 +1,4 @@
-﻿using ASD_Game.Items.ArmorStats;
+using ASD_Game.Items.ArmorStats;
 using ASD_Game.Items.Consumables;
 using ASD_Game.Items.Consumables.ConsumableStats;
 using ASD_Game.Items.ItemStats;

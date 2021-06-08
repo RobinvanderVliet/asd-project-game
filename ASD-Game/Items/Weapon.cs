@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using ASD_Game.Items.ItemStats;
 using ASD_Game.Items.WeaponStats;
 

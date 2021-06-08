@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using ASD_Game.ActionHandling;
@@ -37,7 +37,6 @@ namespace ASD_Game.Tests.SessionTests
         private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
         private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigDatabaseService;
 
-
         [SetUp]
         public void Setup()
         {
@@ -58,15 +57,15 @@ namespace ASD_Game.Tests.SessionTests
             _mockedScreenHandler = new Mock<IScreenHandler>();
             _mockedMessageService = new Mock<IMessageService>();
             _sut = new GameSessionHandler(_mockedClientController.Object,
-                _mockedWorldService.Object,
                 _mockedSessionHandler.Object,
                 _mockedRelativeStatHandler.Object,
+                _mockedGameConfigurationHandler.Object,
+                _mockedScreenHandler.Object,
                 _mockedPlayerDatabaseService.Object,
                 _mockedGameDatabaseService.Object,
                 _mockedGameConfigDatabaseService.Object,
-                _mockedGameConfigurationHandler.Object,
-                _mockedScreenHandler.Object,
                 _mockedPlayerItemDatabaseService.Object,
+                _mockedWorldService.Object,
                 _mockedMessageService.Object);
             _packetDTO = new PacketDTO();
         }
@@ -77,15 +76,15 @@ namespace ASD_Game.Tests.SessionTests
         // {
         //     //arrange
         //     Dictionary<string, int[]> players = new Dictionary<string, int[]>();
-        //     
+        //
         //     int[] playerPosition = new int[2];
         //     playerPosition[0] = 1;
         //     playerPosition[1] = 2;
         //     players.Add("player", playerPosition);
-        //     
+        //
         //     StartGameDTO startGameDTO = new StartGameDTO
         //         {GameGuid = "testGame", PlayerLocations = players};
-        //     
+        //
         //     var payload = JsonConvert.SerializeObject(startGameDTO);
         //
         //     _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Session));
@@ -97,6 +96,5 @@ namespace ASD_Game.Tests.SessionTests
         //     // Assert ---------
         //     _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
         // }
-        
     }
 }

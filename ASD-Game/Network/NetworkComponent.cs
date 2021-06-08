@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using ASD_Game.Network.DTO;
 using Newtonsoft.Json;
 
@@ -26,14 +26,14 @@ namespace ASD_Game.Network
 
         public void ReceivePacket(PacketDTO packet)
         {
-            if(_hostController != null)
+            if (_hostController != null)
             {
-                if(packet.Header.Target == "host")
+                if (packet.Header.Target == "host")
                 {
                     _hostController.ReceivePacket(packet);
                 }
             }
-            else if((packet.Header.Target == "client" || packet.Header.Target == _originId) && _clientController != null)
+            else if ((packet.Header.Target == "client" || packet.Header.Target == _originId) && _clientController != null)
             {
                 _clientController.HandlePacket(packet);
             }
@@ -60,7 +60,7 @@ namespace ASD_Game.Network
         {
             _hostController = hostController;
         }
-        
+
         public string GetOriginId()
         {
             return _originId;

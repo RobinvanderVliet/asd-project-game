@@ -1,4 +1,4 @@
-﻿namespace ASD_Game.UserInterface
+namespace ASD_Game.UserInterface
 {
     public interface IGameStatScreen : IScreen
     {

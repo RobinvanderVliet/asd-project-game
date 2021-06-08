@@ -6,6 +6,8 @@ using ASD_Game.Items.Services;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Interfaces;
+using System.Diagnostics.CodeAnalysis;
+using World.Models.Characters.Algorithms.NeuralNetworking;
 
 namespace ASD_Game.World.Services
 {
@@ -15,6 +17,8 @@ namespace ASD_Game.World.Services
         private readonly IScreenHandler _screenHandler;
         private World _world;
 
+        public List<Character> _creatureMoves { get; set; }
+        
         public WorldService(IScreenHandler screenHandler, IItemService itemService)
         {
             _screenHandler = screenHandler;
@@ -31,11 +35,16 @@ namespace ASD_Game.World.Services
             _world.AddPlayerToWorld(player, isCurrentPlayer);
         }
 
+        public void AddCreatureToWorld(Character character)
+        {
+            _world.AddCreatureToWorld(character);
+        }
+
         public void DisplayWorld()
         {
             _world.UpdateMap();
         }
-
+        
         public void DeleteMap()
         {
             _world.DeleteMap();
@@ -64,6 +73,50 @@ namespace ASD_Game.World.Services
         public Player GetCurrentPlayer()
         {
             return _world.CurrentPlayer;
+        }
+
+        public World GetWorld()
+        {
+            return _world;
+        }
+
+        public char[,] GetMapAroundCharacter(Character character)
+        {
+            return _world.GetMapAroundCharacter(character);
+        }
+
+        public List<Character> GetMonsters()
+        {
+            return _world._creatures;
+        }
+
+        public void UpdateBrains(Genome genome)
+        {
+            if (_world != null)
+            {
+                foreach (Character monster in _world._creatures)
+                {
+                    if (monster is SmartMonster smartMonster)
+                    {
+                        smartMonster.Brain = genome;
+                    }
+                }
+            }
+        }
+
+        public List<Character> GetCreatureMoves()
+        {
+            if (_world != null)
+            {
+                _world.UpdateAI();
+                return _world.movesList;
+            }
+            return null;
+        }
+
+        public List<Player> GetAllPlayers()
+        {
+            return _world.Players;
         }
 
         public bool IsDead(Player player)
@@ -95,10 +148,30 @@ namespace ASD_Game.World.Services
         {
             return _world.GetPlayer(userId);
         }
-        
+
+        public Character GetAI(string id)
+        {
+            return _world.GetAI(id);
+        }
+
+        public ITile GetTile(int x, int y)
+        {
+            return _world.GetLoadedTileByXAndY(x, y);
+        }
+
+        public bool CheckIfCharacterOnTile(ITile tile)
+        {
+            return _world.CheckIfCharacterOnTile(tile);
+        }
+
+        public void LoadArea(int playerX, int playerY, int viewDistance)
+        {
+            _world.LoadArea(playerX, playerY, viewDistance);
+        }
+
         public void DisplayStats()
         {
-            var player = GetCurrentPlayer();
+            Player player = GetCurrentPlayer();
             _screenHandler.SetStatValues(
                 player.Name,
                 0,

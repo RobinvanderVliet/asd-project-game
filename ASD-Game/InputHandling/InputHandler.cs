@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Timers;
 using ASD_Game.InputHandling.Antlr;
 using ASD_Game.Messages;

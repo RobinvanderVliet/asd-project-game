@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using ASD_Game.ActionHandling.DTO;
 using ASD_Game.DatabaseHandler.POCO;

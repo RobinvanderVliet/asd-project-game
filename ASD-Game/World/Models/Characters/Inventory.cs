@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using ASD_Game.Items;
 using ASD_Game.Items.ArmorStats;

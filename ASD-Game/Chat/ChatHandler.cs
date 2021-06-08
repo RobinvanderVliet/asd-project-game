@@ -1,4 +1,4 @@
-﻿using ASD_Game.Chat.DTO;
+using ASD_Game.Chat.DTO;
 using ASD_Game.Messages;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;

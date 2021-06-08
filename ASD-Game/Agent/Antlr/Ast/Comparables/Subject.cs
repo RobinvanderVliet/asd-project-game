@@ -1,7 +1,6 @@
 
 namespace ASD_Game.Agent.Antlr.Ast.Comparables
 {
-
     public class Subject : Comparable
     {
         public string Name { get; set; }
@@ -10,7 +9,6 @@ namespace ASD_Game.Agent.Antlr.Ast.Comparables
         {
             Name = name;
         }
-
 
         public override string GetNodeType()
         {

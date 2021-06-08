@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 
 namespace ASD_Game.World.Models.Characters
 {
@@ -11,6 +12,7 @@ namespace ASD_Game.World.Models.Characters
         public int XPosition { get; set; }
         public int YPosition { get; set; }
         public string Symbol { get; set; }
+        public Vector2 Destination { get; set; }
 
         public Character(string name, int xPosition, int yPosition, string symbol, string id)
         {
@@ -21,7 +23,7 @@ namespace ASD_Game.World.Models.Characters
             Symbol = symbol;
             Id = id;
         }
-        
+
         public string GetSymbol()
         {
             if (Health <= 0)
@@ -31,8 +33,5 @@ namespace ASD_Game.World.Models.Characters
 
             return Symbol;
         }
-
     }
-
-
 }

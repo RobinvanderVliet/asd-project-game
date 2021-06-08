@@ -1,4 +1,4 @@
-﻿using ASD_Game.Items;
+using ASD_Game.Items;
 
 namespace ASD_Game.World
 {

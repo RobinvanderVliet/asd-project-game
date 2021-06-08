@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using LiteDB;
 
 namespace ASD_Game.DatabaseHandler.POCO

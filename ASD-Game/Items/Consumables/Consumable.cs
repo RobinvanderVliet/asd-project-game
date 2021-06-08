@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using ASD_Game.Items.ItemStats;
 
 namespace ASD_Game.Items.Consumables
