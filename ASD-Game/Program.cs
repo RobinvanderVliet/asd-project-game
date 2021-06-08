@@ -48,6 +48,7 @@ namespace ASD_Game
                     services.AddScoped<IChatHandler, ChatHandler>();
                     services.AddScoped<ISessionHandler, SessionHandler>();
                     services.AddScoped<IMoveHandler, MoveHandler>();
+                    services.AddScoped<IAttackHandler, AttackHandler>();
                     services.AddScoped<IRelativeStatHandler, RelativeStatHandler>();
                     services.AddScoped<IWorldService, WorldService>();
                     services.AddScoped<IMessageService, MessageService>();

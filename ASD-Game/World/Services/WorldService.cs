@@ -66,6 +66,11 @@ namespace ASD_Game.World.Services
             return _world.CurrentPlayer;
         }
 
+        public bool IsDead(Player player)
+        {
+            return player.Health <= 0;
+        }
+        
         public void LoadArea(int playerX, int playerY, int viewDistance)
         {
             _world.LoadArea(playerX, playerY, viewDistance);
@@ -85,8 +90,7 @@ namespace ASD_Game.World.Services
 
             return result;
         }
-
-
+        
         public Player GetPlayer(string userId)
         {
             return _world.GetPlayer(userId);

@@ -26,6 +26,8 @@ namespace ASD_Game.Tests.InputHandlingTests
         private Mock<IMoveHandler> _mockedMoveHandler;
         private Mock<IGameSessionHandler> _mockedGameSessionHandler;
         private Mock<IChatHandler> _mockedChatHandler;
+        private Mock<IAttackHandler> _mockedAttackHandler;
+    
         private Mock<IClientController> _mockedClientController;
         private Mock<IInventoryHandler> _mockedInventoryHandler;
         [SetUp]
@@ -35,9 +37,10 @@ namespace ASD_Game.Tests.InputHandlingTests
             _mockedMoveHandler = new Mock<IMoveHandler>();
             _mockedGameSessionHandler = new Mock<IGameSessionHandler>();
             _mockedChatHandler = new Mock<IChatHandler>();
+            _mockedAttackHandler = new Mock<IAttackHandler>();
             _mockedClientController = new Mock<IClientController>();
             _mockedInventoryHandler = new Mock<IInventoryHandler>();
-            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedInventoryHandler.Object, _mockedClientController.Object);
+            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedAttackHandler.Object, _mockedInventoryHandler.Object, _mockedClientController.Object);
         }
     
         [Test]
@@ -159,7 +162,7 @@ namespace ASD_Game.Tests.InputHandlingTests
             requestSessions.AddChild(new RequestSessions());
             return new AST(requestSessions);
         }
-
+    
         [Test]
         public void Test_Apply_HandleCreateSessionActionIsCalled()
         {

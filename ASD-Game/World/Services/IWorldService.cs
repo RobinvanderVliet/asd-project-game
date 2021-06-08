@@ -13,6 +13,8 @@ namespace ASD_Game.World.Services
         public void DisplayWorld();
         public void DeleteMap();
         public void GenerateWorld(int seed);
+        public List<Player> GetAllPlayers();
+        public bool IsDead(Player player);
         public Player getCurrentPlayer();
         public List<ItemSpawnDTO> getAllItems();
         public ITile GetTile(int x, int y);

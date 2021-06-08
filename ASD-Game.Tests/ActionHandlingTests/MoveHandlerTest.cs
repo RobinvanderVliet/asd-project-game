@@ -53,7 +53,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
             _sut.SendMove(direction, steps);
             
             //assert
-            _mockedWorldService.Verify(mock => mock.GetCurrentPlayer(), Times.Once);
+           // _mockedWorldService.Verify(mock => mock.Send(), Times.Once);
             _mockedClientController.Verify(mock => mock.SendPayload(It.IsAny<string>(), PacketType.Move), Times.Once);
         }
     }

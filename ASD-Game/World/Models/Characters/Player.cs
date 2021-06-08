@@ -32,7 +32,6 @@ namespace ASD_Game.World.Models.Characters
         {
             if(consumable is HealthConsumable)
             {
-
                 AddHealth((consumable as HealthConsumable).getHealth());
             }
             else if (consumable is StaminaConsumable)
@@ -87,7 +86,7 @@ namespace ASD_Game.World.Models.Characters
                     break;
             }
         }
-        
+
         public int GetArmorPoints()
         {
             int armorpoints = 0;
@@ -101,5 +100,7 @@ namespace ASD_Game.World.Models.Characters
             }
             return armorpoints;
         }
+
+
     }
 }

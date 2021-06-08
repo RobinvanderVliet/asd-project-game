@@ -9,6 +9,8 @@ namespace ASD_Game.DatabaseHandler.POCO
 
         [BsonId]
         public string ItemName { get; set; }
+        public int ItemType { get; set; }
+        public int ArmorPoints { get; set; }
         public int Xposition { get; set; }
         public int Yposition { get; set; }
     }

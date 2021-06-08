@@ -67,11 +67,11 @@ namespace ASD_Game.Tests.InputHandlingTests
 
         public static AST DropCommand()
         {
-            Input attack = new Input();
+            Input drop = new Input();
 
-            attack.AddChild(new Drop());
+            drop.AddChild(new Drop());
 
-            return new AST(attack);
+            return new AST(drop);
         }
 
         public static AST SayCommand(string message)
