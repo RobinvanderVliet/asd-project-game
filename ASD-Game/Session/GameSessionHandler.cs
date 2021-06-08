@@ -94,6 +94,8 @@ namespace Session
                                     _clientController.IsBackupHost;
             var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
 
+            
+            
             _screenHandler.TransitionTo(new GameScreen());
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
 
@@ -102,7 +104,6 @@ namespace Session
             if (startGameDTO.ExistingPlayer != null &&
                 _clientController.GetOriginId() == startGameDTO.ExistingPlayer.PlayerGuid)
             {
-                _worldService.GenerateWorld(startGameDTO.Seed);
                 currentPlayer = AddRejoinedPlayerToGame(startGameDTO);
                 _worldService.DisplayWorld();
             }
