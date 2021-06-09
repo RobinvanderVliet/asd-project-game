@@ -57,7 +57,7 @@ namespace ASD_Game.UserInterface
             }
         }
 
-        public string GetScreenInput()
+        public virtual string GetScreenInput()
         {
             return _consoleHelper.ReadLine();
         }
@@ -94,6 +94,11 @@ namespace ASD_Game.UserInterface
                 GameScreen gameScreen = _screen as GameScreen;
                 _actionsInQueue.Add(() => gameScreen.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree));
             }
+        }
+
+        public virtual void SetScreenInput(string input)
+        {
+            _consoleHelper.WriteLine(input);
         }
     }
 }

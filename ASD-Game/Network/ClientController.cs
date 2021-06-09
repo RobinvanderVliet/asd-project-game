@@ -8,19 +8,18 @@ namespace ASD_Game.Network
 {
     public class ClientController : IPacketHandler, IClientController
     {
-        private INetworkComponent _networkComponent;
+        private readonly INetworkComponent _networkComponent;
         private IHostController _hostController;
         private string _sessionId;
-        private Dictionary<PacketType, IPacketHandler> _subscribers = new();
-        private bool _isBackupHost;
-        public bool IsBackupHost { get => _isBackupHost; set => _isBackupHost = value; }
+        private readonly Dictionary<PacketType, IPacketHandler> _subscribers = new();
+        public bool IsBackupHost { get; set; }
         public string SessionId { get => _sessionId; }
 
         public ClientController(INetworkComponent networkComponent)
         {
             _networkComponent = networkComponent;
             _networkComponent.SetClientController(this);
-            _isBackupHost = false;
+            IsBackupHost = false;
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
@@ -58,25 +57,23 @@ namespace ASD_Game.Network
 
         public void SendPayload(string payload, PacketType packetType)
         {
-            if (string.IsNullOrEmpty(payload))
+            if (!string.IsNullOrEmpty(payload))
             {
-                throw new Exception("Payload is empty.");
-            }
+                PacketDTO packet = new PacketBuilder()
+                    .SetTarget("host")
+                    .SetPacketType(packetType)
+                    .SetPayload(payload)
+                    .SetSessionID(_sessionId)
+                    .Build();
 
-            PacketDTO packet = new PacketBuilder()
-                .SetTarget("host")
-                .SetPacketType(packetType)
-                .SetPayload(payload)
-                .SetSessionID(_sessionId)
-                .Build();
-
-            if (_hostController != null)
-            {
-                _hostController.ReceivePacket(packet);
-            }
-            else
-            {
-                _networkComponent.SendPacket(packet);
+                if (_hostController != null)
+                {
+                    _hostController.ReceivePacket(packet);
+                }
+                else
+                {
+                    _networkComponent.SendPacket(packet);
+                }
             }
         }
 
@@ -98,7 +95,7 @@ namespace ASD_Game.Network
         //needed for testing, remove and all games will crash, you have been warned
         public void SetBackupHost(bool value)
         {
-            _isBackupHost = value;
+            IsBackupHost = value;
         }
     }
 }

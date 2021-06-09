@@ -27,19 +27,20 @@ DOES_NOT_CONTAIN: 'does not contain';
 PLAYER: 'player';
 NPC: 'npc';
 INVENTORY: 'inventory';
-OPPONENT: 'opponent';
+AGENT: 'agent';
 
 //OBJECTS
-POTION: 'potion';
-ITEM: 'item';
-WEAPON: 'weapon';
 CURRENT: 'current';
 
 //STATS
-STRENGTH: 'strength';
 HEALTH: 'health';
-POWER: 'power';
+ARMOR: 'armor';
+RADIATION: 'radiation';
 STAMINA: 'stamina';
+HP: 'HP';
+AP: 'AP';
+RPP: 'RPP';
+SP: 'SP';
 
 //SETTINGS
 GENERAL: 'general';
@@ -71,6 +72,6 @@ string: DOUBLE_QUOTE STRING+ DOUBLE_QUOTE;
 comparable: item | itemStat | subject | subjectStat | stat | INT;
 itemStat: item stat;
 subjectStat: subject stat;
-subject: PLAYER #player | NPC #npc | OPPONENT #opponent | INVENTORY #inventory | CURRENT #current | STRING #tile;
-item: ITEM | POTION | WEAPON | string;
-stat: STRENGTH | POWER | HEALTH | STAMINA;
+subject: PLAYER #player | NPC #npc | AGENT #agent | INVENTORY #inventory | CURRENT #current | STRING #tile;
+item: string;
+stat: HEALTH | ARMOR | RADIATION | STAMINA | HP | AP | RPP | SP;

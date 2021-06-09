@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using ASD_Game.ActionHandling;
 using ASD_Game.DatabaseHandler.POCO;
 using ASD_Game.DatabaseHandler.Services;
@@ -9,18 +8,17 @@ using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
 using ASD_Game.Session.DTO;
 using ASD_Game.Session.GameConfiguration;
+using ASD_Game.Session.Helpers;
 using ASD_Game.UserInterface;
-using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Services;
 using Newtonsoft.Json;
 using System;
 using System.Timers;
+using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine;
-using WorldGeneration;
 using WorldGeneration.StateMachine;
-using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
 namespace ASD_Game.Session
 {
@@ -155,31 +153,7 @@ namespace ASD_Game.Session
 
         private Player AddPlayersToWorld()
         {
-            List<string[]> allClients = _sessionHandler.GetAllClients();
-
-            int playerX = 26;
-            int playerY = 11;
-
-            Player currentPlayer = null;
-            foreach (var client in allClients)
-            {
-                if (_clientController.GetOriginId() == client[0])
-                {
-                    // add name to players
-                    currentPlayer = new Player(client[1], playerX, playerY,
-                        CharacterSymbol.CURRENT_PLAYER, client[0]);
-                    _worldService.AddPlayerToWorld(currentPlayer, true);
-                }
-                else
-                {
-                    var playerObject = new Player(client[1], playerX, playerY, CharacterSymbol.ENEMY_PLAYER, client[0]);
-                    _worldService.AddPlayerToWorld(playerObject, false);
-                }
-                
-                playerX += 2;
-                playerY += 2;
-            }
-            return currentPlayer;
+            return PlayerSpawner.SpawnPlayers(_sessionHandler.GetAllClients(), _sessionHandler.GetSessionSeed(), _worldService, _clientController);
         }
 
         private void CreateMonsters()
