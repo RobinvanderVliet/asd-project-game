@@ -1,6 +1,6 @@
 using System;
 
-namespace InputHandling.Antlr.Ast
+namespace ASD_Game.InputHandling.Antlr.Ast
 {
     public class Username : ASTNode, IEquatable<Username>
     {

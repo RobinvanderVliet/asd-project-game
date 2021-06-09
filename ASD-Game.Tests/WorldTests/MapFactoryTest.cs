@@ -1,8 +1,8 @@
-/*using System.Diagnostics.CodeAnalysis;
-using Moq;
+using System.Diagnostics.CodeAnalysis;
+using ASD_Game.World;
 using NUnit.Framework;
 
-namespace WorldGeneration.Tests
+namespace ASD_Game.Tests.WorldTests
 {
     [ExcludeFromCodeCoverage]  
     [TestFixture]
@@ -34,4 +34,4 @@ namespace WorldGeneration.Tests
             Assert.That(seed1 != seed2);
         }
     }
-}*/
+}

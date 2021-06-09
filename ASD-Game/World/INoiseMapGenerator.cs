@@ -1,9 +1,9 @@
-using WorldGeneration.Models;
+using ASD_Game.World.Models;
 
-namespace WorldGeneration
+namespace ASD_Game.World
 {
     public interface INoiseMapGenerator
     {
-        public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize, int seed);
+        public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize);
     }
 }

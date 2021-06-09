@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections;
+using ASD_Game.InputHandling.Antlr.Ast;
+using ASD_Game.InputHandling.Antlr.Ast.Actions;
 using InputCommandHandler.Antlr.Ast.Actions;
-using InputHandling.Antlr.Ast;
-using InputHandling.Antlr.Ast.Actions;
 using InputHandling.Antlr.Grammar;
 
-namespace InputHandling.Antlr.Parser
+namespace ASD_Game.InputHandling.Antlr.Parser
 {
     public class ASTListener : PlayerCommandsBaseListener
     {

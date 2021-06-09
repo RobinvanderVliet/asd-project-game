@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
 
-namespace Network
+namespace ASD_Game.Network
 {
     [ExcludeFromCodeCoverage]
     public class PacketBuilder

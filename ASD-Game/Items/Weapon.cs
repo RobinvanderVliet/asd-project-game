@@ -1,8 +1,8 @@
-﻿using System;
-using Items.ItemStats;
-using Items.WeaponStats;
+using System;
+using ASD_Game.Items.ItemStats;
+using ASD_Game.Items.WeaponStats;
 
-namespace Items
+namespace ASD_Game.Items
 {
     public class Weapon : Item
     {

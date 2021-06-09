@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Network;
+using ASD_Game.Session;
+using ASD_Game.UserInterface;
 using Castle.Core.Internal;
-using DatabaseHandler;
 using DatabaseHandler.POCO;
-using DatabaseHandler.Repository;
-using DatabaseHandler.Services;
-using Network;
-using UserInterface;
+
 
 namespace Session
 {
@@ -42,7 +43,7 @@ namespace Session
             }
             else
             {
-                var sessions = result.Select(x => new string[] {x.GameGuid, x.GameName}).ToList();
+                var sessions = result.Select(x => new string[] {x.GameGUID, x.GameName}).ToList();
 
                 _screenHandler.UpdateSavedSessionsList(sessions);
             }
@@ -52,15 +53,15 @@ namespace Session
         {
             var allGames = _gamePocoService.GetAllAsync();
 
-            if (allGames.Result.Where(x => x.GameGuid == value).IsNullOrEmpty())
+            if (allGames.Result.Where(x => x.GameGUID == value).IsNullOrEmpty())
             {
                 Console.WriteLine("Game cannot be loaded as it does not exist.");
             }
             else
             {
-                var gameName = allGames.Result.Where(x => x.GameGuid == value).Select(x => x.GameName).First()
+                var gameName = allGames.Result.Where(x => x.GameGUID == value).Select(x => x.GameName).First()
                     .ToString();
-                var seed = allGames.Result.Where(x => x.GameGuid == value).Select(x => x.Seed).FirstOrDefault();
+                var seed = allGames.Result.Where(x => x.GameGUID == value).Select(x => x.Seed).FirstOrDefault();
                 //get host userName from somewhere.
                 _sessionHandler.CreateSession(gameName, "gerrie", true, value, seed);
             }

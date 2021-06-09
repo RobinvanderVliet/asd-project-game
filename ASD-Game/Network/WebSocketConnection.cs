@@ -1,10 +1,12 @@
+using System;
+using ASD_Game.Network.DTO;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.IO;
 using WebSocketSharp;
 
-namespace Network
+namespace ASD_Game.Network
 {
     public class WebSocketConnection : IWebSocketConnection
     {
@@ -82,7 +84,6 @@ namespace Network
                 throw;
             }
         }
-
         private void LoadConfigVariables()
         {
             var config = new ConfigurationBuilder().SetBasePath(AppDomain.CurrentDomain.BaseDirectory)

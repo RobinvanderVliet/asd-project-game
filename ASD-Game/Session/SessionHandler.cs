@@ -1,72 +1,59 @@
-using Network;
-using Newtonsoft.Json;
-using Session.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Timers;
-using Network.DTO;
-using WorldGeneration;
-using DatabaseHandler;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using DatabaseHandler.Repository;
-using Session.GameConfiguration;
-using UserInterface;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
+using ASD_Game.Session.DTO;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
+using ASD_Game.World;
+using Newtonsoft.Json;
+using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 using Timer = System.Timers.Timer;
-using Messages;
 
-namespace Session
+namespace ASD_Game.Session
 {
     public class SessionHandler : IPacketHandler, ISessionHandler
     {
         private const bool DEBUG_INTERFACE = false; //TODO: remove when UI is complete, obviously
-
-        private readonly IClientController _clientController;
+        private const int WAITTIMEPINGTIMER = 500;
+        private const int INTERVALTIMEPINGTIMER = 1000;
+        private IClientController _clientController;
         private Session _session;
         private IHeartbeatHandler _heartbeatHandler;
+        public TrainingScenario TrainingScenario { get; set; } = new TrainingScenario();
         private readonly IScreenHandler _screenHandler;
         private readonly IMessageService _messageService;
-
+        private readonly IGameConfigurationHandler _gameConfigurationHandler;
+        private readonly IDatabaseService<PlayerPOCO> _playerSerice;
+        
         private Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;
         private int _hostInactiveCounter = 0;
         private Timer _hostPingTimer;
         private Timer _senderHeartbeatTimer;
-        private readonly IGameConfigurationHandler _gameConfigurationHandler;
-        private const int WAITTIMEPINGTIMER = 500;
-        private const int INTERVALTIMEPINGTIMER = 1000;
-        public string GameName { get; set; }
 
-        public SessionHandler(IClientController clientController, IScreenHandler screenHandler,
-            IMessageService messageService, IGameConfigurationHandler gameConfigurationHandler)
+        public SessionHandler(IClientController clientController, IScreenHandler screenHandler, IMessageService messageService,IGameConfigurationHandler gameConfigurationHandler, IDatabaseService<PlayerPOCO> playerSerice)
         {
             _clientController = clientController;
             _screenHandler = screenHandler;
             _messageService = messageService;
             _gameConfigurationHandler = gameConfigurationHandler;
-            _clientController.SubscribeToPacketType(this, PacketType.Session);
+            _playerSerice = playerSerice;
         }
 
-        public SessionHandler(IMessageService messageService, IScreenHandler screenHandler,
-            IGameConfigurationHandler gameConfigurationHandler)
-        {
-            _messageService = messageService;
-            _screenHandler = screenHandler;
-            _gameConfigurationHandler = gameConfigurationHandler;
-            _messageService = messageService;
-        }
-
-        public SessionHandler()
-        {
-        }
 
         public List<string[]> GetAllClients()
         {
             return _session.GetAllClients();
         }
-
+     
         public bool JoinSession(string sessionId, string userName)
         {
             var joinSession = false;
@@ -90,6 +77,7 @@ namespace Session
                 SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
                 sessionDTO.Clients = new List<string[]>();
                 sessionDTO.Clients.Add(new[] {_clientController.GetOriginId(), userName});
+                sessionDTO.Clients.Add(new[] { _clientController.GetOriginId(), userName });
                 sessionDTO.SessionSeed = receivedSessionDTO.SessionSeed;
                 SendSessionDTO(sessionDTO);
                 joinSession = true;
@@ -116,7 +104,6 @@ namespace Session
         {
              GameName = sessionName;
             _session = new Session(sessionName);
-            _session.SessionId = sessionId;
             if (sessionId is null)
             {
                 _session.GenerateSessionId();
@@ -134,19 +121,25 @@ namespace Session
             }
             else
             {
-                _session.SessionSeed = MapFactory.GenerateSeed();
+                _session.SessionSeed = new MapFactory().GenerateSeed();
             }
 
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
+            
+            Thread traingThread = new Thread(
+            TrainingScenario.StartTraining
+            );
+            
+            traingThread.Start();
+            
             _session.SavedGame = savedGame;
 
             _heartbeatHandler = new HeartbeatHandler();
             _messageService.AddMessage("Created session with the name: " + _session.Name);
             return _session.InSession;
         }
-
 
         public void RequestSessions()
         {
@@ -165,7 +158,6 @@ namespace Session
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _clientController.SendPayload(payload, PacketType.Session);
         }
-
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
@@ -186,12 +178,10 @@ namespace Session
                         return AddPlayerToSession(packet);
                     }
 
-
                     if (sessionDTO.SessionType == SessionType.SendHeartbeat)
                     {
                         return HandleHeartbeat(packet);
                     }
-
 
                     if (sessionDTO.SessionType == SessionType.NewBackUpHost)
                     {
@@ -259,16 +249,15 @@ namespace Session
             {
                 SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.Payload);
                 int difficulty = int.Parse(sessionDTO.Name);
-                _gameConfigurationHandler.SetDifficulty((MonsterDifficulty) difficulty, _clientController.SessionId);
+                _gameConfigurationHandler.SetDifficulty((MonsterDifficulty)difficulty, _clientController.SessionId);
                 return new HandlerResponseDTO(SendAction.SendToClients, packetDto.Payload);
             }
-
             if (_clientController.IsBackupHost)
             {
                 SessionDTO sessionDTO =
                     JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
                 int difficulty = int.Parse(sessionDTO.Name);
-                _gameConfigurationHandler.SetDifficulty((MonsterDifficulty) difficulty, _clientController.SessionId);
+                _gameConfigurationHandler.SetDifficulty((MonsterDifficulty)difficulty, _clientController.SessionId);
             }
 
             return new HandlerResponseDTO(SendAction.Ignore, null);
@@ -281,19 +270,17 @@ namespace Session
                 SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.Payload);
                 int spawnrate = int.Parse(sessionDTO.Name);
                 _messageService.AddMessage(spawnrate + "");
-                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
+                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate)spawnrate, _clientController.SessionId);
                 return new HandlerResponseDTO(SendAction.SendToClients, packetDto.Payload);
             }
-
             if (_clientController.IsBackupHost)
             {
                 SessionDTO sessionDTO =
                     JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
                 int spawnrate = int.Parse(sessionDTO.Name);
                 _messageService.AddMessage(spawnrate + "");
-                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
+                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate)spawnrate, _clientController.SessionId);
             }
-
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
@@ -413,16 +400,14 @@ namespace Session
                         amountOfPlayers = "1";
                     }
 
-                    screen.UpdateWithNewSession(new[]
-                        {packet.Header.SessionID, sessionDTO.Name, hostName, amountOfPlayers});
+                    screen.UpdateWithNewSession(new[] { packet.Header.SessionID, sessionDTO.Name, hostName, amountOfPlayers });
                 }
             }
             else
             {
-                var temp = packet; 
-                Console.WriteLine("Id: " + packet.Header.SessionID + " Name: " + sessionDTO.Name + " Host: ");
+                _messageService.AddMessage("Id: " + packet.Header.SessionID + " Name: " + sessionDTO.Name + " Host: " + sessionDTO.Clients.First()[1] + " Amount of players: " + sessionDTO.Clients.Count);
             }
-
+            
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
@@ -512,13 +497,12 @@ namespace Session
             // check if ID matches
             var clientId = sessionDTO.Clients[0];
 
-            IDatabaseService<PlayerPOCO> servicePlayer = new DatabaseService<PlayerPOCO>();
 
-            var allPlayerId = servicePlayer.GetAllAsync();
+            var allPlayerId = _playerSerice.GetAllAsync();
             allPlayerId.Wait();
             var result =
                 allPlayerId.Result.FirstOrDefault(x =>
-                    x.GameGuid == _session.SessionId && x.PlayerGuid == clientId[0]);
+                    x.GameGUID == _session.SessionId && x.PlayerGUID == clientId[0]);
 
             if (result != null)
             {
@@ -531,7 +515,7 @@ namespace Session
 
                 if (GameStarted())
                 {
-                    startGameDto = HandlePlayerLocation(servicePlayer, result);
+                    startGameDto = HandlePlayerLocation(result);
                 }
 
                 var jsonObject = JsonConvert.SerializeObject(startGameDto);
@@ -545,15 +529,15 @@ namespace Session
             }
         }
 
-        public StartGameDTO HandlePlayerLocation(IDatabaseService<PlayerPOCO> servicePlayer, PlayerPOCO result)
+        public StartGameDTO HandlePlayerLocation(PlayerPOCO result)
         {
             StartGameDTO startGameDTO = new StartGameDTO();
             startGameDTO.ExistingPlayer = result;
             startGameDTO.Seed = _session.SessionSeed;
 
-            var allPlayerId = servicePlayer.GetAllAsync();
+            var allPlayerId = _playerSerice.GetAllAsync();
             allPlayerId.Wait();
-            var playerLocations = allPlayerId.Result.Where(x => x.GameGuid == _session.SessionId);
+            var playerLocations = allPlayerId.Result.Where(x => x.GameGUID == _session.SessionId);
 
             startGameDTO.SavedPlayers = playerLocations.ToList();
             startGameDTO.GameGuid = _session.SessionId;
@@ -658,6 +642,8 @@ namespace Session
         {
             _session.GameStarted = startSession;
         }
+
+        public string GameName { get; set; }
 
 
         public void SetSession(Session ses)

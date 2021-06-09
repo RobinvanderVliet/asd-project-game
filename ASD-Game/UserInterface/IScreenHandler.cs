@@ -1,8 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 
-namespace UserInterface
+namespace ASD_Game.UserInterface
 {
     public interface IScreenHandler
     {
@@ -20,6 +18,5 @@ namespace UserInterface
         string GetSessionByPosition(int sessionNumber);
     }
 }
-       
-        
-        
+
+

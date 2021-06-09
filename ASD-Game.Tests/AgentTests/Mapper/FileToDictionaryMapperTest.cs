@@ -1,10 +1,11 @@
-﻿using Agent.Mapper;
-using NUnit.Framework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
+using ASD_Game.Agent;
+using ASD_Game.Agent.Mapper;
+using NUnit.Framework;
 
-namespace Agent.Tests.Mapper
+namespace ASD_Game.Tests.AgentTests.Mapper
 {
     [ExcludeFromCodeCoverage]
     public class FileToDictionaryMapperTest

@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 
-namespace UserInterface
+namespace ASD_Game.UserInterface
 {
     public class GameScreen : Screen
     {

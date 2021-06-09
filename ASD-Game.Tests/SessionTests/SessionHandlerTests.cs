@@ -1,20 +1,22 @@
-using Messages;
-using Moq;
-using Network;
-using Network.DTO;
-using Newtonsoft.Json;
-using NUnit.Framework;
-using Session.DTO;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
-using Session.GameConfiguration;
-using UserInterface;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
+using ASD_Game.Session;
+using ASD_Game.Session.DTO;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
+using Moq;
+using Newtonsoft.Json;
+using NUnit.Framework;
 using Timer = System.Timers.Timer;
 
-namespace Session.Tests
+namespace ASD_Game.Tests.SessionTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
@@ -29,10 +31,9 @@ namespace Session.Tests
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;
         private Mock<IMessageService> _mockedMessageService;
-        private Mock<Session> _mockedSession;
+        private Mock<Session.Session> _mockedSession;
         private Mock<IScreenHandler> _mockedScreenHandler;
         private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
-
 
         [SetUp]
         public void Setup()
@@ -44,8 +45,9 @@ namespace Session.Tests
             _mockedScreenHandler = new Mock<IScreenHandler>();
             _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
             _mockedMessageService = new();
-            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object, _mockedMessageService.Object,  _mockedGameConfigurationHandler.Object);
             _mockedSession = new Mock<Session>("test");
+            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object, _mockedGameConfigurationHandler.Object, _mockedMessageService.Object);
+            _mockedSession = new Mock<Session.Session>("test");
             _packetDTO = new PacketDTO();
         }
 
@@ -220,7 +222,7 @@ namespace Session.Tests
             SessionDTO sessionDTOjoin = new SessionDTO(SessionType.RequestSessions);
             var payload = JsonConvert.SerializeObject(sessionDTOjoin);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = hostOriginId;
             packetHeaderDTO.SessionID = sessionId;
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -267,7 +269,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = "testOriginId";
             packetHeaderDTO.SessionID = null;
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -292,7 +294,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = hostOriginId;
             packetHeaderDTO.SessionID = "sessionId";
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -325,7 +327,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = hostOriginId;
             packetHeaderDTO.SessionID = "sessionId";
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -358,7 +360,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = hostOriginId;
             packetHeaderDTO.SessionID = "sessionId";
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -390,7 +392,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = "testOriginId";
             packetHeaderDTO.SessionID = "otherSessionId";
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -422,7 +424,7 @@ namespace Session.Tests
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = originId;
             packetHeaderDTO.SessionID = generatedSessionId;
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -456,7 +458,7 @@ namespace Session.Tests
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            Network.PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.OriginID = originId;
             packetHeaderDTO.SessionID = generatedSessionId;
             packetHeaderDTO.PacketType = PacketType.Session;
@@ -501,7 +503,7 @@ namespace Session.Tests
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
 
-            PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO
             {
                 OriginID = originId,
                 SessionID = generatedSessionId,
@@ -553,7 +555,7 @@ namespace Session.Tests
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO
             {
                 OriginID = originId,
                 SessionID = generatedSessionId,
@@ -673,7 +675,7 @@ namespace Session.Tests
             SessionDTO sessionDTO = new SessionDTO(SessionType.SendHeartbeat);
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
-            PacketHeaderDTO packetHeaderDTO = new Network.PacketHeaderDTO();
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
             packetHeaderDTO.PacketType = PacketType.Session;
             packetHeaderDTO.Target = "host";
             _packetDTO.Header = packetHeaderDTO;
@@ -964,7 +966,8 @@ namespace Session.Tests
             _mockedGameConfigurationHandler.Verify(x => x.SetSpawnRate(spawnRate, generatedSessionId), Times.Never());
         }
 
-        // [Test] //AddPlayerToSession is a private method, not sure why its beeing tests
+        //
+        // [Test]
         // public void Test_AddPlayerToSession_HostTestIfUpdateIsCalled() 
         // {
         //     //Arrange
@@ -979,7 +982,7 @@ namespace Session.Tests
         //     packetDTO.Payload = JsonConvert.SerializeObject(sessionDTO);
         //     packetDTO.HandlerResponse = new HandlerResponseDTO(SendAction.Ignore, "");
         //
-        //     Session session = new Session("testsession");
+        //     Session.Session session = new Session.Session("testsession");
         //     _sut.SetSession(session);
         //
         //     //Arrange the mock for lobbyscreen
@@ -993,8 +996,8 @@ namespace Session.Tests
         //     //Assert
         //     lobbyMock.Verify(mock => mock.UpdateLobbyScreen(It.IsAny<List<string[]>>()), Times.Once());
         // }
-
-        // [Test] //AddPlayerToSession is a private method, not sure why its beeing tests?
+        //
+        // [Test]
         // public void Test_AddPlayerToSession_ClientIfUpdateIsCalled()
         // {
         //     //Arrange
@@ -1015,7 +1018,7 @@ namespace Session.Tests
         //     resultMessage.SessionSeed = 1;
         //     packetDTO.HandlerResponse = new HandlerResponseDTO(SendAction.Ignore, JsonConvert.SerializeObject(resultMessage));
         //
-        //     Session session = new Session("testsession");
+        //     Session.Session session = new Session.Session("testsession");
         //     _sut.SetSession(session);
         //
         //     //Arrange the mock for lobbyscreen
@@ -1058,7 +1061,7 @@ namespace Session.Tests
                 Payload = ""
             };
 
-            _sut.SetSession(new Session("test game"));
+            _sut.SetSession(new Session.Session("test game"));
             _mockedClientController.Setup(x => x.GetOriginId()).Returns("3");
 
             _sut.GetAllClients().Add(new []{"1", "gerrit"});
@@ -1085,7 +1088,7 @@ namespace Session.Tests
                 Payload = ""
             };
 
-            _sut.SetSession(new Session("test game"));
+            _sut.SetSession(new Session.Session("test game"));
             _mockedClientController.Setup(x => x.GetOriginId()).Returns("1");
 
             _sut.GetAllClients().Add(new []{"1", "gerrit"});

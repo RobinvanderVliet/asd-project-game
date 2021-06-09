@@ -1,15 +1,14 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+using System;
 using System.Timers;
-using InputHandling.Antlr;
-using InputHandling.Exceptions;
-using Messages;
+using ASD_Game.InputHandling.Antlr;
+using ASD_Game.Messages;
+using ASD_Game.Session;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
 using Session;
-using Session.GameConfiguration;
-using UserInterface;
 using WebSocketSharp;
 
-namespace InputHandling
+namespace ASD_Game.InputHandling
 {
     public class InputHandler : IInputHandler
     {
@@ -33,7 +32,6 @@ namespace InputHandling
             _gameConfigurationHandler = gameConfigurationHandler;
             _gamesSessionService = gamesSessionService;
             _messageService = messageService;
-
         }
 
         public InputHandler()

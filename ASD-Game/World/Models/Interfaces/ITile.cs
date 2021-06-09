@@ -1,7 +1,7 @@
-﻿using Items;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using ASD_Game.Items;
 
-namespace WorldGeneration.Models.Interfaces
+namespace ASD_Game.World.Models.Interfaces
 {
     public interface ITile
     {

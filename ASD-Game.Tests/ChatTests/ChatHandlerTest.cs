@@ -1,16 +1,17 @@
-﻿using System;
-using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using ASD_Game.Chat;
+using ASD_Game.Chat.DTO;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Services;
 using Moq;
-using Network;
-using Chat.DTO;
-using Network.DTO;
 using Newtonsoft.Json;
-using System.IO;
-using WorldGeneration;
-using Messages;
+using NUnit.Framework;
 
-namespace Chat.Tests
+namespace ASD_Game.Tests.ChatTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
@@ -85,7 +86,6 @@ namespace Chat.Tests
             Assert.AreEqual(ExpectedResult, actualResult);
         }
 
-        //TODO Test fixen
         [Test]
         public void Test_HandlePacket_HandleSayProperly()
         {

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using ASD_Game.DatabaseHandler.POCO;
 using DatabaseHandler.POCO;
 
-namespace Session.DTO
+namespace ASD_Game.Session.DTO
 {
     [ExcludeFromCodeCoverage]
     public class StartGameDTO

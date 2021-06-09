@@ -1,7 +1,7 @@
-﻿using Agent.Antlr.Ast.Comparables;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using ASD_Game.Agent.Antlr.Ast.Comparables;
 
-namespace Agent.Antlr.Ast
+namespace ASD_Game.Agent.Antlr.Ast
 {
     public class ActionReference : Node
     {

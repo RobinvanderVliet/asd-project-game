@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace UserInterface
+namespace ASD_Game.UserInterface
 {
     public class ScreenHandler : IScreenHandler
     {
@@ -10,13 +11,28 @@ namespace UserInterface
         public Screen Screen { get => _screen; set => _screen = value; }
         private ConsoleHelper _consoleHelper;
         public ConsoleHelper ConsoleHelper { get => _consoleHelper; set => _consoleHelper = value; }
+        private BlockingCollection<Action> _actionsInQueue;
+        private Thread _displayThread { get; set; }
+        
         private bool _displaying;
         
         public ScreenHandler()
         {
             _consoleHelper = new ConsoleHelper();
-            _displaying = false;
+            _actionsInQueue = new();
+
+            _displayThread = new Thread(RunDisplay);
+            _displayThread.Start();
         }
+
+        private void RunDisplay()
+        {
+            while(_actionsInQueue.TryTake(out Action a, -1))
+            {
+                a.Invoke();
+            }
+        }
+
         public void TransitionTo(Screen screen)
         {
             _consoleHelper.ClearConsole();

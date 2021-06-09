@@ -1,9 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace WorldGeneration.Models
+namespace ASD_Game.World.Models
 {
     [ExcludeFromCodeCoverage]
-    public static class TileSymbol
+    public static class TileSymbol 
     {
         public const string DOOR = "/";
         public const string HOUSE = "+";

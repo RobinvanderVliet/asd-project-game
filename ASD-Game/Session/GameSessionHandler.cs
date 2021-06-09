@@ -1,22 +1,30 @@
-using DatabaseHandler;
 using System.Collections.Generic;
-using System.Linq;
-using ActionHandling;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Repository;
-using DatabaseHandler.Services;
-using Items;
-using Messages;
-using Network;
-using Network.DTO;
+using ASD_Game.ActionHandling;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Items;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
+using ASD_Game.Session.DTO;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
+using ASD_Game.World.Models;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Services;
 using Newtonsoft.Json;
-using Session.DTO;
-using Session.GameConfiguration;
-using UserInterface;
+using System;
+using System.Linq;
+using System.Timers;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
+using ASD_Game.World.Models.Characters.StateMachine;
+using DatabaseHandler.POCO;
 using WorldGeneration;
-using WorldGeneration.Models;
+using WorldGeneration.StateMachine;
+using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
-namespace Session
+namespace ASD_Game.Session
 {
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
     {
@@ -32,6 +40,9 @@ namespace Session
         private readonly IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
         private readonly IGameConfigurationHandler _gameConfigurationHandler;
         private IDatabaseService<GameConfigurationPOCO> _gameConfigDatabaseService;
+        private Timer AIUpdateTimer;
+        private int _brainUpdateTime = 60000;
+        private Random _random = new Random();
 
         public GameSessionHandler(IClientController clientController, IWorldService worldService,
             ISessionHandler sessionHandler, IDatabaseService<GamePOCO> gamePocoService,
@@ -55,6 +66,10 @@ namespace Session
             _playerItemDatabaseService = playerItemDatabaseService;
             _gameConfigurationHandler = gameConfigurationHandler;
             _gameConfigDatabaseService = gameConfigDatabaseService;
+            _playerItemDatabaseService = playerItemDatabaseService;
+            _worldService = worldService;
+            _messageService = messageService;
+            CheckAITimer();
         }
 
         public void SendGameSession()
@@ -72,7 +87,7 @@ namespace Session
             SendGameSessionDTO(startGameDTO);
             _sessionHandler.SetGameStarted(true);
         }
-        
+
         public StartGameDTO LoadSave()
         {
             StartGameDTO startGameDTO = new StartGameDTO();
@@ -80,11 +95,11 @@ namespace Session
 
             var allPlayerId = _playerService.GetAllAsync();
             allPlayerId.Wait();
-            var playerLocations = allPlayerId.Result.Where(x => x.GameGuid == _clientController.SessionId);
+            var playerLocations = allPlayerId.Result.Where(x => x.GameGUID == _clientController.SessionId);
 
             startGameDTO.SavedPlayers = playerLocations.ToList();
             startGameDTO.GameGuid = _clientController.SessionId;
-            
+
 
             return startGameDTO;
         }
@@ -124,6 +139,7 @@ namespace Session
                     var playerObject = new Player(client[1], playerX, playerY, CharacterSymbol.ENEMY_PLAYER, client[0]);
                     _worldService.AddPlayerToWorld(playerObject, false);
                 }
+
                 playerX += 2;
                 playerY += 2;
             }
@@ -143,13 +159,14 @@ namespace Session
                 playerPosition[0] = player.XPosition;
                 playerPosition[1] = player.YPosition;
 
-                players.Add(player.PlayerGuid, playerPosition);
+                players.Add(player.PlayerGUID, playerPosition);
                 startGameDTO.SavedPlayers.Add(player);
             }
 
             startGameDTO.PlayerLocations = players;
             return startGameDTO;
         }
+
 
         private void SendGameSessionDTO(StartGameDTO startGameDTO)
         {
@@ -166,17 +183,18 @@ namespace Session
                 HandleStartGameSession(startGameDTO);
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
+
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
         private void InsertPlayersIntoDatabase()
         {
-            var players = _worldService.GetPlayers();
+            var players = _worldService.GetAllPlayers();
             foreach (Player player in players)
             {
                 PlayerPOCO playerPoco = new PlayerPOCO
                 {
-                    PlayerGuid = player.Id, GameGuid = _clientController.SessionId,
+                    PlayerGUID = player.Id, GameGUID = _clientController.SessionId,
                     GameGUIDAndPlayerGuid = _clientController.SessionId + player.Id, XPosition = player.XPosition,
                     YPosition = player.YPosition
                 };
@@ -210,51 +228,55 @@ namespace Session
         private void InsertGameIntoDatabase()
         {
             var gamePOCO = new GamePOCO
-                {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId(), GameName = _sessionHandler.GameName, Seed = _sessionHandler.GetSessionSeed()};
+            {
+                GameGUID = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId(),
+                GameName = _sessionHandler.GameName, Seed = _sessionHandler.GetSessionSeed()
+            };
             _gamePocoService.CreateAsync(gamePOCO);
         }
 
         private void HandleStartGameSession(StartGameDTO startGameDTO)
         {
-        
-                bool handleInDatabase = (_clientController.IsHost() || _clientController.IsBackupHost);
+            bool handleInDatabase = (_clientController.IsHost() || _clientController.IsBackupHost);
 
-                _screenHandler.TransitionTo(new GameScreen());
-                Player currentPlayer = null;
+            _screenHandler.TransitionTo(new GameScreen());
+          
 
-                if (startGameDTO.GameGuid == null && !_sessionHandler.GameStarted())
-                {
-                    _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
-                    currentPlayer = AddPlayersToWorld();
+            Player currentPlayer = null;
 
-                    if (handleInDatabase)
-                    {
-                        InsertGameIntoDatabase();
-                        InsertPlayersIntoDatabase();
-                        InsertConfigurationIntoDatabase();
-                    }
-                }
-                else
+            if (startGameDTO.GameGuid == null && !_sessionHandler.GameStarted())
+            {
+                _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
+                currentPlayer = AddPlayersToWorld();
+
+                if (handleInDatabase)
                 {
-                    _worldService.GenerateWorld(startGameDTO.Seed);
-                    currentPlayer = AddPlayerToWorldSavedGame(startGameDTO.SavedPlayers);
+                    InsertGameIntoDatabase();
+                    InsertPlayersIntoDatabase();
+                    InsertConfigurationIntoDatabase();
                 }
-            
-                if (currentPlayer != null)
-                {
-                    _worldService.LoadArea(currentPlayer.XPosition, currentPlayer.YPosition, 10);
-                }
-            
-                _relativeStatHandler.SetCurrentPlayer(_worldService.GetCurrentPlayer());
-                _relativeStatHandler.CheckStaminaTimer();
-                _relativeStatHandler.CheckRadiationTimer();
-                _worldService.DisplayWorld();
-                _worldService.DisplayStats();
-                _messageService.DisplayMessages();
-            
+            }
+            else
+            {
+                _worldService.GenerateWorld(startGameDTO.Seed);
+                currentPlayer = AddPlayerToWorldSavedGame(startGameDTO.SavedPlayers);
+            }
+
+            if (currentPlayer != null)
+            {
+                _worldService.LoadArea(currentPlayer.XPosition, currentPlayer.YPosition, 10);
+                CreateMonsters();
+            }
+
+            _relativeStatHandler.SetCurrentPlayer(_worldService.GetCurrentPlayer());
+            _relativeStatHandler.CheckStaminaTimer();
+            _relativeStatHandler.CheckRadiationTimer();
+            _worldService.DisplayWorld();
+            _worldService.DisplayStats();
+            _messageService.DisplayMessages();
         }
 
-      
+
         private Player AddPlayersToNewGame(StartGameDTO startGameDTO)
         {
             Player currentPlayer = null;
@@ -292,21 +314,79 @@ namespace Session
             Player currentPlayer = null;
             foreach (var player in savedPlayers)
             {
-                if (_clientController.GetOriginId() == player.PlayerGuid)
+                if (_clientController.GetOriginId() == player.PlayerGUID)
                 {
                     currentPlayer = new Player("gerrit", player.XPosition, player.YPosition,
-                        CharacterSymbol.CURRENT_PLAYER, player.PlayerGuid);
+                        CharacterSymbol.CURRENT_PLAYER, player.PlayerGUID);
                     _worldService.AddPlayerToWorld(currentPlayer, true);
                 }
                 else
                 {
                     var enemyPlayer = new Player("arie", player.XPosition, player.YPosition,
-                        CharacterSymbol.ENEMY_PLAYER, player.PlayerGuid);
+                        CharacterSymbol.ENEMY_PLAYER, player.PlayerGUID);
                     _worldService.AddPlayerToWorld(enemyPlayer, false);
                 }
             }
 
             return currentPlayer;
+        }
+
+        private void CreateMonsters()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                if (i < 0)
+                {
+                    Monster newMonster = new Monster("Zombie", _random.Next(12, 25), _random.Next(12, 25),
+                        CharacterSymbol.TERMINATOR, "monst" + i);
+                    SetStateMachine(newMonster);
+                    _worldService.AddCreatureToWorld(newMonster);
+                }
+                else
+                {
+                    SmartMonster newMonster = new SmartMonster("Zombie", _random.Next(12, 25), _random.Next(12, 25),
+                        CharacterSymbol.TERMINATOR, "monst" + i, new DataGatheringService(_worldService));
+                    SetBrain(newMonster);
+                    _worldService.AddCreatureToWorld(newMonster);
+                }
+            }
+        }
+
+        private void SetBrain(SmartMonster monster)
+        {
+            if (_sessionHandler.TrainingScenario.BrainTransplant() != null)
+            {
+                monster.Brain = _sessionHandler.TrainingScenario.BrainTransplant();
+            }
+        }
+
+        private void CheckAITimer()
+        {
+            AIUpdateTimer = new Timer(_brainUpdateTime);
+            AIUpdateTimer.AutoReset = true;
+            AIUpdateTimer.Elapsed += CheckAITimerEvent;
+            AIUpdateTimer.Start();
+        }
+
+        private void CheckAITimerEvent(object sender, ElapsedEventArgs e)
+        {
+            AIUpdateTimer.Stop();
+            UpdateBrain();
+            AIUpdateTimer.Start();
+        }
+
+        public void UpdateBrain()
+        {
+            if (_sessionHandler.TrainingScenario.BrainTransplant() != null)
+            {
+                _worldService.UpdateBrains(_sessionHandler.TrainingScenario.BrainTransplant());
+            }
+        }
+
+        private void SetStateMachine(Monster monster)
+        {
+            ICharacterStateMachine CSM = new MonsterStateMachine(monster.MonsterData, null);
+            monster.MonsterStateMachine = CSM;
         }
     }
 }

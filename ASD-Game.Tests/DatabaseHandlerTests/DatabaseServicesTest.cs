@@ -6,13 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using DatabaseHandler.Repository;
-using DatabaseHandler.Services;
+using ASD_Game.DatabaseHandler.Repository;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.World.Models;
 using Moq;
 using NUnit.Framework;
-using WorldGeneration.Models;
 
-namespace DatabaseHandler.Tests
+namespace ASD_Game.Tests.DatabaseHandlerTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
@@ -104,8 +104,6 @@ namespace DatabaseHandler.Tests
                 var errorChunk = _services.CreateAsync(chunk).Result;
             });
         }
-
-
 
         /// <summary>
         /// ReadAsync(Chunk)

@@ -1,6 +1,4 @@
-using System;
-
-namespace UserInterface
+namespace ASD_Game.UserInterface
 {
     public abstract class Screen
     {

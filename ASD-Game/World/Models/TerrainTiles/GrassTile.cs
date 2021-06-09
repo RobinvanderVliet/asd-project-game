@@ -1,14 +1,13 @@
-﻿using Items;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using WorldGeneration.Models.Interfaces;
+using ASD_Game.Items;
+using ASD_Game.World.Models.Interfaces;
 
-namespace WorldGeneration.Models.TerrainTiles
+namespace ASD_Game.World.Models.TerrainTiles
 {
     [ExcludeFromCodeCoverage]
     public class GrassTile : ITerrainTile
     {
-
         public bool IsAccessible { get; set; }
         public string Symbol { get; set; }
         public int XPosition { get; set; }
@@ -24,6 +23,7 @@ namespace WorldGeneration.Models.TerrainTiles
             XPosition = x;
             YPosition = y;
             StaminaCost = 2;
+            ItemsOnTile = new List<Item>();
         }
     }
 }

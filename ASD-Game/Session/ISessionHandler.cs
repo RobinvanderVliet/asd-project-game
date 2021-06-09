@@ -1,17 +1,15 @@
-using System;
 using System.Collections.Generic;
-using Session.DTO;
+using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
-using System.Dynamic;
-
-namespace Session
+namespace ASD_Game.Session
 {
     public interface ISessionHandler
     {
+        public TrainingScenario TrainingScenario { get; set; }
+
         public bool JoinSession(string sessionId, string userName);
         public bool CreateSession(string sessionName, string userName, bool savedGame, string sessionId, int? seed);
         public void RequestSessions();
-        public void SendHeartbeat();
         public int GetSessionSeed();
         public List<string[]> GetAllClients();
 

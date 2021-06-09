@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace ActionHandling.DTO
+namespace ASD_Game.ActionHandling.DTO
 {
     [ExcludeFromCodeCoverage]
     public class RelativeStatDTO

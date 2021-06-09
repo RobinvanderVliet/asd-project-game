@@ -1,14 +1,13 @@
-using LiteDB;
 using System.Diagnostics.CodeAnalysis;
+using LiteDB;
 
-namespace DatabaseHandler.POCO
+namespace ASD_Game.DatabaseHandler.POCO
 {
     [ExcludeFromCodeCoverage]
     public class PlayerPOCO
     {
-        
-        public string GameGuid { get; set; }
-        public string PlayerGuid { get; set; }
+        public string GameGUID { get; set; }
+        public string PlayerGUID { get; set; }
         [BsonId]
         public string GameGUIDAndPlayerGuid { get; set; }
         

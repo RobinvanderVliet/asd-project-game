@@ -1,4 +1,4 @@
-﻿namespace UserInterface
+﻿namespace ASD_Game.UserInterface
 {
     public class GameWorldScreen : Screen, IGameWorldScreen
     {
