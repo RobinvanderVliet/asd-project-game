@@ -2,10 +2,10 @@
 {
     public class GameWorldScreen : Screen, IGameWorldScreen
     {
-        private int _xPosition;
-        private int _yPosition;
-        private int _width;
-        private int _height;
+        private readonly int _xPosition;
+        private readonly int _yPosition;
+        private readonly int _width;
+        private readonly int _height;
         public GameWorldScreen(int x, int y, int width, int height)
         {
             _xPosition = x;

@@ -5,7 +5,7 @@ namespace ASD_Game.Agent.Antlr.Ast
 
     public class Rule : Node
     {
-        private List<Node> _settings = new List<Node>();
+        private readonly List<Node> _settings = new List<Node>();
 
         public string SettingName { get; set; }
         public string Value { get; set; }

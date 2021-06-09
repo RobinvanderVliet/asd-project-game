@@ -15,14 +15,13 @@ namespace ASD_Game.Agent
     {
         private AST _ast;
 
-        private List<string> _errors;
+        private readonly List<string> _errors;
         private Checking _checking;
-        private Generating _generating;
+        private readonly Generating _generating;
 
         public Pipeline()
         {
             _errors = new List<string>();
-            // transformer = new Transformer();
             _generating = new Generating();
         }
 
@@ -75,6 +74,7 @@ namespace ASD_Game.Agent
 
         public Checking Checking
         {
+            get => _checking;
             set => _checking = value;
         }
 

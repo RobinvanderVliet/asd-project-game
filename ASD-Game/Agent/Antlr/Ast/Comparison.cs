@@ -5,7 +5,6 @@
     {
         public string ComparisonType { get; set; }
 
-        //TODO: Create comparisonTypeEnum ,(reactie) voor nu overbodig kan later
         public Comparison(string comparisonType)
         {
             ComparisonType = comparisonType;

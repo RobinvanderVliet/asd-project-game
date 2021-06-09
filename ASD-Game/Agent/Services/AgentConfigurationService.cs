@@ -10,9 +10,9 @@ namespace ASD_Game.Agent.Services
 {
     public class AgentConfigurationService : BaseConfigurationService
     {
-        private InlineConfig _inlineConfig;
-        private List<Configuration> _agentConfigurations;
-        private InputHandler _inputHandler;
+        private readonly InlineConfig _inlineConfig;
+        private readonly List<Configuration> _agentConfigurations;
+        private readonly InputHandler _inputHandler;
 
         public AgentConfigurationService(List<Configuration> agentConfigurations, FileToDictionaryMapper fileToDictionaryMapper, InputHandler inputHandler)
         {
@@ -70,10 +70,10 @@ namespace ASD_Game.Agent.Services
             }
         }
 
-        public override void CreateConfiguration(string agentName, string filepath)
+        public override void CreateConfiguration(string configurationName, string filepath)
         {
             var agentConfiguration = new AgentConfiguration();
-            agentConfiguration.AgentName = agentName;
+            agentConfiguration.AgentName = configurationName;
             agentConfiguration.Settings = FileToDictionaryMapper.MapFileToConfiguration(filepath);
             _agentConfigurations.Add(agentConfiguration);
         }

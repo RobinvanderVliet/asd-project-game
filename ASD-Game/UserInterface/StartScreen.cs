@@ -10,8 +10,8 @@ namespace ASD_Game.UserInterface
 
         private const int INPUT_X = 0;
         private const int INPUT_Y = HEADER_HEIGHT + BORDER_SIZE * 2;
-
-        private List<string> _options = new()
+        
+        private readonly List<string> _options = new()
         {
             "Host a new session",
             "Join a session",

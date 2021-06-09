@@ -19,7 +19,7 @@ namespace ASD_Game.Agent.Antlr.Ast
             if (_action != null)
             {
                 children.Add(_action);
-            };
+            }
             children.AddRange(body);
             return children;
         }

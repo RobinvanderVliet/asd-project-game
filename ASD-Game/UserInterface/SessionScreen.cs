@@ -17,6 +17,7 @@ namespace ASD_Game.UserInterface
 
         public List<string[]> SessionInfoList
         {
+            get => _sessionsInfoList;
             set => _sessionsInfoList = value;
         }
 

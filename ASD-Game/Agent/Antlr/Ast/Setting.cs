@@ -6,8 +6,8 @@ namespace ASD_Game.Agent.Antlr.Ast
     public class Setting : Node
     {
 
-        private List<Node> _conditions = new List<Node>();
-        private List<Node> _actions = new List<Node>();
+        private readonly List<Node> _conditions = new List<Node>();
+        private readonly List<Node> _actions = new List<Node>();
 
         public string SettingName { get; set; }
 

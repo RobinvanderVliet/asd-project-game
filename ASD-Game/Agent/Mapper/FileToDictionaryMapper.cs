@@ -6,19 +6,20 @@ namespace ASD_Game.Agent.Mapper
 {
     public class FileToDictionaryMapper
     {
-        public FileHandler FileHandler;
+        private FileHandler _FileHandler;
+        public FileHandler FileHandler { get => _FileHandler; set => _FileHandler = value; }
         public Dictionary<string, string> MapFileToConfiguration(string filepath)
         {
-            FileHandler = new FileHandler();
+            _FileHandler = new FileHandler();
             Dictionary<string, string> configuration = new Dictionary<string, string>();
 
-            string content = FileHandler.ImportFile(filepath);
+            string content = _FileHandler.ImportFile(filepath);
 
             var splitContent = content.Split(Environment.NewLine);
 
-            foreach (var setting in splitContent)
+            foreach (string setting in splitContent)
             {
-                if (setting.Equals(""))
+                if (string.IsNullOrEmpty(setting))
                 {
                     throw new SyntaxErrorException("The config file for npc or agent contains an empty row. This is not allowed.");
                 }

@@ -15,6 +15,7 @@ namespace ASD_Game.UserInterface
         private const int INPUT_X = 0;
         private const int INPUT_Y = HEADER_HEIGHT + CONFIGURATION_Y + 2;
 
+        private const string CONFIG_TEXT = "Welcome to the game configuration!";
         public ConfigurationScreen()
         {
             _configuration = "Do you want to configure the game?";
@@ -27,7 +28,7 @@ namespace ASD_Game.UserInterface
         public override void DrawScreen()
         {
             Console.Clear();
-            DrawHeader(GetHeaderText());
+            DrawHeader(CONFIG_TEXT);
             DrawConfigurationBox();
             DrawInputBox(INPUT_X, INPUT_Y + _options.Count, _inputText);
         }
@@ -37,11 +38,6 @@ namespace ASD_Game.UserInterface
             _configuration = configurationHeader;
             _options = configurationChoices;
             DrawScreen();
-        }
-        
-        private string GetHeaderText()
-        {
-            return "Welcome to the game configuration!";
         }
 
         private void DrawConfigurationBox()
