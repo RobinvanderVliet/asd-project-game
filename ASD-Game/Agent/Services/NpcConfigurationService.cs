@@ -10,12 +10,12 @@ namespace Agent.Services
     public class NpcConfigurationService : BaseConfigurationService
     {
         private List<Configuration> _npcConfigurations;
-        public FileToDictionaryMapper fileToDictionaryMapper;
+        public FileToDictionaryMapper FileToDictionaryMapper;
 
         public NpcConfigurationService(List<Configuration> npcConfigurations, FileToDictionaryMapper fileToDictionaryMapper)
         {
             _npcConfigurations = npcConfigurations;
-            this.fileToDictionaryMapper = fileToDictionaryMapper;
+            FileToDictionaryMapper = fileToDictionaryMapper;
             FileHandler = new FileHandler();
             Pipeline = new Pipeline();
         }
@@ -24,7 +24,7 @@ namespace Agent.Services
         {
             var npcConfiguration = new NpcConfiguration();
             npcConfiguration.NpcName = npcName;
-            npcConfiguration.Settings = fileToDictionaryMapper.MapFileToConfiguration(filepath);
+            npcConfiguration.Settings = FileToDictionaryMapper.MapFileToConfiguration(filepath);
             _npcConfigurations.Add(npcConfiguration);
         }
 

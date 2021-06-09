@@ -5,11 +5,9 @@ using NUnit.Framework;
 
 namespace UserInterface.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class ScreenHandlerTest
     {
-        [ExcludeFromCodeCoverage]
-        public class StartScreenTest
-        {
             private IScreenHandler _sut;
             private Mock<StartScreen> _mockedStartScreen;
             private Mock<ConsoleHelper> _mockedConsoleHelper;
@@ -35,4 +33,3 @@ namespace UserInterface.Tests
             }
         }
     }
-}

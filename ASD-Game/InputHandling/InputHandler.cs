@@ -226,11 +226,11 @@ namespace InputHandling
                 if(input.Equals("help combat"))
                 {
                     _screenHandler.ConsoleHelper.ClearConsole();
-                    editorScreen.UpdateLastQuestion(questions.helpCombat);
+                    editorScreen.UpdateLastQuestion(questions.HelpCombat);
                 } else if(input.Equals("help explore"))
                 {
                     _screenHandler.ConsoleHelper.ClearConsole();
-                    editorScreen.UpdateLastQuestion(questions.helpExplore);
+                    editorScreen.UpdateLastQuestion(questions.HelpExplore);
                 } else if (questions.EditorAnswers.ElementAt(i).Contains(input))
                 {
                     answers[i] = answers[i] + input;
@@ -394,7 +394,7 @@ namespace InputHandling
 
                 List<string> rule = input.Split(" ").ToList();
 
-                //Çheck if the user input match basic requirements
+                //Check if the user input match basic requirements
                 if (CheckInput(rule, variables))
                 {
                     builder.Append(input);

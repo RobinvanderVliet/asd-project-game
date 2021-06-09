@@ -6,14 +6,17 @@ namespace InputHandling.Models
 {
     public class BaseVariables
     {
-        public readonly List<string> comparables = new() {
+        public readonly List<string> comparables = new() 
+        {
             "player", 
             "agent",
             "health", 
             "inventory", 
-            "item"};
+            "item"
+        };
 
-        public readonly List<string> comparison = new() { 
+        public readonly List<string> comparison = new() 
+        { 
             "greater than", 
             "less than", 
             "nearby", 

@@ -5,9 +5,10 @@ using Agent.Antlr.Parser;
 using Agent.Generator;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using Serilog;
+using Messages;
 using System;
 using System.Collections.Generic;
+using UserInterface;
 using SyntaxErrorException = Agent.Exceptions.SyntaxErrorException;
 
 namespace Agent
@@ -19,12 +20,14 @@ namespace Agent
         private List<string> _errors;
         private Checking _checking;
         private Generating _generating;
+        private MessageService _messageService;
 
         public Pipeline()
         {
             _errors = new List<string>();
             _generating = new Generating();
             _checking = new Checking();
+            _messageService = new(new ScreenHandler());
         }
 
         public virtual void ParseString(String input)
@@ -50,7 +53,7 @@ namespace Agent
             }
             catch (Exception e)
             {
-                Log.Logger.Information("Syntax error: " + e.Message);
+                _messageService.AddMessage("Syntax error: " + e.Message);
                 _errors.Add(e.Message);
             }
         }
@@ -60,7 +63,7 @@ namespace Agent
             _checking.Check(_ast.Root);
             foreach (var error in _ast.GetErrors())
             {
-                Log.Logger.Information("Semantic error: " + error.ToString());
+                _messageService.AddMessage("Semantic error: " + error.ToString());
                 _errors.Add(error.ToString());
             }
         }
