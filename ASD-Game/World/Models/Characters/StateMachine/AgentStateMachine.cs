@@ -35,13 +35,13 @@ namespace World.Models.Characters.StateMachine
 
             CharacterData.BuilderConfigurator = builderConfigurator;
 
-            CharacterState idleState = new IdleState(CharacterData);
-            CharacterState inventoryState = new InventoryState(CharacterData);
-            CharacterState fleeFromCharacterState = new FleeFromCreatureState(CharacterData);
-            CharacterState followCreatureState = new FollowCreatureState(CharacterData);
-            CharacterState wanderState = new WanderState(CharacterData);
-            CharacterState useConsumableState = new UseConsumableState(CharacterData);
-            CharacterState attackState = new AttackState(CharacterData);
+            CharacterState idleState = new IdleState(CharacterData, this);
+            CharacterState inventoryState = new InventoryState(CharacterData, this);
+            CharacterState fleeFromCharacterState = new FleeFromCreatureState(CharacterData, this);
+            CharacterState followCreatureState = new FollowCreatureState(CharacterData, this);
+            CharacterState wanderState = new WanderState(CharacterData, this);
+            CharacterState useConsumableState = new UseConsumableState(CharacterData, this);
+            CharacterState attackState = new AttackState(CharacterData, this);
                 
             DefineDefaultBehaviour(ref builder, ref followCreatureState);
             DefineDefaultBehaviour(ref builder, ref wanderState);

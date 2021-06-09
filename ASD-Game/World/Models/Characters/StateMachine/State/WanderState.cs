@@ -8,6 +8,7 @@ namespace Creature.Creature.StateMachine.State
 {
     public class WanderState : CharacterState
     {
+        private const int MAX_MOVEMENT_SPEED = 3;
         public WanderState(ICharacterData characterData, ICharacterStateMachine characterStateMachine) : base(characterData, characterStateMachine)
         {
         }
@@ -16,10 +17,17 @@ namespace Creature.Creature.StateMachine.State
         {
             DoWorldCheck();
 
-            var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
-            var _builderConfiguration = _characterData.BuilderConfigurator;
+            //var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
+            //var _builderConfiguration = _characterData.BuilderConfigurator;
 
-            if (_characterData.WorldService.GetPlayer(_characterData.CharacterId).Stamina >= 20)
+            if (_characterData is AgentData)
+            {
+                if (_characterData.WorldService.GetPlayer(_characterData.CharacterId).Stamina >= 20)
+                {
+                    MoveRandomDirection();
+                }
+            }
+            else
             {
                 MoveRandomDirection();
             }

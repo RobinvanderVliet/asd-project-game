@@ -2,6 +2,7 @@
 using Creature.Creature;
 using Network;
 using Network.DTO;
+using World.Models.Characters;
 
 namespace WorldGeneration
 {

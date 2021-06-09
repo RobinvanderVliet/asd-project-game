@@ -16,10 +16,10 @@ using UserInterface;
 using WorldGeneration;
 using WorldGeneration.Models;
 using WorldGeneration.StateMachine;
-using Characters;
 using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 using World.Models.Characters.StateMachine.Data;
 using System.Numerics;
+using World.Models.Characters;
 
 namespace Session
 {

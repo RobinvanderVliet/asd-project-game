@@ -1,4 +1,5 @@
 using ActionHandling.DTO;
+using World.Models.Characters;
 using WorldGeneration;
 
 namespace ActionHandling

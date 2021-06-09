@@ -1,8 +1,8 @@
-﻿using Character.Pathfinder;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using World.Models.Characters.Algorithms.Pathfinder;
 
 namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
 {

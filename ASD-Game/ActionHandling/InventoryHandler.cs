@@ -9,6 +9,7 @@ using Network.DTO;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using World.Models.Characters;
 using WorldGeneration;
 using WorldGeneration.Exceptions;
 

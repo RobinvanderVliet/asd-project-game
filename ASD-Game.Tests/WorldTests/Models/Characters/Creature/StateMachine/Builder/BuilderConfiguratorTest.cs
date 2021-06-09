@@ -5,6 +5,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using World.Models.Characters;
 using World.Models.Characters.StateMachine.Builder;
 using World.Models.Characters.StateMachine.Data;
 using WorldGeneration;

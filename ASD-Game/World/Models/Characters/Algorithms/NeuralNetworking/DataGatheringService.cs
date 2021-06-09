@@ -1,5 +1,4 @@
-﻿using Characters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
@@ -52,7 +51,7 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
             }
         }
 
-        private void SetClosestPlayer(SmartMonster smartMonster, int visionRange)
+        private void SetClosestPlayer(Character smartMonster, int visionRange)
         {
             List<Player> players = WorldService.GetAllPlayers();
             foreach (Player player in players)
@@ -88,7 +87,7 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
             }
         }
 
-        public List<List<Node>> TranslateCharacterMap(WorldGeneration.Character c)
+        public List<List<Node>> TranslateCharacterMap(Character c)
         {
             List<List<Node>> translatedMap = new List<List<Node>>();
             char[,] map = WorldService.GetMapAroundCharacter(c);
@@ -140,7 +139,7 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
             return true;
         }
 
-        private bool IsPlayerInSight(WorldGeneration.Character c)
+        private bool IsPlayerInSight(Character c)
         {
             char[,] map = WorldService.GetMapAroundCharacter(c);
             for (int row = 0; row < _colCount; row++)

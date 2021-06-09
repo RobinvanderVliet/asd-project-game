@@ -1,5 +1,6 @@
 ﻿using Creature.Creature;
 using Network.DTO;
+using World.Models.Characters;
 using WorldGeneration;
 
 namespace Network

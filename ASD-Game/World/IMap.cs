@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using World.Models.Characters;
 using WorldGeneration.Models.Interfaces;
 
 namespace WorldGeneration

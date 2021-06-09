@@ -8,6 +8,7 @@ using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Session.DTO;
+using World.Models.Characters;
 using WorldGeneration;
 
 namespace Creature
@@ -22,7 +23,7 @@ namespace Creature
         private readonly IAttackHandler _attackHandler;
 
         // string = playerId
-        private Dictionary<string, WorldGeneration.Agent> _agents;
+        private Dictionary<string, World.Models.Characters.Agent> _agents;
 
         public AgentHandler(IWorldService worldService, IMoveHandler moveHandler, IClientController clientController,
             IDatabaseService<AgentPOCO> databaseService, IConfigurationService configurationService,
@@ -36,7 +37,7 @@ namespace Creature
             _clientController = clientController;
             _databaseService = databaseService;
             _clientController.SubscribeToPacketType(this, PacketType.Agent);
-            _agents = new Dictionary<string, WorldGeneration.Agent>();
+            _agents = new Dictionary<string, World.Models.Characters.Agent>();
         }
 
         public void Replace(string playerId)
@@ -90,7 +91,7 @@ namespace Creature
             updateAsync.Wait();
         }
 
-        private WorldGeneration.Agent CreateAgent(Player player, List<KeyValuePair<string, string>> agentConfiguration)
+        private World.Models.Characters.Agent CreateAgent(Player player, List<KeyValuePair<string, string>> agentConfiguration)
         {
             return new(player.Name, player.XPosition, player.YPosition, player.Symbol, player.Id)
             {

@@ -1,11 +1,9 @@
-﻿using Character.Pathfinder;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using Characters;
-using Character;
 using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
+using World.Models.Characters.Algorithms.Pathfinder;
 
 namespace World.Models.Characters.Algorithms.NeuralNetworking
 {
@@ -101,7 +99,7 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking
             }
         }
 
-        public void Attack(WorldGeneration.Character player, SmartMonster smartmonster)
+        public void Attack(Character player, SmartMonster smartmonster)
         {
             if (player != null)
             {
@@ -114,7 +112,7 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking
             }
         }
 
-        public void Flee(WorldGeneration.Character player, SmartMonster smartmonster)
+        public void Flee(Character player, SmartMonster smartmonster)
         {
             if (player != null)
             {
@@ -122,7 +120,7 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking
             }
         }
 
-        public void RunToMonster(WorldGeneration.Character monster, SmartMonster smartMonster)
+        public void RunToMonster(Character monster, SmartMonster smartMonster)
         {
             if (monster != null)
             {

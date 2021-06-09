@@ -11,6 +11,7 @@ using Network.DTO;
 using WorldGeneration;
 using WorldGeneration.Models.HazardousTiles;
 using Timer = System.Timers.Timer;
+using World.Models.Characters;
 
 namespace ActionHandling
 {

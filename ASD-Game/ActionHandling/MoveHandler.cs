@@ -10,9 +10,9 @@ using Newtonsoft.Json;
 using WorldGeneration;
 using WorldGeneration.Models.Interfaces;
 using System.Timers;
-using Characters;
 
 using WorldGeneration;
+using World.Models.Characters;
 
 namespace ActionHandling
 {
@@ -282,12 +282,12 @@ namespace ActionHandling
             return movableTiles;
         }
 
-        public void MoveAIs(List<WorldGeneration.Character> creatureMoves)
+        public void MoveAIs(List<Character> creatureMoves)
         {
             List<MoveDTO> moveDTOs = new List<MoveDTO>();
             if (creatureMoves != null)
             {
-                foreach (WorldGeneration.Character move in creatureMoves)
+                foreach (Character move in creatureMoves)
                 {
                     if (move is SmartMonster smartMonster)
                     {

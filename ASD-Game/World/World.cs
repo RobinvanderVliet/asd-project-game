@@ -3,8 +3,7 @@ using System.IO;
 using WorldGeneration.Models.Interfaces;
 using System.Linq;
 using UserInterface;
-
-using Characters;
+using World.Models.Characters;
 
 namespace WorldGeneration
 {
