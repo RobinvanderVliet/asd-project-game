@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using ActionHandling.DTO;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
+using Items.Consumables.ConsumableStats;
 using Messages;
 using Network.DTO;
 using Session;
@@ -112,6 +113,174 @@ namespace ActionHandling.Tests
             };
 
             Player player = new Player("Gert", 10, 20, "#", PlayerGuid);
+
+            PlayerPOCO attackedPlayerPOCO = new PlayerPOCO
+            {
+                PlayerGuid = AttackedPlayerGuid,
+                Health = 100,
+                Stamina = 100,
+                GameGuid = null,
+                XPosition = 26,
+                YPosition = 11
+            };
+
+            Player attackedPlayer = new Player("Henk", 26, 11, "E", AttackedPlayerGuid);
+
+
+            _attackDTO.Damage = 20;
+            _attackDTO.Stamina = 100;
+            _attackDTO.PlayerGuid = PlayerGuid;
+            _attackDTO.AttackedPlayerGuid = AttackedPlayerGuid;
+            
+            _mockedClientController.Setup(x => x.IsBackupHost).Returns(true);
+            _mockedClientController.Setup(x => x.GetOriginId()).Returns(PlayerGuid);
+            _mockedClientController.Object.SetSessionId(GameGuid);
+
+            _mockedWorldService.Setup(mock => mock.GetPlayer(player.Id)).Returns(player);
+            _mockedWorldService.Setup(mock => mock.GetPlayer(attackedPlayer.Id)).Returns(attackedPlayer);
+
+
+            var payload = JsonConvert.SerializeObject(_attackDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            packetHeaderDTO.OriginID = PlayerGuid;
+            packetHeaderDTO.SessionID = null;
+            packetHeaderDTO.PacketType = PacketType.Attack;
+            packetHeaderDTO.Target = "host";
+            _packetDTO.Header = packetHeaderDTO;
+
+            List<Player> list = new List<Player>();
+            list.Add(player);
+            list.Add(attackedPlayer);
+
+
+            _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(list);
+
+            List<PlayerPOCO> playerPOCOList = new();
+            playerPOCOList.Add(attackedPlayerPOCO);
+            playerPOCOList.Add(playerPOCO);
+            IEnumerable<PlayerPOCO> en = playerPOCOList;
+            var task = Task.FromResult(en);
+
+            _mockedPlayerPocoDatabaseService.Setup(mock => mock.GetAllAsync())
+                .Returns(task);
+
+
+            //Act
+            var actualResult = _sut.HandlePacket(_packetDTO);
+
+            //Assert
+            _mockedWorldService.Verify(mock => mock.DisplayWorld(), Times.Once);
+        }
+        
+        [TestCase("up")]
+        [TestCase("down")]
+        [TestCase("left")]
+        [TestCase("right")]
+        [Test]
+        public void Test_HandlePacket_HandleAttack_PlayerIsAlreadyDead(String direction)
+        {
+            //Arrange
+            string GameGuid = Guid.NewGuid().ToString();
+            string PlayerGuid = Guid.NewGuid().ToString();
+            string AttackedPlayerGuid = Guid.NewGuid().ToString();
+
+            PlayerPOCO playerPOCO = new PlayerPOCO
+            {
+                PlayerGuid = PlayerGuid,
+                Health = 100,
+                Stamina = 100,
+                GameGuid = null,
+                XPosition = 10,
+                YPosition = 20
+            };
+
+            Player player = new Player("Gert", 10, 20, "#", PlayerGuid);
+
+            PlayerPOCO attackedPlayerPOCO = new PlayerPOCO
+            {
+                PlayerGuid = AttackedPlayerGuid,
+                Health = 0,
+                Stamina = 100,
+                GameGuid = null,
+                XPosition = 26,
+                YPosition = 11
+            };
+
+            Player attackedPlayer = new Player("Henk", 26, 11, "E", AttackedPlayerGuid);
+            attackedPlayer.Health = 0;
+            
+            _attackDTO.Damage = 20;
+            _attackDTO.Stamina = 100;
+            _attackDTO.PlayerGuid = PlayerGuid;
+            _attackDTO.AttackedPlayerGuid = AttackedPlayerGuid;
+            _attackDTO.XPosition = 26;
+            _attackDTO.YPosition = 11;
+            
+            _mockedClientController.Setup(x => x.IsBackupHost).Returns(true);
+            _mockedClientController.Setup(x => x.GetOriginId()).Returns(PlayerGuid);
+            _mockedClientController.Object.SetSessionId(GameGuid);
+
+            _mockedWorldService.Setup(mock => mock.GetPlayer(player.Id)).Returns(player);
+            _mockedWorldService.Setup(mock => mock.GetPlayer(attackedPlayer.Id)).Returns(attackedPlayer);
+
+
+            var payload = JsonConvert.SerializeObject(_attackDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            packetHeaderDTO.OriginID = PlayerGuid;
+            packetHeaderDTO.SessionID = null;
+            packetHeaderDTO.PacketType = PacketType.Attack;
+            packetHeaderDTO.Target = "host";
+            _packetDTO.Header = packetHeaderDTO;
+
+            List<Player> list = new List<Player>();
+            list.Add(player);
+            list.Add(attackedPlayer);
+
+
+            _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(list);
+
+            List<PlayerPOCO> playerPOCOList = new();
+            playerPOCOList.Add(attackedPlayerPOCO);
+            playerPOCOList.Add(playerPOCO);
+            IEnumerable<PlayerPOCO> en = playerPOCOList;
+            var task = Task.FromResult(en);
+            
+            _mockedPlayerPocoDatabaseService.Setup(mock => mock.GetAllAsync())
+                .Returns(task);
+
+
+            //Act
+            var actualResult = _sut.HandlePacket(_packetDTO);
+
+            //Assert
+            _mockedMessageService.Verify(mock => mock.AddMessage("You can't attack this enemy, he is already dead."), Times.Once);
+        }
+        
+        [TestCase("down")]
+        [TestCase("up")]
+        [TestCase("left")]
+        [TestCase("right")]
+        [Test]
+        public void Test_HandlePacket_HandleAttack_TakesDamageDown(String direction)
+        {
+            //Arrange
+            string GameGuid = Guid.NewGuid().ToString();
+            string PlayerGuid = Guid.NewGuid().ToString();
+            string AttackedPlayerGuid = Guid.NewGuid().ToString();
+
+            PlayerPOCO playerPOCO = new PlayerPOCO
+            {
+                PlayerGuid = PlayerGuid,
+                Health = 100,
+                Stamina = 100,
+                GameGuid = null,
+                XPosition = 26,
+                YPosition = 12
+            };
+
+            Player player = new Player("Gert", 26, 12, "#", PlayerGuid);
 
             PlayerPOCO attackedPlayerPOCO = new PlayerPOCO
             {
