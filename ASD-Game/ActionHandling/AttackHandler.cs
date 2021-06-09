@@ -243,18 +243,6 @@ namespace ASD_Game.ActionHandling
                     }
                 }
             }
-            else
-            {
-                var attackedCreature = _creatureDatabaseService.GetAllAsync().Result
-                    .FirstOrDefault(attackedCreature => attackedCreature.CreatureGuid == attackDto.AttackedPlayerGuid);
-                attackedCreature.Health -= attackDto.Damage;
-                _creatureDatabaseService.UpdateAsync(attackedCreature);
-
-                if (attackedCreature.Health <= 0)
-                {
-                    _messageService.AddMessage("RIP"); //TODO implement death of creature
-                }
-            }
         }
 
         private void HandleAttack(AttackDTO attackDto)
@@ -264,7 +252,7 @@ namespace ASD_Game.ActionHandling
 
             var player = _worldService.GetPlayer(attackDto.PlayerGuid);
             bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
-            
+
             var attackedPlayer = _worldService.GetPlayer(attackDto.AttackedPlayerGuid);
             bool printAttackedMessage = _clientController.GetOriginId().Equals(attackedPlayer.Id);
             {
