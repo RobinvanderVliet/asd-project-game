@@ -17,17 +17,17 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
 
         public override void Do()
         {
-            Console.WriteLine("Ik doe iets");
+            // Console.WriteLine("Ik doe iets");
         }
 
         public override void Do(ICharacterData characterData)
         {
-            Console.WriteLine("Ik doe iets");
+            // Console.WriteLine("Ik doe iets");
         }
 
         public override void Exit()
         {
-            Console.WriteLine("Wander state Exit");
+            // Console.WriteLine("Wander state Exit");
         }
     }
 }
