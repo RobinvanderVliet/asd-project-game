@@ -48,9 +48,9 @@ namespace Player.Tests.ActionHandlers
         [Test]
         public void Test_SendMove_SendsTheMessageAndPacketTypeToClientController()
         {
+            //Arrange ---------
             string playerGuid = new Guid().ToString();
             string GameGuid = new Guid().ToString();
-            //Arrange ---------
             _mapCharacterDTO = new MapCharacterDTO(10,10, playerGuid, GameGuid);
             _moveDTO = new MoveDTO(_mapCharacterDTO);
             var payload = JsonConvert.SerializeObject(_moveDTO);
@@ -58,30 +58,30 @@ namespace Player.Tests.ActionHandlers
 
             //Act ---------
             _sut.SendMove(_mapCharacterDTO);
+
             //Assert ---------
             _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Move), Times.Once());
         }
-        // [Test]
-        // public void Test_HandlePacket_HandleMoveProperly()
-        // {
-        //     //Arrange ---------
-        //     string playerGuid = new Guid().ToString();
-        //     string GameGuid = new Guid().ToString();
-        //     //Arrange ---------
-        //     _mapCharacterDTO = new MapCharacterDTO(10,10, playerGuid, GameGuid);
-        //     _moveDTO = new MoveDTO(_mapCharacterDTO);
-        //     var payload = JsonConvert.SerializeObject(_moveDTO);
-        //     _packetDTO.Payload = payload;
-        //     _packetDTO.Header.Target = playerGuid;
-        //     //_mockedNetworkComponent.
-        //     {
-        //         //Act ---------
-        //         HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
-        //
-        //         //Assert ---------
-        //         HandlerResponseDTO ExpectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
-        //         Assert.AreEqual(ExpectedResult, actualResult);
-        //     }                 
-        // }
+
+        [Test]
+        public void Test_HandlePacket_HandleMoveProperly()
+        {
+            //Arrange ---------
+            string playerGuid = new Guid().ToString();
+            string GameGuid = new Guid().ToString();
+
+            _mapCharacterDTO = new MapCharacterDTO(10, 10, playerGuid, GameGuid);
+            _moveDTO = new MoveDTO(_mapCharacterDTO);
+            var payload = JsonConvert.SerializeObject(_moveDTO);
+            _packetDTO.Payload = payload;
+            _packetDTO.Header.Target = playerGuid;
+
+            //Act ---------
+            HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
+
+            //Assert ---------
+            HandlerResponseDTO ExpectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
+            Assert.AreEqual(ExpectedResult, actualResult);
+        }
     }
 }
