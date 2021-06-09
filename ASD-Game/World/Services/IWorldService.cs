@@ -52,5 +52,6 @@ namespace WorldGeneration
         public void DisplayStats();
 
         public Character GetAI(string id);
+        public World GetWorld();
     }
 }
