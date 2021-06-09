@@ -141,7 +141,6 @@ namespace ActionHandling.Tests
             _mockedClientController.Object.SetSessionId(GameGuid);
 
             _mockedWorldService.Setup(mock => mock.GetPlayer(player.Id)).Returns(player);
-            _mockedWorldService.Setup(mock => mock.GetPlayer(attackedPlayer.Id)).Returns(attackedPlayer);
 
 
             var payload = JsonConvert.SerializeObject(_attackDTO);
@@ -182,11 +181,9 @@ namespace ActionHandling.Tests
             var actualResult = _sut.HandlePacket(_packetDTO);
 
             //Assert
-            _mockedWorldService.Verify(mock => mock.DisplayWorld(), Times.Once);
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
-            _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(3));
+            _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(2));
             _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Once);
-            _mockedWorldService.Verify(mock => mock.GetPlayer(attackedPlayer.Id), Times.Once);
             _mockedWorldService.Verify(x => x.GetAllPlayers(), Times.Once);
             _mockedWorldService.Verify(x => x.GetMonsters(), Times.Once);
             _mockedPlayerPocoDatabaseService.Verify(mock => mock.GetAllAsync(), Times.Once);
@@ -371,8 +368,8 @@ namespace ActionHandling.Tests
 
             //Assert
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
-            _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(2));
-            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Once);
+            _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(3));
+            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Exactly(2));
             _mockedWorldService.Verify(mock => mock.GetPlayer(attackedPlayer.Id), Times.Once);
             _mockedWorldService.Verify(x => x.GetAllPlayers(), Times.Exactly(2));
             _mockedWorldService.Verify(x => x.GetMonsters(), Times.Once);
@@ -496,8 +493,8 @@ namespace ActionHandling.Tests
 
             //Assert
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
-            _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(2));
-            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Once);
+            _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(3));
+            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Exactly(2));
             _mockedWorldService.Verify(mock => mock.GetPlayer(attackedPlayer.Id), Times.Once);
             _mockedWorldService.Verify(x => x.GetAllPlayers(), Times.Exactly(2));
             _mockedWorldService.Verify(x => x.GetMonsters(), Times.Once);
@@ -627,8 +624,8 @@ namespace ActionHandling.Tests
 
             //Assert
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
-            _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(2));
-            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Once);
+            _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(3));
+            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Exactly(2));
             _mockedWorldService.Verify(mock => mock.GetPlayer(attackedPlayer.Id), Times.Once);
             _mockedWorldService.Verify(x => x.GetAllPlayers(), Times.Exactly(2));
             _mockedWorldService.Verify(x => x.GetMonsters(), Times.Once);
@@ -733,8 +730,8 @@ namespace ActionHandling.Tests
 
             //Assert
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
-            _mockedClientController.Verify(x => x.GetOriginId(), Times.Once);
-            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Once);
+            _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(2));
+            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Exactly(2));
             _mockedWorldService.Verify(x => x.GetAllPlayers(), Times.Once);
             _mockedWorldService.Verify(x => x.GetMonsters(), Times.Once);
             _mockedPlayerPocoDatabaseService.Verify(mock => mock.GetAllAsync(), Times.Once);
