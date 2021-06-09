@@ -47,7 +47,7 @@ namespace ASD_Game.World
                         , chunkRowSize * chunkY - chunkRowSize + y);
                 }
             }
-            return new Chunk(chunkX, chunkY, map, chunkRowSize, _seed);
+            return new Chunk(chunkX, chunkY, map, chunkRowSize);
         }
         
         private ITile CreateTileWithItemFromNoise(float worldNoise, float itemNoise, int x, int y)
