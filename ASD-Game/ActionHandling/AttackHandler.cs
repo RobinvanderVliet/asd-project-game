@@ -153,7 +153,7 @@ namespace ASD_Game.ActionHandling
                 {
                     if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
                     {
-                        HandleAttack(attackDto);
+                        LowerStamina(attackDto);
                         _messageService.AddMessage("There is no enemy to attack");
                     }
 
@@ -260,27 +260,32 @@ namespace ASD_Game.ActionHandling
             }
         }
 
+        private void LowerStamina(AttackDTO attackDto)
+        {
+            var player = _worldService.GetPlayer(attackDto.PlayerGuid);
+            bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
+            if (player.Stamina < ATTACK_STAMINA && printAttackMessage)
+            {
+                _messageService.AddMessage("You're out of stamina, you can't attack.");
+            }
+            else
+            {
+                player.Stamina -= ATTACK_STAMINA;
+            }
+        }
+
         private void HandleAttack(AttackDTO attackDto)
         {
             var creature = _worldService.GetAI(attackDto.AttackedPlayerGuid);
             var player = _worldService.GetPlayer(attackDto.PlayerGuid);
             bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
 
+            LowerStamina(attackDto);
+            if (printAttackMessage)
             {
-                if (player.Stamina < ATTACK_STAMINA && printAttackMessage)
-                {
-                    _messageService.AddMessage("You're out of stamina, you can't attack.");
-                }
-                else
-                {
-                    player.Stamina -= ATTACK_STAMINA;
-                    if (printAttackMessage)
-                    {
-                        _messageService.AddMessage("You attacked an enemy.");
-                    }
-                }
+                _messageService.AddMessage("You attacked an enemy.");
             }
-
+            
             if (creature == null)
             {
                 var attackedPlayer = _worldService.GetPlayer(attackDto.AttackedPlayerGuid);
