@@ -23,7 +23,7 @@ namespace Creature
 
         // string = playerId
         private Dictionary<string, WorldGeneration.Agent> _agents;
-        
+
         public AgentHandler(IWorldService worldService, IMoveHandler moveHandler, IClientController clientController,
             IDatabaseService<AgentPOCO> databaseService, IConfigurationService configurationService,
             IAttackHandler attackHandler)
@@ -42,7 +42,7 @@ namespace Creature
         public void Replace(string playerId)
         {
             if (_worldService.GetWorld() == null) return;
-            
+
             var player = _worldService.GetPlayer(playerId);
             _agents.TryGetValue(playerId, out var agent);
 
@@ -59,13 +59,9 @@ namespace Creature
             {
                 var agentConfiguration = agentPoco.AgentConfiguration;
 
-                // If agent not in memory
-                if (agent == null)
-                {
-                    // Get agent from database
-                    agent = CreateAgent(player, agentConfiguration);
-                    _agents.Add(player.Id, agent);
-                }
+                // Get agent from database
+                agent = CreateAgent(player, agentConfiguration);
+                _agents.Add(player.Id, agent);
 
                 // Activate agent
                 agent.AgentStateMachine.StartStateMachine();
