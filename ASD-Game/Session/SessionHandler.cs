@@ -557,6 +557,7 @@ namespace Session
             var playerLocations = allPlayerId.Result.Where(x => x.GameGuid == _session.SessionId);
 
             startGameDTO.SavedPlayers = playerLocations.ToList();
+            startGameDTO.GameGuid = _session.SessionId;
 
             return startGameDTO;
         }
