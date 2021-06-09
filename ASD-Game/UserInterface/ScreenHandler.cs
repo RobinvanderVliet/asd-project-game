@@ -42,24 +42,20 @@ namespace ASD_Game.UserInterface
         }
         public void DisplayScreen()
         {
-            _screen.DrawScreen();
+            _actionsInQueue.Add(_screen.DrawScreen);
         }
 
         public void ShowMessages(Queue<string> messages)
         {
-            if (!_displaying)
+            
+            if (_screen is GameScreen)
             {
-                _displaying = true;
-                if(_screen is GameScreen)
-                {
-                    var gameScreen = Screen as GameScreen;
-                    gameScreen.ShowMessages(messages);
-                }
-                _displaying = false;
+                var gameScreen = Screen as GameScreen;
+                _actionsInQueue.Add(() => gameScreen.ShowMessages(messages));
             }
         }
 
-        public string GetScreenInput()
+        public virtual string GetScreenInput()
         {
             return _consoleHelper.ReadLine();
         }
@@ -69,45 +65,32 @@ namespace ASD_Game.UserInterface
             if (_screen is GameScreen)
             {
                 var gameScreen = Screen as GameScreen;
-                gameScreen.RedrawInputBox();
+                _actionsInQueue.Add(gameScreen.RedrawInputBox);
+                _displayThread = new Thread(gameScreen.RedrawInputBox);
             }
         }
 
         public void UpdateWorld(char[,] map)
         {
-            if (!_displaying)
+            if (_screen is GameScreen)
             {
-                _displaying = true;
-                if (_screen is GameScreen)
-                {
-                    var gameScreen = Screen as GameScreen;
-                    gameScreen.UpdateWorld(map);
-                }
-                _displaying = false;
+                var gameScreen = Screen as GameScreen;
+                _actionsInQueue.Add(() => gameScreen.UpdateWorld(map));
             }
         }
 
         public void SetStatValues(string name, int score, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree)
         {
-            if (!_displaying)
+            if (_screen is GameScreen)
             {
-                _displaying = true;
-                if (_screen is GameScreen)
-                {
-                    GameScreen gameScreen = _screen as GameScreen;
-                    gameScreen.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree);
-                }
-                _displaying = false;
+                GameScreen gameScreen = _screen as GameScreen;
+                _actionsInQueue.Add(() => gameScreen.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree));
             }
         }
 
-        public void UpdateSavedSessionsList(List<string[]> sessions)
+        public virtual void SetScreenInput(string input)
         {
-            if (_screen is LoadScreen)
-            {
-                LoadScreen loadScreen = _screen as LoadScreen;
-                loadScreen.UpdateSavedSessionsList(sessions);
-            }
+            _consoleHelper.WriteLine(input);
         }
 
         public void UpdateInputMessage(string message)

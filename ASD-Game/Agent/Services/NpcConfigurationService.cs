@@ -7,7 +7,8 @@ namespace ASD_Game.Agent.Services
     public class NpcConfigurationService : BaseConfigurationService
     {
         private List<Configuration> _npcConfigurations;
-        
+        public FileToDictionaryMapper FileToDictionaryMapper;
+
         public NpcConfigurationService(List<Configuration> npcConfigurations, FileToDictionaryMapper fileToDictionaryMapper)
         {
             _npcConfigurations = npcConfigurations;
@@ -29,7 +30,7 @@ namespace ASD_Game.Agent.Services
             return _npcConfigurations;
         }
 
-        public override void Configure()
+        public  void Configure()
         {
             // //TODO: Seems like duplicate code for now, but must be refactored later to match anticipated feature 'Configure NPC during a game'
             // Console.WriteLine("What NPC do you wish to configure?");

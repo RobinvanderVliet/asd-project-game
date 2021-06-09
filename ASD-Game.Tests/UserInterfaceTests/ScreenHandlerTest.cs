@@ -36,7 +36,7 @@ namespace UserInterface.Tests
             Assert.True(_sut.Screen.Equals(startScreen));
             _mockedStartScreen.Verify(mock => mock.DrawScreen(), Times.Once);
         }
-        
+
         [Test]
         public void Test_UpdateInputMessage_CallsUpdateSavedSessionsListOnScreens()
         {
@@ -44,17 +44,17 @@ namespace UserInterface.Tests
             var loadScreen = _mockedLoadScreen.Object;
             _sut.Screen = loadScreen;
             List<string[]> savedSessions = new List<string[]>();
-            savedSessions.Add(new []{"Code1", "Session 1"});
-            savedSessions.Add(new []{"Code2", "Session 2"});
-            savedSessions.Add(new []{"Code3", "Session 3"});
-            
+            savedSessions.Add(new[] {"Code1", "Session 1"});
+            savedSessions.Add(new[] {"Code2", "Session 2"});
+            savedSessions.Add(new[] {"Code3", "Session 3"});
+
             //Act
             _sut.UpdateSavedSessionsList(savedSessions);
-            
+
             //Assert
             _mockedLoadScreen.Verify(mock => mock.UpdateSavedSessionsList(savedSessions), Times.Once);
         }
-        
+
         [Test]
         public void Test_UpdateInputMessage_CallsUpdateInputMessageOnScreens()
         {
@@ -62,27 +62,26 @@ namespace UserInterface.Tests
             var testMessage = "Test message";
             var loadScreen = _mockedLoadScreen.Object;
             _sut.Screen = loadScreen;
-            
+
             //Act
             _sut.UpdateInputMessage(testMessage);
-            
+
             //Assert
             _mockedLoadScreen.Verify(mock => mock.UpdateInputMessage(testMessage), Times.Once);
         }
-        
+
         [Test]
         public void Test_GetSessionByPosition_CallsGetSessionByPositionOnScreens()
         {
             //Arrange
             var loadScreen = _mockedLoadScreen.Object;
             _sut.Screen = loadScreen;
-            
+
             //Act
             _sut.GetSessionByPosition(1);
-            
+
             //Assert
             _mockedLoadScreen.Verify(mock => mock.GetSessionByPosition(1), Times.Once);
         }
     }
 }
-

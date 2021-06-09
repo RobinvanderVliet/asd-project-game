@@ -10,9 +10,9 @@ namespace ASD_Game.Network
 {
     public class WebSocketConnection : IWebSocketConnection
     {
-        private WebSocket _websocket;
+        private readonly WebSocket _websocket;
         private WebSocketConnectionConfig _webSocketConnectionConfig;
-        private IPacketListener _packetListener;
+        private readonly IPacketListener _packetListener;
 
         private UserSettingsConfig _userSettingsConfig;
 
@@ -46,24 +46,6 @@ namespace ASD_Game.Network
         private void AddBehaviorToWebsocket()
         {
             _websocket.OnMessage += OnMessage;
-            _websocket.OnOpen += Websocket_OnOpen;
-            _websocket.OnError += Websocket_OnError;
-            _websocket.OnClose += Websocket_OnClose;
-        }
-
-        private void Websocket_OnClose(object sender, CloseEventArgs e)
-        {
-            Console.WriteLine("connection close");
-        }
-
-        private void Websocket_OnError(object sender, WebSocketSharp.ErrorEventArgs e)
-        {
-            Console.WriteLine("error event");
-        }
-
-        private void Websocket_OnOpen(object sender, EventArgs e)
-        {
-            // Console.WriteLine("connection open");
         }
 
         private void OnMessage(object sender, MessageEventArgs e)

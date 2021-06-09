@@ -37,7 +37,7 @@ namespace ASD_Game.Tests.AgentTests.Ast
         [TestCase(typeof(Current))]
         [TestCase(typeof(Inventory))]
         [TestCase(typeof(NPC))]
-        [TestCase(typeof(Opponent))]
+        [TestCase(typeof(AgentSubject))]
         [TestCase(typeof(Player))]
         [TestCase(typeof(Tile))]
         [TestCase(typeof(Int))]
@@ -53,11 +53,11 @@ namespace ASD_Game.Tests.AgentTests.Ast
             //Act
             _sut.AddChild(comparable);
             //Assert
-
-            Assert.AreEqual(comparable, _sut.GetComparableL());
-            Assert.AreEqual(null, _sut.GetComparableR());
-            Assert.AreEqual(null, _sut.GetComparison());
-            Assert.AreEqual(null, _sut.GetThen());
+            
+            Assert.AreEqual( comparable, _sut.ComparableL);
+            Assert.AreEqual(null,_sut.ComparableR);
+            Assert.AreEqual(null,_sut.Comparison);
+            Assert.AreEqual(null,_sut.Then);
             Assert.AreEqual(1, _sut.GetChildren().Count);
         }
 
@@ -66,7 +66,7 @@ namespace ASD_Game.Tests.AgentTests.Ast
         [TestCase(typeof(Current))]
         [TestCase(typeof(Inventory))]
         [TestCase(typeof(NPC))]
-        [TestCase(typeof(Opponent))]
+        [TestCase(typeof(AgentSubject))]
         [TestCase(typeof(Player))]
         [TestCase(typeof(Tile))]
         [TestCase(typeof(Int))]
@@ -83,11 +83,11 @@ namespace ASD_Game.Tests.AgentTests.Ast
             //Act
             _sut.AddChild(comparableR);
             //Assert
-
-            Assert.AreEqual(comparableL, _sut.GetComparableL());
-            Assert.AreEqual(comparableR, _sut.GetComparableR());
-            Assert.AreEqual(null, _sut.GetComparison());
-            Assert.AreEqual(null, _sut.GetThen());
+            
+            Assert.AreEqual(comparableL, _sut.ComparableL);
+            Assert.AreEqual(comparableR,_sut.ComparableR);
+            Assert.AreEqual(null,_sut.Comparison);
+            Assert.AreEqual(null,_sut.Then);
             Assert.AreEqual(2, _sut.GetChildren().Count);
         }
 
@@ -95,7 +95,7 @@ namespace ASD_Game.Tests.AgentTests.Ast
         [TestCase(typeof(Current))]
         [TestCase(typeof(Inventory))]
         [TestCase(typeof(NPC))]
-        [TestCase(typeof(Opponent))]
+        [TestCase(typeof(AgentSubject))]
         [TestCase(typeof(Player))]
         [TestCase(typeof(Tile))]
         [TestCase(typeof(Int))]
@@ -114,11 +114,11 @@ namespace ASD_Game.Tests.AgentTests.Ast
             //Act
             _sut.AddChild(comparable);
             //Assert
-
-            Assert.AreEqual(comparableL, _sut.GetComparableL());
-            Assert.AreEqual(comparableR, _sut.GetComparableR());
-            Assert.AreEqual(null, _sut.GetComparison());
-            Assert.AreEqual(null, _sut.GetThen());
+            
+            Assert.AreEqual(comparableL, _sut.ComparableL);
+            Assert.AreEqual(comparableR,_sut.ComparableR);
+            Assert.AreEqual(null,_sut.Comparison);
+            Assert.AreEqual(null,_sut.Then);
             Assert.AreEqual(3, _sut.GetChildren().Count);
             Assert.AreEqual(comparable, _sut.GetChildren()[2]);
         }
@@ -131,10 +131,10 @@ namespace ASD_Game.Tests.AgentTests.Ast
             //Act
             _sut.AddChild(action);
             //Assert
-            Assert.AreEqual(null, _sut.GetComparableL());
-            Assert.AreEqual(null, _sut.GetComparableR());
-            Assert.AreEqual(null, _sut.GetComparison());
-            Assert.AreEqual(action, _sut.GetThen());
+            Assert.AreEqual(null, _sut.ComparableL);
+            Assert.AreEqual(null,_sut.ComparableR);
+            Assert.AreEqual(null,_sut.Comparison);
+            Assert.AreEqual(action,_sut.Then);
             Assert.AreEqual(1, _sut.GetChildren().Count);
         }
 
@@ -147,11 +147,11 @@ namespace ASD_Game.Tests.AgentTests.Ast
             //Act
             _sut.AddChild(comparison);
             //Assert
-            Assert.AreEqual(null, _sut.GetComparableL());
-            Assert.AreEqual(null, _sut.GetComparableR());
-            Assert.AreEqual(comparison, _sut.GetComparison());
-            Assert.AreEqual(null, _sut.GetThen());
-
+            Assert.AreEqual(null, _sut.ComparableL);
+            Assert.AreEqual(null,_sut.ComparableR);
+            Assert.AreEqual(comparison,_sut.Comparison);
+            Assert.AreEqual(null,_sut.Then);
+            
             Assert.AreEqual(1, _sut.GetChildren().Count);
         }
 
@@ -165,10 +165,10 @@ namespace ASD_Game.Tests.AgentTests.Ast
             //Act
             _sut.AddChild(extra);
             //Assert
-            Assert.AreEqual(null, _sut.GetComparableL());
-            Assert.AreEqual(null, _sut.GetComparableR());
-            Assert.AreEqual(null, _sut.GetComparison());
-            Assert.AreEqual(null, _sut.GetThen());
+            Assert.AreEqual(null, _sut.ComparableL);
+            Assert.AreEqual(null,_sut.ComparableR);
+            Assert.AreEqual(null,_sut.Comparison);
+            Assert.AreEqual(null,_sut.Then);
             Assert.AreEqual(1, _sut.GetChildren().Count);
             Assert.AreEqual(extra, _sut.GetChildren()[0]);
         }

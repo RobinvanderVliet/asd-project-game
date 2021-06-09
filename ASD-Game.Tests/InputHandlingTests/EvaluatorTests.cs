@@ -255,14 +255,6 @@ namespace ASD_Game.Tests.InputHandlingTests
             //act & assert
             Assert.Throws<SlotException>(() => _sut.Apply(ast));
         }
-
-        public static AST InspectAST(string inventorySlot)
-        {
-            Input inspect = new Input();
-            inspect.AddChild(new Inspect()
-                .AddChild(new InventorySlot(inventorySlot)));
-            return new AST(inspect);
-        }
         
         [TestCase("easy")]
         [TestCase("medium")]
@@ -380,5 +372,12 @@ namespace ASD_Game.Tests.InputHandlingTests
             _ => (int)ItemSpawnRate.High
         };
 
+        public static AST InspectAST(string inventorySlot)
+        {
+            Input inspect = new Input();
+            inspect.AddChild(new Inspect()
+                .AddChild(new InventorySlot(inventorySlot)));
+            return new AST(inspect);
+        }
     }
 }

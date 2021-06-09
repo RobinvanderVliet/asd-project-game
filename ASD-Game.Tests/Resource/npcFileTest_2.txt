@@ -1,0 +1,2 @@
+﻿explore : weeop speciaal_voor_danny
+combat = offensive

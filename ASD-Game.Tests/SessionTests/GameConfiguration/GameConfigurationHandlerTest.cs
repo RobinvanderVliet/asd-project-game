@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using ASD_Game.DatabaseHandler.POCO;
 using ASD_Game.DatabaseHandler.Services;
@@ -20,6 +21,11 @@ namespace ASD_Game.Tests.SessionTests.GameConfiguration
         {
             _mockScreenHandler = new Mock<ScreenHandler>();
             _mockedGameConfigServicesDb = new Mock<IDatabaseService<GameConfigurationPOCO>>();
+
+            Mock<ConfigurationScreen> _screen = new Mock<ConfigurationScreen>();
+            _mockScreenHandler.Object.Screen = _screen.Object;
+            _screen.Setup(x => x.UpdateInputMessage(""));
+
             _sut = new GameConfigurationHandler(_mockScreenHandler.Object, _mockedGameConfigServicesDb.Object);
         }
 
@@ -91,6 +97,40 @@ namespace ASD_Game.Tests.SessionTests.GameConfiguration
             //Assert
             Assert.AreEqual(difficulty, _sut.NewMonsterDifficulty);
             Assert.AreEqual(true, _sut.NextScreen);
+        }
+        
+        [TestCase("6")]
+        [TestCase("falseChoice")]
+        [Test]
+        public void Test_UpdateMonsterDifficultyDoesntExist(string input)
+        {
+            //Arrange
+
+
+            //Act
+            _sut.UpdateMonsterDifficulty(input);
+            
+            //Assert
+            Assert.False(_sut.NextScreen);
+        }
+        
+        [Test]
+        public void Test_HandleAnswerSetsUsername()
+        {
+            //Arrange
+            _sut.SetGameConfiguration();
+            Mock<ConfigurationScreen> _screen = new Mock<ConfigurationScreen>();
+            _mockScreenHandler.Object.Screen = _screen.Object;
+            _screen.Setup(x => x.UpdateConfigurationScreen(_sut.ConfigurationHeader[_sut.OptionCounter], _sut.ConfigurationChoices[_sut.OptionCounter]));
+
+            //Act
+            _sut.HandleAnswer("1");
+            _sut.HandleAnswer("1");
+            _sut.HandleAnswer("1");
+            _sut.HandleAnswer("Abdul");
+
+            //Assert
+            Assert.AreEqual("Abdul", _sut.Username);
         }
     }
 }

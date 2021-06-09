@@ -16,7 +16,6 @@ namespace ASD_Game.UserInterface
         public void UpdateSavedSessionsList(List<string[]> sessions);
         public void UpdateInputMessage(string message);
         string GetSessionByPosition(int sessionNumber);
+        public void SetScreenInput(string input);
     }
 }
-
-
