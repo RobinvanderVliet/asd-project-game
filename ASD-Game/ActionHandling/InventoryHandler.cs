@@ -131,10 +131,9 @@ namespace ASD_Game.ActionHandling
                     output = inventoryItem.ToString();
                 }
             }
-            finally
-            {
-                _messageService.AddMessage(output);
-            }
+            catch(ArgumentOutOfRangeException) {}
+            
+            _messageService.AddMessage(output);
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
