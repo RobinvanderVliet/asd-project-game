@@ -95,7 +95,7 @@ namespace ASD_Game.Network
         //needed for testing, remove and all games will crash, you have been warned
         public void SetBackupHost(bool value)
         {
-            _isBackupHost = value;
+            IsBackupHost = value;
         }
     }
 }
