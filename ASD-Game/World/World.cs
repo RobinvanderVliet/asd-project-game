@@ -15,7 +15,7 @@ namespace ASD_Game.World
         private IMap _map;
         public Player CurrentPlayer { get; set; }
         public List<Player> Players { get; set; }
-        public List<Monster> _creatures { get; set; }
+        public List<Monster> Creatures { get; set; }
         public List<Character> movesList = new List<Character>();
         public List<ItemSpawnDTO> Items;
         
