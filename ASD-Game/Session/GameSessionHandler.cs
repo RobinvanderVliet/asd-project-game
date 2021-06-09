@@ -190,7 +190,7 @@ namespace Session
         private void InsertGameIntoDatabase()
         {
             var gamePOCO = new GamePOCO
-                {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId()};
+                {GameGuid = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId(), GameName = _sessionHandler.GameName};
             _gamePocoService.CreateAsync(gamePOCO);
         }
 

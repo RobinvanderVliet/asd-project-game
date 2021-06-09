@@ -34,8 +34,7 @@ namespace Session
             var allGames = _gamePocoService.GetAllAsync();
             allGames.Wait();
             var result = allGames.Result.Where(x => x.PlayerGUIDHost.Equals(_clientController.GetOriginId()));
-
-        
+       
 
             if (result.IsNullOrEmpty())
             {
