@@ -72,9 +72,9 @@ namespace Session
 
         private void EnablePlayerAgent(List<HeartbeatDTO> leavers)
         {
-            Console.WriteLine("Agents are enabled");
             foreach (HeartbeatDTO player in leavers)
             {
+                _agentHandler.Replace(player.clientID);
                 _players.Remove(player);
             }
         }

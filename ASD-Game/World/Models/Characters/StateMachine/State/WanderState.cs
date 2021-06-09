@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using World.Models.Characters.StateMachine.Data;
 using WorldGeneration.StateMachine.State;
 
@@ -14,15 +15,28 @@ namespace Creature.Creature.StateMachine.State
         {
             var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
             var _builderConfiguration = _characterData.BuilderConfigurator;
+
+            var steps = new Random().Next(10);
+            //_characterData.MoveHandler.SendMove(PickRandomDirection(), steps);
             
+            _characterData.Position = new Vector2(
+                _characterData.Position.X + 2,
+                _characterData.Position.Y
+            );
+
+            _characterData.MoveHandler.SendAIMove(_characterData.CharacterId,
+                Convert.ToInt32(_characterData.Position.X),
+                Convert.ToInt32(_characterData.Position.Y)
+            );
+
             foreach (var builderInfo in _builderInfoList)
             {
                 if (builderInfo.Action == "wander")
                 {
                     if (_builderConfiguration.GetGuard(_characterData, _target, builderInfo))
                     {
-                        int steps = new Random().Next(10);
-                        _characterData.MoveHandler.SendMove(PickRandomDirection(), steps);
+                        //int steps = new Random().Next(10);
+                        //_characterData.MoveHandler.SendMove(PickRandomDirection(), steps);
                     }
                 }
             }
@@ -31,22 +45,17 @@ namespace Creature.Creature.StateMachine.State
         private string PickRandomDirection()
         {
             var _direction = "";
-            var CaseSwitch = new Random().Next(1, 4);
+            var CaseSwitch = new Random().Next(1, 2);
             switch (CaseSwitch)
             {
                 case 1:
-                    _direction += "up";
+                    _direction += "x";
                     break;
                 case 2:
-                    _direction += "right";
-                    break;
-                case 3:
-                    _direction += "down";
-                    break;
-                case 4:
-                    _direction += "left";
+                    _direction += "y";
                     break;
             }
+
             return _direction;
         }
     }

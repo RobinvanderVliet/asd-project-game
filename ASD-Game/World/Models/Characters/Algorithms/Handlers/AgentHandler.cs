@@ -23,8 +23,7 @@ namespace Creature
 
         // string = playerId
         private Dictionary<string, WorldGeneration.Agent> _agents;
-
-        // TODO: add attack handler when that is on develop
+        
         public AgentHandler(IWorldService worldService, IMoveHandler moveHandler, IClientController clientController,
             IDatabaseService<AgentPOCO> databaseService, IConfigurationService configurationService,
             IAttackHandler attackHandler)
@@ -102,7 +101,7 @@ namespace Creature
                     MoveHandler = _moveHandler, WorldService = _worldService, Health = player.Health,
                     Inventory = player.Inventory, Stamina = player.Stamina, Team = player.Team,
                     RadiationLevel = player.RadiationLevel, VisionRange = 6, RuleSet = agentConfiguration,
-                    AttackHandler = _attackHandler
+                    AttackHandler = _attackHandler, CharacterId = player.Id
                 }
             };
         }

@@ -53,6 +53,7 @@ namespace World.Models.Characters.StateMachine.Data
         }
 
         public IAttackHandler AttackHandler { get; set; }
+        public string CharacterId { get; set; }
 
         public AgentData(int xPos, int yPos, int difficulty)
         {

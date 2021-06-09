@@ -302,6 +302,11 @@ namespace ActionHandling
             }
         }
 
+        public void SendAIMove(string id, int x, int y)
+        {
+            SendMoveDTO(new MoveDTO(id, x, y));
+        }
+
         public void GetAIMoves()
         {
             MoveAIs(_worldService.GetCreatureMoves());
