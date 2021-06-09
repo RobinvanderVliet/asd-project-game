@@ -11,7 +11,7 @@ namespace ASD_Game.Session.Helpers
     {
         public static Player SpawnPlayers(IEnumerable<string[]> allClients, int spawnSeed, IWorldService worldService, IClientController clientController)
         {
-            { 
+             
                 // spawn position first person.
                 var playerX = spawnSeed % 50; 
                 var playerY = spawnSeed % 50; 
@@ -40,7 +40,6 @@ namespace ASD_Game.Session.Helpers
                             }
                         }
                         return currentPlayer;
-            }
         }
 
         private static bool FindEmptyTile(IWorldService worldService, int playerX, int playerY)
