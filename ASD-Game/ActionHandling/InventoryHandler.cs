@@ -312,7 +312,7 @@ namespace ASD_Game.ActionHandling
                     PlayerPOCO playerPOCO = result.FirstOrDefault(player => player.PlayerGUID == inventoryDTO.UserId && player.GameGUID == _clientController.SessionId );
 
                     playerPOCO.Health = player.Health;
-                    //add stamina to playerPOCO
+                    playerPOCO.Stamina = player.Stamina;
                     _ = _playerDatabaseService.UpdateAsync(playerPOCO);
                 }
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
