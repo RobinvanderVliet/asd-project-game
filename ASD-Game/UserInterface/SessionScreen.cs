@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using ASD_Game.Session.DTO;
 
 namespace ASD_Game.UserInterface
 {
@@ -13,9 +15,9 @@ namespace ASD_Game.UserInterface
         private const int INPUT_Y = SESSIONS_Y + BORDER_SIZE;
         private const string INPUT_MESSAGE = "Insert session number and username to join";
 
-        private List<string[]> _sessionsInfoList = new();
+        private List<SessionDTO> _sessionsInfoList = new();
 
-        public List<string[]> SessionInfoList
+        public List<SessionDTO> SessionInfoList
         {
             set => _sessionsInfoList = value;
         }
@@ -27,10 +29,10 @@ namespace ASD_Game.UserInterface
             UpdateInputMessage(INPUT_MESSAGE);
         }
 
-        public void UpdateWithNewSession(string[] sessionInfo)
+        public void UpdateWithNewSession(List<SessionDTO> sessions)
         {
             _screenHandler.ConsoleHelper.ClearConsole();
-            _sessionsInfoList.Add(sessionInfo);
+            _sessionsInfoList = sessions;
             DrawHeader(GetHeaderText());
             DrawSessionBox();
             UpdateInputMessage(INPUT_MESSAGE);
@@ -45,7 +47,7 @@ namespace ASD_Game.UserInterface
                 _screenHandler.ConsoleHelper.SetCursor(SESSIONS_X + BORDER_SIZE / 2, SESSIONS_Y + OFFSET_TOP + position);
                 _screenHandler.ConsoleHelper.Write(" ");
                 _screenHandler.ConsoleHelper.SetCursor(SESSIONS_X + OFFSET_LEFT, SESSIONS_Y + OFFSET_TOP + position);
-                _screenHandler.ConsoleHelper.Write("(" + (position + 1) + ") " + session[1] + " | Created by: " + session[2] + " | Players: " + session[3] + "/8");
+                _screenHandler.ConsoleHelper.Write("(" + (position + 1) + ") " + session.Name + " | Created by: " + session.Clients[0][1] + " | Players: " + session.Clients.Count + "/8" + " | Status: " + (session.SessionStarted ? "In progress" : "Not started"));
                 _screenHandler.ConsoleHelper.Write(new string(' ', SCREEN_WIDTH - _screenHandler.ConsoleHelper.GetCursorLeft() - BORDER_SIZE / 2));
             }
 
@@ -61,7 +63,7 @@ namespace ASD_Game.UserInterface
         {
             if (_sessionsInfoList.ElementAtOrDefault(sessionNumber) != null)
             {
-                return _sessionsInfoList[sessionNumber][0];
+                return _sessionsInfoList[0].SessionId;
             }
 
             return null;

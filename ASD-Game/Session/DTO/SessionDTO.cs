@@ -6,6 +6,7 @@ namespace ASD_Game.Session.DTO
     [ExcludeFromCodeCoverage]
     public class SessionDTO
     {
+        public string SessionId { get; set; }
         public SessionType SessionType { get; set; }
         public string Name { get; set; }
         public List<string[]> Clients { get; set; }
