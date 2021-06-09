@@ -1,33 +1,24 @@
-﻿using Creature.Creature.StateMachine.Data;
-using System;
-using System.Collections.Generic;
-using Creature.Creature.StateMachine.Builder;
+﻿using World.Models.Characters.StateMachine.Data;
+using WorldGeneration.StateMachine.State;
 
 namespace Creature.Creature.StateMachine.State
 {
-    public class UseConsumableState : CreatureState
+    public class UseConsumableState : CharacterState
     {
-        public UseConsumableState(ICreatureData creatureData, ICreatureStateMachine stateMachine, List<BuilderInfo> builderInfoList, BuilderConfigurator builderConfiguration) : base(creatureData, stateMachine, builderInfoList, builderConfiguration)
+        public UseConsumableState(ICharacterData characterData) : base(characterData)
         {
-            _creatureData = creatureData;
-            _stateMachine = stateMachine;
-            _builderConfiguration = builderConfiguration;
-            _builderInfoList = builderInfoList;
-        }
-        
-        public UseConsumableState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base (creatureData, stateMachine)
-        {
-            _creatureData = creatureData;
-            _stateMachine = stateMachine;
         }
 
         public override void Do()
         {
+            var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
+            var _builderConfiguration = _characterData.BuilderConfigurator;
+            
             foreach (var builderInfo in _builderInfoList)
             {
                 if (builderInfo.Action == "attack")
                 {
-                    if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo))
+                    if (_builderConfiguration.GetGuard(_characterData, _target, builderInfo))
                     {
                         //TODO implement Attack logic + gather targetData
                     }

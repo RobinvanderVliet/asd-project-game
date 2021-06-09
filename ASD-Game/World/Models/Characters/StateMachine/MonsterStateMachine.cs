@@ -1,8 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading;
 using Appccelerate.StateMachine.Machine;
-using WorldGeneration.StateMachine.CustomRuleSet;
-using WorldGeneration.StateMachine.Data;
+using Creature.Creature.StateMachine.CustomRuleSet;
+using Creature.Creature.StateMachine.State;
+using World.Models.Characters.StateMachine.Builder;
+using World.Models.Characters.StateMachine.Data;
 using WorldGeneration.StateMachine.Event;
 using WorldGeneration.StateMachine.State;
 
@@ -12,7 +15,7 @@ namespace WorldGeneration.StateMachine
     {
         private Timer _timer;
 
-        public MonsterStateMachine(ICharacterData characterData, RuleSet ruleSet) : base(characterData, ruleSet)
+        public MonsterStateMachine(ICharacterData characterData) : base(characterData)
         {
         }
 
@@ -20,40 +23,69 @@ namespace WorldGeneration.StateMachine
         public ICharacterData CharacterData
         {
             get => _characterData;
-            set => _characterData = (MonsterData)value;
+            set => _characterData = (MonsterData) value;
         }
 
         public override void StartStateMachine()
         {
             var builder = new StateMachineDefinitionBuilder<CharacterState, CharacterEvent.Event>();
+            var ruleSetFactory = new RuleSetFactory();
+            var rulesetList = ruleSetFactory.GetRuleSetListFromSettingsList(CharacterData.RuleSet);
+            var builderConfigurator = new BuilderConfigurator(rulesetList, CharacterData, this);
+            var builderInfoList = builderConfigurator.GetBuilderInfoList();
 
-            CharacterState followPlayerState = new FollowPlayerState(CharacterData);
+            CharacterData.BuilderConfigurator = builderConfigurator;
+            
+            CharacterState followCreatureState = new FollowCreatureState(CharacterData);
             CharacterState wanderState = new WanderState(CharacterData);
             CharacterState useConsumableState = new UseConsumableState(CharacterData);
-            CharacterState attackPlayerState = new AttackPlayerState(CharacterData);
+            CharacterState attackState = new AttackState(CharacterData);
 
-            DefineDefaultBehaviour(ref builder, ref followPlayerState);
+            DefineDefaultBehaviour(ref builder, ref followCreatureState);
             DefineDefaultBehaviour(ref builder, ref wanderState);
             DefineDefaultBehaviour(ref builder, ref useConsumableState);
-            DefineDefaultBehaviour(ref builder, ref attackPlayerState);
+            DefineDefaultBehaviour(ref builder, ref attackState);
 
-            // Wandering
-            builder.In(followPlayerState).On(CharacterEvent.Event.LOST_PLAYER).Goto(wanderState);
+            foreach (BuilderInfo builderInfo in builderInfoList)
+            {
+                foreach (var initialState in builderInfo.InitialStates)
+                {
+                    builder.In(initialState).On(builderInfo.Event)
+                        .If<object>((targetData) => builderConfigurator.GetGuard(_characterData, targetData, builderInfo))
+                        .Goto(builderInfo.TargetState).Execute<ICharacterData>(builderInfo.TargetState.SetTargetData);
+                }
+            }
 
-            // Follow player
-            builder.In(wanderState).On(CharacterEvent.Event.SPOTTED_PLAYER).Goto(followPlayerState).Execute<ICharacterData>(new FollowPlayerState(CharacterData).Do);
-            builder.In(followPlayerState).On(CharacterEvent.Event.SPOTTED_PLAYER).Goto(followPlayerState).Execute<ICharacterData>(new FollowPlayerState(CharacterData).Do);
-            builder.In(useConsumableState).On(CharacterEvent.Event.REGAINED_HEALTH_PLAYER_OUT_OF_RANGE).Goto(followPlayerState).Execute<ICharacterData>(new FollowPlayerState(CharacterData).Do);
-            builder.In(attackPlayerState).On(CharacterEvent.Event.PLAYER_OUT_OF_RANGE).Goto(followPlayerState).Execute<ICharacterData>(new FollowPlayerState(CharacterData).Do);
-
-            // Attack player
-            builder.In(followPlayerState).On(CharacterEvent.Event.PLAYER_IN_RANGE).Goto(attackPlayerState).Execute<ICharacterData>(new AttackPlayerState(CharacterData).Do);
-            builder.In(attackPlayerState).On(CharacterEvent.Event.PLAYER_IN_RANGE).Execute<ICharacterData>(new AttackPlayerState(CharacterData).Do);
-            builder.In(useConsumableState).On(CharacterEvent.Event.REGAINED_HEALTH_PLAYER_IN_RANGE).Goto(attackPlayerState).Execute<ICharacterData>(new AttackPlayerState(CharacterData).Do);
-
-            // Use potion
-            builder.In(attackPlayerState).On(CharacterEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICharacterData>(new UseConsumableState(CharacterData).Do);
-            builder.In(followPlayerState).On(CharacterEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICharacterData>(new UseConsumableState(CharacterData).Do);
+            foreach (var action in builderConfigurator.GetActionWithStateList())
+            {
+                if (!builderInfoList.Any(x => x.Action == action.Key))
+                {
+                    if (action.Key == "wander")
+                    {
+                        // Wandering
+                        builder.In(followCreatureState).On(CharacterEvent.Event.LOST_CREATURE).Goto(wanderState);
+                    }
+                    else if (action.Key == "follow")
+                    {
+                        // Follow player
+                        builder.In(wanderState).On(CharacterEvent.Event.SPOTTED_CREATURE).Goto(followCreatureState)
+                            .Execute<ICharacterData>(followCreatureState.SetTargetData);
+                        builder.In(followCreatureState).On(CharacterEvent.Event.SPOTTED_CREATURE).Goto(followCreatureState)
+                            .Execute<ICharacterData>(followCreatureState.SetTargetData);
+                        builder.In(attackState).On(CharacterEvent.Event.SPOTTED_CREATURE).Goto(followCreatureState)
+                            .Execute<ICharacterData>(followCreatureState.SetTargetData);
+                    }
+                    else if (action.Key == "attack")
+                    {
+                        // Attack player
+                        builder.In(followCreatureState).On(CharacterEvent.Event.CREATURE_IN_RANGE)
+                            .Goto(attackState).Execute<ICharacterData>(attackState.SetTargetData);
+                        builder.In(attackState).On(CharacterEvent.Event.CREATURE_IN_RANGE)
+                            .Execute<ICharacterData>(attackState.SetTargetData);
+                    }
+                    //else if (action == "...")
+                }
+            }
 
             builder.WithInitialState(wanderState);
 

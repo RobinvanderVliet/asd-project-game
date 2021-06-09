@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
-using WorldGeneration.StateMachine.Data;
+using World.Models.Characters.StateMachine.Data;
 
 namespace World.Models.Characters.Algorithms.NeuralNetworking
 {

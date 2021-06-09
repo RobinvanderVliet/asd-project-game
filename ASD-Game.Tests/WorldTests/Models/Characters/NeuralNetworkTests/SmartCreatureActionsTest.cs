@@ -3,7 +3,7 @@ using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
-using WorldGeneration.StateMachine.Data;
+using World.Models.Characters.StateMachine.Data;
 
 namespace World.Models.Character.Tests.NeuralNetworkTest
 {

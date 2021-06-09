@@ -26,7 +26,7 @@ namespace Character.Tests.StateMachineTests
         public void Test_FireEvent_SuccessfulStateChange()
         {
             _correctlyTransitioned = false;
-            _monsterStateMachine = new MonsterStateMachine(_monster.MonsterData, null);
+            _monsterStateMachine = new MonsterStateMachine(_monster.MonsterData);
             _monsterStateMachine.StartStateMachine();
 
             //Arrange
@@ -57,7 +57,7 @@ namespace Character.Tests.StateMachineTests
         public void Test_FireEvent_NotSuccessfulStateChange()
         {
             _correctlyTransitioned = true;
-            _monsterStateMachine = new MonsterStateMachine(_monster.MonsterData, null);
+            _monsterStateMachine = new MonsterStateMachine(_monster.MonsterData);
             _monsterStateMachine.StartStateMachine();
 
             //Arrange
@@ -77,7 +77,7 @@ namespace Character.Tests.StateMachineTests
             };
 
             //Act
-            _monsterStateMachine.FireEvent(CharacterEvent.Event.PLAYER_IN_RANGE);
+            _monsterStateMachine.FireEvent(CharacterEvent.Event.CREATURE_IN_RANGE);
             // FireEvent works with a queue which gets cleared on a interval. There was a possibility that the event 
             // was not yet completed before doing the assertion and thus making the test fail.            
             Thread.Sleep(1000);
@@ -90,7 +90,7 @@ namespace Character.Tests.StateMachineTests
         public void Test_FireEvent_SuccessfulStateChangeWithArgument()
         {
             _correctlyTransitioned = false;
-            _monsterStateMachine = new MonsterStateMachine(_monster.MonsterData, null);
+            _monsterStateMachine = new MonsterStateMachine(_monster.MonsterData);
             _monsterStateMachine.StartStateMachine();
 
             //Arrange
@@ -120,7 +120,7 @@ namespace Character.Tests.StateMachineTests
         public void Test_FireEvent_NotSuccessfulStateChangeWithArgument()
         {
             _correctlyTransitioned = true;
-            _monsterStateMachine = new MonsterStateMachine(_monster.MonsterData, null);
+            _monsterStateMachine = new MonsterStateMachine(_monster.MonsterData);
             _monsterStateMachine.StartStateMachine();
             //Arrange
             _monsterStateMachine._passiveStateMachine.TransitionCompleted += (sender, args) =>
@@ -138,7 +138,7 @@ namespace Character.Tests.StateMachineTests
             };
 
             //Act
-            _monsterStateMachine.FireEvent(CharacterEvent.Event.PLAYER_IN_RANGE, _monster.MonsterData);
+            _monsterStateMachine.FireEvent(CharacterEvent.Event.CREATURE_IN_RANGE, _monster.MonsterData);
             // FireEvent works with a queue which gets cleared on a interval. There was a possibility that the event 
             // was not yet completed before doing the assertion and thus making the test fail.
             Thread.Sleep(1000);
@@ -151,7 +151,7 @@ namespace Character.Tests.StateMachineTests
         public void Test_StartStateMachine_StateMachineIsActive()
         {
             //Arrange
-            MonsterStateMachine newStateMachine = new MonsterStateMachine(_monster.MonsterData, null);
+            MonsterStateMachine newStateMachine = new MonsterStateMachine(_monster.MonsterData);
 
             //Act
             newStateMachine.StartStateMachine();

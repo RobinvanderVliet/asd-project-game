@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using World.Models.Characters.StateMachine.Data;
 using WorldGeneration;
-using WorldGeneration.StateMachine.Data;
 
 namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
 {

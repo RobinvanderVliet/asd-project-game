@@ -1,51 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
-using ActionHandling;
-using Creature.Creature.StateMachine.Builder;
-using Creature.Creature.StateMachine.Data;
-using Network;
-using WorldGeneration;
+using World.Models.Characters.StateMachine.Data;
+using WorldGeneration.StateMachine.State;
 
 namespace Creature.Creature.StateMachine.State
 {
-    public class WanderState : CreatureState
+    public class WanderState : CharacterState
     {
-        public WanderState(ICreatureData creatureData, ICreatureStateMachine stateMachine,
-            List<BuilderInfo> builderInfoList, BuilderConfigurator builderConfiguration) : base(creatureData,
-            stateMachine, builderInfoList, builderConfiguration)
+        public WanderState(ICharacterData characterData) : base(characterData)
         {
-            _creatureData = creatureData;
-            _stateMachine = stateMachine;
-            _builderConfiguration = builderConfiguration;
-            _builderInfoList = builderInfoList;
-        }
-
-        public WanderState(ICreatureData creatureData, ICreatureStateMachine stateMachine) : base(creatureData,
-            stateMachine)
-        {
-            _creatureData = creatureData;
-            _stateMachine = stateMachine;
         }
 
         public override void Do()
         {
+            var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
+            var _builderConfiguration = _characterData.BuilderConfigurator;
+            
             foreach (var builderInfo in _builderInfoList)
             {
                 if (builderInfo.Action == "wander")
                 {
-                    if (_builderConfiguration.GetGuard(_creatureData, _target, builderInfo))
+                    if (_builderConfiguration.GetGuard(_characterData, _target, builderInfo))
                     {
                         int steps = new Random().Next(10);
-                        _creatureData.MoveHandler.SendMove(pickRandomDirection(), steps);
+                        _characterData.MoveHandler.SendMove(PickRandomDirection(), steps);
                     }
                 }
             }
         }
 
-        private string pickRandomDirection()
+        private string PickRandomDirection()
         {
-            string _direction = "";
-            int CaseSwitch = new Random().Next(1, 4);
+            var _direction = "";
+            var CaseSwitch = new Random().Next(1, 4);
             switch (CaseSwitch)
             {
                 case 1:

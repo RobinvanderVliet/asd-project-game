@@ -1,4 +1,4 @@
-﻿using WorldGeneration.StateMachine.Data;
+﻿using World.Models.Characters.StateMachine.Data;
 using WorldGeneration.StateMachine.Event;
 
 namespace WorldGeneration.StateMachine

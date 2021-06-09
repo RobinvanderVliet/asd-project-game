@@ -2,8 +2,8 @@
 using System.Numerics;
 using World.Models.Characters.Algorithms.NeuralNetworking;
 using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
+using World.Models.Characters.StateMachine.Data;
 using WorldGeneration;
-using WorldGeneration.StateMachine.Data;
 
 namespace Characters
 {

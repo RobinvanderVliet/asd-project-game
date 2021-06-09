@@ -1,7 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using ActionHandling;
+using World.Models.Characters.StateMachine.Builder;
+using WorldGeneration;
 
-namespace WorldGeneration.StateMachine.Data
+namespace World.Models.Characters.StateMachine.Data
 {
     [ExcludeFromCodeCoverage]
     public class MonsterData : ICharacterData
@@ -24,6 +28,14 @@ namespace WorldGeneration.StateMachine.Data
             get => _health;
             set => _health = value;
         }
+
+        public List<KeyValuePair<string, string>> RuleSet { get; set; }
+        public Inventory Inventory { get; set; }
+        public int Team { get; set; }
+        public int RadiationLevel { get; set; }
+        public IMoveHandler MoveHandler { get; set; }
+        public IWorldService WorldService { get; set; }
+        public BuilderConfigurator BuilderConfigurator { get; set; }
 
         public int Damage
         {

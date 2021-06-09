@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using WorldGeneration.StateMachine.Data;
+using World.Models.Characters.StateMachine.Data;
 
 namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
 {
