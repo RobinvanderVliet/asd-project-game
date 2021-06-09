@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using ActionHandling;
 using ASD_Game.ActionHandling;
@@ -23,6 +24,7 @@ using Serilog;
 
 namespace ASD_Game
 {
+    [ExcludeFromCodeCoverage]
     partial class Program
     {
         static void Main(string[] args)
@@ -38,7 +40,6 @@ namespace ASD_Game
             
             Log.Logger.Information("Application starting");
             
-            //Example of dependency injection with GreetingService
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
