@@ -1,5 +1,5 @@
 using System;
-using System.Timers;
+using System.Threading;
 using ASD_Game.InputHandling.Antlr;
 using ASD_Game.Messages;
 using ASD_Game.Session;
@@ -7,6 +7,7 @@ using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
 using Session;
 using WebSocketSharp;
+using Timer = System.Timers.Timer;
 
 namespace ASD_Game.InputHandling
 {
@@ -127,7 +128,8 @@ namespace ASD_Game.InputHandling
                 int.TryParse(input[0].ToString(), out sessionNumber);
 
                 string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
-
+                
+                
                 if (sessionId.IsNullOrEmpty())
                 {
                     sessionScreen.UpdateInputMessage("Not a valid session, try again!");
