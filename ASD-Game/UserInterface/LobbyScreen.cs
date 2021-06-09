@@ -1,11 +1,7 @@
-﻿using Chat.DTO;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ASD_Game.Chat.DTO;
 
-namespace UserInterface
+namespace ASD_Game.UserInterface
 {
     public class LobbyScreen : Screen
     {
@@ -46,7 +42,7 @@ namespace UserInterface
             DrawBox(LOBBY_X, LOBBY_Y, LOBBY_WIDTH, LOBBY_HEIGHT);
         }
 
-        private string GetHeaderText() 
+        private string GetHeaderText()
         {
             return "Welcome to the lobby, people in the lobby:";
         }
@@ -66,7 +62,7 @@ namespace UserInterface
             ResetCursor();
         }
 
-        public void ResetCursor() 
+        public void ResetCursor()
         {
             _screenHandler.ConsoleHelper.SetCursor(INPUT_X + 4, INPUT_Y + LOBBY_HEIGHT + 2);
         }
@@ -77,8 +73,8 @@ namespace UserInterface
         }
 
         public void UpdateChat(List<ChatMessageDTO> messages)
-        { 
-            foreach (ChatMessageDTO message in messages) 
+        {
+            foreach (ChatMessageDTO message in messages)
             {
                 int position = messages.IndexOf(message);
                 _screenHandler.ConsoleHelper.SetCursor(CHAT_X + 1, CHAT_Y + position);
@@ -90,7 +86,7 @@ namespace UserInterface
         }
 
         //REMOVE THIS FUNCTION WHEN CHAT HAS BEEN FULLY IMPLEMENTED
-        public List<ChatMessageDTO> UpdateMessages() 
+        public List<ChatMessageDTO> UpdateMessages()
         {
             List<ChatMessageDTO> list = new();
             list.Add(new ChatMessageDTO("swankie", "this is the first message"));

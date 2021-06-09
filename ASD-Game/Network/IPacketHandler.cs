@@ -1,6 +1,6 @@
-﻿using Network.DTO;
+﻿using ASD_Game.Network.DTO;
 
-namespace Network
+namespace ASD_Game.Network
 {
     public interface IPacketHandler
     {

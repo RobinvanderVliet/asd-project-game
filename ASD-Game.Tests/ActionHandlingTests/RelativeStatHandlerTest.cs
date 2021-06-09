@@ -2,18 +2,22 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
-using ActionHandling.DTO;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
 using Moq;
-using Network;
-using Network.DTO;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using WorldGeneration;
-using WorldGeneration.Models.HazardousTiles;
+using ASD_Game.ActionHandling;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.HazardousTiles;
+using ASD_Game.World.Services;
 
-namespace ActionHandling.Tests
+namespace ASD_Game.Tests.ActionHandlingTests
 {
     [ExcludeFromCodeCoverage]
     public class RelativeStatHandlerTest
@@ -21,6 +25,7 @@ namespace ActionHandling.Tests
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
         private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerDatabaseService;
+        private Mock<IMessageService> _mockedMessageService;
         private RelativeStatHandler _sut;
 
         [SetUp]
@@ -30,8 +35,7 @@ namespace ActionHandling.Tests
             _mockedWorldService = new Mock<IWorldService>();
             _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPOCO>>();
 
-            _sut = new RelativeStatHandler(_mockedClientController.Object, _mockedWorldService.Object,
-                _mockedPlayerDatabaseService.Object);
+            _sut = new RelativeStatHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerDatabaseService.Object, _mockedMessageService.Object);
         }
 
         [Test]
@@ -169,7 +173,7 @@ namespace ActionHandling.Tests
             var player = new Mock<Player>("f", 0, 42, "#", "f");
             player.Object.Stamina = 90;
 
-            var playerPOCO = new PlayerPOCO() {GameGuid = "gameguid", PlayerGuid = "f"};
+            var playerPOCO = new PlayerPOCO() { GameGUID = "gameguid", PlayerGUID = "f"};
             List<PlayerPOCO> playerPOCOs = new();
             playerPOCOs.Add(playerPOCO);
             IEnumerable<PlayerPOCO> enumerable = playerPOCOs;
@@ -235,7 +239,7 @@ namespace ActionHandling.Tests
             var player = new Mock<Player>("f", 0, 42, "#", "f");
             player.Object.RadiationLevel = 1;
 
-            var playerPOCO = new PlayerPOCO() {GameGuid = "gameguid", PlayerGuid = "f"};
+            var playerPOCO = new PlayerPOCO() { GameGUID = "gameguid", PlayerGUID = "f" };
             List<PlayerPOCO> playerPOCOs = new();
             playerPOCOs.Add(playerPOCO);
             IEnumerable<PlayerPOCO> enumerable = playerPOCOs;
@@ -301,7 +305,7 @@ namespace ActionHandling.Tests
             var player = new Mock<Player>("f", 0, 42, "#", "f");
             player.Object.Health = 90;
 
-            var playerPOCO = new PlayerPOCO() {GameGuid = "gameguid", PlayerGuid = "f"};
+            var playerPOCO = new PlayerPOCO() { GameGUID = "gameguid", PlayerGUID = "f" };
             List<PlayerPOCO> playerPOCOs = new();
             playerPOCOs.Add(playerPOCO);
             IEnumerable<PlayerPOCO> enumerable = playerPOCOs;

@@ -1,4 +1,4 @@
-﻿namespace Items.ItemStats
+﻿namespace ASD_Game.Items.ItemStats
 {
     public enum Rarity
     {

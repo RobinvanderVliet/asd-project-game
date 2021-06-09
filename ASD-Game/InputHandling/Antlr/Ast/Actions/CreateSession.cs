@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
-namespace InputHandling.Antlr.Ast.Actions
+namespace ASD_Game.InputHandling.Antlr.Ast.Actions
 {
     public class CreateSession : Command
     {

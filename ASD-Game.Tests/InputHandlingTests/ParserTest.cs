@@ -1,14 +1,14 @@
-﻿using Antlr4.Runtime;
-using Antlr4.Runtime.Tree;
-using InputHandling.Antlr.Ast;
-using InputHandling.Antlr.Ast.Actions;
-using InputHandling.Antlr.Grammar;
-using InputHandling.Antlr.Parser;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
+using ASD_Game.InputHandling.Antlr.Ast;
+using ASD_Game.InputHandling.Antlr.Ast.Actions;
+using ASD_Game.InputHandling.Antlr.Parser;
+using InputHandling.Antlr.Grammar;
+using NUnit.Framework;
 
-namespace InputHandling.Tests
+namespace ASD_Game.Tests.InputHandlingTests
 {
     [ExcludeFromCodeCoverage]
     public class ParserTest
@@ -67,11 +67,11 @@ namespace InputHandling.Tests
 
         public static AST DropCommand()
         {
-            Input attack = new Input();
+            Input drop = new Input();
 
-            attack.AddChild(new Drop());
+            drop.AddChild(new Drop());
 
-            return new AST(attack);
+            return new AST(drop);
         }
 
         public static AST SayCommand(string message)

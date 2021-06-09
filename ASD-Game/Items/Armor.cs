@@ -1,8 +1,8 @@
-﻿using System;
-using Items.ArmorStats;
-using Items.ItemStats;
+using System;
+using ASD_Game.Items.ArmorStats;
+using ASD_Game.Items.ItemStats;
 
-namespace Items
+namespace ASD_Game.Items
 {
     public class Armor : Item
     {

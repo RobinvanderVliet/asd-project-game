@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using Moq;
-using Network;
-using Network.DTO;
-using Newtonsoft.Json;
-using NUnit.Framework;
-using Session.DTO;
-using Session.GameConfiguration;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using ActionHandling;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using Messages;
-using WorldGeneration;
-using Session.DTO;
-using UserInterface;
+using ASD_Game.ActionHandling;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Session;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
+using ASD_Game.World.Services;
+using Moq;
+using NUnit.Framework;
 
-namespace Session.Tests
+namespace ASD_Game.Tests.SessionTests
 {
     [ExcludeFromCodeCoverage]
     public class GameSessionHandlerTests
@@ -42,7 +36,6 @@ namespace Session.Tests
 
         private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
         private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigDatabaseService;
-
 
         [SetUp]
         public void Setup()
@@ -83,15 +76,15 @@ namespace Session.Tests
         // {
         //     //arrange
         //     Dictionary<string, int[]> players = new Dictionary<string, int[]>();
-        //     
+        //
         //     int[] playerPosition = new int[2];
         //     playerPosition[0] = 1;
         //     playerPosition[1] = 2;
         //     players.Add("player", playerPosition);
-        //     
+        //
         //     StartGameDTO startGameDTO = new StartGameDTO
         //         {GameGuid = "testGame", PlayerLocations = players};
-        //     
+        //
         //     var payload = JsonConvert.SerializeObject(startGameDTO);
         //
         //     _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Session));
@@ -103,6 +96,5 @@ namespace Session.Tests
         //     // Assert ---------
         //     _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.Session), Times.Once());
         // }
-        
     }
 }

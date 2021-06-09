@@ -1,4 +1,4 @@
-﻿namespace Messages
+﻿namespace ASD_Game.Messages
 {
     public interface IMessageService
     {

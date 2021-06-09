@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using LiteDB;
 
-namespace DatabaseHandler.Repository
+namespace ASD_Game.DatabaseHandler.Repository
 {
     public interface IRepository<T>
     {
@@ -11,5 +11,6 @@ namespace DatabaseHandler.Repository
         Task<int> DeleteAsync(T obj);
         Task<IEnumerable<T>> GetAllAsync();
         Task<int> DeleteAllAsync();
+
     }
 }

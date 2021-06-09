@@ -1,4 +1,4 @@
-﻿namespace Session.GameConfiguration
+﻿namespace ASD_Game.Session.GameConfiguration
 {
     public enum MonsterDifficulty
     {

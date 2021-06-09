@@ -1,7 +1,7 @@
-﻿using System;
-using Items.ItemStats;
+using System;
+using ASD_Game.Items.ItemStats;
 
-namespace Items.Consumables
+namespace ASD_Game.Items.Consumables
 {
     public class Consumable : Item
     {
@@ -11,8 +11,7 @@ namespace Items.Consumables
         {
 
         }
-        
-        
+
         public override string ToString()
         {
             string inspect = Description;
