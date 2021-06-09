@@ -15,15 +15,13 @@ namespace ASD_Game.Chat
     public class ChatHandler : IPacketHandler, IChatHandler
     {
         private readonly IClientController _clientController;
-        private readonly IWorldService _worldService;
         private readonly IMessageService _messageService;
         private readonly ISessionHandler _sessionHandler;
 
-        public ChatHandler(IClientController clientController, IWorldService worldService, IMessageService messageService, ISessionHandler sessionHandler)
+        public ChatHandler(IClientController clientController, IMessageService messageService, ISessionHandler sessionHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Chat);
-            _worldService = worldService;
             _messageService = messageService;
             _sessionHandler = sessionHandler;
         }
@@ -77,7 +75,7 @@ namespace ASD_Game.Chat
         private string GetUserIdentifier(string userId)
         {
             var player = _sessionHandler.GetAllClients().Find(client => client[0].Equals(userId));
-            if (!player.IsNullOrEmpty())
+            if (!player[1].IsNullOrEmpty())
             {
                 return player[1];
             }
