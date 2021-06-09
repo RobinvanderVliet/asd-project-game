@@ -159,11 +159,10 @@ namespace ASD_Game.InputHandling
                     return;
                 }
 
-            //TODO add if to check if you are the host
-            if (input == START_COMMAND) 
-            {
-                SendCommand(START_COMMAND);
-            }
+                if (input == START_COMMAND) 
+                {
+                    SendCommand(START_COMMAND);
+                }
 
                 if (input.Contains("SAY"))
                 {
