@@ -71,18 +71,18 @@ namespace ASD_Game.Tests.ActionHandlingTests
             int steps = 5;
             int x = 26;
             int y = 11;
+            bool isded = true;
 
             Player player = new Player("test", x, y, "#", "test2");
 
             _mockedWorldService.Setup(mock => mock.GetCurrentPlayer()).Returns(player);
-            _mockedClientController.Setup(mock => mock.SendPayload(It.IsAny<string>(), PacketType.Move)); 
-            _mockedWorldService.Setup(mock => mock.IsDead(new Player())).Returns(true);
+            _mockedWorldService.Setup(mock => mock.IsDead(player)).Returns(isded);
 
             // act
             _sut.SendMove(direction, steps);
 
             // assert
-            _mockedClientController.Verify(mock => mock.SendPayload(It.IsAny<string>(), PacketType.Move), Times.Once);
+            _mockedMessageService.Verify(mock => mock.AddMessage("You can't move, you're dead!"), Times.Once);
         }
 
         [Test]
