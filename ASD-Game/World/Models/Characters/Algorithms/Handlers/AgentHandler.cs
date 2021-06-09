@@ -41,6 +41,8 @@ namespace Creature
 
         public void Replace(string playerId)
         {
+            if (_worldService.GetWorld() == null) return;
+            
             var player = _worldService.GetPlayer(playerId);
             _agents.TryGetValue(playerId, out var agent);
 
