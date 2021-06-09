@@ -464,24 +464,23 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking
         [ExcludeFromCodeCoverage]
         public void PrintGenome()
         {
-            string filePath = @"C:\Temp\NeuralNetworkOutput.txt";
-            using (StreamWriter writer = new StreamWriter(filePath))
+            Console.Clear();
+            Console.WriteLine("Print genome  layers: " + Layers);
+            Console.WriteLine("bias node: " + BiasNode);
+            Console.WriteLine("nodes");
+            for (int i = 0; i < Nodes.Count; i++)
             {
-                writer.WriteLine("Print genome  layers: " + Layers);
-                writer.WriteLine("bias node: " + BiasNode);
-                writer.WriteLine("nodes");
-                for (int i = 0; i < Nodes.Count; i++)
-                {
-                    writer.WriteLine(Nodes[i].Number + " is : " + GetNodeName(Nodes[i].Number));
-                }
-                writer.WriteLine("Genes");
-                for (int i = 0; i < Genes.Count; i++)
-                {
-                    //for each connectionGene
-                    writer.WriteLine("gene " + Genes[i].InnovationNo + " From node " + GetNodeName(Genes[i].FromNode.Number) + " To node " + GetNodeName(Genes[i].ToNode.Number) +
-                      " is enabled " + Genes[i].Enabled + " from layer " + Genes[i].FromNode.Layer + " to layer " + Genes[i].ToNode.Layer + " weight: " + Genes[i].Weight);
-                }
+                Console.WriteLine(Nodes[i].Number + " is : " + GetNodeName(Nodes[i].Number));
             }
+            Console.WriteLine("Genes");
+            for (int i = 0; i < Genes.Count; i++)
+            {
+                //for each connectionGene
+                Console.WriteLine("gene " + Genes[i].InnovationNo + " From node " + GetNodeName(Genes[i].FromNode.Number) + " To node " + GetNodeName(Genes[i].ToNode.Number) +
+                  " is enabled " + Genes[i].Enabled + " from layer " + Genes[i].FromNode.Layer + " to layer " + Genes[i].ToNode.Layer + " weight: " + Genes[i].Weight);
+            }
+
+            Console.WriteLine();
         }
 
         [ExcludeFromCodeCoverage]
