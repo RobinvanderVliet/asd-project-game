@@ -88,6 +88,15 @@ namespace ASD_Game.UserInterface
             }
         }
 
+        public void UpdateSavedSessionsList(List<string[]> sessions)
+        {
+            if (_screen is LoadScreen)
+            {
+                LoadScreen loadScreen = _screen as LoadScreen;
+                loadScreen.UpdateSavedSessionsList(sessions);
+            }
+        }
+
         public virtual void SetScreenInput(string input)
         {
             _consoleHelper.WriteLine(input);

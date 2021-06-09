@@ -46,10 +46,11 @@ namespace ASD_Game.Tests.InputHandlingTests
             _mockedMessageService = new Mock<IMessageService>();
             _mockedGamesSessionService = new Mock<IGamesSessionService>();
 
+            
             _mockedConsole = new();
             _mockedScreenHandler.Object.ConsoleHelper = _mockedConsole.Object;
-            mockedMessagesService = new(_mockedScreenHandler.Object);
-            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedScreenHandler.Object, mockedMessagesService.Object, _mockedGameConfigurationHandler.Object);
+            _mockedMessageService = new(_mockedScreenHandler.Object);
+            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedMessageService.Object, _mockedGameConfigurationHandler.Object, _mockedGamesSessionService.Object, _mockedScreenHandler.Object);
         }
 
         [Test]
@@ -74,7 +75,6 @@ namespace ASD_Game.Tests.InputHandlingTests
         public void Test_HandleStartScreenCommands_HandlesInput(string input)
         {
             //Arrange
-            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedInterfaceScreenHandler.Object, mockedMessagesService.Object, _mockedGameConfigurationHandler.Object);
 
             _mockedInterfaceScreenHandler.Setup(mock => mock.GetScreenInput()).Returns(input);
             _mockedInterfaceScreenHandler.Setup(mock => mock.Screen).Returns(_mockedStartScreen.Object);
@@ -117,7 +117,6 @@ namespace ASD_Game.Tests.InputHandlingTests
         public void Test_HandleSessionScreenCommands_HandlesInput(string input)
         {
             //Arrange
-            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedInterfaceScreenHandler.Object, mockedMessagesService.Object, _mockedGameConfigurationHandler.Object);
             
             var testId = "testId";
             var username = "Gerrit";

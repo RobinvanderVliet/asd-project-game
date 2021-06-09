@@ -28,18 +28,19 @@ namespace ASD_Game.InputHandling
         private const string RETURN_KEYWORD = "return";
         private string _enteredSessionName;
         private readonly IGamesSessionService _gamesSessionService;
+        private readonly IScreenHandler _screenHandler;
 
         public string START_COMMAND = "start_session";
 
-        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler,
+        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler,
             IMessageService messageService, IGameConfigurationHandler gameConfigurationHandler,
-            IGamesSessionService gamesSessionService)
+            IGamesSessionService gamesSessionService, IScreenHandler screenHandler)
         {
             _pipeline = pipeline;
             _sessionHandler = sessionHandler;
-            _screenHandler = screenHandler;
             _gameConfigurationHandler = gameConfigurationHandler;
             _gamesSessionService = gamesSessionService;
+            _screenHandler = screenHandler;
             _messageService = messageService;
         }
 
