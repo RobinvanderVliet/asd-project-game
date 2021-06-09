@@ -55,7 +55,7 @@ namespace Session
 
             if (allGames.Result.Where(x => x.GameGUID == value).IsNullOrEmpty())
             {
-                Console.WriteLine("Game cannot be loaded as it does not exist.");
+                _screenHandler.UpdateInputMessage("Game cannot be loaded as it does not exist.");
             }
             else
             {

@@ -41,7 +41,7 @@ namespace ASD_Game.Session
         private IGameConfigurationHandler _gameConfigurationHandler;
         public string GameName { get; set; }
         public bool AllowedToJoin { get; set; }
-        
+
         public SessionHandler(IClientController clientController, IScreenHandler screenHandler,
             IMessageService messageService, IGameConfigurationHandler gameConfigurationHandler,
             IDatabaseService<PlayerPOCO> playerService)
@@ -200,7 +200,6 @@ namespace ASD_Game.Session
                             JoinExistingGame(packet);
                         }
                     }
-                    
                 }
 
                 if (packet.Header.Target == "client" || packet.Header.Target == "host")
@@ -424,7 +423,7 @@ namespace ASD_Game.Session
                     JsonConvert.DeserializeObject<SessionDTO>(x.Value.HandlerResponse.ResultMessage)).ToList();
                 screen.UpdateWithNewSession(list);
             }
-            
+
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
@@ -473,12 +472,12 @@ namespace ASD_Game.Session
                 {
                     screen.UpdateLobbyScreen(_session.GetAllClients());
                 }
-                
-              
+
 
                 return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
             }
         }
+
         private void ClientAddsPlayer(SessionDTO sessionDTO, PacketDTO packet)
         {
             SessionDTO sessionDTOClients =
@@ -491,175 +490,173 @@ namespace ASD_Game.Session
             {
                 _session.AddClient(client[0], client[1]);
             }
-            
-            if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost && sessionDTOClients.Clients.Count <= 2)
+
+            if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost &&
+                sessionDTOClients.Clients.Count <= 2)
             {
-               
-                    _clientController.IsBackupHost = true;
-                    PingHostTimer();
-                
+                _clientController.IsBackupHost = true;
+                PingHostTimer();
             }
 
             if (_screenHandler.Screen is LobbyScreen screen)
             {
                 screen.UpdateLobbyScreen(sessionDTOClients.Clients);
             }
-
         }
 
         private HandlerResponseDTO ActiveGameAddsPlayer(SessionDTO sessionDTO, PacketDTO packet)
+        {
+            // check if ID matches
+            var clientId = sessionDTO.Clients[0];
+
+
+            var allPlayerId = _playerService.GetAllAsync();
+            allPlayerId.Wait();
+            var result =
+                allPlayerId.Result.FirstOrDefault(x =>
+                    x.GameGUID == _session.SessionId && x.PlayerGUID == clientId[0]);
+
+            if (result != null)
+            {
+                _messageService.AddMessage(sessionDTO.Clients[0][1] + " has joined your session!");
+                _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
+                sessionDTO.Clients = new List<string[]>();
+
+                sessionDTO.SessionSeed = _session.SessionSeed;
+                StartGameDTO startGameDto = null;
+
+                if (GameStarted())
                 {
-                    // check if ID matches
-                    var clientId = sessionDTO.Clients[0];
-
-
-                    var allPlayerId = _playerService.GetAllAsync();
-                    allPlayerId.Wait();
-                    var result =
-                        allPlayerId.Result.FirstOrDefault(x =>
-                            x.GameGUID == _session.SessionId && x.PlayerGUID == clientId[0]);
-
-                    if (result != null)
-                    {
-                        _messageService.AddMessage(sessionDTO.Clients[0][1] + " has joined your session!");
-                        _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
-                        sessionDTO.Clients = new List<string[]>();
-
-                        sessionDTO.SessionSeed = _session.SessionSeed;
-                        StartGameDTO startGameDto = null;
-
-                        if (GameStarted())
-                        {
-                            startGameDto = HandlePlayerLocation(result);
-                        }
-
-                        var jsonObject = JsonConvert.SerializeObject(startGameDto);
-
-                        return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
-                    }
-                    else
-                    {
-                        return new HandlerResponseDTO(SendAction.ReturnToSender,
-                            "Not allowed to join saved or running game");
-                    }
+                    startGameDto = HandlePlayerLocation(result);
                 }
 
-                public StartGameDTO HandlePlayerLocation(PlayerPOCO result)
-                {
-                    StartGameDTO startGameDTO = new StartGameDTO();
-                    startGameDTO.ExistingPlayer = result;
-                    startGameDTO.Seed = _session.SessionSeed;
+                var jsonObject = JsonConvert.SerializeObject(startGameDto);
 
-                    var allPlayerId = _playerService.GetAllAsync();
-                    allPlayerId.Wait();
-                    var playerLocations = allPlayerId.Result.Where(x => x.GameGUID == _session.SessionId);
+                return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
+            }
+            else
+            {
+                return new HandlerResponseDTO(SendAction.ReturnToSender,
+                    "Not allowed to join saved or running game");
+            }
+        }
 
-                    startGameDTO.SavedPlayers = playerLocations.ToList();
-                    startGameDTO.GameGuid = _session.SessionId;
+        public StartGameDTO HandlePlayerLocation(PlayerPOCO result)
+        {
+            StartGameDTO startGameDTO = new StartGameDTO();
+            startGameDTO.ExistingPlayer = result;
+            startGameDTO.Seed = _session.SessionSeed;
 
+            var allPlayerId = _playerService.GetAllAsync();
+            allPlayerId.Wait();
+            var playerLocations = allPlayerId.Result.Where(x => x.GameGUID == _session.SessionId);
 
-                    return startGameDTO;
-                }
-
-                public int GetSessionSeed()
-                {
-                    return _session.SessionSeed;
-                }
-
-                private void SendPing()
-                {
-                    SessionDTO sessionDTO = new SessionDTO
-                    {
-                        SessionType = SessionType.SendPing,
-                        Name = "ping"
-                    };
-                    var jsonObject = JsonConvert.SerializeObject(sessionDTO);
-                    _hostActive = false;
-                    _clientController.SendPayload(jsonObject, PacketType.Session);
-                }
-
-                private void PingHostTimer()
-                {
-                    _hostPingTimer = new Timer(INTERVALTIMEPINGTIMER);
-                    _hostPingTimer.Enabled = true;
-                    _hostPingTimer.AutoReset = true;
-                    _hostPingTimer.Elapsed += HostPingEvent;
-                    _hostPingTimer.Start();
-                }
-
-                public void HostPingEvent(Object source, ElapsedEventArgs e)
-                {
-                    SendPing();
-                    Thread.Sleep(WAITTIMEPINGTIMER);
-                    CheckIfHostActive();
-                }
-
-                public void SwapToHost()
-                {
-                    _clientController.CreateHostController();
-                    _clientController.IsBackupHost = false;
-
-                    _senderHeartbeatTimer.Close();
-
-                    _messageService.AddMessage("Look at me, I'm the captain (Host) now!");
-
-                    var clients = _session.GetAllClients().Select(client => client.First()).ToArray();
-                    List<string> heartbeatSenders = new List<string>(clients);
-                    heartbeatSenders.Remove(_clientController.GetOriginId());
-
-                    _heartbeatHandler = new HeartbeatHandler(heartbeatSenders);
-
-                    SessionDTO sessionDTO = new SessionDTO
-                    {
-                        SessionType = SessionType.NewBackUpHost,
-                        Name = "you'are our co-captain (back up host) now!"
-                    };
-                    var jsonObject = JsonConvert.SerializeObject(sessionDTO);
-                    _clientController.SendPayload(jsonObject, PacketType.Session);
-                }
-
-                public Timer getHostPingTimer()
-                {
-                    return _hostPingTimer;
-                }
-
-                public bool getHostActive()
-                {
-                    return _hostActive;
-                }
-
-                public void setHostActive(bool hostActive)
-                {
-                    _hostActive = hostActive;
-                }
-
-                public void setHostPingTimer(Timer timer)
-                {
-                    _hostPingTimer = timer;
-                }
-
-                public bool GetSavedGame()
-                {
-                    return _session.SavedGame;
-                }
-
-                public string GetSavedGameName()
-                {
-                    return _session.Name;
-                }
-
-                public bool GameStarted()
-                {
-                    return _session.GameStarted;
-                }
-
-                public void SetGameStarted(bool startSession)
-                {
-                    _session.GameStarted = startSession;
-                }
+            startGameDTO.SavedPlayers = playerLocations.ToList();
+            startGameDTO.GameGuid = _session.SessionId;
 
 
-                public void SetSession(Session ses)
+            return startGameDTO;
+        }
+
+        public int GetSessionSeed()
+        {
+            return _session.SessionSeed;
+        }
+
+        private void SendPing()
+        {
+            SessionDTO sessionDTO = new SessionDTO
+            {
+                SessionType = SessionType.SendPing,
+                Name = "ping"
+            };
+            var jsonObject = JsonConvert.SerializeObject(sessionDTO);
+            _hostActive = false;
+            _clientController.SendPayload(jsonObject, PacketType.Session);
+        }
+
+        private void PingHostTimer()
+        {
+            _hostPingTimer = new Timer(INTERVALTIMEPINGTIMER);
+            _hostPingTimer.Enabled = true;
+            _hostPingTimer.AutoReset = true;
+            _hostPingTimer.Elapsed += HostPingEvent;
+            _hostPingTimer.Start();
+        }
+
+        public void HostPingEvent(Object source, ElapsedEventArgs e)
+        {
+            SendPing();
+            Thread.Sleep(WAITTIMEPINGTIMER);
+            CheckIfHostActive();
+        }
+
+        public void SwapToHost()
+        {
+            _clientController.CreateHostController();
+            _clientController.IsBackupHost = false;
+
+            _senderHeartbeatTimer.Close();
+
+            _messageService.AddMessage("Look at me, I'm the captain (Host) now!");
+
+            var clients = _session.GetAllClients().Select(client => client.First()).ToArray();
+            List<string> heartbeatSenders = new List<string>(clients);
+            heartbeatSenders.Remove(_clientController.GetOriginId());
+
+            _heartbeatHandler = new HeartbeatHandler(heartbeatSenders);
+
+            SessionDTO sessionDTO = new SessionDTO
+            {
+                SessionType = SessionType.NewBackUpHost,
+                Name = "you'are our co-captain (back up host) now!"
+            };
+            var jsonObject = JsonConvert.SerializeObject(sessionDTO);
+            _clientController.SendPayload(jsonObject, PacketType.Session);
+        }
+
+        public Timer getHostPingTimer()
+        {
+            return _hostPingTimer;
+        }
+
+        public bool getHostActive()
+        {
+            return _hostActive;
+        }
+
+        public void setHostActive(bool hostActive)
+        {
+            _hostActive = hostActive;
+        }
+
+        public void setHostPingTimer(Timer timer)
+        {
+            _hostPingTimer = timer;
+        }
+
+        public bool GetSavedGame()
+        {
+            return _session.SavedGame;
+        }
+
+        public string GetSavedGameName()
+        {
+            return _session.Name;
+        }
+
+        public bool GameStarted()
+        {
+            return _session.GameStarted;
+        }
+
+        public void SetGameStarted(bool startSession)
+        {
+            _session.GameStarted = startSession;
+        }
+
+
+        public void SetSession(Session ses)
         {
             _session = ses;
         }

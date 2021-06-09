@@ -47,9 +47,9 @@ namespace ASD_Game.Tests.InputHandlingTests
             _mockedGamesSessionService = new Mock<IGamesSessionService>();
 
             
-            _mockedConsole = new();
+            _mockedConsole = new Mock<ConsoleHelper>();
             _mockedScreenHandler.Object.ConsoleHelper = _mockedConsole.Object;
-            _mockedMessageService = new(_mockedScreenHandler.Object);
+            _mockedMessageService = new Mock<IMessageService>(_mockedScreenHandler.Object);
             _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedMessageService.Object, _mockedGameConfigurationHandler.Object, _mockedGamesSessionService.Object, _mockedScreenHandler.Object);
         }
 
