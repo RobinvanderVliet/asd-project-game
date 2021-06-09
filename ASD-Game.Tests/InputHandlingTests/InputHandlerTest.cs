@@ -49,7 +49,7 @@ namespace ASD_Game.Tests.InputHandlingTests
             
             _mockedConsole = new Mock<ConsoleHelper>();
             _mockedScreenHandler.Object.ConsoleHelper = _mockedConsole.Object;
-            _mockedMessageService = new Mock<IMessageService>(_mockedScreenHandler.Object);
+            _mockedMessageService = new Mock<IMessageService>();
             _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedMessageService.Object, _mockedGameConfigurationHandler.Object, _mockedGamesSessionService.Object, _mockedScreenHandler.Object);
         }
 
@@ -75,7 +75,7 @@ namespace ASD_Game.Tests.InputHandlingTests
         public void Test_HandleStartScreenCommands_HandlesInput(string input)
         {
             //Arrange
-
+            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedMessageService.Object, _mockedGameConfigurationHandler.Object, _mockedGamesSessionService.Object, _mockedInterfaceScreenHandler.Object);
             _mockedInterfaceScreenHandler.Setup(mock => mock.GetScreenInput()).Returns(input);
             _mockedInterfaceScreenHandler.Setup(mock => mock.Screen).Returns(_mockedStartScreen.Object);
             _mockedStartScreen.Setup(mock => mock.UpdateInputMessage(It.IsAny<string>()));
@@ -117,10 +117,9 @@ namespace ASD_Game.Tests.InputHandlingTests
         public void Test_HandleSessionScreenCommands_HandlesInput(string input)
         {
             //Arrange
-            
             var testId = "testId";
             var username = "Gerrit";
-            
+            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedMessageService.Object, _mockedGameConfigurationHandler.Object, _mockedGamesSessionService.Object, _mockedInterfaceScreenHandler.Object);
             _mockedInterfaceScreenHandler.Setup(mock => mock.GetScreenInput()).Returns(input);
             _mockedInterfaceScreenHandler.Setup(mock => mock.Screen).Returns(_mockedSessionScreen.Object);
             _mockedSessionScreen.Setup(mock => mock.GetSessionIdByVisualNumber(0)).Returns(testId);

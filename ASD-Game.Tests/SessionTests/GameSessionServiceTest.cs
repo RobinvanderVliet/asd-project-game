@@ -58,10 +58,8 @@ namespace Session.Tests
             _mockedDatabaseGameService.Setup(x => x.GetAllAsync()).ReturnsAsync(gameList);
             sut.RequestSavedGames();
             
-            var games = new string[] {"game1","gameName1"};
-            var  result = new List<string[]> {games};
             
-            _mockedScreenHandler.Verify(x => x.UpdateSavedSessionsList(result),Times.Once);
+            _mockedScreenHandler.Verify(x => x.UpdateSavedSessionsList(It.IsAny<List<string[]>>()),Times.Once);
         }
 
         /// <summary>

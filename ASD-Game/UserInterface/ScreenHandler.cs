@@ -38,7 +38,7 @@ namespace ASD_Game.UserInterface
             }
         }
 
-        public void TransitionTo(Screen screen)
+        public virtual void TransitionTo(Screen screen)
         {
             _consoleHelper.ClearConsole();
             _screen = screen;
@@ -106,7 +106,7 @@ namespace ASD_Game.UserInterface
             _consoleHelper.WriteLine(input);
         }
 
-        public void UpdateInputMessage(string message)
+        public virtual void UpdateInputMessage(string message)
         {
             if (_screen is LoadScreen screen)
             {
@@ -114,7 +114,7 @@ namespace ASD_Game.UserInterface
             }
         }
 
-        public string GetSessionByPosition(int sessionNumber)
+        public virtual string GetSessionByPosition(int sessionNumber)
         {
             if (_screen is LoadScreen screen)
             {
