@@ -19,17 +19,20 @@ namespace Creature
         private readonly IClientController _clientController;
         private readonly IDatabaseService<AgentPOCO> _databaseService;
         private readonly IConfigurationService _configurationService;
+        private readonly IAttackHandler _attackHandler;
 
         // string = playerId
         private Dictionary<string, WorldGeneration.Agent> _agents;
 
         // TODO: add attack handler when that is on develop
         public AgentHandler(IWorldService worldService, IMoveHandler moveHandler, IClientController clientController,
-            IDatabaseService<AgentPOCO> databaseService, IConfigurationService configurationService)
+            IDatabaseService<AgentPOCO> databaseService, IConfigurationService configurationService,
+            IAttackHandler attackHandler)
         {
             _worldService = worldService;
             _moveHandler = moveHandler;
             _configurationService = configurationService;
+            _attackHandler = attackHandler;
             _configurationService.CreateConfiguration("agent");
             _clientController = clientController;
             _databaseService = databaseService;
@@ -49,7 +52,7 @@ namespace Creature
             if (allAgents.Result.All(x => x.PlayerGUID != player.Id)) return;
 
             var agentPoco = allAgents.Result.First();
-            
+
             // If agent is not activated
             if (!agentPoco.Activated || agent == null)
             {
@@ -85,6 +88,7 @@ namespace Creature
                 // Update database
                 agentPoco.Activated = false;
             }
+
             var updateAsync = _databaseService.UpdateAsync(agentPoco);
             updateAsync.Wait();
         }
@@ -97,7 +101,8 @@ namespace Creature
                 {
                     MoveHandler = _moveHandler, WorldService = _worldService, Health = player.Health,
                     Inventory = player.Inventory, Stamina = player.Stamina, Team = player.Team,
-                    RadiationLevel = player.RadiationLevel, VisionRange = 6, RuleSet = agentConfiguration
+                    RadiationLevel = player.RadiationLevel, VisionRange = 6, RuleSet = agentConfiguration,
+                    AttackHandler = _attackHandler
                 }
             };
         }

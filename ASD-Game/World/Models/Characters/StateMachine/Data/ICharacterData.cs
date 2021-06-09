@@ -20,5 +20,6 @@ namespace World.Models.Characters.StateMachine.Data
         public IMoveHandler MoveHandler { get; set; }
         public IWorldService WorldService { get; set; }
         public BuilderConfigurator BuilderConfigurator { get; set; }
+        public IAttackHandler AttackHandler { get; set; }
     }
 }

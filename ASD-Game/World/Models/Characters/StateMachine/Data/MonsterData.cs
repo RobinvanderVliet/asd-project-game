@@ -15,7 +15,10 @@ namespace World.Models.Characters.StateMachine.Data
         private int _damage = 10;
         private int _visionRange = 6;
 
-        public bool IsAlive { get => _health > 0; }
+        public bool IsAlive
+        {
+            get => _health > 0;
+        }
 
         public Vector2 Position
         {
@@ -36,6 +39,7 @@ namespace World.Models.Characters.StateMachine.Data
         public IMoveHandler MoveHandler { get; set; }
         public IWorldService WorldService { get; set; }
         public BuilderConfigurator BuilderConfigurator { get; set; }
+        public IAttackHandler AttackHandler { get; set; }
 
         public int Damage
         {

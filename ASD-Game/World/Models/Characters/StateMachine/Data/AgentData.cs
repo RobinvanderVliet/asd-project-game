@@ -52,6 +52,8 @@ namespace World.Models.Characters.StateMachine.Data
             set => _visionRange = value;
         }
 
+        public IAttackHandler AttackHandler { get; set; }
+
         public AgentData(int xPos, int yPos, int difficulty)
         {
             _position = new Vector2(xPos, yPos);
