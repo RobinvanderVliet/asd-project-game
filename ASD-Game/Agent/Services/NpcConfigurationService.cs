@@ -1,5 +1,5 @@
-﻿using Agent.Mapper;
-using Agent.Models;
+﻿using ASD_Game.Agent.Mapper;
+using ASD_Game.Agent.Models;
 using System.Collections.Generic;
 
 namespace ASD_Game.Agent.Services
