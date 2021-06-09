@@ -184,19 +184,23 @@ namespace ASD_Game.Session
             {
                 if (packet.Header.Target == _clientController.GetOriginId())
                 {
-                    if (packet.HandlerResponse.ResultMessage.Equals("Not allowed to join saved or running game") &&
-                        packet.Header.Target.Equals(_clientController.GetOriginId()))
+                    if (sessionDTO.SessionType == SessionType.RequestToJoinSession)
                     {
-                        AllowedToJoin = false;
-                        _clientController.SetSessionId(String.Empty);
-                        return new HandlerResponseDTO(SendAction.Ignore, null);
-                    }
+                        if (packet.HandlerResponse.ResultMessage.Equals("Not allowed to join saved or running game") &&
+                            packet.Header.Target.Equals(_clientController.GetOriginId()))
+                        {
+                            AllowedToJoin = false;
+                            _clientController.SetSessionId(String.Empty);
+                            return new HandlerResponseDTO(SendAction.Ignore, null);
+                        }
 
-                    if (sessionDTO.SessionStarted)
-                    {
-                        AllowedToJoin = true;
-                        JoinExistingGame(packet);
+                        if (sessionDTO.SessionStarted)
+                        {
+                            AllowedToJoin = true;
+                            JoinExistingGame(packet);
+                        }
                     }
+                    
                 }
 
                 if (packet.Header.Target == "client" || packet.Header.Target == "host")
@@ -469,6 +473,8 @@ namespace ASD_Game.Session
                 {
                     screen.UpdateLobbyScreen(_session.GetAllClients());
                 }
+                
+              
 
                 return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
             }
@@ -485,30 +491,20 @@ namespace ASD_Game.Session
             {
                 _session.AddClient(client[0], client[1]);
             }
+            
+            if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost && sessionDTOClients.Clients.Count <= 2)
+            {
+               
+                    _clientController.IsBackupHost = true;
+                    PingHostTimer();
+                
+            }
 
             if (_screenHandler.Screen is LobbyScreen screen)
             {
                 screen.UpdateLobbyScreen(sessionDTOClients.Clients);
             }
 
-            if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost)
-            {
-                if (sessionDTOClients.Clients[1][0].Equals(_clientController.GetOriginId()))
-                {
-                    _clientController.IsBackupHost = true;
-                    PingHostTimer();
-                }
-
-                if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost)
-                {
-                    if (sessionDTOClients.Clients[1].Equals(_clientController.GetOriginId()))
-                    {
-                        _clientController.IsBackupHost = true;
-                        PingHostTimer();
-                        Console.WriteLine("You have been marked as the backup host");
-                    }
-                }
-            }
         }
 
         private HandlerResponseDTO ActiveGameAddsPlayer(SessionDTO sessionDTO, PacketDTO packet)

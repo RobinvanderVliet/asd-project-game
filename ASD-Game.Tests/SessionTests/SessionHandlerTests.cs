@@ -488,14 +488,14 @@ namespace ASD_Game.Tests.SessionTests
             Assert.AreEqual(expectedResult, actualResult);
         }
 
-        [Test]
+          [Test]
         public void Test_HandlePacket_RequestToJoinSessionAsSecondClient()
         {
             // Arrange ---------
             string generatedSessionId = "";
             _mockedClientController.Setup(mock => mock.SetSessionId(It.IsAny<string>()))
                 .Callback<string>(r => generatedSessionId = r);
-            _sut.CreateSession("testSessionName", "", false, null, null);
+            _sut.CreateSession("testSessionName", "testHost", false, null, null);
 
             string originId = "testOriginId";
             string originIdHost = "testOriginIdHost";
@@ -507,6 +507,8 @@ namespace ASD_Game.Tests.SessionTests
                 Clients = new List<string[]>()
             };
             sessionDTO.Clients.Add(new []{originId, userName});
+
+
 
             var payload = JsonConvert.SerializeObject(sessionDTO);
             _packetDTO.Payload = payload;
@@ -537,7 +539,7 @@ namespace ASD_Game.Tests.SessionTests
             _sut.HandlePacket(_packetDTO);
 
             // Assert ----------
-            _mockedClientController.Verify(mock => mock.IsBackupHost, Times.AtLeast(1));
+            _mockedClientController.Verify(mock => mock.IsBackupHost, Times.Once);
             Assert.IsTrue(_sut.getHostPingTimer().Enabled);
             Assert.IsTrue(_sut.getHostPingTimer().AutoReset);
             Assert.AreEqual(1000, _sut.getHostPingTimer().Interval);
@@ -622,7 +624,7 @@ namespace ASD_Game.Tests.SessionTests
             HandlerResponseDTO expectedHandlerResponse = new HandlerResponseDTO(SendAction.Ignore, null);
             _packetDTO.HandlerResponse = expectedHandlerResponse;
 
-            _mockedClientController.SetupSequence(x => x.GetOriginId()).Returns("1");
+            _mockedClientController.SetupSequence(x => x.GetOriginId()).Returns(originId);
 
             // Act -------------
             HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
