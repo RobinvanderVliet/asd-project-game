@@ -7,6 +7,7 @@ using ASD_Game.Messages;
 using ASD_Game.Session;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
+using InputHandling.Models;
 using Moq;
 using NUnit.Framework;
 using UserInterface;

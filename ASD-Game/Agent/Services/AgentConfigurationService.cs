@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Agent.Mapper;
 using ASD_Game.Agent.Exceptions;
-using ASD_Game.Agent.Mapper;
 using ASD_Game.Agent.Models;
-using ASD_Game.InputHandling;
 using Serilog;
 
 namespace ASD_Game.Agent.Services

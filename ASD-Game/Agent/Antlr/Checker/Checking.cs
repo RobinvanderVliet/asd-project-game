@@ -1,10 +1,9 @@
+using ASD_Game.Agent.Antlr.Ast;
+using ASD_Game.Agent.Antlr.Ast.Comparables;
+using ASD_Game.Agent.Antlr.Ast.Comparables.Subjects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Agent.Antlr.Ast;
-using Agent.Antlr.Ast.Comparables;
-using Agent.Antlr.Ast.Comparables.Subjects;
-using Action = Agent.Antlr.Ast.Action;
+using Action = ASD_Game.Agent.Antlr.Ast.Action;
 
 namespace ASD_Game.Agent.Antlr.Checker
 {

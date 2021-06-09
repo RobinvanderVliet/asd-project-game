@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Antlr4.Runtime;
 using ASD_Game.Agent;
 using ASD_Game.Agent.Antlr.Ast;
+using ASD_Game.Agent.Antlr.Checker;
 using ASD_Game.Agent.Exceptions;
 using Moq;
 using NUnit.Framework;
@@ -53,7 +55,7 @@ namespace ASD_Game.Tests.AgentTests
             Mock<AST> mockedAst = new Mock<AST>();
             mockedAst.Setup(x => x.GetErrors()).Returns(new List<ASTError>());
             
-            Mock<Antlr.Checker.Checking> mockedChecker = new Mock<Antlr.Checker.Checking>();
+            Mock<Checking> mockedChecker = new Mock<Checking>();
             mockedChecker.Setup(x => x.Check(It.IsAny<Node>())).Verifiable();
             
             _sut.Ast = mockedAst.Object;
@@ -75,7 +77,7 @@ namespace ASD_Game.Tests.AgentTests
             Mock<AST> mockedAst = new Mock<AST>();
             mockedAst.Setup(x => x.GetErrors()).Returns(new List<ASTError>{new ("TEST")});
             
-            Mock<Antlr.Checker.Checking> mockedChecker = new Mock<Antlr.Checker.Checking>();
+            Mock<Checking> mockedChecker = new Mock<Checking>();
             mockedChecker.Setup(x => x.Check(It.IsAny<Node>())).Verifiable();
             
             _sut.Ast = mockedAst.Object;

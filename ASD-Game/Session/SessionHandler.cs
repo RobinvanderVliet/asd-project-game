@@ -404,11 +404,6 @@ namespace ASD_Game.Session
                     _session.AddClient(client[0], client[1]);
                 }
 
-                if (_screenHandler.Screen is LobbyScreen screen)
-                {
-                    screen.UpdateLobbyScreen(sessionDTOClients.Clients);
-                }
-
                 if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost)
                 {
                     if (sessionDTOClients.Clients[1][0].Equals(_clientController.GetOriginId()))

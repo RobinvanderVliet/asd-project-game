@@ -20,13 +20,13 @@ namespace ASD_Game.Tests.SessionTests.GameConfiguration
         public void Setup()
         {
             _mockScreenHandler = new Mock<ScreenHandler>();
-            _mockedGameConfigDatabaseService = new Mock<IDatabaseService<GameConfigurationPOCO>>();
+            _mockedGameConfigServicesDb = new Mock<IDatabaseService<GameConfigurationPOCO>>();
 
             Mock<ConfigurationScreen> _screen = new Mock<ConfigurationScreen>();
             _mockScreenHandler.Object.Screen = _screen.Object;
             _screen.Setup(x => x.UpdateInputMessage(""));
 
-            _sut = new GameConfigurationHandler(_mockScreenHandler.Object, _mockedGameConfigDatabaseService.Object);
+            _sut = new GameConfigurationHandler(_mockScreenHandler.Object, _mockedGameConfigServicesDb.Object);
         }
 
         [Test]

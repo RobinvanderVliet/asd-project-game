@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Agent.Mapper;
 using NUnit.Framework;
-using SyntaxErrorException = Agent.Exceptions.SyntaxErrorException;
 
 namespace Agent.Tests.Mapper
 {

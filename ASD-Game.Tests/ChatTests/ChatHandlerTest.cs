@@ -5,14 +5,10 @@ using ASD_Game.Messages;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
-using ASD_Game.World.Models.Characters;
+using ASD_Game.UserInterface;
 using ASD_Game.World.Services;
 using Moq;
 using Newtonsoft.Json;
-using System.IO;
-using WorldGeneration;
-using Messages;
-using UserInterface;
 using NUnit.Framework;
 
 namespace ASD_Game.Tests.ChatTests

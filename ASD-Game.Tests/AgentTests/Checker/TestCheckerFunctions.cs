@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using ASD_Game.Agent.Antlr.Ast;
 using ASD_Game.Agent.Antlr.Ast.Comparables;
+using ASD_Game.Agent.Antlr.Ast.Comparables.Subjects;
 using ASD_Game.Agent.Antlr.Checker;
 using Moq;
 using NUnit.Framework;
+using Action = ASD_Game.Agent.Antlr.Ast.Action;
 
 namespace ASD_Game.Tests.AgentTests.Checker
 {

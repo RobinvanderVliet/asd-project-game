@@ -8,11 +8,8 @@ using ASD_Game.Agent.Antlr.Checker;
 using ASD_Game.Agent.Antlr.Parser;
 using ASD_Game.Agent.Generator;
 using SyntaxErrorException = ASD_Game.Agent.Exceptions.SyntaxErrorException;
-using Messages;
-using System;
-using System.Collections.Generic;
-using UserInterface;
-using SyntaxErrorException = Agent.Exceptions.SyntaxErrorException;
+using ASD_Game.Messages;
+using ASD_Game.UserInterface;
 
 namespace ASD_Game.Agent
 {
