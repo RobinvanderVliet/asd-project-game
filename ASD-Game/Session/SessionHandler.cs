@@ -169,14 +169,6 @@ namespace ASD_Game.Session
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
-            // if (packet.HandlerResponse.ResultMessage.Equals("Not allowed to join saved or running game") && packet.Header.Target.Equals(_clientController.GetOriginId()))
-            // {
-            //     NotAllowedToJoin = true; 
-            // }
-            // else
-            // {
-            //     NotAllowedToJoin = false; 
-            // }
 
             if (packet.Header.SessionID == _session?.SessionId)
             {
@@ -188,7 +180,10 @@ namespace ASD_Game.Session
                         return new HandlerResponseDTO(SendAction.Ignore, null);
                     }
 
-                    JoinExistingGame(packet);
+                    if (sessionDTO.SessionStarted)
+                    {
+                        JoinExistingGame(packet);
+                    }
                 }
 
                 if (packet.Header.Target == "client" || packet.Header.Target == "host")
