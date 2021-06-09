@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Timers;
-using ASD_Game.Agent.Services;
+using Agent.Services;
 using ASD_Game.InputHandling.Antlr;
 using ASD_Game.Messages;
 using ASD_Game.Session;
@@ -265,7 +264,7 @@ namespace ASD_Game.InputHandling
                 }
             }
 
-            AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
+            var agentConfigurationService = new ConfigurationService();
             List<string> errors = agentConfigurationService.Configure(finalString);
 
 /*            AgentService agentService = new AgentService();

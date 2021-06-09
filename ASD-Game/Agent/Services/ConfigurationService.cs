@@ -1,7 +1,11 @@
 ﻿using Agent.Mapper;
-using Agent.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using ASD_Game.Agent;
+using ASD_Game.Agent.Exceptions;
+using ASD_Game.Agent.Models;
+using Serilog;
 
 namespace Agent.Services
 {
@@ -56,38 +60,36 @@ namespace Agent.Services
             Configuration = configuration;
         }
         
-        // public virtual List<string> Configure(string input)
-        // {
-        //     // try
-        //     // {
-        //     //     Pipeline.ParseString(input);
-        //     //     if (Pipeline.GetErrors().Count <= 0)
-        //     //     {
-        //     //         Pipeline.CheckAst();
-        //     //     }
-        //     //     if (Pipeline.GetErrors().Count > 0)
-        //     //     {
-        //     //         return Pipeline.GetErrors();
-        //     //     }
-        //     //
-        //     //
-        //     //
-        //     //     if (Pipeline.GetErrors().Count <= 0)
-        //     //     {
-        //     //         var output = Pipeline.GenerateAst();
-        //     //         string fileName = "agent/agent-config.cfg";
-        //     //
-        //     //         FileHandler.ExportFile(output, fileName);
-        //     //
-        //     //
-        //     //     }
-        //     // }
-        //     // catch (FileException e)
-        //     // {
-        //     //     LastError = e.Message;
-        //     //     Log.Logger.Information("File error: " + e.Message);
-        //     // }
-        //     // return Pipeline.GetErrors();
-        // }
+        public virtual List<string> Configure(string input)
+        {
+            try
+            {
+                Pipeline.ParseString(input);
+                if (Pipeline.GetErrors().Count <= 0)
+                {
+                    Pipeline.CheckAst();
+                }
+                if (Pipeline.GetErrors().Count > 0)
+                {
+                    return Pipeline.GetErrors();
+                }
+            
+            
+            
+                if (Pipeline.GetErrors().Count <= 0)
+                {
+                    var output = Pipeline.GenerateAst();
+                    string fileName = "agent/agent-config.cfg";
+            
+                    _fileHandler.ExportFile(output, fileName);
+                }
+            }
+            catch (FileException e)
+            {
+                LastError = e.Message;
+                Log.Logger.Information("File error: " + e.Message);
+            }
+            return Pipeline.GetErrors();
+        }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
-using World.Models.Characters.StateMachine.Data;
 
 namespace World.Models.Characters.Algorithms.NeuralNetworking
 {

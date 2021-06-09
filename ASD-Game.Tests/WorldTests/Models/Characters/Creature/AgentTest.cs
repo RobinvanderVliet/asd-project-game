@@ -7,7 +7,7 @@ namespace Creature.Tests
     [TestFixture]
     public class AgentTest
     {
-        private WorldGeneration.Agent _sut;
+        private World.Models.Characters.Agent _sut;
         private Mock<ICharacterStateMachine> _creatureStateMachineMock;
 
         private string Id;
@@ -26,7 +26,7 @@ namespace Creature.Tests
             XPosition = 10;
             YPosition = 10;
             
-            _sut = new WorldGeneration.Agent(Name, XPosition, YPosition, Symbol, Id);
+            _sut = new World.Models.Characters.Agent(Name, XPosition, YPosition, Symbol, Id);
         }
         
         [Test]

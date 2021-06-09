@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Session.DTO;
 
 namespace ASD_Game.Session.DTO
 {

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using ActionHandling;
-using World.Models.Characters.StateMachine.Builder;
-using WorldGeneration;
+using ASD_Game.ActionHandling;
+using ASD_Game.World.Models.Characters.StateMachine.Builder;
+using ASD_Game.World.Services;
 
-namespace World.Models.Characters.StateMachine.Data
+namespace ASD_Game.World.Models.Characters.StateMachine.Data
 {
     public class AgentData : ICharacterData
     {

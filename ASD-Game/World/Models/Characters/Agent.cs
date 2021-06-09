@@ -1,10 +1,10 @@
-﻿using World.Models.Characters.StateMachine;
-using World.Models.Characters.StateMachine.Data;
+﻿using ASD_Game.World.Models.Characters.StateMachine;
+using ASD_Game.World.Models.Characters.StateMachine.Data;
 using WorldGeneration.StateMachine;
 
 namespace World.Models.Characters
 {
-    public class Agent : Character
+    public class Agent : ASD_Game.World.Models.Characters.Character
     {
         public ICharacterStateMachine AgentStateMachine { get; set; }
         public AgentData AgentData { get; set; }

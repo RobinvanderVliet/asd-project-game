@@ -1,6 +1,6 @@
-﻿using World.Models.Characters.StateMachine.Data;
+﻿using ASD_Game.World.Models.Characters.StateMachine.Data;
+using ASD_Game.World.Models.Characters.StateMachine.State;
 using WorldGeneration.StateMachine;
-using WorldGeneration.StateMachine.State;
 
 namespace Creature.Creature.StateMachine.State
 {

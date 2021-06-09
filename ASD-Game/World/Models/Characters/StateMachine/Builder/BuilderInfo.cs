@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using ASD_Game.World.Models.Characters.StateMachine.State;
 using WorldGeneration.StateMachine.CustomRuleSet;
 using WorldGeneration.StateMachine.Event;
-using WorldGeneration.StateMachine.State;
 
-namespace World.Models.Characters.StateMachine.Builder
+namespace ASD_Game.World.Models.Characters.StateMachine.Builder
 {
     public class BuilderInfo
     {

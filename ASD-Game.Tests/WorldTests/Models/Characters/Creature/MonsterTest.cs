@@ -1,9 +1,6 @@
-﻿using Creature.Creature.StateMachine;
-using Moq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
-using Creature.Creature;
-using WorldGeneration;
+using ASD_Game.World.Models.Characters;
 
 namespace Creature.Tests
 {
