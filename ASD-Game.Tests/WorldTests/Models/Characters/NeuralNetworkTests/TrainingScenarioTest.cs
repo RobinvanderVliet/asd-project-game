@@ -31,7 +31,7 @@ namespace World.Models.Character.Tests.NeuralNetworkTest
             //act
             _sut.SetupTraining();
             //assert
-            Assert.AreEqual(50, _sut.Pop.Pop.Count);
+            Assert.AreEqual(100, _sut.Pop.Pop.Count);
         }
     }
 }
