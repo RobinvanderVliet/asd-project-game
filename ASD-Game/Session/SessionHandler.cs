@@ -108,12 +108,13 @@ namespace ASD_Game.Session
             {
                 _session.GenerateSessionId();
                 _clientController.SetSessionId(_session.SessionId);
-
+                _clientController.CreateHostController();
             }
             else
             {
                 _session.SessionId = sessionId;
                 _clientController.SetSessionId(_session.SessionId);
+                _clientController.CreateHostController();
             }
 
             _session.AddClient(_clientController.GetOriginId(), userName);
@@ -127,7 +128,6 @@ namespace ASD_Game.Session
                 _session.SessionSeed = new MapFactory().GenerateSeed();
             }
 
-            _clientController.CreateHostController();
             _session.InSession = true;
             
             Thread traingThread = new Thread(
