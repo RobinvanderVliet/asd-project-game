@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using ASD_Game.Items;
 using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Interfaces;
-using World.Models.Characters.Algorithms.NeuralNetworking;
 
 namespace ASD_Game.World.Services
 {

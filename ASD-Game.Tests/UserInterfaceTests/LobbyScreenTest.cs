@@ -1,18 +1,12 @@
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ASD_Game.Chat.DTO;
 using ASD_Game.UserInterface;
 using Moq;
 using NUnit.Framework;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
-namespace UserInterface.Tests
+namespace ASD_Game.Tests.UserInterfaceTests
 {
     [ExcludeFromCodeCoverage]
     public class LobbyScreenTest

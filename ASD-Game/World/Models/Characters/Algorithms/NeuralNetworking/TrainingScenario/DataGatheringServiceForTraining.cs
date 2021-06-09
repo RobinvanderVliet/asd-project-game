@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
-namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
+namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
 {
     public class DataGatheringServiceForTraining
     {

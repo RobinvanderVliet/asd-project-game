@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace World.Models.Characters.Algorithms.NeuralNetworking
+namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
 {
     [ExcludeFromCodeCoverage]
     public class ConnectionHistory
