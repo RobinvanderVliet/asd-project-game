@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items;
 using ASD_Game.Items.Services;
@@ -131,21 +132,23 @@ namespace ASD_Game.World.Services
         public string SearchCurrentTile()
         {
             var itemsOnCurrentTile = GetItemsOnCurrentTile();
+            StringBuilder result = new StringBuilder();
 
-            var result = "The following items are on the current tile:" + Environment.NewLine;
+            result.Append("The following items are on the current tile:" + Environment.NewLine);
+
             var index = 1;
             foreach (var item in itemsOnCurrentTile)
             {
-                result += $"{index}. {item.ItemName}{Environment.NewLine}";
+                result.Append($"{index}. {item.ItemName}{Environment.NewLine}");
                 index += 1;
             }
 
-            return result;
+            return result.ToString();
         }
         
-        public Player GetPlayer(string userId)
+        public Player GetPlayer(string id)
         {
-            return _world.GetPlayer(userId);
+            return _world.GetPlayer(id);
         }
 
         public Character GetAI(string id)
