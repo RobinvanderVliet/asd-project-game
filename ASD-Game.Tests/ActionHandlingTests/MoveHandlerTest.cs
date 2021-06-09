@@ -43,17 +43,17 @@ namespace ASD_Game.Tests.ActionHandlingTests
             int steps = 5;
             int x = 26;
             int y = 11;
-            
+
             Player player = new Player("test", x, y, "#", "test2");
-            
+
             _mockedWorldService.Setup(mock => mock.GetCurrentPlayer()).Returns(player);
             _mockedClientController.Setup(mock => mock.SendPayload(It.IsAny<string>(), PacketType.Move));
-            
+
             //act
             _sut.SendMove(direction, steps);
-            
+
             //assert
-           // _mockedWorldService.Verify(mock => mock.Send(), Times.Once);
+            // _mockedWorldService.Verify(mock => mock.Send(), Times.Once);
             _mockedClientController.Verify(mock => mock.SendPayload(It.IsAny<string>(), PacketType.Move), Times.Once);
         }
     }

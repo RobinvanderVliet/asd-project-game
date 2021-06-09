@@ -1,5 +1,9 @@
 using System.Collections.Generic;
 using ASD_Game.Chat.DTO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ASD_Game.UserInterface
 {
@@ -18,6 +22,7 @@ namespace ASD_Game.UserInterface
         private const int INPUT_X = 0;
         private const int INPUT_Y = LOBBY_Y + BORDER_SIZE;
         private const string INPUT_MESSAGE = "Insert lobby message or command";
+        private const int DRAWING_PAUSE = 50;
         public override void DrawScreen()
         {
             DrawLobbyScreen();
@@ -49,6 +54,7 @@ namespace ASD_Game.UserInterface
 
         public virtual void UpdateLobbyScreen(List<string[]> clients)
         {
+            Thread.Sleep(DRAWING_PAUSE);
             foreach (string[] client in clients)
             {
                 int position = clients.IndexOf(client);

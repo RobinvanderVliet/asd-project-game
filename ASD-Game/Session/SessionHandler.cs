@@ -19,10 +19,12 @@ namespace ASD_Game.Session
 {
     public class SessionHandler : IPacketHandler, ISessionHandler
     {
-        private const bool DEBUG_INTERFACE = false; //TODO: remove when UI is complete, obviously
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
-        private IClientController _clientController;
+
+        private readonly IClientController _clientController;
+        private const bool DEBUG_INTERFACE = false; //TODO: remove when UI is complete, obviously
+
         private Session _session;
         private IHeartbeatHandler _heartbeatHandler;
         public TrainingScenario TrainingScenario { get; set; } = new TrainingScenario();
@@ -51,7 +53,7 @@ namespace ASD_Game.Session
 
         public List<string[]> GetAllClients()
         {
-            return _session.GetAllClients();
+           return _session.GetAllClients();
         }
 
         public bool JoinSession(string sessionId, string userName)
@@ -114,6 +116,12 @@ namespace ASD_Game.Session
 
             _heartbeatHandler = new HeartbeatHandler();
             _messageService.AddMessage("Created session with the name: " + _session.Name);
+
+            if (_screenHandler.Screen is LobbyScreen screen)
+            {
+                screen.UpdateLobbyScreen(_session.GetAllClients());
+            }
+
             return _session.InSession;
         }
 
@@ -321,6 +329,7 @@ namespace ASD_Game.Session
             SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessionsResponse);
             sessionDTO.Name = _session.Name;
             sessionDTO.SessionSeed = _session.SessionSeed;
+            sessionDTO.Clients = _session.GetAllClients();
             var jsonObject = JsonConvert.SerializeObject(sessionDTO);
             return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
         }
@@ -365,19 +374,20 @@ namespace ASD_Game.Session
 
             if (packet.Header.Target == "host")
             {
-                if (_screenHandler.Screen is LobbyScreen screen)
-                {
-                    screen.UpdateLobbyScreen(sessionDTO.Clients);
-                }
 
                 _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
                 sessionDTO.Clients = new List<string[]>();
-
+                
                 sessionDTO.SessionSeed = _session.SessionSeed;
 
                 foreach (string[] client in _session.GetAllClients())
                 {
                     sessionDTO.Clients.Add(client);
+                }
+
+                if (_screenHandler.Screen is LobbyScreen screen)
+                {
+                    screen.UpdateLobbyScreen(_session.GetAllClients());
                 }
 
                 return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
@@ -394,11 +404,6 @@ namespace ASD_Game.Session
                     _session.AddClient(client[0], client[1]);
                 }
 
-                if (_screenHandler.Screen is LobbyScreen screen)
-                {
-                    screen.UpdateLobbyScreen(sessionDTOClients.Clients);
-                }
-
                 if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost)
                 {
                     if (sessionDTOClients.Clients[1][0].Equals(_clientController.GetOriginId()))
@@ -407,6 +412,12 @@ namespace ASD_Game.Session
                         PingHostTimer();
                     }
                 }
+                
+                if (_screenHandler.Screen is LobbyScreen screen)
+                {
+                    screen.UpdateLobbyScreen(_session.GetAllClients());
+                }
+
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
         }
