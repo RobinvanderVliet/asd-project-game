@@ -75,7 +75,7 @@ namespace ASD_Game.World.Services
             return _world.CurrentPlayer;
         }
 
-        public World GetWorld()
+        public IWorld GetWorld()
         {
             return _world;
         }
