@@ -17,6 +17,7 @@ namespace UserInterface
         private List<string[]> _sessionsInfoList = new();
         public List<string[]> SessionInfoList
         {
+            get => _sessionsInfoList;
             set => _sessionsInfoList = value;
         }
         public override void DrawScreen()

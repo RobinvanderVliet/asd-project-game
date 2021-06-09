@@ -5,10 +5,10 @@ namespace UserInterface
 {
     public class GameChatScreen : Screen, IGameChatScreen
     {
-        private int _xPosition;
-        private int _yPosition;
-        private int _width;
-        private int _height;      
+        private readonly int _xPosition;
+        private readonly int _yPosition;
+        private readonly int _width;
+        private readonly int _height;      
 
         public GameChatScreen(int x, int y, int width, int height)
         {
@@ -53,6 +53,10 @@ namespace UserInterface
             DrawScreen();
         }
 
+        /// <summary>
+        /// Autowrap messages so they can be shown on screen, draw after
+        /// </summary>
+        /// <param name="messages"></param>
         public void ShowMessages(Queue<string> messages)
         {
             Stack<string> messageStack = new();

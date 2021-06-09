@@ -22,6 +22,7 @@ namespace UserInterface
         private const int INPUT_X = 0;
         private const int INPUT_Y = LOBBY_Y + BORDER_SIZE;
         private const string INPUT_MESSAGE = "Insert lobby message or command";
+        private const string LOBBY_MESSAGE = "Welcome to the lobby, people in the lobby:";
         public override void DrawScreen()
         {
             DrawLobbyScreen();
@@ -29,7 +30,7 @@ namespace UserInterface
 
         public void DrawLobbyScreen() 
         {
-            DrawHeader(GetHeaderText());
+            DrawHeader(LOBBY_MESSAGE);
             DrawUserBox();
             DrawChatBox();
             UpdateChat(UpdateMessages());
@@ -44,11 +45,6 @@ namespace UserInterface
         private void DrawUserBox()
         {
             DrawBox(LOBBY_X, LOBBY_Y, LOBBY_WIDTH, LOBBY_HEIGHT);
-        }
-
-        private string GetHeaderText() 
-        {
-            return "Welcome to the lobby, people in the lobby:";
         }
 
         public virtual void UpdateLobbyScreen(List<string[]> clients)
