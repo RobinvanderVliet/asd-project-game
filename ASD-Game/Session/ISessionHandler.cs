@@ -22,6 +22,6 @@ namespace ASD_Game.Session
         public void SetGameStarted(bool startSessie);
 
         public string GameName { get; set; }
-        bool NotAllowedToJoin { get; set; }
+        bool AllowedToJoin { get; set; }
     }
 }

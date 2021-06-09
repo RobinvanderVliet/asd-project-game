@@ -142,8 +142,16 @@ namespace ASD_Game.InputHandling
                 }
                 else
                 {
-                    _screenHandler.TransitionTo(new LobbyScreen());
                     SendCommand("join_session \"" + sessionId + "\" \"" + inputParts[1].Replace("\"", "") + "\"");
+                    
+                    if (_sessionHandler.AllowedToJoin)
+                    {
+                        _screenHandler.TransitionTo(new LobbyScreen());
+                    }
+                    else
+                    {
+                        sessionScreen.UpdateInputMessage("Not allowed to join!");
+                    }
                 }
             }
         }
