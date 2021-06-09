@@ -6,8 +6,8 @@ namespace ASD_Game.Network
 {
     public class HostController : IPacketListener, IHostController
     {
-        private INetworkComponent _networkComponent;
-        private IPacketHandler _client;
+        private readonly INetworkComponent _networkComponent;
+        private readonly IPacketHandler _client;
         private string _sessionId;
 
         public HostController(INetworkComponent networkComponent, IPacketHandler client, string sessionId)

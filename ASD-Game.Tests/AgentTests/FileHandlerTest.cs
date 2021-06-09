@@ -11,6 +11,8 @@ namespace ASD_Game.Tests.AgentTests
     public class FileHandlerTests
     {
         private FileHandler _sut;
+        private static readonly char _separator = Path.DirectorySeparatorChar;
+
         [SetUp]
         public void Setup()
         {
@@ -23,7 +25,7 @@ namespace ASD_Game.Tests.AgentTests
         {
             //Arrange
             var expected = "combat when player nearby player then attack";
-            var fileLocation = _sut.GetBaseDirectory() + "/Resource/import_test_file_1.txt";
+            var fileLocation = _sut.GetBaseDirectory() + $"{_separator}Resource{_separator}import_test_file_1.txt";
             
             //Act
             var result = _sut.ImportFile(fileLocation);
@@ -35,7 +37,7 @@ namespace ASD_Game.Tests.AgentTests
         public void Test_ImportFile_ThrowsFileException1()
         {
             //Arrange
-            var fileLocation = _sut.GetBaseDirectory() + "Resource/ThisFileDoesNotExist.txt";
+            var fileLocation = _sut.GetBaseDirectory() + $"Resource{_separator}ThisFileDoesNotExist.txt";
 
             //Act
             var exception = Assert.Throws<FileException>(() =>
@@ -49,8 +51,8 @@ namespace ASD_Game.Tests.AgentTests
         public void Test_ImportFile_ThrowsFileException2()
         {
             //Arrange
-            var fileLocation = _sut.GetBaseDirectory() + "/Resource/AgentTestFileWrongExtension.xml";
-
+            var fileLocation = _sut.GetBaseDirectory() + $"{_separator}Resource{_separator}AgentTestFileWrongExtension.xml";
+             
             //Act
             var exception = Assert.Throws<FileException>(() =>
                 _sut.ImportFile(fileLocation));
@@ -64,7 +66,7 @@ namespace ASD_Game.Tests.AgentTests
         {
             //Arrange
             var expected = "combat=defensive" + Environment.NewLine + "explore=random";
-            var fileLocation = _sut.GetBaseDirectory() + "/Resource/";
+            var fileLocation = _sut.GetBaseDirectory() + $"{_separator}Resource{_separator}";
             var fileName = "AgentExportFile.cfg";
 
             //Act
@@ -80,7 +82,7 @@ namespace ASD_Game.Tests.AgentTests
         public void Test_CreateDirectory_DirectoryCreated()
         {
             //Arrange
-            var directory = _sut.GetBaseDirectory() + "/Resources/Agent/";
+            var directory = _sut.GetBaseDirectory() + $"{_separator}Resources{_separator}Agent{_separator}";
 
             if (Directory.Exists(directory))
             {
