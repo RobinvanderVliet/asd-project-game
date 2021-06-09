@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Player.ActionHandlers;
-using Player.DTO;
 using Chat;
 using DataTransfer.DTO.Character;
-using DataTransfer.DTO.Player;
 using Network;
 using Player.Model;
-using Session;
 using WorldGeneration;
-using WorldGeneration.Models;
 
 namespace Player.Services
 {
@@ -68,14 +64,11 @@ namespace Player.Services
         public void Say(string messageValue)
         {
             _chatHandler.SendSay(messageValue);
-            //code for chat with other players in team chat
-            //Console.WriteLine(_currentPlayer.Name + " sent message: " + messageValue);
         }
 
         public void Shout(string messageValue)
         {
-            //code for chat with other players in general chat
-            Console.WriteLine(_currentPlayer.Name + " sent message: " + messageValue);
+            _chatHandler.SendShout(messageValue);
         }
 
         public void AddHealth(int amount)
@@ -170,13 +163,13 @@ namespace Player.Services
             }
 
             
-            var mapCharacterDto = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
+            var mapCharacterDTO = new MapCharacterDTO((_worldService.getCurrentCharacterPositions().XPosition) + x, 
                 (_worldService.getCurrentCharacterPositions().YPosition) + y, 
                 _currentPlayer.PlayerGuid, 
                 _worldService.getCurrentCharacterPositions().GameGuid, 
                 _currentPlayer.Symbol);
             
-            _moveHandler.SendMove(mapCharacterDto);
+            _moveHandler.SendMove(mapCharacterDTO);
             
             MapCharacterDTO currentCharacter =  _worldService.getCurrentCharacterPositions();
            _currentPlayer.XPosition = currentCharacter.XPosition;

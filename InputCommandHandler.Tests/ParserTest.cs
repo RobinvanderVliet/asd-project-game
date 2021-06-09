@@ -123,240 +123,264 @@ namespace InputCommandHandler.Tests
         [Test]
         public void Test_AstListener_CreatesDropAst()
         {
+            //act
             AST exp = DropCommand();
-            
+            //arrange
             AST sut = SetupParser("drop");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesExitAst()
         {
+            //act
             AST exp = ExitCommand();
-            
+            //arrange
             AST sut = SetupParser("exit");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesAttackAstTWithDirectionForward()
         {
+            //act
             AST exp = AttackCommand("forward");
-            
+            //arrange
             AST sut = SetupParser("attack forward");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesAttackAstTWithDirectionLeft()
         {
+            //act
             AST exp = AttackCommand("left");
-            
+            //arrange
             AST sut = SetupParser("attack left");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesAttackAstTWithDirectionRight()
         {
+            //act
             AST exp = AttackCommand("right");
-            
+            //arrange
             AST sut = SetupParser("attack right");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesAttackAstTWithDirectionBackward()
         {
+            //act
             AST exp = AttackCommand("backward");
-            
+            //arrange
             AST sut = SetupParser("attack backward");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesPickupAst()
         {
+            //act
             AST exp = PickupCommand();
-            
+            //arrange
             AST sut = SetupParser("pickup");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesSayAstWithMessage()
         {
+            //act
             AST exp = SayCommand("\"hello world!\"");
-            
+            //arrange
             AST sut = SetupParser("say \"hello world!\"");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesShoutAstWithMessage()
         {
+            //act
             AST exp = ShoutCommand("\"hello world!\"");
-            
+            //arrange
             AST sut = SetupParser("shout \"hello world!\"");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesReplaceAst()
         {
+            //act
             AST exp = ReplaceCommand();
-            
+            //arrange
             AST sut = SetupParser("replace");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesPauseAst()
         {
+            //act
             AST exp = PauseCommand();
-            
+            //arrange
             AST sut = SetupParser("pause");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesResumeAst()
         {
+            //act
             AST exp = ResumeCommand();
-            
+            //arrange
             AST sut = SetupParser("resume");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
         
         [Test]
         public void Test_AstListener_CreatesMoveAstWithForward2Steps()
         {
+            //act
             AST exp = MoveCommand(2, "forward");
-            
+            //arrange
             AST sut = SetupParser("move forward 2");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesMoveAstWithForward1Step()
         {
+            //act
             AST exp = MoveCommand(1, "forward");
-            
+            //arrange
             AST sut = SetupParser("move forward 1");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesMoveAstWithForward0Steps()
         {
+            //act
             AST exp = MoveCommand(1, "forward"); // if no steps entered always 1 step 
-            
+            //arrange
             AST sut = SetupParser("move forward");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesMoveAstWithBackward2Steps()
         {
+            //act
             AST exp = MoveCommand(2, "backward");
-            
+            //arrage
             AST sut = SetupParser("move backward 2");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesMoveAstWithBackward1Step()
         {
+            //act
             AST exp = MoveCommand(1, "backward");
-            
+            //arrange
             AST sut = SetupParser("move backward 1");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesMoveAstWithBackward0Steps()
         {
+            //act
             AST exp = MoveCommand(1, "backward"); // if no steps entered always 1 step 
-            
+            //arrange
             AST sut = SetupParser("move backward");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesMoveAstWithLeft2Steps()
         {
+            //act
             AST exp = MoveCommand(2, "left");
-            
+            //arrange
             AST sut = SetupParser("move left 2");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesMoveAstWithLeft1Step()
         {
+            //act
             AST exp = MoveCommand(1, "left");
-            
+            //arrange
             AST sut = SetupParser("move left 1");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesMoveAstWithLeft0Steps()
         {
+            //act
             AST exp = MoveCommand(1, "left"); // if no steps entered always 1 step 
-            
+            //arrange
             AST sut = SetupParser("move left");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesMoveAstWithRight2Steps()
         {
+            //act
             AST exp = MoveCommand(2, "right");
-            
+            //arrange
             AST sut = SetupParser("move right 2");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesMoveAstWithRight2Step()
         {
+            //act
             AST exp = MoveCommand(1, "right");
-            
+            //arrange
             AST sut = SetupParser("move right 1");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
 
         [Test]
         public void Test_AstListener_CreatesMoveAstWithRight0Steps()
         {
+            //act
             AST exp = MoveCommand(1, "right"); // if no steps entered always 1 step 
-            
+            //arrange
             AST sut = SetupParser("move right");
-
+            //assert
             Assert.AreEqual(exp, sut);
         }
         
@@ -371,76 +395,6 @@ namespace InputCommandHandler.Tests
             );
 
             return new AST(moveForward);
-        }
-        
-        [Test]
-        public void Test_AstListener_CreatesRequestSessions()
-        {
-            // Arrange
-            AST exp = RequestSessionsCommand();
-            
-            // Act
-            AST sut = SetupParser("request_sessions");
-
-            // Assert
-            Assert.AreEqual(exp, sut);
-        }
-
-        private static AST RequestSessionsCommand()
-        {
-            Input requestSessions = new Input();
-
-            requestSessions.AddChild(new RequestSessions());
-
-            return new AST(requestSessions);
-        }
-
-        [Test]
-        public void Test_AstListener_CreatesCreateSession()
-        {
-            // Arrange
-            const string sessionName = "cool world";
-            AST exp = CreateSessionCommand(sessionName);
-            
-            // Act
-            AST sut = SetupParser($"create_session \"{sessionName}\"");
-
-            // Assert
-            Assert.AreEqual(exp, sut);
-        }
-
-        private static AST CreateSessionCommand(string sessionName)
-        {
-            Input createSession = new Input();
-
-            createSession.AddChild(new CreateSession()
-                .AddChild(new Message(sessionName)));
-
-            return new AST(createSession);
-        }
-
-        [Test]
-        public void Test_AstListener_CreatesJoinSession()
-        {
-            // Arrange
-            const string sessionId = "1234-1234";
-            AST exp = JoinSessionCommand(sessionId);
-            
-            // Act
-            AST sut = SetupParser($"join_session \"{sessionId}\"");
-
-            // Assert
-            Assert.AreEqual(exp, sut);
-        }
-
-        private static AST JoinSessionCommand(string sessionId)
-        {
-            Input joinSession = new Input();
-
-            joinSession.AddChild(new JoinSession()
-                .AddChild(new Message(sessionId)));
-
-            return new AST(joinSession);
         }
     }
 }

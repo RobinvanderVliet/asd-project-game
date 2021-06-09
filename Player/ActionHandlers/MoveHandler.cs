@@ -1,16 +1,19 @@
 ﻿using DataTransfer.DTO.Character;
 using Network;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using DatabaseHandler;
-using DatabaseHandler.Poco;
+using DatabaseHandler.POCO;
 using DatabaseHandler.Repository;
 using DatabaseHandler.Services;
+using Network;
 using Network.DTO;
 using Newtonsoft.Json;
 using Player.DTO;
 using WorldGeneration;
+using Player.Model;
 
 
 namespace Player.ActionHandlers
@@ -18,6 +21,9 @@ namespace Player.ActionHandlers
     public class MoveHandler : IMoveHandler, IPacketHandler
     {
         private IClientController _clientController;
+        private IPlayerModel _currentPlayer;
+        private string _game;
+        private string _playerGuid;
         private IWorldService _worldService;
         private IMapper _mapper;
 
@@ -45,14 +51,16 @@ namespace Player.ActionHandlers
         {
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
 
+            //check for backup host like comments below
+            //(_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost)
             if (_clientController.IsHost() && packet.Header.Target.Equals("host"))
             {
-                var tmp = new DbConnection();
+                var dbConnection = new DbConnection();
 
-                var playerRepository = new Repository<PlayerPoco>(tmp);
-                var tmpServicePlayer = new ServicesDb<PlayerPoco>(playerRepository);
+                var playerRepository = new Repository<PlayerPOCO>(dbConnection);
+                var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
 
-                var allLocations = tmpServicePlayer.GetAllAsync();
+                var allLocations = servicePlayer.GetAllAsync();
 
                 allLocations.Wait();
 
@@ -66,9 +74,7 @@ namespace Player.ActionHandlers
 
                 if (result.Any())
                 {
-                    return new HandlerResponseDTO(SendAction.ReturnToSender,
-                        "Can't move to new position something is in the way");
-                    
+                    return new HandlerResponseDTO(SendAction.ReturnToSender, "Can't move to new position something is in the way");
                 }
                 else
                 {
@@ -76,8 +82,7 @@ namespace Player.ActionHandlers
                     HandleMove(moveDTO.PlayerPosition);
                 }
             }
-
-            if (packet.Header.Target.Equals(_clientController.GetOriginId()))
+            else if (packet.Header.Target.Equals(_clientController.GetOriginId()))
             {
                 Console.WriteLine(packet.HandlerResponse.ResultMessage);
             }
@@ -86,23 +91,21 @@ namespace Player.ActionHandlers
                 HandleMove(moveDTO.PlayerPosition);
             }
             
-           return new HandlerResponseDTO(SendAction.SendToClients, null);
+            return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
-        private void InsertToDatabase(MoveDTO moveDto)
+        private void InsertToDatabase(MoveDTO moveDTO)
         {
-            var tmp = new DbConnection();
+            var dbConnection = new DbConnection();
 
-            var playerRepository = new Repository<PlayerPoco>(tmp);
-            var tmpServicePlayer = new ServicesDb<PlayerPoco>(playerRepository);
-            var tmpGameRepostory = new Repository<GamePoco>(tmp);
-            var tmpServiceGame = new ServicesDb<GamePoco>(tmpGameRepostory);
+            var playerRepository = new Repository<PlayerPOCO>(dbConnection);
+            var servicePlayer = new ServicesDb<PlayerPOCO>(playerRepository);
 
-            var destination = _mapper.Map<PlayerPoco>(moveDto.PlayerPosition);
+            var destination = _mapper.Map<PlayerPOCO>(moveDTO.PlayerPosition);
 
             if (playerRepository.UpdateAsync(destination).Result == 1)
             {
-                var allPlayers = tmpServicePlayer.GetAllAsync();
+                var allPlayers = servicePlayer.GetAllAsync();
                 allPlayers.Wait();
                 Console.WriteLine("Updated :)");
             }

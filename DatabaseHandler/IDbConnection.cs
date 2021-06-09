@@ -4,7 +4,6 @@ namespace DatabaseHandler
 {
     public interface IDbConnection
     {
-        ILiteDatabaseAsync GetConnectionAsync();
-        void SetForeignKeys();
+        public ILiteDatabaseAsync GetConnectionAsync();
     }
 }

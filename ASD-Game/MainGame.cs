@@ -4,9 +4,11 @@ using InputCommandHandler;
 using Player.Model;
 using Player.Services;
 using System.Collections.Generic;
+using Agent.Mapper;
+using Agent.Models;
+using Agent.Services;
 using WorldGeneration;
 using Chat;
-using DataTransfer.DTO.Character;
 using Network;
 using Session;
 using Player.ActionHandlers;
@@ -26,40 +28,35 @@ namespace ASD_project
             private readonly IClientController _clientController;
             private readonly IWorldService _worldService;
 
-            public MainGame(ILogger<MainGame> log, IInventory inventory, IChatHandler chatHandler,
-                ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler,
-                IClientController clientController,
-                IWorldService worldService)
+            public MainGame(ILogger<MainGame> log, IInventory inventory, IClientController clientController, IWorldService worldService, 
+                IChatHandler chatHandler, ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler)
             {
                 _log = log;
                 _inventory = inventory;
+                _clientController = clientController;
+                _worldService = worldService;
                 _chatHandler = chatHandler;
                 _sessionHandler = sessionHandler;
                 _moveHandler = moveHandler;
                 _gameSessionHandler = gameSessionHandler;
-                _clientController = clientController;
-                _worldService = worldService;
             }
-
 
             public void Run()
             {
                 Console.WriteLine("Game is gestart");
-
-                // TODO: Remove from this method, team 2 will provide a command for it
-                // AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
-                // agentConfigurationService.StartConfiguration();
-
-                //moet later vervangen worden
                 InputCommandHandlerComponent inputHandler = new InputCommandHandlerComponent();
-                IPlayerModel playerModel =
-                    new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
-                IPlayerService playerService = new PlayerService(playerModel, _chatHandler,
-                    _moveHandler, _clientController, _worldService);
+
+                // TODO: Remove from this method, a command needs to be made
+                // AgentConfigurationService agentConfigurationService = new AgentConfigurationService(new List<Configuration>(), new FileToDictionaryMapper(), inputHandler);
+                // agentConfigurationService.Configure();
+                
+                //moet later vervangen worden
+                IPlayerModel playerModel = new PlayerModel("Gerard", _inventory, new Bitcoin(20), new RadiationLevel(1));
+                IPlayerService playerService = new PlayerService(playerModel, _chatHandler, _moveHandler, _clientController, _worldService);
 
                 ISessionService sessionService = new SessionService(_sessionHandler, _gameSessionHandler);
-
-                while (true)
+                // moet vervangen worden met variabele: isRun
+                while (true) 
                 {
                     Console.WriteLine("Type input messages below");
                     inputHandler.HandleCommands(playerService, sessionService);

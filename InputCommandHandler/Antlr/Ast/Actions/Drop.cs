@@ -39,7 +39,7 @@ namespace InputCommandHandler.Antlr.Ast.Actions
         [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
-            return this.Equals(obj as Drop);
+            return Equals(obj as Drop);
         }
 
         [ExcludeFromCodeCoverage]
