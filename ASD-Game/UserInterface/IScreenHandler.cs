@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace ASD_Game.UserInterface
@@ -5,6 +7,7 @@ namespace ASD_Game.UserInterface
     public interface IScreenHandler
     {
         public Screen Screen { get; set; }
+        public BlockingCollection<Action> ActionsInQueue { get; set; }
         void TransitionTo(Screen screen);
         void DisplayScreen();
         public ConsoleHelper ConsoleHelper { get; set; }

@@ -12,6 +12,11 @@ namespace ASD_Game.UserInterface
         private ConsoleHelper _consoleHelper;
         public ConsoleHelper ConsoleHelper { get => _consoleHelper; set => _consoleHelper = value; }
         private BlockingCollection<Action> _actionsInQueue;
+        public BlockingCollection<Action> ActionsInQueue
+        {
+            get => _actionsInQueue;
+            set => _actionsInQueue = value;
+        }
         private Thread _displayThread { get; set; }
         
         private bool _displaying;
@@ -19,7 +24,7 @@ namespace ASD_Game.UserInterface
         public ScreenHandler()
         {
             _consoleHelper = new ConsoleHelper();
-            _actionsInQueue = new();
+            ActionsInQueue = new();
 
             _displayThread = new Thread(RunDisplay);
             _displayThread.Start();
@@ -27,7 +32,7 @@ namespace ASD_Game.UserInterface
 
         private void RunDisplay()
         {
-            while(_actionsInQueue.TryTake(out Action a, -1))
+            while(ActionsInQueue.TryTake(out Action a, -1))
             {
                 a.Invoke();
             }
@@ -42,16 +47,15 @@ namespace ASD_Game.UserInterface
         }
         public void DisplayScreen()
         {
-            _actionsInQueue.Add(_screen.DrawScreen);
+            ActionsInQueue.Add(_screen.DrawScreen);
         }
 
         public void ShowMessages(Queue<string> messages)
         {
-            
             if (_screen is GameScreen)
             {
                 var gameScreen = Screen as GameScreen;
-                _actionsInQueue.Add(() => gameScreen.ShowMessages(messages));
+                ActionsInQueue.Add(() => gameScreen.ShowMessages(messages));
             }
         }
 
@@ -65,7 +69,7 @@ namespace ASD_Game.UserInterface
             if (_screen is GameScreen)
             {
                 var gameScreen = Screen as GameScreen;
-                _actionsInQueue.Add(gameScreen.RedrawInputBox);
+                ActionsInQueue.Add(gameScreen.RedrawInputBox);
                 _displayThread = new Thread(gameScreen.RedrawInputBox);
             }
         }
@@ -75,7 +79,7 @@ namespace ASD_Game.UserInterface
             if (_screen is GameScreen)
             {
                 var gameScreen = Screen as GameScreen;
-                _actionsInQueue.Add(() => gameScreen.UpdateWorld(map));
+                ActionsInQueue.Add(() => gameScreen.UpdateWorld(map));
             }
         }
 
@@ -84,7 +88,7 @@ namespace ASD_Game.UserInterface
             if (_screen is GameScreen)
             {
                 GameScreen gameScreen = _screen as GameScreen;
-                _actionsInQueue.Add(() => gameScreen.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree));
+                ActionsInQueue.Add(() => gameScreen.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree));
             }
         }
 

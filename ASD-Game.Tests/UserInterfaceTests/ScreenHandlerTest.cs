@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using ASD_Game.UserInterface;
 using Moq;
 using NUnit.Framework;
@@ -76,12 +78,103 @@ namespace UserInterface.Tests
             //Arrange
             var loadScreen = _mockedLoadScreen.Object;
             _sut.Screen = loadScreen;
-
+            _sut.ActionsInQueue = new BlockingCollection<Action>();
+            
             //Act
             _sut.GetSessionByPosition(1);
 
             //Assert
             _mockedLoadScreen.Verify(mock => mock.GetSessionByPosition(1), Times.Once);
+        }
+
+        [Test]
+        public void Test_ShowMessages_AddsToQueue()
+        {
+            //Arrange
+            _sut.Screen = new Mock<GameScreen>().Object;
+            var mockedBlockingCollection = new Mock<BlockingCollection<Action>>();
+            _sut.ActionsInQueue = mockedBlockingCollection.Object;
+            //Act
+            Queue <string> queue = new Queue<string>();
+            queue.Enqueue("Test");
+            _sut.ShowMessages(queue);
+            var action = _sut.ActionsInQueue.First();
+            
+            //Assert
+            Assert.AreSame(action, _sut.ActionsInQueue.Take());
+        }
+
+        [Test]
+        public void Test_GetScreenInput_ReturnsInput()
+        {
+            //Arrange
+            var testInput = "Gerrit";
+            _mockedConsoleHelper.Setup(mock => mock.ReadLine()).Returns(testInput);
+            
+            //Act
+            var result = _sut.GetScreenInput();
+            
+            //Assert
+            Assert.AreEqual(testInput, result);
+        }
+        
+        [Test]
+        public void Test_SetScreenInput_CallsInput()
+        {
+            //Arrange
+            var testInput = "Gerrit";
+
+            //Act
+            _sut.SetScreenInput(testInput);
+            
+            //Assert
+            _mockedConsoleHelper.Verify(mock => mock.WriteLine(testInput), Times.Once);
+        }
+        
+        [Test]
+        public void Test_RedrawGameInputBox_AddsToQueue()
+        {
+            //Arrange
+            _sut.Screen = new Mock<GameScreen>().Object;
+            var mockedBlockingCollection = new Mock<BlockingCollection<Action>>();
+            _sut.ActionsInQueue = mockedBlockingCollection.Object;
+            //Act
+            _sut.RedrawGameInputBox();
+            var action = _sut.ActionsInQueue.First();
+            
+            //Assert
+            Assert.AreSame(action, _sut.ActionsInQueue.Take());
+        }
+        
+        [Test]
+        public void Test_UpdateWorld_AddsToQueue()
+        {
+            //Arrange
+            _sut.Screen = new Mock<GameScreen>().Object;
+            var mockedBlockingCollection = new Mock<BlockingCollection<Action>>();
+            _sut.ActionsInQueue = mockedBlockingCollection.Object;
+            //Act
+            var map = new char[1,1];
+            _sut.UpdateWorld(map);
+            var action = _sut.ActionsInQueue.First();
+            
+            //Assert
+            Assert.AreSame(action, _sut.ActionsInQueue.Take());
+        }
+        
+        [Test]
+        public void Test_SetStatValues_AddsToQueue()
+        {
+            //Arrange
+            _sut.Screen = new Mock<GameScreen>().Object;
+            var mockedBlockingCollection = new Mock<BlockingCollection<Action>>();
+            _sut.ActionsInQueue = mockedBlockingCollection.Object;
+            //Act
+            _sut.SetStatValues(String.Empty, 0, 0, 0, 0, 0, String.Empty, String.Empty, String.Empty, String.Empty, String.Empty, String.Empty);
+            var action = _sut.ActionsInQueue.First();
+            
+            //Assert
+            Assert.AreSame(action, _sut.ActionsInQueue.Take());
         }
     }
 }
