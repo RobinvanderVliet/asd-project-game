@@ -240,10 +240,13 @@ namespace ASD_Game.Session
                 {
                     _messageService.AddMessage(packet.HandlerResponse.ResultMessage);
                 }
+                else
+                {
+                    PacketDTO newPacket = new PacketBuilder().SetTarget("client").SetSessionID(_clientController.SessionId)
+                        .SetPayload(packet.HandlerResponse.ResultMessage).SetPacketType(PacketType.GameSession).Build();
+                    ((IPacketHandler) _clientController).HandlePacket(newPacket);
+                }
 
-                PacketDTO newPacket = new PacketBuilder().SetTarget("client").SetSessionID(_clientController.SessionId)
-                    .SetPayload(packet.HandlerResponse.ResultMessage).SetPacketType(PacketType.GameSession).Build();
-                ((IPacketHandler) _clientController).HandlePacket(newPacket);
             }
         }
 
