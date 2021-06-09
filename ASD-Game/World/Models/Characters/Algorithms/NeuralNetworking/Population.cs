@@ -88,7 +88,8 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking
             {
                 GenSmartMonsters.Add(tempBest.CloneForReplay());
                 BestScore = tempBest.Score;
-                BestSmartMonster = tempBest.CloneForReplay(); ;
+                BestSmartMonster = tempBest.CloneForReplay();
+                BestSmartMonster.Brain.PrintGenome();
             }
         }
 

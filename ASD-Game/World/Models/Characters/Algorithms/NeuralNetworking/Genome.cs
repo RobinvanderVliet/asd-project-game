@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 namespace World.Models.Characters.Algorithms.NeuralNetworking
 {
@@ -463,23 +464,24 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking
         [ExcludeFromCodeCoverage]
         public void PrintGenome()
         {
-            Console.Clear();
-            Console.WriteLine("Print genome  layers: " + Layers);
-            Console.WriteLine("bias node: " + BiasNode);
-            Console.WriteLine("nodes");
-            for (int i = 0; i < Nodes.Count; i++)
+            string filePath = @"C:\Temp\NeuralNetworkOutput.txt";
+            using (StreamWriter writer = new StreamWriter(filePath))
             {
-                Console.WriteLine(Nodes[i].Number + " is : " + GetNodeName(Nodes[i].Number));
+                writer.WriteLine("Print genome  layers: " + Layers);
+                writer.WriteLine("bias node: " + BiasNode);
+                writer.WriteLine("nodes");
+                for (int i = 0; i < Nodes.Count; i++)
+                {
+                    writer.WriteLine(Nodes[i].Number + " is : " + GetNodeName(Nodes[i].Number));
+                }
+                writer.WriteLine("Genes");
+                for (int i = 0; i < Genes.Count; i++)
+                {
+                    //for each connectionGene
+                    writer.WriteLine("gene " + Genes[i].InnovationNo + " From node " + GetNodeName(Genes[i].FromNode.Number) + " To node " + GetNodeName(Genes[i].ToNode.Number) +
+                      " is enabled " + Genes[i].Enabled + " from layer " + Genes[i].FromNode.Layer + " to layer " + Genes[i].ToNode.Layer + " weight: " + Genes[i].Weight);
+                }
             }
-            Console.WriteLine("Genes");
-            for (int i = 0; i < Genes.Count; i++)
-            {
-                //for each connectionGene
-                Console.WriteLine("gene " + Genes[i].InnovationNo + " From node " + GetNodeName(Genes[i].FromNode.Number) + " To node " + GetNodeName(Genes[i].ToNode.Number) +
-                  " is enabled " + Genes[i].Enabled + " from layer " + Genes[i].FromNode.Layer + " to layer " + Genes[i].ToNode.Layer + " weight: " + Genes[i].Weight);
-            }
-
-            Console.WriteLine();
         }
 
         [ExcludeFromCodeCoverage]
@@ -489,91 +491,69 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking
             {
                 case 0:
                     return "Creature X pos";
-                    break;
 
                 case 1:
                     return "Creature Y pos";
-                    break;
 
                 case 2:
                     return "Creature damage";
-                    break;
 
                 case 3:
                     return "Creature Health";
-                    break;
 
                 case 4:
                     return "Distance to closest player";
-                    break;
 
                 case 5:
                     return "Distance to closest monster";
-                    break;
 
                 case 6:
                     return "Closest player health";
-                    break;
 
                 case 7:
                     return "Closest player damage";
-                    break;
 
                 case 8:
                     return "Closest player X pos";
-                    break;
 
                 case 9:
                     return "Closest player Y pos";
-                    break;
 
                 case 10:
                     return "Closest Monster Health";
-                    break;
 
                 case 11:
                     return "Closest Monster damage";
-                    break;
 
                 case 12:
                     return "Closest Monster X pos";
-                    break;
 
                 case 13:
                     return "Closest Monster Y pos";
-                    break;
 
                 case 14:
                     return "Attack ction";
-                    break;
 
                 case 15:
                     return "Flee action";
-                    break;
 
                 case 16:
                     return "Run to monster action";
-                    break;
 
                 case 17:
                     return "walk up";
-                    break;
 
                 case 18:
                     return "walk down";
-                    break;
 
                 case 19:
                     return "walk left";
-                    break;
 
                 case 20:
                     return "walk right";
-                    break;
 
                 case 21:
                     return "Bias node";
-                    break;
 
                 default:
                     return "hiddennode";

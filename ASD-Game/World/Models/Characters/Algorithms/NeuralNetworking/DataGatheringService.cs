@@ -119,23 +119,18 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
             {
                 case '~':
                     return false;
-                    break;
 
                 case 'E':
                     return false;
-                    break;
 
                 case '#':
                     return false;
-                    break;
 
                 case 'T':
                     return false;
-                    break;
 
                 case '\u25B2':
                     return false;
-                    break;
             }
             return true;
         }

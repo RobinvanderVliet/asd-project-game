@@ -49,7 +49,6 @@ namespace Characters
         public void Update()
         {
             _dataGatheringService.CheckNewPosition(this);
-            Destination = new Vector2(this.XPosition, this.YPosition);
             if (!Dead)
             {
                 LifeSpan++;
@@ -114,8 +113,7 @@ namespace Characters
                 }
             }
 
-            //TODO setback to 0.7 or maybe try 0.6 hhhmmmmmm...
-            if (max < 0.1)
+            if (max < 0.6)
             {
                 Smartactions.Wander(this);
                 return;

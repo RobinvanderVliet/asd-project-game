@@ -12,8 +12,6 @@ using WorldGeneration.Models.Interfaces;
 using System.Timers;
 using Characters;
 
-using WorldGeneration;
-
 namespace ActionHandling
 {
     public class MoveHandler : IMoveHandler, IPacketHandler
