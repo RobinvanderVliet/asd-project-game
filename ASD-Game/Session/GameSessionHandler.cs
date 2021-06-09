@@ -72,19 +72,35 @@ namespace Session
             SendGameSessionDTO(startGameDTO);
             _sessionHandler.SetGameStarted(true);
         }
-
-        private StartGameDTO LoadSave()
+        
+        public StartGameDTO LoadSave()
         {
-            StartGameDTO startGameDTO = new();
+            StartGameDTO startGameDTO = new StartGameDTO();
+            startGameDTO.Seed = _sessionHandler.GetSessionSeed();
 
-            var allPlayers = _playerService.GetAllAsync();
-            allPlayers.Wait();
-            var allPlayersInGame = allPlayers.Result.Where(x => x.GameGuid == _clientController.SessionId);
+            var allPlayerId = _playerService.GetAllAsync();
+            allPlayerId.Wait();
+            var playerLocations = allPlayerId.Result.Where(x => x.GameGuid == _clientController.SessionId);
 
-            startGameDTO = SetLoadedGameInfo(startGameDTO, allPlayersInGame);
+            startGameDTO.SavedPlayers = playerLocations.ToList();
+            startGameDTO.GameGuid = _clientController.SessionId;
+            
 
             return startGameDTO;
         }
+
+        // private StartGameDTO LoadSave()
+        // {
+        //     StartGameDTO startGameDTO = new();
+        //
+        //     var allPlayers = _playerService.GetAllAsync();
+        //     allPlayers.Wait();
+        //     var allPlayersInGame = allPlayers.Result.Where(x => x.GameGuid == _clientController.SessionId);
+        //
+        //     startGameDTO = SetLoadedGameInfo(startGameDTO, allPlayersInGame);
+        //
+        //     return startGameDTO;
+        // }
 
         private Player AddPlayersToWorld()
         {
@@ -236,9 +252,6 @@ namespace Session
                 _worldService.DisplayStats();
                 _messageService.DisplayMessages();
             
-            
-           
-
         }
 
       
