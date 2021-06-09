@@ -111,11 +111,21 @@ namespace ASD_Game.ActionHandling
                     }
                 }
 
-
-                // var creatureToAttack =
-                //     allCreatures.Where(x =>
-                //         x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition &&
-                //         x.GameGuid == _clientController.SessionId);
+                var allCreatures = _worldService.GetMonsters();
+                var creatureToAttack =
+                    allCreatures.Where(x =>
+                        x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition);
+                if (creatureToAttack.FirstOrDefault() != null)
+                {
+                    if (creatureToAttack.FirstOrDefault().Health <= 0)
+                    {
+                        if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
+                        {
+                            _messageService.AddMessage("You can't attack this enemy, he is already dead.");
+                            return new HandlerResponseDTO(SendAction.Ignore, null);
+                        }
+                    }
+                }
 
                 InsertStaminaToDatabase(attackDto);
 
@@ -128,12 +138,17 @@ namespace ASD_Game.ActionHandling
                         packet.Payload = JsonConvert.SerializeObject(attackDto);
                     }
                 }
-                // else if (creatureToAttack.Any())
-                // {
-                //     attackDto.AttackedPlayerGuid = creatureToAttack.FirstOrDefault().CreatureGuid;
-                //     InsertDamageToDatabase(attackDto, false);
-                //     packet.Payload = JsonConvert.SerializeObject(attackDto);
-                // }
+                else if (creatureToAttack.Any())
+                {
+                    attackDto.AttackedPlayerGuid = creatureToAttack.FirstOrDefault().Id;
+                    if (attackDto.Stamina >= ATTACK_STAMINA)
+                    {
+                        var creature = _worldService.GetAI(attackDto.AttackedPlayerGuid);
+                        creature.Health -= attackDto.Damage;
+                        //InsertDamageToDatabase(attackDto, false);
+                        packet.Payload = JsonConvert.SerializeObject(attackDto);
+                    }
+                }
                 else
                 {
                     if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
@@ -243,30 +258,14 @@ namespace ASD_Game.ActionHandling
                     }
                 }
             }
-            else
-            {
-                var attackedCreature = _creatureDatabaseService.GetAllAsync().Result
-                    .FirstOrDefault(attackedCreature => attackedCreature.CreatureGuid == attackDto.AttackedPlayerGuid);
-                attackedCreature.Health -= attackDto.Damage;
-                _creatureDatabaseService.UpdateAsync(attackedCreature);
-
-                if (attackedCreature.Health <= 0)
-                {
-                    _messageService.AddMessage("RIP"); //TODO implement death of creature
-                }
-            }
         }
 
         private void HandleAttack(AttackDTO attackDto)
         {
-            // var playerIsDead = false;
-            // if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
-
+            var creature = _worldService.GetAI(attackDto.AttackedPlayerGuid);
             var player = _worldService.GetPlayer(attackDto.PlayerGuid);
             bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
-            
-            var attackedPlayer = _worldService.GetPlayer(attackDto.AttackedPlayerGuid);
-            bool printAttackedMessage = _clientController.GetOriginId().Equals(attackedPlayer.Id);
+
             {
                 if (player.Stamina < ATTACK_STAMINA && printAttackMessage)
                 {
@@ -279,82 +278,90 @@ namespace ASD_Game.ActionHandling
                     {
                         _messageService.AddMessage("You attacked an enemy.");
                     }
-
-                    _worldService.DisplayStats();
                 }
             }
-            if (attackDto.AttackedPlayerGuid != null && attackedPlayer.Health != 0)
+
+            if (creature == null)
             {
-                if (printAttackedMessage)
-                {
-                    _messageService.AddMessage(
-                        "You've been attacked! You took a total of: " + attackDto.Damage + " damage.");
-                }
-
-                int ArmorPoints = 0;
-                int HelmetPoints = 0;
-                if (attackedPlayer.Inventory.Armor != null)
-                {
-                    ArmorPoints = attackedPlayer.Inventory.Armor.ArmorProtectionPoints;
-                }
-
-                if (attackedPlayer.Inventory.Helmet != null)
-                {
-                    HelmetPoints = attackedPlayer.Inventory.Helmet.ArmorProtectionPoints;
-                }
-
-                //First damage is substracted from the helmet, after that from body armor and finally from the player him/herself.
-                if (HelmetPoints - attackDto.Damage <= 0 && HelmetPoints != 0)
+                var attackedPlayer = _worldService.GetPlayer(attackDto.AttackedPlayerGuid);
+                bool printAttackedMessage = _clientController.GetOriginId().Equals(attackedPlayer.Id);
+                if (attackDto.AttackedPlayerGuid != null && attackedPlayer.Health != 0)
                 {
                     if (printAttackedMessage)
                     {
-                        _messageService.AddMessage("Your helmet has been destroyed!");
+                        _messageService.AddMessage(
+                            "You've been attacked! You took a total of: " + attackDto.Damage + " damage.");
                     }
 
-                    attackDto.Damage -= HelmetPoints;
-                    attackedPlayer.Inventory.Helmet = null;
-                    _worldService.DisplayStats();
-                }
-                else if (HelmetPoints != 0)
-                {
-                    attackDto.Damage = 0;
-                    attackedPlayer.Inventory.Helmet.ArmorProtectionPoints -= attackDto.Damage;
-                    _worldService.DisplayStats();
-                }
-
-                if (ArmorPoints - attackDto.Damage <= 0 && ArmorPoints != 0)
-                {
-                    if (printAttackedMessage)
+                    int ArmorPoints = 0;
+                    int HelmetPoints = 0;
+                    if (attackedPlayer.Inventory.Armor != null)
                     {
-                        _messageService.AddMessage("Your armor piece has been destroyed!");
+                        ArmorPoints = attackedPlayer.Inventory.Armor.ArmorProtectionPoints;
                     }
 
-                    attackDto.Damage -= ArmorPoints;
-                    attackedPlayer.Inventory.Armor = null;
-                    attackedPlayer.Health -= attackDto.Damage;
-                    _worldService.DisplayStats();
-                }
-                else if (ArmorPoints != 0)
-                {
-                    attackedPlayer.Inventory.Armor.ArmorProtectionPoints -= attackDto.Damage;
-                    _worldService.DisplayStats();
-                }
-                else
-                {
-                    if (attackedPlayer.Health - attackDto.Damage >= 0)
+                    if (attackedPlayer.Inventory.Helmet != null)
                     {
+                        HelmetPoints = attackedPlayer.Inventory.Helmet.ArmorProtectionPoints;
+                    }
+
+                    //First damage is substracted from the helmet, after that from body armor and finally from the player him/herself.
+                    if (HelmetPoints - attackDto.Damage <= 0 && HelmetPoints != 0)
+                    {
+                        if (printAttackedMessage)
+                        {
+                            _messageService.AddMessage("Your helmet has been destroyed!");
+                        }
+
+                        attackDto.Damage -= HelmetPoints;
+                        attackedPlayer.Inventory.Helmet = null;
+                        _worldService.DisplayStats();
+                    }
+                    else if (HelmetPoints != 0)
+                    {
+                        attackDto.Damage = 0;
+                        attackedPlayer.Inventory.Helmet.ArmorProtectionPoints -= attackDto.Damage;
+                        _worldService.DisplayStats();
+                    }
+
+                    if (ArmorPoints - attackDto.Damage <= 0 && ArmorPoints != 0)
+                    {
+                        if (printAttackedMessage)
+                        {
+                            _messageService.AddMessage("Your armor piece has been destroyed!");
+                        }
+
+                        attackDto.Damage -= ArmorPoints;
+                        attackedPlayer.Inventory.Armor = null;
                         attackedPlayer.Health -= attackDto.Damage;
+                        _worldService.DisplayStats();
+                    }
+                    else if (ArmorPoints != 0)
+                    {
+                        attackedPlayer.Inventory.Armor.ArmorProtectionPoints -= attackDto.Damage;
+                        _worldService.DisplayStats();
                     }
                     else
                     {
-                        _messageService.AddMessage("You died");
-                        attackedPlayer.Health = 0;
-                    }
+                        if (attackedPlayer.Health - attackDto.Damage >= 0)
+                        {
+                            attackedPlayer.Health -= attackDto.Damage;
+                        }
+                        else
+                        {
+                            if (printAttackedMessage)
+                            {
+                                _messageService.AddMessage("You died");
+                            }
 
-                    _worldService.DisplayStats();
-                    _worldService.DisplayWorld();
+                            attackedPlayer.Health = 0;
+                        }
+                    }
                 }
             }
+
+            _worldService.DisplayStats();
+            _worldService.DisplayWorld();
         }
     }
 }

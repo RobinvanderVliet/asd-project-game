@@ -52,12 +52,7 @@ namespace ASD_Game.World.Services
         {
             _world = new World(seed, 6, new MapFactory(), _screenHandler, _itemService);
         }
-
-        public Player getCurrentPlayer()
-        {
-            return _world.CurrentPlayer;
-        }
-
+        
         public List<ItemSpawnDTO> getAllItems()
         {
             return _world.Items;
@@ -101,7 +96,6 @@ namespace ASD_Game.World.Services
                 }
             }
         }
-
         public List<Character> GetCreatureMoves()
         {
             if (_world != null)
