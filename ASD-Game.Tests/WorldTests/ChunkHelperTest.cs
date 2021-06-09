@@ -18,27 +18,28 @@ namespace ASD_Game.Tests.WorldTests
         private ITile[] _tiles;
         private Mock<ChunkHelper> _chunkHelperMock;
 
-        [SetUp]
-        public void Setup()
-        {
-            _tiles = new ITile[] { new GrassTile(1, 1), new GrassTile(1, 2), new GrassTile(1, 3), new GrassTile(1, 4) };
-            _chunk = new Chunk(0, 0, _tiles, 6, 2);
-            _chunkHelperMock = new Mock<ChunkHelper>();
-            _sut = _chunkHelperMock.Object;
-            _sut.Chunk = _chunk;
-        }
-
-        public void Test_GetPositionInTileArrayByWorldCoordinates()
-        {
-            int x = 1;
-            int y = 2;
-
-            //Arrange ---------
-
-            //Act ---------
-
-            //Assert ---------
-            Assert.That(true);
-        }
+        // [SetUp]
+        // public void Setup()
+        // {
+        //     _tiles = new ITile[] { new GrassTile(1, 1), new GrassTile(1, 2), new GrassTile(1, 3), new GrassTile(1, 4) };
+        //     _chunk = new Chunk(0, 0, _tiles, 6, 2);
+        //     _chunkHelperMock = new Mock<ChunkHelper>();
+        //     _sut = _chunkHelperMock.Object;
+        //     _sut.Chunk = _chunk;
+        // }
+        //
+        // [Test]
+        // public void Test_GetPositionInTileArrayByWorldCoordinates()
+        // {
+        // int x = 1;
+        // int y = 2;
+        //
+        // //Arrange ---------
+        //
+        // //Act ---------
+        //
+        // //Assert ---------
+        // Assert.That(true);
+        // }
     }
 }
