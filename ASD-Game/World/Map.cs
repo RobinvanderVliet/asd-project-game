@@ -13,7 +13,6 @@ namespace ASD_Game.World
     {
         private readonly int _chunkSize;
         private IList<Chunk> _chunks;
-        private ChunkHelper _chunkHelper;
         private readonly INoiseMapGenerator _noiseMapGenerator;
 
         public Map(
@@ -142,8 +141,8 @@ namespace ASD_Game.World
         
         public ITile GetLoadedTileByXAndY(int x, int y)
         {
-            _chunkHelper = new ChunkHelper(GetLoadedChunkForTileXAndY(x, y));
-            return _chunkHelper.GetTileByWorldCoordinates(x, y);
+            var chunkHelper = new ChunkHelper(GetLoadedChunkForTileXAndY(x, y));
+            return chunkHelper.GetTileByWorldCoordinates(x, y);
         }
     }
 }
