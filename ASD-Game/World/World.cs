@@ -35,7 +35,7 @@ namespace ASD_Game.World
             // DeleteMap();
             Items = new();
             Players = new ();
-            _creatures = new ();
+            Creatures = new ();
             _map = mapFactory.GenerateMap(itemService, Items, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
@@ -59,7 +59,7 @@ namespace ASD_Game.World
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
-            var creature = _creatures.FirstOrDefault(x => x.Id == userId);
+            var creature = Creatures.FirstOrDefault(x => x.Id == userId);
             if (GetAI(userId) != null)
             {
                 creature.XPosition = newXPosition;
@@ -79,12 +79,12 @@ namespace ASD_Game.World
 
         public void AddCreatureToWorld(Monster character)
         {
-            _creatures.Add(character);
+            Creatures.Add(character);
         }
 
         public void UpdateMap()
         {
-            if (CurrentPlayer != null && Players != null && _creatures != null)
+            if (CurrentPlayer != null && Players != null && Creatures != null)
             {
                 _screenHandler.UpdateWorld(_map.GetCharArrayMapAroundCharacter(CurrentPlayer, _viewDistance, GetAllCharacters()));
             }
@@ -118,7 +118,7 @@ namespace ASD_Game.World
         private List<Character> GetAllCharacters()
         {
             List<Character> characters = Players.Cast<Character>().ToList();
-            characters.AddRange(_creatures);
+            characters.AddRange(Creatures);
             return characters;
         }
 
@@ -126,11 +126,11 @@ namespace ASD_Game.World
         {
             _map.LoadArea(playerX, playerY, viewDistance);
         }
-
+         
         public void UpdateAI()
         {
             movesList = new List<Character>();
-            foreach (Character monster in _creatures)
+            foreach (Character monster in Creatures)
             {
                 if (monster is SmartMonster smartMonster)
                 {
@@ -150,7 +150,7 @@ namespace ASD_Game.World
 
         public Character GetAI(string id)
         {
-            return _creatures.Find(x => x.Id == id);
+            return Creatures.Find(x => x.Id == id);
         }
 
         public ITile GetCurrentTile()
