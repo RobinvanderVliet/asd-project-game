@@ -289,5 +289,42 @@ namespace ASD_Game.Tests.WorldTests
             //Assert ---------
             
         }
+        
+        [Test]
+        public void Test_DisplayStats_VerifyThatSetStatValuesFromScreenHandlerIsExecutedWithPlayer()
+        {
+            //Arrange ---------
+            _screenHandlerMock.Setup(screenHandler => 
+                screenHandler.SetStatValues(
+                    It.IsAny<string>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>())).Verifiable();
+            //Act ---------
+            _sut.DisplayStats();
+            //Assert ---------
+            _screenHandlerMock.Verify(screenHandler => screenHandler.SetStatValues(
+                _player.Name,
+                0,
+                _player.Health,
+                _player.Stamina,
+                _player.GetArmorPoints(),
+                _player.RadiationLevel,
+                _player.Inventory.Helmet.ItemName ?? "Empty",
+                _player.Inventory.Armor.ItemName ?? "Empty",
+                _player.Inventory.Weapon.ItemName ?? "Empty",
+                _player.Inventory.GetConsumableAtIndex(0).ItemName ?? "Empty",
+                _player.Inventory.GetConsumableAtIndex(1).ItemName ?? "Empty",
+                _player.Inventory.GetConsumableAtIndex(2).ItemName ?? "Empty"));
+            
+        }
     }
 }

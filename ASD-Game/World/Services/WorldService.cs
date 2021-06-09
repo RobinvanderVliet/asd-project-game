@@ -54,16 +54,6 @@ namespace ASD_Game.World.Services
             World = new World(seed, 6, new MapFactory(), _screenHandler, _itemService);
         }
 
-        public List<ItemSpawnDTO> GetAllItems()
-        {
-            return World.Items;
-        }
-
-        public void AddItemToWorld(ItemSpawnDTO itemSpawnDTO)
-        {
-            World.AddItemToWorld(itemSpawnDTO);
-        }
-
         public Player GetCurrentPlayer()
         {
             return World.CurrentPlayer;
