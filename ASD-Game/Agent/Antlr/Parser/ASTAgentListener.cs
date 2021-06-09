@@ -22,7 +22,10 @@ namespace Agent.Antlr.Parser
             _currentContainer = new Stack<Node>();
         }
 
-        public AST GetAST() { return _ast; }
+        public AST GetAST()
+        {
+            return _ast;
+        }
 
         public override void EnterAction([NotNull] AgentConfigurationParser.ActionContext context)
         {
@@ -104,7 +107,6 @@ namespace Agent.Antlr.Parser
             Subject subject = (Subject)context.children.Where(c => c.GetText() != null).FirstOrDefault();
             _currentContainer.Push(subject);
         }
-
 
         public override void EnterSubjectStat([NotNull] AgentConfigurationParser.SubjectStatContext context)
         {
@@ -220,7 +222,6 @@ namespace Agent.Antlr.Parser
         {
             base.ExitSubject(context);
         }
-
 
         public override void EnterNpc([NotNull] AgentConfigurationParser.NpcContext context)
         {

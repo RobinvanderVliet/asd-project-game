@@ -20,6 +20,7 @@ namespace WorldGeneration.Models.BuildingTiles
         {
             Symbol = TileSymbol.HOUSE;
             IsAccessible = true;
+            ItemsOnTile = new List<Item>();
             StaminaCost = 1;
         }
 

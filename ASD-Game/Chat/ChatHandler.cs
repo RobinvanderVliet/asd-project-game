@@ -1,10 +1,9 @@
 ﻿using Chat.DTO;
-using Network;
-using Newtonsoft.Json;
-using System;
-using Network.DTO;
-using WorldGeneration;
 using Messages;
+using Network;
+using Network.DTO;
+using Newtonsoft.Json;
+using WorldGeneration;
 
 namespace Chat
 {
@@ -13,7 +12,6 @@ namespace Chat
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
         private readonly IMessageService _messageService;
-
 
         public ChatHandler(IClientController clientController, IWorldService worldService, IMessageService messageService)
         {
@@ -39,19 +37,20 @@ namespace Chat
 
         private void SendChatDTO(ChatDTO chatDTO)
         {
-            var payload = JsonConvert.SerializeObject(chatDTO);        
+            var payload = JsonConvert.SerializeObject(chatDTO);
             _clientController.SendPayload(payload, PacketType.Chat);
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var chatDTO = JsonConvert.DeserializeObject<ChatDTO>(packet.Payload);
-           
+
             switch (chatDTO.ChatType)
             {
                 case ChatType.Say:
                     HandleSay(chatDTO.Message, chatDTO.OriginId);
                     return new HandlerResponseDTO(SendAction.SendToClients, null);
+
                 case ChatType.Shout:
                     HandleShout(chatDTO.Message, chatDTO.OriginId);
                     return new HandlerResponseDTO(SendAction.SendToClients, null);

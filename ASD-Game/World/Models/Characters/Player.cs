@@ -6,7 +6,6 @@ namespace WorldGeneration
     [ExcludeFromCodeCoverage]
     public class Player : Character
     {
-        public string Id { get; set; }
         public int Stamina { get; set; }
         public Inventory Inventory { get; set; }
         public int RadiationLevel { get; set; }
@@ -20,7 +19,7 @@ namespace WorldGeneration
         public const int RADIATION_LEVEL_MIN = 0;
         public const int RADIATION_LEVEL_MAX = 100;
 
-        public Player(string name, int xPosition, int yPosition, string symbol, string id) : base(name, xPosition, yPosition, symbol)
+        public Player(string name, int xPosition, int yPosition, string symbol, string id) : base(name, xPosition, yPosition, symbol, id)
         {
             Id = id;
             Stamina = STAMINA_MAX;
@@ -34,17 +33,14 @@ namespace WorldGeneration
         {
             if(consumable is HealthConsumable)
             {
-
                 AddHealth((consumable as HealthConsumable).getHealth());
             }
             else if (consumable is StaminaConsumable)
             {
-
                 AddStamina((consumable as StaminaConsumable).getStamina());
             }
         }
 
-        
         public void AddStamina(int amount)
         {
             Stamina += amount;
@@ -54,6 +50,7 @@ namespace WorldGeneration
                 case < STAMINA_MIN:
                     Stamina = STAMINA_MIN;
                     break;
+
                 case > STAMINA_MAX:
                     Stamina = STAMINA_MAX;
                     break;
@@ -69,6 +66,7 @@ namespace WorldGeneration
                 case < RADIATION_LEVEL_MIN:
                     RadiationLevel = RADIATION_LEVEL_MIN;
                     break;
+
                 case > RADIATION_LEVEL_MAX:
                     RadiationLevel = RADIATION_LEVEL_MAX;
                     break;
@@ -84,12 +82,13 @@ namespace WorldGeneration
                 case < HEALTH_MIN:
                     Health = HEALTH_MIN;
                     break;
+
                 case > HEALTH_MAX:
                     Health = HEALTH_MAX;
                     break;
             }
         }
-        
+
         public int GetArmorPoints()
         {
             int armorpoints = 0;
@@ -103,5 +102,7 @@ namespace WorldGeneration
             }
             return armorpoints;
         }
+
+
     }
 }

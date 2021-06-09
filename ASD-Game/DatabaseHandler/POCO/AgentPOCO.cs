@@ -1,11 +1,10 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using LiteDB;
-using System.Diagnostics.CodeAnalysis;
 
-namespace DatabaseHandler.POCO
+
+ namespace DatabaseHandler.POCO
 {
-    [ExcludeFromCodeCoverage]
     public class AgentPOCO
     {
         public List<KeyValuePair<string, string>> AgentConfiguration { get; set; }
@@ -14,5 +13,5 @@ namespace DatabaseHandler.POCO
         public string PlayerGUID { get; set; }
         public string GameGUID { get; set; }
         public bool Activated { get; set; }
-    }
+}
 }

@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chat.DTO;
+﻿using Chat.DTO;
 using Moq;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace UserInterface.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class LobbyScreenTest
     {
         private LobbyScreen _sut;
@@ -41,7 +40,7 @@ namespace UserInterface.Tests
         }
 
         [Test]
-        public void Test_DrawLobbyScreen() 
+        public void Test_DrawLobbyScreen()
         {
             //Arrange
             var headerText = "Welcome to the lobby, people in the lobby:";

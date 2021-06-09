@@ -9,6 +9,10 @@ using Network.DTO;
 using Newtonsoft.Json;
 using WorldGeneration;
 using WorldGeneration.Models.Interfaces;
+using System.Timers;
+using Characters;
+
+using WorldGeneration;
 
 namespace ActionHandling
 {
@@ -18,6 +22,8 @@ namespace ActionHandling
         private readonly IWorldService _worldService;
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IMessageService _messageService;
+        private Timer AIUpdateTimer;
+        private int _updateTime = 2000;
 
         public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
         {
@@ -26,10 +32,17 @@ namespace ActionHandling
             _worldService = worldService;
             _playerDatabaseService = playerDatabaseService;
             _messageService = messageService;
+            CheckAITimer();
         }
 
         public void SendMove(string directionValue, int stepsValue)
         {
+            if (_worldService.IsDead(_worldService.GetCurrentPlayer()))
+            {
+                _messageService.AddMessage("You can't move, you're dead!");
+                return;
+            }
+
             int x = 0;
             int y = 0;
 
@@ -39,15 +52,18 @@ namespace ActionHandling
                 case "east":
                     x = stepsValue;
                     break;
+
                 case "left":
                 case "west":
                     x = -stepsValue;
                     break;
+
                 case "forward":
                 case "up":
                 case "north":
                     y = +stepsValue;
                     break;
+
                 case "backward":
                 case "down":
                 case "south":
@@ -84,56 +100,61 @@ namespace ActionHandling
 
         public HandlerResponseDTO HandleMove(MoveDTO moveDTO, bool handleInDatabase)
         {
-            var player = _worldService.GetPlayer(moveDTO.UserId);
-            
-            var newPosPlayerX = moveDTO.XPosition;
-            var newPosPlayerY = moveDTO.YPosition;
-            var oldPosPlayerX = player.XPosition;
-            var oldPosPlayerY = player.YPosition;
-            var playerStamina = player.Stamina;
-            
-            _worldService.LoadArea(newPosPlayerX, newPosPlayerY, 10);
-            var allTiles = GetTilesForPositions(oldPosPlayerX, oldPosPlayerY, newPosPlayerX, newPosPlayerY);
-            var accessibleTiles = inAccessibleTileExists(allTiles);
-            var movableTiles = GetMovableTiles(allTiles, accessibleTiles);
-            var staminaCost = GetStaminaCostForTiles(movableTiles);
-            
-            if (staminaCost > playerStamina)
+            if (_worldService.GetPlayer(moveDTO.UserId) != null)
             {
-                moveDTO = ChangeMoveDTOToNewLocation(moveDTO, movableTiles, player);
-                
-                if (moveDTO.UserId == _clientController.GetOriginId())
-                {
-                    _messageService.AddMessage("You do not have enough stamina to move!");
-                }
+                var player = _worldService.GetPlayer(moveDTO.UserId);
 
-                return new HandlerResponseDTO(SendAction.ReturnToSender, "You do not have enough stamina to move!");
-            }
-            else
-            {
-                string resultMessage = null;
-                moveDTO.Stamina = playerStamina - staminaCost;
-                //allTiles.Count-1 because the maximum count movableTiles always has 1 less tile, since it doesn't contain the first tile
-                if (movableTiles.Count < allTiles.Count - 1)
+                var newPosPlayerX = moveDTO.XPosition;
+                var newPosPlayerY = moveDTO.YPosition;
+                var oldPosPlayerX = player.XPosition;
+                var oldPosPlayerY = player.YPosition;
+                var playerStamina = player.Stamina;
+
+                _worldService.LoadArea(newPosPlayerX, newPosPlayerY, 10);
+                var allTiles = GetTilesForPositions(oldPosPlayerX, oldPosPlayerY, newPosPlayerX, newPosPlayerY);
+                var accessibleTiles = inAccessibleTileExists(allTiles);
+                var movableTiles = GetMovableTiles(allTiles, accessibleTiles);
+                var staminaCost = GetStaminaCostForTiles(movableTiles);
+
+                if (staminaCost > playerStamina)
                 {
                     moveDTO = ChangeMoveDTOToNewLocation(moveDTO, movableTiles, player);
-                    resultMessage = "You could not move to the next tile.";
 
                     if (moveDTO.UserId == _clientController.GetOriginId())
                     {
-                        _messageService.AddMessage(resultMessage);
+                        _messageService.AddMessage("You do not have enough stamina to move!");
                     }
+
+                    return new HandlerResponseDTO(SendAction.ReturnToSender, "You do not have enough stamina to move!");
                 }
-
-                ChangePlayerPosition(moveDTO);
-
-                if (handleInDatabase)
+                else
                 {
-                    InsertToDatabase(moveDTO);
+                    string resultMessage = null;
+                    moveDTO.Stamina = playerStamina - staminaCost;
+                    //allTiles.Count-1 because the maximum count movableTiles always has 1 less tile, since it doesn't contain the first tile
+                    if (movableTiles.Count < allTiles.Count - 1)
+                    {
+                        moveDTO = ChangeMoveDTOToNewLocation(moveDTO, movableTiles, player);
+                        resultMessage = "You could not move to the next tile.";
+
+                        if (moveDTO.UserId == _clientController.GetOriginId())
+                        {
+                            _messageService.AddMessage(resultMessage);
+                        }
+                    }
+
+                    ChangePlayerPosition(moveDTO);
+
+                    if (handleInDatabase)
+                    {
+                        InsertToDatabase(moveDTO);
+                    }
+
+                    return new HandlerResponseDTO(SendAction.SendToClients, resultMessage);
                 }
-                
-                return new HandlerResponseDTO(SendAction.SendToClients, resultMessage);
             }
+            ChangeAIPosition(moveDTO);
+            return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
         private void InsertToDatabase(MoveDTO moveDTO)
@@ -171,10 +192,18 @@ namespace ActionHandling
             _worldService.DisplayWorld();
         }
 
+        private void ChangeAIPosition(MoveDTO moveDTO)
+        {
+            var character = _worldService.GetAI(moveDTO.UserId);
+            character.XPosition = moveDTO.XPosition;
+            character.YPosition = moveDTO.YPosition;
+            _worldService.DisplayWorld();
+        }
+
         private List<ITile> GetTilesForPositions(int x1, int y1, int x2, int y2)
         {
             var tiles = new List<ITile>();
- 
+
             if (y1 != y2)
             {
                 if (y2 > y1)
@@ -215,12 +244,12 @@ namespace ActionHandling
         private int GetStaminaCostForTiles(List<ITile> tiles)
         {
             var staminaCosts = 0;
-            
+
             foreach (var tile in tiles)
             {
                 staminaCosts += tile.StaminaCost;
             }
-            
+
             return staminaCosts;
         }
 
@@ -241,9 +270,9 @@ namespace ActionHandling
             for (int i = 0; i < accessible.Count; i++)
             {
                 //tiles[i+1] since we don't want to check the first tile, since the player is standing on that tile and the accessible list has 1 tile less than list tiles
-                if (accessible[i] && !_worldService.CheckIfCharacterOnTile(tiles[i+1]))
+                if (accessible[i] && !_worldService.CheckIfCharacterOnTile(tiles[i + 1]))
                 {
-                    movableTiles.Add(tiles[i+1]);
+                    movableTiles.Add(tiles[i + 1]);
                 }
                 else
                 {
@@ -251,6 +280,46 @@ namespace ActionHandling
                 }
             }
             return movableTiles;
+        }
+
+        public void MoveAIs(List<WorldGeneration.Character> creatureMoves)
+        {
+            List<MoveDTO> moveDTOs = new List<MoveDTO>();
+            if (creatureMoves != null)
+            {
+                foreach (WorldGeneration.Character move in creatureMoves)
+                {
+                    if (move is SmartMonster smartMonster)
+                    {
+                        MoveDTO moveDTO = new(smartMonster.Id, (int)smartMonster.Destination.X, (int)smartMonster.Destination.Y);
+                        moveDTOs.Add(moveDTO);
+                    }
+                }
+                foreach (MoveDTO move in moveDTOs)
+                {
+                    SendMoveDTO(move);
+                }
+            }
+        }
+
+        public void GetAIMoves()
+        {
+            MoveAIs(_worldService.GetCreatureMoves());
+        }
+
+        private void CheckAITimer()
+        {
+            AIUpdateTimer = new Timer(_updateTime);
+            AIUpdateTimer.AutoReset = true;
+            AIUpdateTimer.Elapsed += CheckAITimerEvent;
+            AIUpdateTimer.Start();
+        }
+
+        private void CheckAITimerEvent(object sender, ElapsedEventArgs e)
+        {
+            AIUpdateTimer.Stop();
+            GetAIMoves();
+            AIUpdateTimer.Start();
         }
     }
 }

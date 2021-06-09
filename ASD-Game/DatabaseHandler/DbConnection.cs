@@ -36,15 +36,15 @@ namespace DatabaseHandler
 
             //FK PlayerItem -> Item
             BsonMapper.Global.Entity<PlayerItemPOCO>()
-                .DbRef(x => x.ItemName, nameof(ItemPOCO));
+                .DbRef(x => x.ItemName, nameof(PlayerItemPOCO));
 
             //FK Game -> WorldItem
             BsonMapper.Global.Entity<GamePOCO>()
-                .DbRef(x => x.GameGuid, nameof(WorldItemPOCO));
+                .DbRef(x => x.GameGUID, nameof(WorldItemPOCO));
 
             //FK WorldItem -> Item
             BsonMapper.Global.Entity<WorldItemPOCO>()
-                .DbRef(x => x.ItemName, nameof(ItemPOCO));
+                .DbRef(x => x.ItemName, nameof(PlayerItemPOCO));
         }
 
         [ExcludeFromCodeCoverage]

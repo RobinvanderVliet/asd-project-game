@@ -1,8 +1,11 @@
+using DatabaseHandler.Services;
 using System;
+using System.Diagnostics.CodeAnalysis;
+using WorldGeneration.Models;
 
 namespace WorldGeneration
 {
-    public abstract class MapFactory
+    public class MapFactory : IMapFactory
     {
         public static Map GenerateMap(string dbLocation, string collectionName = "ChunkMap", int chunkSize = 8, int seed = -1123581321)
         {
@@ -12,14 +15,17 @@ namespace WorldGeneration
             {
                 seed = new Random().Next(1, 999999);
             }
-
-            return new Map(new NoiseMapGenerator(), new DatabaseFunctions.Database(dbLocation, collectionName), chunkSize, seed);
+            return new Map(new NoiseMapGenerator(seed), chunkSize, new DatabaseService<Chunk>(), seed);
         }
 
-        public static int GenerateSeed()
+        public Map GenerateMap(int chunkSize, int seed)
         {
-            var randomSeed = new Random().Next(1, 999999);
-            return randomSeed;
+            throw new NotImplementedException();
+        }
+
+        public int GenerateSeed()
+        {
+            return new Random().Next(1, 9999999);
         }
     }
 }

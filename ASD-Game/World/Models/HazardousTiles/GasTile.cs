@@ -8,7 +8,6 @@ namespace WorldGeneration.Models.HazardousTiles
     [ExcludeFromCodeCoverage]
     public class GasTile : IHazardousTile
     {
-
         public bool IsAccessible { get; set; }
         public string Symbol { get; set; }
         public int XPosition { get; set; }
@@ -26,6 +25,7 @@ namespace WorldGeneration.Models.HazardousTiles
             StaminaCost = 4;
 
             Radius = radius;
+            ItemsOnTile = new List<Item>();
         }
 
         private int Radius { get; }

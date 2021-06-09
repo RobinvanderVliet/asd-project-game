@@ -19,20 +19,21 @@ namespace InputHandling.Antlr.Transformer
 {
     public class Evaluator : IEvaluator
     {
-        private ISessionHandler _sessionHandler;
-        private IMoveHandler _moveHandler;
-        private IGameSessionHandler _gameSessionHandler;
-        private IChatHandler _chatHandler;
         private IAgentHandler _agentHandler;
         private readonly IWorldService _worldService;
-
-        private IClientController _clientController;
-        private IInventoryHandler _inventoryHandler;
+        private readonly IAttackHandler _attackHandler;
+        private readonly ISessionHandler _sessionHandler;
+        private readonly IMoveHandler _moveHandler;
+        private readonly IGameSessionHandler _gameSessionHandler;
+        private readonly IChatHandler _chatHandler;
+        private readonly IClientController _clientController;
+        private readonly IInventoryHandler _inventoryHandler;
+        
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private string _commando;
-
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IInventoryHandler inventoryHandler, IClientController clientController, IAgentHandler agentHandler, IWorldService worldService)
+        
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IAttackHandler attackHandler, IInventoryHandler inventoryHandler, IClientController clientController, IAgentHandler agentHandler, IWorldService worldService)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
@@ -40,9 +41,11 @@ namespace InputHandling.Antlr.Transformer
             _chatHandler = chatHandler;
             _agentHandler = agentHandler;
             _worldService = worldService;
+            _attackHandler = attackHandler;
             _clientController = clientController;
             _inventoryHandler = inventoryHandler;
         }
+
         public void Apply(AST ast)
         {
             TransformNode(ast.Root);
@@ -58,57 +61,75 @@ namespace InputHandling.Antlr.Transformer
                     case Attack:
                         TransformAttack((Attack)nodeBody[i]);
                         break;
-                    case Drop:
-                        TransformDrop((Drop)nodeBody[i]);
-                        break;
-                    case Exit:
-                        TransformExit();
-                        break;
-                    case Move:
-                        TransformMove((Move)nodeBody[i]);
-                        break;
-                    case Pause:
-                        TransformPause();
-                        break;
-                    case Pickup:
-                        TransformPickup((Pickup)nodeBody[i]);
-                        break;
-                    case Replace:
-                        TransformReplace();
-                        break;
-                    case Resume:
-                        TransformResume();
-                        break;
-                    case Say:
-                        TransformSay((Say)nodeBody[i]);
-                        break;
-                    case Shout:
-                        TransformShout((Shout)nodeBody[i]);
-                        break;
+
                     case CreateSession:
                         TransformCreateSession((CreateSession)nodeBody[i]);
                         break;
+
+                    case Drop:
+                        TransformDrop((Drop)nodeBody[i]);
+                        break;
+
+                    case Exit:
+                        TransformExit();
+                        break;
+
+                    case Move:
+                        TransformMove((Move)nodeBody[i]);
+                        break;
+
+                    case Pause:
+                        TransformPause();
+                        break;
+
+                    case Pickup:
+                        TransformPickup((Pickup)nodeBody[i]);
+                        break;
+
+                    case Replace:
+                        TransformReplace();
+                        break;
+
+                    case Resume:
+                        TransformResume();
+                        break;
+
+                    case Say:
+                        TransformSay((Say)nodeBody[i]);
+                        break;
+
+                    case Shout:
+                        TransformShout((Shout)nodeBody[i]);
+                        break;
+
                     case JoinSession:
                         TransformJoinSession((JoinSession)nodeBody[i]);
                         break;
+
                     case RequestSessions:
                         TransformRequestSessions((RequestSessions)nodeBody[i]);
                         break;
+
                     case StartSession:
                         TransformStartSession((StartSession)nodeBody[i]);
                         break;
+
                     case MonsterDifficulty:
                         TransformMonsterDifficulty((MonsterDifficulty)nodeBody[i]);
                         break;
+
                     case ItemFrequency:
                         TransformItemFrequency((ItemFrequency)nodeBody[i]);
                         break;
+
                     case Inspect:
                         TransformInspect((Inspect)nodeBody[i]);
-                        break;    
+                        break;
+
                     case Use:
                         TransformUse((Use)nodeBody[i]);
                         break;
+
                     case Search:
                         TransformSearch();
                         break;
@@ -141,12 +162,12 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformDrop(Drop drop)
         {
-            _inventoryHandler.DropItem(drop.InventorySlot.InventorySlotValue);
+            // TODO: Call InventoryHandler method with (drop.ItemName.MessageValue)
         }
 
         private void TransformAttack(Attack attack)
         {
-            // TODO: Call AttackHandler method with (attack.Direction.DirectionValue)
+            _attackHandler.SendAttack(attack.Direction.DirectionValue);
         }
 
         private void TransformExit()
@@ -210,16 +231,19 @@ namespace InputHandling.Antlr.Transformer
             switch (monster.Difficulty)
             {
                 case "easy":
-                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Easy;
+                    difficulty = (int)Session.GameConfiguration.MonsterDifficulty.Easy;
                     break;
+
                 case "medium":
-                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Medium;
+                    difficulty = (int)Session.GameConfiguration.MonsterDifficulty.Medium;
                     break;
+
                 case "hard":
-                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Hard;
+                    difficulty = (int)Session.GameConfiguration.MonsterDifficulty.Hard;
                     break;
+
                 case "impossible":
-                    difficulty = (int) Session.GameConfiguration.MonsterDifficulty.Impossible;
+                    difficulty = (int)Session.GameConfiguration.MonsterDifficulty.Impossible;
                     break;
             }
 
@@ -237,18 +261,20 @@ namespace InputHandling.Antlr.Transformer
             {
                 return;
             }
-            
+
             int frequency = -1;
             switch (itemFrequency.Frequency)
             {
                 case "low":
-                    frequency = (int) ItemSpawnRate.Low;
+                    frequency = (int)ItemSpawnRate.Low;
                     break;
+
                 case "medium":
-                    frequency = (int) ItemSpawnRate.Medium;
+                    frequency = (int)ItemSpawnRate.Medium;
                     break;
+
                 case "high":
-                    frequency = (int) ItemSpawnRate.High;
+                    frequency = (int)ItemSpawnRate.High;
                     break;
             }
             SessionDTO sessionDto = new SessionDTO
@@ -264,6 +290,7 @@ namespace InputHandling.Antlr.Transformer
             var jsonObject = JsonConvert.SerializeObject(sessionDto);
             _clientController.SendPayload(jsonObject, PacketType.Session);
         }
+
         private void TransformInspect(Inspect inspect)
         {
             string slot = inspect.InventorySlot.InventorySlotValue;

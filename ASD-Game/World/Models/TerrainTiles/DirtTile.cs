@@ -23,6 +23,7 @@ namespace WorldGeneration.Models.TerrainTiles
             XPosition = x;
             YPosition = y;
             StaminaCost = 2;
+            ItemsOnTile = new List<Item>();
         }
     }
 }

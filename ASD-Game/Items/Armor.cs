@@ -1,6 +1,6 @@
-﻿using System;
-using Items.ArmorStats;
+﻿using Items.ArmorStats;
 using Items.ItemStats;
+using System;
 
 namespace Items
 {
@@ -9,7 +9,7 @@ namespace Items
         public ArmorPartType ArmorPartType { get; set; }
         public int ArmorProtectionPoints { get; set; }
         public Rarity Rarity { get; set; }
-        
+
         public override string ToString()
         {
             string inspect = Description;

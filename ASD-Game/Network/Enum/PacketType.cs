@@ -8,6 +8,8 @@
         GameSession,
         Agent,
         RelativeStat,
-        Inventory
+        Inventory,
+        Attack,
+        Dead
     }
 }
