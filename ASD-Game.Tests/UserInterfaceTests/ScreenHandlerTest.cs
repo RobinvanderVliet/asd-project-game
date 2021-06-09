@@ -23,7 +23,6 @@ namespace UserInterface.Tests
         }
 
         [Test]
-        //[Repeat(100)]
 
         public void Test_TransitionTo_ChangesAndDrawsScreen()
         {
