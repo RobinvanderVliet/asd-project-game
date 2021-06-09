@@ -11,35 +11,34 @@ namespace ASD_Game.Session.Helpers
     {
         public static Player SpawnPlayers(IEnumerable<string[]> allClients, int spawnSeed, IWorldService worldService, IClientController clientController)
         {
-             
-                // spawn position first person.
-                var playerX = spawnSeed % 50; 
-                var playerY = spawnSeed % 50; 
-                Player currentPlayer = null;
-                        foreach (var client in allClients)
-                        {
-                            var findEmptyTile = true;
-                            while (findEmptyTile)
-                            {
-                                // changes the X and y coordinates based on the seed.
-                                playerX = ChangePlayerX(spawnSeed, playerX);
-                                playerY = ChangePlayerY(spawnSeed, playerY);
+            // spawn position first person.
+            var playerX = spawnSeed % 50; 
+            var playerY = spawnSeed % 50; 
+            Player currentPlayer = null;
+            foreach (var client in allClients)
+            {
+                var findEmptyTile = true;
+                while (findEmptyTile)
+                {
+                    // changes the X and y coordinates based on the seed.
+                    playerX = ChangePlayerX(spawnSeed, playerX);
+                    playerY = ChangePlayerY(spawnSeed, playerY);
 
-                                findEmptyTile = FindEmptyTile(worldService, playerX, playerY);
-                            }
+                    findEmptyTile = FindEmptyTile(worldService, playerX, playerY);
+                }
             
-                            if (clientController.GetOriginId() == client[0])
-                            {
-                                currentPlayer = new Player(client[1], playerX, playerY, CharacterSymbol.CURRENT_PLAYER, client[0]);
-                                worldService.AddPlayerToWorld(currentPlayer, true);
-                            }
-                            else
-                            {
-                                var playerObject = new Player(client[1], playerX, playerY, CharacterSymbol.ENEMY_PLAYER, client[0]);
-                                worldService.AddPlayerToWorld(playerObject, false);
-                            }
-                        }
-                        return currentPlayer;
+                if (clientController.GetOriginId() == client[0])
+                {
+                    currentPlayer = new Player(client[1], playerX, playerY, CharacterSymbol.CURRENT_PLAYER, client[0]);
+                    worldService.AddPlayerToWorld(currentPlayer, true);
+                }
+                else
+                {
+                    var playerObject = new Player(client[1], playerX, playerY, CharacterSymbol.ENEMY_PLAYER, client[0]);
+                    worldService.AddPlayerToWorld(playerObject, false);
+                }
+            }
+            return currentPlayer;
         }
 
         private static bool FindEmptyTile(IWorldService worldService, int playerX, int playerY)
