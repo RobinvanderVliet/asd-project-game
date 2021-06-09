@@ -154,31 +154,7 @@ namespace ASD_Game.Session
 
         private Player AddPlayersToWorld()
         {
-            List<string[]> allClients = _sessionHandler.GetAllClients();
-
-            int playerX = 26;
-            int playerY = 11;
-
-            Player currentPlayer = null;
-            foreach (var client in allClients)
-            {
-                if (_clientController.GetOriginId() == client[0])
-                {
-                    // add name to players
-                    currentPlayer = new Player(client[1], playerX, playerY,
-                        CharacterSymbol.CURRENT_PLAYER, client[0]);
-                    _worldService.AddPlayerToWorld(currentPlayer, true);
-                }
-                else
-                {
-                    var playerObject = new Player(client[1], playerX, playerY, CharacterSymbol.ENEMY_PLAYER, client[0]);
-                    _worldService.AddPlayerToWorld(playerObject, false);
-                }
-
-                playerX += 2;
-                playerY += 2;
-            }
-            return currentPlayer;
+            return PlayerSpawner.SpawnPlayers(_sessionHandler.GetAllClients(), _sessionHandler.GetSessionSeed(), _worldService, _clientController);
         }
 
         private void CreateMonsters()
