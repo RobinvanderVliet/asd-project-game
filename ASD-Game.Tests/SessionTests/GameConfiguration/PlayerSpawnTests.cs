@@ -17,7 +17,7 @@ namespace ASD_Game.Tests.SessionTests.GameConfiguration
     public class PlayerSpawnTests
     {
         //Declaration and initialisation of variables
-        private List<String[]> _allClients;
+        private List<string[]> _allClients;
         private int _sessionSeed;
         
         //Declaration of mocks
@@ -34,9 +34,7 @@ namespace ASD_Game.Tests.SessionTests.GameConfiguration
             _mockedWorldService = new Mock<IWorldService>();
             _mockedTile = new Mock<ITerrainTile>();
             _sessionSeed = 12;
-            _allClients = new List<string[]>();
-            _allClients.Add(new string[]{"1", "Player 1"});
-            _allClients.Add(new string[]{"2", "Player 2"});
+            _allClients = new List<string[]> {new[] {"1", "Player 1"}, new[] {"2", "Player 2"}};
             _mockedSessionHandler.Setup(mock => mock.GetSessionSeed()).Returns(_sessionSeed);
             _mockedSessionHandler.Setup(mock => mock.GetAllClients()).Returns(_allClients);
             _mockedWorldService.Setup(mock => mock.LoadArea(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()));
