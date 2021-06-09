@@ -220,37 +220,6 @@ namespace ASD_Game.Session
         }
 
 
-        private Player AddPlayersToNewGame(StartGameDTO startGameDTO)
-        {
-            Player currentPlayer = null;
-            foreach (var player in startGameDTO.PlayerLocations)
-            {
-                if (_clientController.GetOriginId() == player.Key)
-                {
-                    if (startGameDTO.ExistingPlayer is null)
-                    {
-                        currentPlayer = new Player("gerrit", player.Value[0], player.Value[1],
-                            CharacterSymbol.CURRENT_PLAYER, player.Key);
-                        _worldService.AddPlayerToWorld(currentPlayer, true);
-                    }
-                    else
-                    {
-                        currentPlayer = new Player("arie", startGameDTO.ExistingPlayer.XPosition,
-                            startGameDTO.ExistingPlayer.YPosition,
-                            CharacterSymbol.CURRENT_PLAYER, player.Key);
-                        _worldService.AddPlayerToWorld(currentPlayer, true);
-                    }
-                }
-                else
-                {
-                    var playerObject = new Player("barry", player.Value[0], player.Value[0],
-                        CharacterSymbol.ENEMY_PLAYER, player.Key);
-                    _worldService.AddPlayerToWorld(playerObject, false);
-                }
-            }
-
-            return currentPlayer;
-        }
 
         private Player AddPlayerToWorldSavedGame(List<PlayerPOCO> savedPlayers)
         {
@@ -283,7 +252,7 @@ namespace ASD_Game.Session
                     Monster newMonster = new Monster("Zombie", _random.Next(12, 25), _random.Next(12, 25),
                         CharacterSymbol.TERMINATOR, "monst" + i);
                     SetStateMachine(newMonster);
-                    _worldService.AddCreatureToWorld(newMonster);
+                   _worldService.AddCreatureToWorld(newMonster);
                 }
                 else
                 {

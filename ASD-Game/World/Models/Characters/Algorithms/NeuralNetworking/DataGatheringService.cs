@@ -85,13 +85,17 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
             {
                 smartMonster.CurrDistanceToMonster = DistanceToClosestMonster;
             }
-        }
+        }    
+        
+
+
 
         public List<List<Node>> TranslateCharacterMap(Character c)
         {
             List<List<Node>> translatedMap = new List<List<Node>>();
             char[,] map = WorldService.GetMapAroundCharacter(c);
 
+         
             for (int row = 0; row < _colCount; row++)
             {
                 List<Node> nodePoints = new List<Node>();
