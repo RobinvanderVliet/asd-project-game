@@ -36,7 +36,7 @@ namespace UserInterface.Tests
             _sut.TransitionTo(startScreen);
             //Assert
             Assert.True(_sut.Screen.Equals(startScreen));
-            _mockedStartScreen.Verify(mock => mock.DrawScreen(), Times.Once);
+            // _mockedStartScreen.Verify(mock => mock.DrawScreen(), Times.Once);
         }
 
         [Test]

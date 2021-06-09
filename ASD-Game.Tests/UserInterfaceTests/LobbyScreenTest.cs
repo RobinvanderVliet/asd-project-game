@@ -65,10 +65,10 @@ namespace UserInterface.Tests
             ChatMessageDTO chatMessageDTO = new ChatMessageDTO("swankie", "hello");
             List<ChatMessageDTO> messages = new List<ChatMessageDTO>();
             messages.Add(chatMessageDTO);
-
+        
             //Act
             _sut.UpdateChat(messages);
-
+        
             //Assert
             _mockedConsoleHelper.Verify(mock => mock.Write(chatMessageDTO.UserName + " : " + chatMessageDTO.Message), Times.Once);
         }
