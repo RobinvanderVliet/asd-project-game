@@ -15,7 +15,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
 
         public override void Do()
         {
-            //DoWorldCheck();
+            DoWorldCheck();
             
             //var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
             //var _builderConfiguration = _characterData.BuilderConfigurator;
@@ -29,7 +29,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
             }
             else
             {
-                MoveRandomDirection();
+                //MoveRandomDirection();
             }
             
             // foreach (var builderInfo in _builderInfoList)

@@ -1,7 +1,7 @@
 using ASD_Game.World.Models.Characters.StateMachine.Data;
-using WorldGeneration.StateMachine.Event;
+using World.Models.Characters.StateMachine.Event;
 
-namespace WorldGeneration.StateMachine
+namespace ASD_Game.World.Models.Characters.StateMachine
 {
     public interface ICharacterStateMachine
     {

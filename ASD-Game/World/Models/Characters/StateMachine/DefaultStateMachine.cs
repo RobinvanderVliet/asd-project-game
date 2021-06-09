@@ -5,9 +5,7 @@ using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ASD_Game.World.Models.Characters.StateMachine.State;
-using WorldGeneration.StateMachine;
-
-using WorldGeneration.StateMachine.Event;
+using World.Models.Characters.StateMachine.Event;
 
 namespace ASD_Game.World.Models.Characters.StateMachine
 {
@@ -47,7 +45,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine
         {
             _timer = new Timer((e) =>
             {
-                //FireEvent(CharacterEvent.Event.DO_WORLD_CHECK);
                 FireEvent(CharacterEvent.Event.DO);
             }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(1000));
         }
@@ -75,7 +72,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine
         protected void DefineDefaultBehaviour(
             ref StateMachineDefinitionBuilder<CharacterState, CharacterEvent.Event> builder, ref CharacterState state)
         {
-            //builder.In(state).On(CharacterEvent.Event.DO_WORLD_CHECK).Execute(state.DoWorldCheck);
             builder.In(state).On(CharacterEvent.Event.DO).Execute(state.Do);
         }
     }
