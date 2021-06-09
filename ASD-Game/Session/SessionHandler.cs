@@ -42,6 +42,7 @@ namespace ASD_Game.Session
         public SessionHandler(IClientController clientController, IScreenHandler screenHandler, IMessageService messageService,IGameConfigurationHandler gameConfigurationHandler, IDatabaseService<PlayerPOCO> playerSerice)
         {
             _clientController = clientController;
+            _clientController.SubscribeToPacketType(this, PacketType.Session);
             _screenHandler = screenHandler;
             _messageService = messageService;
             _gameConfigurationHandler = gameConfigurationHandler;
@@ -106,6 +107,7 @@ namespace ASD_Game.Session
             _session = new Session(sessionName);
             if (sessionId is null)
             {
+
                 _session.GenerateSessionId();
                 _clientController.SetSessionId(_session.SessionId);
                 _clientController.CreateHostController();
