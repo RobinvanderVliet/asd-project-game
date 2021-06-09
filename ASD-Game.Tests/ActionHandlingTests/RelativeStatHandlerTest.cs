@@ -34,6 +34,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
             _mockedClientController = new Mock<IClientController>();
             _mockedWorldService = new Mock<IWorldService>();
             _mockedPlayerDatabaseService = new Mock<IDatabaseService<PlayerPOCO>>();
+            _mockedMessageService = new Mock<IMessageService>();
 
             _sut = new RelativeStatHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerDatabaseService.Object, _mockedMessageService.Object);
         }
@@ -74,12 +75,15 @@ namespace ASD_Game.Tests.ActionHandlingTests
         }
 
         [Test]
-        public void Test_CheckStaminaTimer_SetsStatDTO()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void Test_CheckStaminaTimer_SetsStatDTO(bool isDead)
         {
             //arrange
             var player = new Player("f", 0, 42, "#", "f");
             player.Stamina = 90;
             _mockedWorldService.Setup(mock => mock.GetCurrentPlayer()).Returns(player);
+            _mockedWorldService.Setup(mock => mock.IsDead(player)).Returns(isDead);
             _sut.SetCurrentPlayer(player);
 
             var dto = new RelativeStatDTO();
@@ -96,18 +100,26 @@ namespace ASD_Game.Tests.ActionHandlingTests
             Thread.Sleep(1100);
 
             //assert
-            _mockedWorldService.Verify(mock => mock.GetCurrentPlayer(), Times.Once);
-            _mockedClientController.Verify(mock => mock.GetOriginId(), Times.Once);
-            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.RelativeStat), Times.Once);
+            _mockedWorldService.Setup(mock => mock.IsDead(player));
+            _mockedWorldService.Verify(mock => mock.GetCurrentPlayer(), Times.Exactly(2));
+            
+            if (!isDead)
+            {
+                _mockedClientController.Verify(mock => mock.GetOriginId(), Times.Once);
+                _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.RelativeStat), Times.Once);
+            }
         }
 
         [Test]
-        public void Test_CheckRadiationTimer_SetsStatDTOWithRadiation()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void Test_CheckRadiationTimer_SetsStatDTOWithRadiation(bool isDead)
         {
             //arrange
             var player = new Player("f", 0, 42, "#", "f");
             player.RadiationLevel = 10;
             _mockedWorldService.Setup(mock => mock.GetCurrentPlayer()).Returns(player);
+            _mockedWorldService.Setup(mock => mock.IsDead(player)).Returns(isDead);
             _sut.SetCurrentPlayer(player);
             var tile = new GasTile(player.XPosition, player.YPosition);
 
@@ -122,23 +134,43 @@ namespace ASD_Game.Tests.ActionHandlingTests
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns("f");
             _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.RelativeStat));
 
+            if (isDead)
+            {
+                _mockedMessageService.Setup(mock => mock.AddMessage("You died"));
+                _mockedWorldService.Setup(mock => mock.DisplayWorld());
+            }
+
             //act
             _sut.CheckRadiationTimer();
             Thread.Sleep(1100);
 
             //assert
-            _mockedWorldService.Verify(mock => mock.GetCurrentPlayer(), Times.Exactly(3));
-            _mockedWorldService.Verify(mock => mock.GetTile(player.XPosition, player.YPosition), Times.Once);
-            _mockedClientController.Verify(mock => mock.GetOriginId(), Times.Once);
-            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.RelativeStat), Times.Once);
+            _mockedWorldService.Setup(mock => mock.IsDead(player));
+            
+            if (!isDead)
+            {
+                _mockedWorldService.Verify(mock => mock.GetCurrentPlayer(), Times.Exactly(4));
+                _mockedWorldService.Verify(mock => mock.GetTile(player.XPosition, player.YPosition), Times.Once);
+                _mockedClientController.Verify(mock => mock.GetOriginId(), Times.Once);
+                _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.RelativeStat), Times.Once);
+            }
+            else
+            {
+                _mockedMessageService.Setup(mock => mock.AddMessage("You died"));
+                _mockedWorldService.Setup(mock => mock.DisplayWorld());
+                _mockedWorldService.Verify(mock => mock.GetCurrentPlayer(), Times.Exactly(2));
+            }
         }
 
         [Test]
-        public void Test_CheckRadiationTimer_SetsStatDTOWithHealth()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void Test_CheckRadiationTimer_SetsStatDTOWithHealth(bool isDead)
         {
             //arrange
             var player = new Player("f", 0, 42, "#", "f");
             _mockedWorldService.Setup(mock => mock.GetCurrentPlayer()).Returns(player);
+            _mockedWorldService.Setup(mock => mock.IsDead(player)).Returns(isDead);
             _sut.SetCurrentPlayer(player);
             var tile = new GasTile(player.XPosition, player.YPosition);
 
@@ -153,15 +185,32 @@ namespace ASD_Game.Tests.ActionHandlingTests
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns("f");
             _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.RelativeStat));
 
+            if (isDead)
+            {
+                _mockedMessageService.Setup(mock => mock.AddMessage("You died"));
+                _mockedWorldService.Setup(mock => mock.DisplayWorld());
+            }
+            
             //act
             _sut.CheckRadiationTimer();
             Thread.Sleep(1100);
 
             //assert
-            _mockedWorldService.Verify(mock => mock.GetCurrentPlayer(), Times.Exactly(3));
-            _mockedWorldService.Verify(mock => mock.GetTile(player.XPosition, player.YPosition), Times.Once);
-            _mockedClientController.Verify(mock => mock.GetOriginId(), Times.Once);
-            _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.RelativeStat), Times.Once);
+            _mockedWorldService.Setup(mock => mock.IsDead(player));
+            
+            if(!isDead) 
+            {
+                _mockedWorldService.Verify(mock => mock.GetCurrentPlayer(), Times.Exactly(4));
+                _mockedWorldService.Verify(mock => mock.GetTile(player.XPosition, player.YPosition), Times.Once);
+                _mockedClientController.Verify(mock => mock.GetOriginId(), Times.Once);
+                _mockedClientController.Verify(mock => mock.SendPayload(payload, PacketType.RelativeStat), Times.Once);
+            }
+            else
+            {
+                _mockedMessageService.Setup(mock => mock.AddMessage("You died"));
+                _mockedWorldService.Setup(mock => mock.DisplayWorld());
+                _mockedWorldService.Verify(mock => mock.GetCurrentPlayer(), Times.Exactly(2));
+            }
         }
 
         [Test]
