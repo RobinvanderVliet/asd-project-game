@@ -14,6 +14,7 @@ using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Services;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using ASD_Game.World.Models;
@@ -103,67 +104,9 @@ namespace ASD_Game.Session
             return startGameDTO;
         }
 
-        // private StartGameDTO LoadSave()
-        // {
-        //     StartGameDTO startGameDTO = new();
-        //
-        //     var allPlayers = _playerService.GetAllAsync();
-        //     allPlayers.Wait();
-        //     var allPlayersInGame = allPlayers.Result.Where(x => x.GameGuid == _clientController.SessionId);
-        //
-        //     startGameDTO = SetLoadedGameInfo(startGameDTO, allPlayersInGame);
-        //
-        //     return startGameDTO;
-        // }
-
         private Player AddPlayersToWorld()
         {
-            List<string[]> allClients = _sessionHandler.GetAllClients();
-
-            int playerX = 26;
-            int playerY = 11;
-
-            Player currentPlayer = null;
-            foreach (var client in allClients)
-            {
-                if (_clientController.GetOriginId() == client[0])
-                {
-                    // add name to players
-                    currentPlayer = new Player(client[1], playerX, playerY,
-                        CharacterSymbol.CURRENT_PLAYER, client[0]);
-                    _worldService.AddPlayerToWorld(currentPlayer, true);
-                }
-                else
-                {
-                    var playerObject = new Player(client[1], playerX, playerY, CharacterSymbol.ENEMY_PLAYER, client[0]);
-                    _worldService.AddPlayerToWorld(playerObject, false);
-                }
-
-                playerX += 2;
-                playerY += 2;
-            }
-
-            return currentPlayer;
-        }
-
-        private StartGameDTO SetLoadedGameInfo(StartGameDTO startGameDTO, IEnumerable<PlayerPOCO> allPlayersInGame)
-        {
-            startGameDTO.SavedPlayers = new List<PlayerPOCO>();
-            Dictionary<string, int[]> players = new Dictionary<string, int[]>();
-            _sessionHandler.GetSessionSeed();
-
-            foreach (var player in allPlayersInGame)
-            {
-                int[] playerPosition = new int[2];
-                playerPosition[0] = player.XPosition;
-                playerPosition[1] = player.YPosition;
-
-                players.Add(player.PlayerGUID, playerPosition);
-                startGameDTO.SavedPlayers.Add(player);
-            }
-
-            startGameDTO.PlayerLocations = players;
-            return startGameDTO;
+            return PlayerSpawner.SpawnPlayers(_sessionHandler.GetAllClients(), _sessionHandler.GetSessionSeed(), _worldService, _clientController);
         }
 
 
@@ -233,7 +176,8 @@ namespace ASD_Game.Session
             };
             _gamePocoService.CreateAsync(gamePOCO);
         }
-
+        
+     
         private void HandleStartGameSession(StartGameDTO startGameDTO)
         {
             bool handleInDatabase = (_clientController.IsHost() || _clientController.IsBackupHost);
