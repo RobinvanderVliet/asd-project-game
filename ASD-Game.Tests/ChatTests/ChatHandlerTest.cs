@@ -158,8 +158,6 @@ namespace ASD_Game.Tests.ChatTests
             Assert.AreEqual(ExpectedResult, actualResult);
             _mockedMessageService.Verify(mock => mock.AddMessage(expected), Times.Once);
         }
-
-
     }
 }
 

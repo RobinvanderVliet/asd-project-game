@@ -47,7 +47,6 @@ HARD: 'hard';
 IMPOSSIBLE: 'impossible';
 LOW : 'low';
 HIGH : 'high';
-
 ARMOR: 'armor';
 HELMET: 'helmet';
 WEAPON: 'weapon';
