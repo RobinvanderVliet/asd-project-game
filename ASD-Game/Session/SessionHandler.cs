@@ -242,6 +242,11 @@ namespace Session
         {
             if (packet.HandlerResponse.ResultMessage != null)
             {
+                if (packet.HandlerResponse.ResultMessage.Equals($"Not allowed to join saved or running game"))
+                {
+                    _messageService.AddMessage(packet.HandlerResponse.ResultMessage);
+                }
+
                 PacketDTO newPacket = new PacketBuilder().SetTarget("client").SetSessionID(_clientController.SessionId)
                     .SetPayload(packet.HandlerResponse.ResultMessage).SetPacketType(PacketType.GameSession).Build();
                 ((IPacketHandler) _clientController).HandlePacket(newPacket);
