@@ -200,8 +200,6 @@ namespace ASD_Game.InputHandling
                 {
                     _screenHandler.UpdateInputMessage("Not a valid session number, please try again!");
                 }
-
-
                 else
                 {
                     _screenHandler.TransitionTo(new LobbyScreen());

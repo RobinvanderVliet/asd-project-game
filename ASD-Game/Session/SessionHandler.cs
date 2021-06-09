@@ -168,17 +168,18 @@ namespace ASD_Game.Session
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
+            if (packet.HandlerResponse.ResultMessage.Equals("Not allowed to join saved or running game"))
+            {
+                NotAllowedToJoin = true; 
+            }
+            else
+            {
+                NotAllowedToJoin = false; 
+            }
 
             if (packet.Header.SessionID == _session?.SessionId)
             {
-                if (packet.HandlerResponse.ResultMessage.Equals("Not allowed to join saved or running game"))
-                {
-                    NotAllowedToJoin = true; 
-                }
-                else
-                {
-                    NotAllowedToJoin = false; 
-                }
+              
 
                 if (packet.Header.Target == _clientController.GetOriginId() &&
                     sessionDTO.SessionType == SessionType.RequestToJoinSession)
