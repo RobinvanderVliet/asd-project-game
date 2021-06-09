@@ -18,6 +18,7 @@ using ASD_Game.Network;
 using ASD_Game.Session;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
+using ASD_Game.World.Models.Characters.Algorithms.Creator;
 using ASD_Game.World.Services;
 using Creature;
 using Microsoft.Extensions.Configuration;
@@ -65,6 +66,7 @@ namespace ASD_Game
                     services.AddScoped(typeof(IDatabaseService<>), typeof(DatabaseService<>));
                     services.AddScoped<IScreenHandler, ScreenHandler>();
                     services.AddScoped<IInputHandler, InputHandler>();
+                    services.AddScoped<IAgentCreator, AgentCreator>();
                     services.AddScoped<IAgentHandler, AgentHandler>();
                     services.AddScoped<IPipeline, Pipeline>();
                     services.AddScoped<IEvaluator, Evaluator>();
