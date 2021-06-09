@@ -78,7 +78,7 @@ namespace ASD_Game.ActionHandling
             AttackDTO attackDto = new AttackDTO();
             attackDto.XPosition = currentPlayer.XPosition + x;
             attackDto.YPosition = currentPlayer.YPosition + y;
-            attackDto.Damage = 100;//(int) weapon.Damage;
+            attackDto.Damage = (int) weapon.Damage;
             attackDto.Stamina = currentPlayer.Stamina;
             attackDto.PlayerGuid = _clientController.GetOriginId();
             SendAttackDTO(attackDto);
