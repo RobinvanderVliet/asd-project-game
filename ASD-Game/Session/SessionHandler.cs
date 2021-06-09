@@ -114,7 +114,7 @@ namespace Session
 
         public bool CreateSession(string sessionName, string userName, bool savedGame, string sessionId, int? seed)
         {
-            GameName = sessionName;
+             GameName = sessionName;
             _session = new Session(sessionName);
             _session.SessionId = sessionId;
             if (sessionId is null)
@@ -240,7 +240,7 @@ namespace Session
 
         private void JoinExistingGame(PacketDTO packet)
         {
-            if (packet.HandlerResponse.ResultMessage != null)
+            if (packet.HandlerResponse.ResultMessage != null && !GameStarted())
             {
                 if (packet.HandlerResponse.ResultMessage.Equals($"Not allowed to join saved or running game"))
                 {
@@ -403,8 +403,8 @@ namespace Session
                     var amountOfPlayers = "0";
                     if (sessionDTO.Clients != null && sessionDTO.Clients.Count > 0)
                     {
-                        hostName = sessionDTO.Clients.First()[1];
-                        amountOfPlayers = sessionDTO.Clients.Count.ToString();
+                     //   hostName = sessionDTO.Clients.First()[1];
+                  //      amountOfPlayers = sessionDTO.Clients.Count.ToString();
                     }
                     else
                     {
@@ -419,9 +419,8 @@ namespace Session
             }
             else
             {
-                _messageService.AddMessage("Id: " + packet.Header.SessionID + " Name: " + sessionDTO.Name + " Host: " +
-                                           sessionDTO.Clients.First()[1] + " Amount of players: " +
-                                           sessionDTO.Clients.Count);
+                var temp = packet; 
+                Console.WriteLine("Id: " + packet.Header.SessionID + " Name: " + sessionDTO.Name + " Host: ");
             }
 
             return new HandlerResponseDTO(SendAction.Ignore, null);
@@ -558,6 +557,7 @@ namespace Session
 
             startGameDTO.SavedPlayers = playerLocations.ToList();
             startGameDTO.GameGuid = _session.SessionId;
+            
 
             return startGameDTO;
         }
