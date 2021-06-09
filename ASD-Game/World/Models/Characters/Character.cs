@@ -2,6 +2,7 @@
 using System.Numerics;
 
 namespace ASD_Game.World.Models.Characters
+
 {
     [ExcludeFromCodeCoverage]
     public class Character

@@ -3,6 +3,7 @@ using ASD_Game.Items;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Interfaces;
 using World.Models.Characters.Algorithms.NeuralNetworking;
+using World.Models.Characters;
 
 namespace ASD_Game.World.Services
 {
@@ -27,6 +28,7 @@ namespace ASD_Game.World.Services
         public bool IsDead(Player player);
 
         public IList<Item> GetItemsOnCurrentTile(Player player);
+        public IList<Item> GetItemsOnCurrentTileWithPlayerId(string playerId);
 
         public IList<Item> GetItemsOnCurrentTile();
 

@@ -1,10 +1,13 @@
-﻿using ASD_Game.World.Models.Characters.StateMachine.Data;
 
-namespace ASD_Game.World.Models.Characters.StateMachine.State
+using ASD_Game.World.Models.Characters.StateMachine.Data;
+using WorldGeneration.StateMachine;
+
+
+ namespace ASD_Game.World.Models.Characters.StateMachine.State
 {
     public class UseConsumableState : CharacterState
     {
-        public UseConsumableState(ICharacterData characterData) : base(characterData)
+        public UseConsumableState(ICharacterData characterData, ICharacterStateMachine characterStateMachine) : base(characterData, characterStateMachine)
         {
         }
 

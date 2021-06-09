@@ -244,14 +244,14 @@ namespace World.Models.Characters.StateMachine.Builder
         {
             return new List<KeyValuePair<string, CharacterState>>
             {
-                new("engage", new EngageState(_characterData)),
-                new("collect", new CollectState(_characterData)),
-                new("follow", new FollowCreatureState(_characterData)),
-                new("flee", new FleeFromCreatureState(_characterData)),
-                new("attack", new AttackState(_characterData)),
-                new("idle", new IdleState(_characterData)),
-                new("inventory", new InventoryState(_characterData)),
-                new("wander", new WanderState(_characterData))
+                new("engage", new EngageState(_characterData, _stateMachine)),
+                new("collect", new CollectState(_characterData, _stateMachine)),
+                new("follow", new FollowCreatureState(_characterData, _stateMachine)),
+                new("flee", new FleeFromCreatureState(_characterData, _stateMachine)),
+                new("attack", new AttackState(_characterData, _stateMachine)),
+                new("idle", new IdleState(_characterData, _stateMachine)),
+                new("inventory", new InventoryState(_characterData, _stateMachine)),
+                new("wander", new WanderState(_characterData, _stateMachine))
             };
         }
     }

@@ -15,13 +15,16 @@ using ASD_Game.Session.DTO;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.Session.Helpers;
 using ASD_Game.UserInterface;
-using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Services;
 using System.Timers;
 using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine;
 using WorldGeneration.StateMachine;
+using System.Numerics;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Characters.StateMachine.Data;
+
 
 namespace ASD_Game.Session
 {
@@ -40,6 +43,7 @@ namespace ASD_Game.Session
         private readonly IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
         private readonly IWorldService _worldService;
         private readonly IMessageService _messageService;
+        private readonly IMoveHandler _moveHandler;
         private Timer AIUpdateTimer;
         private int _brainUpdateTime = 60000;
         private Random _random = new Random();
@@ -57,7 +61,8 @@ namespace ASD_Game.Session
             IWorldService worldService,
             IMessageService messageService,
             INetworkComponent networkComponent,
-            IConfigurationService configurationService
+            IConfigurationService configurationService,
+            IMoveHandler moveHandler
         )
         {
             _clientController = clientController;
@@ -74,6 +79,7 @@ namespace ASD_Game.Session
             _messageService = messageService;
             _networkComponent = networkComponent;
             _configurationService = configurationService;
+            _moveHandler = moveHandler;
             CheckAITimer();
         }
 
@@ -184,19 +190,26 @@ namespace ASD_Game.Session
 
         private void CreateMonsters()
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 20; i++)
             {
-                if (i < 0)
+                if (i >= 15)
                 {
-                    Monster newMonster = new Monster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i);
+                    var newMonster = new Monster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i);
+                    MonsterData newMonsterData = new(newMonster.XPosition, newMonster.YPosition, 0);
+                    newMonsterData.WorldService = _worldService;
+                    newMonsterData.MoveHandler = _moveHandler;
+                    newMonsterData.Position = new Vector2(newMonster.XPosition, newMonster.YPosition);
+                    newMonsterData.CharacterId = newMonster.Id;
+                    newMonster.MonsterData = newMonsterData;
                     SetStateMachine(newMonster);
+                    newMonster.MonsterStateMachine.StartStateMachine();
                     _worldService.AddCreatureToWorld(newMonster);
                 }
                 else
                 {
-                    SmartMonster newMonster = new SmartMonster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i, new DataGatheringService(_worldService));
-                    SetBrain(newMonster);
-                    _worldService.AddCreatureToWorld(newMonster);
+                    // var newMonster = new SmartMonster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i, new DataGatheringService(_worldService));
+                    // SetBrain(newMonster);
+                    // _worldService.AddCreatureToWorld(newMonster);
                 }
             }
         }

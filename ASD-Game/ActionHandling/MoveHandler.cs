@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using System.Timers;
 
 namespace ASD_Game.ActionHandling
+
 {
     public class MoveHandler : IMoveHandler, IPacketHandler
     {
@@ -22,7 +23,7 @@ namespace ASD_Game.ActionHandling
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IMessageService _messageService;
         private Timer AIUpdateTimer;
-        private int _updateTime = 2000;
+        private int _updateTime = 20000;
 
         public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
         {
@@ -190,19 +191,10 @@ namespace ASD_Game.ActionHandling
 
         private void ChangeAIPosition(MoveDTO moveDTO)
         {
-            var player = _worldService.GetCurrentPlayer();
-            int viewdistance = _worldService.GetViewDistance();
             var character = _worldService.GetAI(moveDTO.UserId);
-            bool aiIsInView = IsCharacterInView(character, player, viewdistance);
-
             character.XPosition = moveDTO.XPosition;
             character.YPosition = moveDTO.YPosition;
-            bool aiIsNowInView = IsCharacterInView(character, player, viewdistance);
-
-            if (aiIsInView || aiIsNowInView)
-            {
-                _worldService.DisplayWorld();
-            }
+            _worldService.DisplayWorld();
         }
 
         public bool IsCharacterInView(Character ai, Character player, int viewDistance)

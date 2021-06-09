@@ -39,6 +39,7 @@ namespace ASD_Game.Tests.SessionTests
         private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigDatabaseService;
         private Mock<INetworkComponent> _mockedNetworkComponent;
         private Mock<IConfigurationService> _mockedConfigurationService;
+        private Mock<IMoveHandler> _mockedMoveHandler;
 
         [SetUp]
         public void Setup()
@@ -61,6 +62,7 @@ namespace ASD_Game.Tests.SessionTests
             _mockedMessageService = new Mock<IMessageService>();
             _mockedNetworkComponent = new Mock<INetworkComponent>();
             _mockedConfigurationService = new Mock<IConfigurationService>();
+            _mockedMoveHandler = new Mock<IMoveHandler>();
             _sut = new GameSessionHandler(_mockedClientController.Object,
                 _mockedSessionHandler.Object,
                 _mockedRelativeStatHandler.Object,
@@ -73,7 +75,8 @@ namespace ASD_Game.Tests.SessionTests
                 _mockedWorldService.Object,
                 _mockedMessageService.Object,
                 _mockedNetworkComponent.Object,
-                _mockedConfigurationService.Object
+                _mockedConfigurationService.Object,
+                _mockedMoveHandler.Object
                 );
             _packetDTO = new PacketDTO();
         }

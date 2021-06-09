@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Numerics;
 using World.Models.Characters.StateMachine.Data;
+using WorldGeneration.StateMachine;
 using WorldGeneration.StateMachine.State;
 
 namespace Creature.Creature.StateMachine.State
 {
     public class FleeFromCreatureState : CharacterState
     {
-        public FleeFromCreatureState(ICharacterData characterData) : base(characterData)
+        public FleeFromCreatureState(ICharacterData characterData, ICharacterStateMachine characterStateMachine) : base(characterData, characterStateMachine)
         {
             
         }

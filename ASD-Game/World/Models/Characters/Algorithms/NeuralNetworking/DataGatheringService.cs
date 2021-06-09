@@ -29,15 +29,16 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
             WorldService = worldService;
         }
 
-        public void ScanMap(SmartMonster smartMonster, int visionRange)
+        public void ScanMap(Character smartMonster, int visionRange)
         {
             SetClosestMonster(smartMonster, visionRange);
             SetClosestPlayer(smartMonster, visionRange);
         }
 
-        private void SetClosestMonster(SmartMonster smartMonster, int visionRange)
+        private void SetClosestMonster(Character smartMonster, int visionRange)
         {
             List<Monster> monsters = WorldService.GetMonsters();
+
             foreach (Character monster in monsters)
             {
                 Vector2 pPos = new Vector2(monster.XPosition, monster.YPosition);
@@ -51,7 +52,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
             }
         }
 
-        private void SetClosestPlayer(SmartMonster smartMonster, int visionRange)
+        private void SetClosestPlayer(Character smartMonster, int visionRange)
         {
             List<Player> players = WorldService.GetAllPlayers();
             foreach (Player player in players)

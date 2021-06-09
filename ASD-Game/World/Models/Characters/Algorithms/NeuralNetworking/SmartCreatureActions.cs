@@ -110,8 +110,8 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
                 }
             }
         }
-
-        public void Flee(ASD_Game.World.Models.Characters.Character player, SmartMonster smartmonster)
+        
+        public void Flee(Character player, SmartMonster smartmonster)
         {
             if (player != null)
             {
