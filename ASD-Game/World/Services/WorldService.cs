@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UserInterface;
-using Characters;
 using World.Models.Characters.Algorithms.NeuralNetworking;
+using World.Models.Characters;
 
 namespace WorldGeneration
 {
@@ -113,6 +113,12 @@ namespace WorldGeneration
 
         public IList<Item> GetItemsOnCurrentTile(Player player)
         {
+            return _world.GetTileForPlayer(player).ItemsOnTile;
+        }
+
+        public IList<Item> GetItemsOnCurrentTileWithPlayerId(string playerId)
+        {
+            var player = GetPlayer(playerId);
             return _world.GetTileForPlayer(player).ItemsOnTile;
         }
 

@@ -2,6 +2,7 @@ using WorldGeneration.Models.Interfaces;
 using System.Collections.Generic;
 using Items;
 using World.Models.Characters.Algorithms.NeuralNetworking;
+using World.Models.Characters;
 
 namespace WorldGeneration
 {
@@ -26,6 +27,7 @@ namespace WorldGeneration
         public bool IsDead(Player player);
 
         public IList<Item> GetItemsOnCurrentTile(Player player);
+        public IList<Item> GetItemsOnCurrentTileWithPlayerId(string playerId);
 
         public IList<Item> GetItemsOnCurrentTile();
 

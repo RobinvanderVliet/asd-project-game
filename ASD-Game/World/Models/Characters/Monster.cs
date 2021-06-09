@@ -1,7 +1,7 @@
 ﻿using World.Models.Characters.StateMachine.Data;
 using WorldGeneration.StateMachine;
 
-namespace WorldGeneration
+namespace World.Models.Characters
 {
     public class Monster : Character
     {

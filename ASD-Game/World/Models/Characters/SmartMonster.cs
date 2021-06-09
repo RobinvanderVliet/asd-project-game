@@ -5,7 +5,7 @@ using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 using World.Models.Characters.StateMachine.Data;
 using WorldGeneration;
 
-namespace Characters
+namespace World.Models.Characters
 {
     [ExcludeFromCodeCoverage]
     public class SmartMonster : Monster

@@ -1,11 +1,12 @@
 ﻿using World.Models.Characters.StateMachine.Data;
+using WorldGeneration.StateMachine;
 using WorldGeneration.StateMachine.State;
 
 namespace Creature.Creature.StateMachine.State
 {
     public class UseConsumableState : CharacterState
     {
-        public UseConsumableState(ICharacterData characterData) : base(characterData)
+        public UseConsumableState(ICharacterData characterData, ICharacterStateMachine characterStateMachine) : base(characterData, characterStateMachine)
         {
         }
 

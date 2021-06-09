@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Character.Pathfinder
+namespace World.Models.Characters.Algorithms.Pathfinder
 {
     public class PriorityQueue<T> where T : IComparable<T>
     {

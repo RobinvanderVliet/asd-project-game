@@ -1,11 +1,12 @@
 ﻿using World.Models.Characters.StateMachine.Data;
+using WorldGeneration.StateMachine;
 using WorldGeneration.StateMachine.State;
 
 namespace Creature.Creature.StateMachine.State
 {
     public class InventoryState : CharacterState
     {
-        public InventoryState(ICharacterData characterData) : base(characterData)
+        public InventoryState(ICharacterData characterData, ICharacterStateMachine characterStateMachine) : base(characterData, characterStateMachine)
         {
         }
 

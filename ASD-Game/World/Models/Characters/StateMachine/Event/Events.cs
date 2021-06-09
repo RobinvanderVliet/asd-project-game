@@ -11,6 +11,7 @@
 
             // Generic Events
             DO,
+            DO_WORLD_CHECK,
 
             // Specific Creature Event
             LOST_PLAYER,

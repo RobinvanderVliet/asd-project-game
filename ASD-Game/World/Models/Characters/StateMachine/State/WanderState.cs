@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Numerics;
 using World.Models.Characters.StateMachine.Data;
+using WorldGeneration.StateMachine;
 using WorldGeneration.StateMachine.State;
 
 namespace Creature.Creature.StateMachine.State
 {
     public class WanderState : CharacterState
     {
-        private const int MAX_MOVEMENT_SPEED = 3;
-
-        public WanderState(ICharacterData characterData) : base(characterData)
+        public WanderState(ICharacterData characterData, ICharacterStateMachine characterStateMachine) : base(characterData, characterStateMachine)
         {
         }
 
         public override void Do()
         {
-            // var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
-            // var _builderConfiguration = _characterData.BuilderConfigurator;
+            DoWorldCheck();
+
+            var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
+            var _builderConfiguration = _characterData.BuilderConfigurator;
 
             if (_characterData.WorldService.GetPlayer(_characterData.CharacterId).Stamina >= 20)
             {

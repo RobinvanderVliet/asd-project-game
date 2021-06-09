@@ -1,11 +1,12 @@
 ﻿using World.Models.Characters.StateMachine.Data;
+using WorldGeneration.StateMachine;
 using WorldGeneration.StateMachine.State;
 
 namespace Creature.Creature.StateMachine.State
 {
     public class AttackState : CharacterState
     {
-        public AttackState(ICharacterData creatureData) : base(creatureData)
+        public AttackState(ICharacterData characterData, ICharacterStateMachine characterStateMachine) : base(characterData, characterStateMachine)
         {
             
         }

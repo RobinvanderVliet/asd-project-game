@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
-namespace WorldGeneration
+namespace World.Models.Characters
 {
     [ExcludeFromCodeCoverage]
     public class Character

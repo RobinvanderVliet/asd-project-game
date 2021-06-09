@@ -1,7 +1,7 @@
 ﻿using Items.Consumables;
 using System.Diagnostics.CodeAnalysis;
 
-namespace WorldGeneration
+namespace World.Models.Characters
 {
     [ExcludeFromCodeCoverage]
     public class Player : Character

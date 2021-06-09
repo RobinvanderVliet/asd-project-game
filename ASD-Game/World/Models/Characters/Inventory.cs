@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using WorldGeneration.Exceptions;
 
-namespace WorldGeneration
+namespace World.Models.Characters
 {
     public class Inventory
     {

@@ -1,9 +1,9 @@
 ﻿using Characters;
-using Character.Pathfinder;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using World.Models.Characters.Algorithms.Pathfinder;
 using WorldGeneration;
 
 namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
@@ -22,7 +22,7 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
         public List<List<Node>> MapNodes = new List<List<Node>>();
         public Player ClosestPlayer { get; set; }
         public Single DistanceToClosestPlayer { get; set; } = 9999999999999999999;
-        public WorldGeneration.Character ClosestMonster { get; set; }
+        public Character ClosestMonster { get; set; }
         public Single DistanceToClosestMonster { get; set; } = 9999999999999999999;
 
         public DataGatheringService(IWorldService worldService)
@@ -30,16 +30,16 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
             WorldService = worldService;
         }
 
-        public void ScanMap(SmartMonster smartMonster, int visionRange)
+        public void ScanMap(Character smartMonster, int visionRange)
         {
             SetClosestMonster(smartMonster, visionRange);
             SetClosestPlayer(smartMonster, visionRange);
         }
 
-        private void SetClosestMonster(SmartMonster smartMonster, int visionRange)
+        private void SetClosestMonster(Character smartMonster, int visionRange)
         {
-            List<WorldGeneration.Character> monsters = WorldService.GetMonsters();
-            foreach (WorldGeneration.Character monster in monsters)
+            List<Character> monsters = WorldService.GetMonsters();
+            foreach (Character monster in monsters)
             {
                 Vector2 pPos = new Vector2(monster.XPosition, monster.YPosition);
                 Vector2 cPos = new Vector2(smartMonster.XPosition, smartMonster.YPosition);
