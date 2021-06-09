@@ -240,7 +240,7 @@ namespace Session
 
         private void JoinExistingGame(PacketDTO packet)
         {
-            if (packet.HandlerResponse.ResultMessage != null && !GameStarted())
+            if (packet.HandlerResponse.ResultMessage != null)
             {
                 if (packet.HandlerResponse.ResultMessage.Equals($"Not allowed to join saved or running game"))
                 {

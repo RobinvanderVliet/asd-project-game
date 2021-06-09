@@ -145,8 +145,12 @@ namespace Session
         {
             var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
 
-            HandleStartGameSession(startGameDTO);
-            return new HandlerResponseDTO(SendAction.SendToClients, null);
+            if (startGameDTO is not null)
+            {
+                HandleStartGameSession(startGameDTO);
+                return new HandlerResponseDTO(SendAction.SendToClients, null);
+            }
+            return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
         private void InsertPlayersIntoDatabase()
@@ -196,40 +200,44 @@ namespace Session
 
         private void HandleStartGameSession(StartGameDTO startGameDTO)
         {
-            bool handleInDatabase = (_clientController.IsHost() || _clientController.IsBackupHost);
+        
+                bool handleInDatabase = (_clientController.IsHost() || _clientController.IsBackupHost);
 
-            _screenHandler.TransitionTo(new GameScreen());
-            Player currentPlayer = null;
+                _screenHandler.TransitionTo(new GameScreen());
+                Player currentPlayer = null;
 
-            if (startGameDTO.GameGuid == null && !_sessionHandler.GameStarted())
-            {
-                _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
-                currentPlayer = AddPlayersToWorld();
-
-                if (handleInDatabase)
+                if (startGameDTO.GameGuid == null && !_sessionHandler.GameStarted())
                 {
-                    InsertGameIntoDatabase();
-                    InsertPlayersIntoDatabase();
-                    InsertConfigurationIntoDatabase();
+                    _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
+                    currentPlayer = AddPlayersToWorld();
+
+                    if (handleInDatabase)
+                    {
+                        InsertGameIntoDatabase();
+                        InsertPlayersIntoDatabase();
+                        InsertConfigurationIntoDatabase();
+                    }
                 }
-            }
-            else
-            {
-                _worldService.GenerateWorld(startGameDTO.Seed);
-                currentPlayer = AddPlayerToWorldSavedGame(startGameDTO.SavedPlayers);
-            }
+                else
+                {
+                    _worldService.GenerateWorld(startGameDTO.Seed);
+                    currentPlayer = AddPlayerToWorldSavedGame(startGameDTO.SavedPlayers);
+                }
             
-            if (currentPlayer != null)
-            {
-                _worldService.LoadArea(currentPlayer.XPosition, currentPlayer.YPosition, 10);
-            }
+                if (currentPlayer != null)
+                {
+                    _worldService.LoadArea(currentPlayer.XPosition, currentPlayer.YPosition, 10);
+                }
             
-            _relativeStatHandler.SetCurrentPlayer(_worldService.GetCurrentPlayer());
-            _relativeStatHandler.CheckStaminaTimer();
-            _relativeStatHandler.CheckRadiationTimer();
-            _worldService.DisplayWorld();
-            _worldService.DisplayStats();
-            _messageService.DisplayMessages();
+                _relativeStatHandler.SetCurrentPlayer(_worldService.GetCurrentPlayer());
+                _relativeStatHandler.CheckStaminaTimer();
+                _relativeStatHandler.CheckRadiationTimer();
+                _worldService.DisplayWorld();
+                _worldService.DisplayStats();
+                _messageService.DisplayMessages();
+            
+            
+           
 
         }
 
