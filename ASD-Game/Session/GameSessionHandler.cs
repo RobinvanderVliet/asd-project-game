@@ -132,7 +132,7 @@ namespace ASD_Game.Session
 
         private Player AddPlayersToWorld()
         {
-            return PlayerSpawn.SpawnPlayers(_sessionHandler.GetAllClients(), _sessionHandler.GetSessionSeed(), _worldService, _clientController);
+            return PlayerSpawner.SpawnPlayers(_sessionHandler.GetAllClients(), _sessionHandler.GetSessionSeed(), _worldService, _clientController);
         }
     }
 }

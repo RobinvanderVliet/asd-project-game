@@ -7,7 +7,7 @@ using ASD_Game.World.Services;
 
 namespace ASD_Game.Session.Helpers
 {
-    public class PlayerSpawn
+    public static class PlayerSpawner
     {
         public static Player SpawnPlayers(IEnumerable<string[]> allClients, int spawnSeed, IWorldService worldService, IClientController clientController)
         {

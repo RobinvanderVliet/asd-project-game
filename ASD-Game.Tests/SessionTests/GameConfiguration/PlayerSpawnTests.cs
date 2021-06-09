@@ -56,7 +56,7 @@ namespace ASD_Game.Tests.SessionTests.GameConfiguration
             // Arrange
 
             // Act
-            PlayerSpawn.SpawnPlayers(_allClients, _sessionSeed, _mockedWorldService.Object, _mockedClientController.Object);
+            PlayerSpawner.SpawnPlayers(_allClients, _sessionSeed, _mockedWorldService.Object, _mockedClientController.Object);
 
             // Assert
             _mockedWorldService.Verify();
