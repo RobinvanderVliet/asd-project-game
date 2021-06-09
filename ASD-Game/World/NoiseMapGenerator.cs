@@ -12,7 +12,6 @@ namespace ASD_Game.World
     {
         private IFastNoise _worldNoise;
         private IFastNoise _itemNoise;
-        private readonly int _seed;
         private IItemService _itemService;
         private List<ItemSpawnDTO> _items;
 
@@ -28,7 +27,6 @@ namespace ASD_Game.World
             _itemNoise.SetFrequency(10f);
             _itemNoise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
             _itemNoise.SetSeed(seed);
-            _seed = seed;
             _itemService = itemService;
             _items = items;
         }

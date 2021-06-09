@@ -22,7 +22,7 @@ namespace ASD_Game.Tests.WorldTests
         public void Setup()
         {
             _tiles = new ITile[] { new GrassTile(1, 1), new GrassTile(1, 2), new GrassTile(1, 3), new GrassTile(1, 4) };
-            _chunk = new Chunk(0, 0, _tiles, 6, 2);
+            _chunk = new Chunk(0, 0, _tiles, 6);
             _chunkHelperMock = new Mock<ChunkHelper>();
             _sut = _chunkHelperMock.Object;
             _sut.Chunk = _chunk;
