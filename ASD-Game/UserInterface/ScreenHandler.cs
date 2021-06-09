@@ -13,7 +13,8 @@ namespace ASD_Game.UserInterface
         public ConsoleHelper ConsoleHelper { get => _consoleHelper; set => _consoleHelper = value; }
         private Thread _displayThread { get; set; }
         private BlockingCollection<Action> _actionsInQueue;
-        
+        public BlockingCollection<Action> ActionsInQueue { get => _actionsInQueue; set => _actionsInQueue = value; }
+
         public ScreenHandler()
         {
             _consoleHelper = new ConsoleHelper();

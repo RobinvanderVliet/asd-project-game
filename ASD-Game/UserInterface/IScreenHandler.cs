@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace ASD_Game.UserInterface
@@ -13,5 +15,6 @@ namespace ASD_Game.UserInterface
         public void RedrawGameInputBox();
         void UpdateWorld(char[,] map);
         public void SetStatValues(string name, int score, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree);
+        public BlockingCollection<Action> ActionsInQueue { get; set; }
     }
 }
