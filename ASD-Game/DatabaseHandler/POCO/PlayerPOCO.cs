@@ -10,9 +10,6 @@ namespace ASD_Game.DatabaseHandler.POCO
         public string PlayerGUID { get; set; }
         [BsonId]
         public string GameGUIDAndPlayerGuid { get; set; }
-        
-        [BsonId]
-
         public string PlayerName { get; set; }
         public int TypePlayer { get; set; }
         public int Health { get; set; }
