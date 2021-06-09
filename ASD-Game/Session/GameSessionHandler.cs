@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using ASD_Game.ActionHandling;
 using ASD_Game.DatabaseHandler.POCO;
 using ASD_Game.DatabaseHandler.Services;
@@ -9,20 +8,20 @@ using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
 using ASD_Game.Session.DTO;
 using ASD_Game.Session.GameConfiguration;
+using ASD_Game.Session.Helpers;
 using ASD_Game.UserInterface;
-using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Services;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Timers;
+using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine;
 using DatabaseHandler.POCO;
 using WorldGeneration;
 using WorldGeneration.StateMachine;
-using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
 namespace ASD_Game.Session
 {
