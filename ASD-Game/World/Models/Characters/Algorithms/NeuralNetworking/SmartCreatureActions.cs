@@ -27,19 +27,23 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
 
         public void Wander(SmartMonster smartMonster)
         {
-            if (Path == null || Path.Count == 0)
+            switch (_random.Next(0, 3))
             {
-                int newXLoc = _random.Next(0, 12);
-                int newYLoc = _random.Next(0, 12);
+                case 0:
+                    WalkUp(smartMonster);
+                    break;
 
-                Vector2 destination = new Vector2(newXLoc, newYLoc);
-                ViewPointCalculator(smartMonster.CreatureData.Position);
-                Path = _pathfinder.FindPath(_startPos, destination);
-            }
-            if (Path != null)
-            {
-                smartMonster.MoveType = "Move";
-                smartMonster.Destination = TransformPath(Path.Pop().Position);
+                case 1:
+                    WalkDown(smartMonster);
+                    break;
+
+                case 2:
+                    WalkLeft(smartMonster);
+                    break;
+
+                case 3:
+                    WalkRight(smartMonster);
+                    break;
             }
         }
 
@@ -102,7 +106,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
             }
         }
 
-        public void Attack(Character player, SmartMonster smartmonster)
+        public void Attack(Character player, SmartMonster smartMonster)
         {
             if (player != null)
             {
@@ -116,7 +120,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
             }
         }
 
-        public void Flee(ASD_Game.World.Models.Characters.Character player, SmartMonster smartmonster)
+        public void Flee(Character player, SmartMonster smartMonster)
         {
             if (player != null)
             {

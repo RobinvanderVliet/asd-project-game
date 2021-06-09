@@ -18,9 +18,7 @@ using System;
 using System.Timers;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine;
-using WorldGeneration;
 using WorldGeneration.StateMachine;
-using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
 namespace ASD_Game.Session
 {
@@ -175,7 +173,7 @@ namespace ASD_Game.Session
                     var playerObject = new Player(client[1], playerX, playerY, CharacterSymbol.ENEMY_PLAYER, client[0]);
                     _worldService.AddPlayerToWorld(playerObject, false);
                 }
-                
+
                 playerX += 2;
                 playerY += 2;
             }
@@ -184,7 +182,7 @@ namespace ASD_Game.Session
 
         private void CreateMonsters()
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 100; i++)
             {
                 if (i < 0)
                 {

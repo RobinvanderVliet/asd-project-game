@@ -12,6 +12,7 @@ using ASD_Game.World.Models.Interfaces;
 using ASD_Game.World.Services;
 using Newtonsoft.Json;
 using System.Timers;
+using System;
 
 namespace ASD_Game.ActionHandling
 {
@@ -22,7 +23,9 @@ namespace ASD_Game.ActionHandling
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IMessageService _messageService;
         private Timer AIUpdateTimer;
-        private int _updateTime = 2000;
+        private int _updateTime = 5000;
+
+        private List<MoveDTO> _AIMoves = new List<MoveDTO>();
 
         public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
         {
@@ -152,7 +155,7 @@ namespace ASD_Game.ActionHandling
                     return new HandlerResponseDTO(SendAction.SendToClients, resultMessage);
                 }
             }
-            ChangeAIPosition(moveDTO);
+            _AIMoves.Add(moveDTO);
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
@@ -191,11 +194,14 @@ namespace ASD_Game.ActionHandling
             _worldService.DisplayWorld();
         }
 
-        private void ChangeAIPosition(MoveDTO moveDTO)
+        private void ChangeAIPosition(List<MoveDTO> moveDTO)
         {
-            var character = _worldService.GetAI(moveDTO.UserId);
-            character.XPosition = moveDTO.XPosition;
-            character.YPosition = moveDTO.YPosition;
+            foreach (MoveDTO move in _AIMoves)
+            {
+                var character = _worldService.GetAI(move.UserId);
+                character.XPosition = move.XPosition;
+                character.YPosition = move.YPosition;
+            }
             _worldService.DisplayWorld();
         }
 
@@ -284,9 +290,10 @@ namespace ASD_Game.ActionHandling
         public void MoveAIs(List<Character> creatureMoves)
         {
             List<MoveDTO> moveDTOs = new List<MoveDTO>();
+            List<Character> _creatureMoves = creatureMoves;
             if (creatureMoves != null)
             {
-                foreach (Character move in creatureMoves)
+                foreach (Character move in _creatureMoves)
                 {
                     if (move is SmartMonster smartMonster)
                     {
@@ -307,6 +314,10 @@ namespace ASD_Game.ActionHandling
         public void GetAIMoves()
         {
             MoveAIs(_worldService.GetCreatureMoves());
+            if (_AIMoves.Count > 0)
+            {
+                ChangeAIPosition(_AIMoves);
+            }
         }
 
         private void CheckAITimer()

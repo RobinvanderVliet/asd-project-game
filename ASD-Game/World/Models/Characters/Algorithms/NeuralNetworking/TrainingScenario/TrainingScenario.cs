@@ -27,7 +27,7 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
                 14,
                 0
             );
-            Pop = new Population(50, data);
+            Pop = new Population(100, data);
             RunTraining = true;
         }
 

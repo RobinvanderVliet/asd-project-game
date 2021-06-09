@@ -18,7 +18,7 @@ namespace ASD_Game.World
         public List<Monster> _creatures { get; set; }
         public List<Character> movesList = new List<Character>();
         public List<ItemSpawnDTO> Items;
-        
+
         private readonly int _viewDistance;
         private readonly IScreenHandler _screenHandler;
         private static readonly char _separator = Path.DirectorySeparatorChar;
@@ -34,13 +34,13 @@ namespace ASD_Game.World
             // _screenHandler = screenHandler;
             // DeleteMap();
             Items = new();
-            Players = new ();
-            _creatures = new ();
+            Players = new();
+            _creatures = new();
             _map = mapFactory.GenerateMap(itemService, Items, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
         }
-        
+
         public Player GetPlayer(string id)
         {
             return Players.Find(x => x.Id == id);
@@ -100,6 +100,7 @@ namespace ASD_Game.World
             Items.Add(itemSpawnDto);
             UpdateMap();
         }
+
         public ITile GetLoadedTileByXAndY(int x, int y)
         {
             return _map.GetLoadedTileByXAndY(x, y);
@@ -129,7 +130,7 @@ namespace ASD_Game.World
 
         public void UpdateAI()
         {
-            movesList = new List<Character>();
+            movesList.Clear();
             foreach (Character monster in _creatures)
             {
                 if (monster is SmartMonster smartMonster)

@@ -11,6 +11,7 @@ using ASD_Game.Messages;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
+using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Services;
 using DatabaseHandler.POCO;
 using Newtonsoft.Json;
@@ -29,7 +30,7 @@ namespace ASD_Game.ActionHandling
         private readonly IMessageService _messageService;
 
         private Timer AIUpdateTimer;
-        private int _updateTime = 500;
+        private int _updateTime = 2000;
 
         public AttackHandler(IClientController clientController, IWorldService worldService,
             IDatabaseService<PlayerPOCO> playerDatabaseService,
@@ -111,9 +112,12 @@ namespace ASD_Game.ActionHandling
 
                 if (attackDto.PlayerGuid.StartsWith("monst"))
                 {
-                    attackDto.AttackedPlayerGuid = playerToAttack.FirstOrDefault().Id;
-                    HandleAttack(attackDto);
-                    return new HandlerResponseDTO(SendAction.SendToClients, null);
+                    if (playerToAttack.FirstOrDefault() != null)
+                    {
+                        attackDto.AttackedPlayerGuid = playerToAttack.FirstOrDefault().Id;
+                        HandleAttack(attackDto);
+                        return new HandlerResponseDTO(SendAction.SendToClients, null);
+                    }
                 }
 
                 if (playerToAttack.FirstOrDefault() != null)
@@ -374,12 +378,12 @@ namespace ASD_Game.ActionHandling
             }
         }
 
-        public void AIAttack(List<WorldGeneration.Character> creatureMoves)
+        public void AIAttack(List<Character> creatureMoves)
         {
             List<AttackDTO> attackDTOs = new List<AttackDTO>();
             if (creatureMoves != null)
             {
-                foreach (WorldGeneration.Character move in creatureMoves)
+                foreach (Character move in creatureMoves)
                 {
                     if (move is SmartMonster smartMonster)
                     {
