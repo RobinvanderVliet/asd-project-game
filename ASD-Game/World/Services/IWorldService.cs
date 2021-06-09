@@ -57,7 +57,7 @@ namespace ASD_Game.World.Services
 
         public Character GetAI(string id);
 
-        public World GetWorld();
+        public IWorld GetWorld();
         
         public int GetViewDistance();
 

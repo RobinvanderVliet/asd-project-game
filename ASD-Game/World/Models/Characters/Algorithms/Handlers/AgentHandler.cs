@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ActionHandling;
 using Agent.Services;
-using ASD_Game.ActionHandling;
 using ASD_Game.DatabaseHandler.POCO;
 using ASD_Game.DatabaseHandler.Services;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
-using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Characters.Algorithms.Creator;
 using ASD_Game.World.Services;
 using Newtonsoft.Json;
 using Session.DTO;
@@ -18,23 +16,20 @@ namespace Creature
     public class AgentHandler : IAgentHandler, IPacketHandler
     {
         private readonly IWorldService _worldService;
-        private readonly IMoveHandler _moveHandler;
         private readonly IClientController _clientController;
         private readonly IDatabaseService<AgentPOCO> _databaseService;
         private readonly IConfigurationService _configurationService;
-        private readonly IAttackHandler _attackHandler;
+        private readonly IAgentCreator _agentCreator;
 
         // string = playerId
         private Dictionary<string, World.Models.Characters.Agent> _agents;
 
-        public AgentHandler(IWorldService worldService, IMoveHandler moveHandler, IClientController clientController,
-            IDatabaseService<AgentPOCO> databaseService, IConfigurationService configurationService,
-            IAttackHandler attackHandler)
+        public AgentHandler(IWorldService worldService, IClientController clientController,
+            IDatabaseService<AgentPOCO> databaseService, IConfigurationService configurationService, IAgentCreator agentCreator)
         {
             _worldService = worldService;
-            _moveHandler = moveHandler;
             _configurationService = configurationService;
-            _attackHandler = attackHandler;
+            _agentCreator = agentCreator;
             _configurationService.CreateConfiguration("agent");
             _clientController = clientController;
             _databaseService = databaseService;
@@ -63,7 +58,7 @@ namespace Creature
                 var agentConfiguration = agentPoco.AgentConfiguration;
 
                 // Get agent from database
-                agent = CreateAgent(player, agentConfiguration);
+                agent = _agentCreator.CreateAgent(player, agentConfiguration);
                 _agents.Add(player.Id, agent);
 
                 // Activate agent
@@ -91,20 +86,6 @@ namespace Creature
 
             var updateAsync = _databaseService.UpdateAsync(agentPoco);
             updateAsync.Wait();
-        }
-
-        private World.Models.Characters.Agent CreateAgent(Player player, List<KeyValuePair<string, string>> agentConfiguration)
-        {
-            return new(player.Name, player.XPosition, player.YPosition, player.Symbol, player.Id)
-            {
-                AgentData =
-                {
-                    MoveHandler = _moveHandler, WorldService = _worldService, Health = player.Health,
-                    Inventory = player.Inventory, Stamina = player.Stamina, Team = player.Team,
-                    RadiationLevel = player.RadiationLevel, VisionRange = 6, RuleSet = agentConfiguration,
-                    AttackHandler = _attackHandler, CharacterId = player.Id
-                }
-            };
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
