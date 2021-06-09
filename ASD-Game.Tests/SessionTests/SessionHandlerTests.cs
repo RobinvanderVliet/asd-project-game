@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
 using ASD_Game.Messages;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
@@ -34,6 +36,7 @@ namespace ASD_Game.Tests.SessionTests
         private Mock<Session.Session> _mockedSession;
         private Mock<IScreenHandler> _mockedScreenHandler;
         private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
+        private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerService;
 
         [SetUp]
         public void Setup()
@@ -45,8 +48,9 @@ namespace ASD_Game.Tests.SessionTests
             _mockedScreenHandler = new Mock<IScreenHandler>();
             _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
             _mockedMessageService = new();
-            _mockedSession = new Mock<Session>("test");
-            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object, _mockedGameConfigurationHandler.Object, _mockedMessageService.Object);
+            _mockedSession = new Mock<Session.Session>("test");
+            _mockedPlayerService = new Mock<IDatabaseService<PlayerPOCO>>();
+            _sut = new SessionHandler(_mockedClientController.Object, _mockedScreenHandler.Object,  _mockedMessageService.Object,_mockedGameConfigurationHandler.Object, _mockedPlayerService.Object);
             _mockedSession = new Mock<Session.Session>("test");
             _packetDTO = new PacketDTO();
         }

@@ -1,5 +1,3 @@
-using DatabaseHandler.Repository;
-using DatabaseHandler.Services;
 using Moq;
 using NUnit.Framework;
 using System;

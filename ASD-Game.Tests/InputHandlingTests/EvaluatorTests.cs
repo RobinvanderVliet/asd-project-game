@@ -14,6 +14,7 @@ using ASD_Game.Session.GameConfiguration;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using Session;
 using ItemFrequency = ASD_Game.InputHandling.Antlr.Ast.Actions.ItemFrequency;
 using MonsterDifficulty = ASD_Game.InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
@@ -31,6 +32,7 @@ namespace ASD_Game.Tests.InputHandlingTests
     
         private Mock<IClientController> _mockedClientController;
         private Mock<IInventoryHandler> _mockedInventoryHandler;
+        private Mock<IGamesSessionService> _mockedGameService;
         [SetUp]
         public void Setup()
         {
@@ -41,7 +43,8 @@ namespace ASD_Game.Tests.InputHandlingTests
             _mockedAttackHandler = new Mock<IAttackHandler>();
             _mockedClientController = new Mock<IClientController>();
             _mockedInventoryHandler = new Mock<IInventoryHandler>();
-            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedAttackHandler.Object, _mockedInventoryHandler.Object, _mockedClientController.Object);
+            _mockedGameService = new Mock<IGamesSessionService>();
+            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedAttackHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedInventoryHandler.Object, _mockedClientController.Object, _mockedGameService.Object);
         }
     
         [Test]
@@ -176,7 +179,7 @@ namespace ASD_Game.Tests.InputHandlingTests
             _sut.Apply(ast);
         
             // Assert
-            _mockedSessionHandler.Verify(mockedSession => mockedSession.CreateSession(sessionName, hostName), Times.Once);
+            _mockedSessionHandler.Verify(mockedSession => mockedSession.CreateSession(sessionName, hostName, false, null, null), Times.Once);
         }
     
         private static AST CreateSessionAst(string sessionName, string hostName)

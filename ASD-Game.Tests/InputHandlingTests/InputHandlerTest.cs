@@ -8,6 +8,7 @@ using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
 using Moq;
 using NUnit.Framework;
+using Session;
 using UserInterface;
 
 namespace ASD_Game.Tests.InputHandlingTests

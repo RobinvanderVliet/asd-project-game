@@ -107,10 +107,13 @@ namespace ASD_Game.Session
             if (sessionId is null)
             {
                 _session.GenerateSessionId();
+                _clientController.SetSessionId(_session.SessionId);
+
             }
             else
             {
                 _session.SessionId = sessionId;
+                _clientController.SetSessionId(_session.SessionId);
             }
 
             _session.AddClient(_clientController.GetOriginId(), userName);
@@ -125,7 +128,6 @@ namespace ASD_Game.Session
             }
 
             _clientController.CreateHostController();
-            _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
             
             Thread traingThread = new Thread(
