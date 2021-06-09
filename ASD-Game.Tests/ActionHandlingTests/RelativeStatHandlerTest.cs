@@ -1,16 +1,17 @@
 using System.Diagnostics.CodeAnalysis;
-using ActionHandling;
-using ActionHandling.DTO;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using Messages;
+using ASD_Game.ActionHandling;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.Enum;
+using ASD_Game.World.Services;
 using Moq;
-using Network;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using WorldGeneration;
 
-namespace ActionHandling.Tests
+namespace ASD_Game.Tests.ActionHandlingTests
 {
     [ExcludeFromCodeCoverage]
     public class RelativeStatHandlerTest

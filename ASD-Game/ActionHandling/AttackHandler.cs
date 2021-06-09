@@ -1,16 +1,18 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using ActionHandling;
 using ActionHandling.DTO;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Items;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
+using ASD_Game.World.Services;
 using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using Items;
-using Messages;
-using Network;
-using Network.DTO;
 using Newtonsoft.Json;
-using WorldGeneration;
 
-namespace ActionHandling
+namespace ASD_Game.ActionHandling
 {
     public class AttackHandler : IAttackHandler, IPacketHandler
     {
@@ -157,7 +159,7 @@ namespace ActionHandling
         {
             var player = _playerDatabaseService.GetAllAsync().Result
                 .FirstOrDefault(player =>
-                    player.PlayerGuid == attackDto.PlayerGuid && player.GameGuid == _clientController.SessionId);
+                    player.PlayerGUID == attackDto.PlayerGuid && player.GameGUID == _clientController.SessionId);
             player.Stamina -= ATTACK_STAMINA;
             _playerDatabaseService.UpdateAsync(player);
         }
@@ -168,7 +170,7 @@ namespace ActionHandling
             if (isPlayer)
             {
                 var attackedPlayer = _playerDatabaseService.GetAllAsync().Result
-                    .FirstOrDefault(attackedPlayer => attackedPlayer.PlayerGuid == attackDto.AttackedPlayerGuid);
+                    .FirstOrDefault(attackedPlayer => attackedPlayer.PlayerGUID == attackDto.AttackedPlayerGuid);
 
                 var attackedPlayerInArray =
                     _worldService.GetAllPlayers().Where(player => player.Id == attackDto.PlayerGuid).FirstOrDefault();

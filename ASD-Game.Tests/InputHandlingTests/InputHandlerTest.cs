@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using InputHandling.Antlr;
-using InputHandling.Antlr.Transformer;
-using InputHandling.Models;
-using Messages;
+using ASD_Game.InputHandling;
+using ASD_Game.InputHandling.Antlr;
+using ASD_Game.InputHandling.Antlr.Transformer;
+using ASD_Game.Messages;
+using ASD_Game.Session;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
 using Moq;
 using NUnit.Framework;
-using Session;
-using Session.GameConfiguration;
 using UserInterface;
-using Messages;
 
-namespace InputHandling.Tests
+namespace ASD_Game.Tests.InputHandlingTests
 {
     [ExcludeFromCodeCoverage]
     public class InputHandlerTest

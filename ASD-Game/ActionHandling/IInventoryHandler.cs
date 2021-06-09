@@ -1,4 +1,4 @@
-﻿namespace ActionHandling
+﻿namespace ASD_Game.ActionHandling
 {
     public interface IInventoryHandler
     {

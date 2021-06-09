@@ -1,20 +1,19 @@
 using System;
 using ActionHandling;
-using Agent.Antlr.Ast;
-using Chat;
-using InputHandling.Antlr.Ast;
-using InputHandling.Antlr.Ast.Actions;
-using InputHandling.Exceptions;
-using Network;
+using ASD_Game.ActionHandling;
+using ASD_Game.Chat;
+using ASD_Game.InputHandling.Antlr.Ast;
+using ASD_Game.InputHandling.Antlr.Ast.Actions;
+using ASD_Game.InputHandling.Exceptions;
+using ASD_Game.Network;
+using ASD_Game.Network.Enum;
+using ASD_Game.Session;
+using ASD_Game.Session.DTO;
+using ASD_Game.Session.GameConfiguration;
 using Newtonsoft.Json;
-using Session;
-using Session.DTO;
-using Session.GameConfiguration;
-using AST = InputHandling.Antlr.Ast.AST;
-using ItemFrequency = InputHandling.Antlr.Ast.Actions.ItemFrequency;
-using MonsterDifficulty = InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
+using MonsterDifficulty = ASD_Game.InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
-namespace InputHandling.Antlr.Transformer
+namespace ASD_Game.InputHandling.Antlr.Transformer
 {
     public class Evaluator : IEvaluator
     {
@@ -138,7 +137,7 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformDrop(Drop drop)
         {
-            // TODO: Call InventoryHandler method with (drop.ItemName.MessageValue)
+            _inventoryHandler.DropItem(drop.InventorySlot.InventorySlotValue);
         }
 
         private void TransformAttack(Attack attack)

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace UserInterface
+namespace ASD_Game.UserInterface
 {
     public class EditorScreen : Screen
     {

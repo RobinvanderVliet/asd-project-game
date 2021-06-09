@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace UserInterface
+namespace ASD_Game.UserInterface
 {
     [ExcludeFromCodeCoverage]
     public class ConsoleHelper

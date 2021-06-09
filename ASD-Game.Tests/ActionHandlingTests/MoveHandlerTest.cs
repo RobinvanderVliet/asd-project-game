@@ -1,16 +1,16 @@
 using System.Diagnostics.CodeAnalysis;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using Messages;
+using ASD_Game.ActionHandling;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.Enum;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Services;
 using Moq;
-using Network;
 using NUnit.Framework;
-using WorldGeneration;
-using DatabaseHandler.Services;
-using DatabaseHandler.POCO;
-using Messages;
 
-namespace ActionHandling.Tests
+namespace ASD_Game.Tests.ActionHandlingTests
 {
     [ExcludeFromCodeCoverage]
     public class MoveHandlerTest

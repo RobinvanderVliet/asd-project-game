@@ -6,7 +6,7 @@ using Agent.Antlr.Ast.Comparables;
 using Agent.Antlr.Ast.Comparables.Subjects;
 using Action = Agent.Antlr.Ast.Action;
 
-namespace Agent.Antlr.Checker
+namespace ASD_Game.Agent.Antlr.Checker
 {
     public class Checking
     {

@@ -1,51 +1,83 @@
-﻿using WorldGeneration.Models;
-using WorldGeneration.Models.HazardousTiles;
-using WorldGeneration.Models.Interfaces;
-using WorldGeneration.Models.TerrainTiles;
-
-namespace WorldGeneration
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.Items.Services;
+using ASD_Game.World.Models;
+using ASD_Game.World.Models.HazardousTiles;
+using ASD_Game.World.Models.Interfaces;
+using ASD_Game.World.Models.TerrainTiles;
+namespace ASD_Game.World
 {
     public class NoiseMapGenerator : INoiseMapGenerator
     {
-        public int[,] GenerateAreaMap(int size, int seed)
+        private IFastNoise _worldNoise;
+        private IFastNoise _itemNoise;
+        private readonly int _seed;
+        private IItemService _itemService;
+        private List<ItemSpawnDTO> _items;
+
+        public NoiseMapGenerator(int seed, IItemService itemService, List<ItemSpawnDTO> items)
         {
-            var noise = new FastNoiseLite();
-            noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
-            noise.SetSeed(seed);
-            noise.SetFrequency(0.015f);
-            noise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
-            var noiseData = new int[size, size];
-            for (var y = 0; y < size; y++)
-            {
-                for (var x = 0; x < size; x++)
-                {
-                    noiseData[x, y] = (int)noise.GetNoise(x, y);
-                }
-            }
-            return noiseData;
+            _worldNoise = new FastNoiseLite();
+            _worldNoise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
+            _worldNoise.SetFrequency(0.015f);
+            _worldNoise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
+            _worldNoise.SetSeed(seed);
+            _itemNoise = new FastNoiseLite();
+            _itemNoise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
+            _itemNoise.SetFrequency(10f);
+            _itemNoise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
+            _itemNoise.SetSeed(seed);
+            _seed = seed;
+            _itemService = itemService;
+            _items = items;
         }
 
-        public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize, int seed)
+        public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize)
         {
-            var noise = new FastNoiseLite();
-            noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
-            noise.SetSeed(seed);
-            noise.SetFrequency(0.03f);
-            noise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
             var map = new ITile[chunkRowSize * chunkRowSize];
             for (var y = 0; y < chunkRowSize; y++)
             {
                 for (var x = 0; x < chunkRowSize; x++)
                 {
-                    map[y * chunkRowSize + x] = GetTileFromNoise(noise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize)
+                    map[y * chunkRowSize + x] = CreateTileWithItemFromNoise(
+                        _worldNoise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize)
+                        , _itemNoise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize)
                         , x + chunkRowSize * chunkX
                         , chunkRowSize * chunkY - chunkRowSize + y);
                 }
             }
-            return new Chunk(chunkX, chunkY, map, chunkRowSize);
+            return new Chunk(chunkX, chunkY, map, chunkRowSize, _seed);
+        }
+        
+        private ITile CreateTileWithItemFromNoise(float worldNoise, float itemNoise, int x, int y)
+        {
+            var tile = GetTileFromNoise(worldNoise, x, y);
+            
+            if (!tile.IsAccessible)
+            {
+                return tile;
+            }
+            
+            var item = _itemService.GenerateItemFromNoise(itemNoise, x, y);
+            var itemSpawnDTO = new ItemSpawnDTO { Item = item, XPosition = x, YPosition = y };
+
+            if (item == null)
+            {
+                return tile;
+            }
+            if (_items.Exists(itemInList => itemInList.Item.ItemId == item.ItemId))
+            {
+                  return tile;
+            }
+            
+            _items.Add(itemSpawnDTO);
+            tile.ItemsOnTile.Add(item);
+            
+            return tile;                      
         }
 
-        private ITile GetTileFromNoise(float noise, int x, int y)
+        public ITile GetTileFromNoise(float noise, int x, int y)
         {
             y++;
             return (noise * 10) switch
@@ -57,6 +89,13 @@ namespace WorldGeneration
                 (< 8) => new StreetTile(x, y),
                 _ => new GasTile(x, y)
             };
+        }
+        
+        [ExcludeFromCodeCoverage]
+        public void SetNoise (IFastNoise noise)
+        {
+            _itemNoise = noise;
+            _worldNoise = noise;
         }
     }
 }

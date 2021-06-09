@@ -1,14 +1,14 @@
-using Agent.Antlr.Ast;
-using Agent.Antlr.Ast.Comparables;
-using Agent.Antlr.Ast.Comparables.Subjects;
-using Agent.Antlr.Grammar;
-using Antlr4.Runtime.Misc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Action = Agent.Antlr.Ast.Action;
+using Agent.Antlr.Grammar;
+using Antlr4.Runtime.Misc;
+using ASD_Game.Agent.Antlr.Ast;
+using ASD_Game.Agent.Antlr.Ast.Comparables;
+using ASD_Game.Agent.Antlr.Ast.Comparables.Subjects;
+using Action = ASD_Game.Agent.Antlr.Ast.Action;
 
-namespace Agent.Antlr.Parser
+namespace ASD_Game.Agent.Antlr.Parser
 {
     public class ASTAgentListener : AgentConfigurationBaseListener
     {
@@ -22,7 +22,10 @@ namespace Agent.Antlr.Parser
             _currentContainer = new Stack<Node>();
         }
 
-        public AST GetAST() { return _ast; }
+        public AST GetAST()
+        {
+            return _ast;
+        }
 
         public override void EnterAction([NotNull] AgentConfigurationParser.ActionContext context)
         {
@@ -104,7 +107,6 @@ namespace Agent.Antlr.Parser
             Subject subject = (Subject)context.children.Where(c => c.GetText() != null).FirstOrDefault();
             _currentContainer.Push(subject);
         }
-
 
         public override void EnterSubjectStat([NotNull] AgentConfigurationParser.SubjectStatContext context)
         {
@@ -221,7 +223,6 @@ namespace Agent.Antlr.Parser
             base.ExitSubject(context);
         }
 
-
         public override void EnterNpc([NotNull] AgentConfigurationParser.NpcContext context)
         {
             NPC npc = new NPC(context.NPC().GetText());
@@ -284,7 +285,7 @@ namespace Agent.Antlr.Parser
 
         public override void EnterPlayer([NotNull] AgentConfigurationParser.PlayerContext context)
         {
-            Ast.Comparables.Subjects.Player player = new(context.PLAYER().GetText());
+            Player player = new(context.PLAYER().GetText());
             _currentContainer.Push(player);
         }
 

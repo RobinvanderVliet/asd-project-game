@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Agent.Exceptions;
-using Agent.Mapper;
-using Agent.Services;
+using ASD_Game.Agent;
+using ASD_Game.Agent.Exceptions;
+using ASD_Game.Agent.Mapper;
+using ASD_Game.Agent.Models;
+using ASD_Game.Agent.Services;
+using ASD_Game.InputHandling;
 using Moq;
 using NUnit.Framework;
-using Configuration = Agent.Models.Configuration;
 
-namespace Agent.Tests.Services
+namespace ASD_Game.Tests.AgentTests.Services
 {
     [ExcludeFromCodeCoverage]
     public class AgentConfigurationServiceTests

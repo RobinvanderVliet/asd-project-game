@@ -1,9 +1,11 @@
-﻿using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
 using Moq;
 using Newtonsoft.Json;
+using NUnit.Framework;
 
-namespace Network.Tests
+namespace ASD_Game.Tests.NetworkTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]

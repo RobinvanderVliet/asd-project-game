@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Antlr4.Runtime;
+using ASD_Game.Agent;
+using ASD_Game.Agent.Antlr.Ast;
+using ASD_Game.Agent.Exceptions;
 using Moq;
 using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
-using Agent.Antlr.Ast;
-using Agent.Exceptions;
-using Antlr4.Runtime;
 
-namespace Agent.Tests
+namespace ASD_Game.Tests.AgentTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]

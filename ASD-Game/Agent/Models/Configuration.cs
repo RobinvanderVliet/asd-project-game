@@ -2,7 +2,7 @@
 using System.Linq;
 using Agent.Mapper;
 
-namespace Agent.Models
+namespace ASD_Game.Agent.Models
 {
     public abstract class Configuration
     {

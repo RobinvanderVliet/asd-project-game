@@ -1,25 +1,33 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.Items.Services;
 
-namespace WorldGeneration
+namespace ASD_Game.World
 {
-    public abstract class MapFactory
+    public class MapFactory: IMapFactory
     {
-        public static Map GenerateMap(string dbLocation, string collectionName = "ChunkMap", int chunkSize = 8, int seed = -1123581321)
+        public IMap GenerateMap(IItemService itemService, List<ItemSpawnDTO> items, int seed = 0)
         {
-            // Default chunk size is 8. Can be adjusted in the line above.
-            // Seed can be null, if it is it becomes random. But because of how C# works you can't set a default null, so this workaround exists.
-            if (seed == -1123581321)
+            return GenerateMap(8, seed, itemService, items);
+            // default chunksize is 8. Can be adjusted in the line above
+        }
+        
+        public IMap GenerateMap(int chunkSize, int seed, IItemService itemService, List<ItemSpawnDTO> items)
+        {
+            // If seed is 0 it becomes random
+            if (seed == 0)
             {
-                seed = new Random().Next(1, 999999);
+                seed = GenerateSeed();
             }
 
-            return new Map(new NoiseMapGenerator(), new DatabaseFunctions.Database(dbLocation, collectionName), chunkSize, seed);
+            return new Map(new NoiseMapGenerator(seed, itemService, items), chunkSize);
         }
 
-        public static int GenerateSeed()
+        public int GenerateSeed()
         {
-            var randomSeed = new Random().Next(1, 999999);
-            return randomSeed;
+            return new Random().Next(1, 9999999);
         }
     }
 }

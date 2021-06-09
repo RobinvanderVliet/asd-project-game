@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using UserInterface;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.UserInterface;
 
-namespace Session.GameConfiguration
+namespace ASD_Game.Session.GameConfiguration
 {
     public class GameConfigurationHandler : IGameConfigurationHandler
     {
@@ -44,25 +44,25 @@ namespace Session.GameConfiguration
             _nextScreen = false;
 
             List<string> newOptions = new List<string>();
-            
+
             //Monster difficulty
             _configurationHeader.Add("Choose the NPC difficulty");
-            newOptions = new List<string>() {"Easy", "Medium", "Hard", "Impossible"};
+            newOptions = new List<string>() { "Easy", "Medium", "Hard", "Impossible" };
             _configurationChoices.Add(newOptions);
-            
+
             //Item Spawnrate
             _configurationHeader.Add("Choose the item spawnrate");
-            newOptions = new List<string>() {"Low", "Medium", "High"};
+            newOptions = new List<string>() { "Low", "Medium", "High" };
             _configurationChoices.Add(newOptions);
 
             //Username
             _configurationHeader.Add("Set your username");
-            newOptions = new List<string>() {"We need to know what to call you", "It can be anything so please keep it civil"};
+            newOptions = new List<string>() { "We need to know what to call you", "It can be anything so please keep it civil" };
             _configurationChoices.Add(newOptions);
-            
+
             //Session name
             _configurationHeader.Add("Type a session name");
-            newOptions = new List<string>() {"It can be anything so please keep it civil"};
+            newOptions = new List<string>() { "It can be anything so please keep it civil" };
             _configurationChoices.Add(newOptions);
         }
 
@@ -105,7 +105,6 @@ namespace Session.GameConfiguration
             }
         }
 
-
         public void UpdateItemSpawnrate(string input)
         {
             input = input.Trim('.', ' ');
@@ -140,7 +139,7 @@ namespace Session.GameConfiguration
             }
         }
 
-        public void SetDifficulty(MonsterDifficulty monsterDifficulty, string sessionId) 
+        public void SetDifficulty(MonsterDifficulty monsterDifficulty, string sessionId)
         {
             var gameConfiguration = _gameConfigDatabaseService.GetAllAsync().Result.FirstOrDefault(configuration => configuration.GameGUID == sessionId);
 
@@ -148,16 +147,16 @@ namespace Session.GameConfiguration
             gameConfiguration.NPCDifficultyNew = (int)monsterDifficulty;
             _gameConfigDatabaseService.UpdateAsync(gameConfiguration);
         }
-        
-        public void SetSpawnRate(ItemSpawnRate spawnRate, string sessionId) 
+
+        public void SetSpawnRate(ItemSpawnRate spawnRate, string sessionId)
         {
             var gameConfiguration = _gameConfigDatabaseService.GetAllAsync().Result.FirstOrDefault(configuration => configuration.GameGUID == sessionId);
 
             gameConfiguration.ItemSpawnRate = (int) spawnRate;
             _gameConfigDatabaseService.UpdateAsync(gameConfiguration);
         }
-        
-        public int AdjustMonsterValue(int monsterProperty) 
+
+        public int AdjustMonsterValue(int monsterProperty)
         {
             return monsterProperty / (int)CurrentMonsterDifficulty * (int)NewMonsterDifficulty;
         }
@@ -169,7 +168,8 @@ namespace Session.GameConfiguration
                 _setupConfiguration = true;
                 SetGameConfiguration();
                 UpdateScreen();
-            } else if (input.Equals("2"))
+            }
+            else if (input.Equals("2"))
             {
                 _setupConfiguration = true;
                 SetGameConfiguration();
@@ -207,14 +207,15 @@ namespace Session.GameConfiguration
                         isCompleted = true;
                         break;
                 }
-            
+
                 if (_nextScreen)
                 {
                     _optionCounter++;
                     _nextScreen = false;
                 }
                 UpdateScreen();
-            } else if (!_setupConfiguration)
+            }
+            else if (!_setupConfiguration)
             {
                 CheckSetupConfiguration(input);
             }
@@ -232,25 +233,24 @@ namespace Session.GameConfiguration
             else
             {
                 _setupConfiguration = false;
-                
             }
         }
 
-        public int OptionCounter 
+        public int OptionCounter
         {
             get { return _optionCounter; }
         }
-        
+
         public bool NextScreen
         {
-            get { return _nextScreen;  }
+            get { return _nextScreen; }
         }
-        
+
         public List<string> ConfigurationHeader
         {
             get { return _configurationHeader; }
         }
-        
+
         public List<List<string>> ConfigurationChoices
         {
             get { return _configurationChoices; }
