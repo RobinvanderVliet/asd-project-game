@@ -122,11 +122,6 @@ namespace ASD_Game.Session
             _heartbeatHandler = new HeartbeatHandler();
             _messageService.AddMessage("Created session with the name: " + _session.Name);
 
-            if (_screenHandler.Screen is LobbyScreen screen)
-            {
-                screen.UpdateLobbyScreen(_session.GetAllClients());
-            }
-
             return _session.InSession;
         }
 
@@ -395,11 +390,6 @@ namespace ASD_Game.Session
                 foreach (string[] client in _session.GetAllClients())
                 {
                     sessionDTO.Clients.Add(client);
-                }
-
-                if (_screenHandler.Screen is LobbyScreen screen)
-                {
-                    screen.UpdateLobbyScreen(_session.GetAllClients());
                 }
 
                 return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
