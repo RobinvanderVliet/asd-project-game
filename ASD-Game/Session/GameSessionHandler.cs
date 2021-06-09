@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using ASD_Game.ActionHandling;
 using ASD_Game.DatabaseHandler.POCO;
 using ASD_Game.DatabaseHandler.Services;
@@ -9,10 +8,9 @@ using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
 using ASD_Game.Session.DTO;
 using ASD_Game.Session.GameConfiguration;
+using ASD_Game.Session.Helpers;
 using ASD_Game.UserInterface;
-using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters;
-using ASD_Game.World.Models.Interfaces;
 using ASD_Game.World.Services;
 using Newtonsoft.Json;
 using System;
@@ -154,62 +152,9 @@ namespace ASD_Game.Session
             _gameConfigDatabaseService.CreateAsync(gameConfigurationPOCO);
         }
 
-        public Player AddPlayersToWorld()
-        { 
-            // This function is only public for unit test purposes
-            List<string[]> allClients = _sessionHandler.GetAllClients();
-            
-            int spawnSeed = _sessionHandler.GetSessionSeed();
-            int playerX = spawnSeed % 50; // spawn position first person.
-            int playerY = spawnSeed % 50;
-
-            Player currentPlayer = null;
-            foreach (var client in allClients)
-            {
-                while (true)
-                {
-                    if (playerX % 2 == 0)
-                    {
-                        playerX += spawnSeed % 3;
-                    }
-                    else
-                    {
-                        playerX -= spawnSeed % 3;
-                    }
-
-                    if (playerY % 2 == 0)
-                    {
-                        playerY += spawnSeed % 5;
-                    }
-                    else
-                    {
-                        playerY -= spawnSeed % 5;
-                    }
-
-                    playerX += 1;
-                    playerY += 1;
-
-                    _worldService.LoadArea(playerX, playerY, 0);
-                    var tile = _worldService.GetTile(playerX, playerY);
-
-                    if (tile is ITerrainTile && tile.IsAccessible && !_worldService.CheckIfCharacterOnTile(tile))
-                    {
-                        break;
-                    }
-                }
-
-                if (_clientController.GetOriginId() == client[0])
-                {
-                    currentPlayer = new Player(client[1], playerX, playerY, CharacterSymbol.CURRENT_PLAYER, client[0]);
-                    _worldService.AddPlayerToWorld(currentPlayer, true);
-                }
-                else
-                {
-                    var playerObject = new Player(client[1], playerX, playerY, CharacterSymbol.ENEMY_PLAYER, client[0]);
-                    _worldService.AddPlayerToWorld(playerObject, false);
-                }
-            }
-            return currentPlayer;
+        private Player AddPlayersToWorld()
+        {
+            return PlayerSpawner.SpawnPlayers(_sessionHandler.GetAllClients(), _sessionHandler.GetSessionSeed(), _worldService, _clientController);
         }
 
         private void CreateMonsters()
