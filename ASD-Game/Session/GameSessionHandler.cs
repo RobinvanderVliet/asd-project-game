@@ -15,11 +15,10 @@ using ASD_Game.World.Services;
 using Newtonsoft.Json;
 using System;
 using System.Timers;
+using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine;
-using WorldGeneration;
 using WorldGeneration.StateMachine;
-using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
 namespace ASD_Game.Session
 {
