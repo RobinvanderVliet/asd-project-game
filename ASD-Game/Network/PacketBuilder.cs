@@ -1,12 +1,14 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
 
-namespace Network
+namespace ASD_Game.Network
 {
     [ExcludeFromCodeCoverage]
     public class PacketBuilder
     {
-        PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
-        PacketDTO packetDTO = new PacketDTO();
+        readonly PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+        readonly PacketDTO packetDTO = new PacketDTO();
 
         public PacketBuilder SetTarget(string target)
         {

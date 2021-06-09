@@ -1,12 +1,11 @@
-﻿using UserInterface;
+using ASD_Game.UserInterface;
 
-namespace Messages
+namespace ASD_Game.Messages
 {
     public class MessageService : IMessageService
     {
-        private MessageModel _messages;
-        private IScreenHandler _screenHandler;
-        //add screenhandler
+        private readonly MessageModel _messages;
+        private readonly IScreenHandler _screenHandler;
 
         public MessageService(IScreenHandler screenHandler)
         {

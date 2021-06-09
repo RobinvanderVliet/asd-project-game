@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Numerics;
 using ActionHandling;
+using ASD_Game.ActionHandling;
+using ASD_Game.World.Services;
 using World.Models.Characters.StateMachine.Builder;
-using WorldGeneration;
 
-namespace World.Models.Characters.StateMachine.Data
+
+namespace ASD_Game.World.Models.Characters.StateMachine.Data
 {
     public interface ICharacterData
     {
@@ -12,7 +14,6 @@ namespace World.Models.Characters.StateMachine.Data
         public Vector2 Position { get; set; }
         public int VisionRange { get; set; }
         public double Health { get; set; }
-
         public List<KeyValuePair<string, string>> RuleSet { get; set; }
         public Inventory Inventory { get; set; }
         public int Team { get; set; }

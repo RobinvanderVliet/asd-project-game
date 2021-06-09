@@ -1,11 +1,11 @@
 ﻿
-namespace Agent.Antlr.Ast.Comparables
+namespace ASD_Game.Agent.Antlr.Ast.Comparables
 {
 
     public class Stat : Comparable
     {
-        public string Name { get; set; }
-
+        public readonly string Name;
+        
         public Stat(string name)
         {
             Name = name;

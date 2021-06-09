@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Session.DTO
+namespace ASD_Game.Session.DTO
 {
     [ExcludeFromCodeCoverage]
     public class StartGameDTO

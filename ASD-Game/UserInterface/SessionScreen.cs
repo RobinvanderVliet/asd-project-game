@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace UserInterface
+namespace ASD_Game.UserInterface
 {
     public class SessionScreen : Screen
     {

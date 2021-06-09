@@ -1,7 +1,6 @@
-﻿using System;
 using System.Collections.Generic;
 
-namespace Agent.Models
+namespace ASD_Game.Agent.Models
 {
     public class Configuration
     {

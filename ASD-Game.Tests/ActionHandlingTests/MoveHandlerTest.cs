@@ -1,13 +1,17 @@
 using System.Diagnostics.CodeAnalysis;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using Messages;
+using ASD_Game.ActionHandling;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.Enum;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Services;
 using Moq;
-using Network;
 using NUnit.Framework;
-using WorldGeneration;
 
-namespace ActionHandling.Tests
+
+namespace ASD_Game.Tests.ActionHandlingTests
 {
     [ExcludeFromCodeCoverage]
     public class MoveHandlerTest
@@ -40,17 +44,17 @@ namespace ActionHandling.Tests
             int steps = 5;
             int x = 26;
             int y = 11;
-            
+
             Player player = new Player("test", x, y, "#", "test2");
-            
+
             _mockedWorldService.Setup(mock => mock.GetCurrentPlayer()).Returns(player);
             _mockedClientController.Setup(mock => mock.SendPayload(It.IsAny<string>(), PacketType.Move));
-            
+
             //act
             _sut.SendMove(direction, steps);
-            
+
             //assert
-           // _mockedWorldService.Verify(mock => mock.Send(), Times.Once);
+            // _mockedWorldService.Verify(mock => mock.Send(), Times.Once);
             _mockedClientController.Verify(mock => mock.SendPayload(It.IsAny<string>(), PacketType.Move), Times.Once);
         }
     }

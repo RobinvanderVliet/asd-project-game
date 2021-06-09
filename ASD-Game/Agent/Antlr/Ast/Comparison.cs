@@ -1,11 +1,10 @@
-﻿namespace Agent.Antlr.Ast
+﻿namespace ASD_Game.Agent.Antlr.Ast
 {
 
     public class Comparison : Node
     {
-        public string ComparisonType { get; set; }
-
-        //TODO: Create comparisonTypeEnum ,(reactie) voor nu overbodig kan later
+        public readonly string ComparisonType;
+        
         public Comparison(string comparisonType)
         {
             ComparisonType = comparisonType;

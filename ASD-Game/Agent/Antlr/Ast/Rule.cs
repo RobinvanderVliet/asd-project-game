@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace Agent.Antlr.Ast
+namespace ASD_Game.Agent.Antlr.Ast
 {
 
     public class Rule : Node
     {
-        private List<Node> _settings = new List<Node>();
-
-        public string SettingName { get; set; }
-        public string Value { get; set; }
+        public readonly List<Node> Settings = new();
+        public readonly string SettingName;
+        public readonly string Value;
 
 
         public Rule(string settingName, string value)
@@ -25,7 +24,7 @@ namespace Agent.Antlr.Ast
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            children.AddRange(_settings);
+            children.AddRange(Settings);
             children.AddRange(body);
             return children;
         }
@@ -33,7 +32,7 @@ namespace Agent.Antlr.Ast
         public override Node AddChild(Node node)
         {
             if (node is Setting setting)
-                _settings.Add(setting);
+                Settings.Add(setting);
             else
                 body.Add(node);
 
@@ -43,8 +42,8 @@ namespace Agent.Antlr.Ast
         public override Node RemoveChild(Node node)
         {
             if (node is Setting setting)
-                _settings.Remove(setting);
-            else
+                Settings.Remove(setting);
+            else 
                 body.Remove(node);
             return this;
         }

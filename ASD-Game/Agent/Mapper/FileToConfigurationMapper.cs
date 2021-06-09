@@ -1,17 +1,19 @@
-﻿using System;
+﻿using Agent.Mapper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Agent.Mapper
+namespace ASD_Game.Agent.Mapper
 {
     public class FileToConfigurationMapper : IFileToConfigurationMapper
     {
         public FileHandler FileHandler;
+        
         public List<KeyValuePair<string, string>> MapFileToConfiguration(string filepath)
         {
             FileHandler = new FileHandler();
             List<KeyValuePair<string, string>> configuration = new List<KeyValuePair<string, string>>();
-                    
+            
             string content = FileHandler.ImportFile(filepath);
 
             var splitContent = content.Split(Environment.NewLine);

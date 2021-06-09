@@ -1,7 +1,7 @@
-using ActionHandling.DTO;
-using WorldGeneration;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.World.Models.Characters;
 
-namespace ActionHandling
+namespace ASD_Game.ActionHandling
 {
     public interface IRelativeStatHandler
     {

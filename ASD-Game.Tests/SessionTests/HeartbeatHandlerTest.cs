@@ -1,12 +1,14 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 using Creature;
 using Moq;
+using ASD_Game.Session;
+using NUnit.Framework;
 
-namespace Session.Tests
+
+namespace ASD_Game.Tests.SessionTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]

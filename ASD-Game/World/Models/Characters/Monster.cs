@@ -1,7 +1,8 @@
-﻿using World.Models.Characters.StateMachine.Data;
 using WorldGeneration.StateMachine;
+using ASD_Game.World.Models.Characters.StateMachine;
+using ASD_Game.World.Models.Characters.StateMachine.Data;
 
-namespace WorldGeneration
+namespace ASD_Game.World.Models.Characters
 {
     public class Monster : Character
     {

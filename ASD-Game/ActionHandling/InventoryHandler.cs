@@ -1,18 +1,20 @@
-﻿using ActionHandling.DTO;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using Items;
-using Items.Consumables;
-using Messages;
-using Network;
-using Network.DTO;
-using Newtonsoft.Json;
 using System;
 using System.Linq;
-using WorldGeneration;
-using WorldGeneration.Exceptions;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Items;
+using ASD_Game.Items.Consumables;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Characters.Exceptions;
+using ASD_Game.World.Services;
+using Newtonsoft.Json;
 
-namespace ActionHandling
+namespace ASD_Game.ActionHandling
 {
     public class InventoryHandler : IPacketHandler, IInventoryHandler
     {
@@ -21,9 +23,12 @@ namespace ActionHandling
         private readonly IMessageService _messageService;
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
-        private readonly IDatabaseService<WorldItemPOCO> _worldItemDatabaseService;
 
-        public InventoryHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IDatabaseService<PlayerItemPOCO> playerItemDatabaseService, IDatabaseService<WorldItemPOCO> worldItemDatabaseService, IMessageService messageService)
+        public InventoryHandler(IClientController clientController,
+            IWorldService worldService,
+            IDatabaseService<PlayerPOCO> playerDatabaseService,
+            IDatabaseService<PlayerItemPOCO> playerItemDatabaseService,
+            IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Inventory);
@@ -31,7 +36,6 @@ namespace ActionHandling
             _messageService = messageService;
             _playerDatabaseService = playerDatabaseService;
             _playerItemDatabaseService = playerItemDatabaseService;
-            _worldItemDatabaseService = worldItemDatabaseService;
         }
 
         public void UseItem(int index)
@@ -69,7 +73,6 @@ namespace ActionHandling
                 new InventoryDTO(_clientController.GetOriginId(), InventoryType.Pickup, index);
             SendInventoryDTO(inventoryDTO);
         }
-
         public void DropItem(string inventorySlot)
         {
             if (_worldService.IsDead(_worldService.GetCurrentPlayer()))
@@ -91,12 +94,12 @@ namespace ActionHandling
             if (index == 99)
             {
                 _messageService.AddMessage("Unknown item slot");
-            }
+            } 
             else
             {
-                InventoryDTO inventoryDTO = new(_clientController.GetOriginId(), InventoryType.Drop, index);
+                InventoryDTO inventoryDTO = new (_clientController.GetOriginId(), InventoryType.Drop, index);
                 SendInventoryDTO(inventoryDTO);
-            }
+            }   
         }
 
         private void SendInventoryDTO(InventoryDTO inventoryDTO)
@@ -128,8 +131,8 @@ namespace ActionHandling
                     output = inventoryItem.ToString();
                 }
             }
-            catch (ArgumentOutOfRangeException e) { }
-
+            catch(ArgumentOutOfRangeException) {}
+            
             _messageService.AddMessage(output);
         }
 
@@ -138,16 +141,15 @@ namespace ActionHandling
             var inventoryDTO = JsonConvert.DeserializeObject<InventoryDTO>(packet.Payload);
             bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
 
+
             if (packet.Header.Target == "host" || packet.Header.Target == "client")
             {
                 switch (inventoryDTO.InventoryType)
                 {
                     case InventoryType.Use:
                         return HandleUse(inventoryDTO, handleInDatabase);
-
                     case InventoryType.Drop:
                         return HandleDrop(inventoryDTO, handleInDatabase);
-
                     case InventoryType.Pickup:
                         return HandlePickup(inventoryDTO, handleInDatabase);
                 }
@@ -192,7 +194,7 @@ namespace ActionHandling
                         GameGUID = _clientController.SessionId,
                         ItemName = item.ItemName,
                     };
-
+                    
                     if (item is Armor armor)
                     {
                         playerItemPOCO.ArmorPoints = armor.ArmorProtectionPoints;
@@ -225,25 +227,21 @@ namespace ActionHandling
                     item = player.Inventory.Helmet;
                     player.Inventory.Helmet = null;
                     break;
-
                 case 1:
                     item = player.Inventory.Armor;
                     player.Inventory.Armor = null;
                     break;
-
                 case 2:
                     item = player.Inventory.Weapon;
                     player.Inventory.Weapon = null;
                     break;
-
                 case 3:
-                    if (player.Inventory.ConsumableItemList.Count >= 1)
+                    if(player.Inventory.ConsumableItemList.Count >= 1)
                     {
                         item = player.Inventory.ConsumableItemList.ElementAt(0);
                         player.Inventory.ConsumableItemList.RemoveAt(0);
-                    }
+                    }              
                     break;
-
                 case 4:
                     if (player.Inventory.ConsumableItemList.Count >= 2)
                     {
@@ -251,7 +249,6 @@ namespace ActionHandling
                         player.Inventory.ConsumableItemList.RemoveAt(1);
                     }
                     break;
-
                 case 5:
                     if (player.Inventory.ConsumableItemList.Count >= 3)
                     {
@@ -259,7 +256,6 @@ namespace ActionHandling
                         player.Inventory.ConsumableItemList.RemoveAt(2);
                     }
                     break;
-
                 default:
                     break;
             }
@@ -269,7 +265,8 @@ namespace ActionHandling
                 _worldService.DisplayStats();
                 if (handleInDatabase)
                 {
-                    PlayerItemPOCO playerItemPOCO = _playerItemDatabaseService.GetAllAsync().Result.FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == item.ItemName && playerItem.PlayerGUID == player.Id);
+                    PlayerItemPOCO playerItemPOCO = _playerItemDatabaseService.GetAllAsync().Result
+                        .FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == item.ItemName && playerItem.PlayerGUID == player.Id);
                     _ = _playerItemDatabaseService.DeleteAsync(playerItemPOCO);
                 }
 
@@ -279,12 +276,13 @@ namespace ActionHandling
                 }
 
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
-            }
+            } 
             else
             {
-                if (inventoryDTO.UserId == _clientController.GetOriginId())
+                if(inventoryDTO.UserId == _clientController.GetOriginId())
                 {
                     _messageService.AddMessage("This is not an item you can drop!");
+
                 }
                 return new HandlerResponseDTO(SendAction.ReturnToSender, "This is not an item you can drop!");
             }
@@ -293,30 +291,31 @@ namespace ActionHandling
         private HandlerResponseDTO HandleUse(InventoryDTO inventoryDTO, bool handleInDatabase)
         {
             var player = _worldService.GetPlayer(inventoryDTO.UserId);
-            if (player.Inventory.ConsumableItemList.Count >= inventoryDTO.Index)
+            if(player.Inventory.ConsumableItemList.Count >= inventoryDTO.Index)
             {
-                Consumable itemToUse = player.Inventory.ConsumableItemList.ElementAt(inventoryDTO.Index - 1);
-                player.Inventory.ConsumableItemList.RemoveAt(inventoryDTO.Index - 1);
+                Consumable itemToUse = player.Inventory.ConsumableItemList.ElementAt(inventoryDTO.Index-1);
+                player.Inventory.ConsumableItemList.RemoveAt(inventoryDTO.Index-1);
                 player.UseConsumable(itemToUse);
                 _worldService.DisplayStats();
 
                 if (handleInDatabase)
                 {
-                    PlayerItemPOCO playerItemPOCO = _playerItemDatabaseService.GetAllAsync().Result.FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == itemToUse.ItemName && playerItem.PlayerGUID == player.Id);
+                    PlayerItemPOCO playerItemPOCO = _playerItemDatabaseService.GetAllAsync().Result
+                        .FirstOrDefault(playerItem => playerItem.GameGUID == _clientController.SessionId && playerItem.ItemName == itemToUse.ItemName && playerItem.PlayerGUID == player.Id);
                     _ = _playerItemDatabaseService.DeleteAsync(playerItemPOCO);
 
                     var result = _playerDatabaseService.GetAllAsync().Result;
-                    PlayerPOCO playerPOCO = result.FirstOrDefault(player => player.PlayerGuid == inventoryDTO.UserId && player.GameGuid == _clientController.SessionId);
+                    PlayerPOCO playerPOCO = result.FirstOrDefault(player => player.PlayerGUID == inventoryDTO.UserId && player.GameGUID == _clientController.SessionId );
 
                     playerPOCO.Health = player.Health;
-                    //add stamina to playerPOCO
+                    playerPOCO.Stamina = player.Stamina;
                     _ = _playerDatabaseService.UpdateAsync(playerPOCO);
                 }
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
             else
             {
-                if (inventoryDTO.UserId == _clientController.GetOriginId())
+                if(inventoryDTO.UserId == _clientController.GetOriginId())
                 {
                     _messageService.AddMessage("Could not find item");
                 }

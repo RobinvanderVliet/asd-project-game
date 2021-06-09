@@ -1,15 +1,14 @@
-using Network.DTO;
 using System.Diagnostics.CodeAnalysis;
-using System.Collections.Generic;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
 
-namespace Network
+namespace ASD_Game.Network
 {
     public class HostController : IPacketListener, IHostController
     {
-        private INetworkComponent _networkComponent;
-        private IPacketHandler _client;
+        private readonly INetworkComponent _networkComponent;
+        private readonly IPacketHandler _client;
         private string _sessionId;
-        private List<IAgentController> _agentControllers;
 
         public HostController(INetworkComponent networkComponent, IPacketHandler client, string sessionId)
         {
@@ -17,7 +16,6 @@ namespace Network
             _client = client;
             _sessionId = sessionId;
             _networkComponent.SetHostController(this);
-            _agentControllers = new List<IAgentController>();
         }
 
         public void ReceivePacket(PacketDTO packet)
@@ -32,8 +30,7 @@ namespace Network
         {
             HandlerResponseDTO handlerResponse = _client.HandlePacket(packet);
             packet.Header.SessionID = _sessionId;
-            SendToAgents(packet);
-            
+
             if (handlerResponse.Action == SendAction.SendToClients)
             {
                 packet.Header.Target = "client";
@@ -47,24 +44,11 @@ namespace Network
                 _networkComponent.SendPacket(packet);
             }
         }
-        
-        private void SendToAgents(PacketDTO packet)
-        {
-            foreach (var agentController in _agentControllers)
-            {
-                agentController.HandlePacket(packet);
-            }
-        }
-        
+
         [ExcludeFromCodeCoverage]
         public void SetSessionId(string sessionId)
         {
             _sessionId = sessionId;
-        }
-
-        public void AddAgentController(IAgentController agentController)
-        {
-            _agentControllers.Add(agentController);
         }
     }
 }

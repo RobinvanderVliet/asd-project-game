@@ -2,14 +2,15 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using Appccelerate.StateMachine.Machine;
+
 using Creature.Creature.StateMachine.CustomRuleSet;
 using Creature.Creature.StateMachine.State;
 using World.Models.Characters.StateMachine.Builder;
-using World.Models.Characters.StateMachine.Data;
+using ASD_Game.World.Models.Characters.StateMachine.Data;
+using ASD_Game.World.Models.Characters.StateMachine.State;
 using WorldGeneration.StateMachine.Event;
-using WorldGeneration.StateMachine.State;
 
-namespace WorldGeneration.StateMachine
+namespace ASD_Game.World.Models.Characters.StateMachine
 {
     public class MonsterStateMachine : DefaultStateMachine
     {

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Numerics;
-using World.Models.Characters.StateMachine.Data;
-using WorldGeneration.StateMachine.State;
+using ASD_Game.World.Models.Characters.StateMachine.Data;
 
-namespace Creature.Creature.StateMachine.State
+namespace ASD_Game.World.Models.Characters.StateMachine.State
 {
     public class WanderState : CharacterState
     {

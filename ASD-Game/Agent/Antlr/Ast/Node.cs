@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace Agent.Antlr.Ast
+namespace ASD_Game.Agent.Antlr.Ast
 {
 
     public class Node
@@ -40,6 +40,11 @@ namespace Agent.Antlr.Ast
         public void SetError(string message)
         {
             error = new ASTError(message);
+        }
+
+        public bool HasError()
+        {
+            return error != null;
         }
 
         private string BuildString(StringBuilder builder)

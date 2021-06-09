@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace Character.Pathfinder
+namespace ASD_Game.World.Models.Characters.Algorithms.Pathfinder
 {
     public class Node : IComparable<Node>
     {
@@ -18,31 +18,26 @@ namespace Character.Pathfinder
             get => _parent;
             set => _parent = value;
         }
-
         public Vector2 Position
         {
             get => _position;
             set => _position = value;
         }
-
         public float DistanceToTarget
         {
             get => _distanceToTarget;
             set => _distanceToTarget = value;
         }
-
         public float Cost
         {
             get => _cost;
             set => _cost = value;
         }
-
         public float Weight
         {
             get => _weight;
             set => _weight = value;
         }
-
         public float FScore
         {
             get
@@ -52,7 +47,6 @@ namespace Character.Pathfinder
                 return -1;
             }
         }
-
         public bool IsWalkable
         {
             get => _isWalkable;

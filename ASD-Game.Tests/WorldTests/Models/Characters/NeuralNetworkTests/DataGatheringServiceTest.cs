@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using ASD_Game.World.Models.Characters.StateMachine.Data;
 using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 using World.Models.Characters.StateMachine.Data;
 

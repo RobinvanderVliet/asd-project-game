@@ -1,4 +1,4 @@
-﻿namespace WorldGeneration.StateMachine.Event
+namespace WorldGeneration.StateMachine.Event
 {
     public class CharacterEvent
     {

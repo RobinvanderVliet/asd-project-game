@@ -1,8 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
+using ASD_Game.Items;
+using ASD_Game.Items.Consumables;
+using ASD_Game.Items.Consumables.ConsumableStats;
+using ASD_Game.World.Models.Characters;
 using NUnit.Framework;
-using WorldGeneration;
 
-namespace World.Tests.Models.Characters
+namespace ASD_Game.Tests.WorldTests.Models.Characters
 {
     [ExcludeFromCodeCoverage]
     public class PlayerTest
@@ -102,6 +105,54 @@ namespace World.Tests.Models.Characters
         {
             _sut.AddRadiationLevel(500);
             Assert.AreEqual(100, _sut.RadiationLevel);
+        }
+        
+        [Test]
+        public void Test_UseConsumeable_EatHealthConsumeable()
+        {
+            _sut.Health = 50;
+            var healthConsumable = new HealthConsumable
+            {
+                Health = Health.Low
+            };
+            _sut.UseConsumable(healthConsumable);
+            
+            Assert.AreEqual(75, _sut.Health);
+        }
+        
+        [Test]
+        public void Test_UseConsumeable_EatStaminaConsumeable()
+        {
+            _sut.Stamina = 50;
+            var staminaConsumable = new StaminaConsumable
+            {
+                Stamina = Stamina.Low
+            };
+            _sut.UseConsumable(staminaConsumable);
+            
+            Assert.AreEqual(75, _sut.Stamina);
+        }
+        
+        [Test]
+        public void Test_GetArmorPoints_HasHelmetWith20ArmorPoints()
+        {
+            var item = ItemFactory.GetMilitaryHelmet();
+            var inventory = new Inventory {Helmet = null};
+            inventory.AddItem(item);
+            _sut.Inventory = inventory;
+            Assert.AreEqual(20, _sut.GetArmorPoints());
+        }
+        
+        [Test]
+        public void Test_GetArmorPoints_HasHelmetWith20ArmorPointsAndBodyArmorWith40ArmorPoints()
+        {
+            var helmetItem = ItemFactory.GetMilitaryHelmet();
+            var bodyItem = ItemFactory.GetTacticalVest();
+            var inventory = new Inventory {Helmet = null, Armor = null};
+            inventory.AddItem(helmetItem);
+            inventory.AddItem(bodyItem);
+            _sut.Inventory = inventory;
+            Assert.AreEqual(60, _sut.GetArmorPoints());
         }
     }
 }

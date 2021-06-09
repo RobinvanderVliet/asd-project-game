@@ -16,14 +16,14 @@ combat{
 }
  
 explore{
-    when player finds item then collect
+    when player finds "item" then collect
  
     collect{
-        when inventory does not contain item then grab otherwise replace
+        when inventory does not contain "item" then grab otherwise replace
      }
  
     replace{
-        when item strength greater than current then swap
+        when "item" RPP greater than current then swap
     }
 }
     

@@ -2,10 +2,11 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using ActionHandling;
+using ASD_Game.ActionHandling;
+using ASD_Game.World.Services;
 using World.Models.Characters.StateMachine.Builder;
-using WorldGeneration;
 
-namespace World.Models.Characters.StateMachine.Data
+namespace ASD_Game.World.Models.Characters.StateMachine.Data
 {
     [ExcludeFromCodeCoverage]
     public class MonsterData : ICharacterData
@@ -32,6 +33,7 @@ namespace World.Models.Characters.StateMachine.Data
             set => _health = value;
         }
 
+
         public List<KeyValuePair<string, string>> RuleSet { get; set; }
         public Inventory Inventory { get; set; }
         public int Team { get; set; }
@@ -41,6 +43,9 @@ namespace World.Models.Characters.StateMachine.Data
         public BuilderConfigurator BuilderConfigurator { get; set; }
         public IAttackHandler AttackHandler { get; set; }
         public string CharacterId { get; set; }
+
+        public IWorld World { get; set; }
+
 
         public int Damage
         {

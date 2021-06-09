@@ -1,9 +1,9 @@
-﻿using Agent.Antlr.Ast.Comparables;
-using Agent.Antlr.Ast.Comparables.Subjects;
+﻿using System.Diagnostics.CodeAnalysis;
+using ASD_Game.Agent.Antlr.Ast.Comparables;
+using ASD_Game.Agent.Antlr.Ast.Comparables.Subjects;
 using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
 
-namespace Agent.Tests.Ast
+namespace ASD_Game.Tests.AgentTests.Ast
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
@@ -60,18 +60,18 @@ namespace Agent.Tests.Ast
         public void Test_GetNodeOpponent_CorrectOutput()
         {
             //Arrange
-            var node = new Opponent(TESTNAME);
+            var node = new AgentSubject(TESTNAME);
             //Act
             var result = node.GetNodeType();
             //Assert
-            Assert.AreEqual("Opponent", result);
+            Assert.AreEqual("Agent", result);
         }
 
         [Test]
         public void Test_GetNodePlayer_CorrectOutput()
         {
             //Arrange
-            var node = new Antlr.Ast.Comparables.Subjects.Player(TESTNAME);
+            var node = new Player(TESTNAME);
             //Act
             var result = node.GetNodeType();
             //Assert

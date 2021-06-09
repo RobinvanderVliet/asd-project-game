@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace UserInterface
+namespace ASD_Game.UserInterface
 {
     [ExcludeFromCodeCoverage]
     public class ConsoleHelper
@@ -35,7 +35,12 @@ namespace UserInterface
         {
             return Console.CursorTop;
         }
-
+        
+        public virtual void WriteLine(string text)
+        {
+            Console.WriteLine(text);
+        }
+        
         public virtual string ReadLine()
         {
             return Console.ReadLine();

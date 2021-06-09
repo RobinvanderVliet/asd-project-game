@@ -1,4 +1,4 @@
-﻿namespace WorldGeneration.StateMachine.CustomRuleSet
+namespace WorldGeneration.StateMachine.CustomRuleSet
 {
     public class RuleSet
     {
@@ -50,11 +50,6 @@
         {
             get => _comparisonFalse;
             set => _comparisonFalse = value;
-        }
-
-        public RuleSet()
-        {
-            
         }
     }
 }

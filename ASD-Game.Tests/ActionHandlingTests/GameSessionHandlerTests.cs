@@ -1,19 +1,22 @@
-﻿using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using Moq;
-using Network;
-using NUnit.Framework;
-using Session.GameConfiguration;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Agent.Services;
-using Messages;
-using Session;
-using WorldGeneration;
-using UserInterface;
+using ASD_Game.ActionHandling;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Session;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
+using ASD_Game.World.Services;
+using Moq;
+using NUnit.Framework;
 
-namespace ActionHandling.Tests
+namespace ASD_Game.Tests.SessionTests
+
 {
     [ExcludeFromCodeCoverage]
     public class GameSessionHandlerTests
@@ -24,7 +27,6 @@ namespace ActionHandling.Tests
 
         //Declaration of mocks
         private Mock<ClientController> _mockedClientController; //change this to the interface and all test break, your choice.
-
         private Mock<IWorldService> _mockedWorldService;
         private Mock<ISessionHandler> _mockedSessionHandler;
         private Mock<IDatabaseService<PlayerPOCO>> _mockedPlayerDatabaseService;

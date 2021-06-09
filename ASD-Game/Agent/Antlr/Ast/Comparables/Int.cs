@@ -1,9 +1,9 @@
-﻿namespace Agent.Antlr.Ast.Comparables
+﻿namespace ASD_Game.Agent.Antlr.Ast.Comparables
 {
     public class Int : Comparable
     {
-        public int Value { get; set; }
-
+        public readonly int Value;
+        
         public Int(int value)
         {
             Value = value;

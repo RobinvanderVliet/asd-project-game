@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 
-namespace Agent.Antlr.Ast
+namespace ASD_Game.Agent.Antlr.Ast
 {
 
     public class Setting : Node
     {
+        
+        public readonly List<Node> Conditions = new ();
+        public readonly List<Node> Actions = new ();
 
-        private List<Node> _conditions = new List<Node>();
-        private List<Node> _actions = new List<Node>();
-
-        public string SettingName { get; set; }
-
+        public readonly string SettingName;
+        
         public Setting(string settingName)
         {
             SettingName = settingName;
@@ -25,8 +25,8 @@ namespace Agent.Antlr.Ast
         public override List<Node> GetChildren()
         {
             var children = new List<Node>();
-            children.AddRange(_conditions);
-            children.AddRange(_actions);
+            children.AddRange(Conditions);
+            children.AddRange(Actions);
             children.AddRange(body);
             return children;
         }
@@ -36,10 +36,10 @@ namespace Agent.Antlr.Ast
             switch (node)
             {
                 case Condition:
-                    _conditions.Add(node);
+                    Conditions.Add(node);
                     break;
                 case Action:
-                    _actions.Add(node);
+                    Actions.Add(node);
                     break;
                 default:
                     body.Add(node);

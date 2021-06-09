@@ -1,18 +1,19 @@
-using System;
-using Network;
-using Newtonsoft.Json;
 using System.Linq;
 using System.Timers;
-using ActionHandling.DTO;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using Messages;
-using Network.DTO;
-using WorldGeneration;
-using WorldGeneration.Models.HazardousTiles;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.HazardousTiles;
+using ASD_Game.World.Services;
+using Newtonsoft.Json;
 using Timer = System.Timers.Timer;
 
-namespace ActionHandling
+namespace ASD_Game.ActionHandling
 {
     public class RelativeStatHandler : IRelativeStatHandler, IPacketHandler
     {
@@ -168,7 +169,7 @@ namespace ActionHandling
             if (handleInDatabase)
             {
                 PlayerPOCO playerPOCO = _playerDatabaseService.GetAllAsync().Result.FirstOrDefault(poco =>
-                    poco.PlayerGuid == player.Id && poco.GameGuid == _clientController.SessionId);
+                    poco.PlayerGUID == player.Id && poco.GameGUID == _clientController.SessionId);
                 if (relativeStatDTO.Stamina != 0)
                 {
                     playerPOCO.Stamina = player.Stamina;
@@ -181,7 +182,6 @@ namespace ActionHandling
                 {
                     playerPOCO.Health = player.Health;
                 }
-
                 _playerDatabaseService.UpdateAsync(playerPOCO);
             }
         }

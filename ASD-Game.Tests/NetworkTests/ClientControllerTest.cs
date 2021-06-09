@@ -1,10 +1,12 @@
-﻿using Moq;
-using Network.DTO;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
+using Moq;
+using NUnit.Framework;
 
-namespace Network.Tests
+namespace ASD_Game.Tests.NetworkTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
@@ -127,30 +129,28 @@ namespace Network.Tests
         public void Test_SendPayload_PayloadIsNull()
         {
             //Arrange
-            string expectedExceptionMessage = "Payload is empty.";
             string payload = null;
             var packetType = PacketType.Chat;
 
             //Act
-            var ex = Assert.Throws<Exception>(() => _sut.SendPayload(payload, packetType));
+            _sut.SendPayload(payload, packetType);
 
             //Assert
-            Assert.AreEqual(expectedExceptionMessage, ex.Message);
+            _mockedNetworkComponent.Verify(mock => mock.SendPacket(It.IsAny<PacketDTO>()), Times.Never);
         }
 
         [Test]
         public void Test_SendPayload_PayloadIsEmpty()
         {
             //Arrange
-            string expectedExceptionMessage = "Payload is empty.";
             string payload = "";
             var packetType = PacketType.Chat;
 
             //Act
-            var ex = Assert.Throws<Exception>(() => _sut.SendPayload(payload, packetType));
+            _sut.SendPayload(payload, packetType);
 
             //Assert
-            Assert.AreEqual(expectedExceptionMessage, ex.Message);
+            _mockedNetworkComponent.Verify(mock => mock.SendPacket(It.IsAny<PacketDTO>()), Times.Never);
         }
 
         [Test]

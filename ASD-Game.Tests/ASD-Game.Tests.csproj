@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <RootNamespace>ASD_Game.Tests</RootNamespace>
-
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
@@ -20,20 +20,26 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="AgentTests\Resource\npcFileTest_2.txt" />
+      <EmbeddedResource Include="AgentTests\Resource\npcFileTest_2.txt" />
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="AgentTests\Resource\AgentTestFile.txt" />
+      <EmbeddedResource Include="AgentTests\Resource\AgentTestFileParseException.txt" />
+      <EmbeddedResource Include="AgentTests\Resource\agent_test.cfg" />
+      <EmbeddedResource Include="AgentTests\Resource\export test file 1.txt" />
+      <EmbeddedResource Include="AgentTests\Resource\import_test_file_1.txt" />
+      <EmbeddedResource Include="AgentTests\Resource\npcFileTest.txt" />
       <EmbeddedResource Include="AgentTests\Resource\test1.txt" />
       <EmbeddedResource Include="AgentTests\Resource\test2.txt" />
       <EmbeddedResource Include="AgentTests\Resource\test3.txt" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <Page Include="AgentTests\Resource\AgentTestFileWrongExtension.xml" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\ASD-Game\ASD-Game.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Resource" />
-	</ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\ASD-Game\ASD-Game.csproj" />
+    </ItemGroup>
 </Project>

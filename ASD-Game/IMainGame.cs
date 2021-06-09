@@ -1,4 +1,4 @@
-﻿namespace ASD_project
+﻿namespace ASD_Game
 {
     public interface IMainGame
     {

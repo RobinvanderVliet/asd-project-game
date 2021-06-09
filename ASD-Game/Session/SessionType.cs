@@ -1,4 +1,4 @@
-namespace Session
+namespace ASD_Game.Session
 {
     public enum SessionType
     {

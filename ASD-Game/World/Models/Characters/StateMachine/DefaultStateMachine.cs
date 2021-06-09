@@ -3,11 +3,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
-using World.Models.Characters.StateMachine.Data;
-using WorldGeneration.StateMachine.Event;
-using WorldGeneration.StateMachine.State;
+using ASD_Game.World.Models.Characters.StateMachine.Data;
+using ASD_Game.World.Models.Characters.StateMachine.State;
+using WorldGeneration.StateMachine;
 
-namespace WorldGeneration.StateMachine
+using WorldGeneration.StateMachine.Event;
+
+namespace ASD_Game.World.Models.Characters.StateMachine
 {
     public abstract class DefaultStateMachine : ICharacterStateMachine
     {
@@ -37,7 +39,7 @@ namespace WorldGeneration.StateMachine
         [ExcludeFromCodeCoverage]
         public void StopStateMachine()
         {
-            _timer.Dispose();
+            KillLoop();
             _passiveStateMachine.Stop();
         }
 

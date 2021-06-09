@@ -1,10 +1,12 @@
-﻿using Session.DTO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Timers;
 using Creature;
 
-namespace Session
+using ASD_Game.Session.DTO;
+
+
+namespace ASD_Game.Session
 {
     public class HeartbeatHandler : IHeartbeatHandler
     {
@@ -63,7 +65,7 @@ namespace Session
 
         private void CheckStatus()
         {
-            var leavers = _players.FindAll(x => !x.online);
+            var leavers = _players.FindAll(x => !x.IsOnline);
             if (leavers.Count != 0)
             {
                 EnablePlayerAgent(leavers);
@@ -81,30 +83,30 @@ namespace Session
 
         private void ReplaceAgent(HeartbeatDTO player)
         {
-            _agentHandler.Replace(player.clientID);
+            _agentHandler.Replace(player.ClientID);
         }
 
         private bool PlayerKnown(string clientID)
         {
-            return _players.Exists(player => player.clientID == clientID);
+            return _players.Exists(player => player.ClientID == clientID);
         }
 
         private void UpdateStatus()
         {
             foreach (HeartbeatDTO player in _players)
             {
-                if (DateTime.Now - player.time >= waitTime)
+                if (DateTime.Now - player.Time >= waitTime)
                 {
-                    player.online = false;
-                } else if (!player.online)
+                    player.IsOnline = false;
+                } else if (!player.IsOnline)
                 {
                     // TODO: implement when player returns take over agent
                     //ReplaceAgent(player);
-                    player.online = true;
+                    player.IsOnline = true;
                 }
                 else
                 {
-                    player.online = true;
+                    player.IsOnline = true;
                 }
             }
             CheckStatus();
@@ -112,8 +114,8 @@ namespace Session
 
         private void UpdatePlayer(string clientID)
         {
-            var player = _players.Find(x => x.clientID == clientID);
-            player.time = DateTime.Now;
+            var player = _players.Find(x => x.ClientID == clientID);
+            player.Time = DateTime.Now;
         }
     }
 }

@@ -1,9 +1,8 @@
-using InputHandling;
 using System;
-using UserInterface;
+using ASD_Game.InputHandling;
+using ASD_Game.UserInterface;
 
-
-namespace ASD_project
+namespace ASD_Game
 {
     partial class Program
     {
@@ -40,11 +39,15 @@ namespace ASD_project
                         {
                             _inputHandler.HandleConfigurationScreenCommands();
                         }
+                        else if (currentScreen is EditorScreen)
+                        {
+                            _inputHandler.HandleEditorScreenCommands();
+                        }
                         else if (currentScreen is GameScreen)
                         {
                             _inputHandler.HandleGameScreenCommands();
                         }
-                        else if (currentScreen is LobbyScreen)
+                        else if (currentScreen is LobbyScreen) 
                         {
                             _inputHandler.HandleLobbyScreenCommands();
                         }

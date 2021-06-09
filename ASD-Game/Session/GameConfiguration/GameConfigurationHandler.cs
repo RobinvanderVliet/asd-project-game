@@ -1,11 +1,11 @@
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UserInterface;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.UserInterface;
 
-namespace Session.GameConfiguration
+namespace ASD_Game.Session.GameConfiguration
 {
     public class GameConfigurationHandler : IGameConfigurationHandler
     {
@@ -78,22 +78,18 @@ namespace Session.GameConfiguration
                         NewMonsterDifficulty = MonsterDifficulty.Easy;
                         _nextScreen = true;
                         break;
-
                     case 2:
                         NewMonsterDifficulty = MonsterDifficulty.Medium;
                         _nextScreen = true;
                         break;
-
                     case 3:
                         NewMonsterDifficulty = MonsterDifficulty.Hard;
                         _nextScreen = true;
                         break;
-
                     case 4:
                         NewMonsterDifficulty = MonsterDifficulty.Impossible;
                         _nextScreen = true;
                         break;
-
                     default:
                         _configurationScreen.UpdateInputMessage(
                             "The chosen option does not exist, please choose one of the existing options by typing their corresponding number");
@@ -121,28 +117,25 @@ namespace Session.GameConfiguration
                         SpawnRate = ItemSpawnRate.Low;
                         _nextScreen = true;
                         break;
-
                     case 2:
                         SpawnRate = ItemSpawnRate.Medium;
                         _nextScreen = true;
                         break;
-
                     case 3:
                         SpawnRate = ItemSpawnRate.High;
                         _nextScreen = true;
                         break;
-
                     default:
                         _configurationScreen.UpdateInputMessage("The chosen option does not exist, please choose one of the existing options by typing their corresponding number");
                         _nextScreen = false;
                         break;
                 }
             }
-            else
+            else 
             {
                 _configurationScreen.UpdateInputMessage(
                     "The chosen option does not exist, please choose one of the existing options by typing their corresponding number");
-                _nextScreen = false;
+                _nextScreen = false; 
             }
         }
 
@@ -201,16 +194,13 @@ namespace Session.GameConfiguration
                     case 0:
                         UpdateMonsterDifficulty(input);
                         break;
-
                     case 1:
                         UpdateItemSpawnrate(input);
                         break;
-
                     case 2:
                         Username = input;
                         _nextScreen = true;
                         break;
-
                     case 3:
                         SessionName = input;
                         _nextScreen = true;

@@ -1,30 +1,31 @@
+using System;
+using System.IO;
+using ActionHandling;
+using Agent.Mapper;
+using Agent.Services;
+using ASD_Game.ActionHandling;
+using ASD_Game.Agent.Mapper;
+using ASD_Game.Chat;
+using ASD_Game.DatabaseHandler;
+using ASD_Game.DatabaseHandler.Repository;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.InputHandling;
+using ASD_Game.InputHandling.Antlr;
+using ASD_Game.InputHandling.Antlr.Transformer;
+using ASD_Game.Items.Services;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Session;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
+using ASD_Game.World.Services;
+using Creature;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using System;
-using System.IO;
-using DatabaseHandler;
-using DatabaseHandler.Repository;
-using DatabaseHandler.Services;
-using WorldGeneration;
-using ActionHandling;
-using Agent.Mapper;
-using Agent.Models;
-using Agent.Services;
-using Chat;
-using Creature;
-using InputHandling;
-using InputHandling.Antlr;
-using InputHandling.Antlr.Transformer;
-using Network;
-using Session;
-using Session.GameConfiguration;
-using UserInterface;
-using Messages;
 
-
-namespace ASD_project
+namespace ASD_Game
 {
     partial class Program
     {
@@ -58,6 +59,8 @@ namespace ASD_project
                     services.AddScoped<IMessageService, MessageService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
                     services.AddSingleton<IDBConnection, DBConnection>();
+                    services.AddScoped<IItemService, ItemService>();
+                    services.AddScoped<ISpawnHandler, SpawnHandler>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
                     services.AddScoped(typeof(IDatabaseService<>), typeof(DatabaseService<>));
                     services.AddScoped<IScreenHandler, ScreenHandler>();

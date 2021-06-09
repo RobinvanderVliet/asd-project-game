@@ -1,7 +1,8 @@
 ﻿using System;
-using World.Models.Characters.StateMachine.Data;
+using ASD_Game.World.Models.Characters.StateMachine.Data;
 
-namespace WorldGeneration.StateMachine.State
+
+namespace ASD_Game.World.Models.Characters.StateMachine.State
 {
     public abstract class CharacterState : IComparable
     {

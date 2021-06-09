@@ -1,17 +1,17 @@
-/*using System.Diagnostics.CodeAnalysis;
-using Moq;
+using System.Diagnostics.CodeAnalysis;
+using ASD_Game.World;
 using NUnit.Framework;
 
-namespace WorldGeneration.Tests
+namespace ASD_Game.Tests.WorldTests
 {
-    [ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]  
     [TestFixture]
     public class MapFactoryTest
     {
         //Declaration and initialisation of constant variables
-
+ 
         //Declaration of variables
-
+ 
         //Declaration of mocks
         private MapFactory _sut;
 
@@ -22,9 +22,9 @@ namespace WorldGeneration.Tests
             //Initialisation of mocks
             _sut = new MapFactory();
         }
-
+        
         [Test]
-        public void Test_GenerateSeed_GeneratesARandomSeed()
+        public void Test_GenerateSeed_GeneratesARandomSeed() 
         {
             //Arrange ---------
             //Act ---------
@@ -34,4 +34,4 @@ namespace WorldGeneration.Tests
             Assert.That(seed1 != seed2);
         }
     }
-}*/
+}
