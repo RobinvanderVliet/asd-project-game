@@ -49,6 +49,7 @@ namespace ASD_Game.Session
             _messageService = messageService;
             _gameConfigurationHandler = gameConfigurationHandler;
             _playerSerice = playerSerice;
+            NotAllowedToJoin = true; 
         }
 
 
@@ -170,6 +171,14 @@ namespace ASD_Game.Session
 
             if (packet.Header.SessionID == _session?.SessionId)
             {
+                if (packet.HandlerResponse.ResultMessage.Equals("Not allowed to join saved or running game"))
+                {
+                    NotAllowedToJoin = true; 
+                }
+                else
+                {
+                    NotAllowedToJoin = false; 
+                }
 
                 if (packet.Header.Target == _clientController.GetOriginId() &&
                     sessionDTO.SessionType == SessionType.RequestToJoinSession)
@@ -655,6 +664,7 @@ namespace ASD_Game.Session
         }
 
         public string GameName { get; set; }
+        public bool NotAllowedToJoin { get; set; }
 
 
         public void SetSession(Session ses)

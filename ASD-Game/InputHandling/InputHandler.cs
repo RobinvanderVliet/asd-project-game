@@ -24,7 +24,9 @@ namespace ASD_Game.InputHandling
 
         public string START_COMMAND = "start_session";
 
-        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler, IMessageService messageService, IGameConfigurationHandler gameConfigurationHandler, IGamesSessionService gamesSessionService)
+        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler,
+            IMessageService messageService, IGameConfigurationHandler gameConfigurationHandler,
+            IGamesSessionService gamesSessionService)
         {
             _pipeline = pipeline;
             _sessionHandler = sessionHandler;
@@ -69,13 +71,13 @@ namespace ASD_Game.InputHandling
         {
             return _screenHandler.GetScreenInput();
         }
-        
+
         public void HandleStartScreenCommands()
         {
             var input = GetCommand();
             var option = 0;
             int.TryParse(input, out option);
-            
+
             switch (option)
             {
                 case 1:
@@ -104,16 +106,15 @@ namespace ASD_Game.InputHandling
 
         public void HandleSessionScreenCommands()
         {
-
             SessionScreen sessionScreen = _screenHandler.Screen as SessionScreen;
             var input = GetCommand();
-            
+
             if (input == RETURN_KEYWORD)
             {
                 _screenHandler.TransitionTo(new StartScreen());
                 return;
             }
-            
+
             var inputParts = input.Split(" ");
 
             if (inputParts.Length != 2)
@@ -126,10 +127,14 @@ namespace ASD_Game.InputHandling
                 int.TryParse(input[0].ToString(), out sessionNumber);
 
                 string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
-        
+
                 if (sessionId.IsNullOrEmpty())
                 {
                     sessionScreen.UpdateInputMessage("Not a valid session, try again!");
+                }
+                else if (_sessionHandler.NotAllowedToJoin)
+                {
+                    _screenHandler.UpdateInputMessage("Not allowed to join running game");
                 }
                 else
                 {
@@ -168,33 +173,33 @@ namespace ASD_Game.InputHandling
                 {
                     SendCommand(input);
                 }
-               
             }
-
         }
 
         public void HandleLoadScreenCommands()
         {
             LoadScreen loadScreen = _screenHandler.Screen as LoadScreen;
             var input = GetCommand();
-            
+
             if (input == RETURN_KEYWORD)
             {
                 _screenHandler.TransitionTo(new StartScreen());
                 return;
             }
-            
+
             if (input.Length > 0)
             {
                 int sessionNumber = 0;
                 int.TryParse(input, out sessionNumber);
 
                 string sessionId = _screenHandler.GetSessionByPosition(sessionNumber - 1);
-        
+
                 if (sessionId.IsNullOrEmpty())
                 {
                     _screenHandler.UpdateInputMessage("Not a valid session number, please try again!");
                 }
+
+
                 else
                 {
                     _screenHandler.TransitionTo(new LobbyScreen());
@@ -222,7 +227,8 @@ namespace ASD_Game.InputHandling
                 if (configurationCompleted)
                 {
                     _gameConfigurationHandler.SetGameConfiguration();
-                    _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(), _gameConfigurationHandler.GetUsername(), false, null, null);
+                    _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(),
+                        _gameConfigurationHandler.GetUsername(), false, null, null);
                     _screenHandler.TransitionTo(new LobbyScreen());
                 }
             }
