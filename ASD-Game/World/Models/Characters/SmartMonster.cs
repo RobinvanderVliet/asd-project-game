@@ -47,7 +47,10 @@ namespace ASD_Game.World.Models.Characters
         public void Update()
         {
             _dataGatheringService.CheckNewPosition(this);
-            Destination = new Vector2(this.XPosition, this.YPosition);
+            if (Health <= 0)
+            {
+                Dead = true;
+            }
             if (!Dead)
             {
                 LifeSpan++;
