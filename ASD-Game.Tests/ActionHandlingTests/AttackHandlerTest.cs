@@ -5,12 +5,11 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Threading.Tasks;
 using ActionHandling.DTO;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
-using Items.Consumables.ConsumableStats;
+using Items;
 using Messages;
 using Network.DTO;
 using Session;
@@ -87,6 +86,7 @@ namespace ActionHandling.Tests
             //Assert ---------
             _mockedClientController.Verify(mock => mock.SendPayload(It.IsAny<String>(), PacketType.Attack),
                 Times.Once());
+            _mockedClientController.Verify(ClientController => ClientController.GetOriginId(), Times.Once);
         }
 
 
@@ -131,7 +131,7 @@ namespace ActionHandling.Tests
             _attackDTO.Stamina = 100;
             _attackDTO.PlayerGuid = PlayerGuid;
             _attackDTO.AttackedPlayerGuid = AttackedPlayerGuid;
-            
+
             _mockedClientController.Setup(x => x.IsBackupHost).Returns(true);
             _mockedClientController.Setup(x => x.GetOriginId()).Returns(PlayerGuid);
             _mockedClientController.Object.SetSessionId(GameGuid);
@@ -164,15 +164,27 @@ namespace ActionHandling.Tests
 
             _mockedPlayerPocoDatabaseService.Setup(mock => mock.GetAllAsync())
                 .Returns(task);
+            _mockedPlayerPocoDatabaseService.Setup(mock => mock.UpdateAsync(playerPOCO));
 
-
+            var expectedResult = new HandlerResponseDTO(SendAction.ReturnToSender,
+                "There is no enemy to attack");
             //Act
             var actualResult = _sut.HandlePacket(_packetDTO);
 
             //Assert
             _mockedWorldService.Verify(mock => mock.DisplayWorld(), Times.Once);
+            _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
+            _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(3));
+            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Once);
+            _mockedWorldService.Verify(mock => mock.GetPlayer(attackedPlayer.Id), Times.Once);
+            _mockedWorldService.Verify(x => x.GetAllPlayers(), Times.Once);
+            _mockedPlayerPocoDatabaseService.Verify(mock => mock.GetAllAsync(), Times.Once);
+            _mockedPlayerPocoDatabaseService.Verify(mock => mock.UpdateAsync(playerPOCO), Times.Once);
+
+
+            Assert.AreEqual(expectedResult, actualResult);
         }
-        
+
         [TestCase("up")]
         [TestCase("down")]
         [TestCase("left")]
@@ -185,45 +197,21 @@ namespace ActionHandling.Tests
             string PlayerGuid = Guid.NewGuid().ToString();
             string AttackedPlayerGuid = Guid.NewGuid().ToString();
 
-            PlayerPOCO playerPOCO = new PlayerPOCO
-            {
-                PlayerGuid = PlayerGuid,
-                Health = 100,
-                Stamina = 100,
-                GameGuid = null,
-                XPosition = 10,
-                YPosition = 20
-            };
-
             Player player = new Player("Gert", 10, 20, "#", PlayerGuid);
-
-            PlayerPOCO attackedPlayerPOCO = new PlayerPOCO
-            {
-                PlayerGuid = AttackedPlayerGuid,
-                Health = 0,
-                Stamina = 100,
-                GameGuid = null,
-                XPosition = 26,
-                YPosition = 11
-            };
 
             Player attackedPlayer = new Player("Henk", 26, 11, "E", AttackedPlayerGuid);
             attackedPlayer.Health = 0;
-            
+
             _attackDTO.Damage = 20;
             _attackDTO.Stamina = 100;
             _attackDTO.PlayerGuid = PlayerGuid;
             _attackDTO.AttackedPlayerGuid = AttackedPlayerGuid;
             _attackDTO.XPosition = 26;
             _attackDTO.YPosition = 11;
-            
+
             _mockedClientController.Setup(x => x.IsBackupHost).Returns(true);
             _mockedClientController.Setup(x => x.GetOriginId()).Returns(PlayerGuid);
             _mockedClientController.Object.SetSessionId(GameGuid);
-
-            _mockedWorldService.Setup(mock => mock.GetPlayer(player.Id)).Returns(player);
-            _mockedWorldService.Setup(mock => mock.GetPlayer(attackedPlayer.Id)).Returns(attackedPlayer);
-
 
             var payload = JsonConvert.SerializeObject(_attackDTO);
             _packetDTO.Payload = payload;
@@ -241,23 +229,20 @@ namespace ActionHandling.Tests
 
             _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(list);
 
-            List<PlayerPOCO> playerPOCOList = new();
-            playerPOCOList.Add(attackedPlayerPOCO);
-            playerPOCOList.Add(playerPOCO);
-            IEnumerable<PlayerPOCO> en = playerPOCOList;
-            var task = Task.FromResult(en);
-            
-            _mockedPlayerPocoDatabaseService.Setup(mock => mock.GetAllAsync())
-                .Returns(task);
-
-
+            var expectedResult = new HandlerResponseDTO(SendAction.Ignore, null);
             //Act
             var actualResult = _sut.HandlePacket(_packetDTO);
 
             //Assert
-            _mockedMessageService.Verify(mock => mock.AddMessage("You can't attack this enemy, he is already dead."), Times.Once);
+            _mockedMessageService.Verify(mock => mock.AddMessage("You can't attack this enemy, he is already dead."),
+                Times.Once);
+            _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
+            _mockedClientController.Verify(x => x.GetOriginId(), Times.Once);
+            _mockedWorldService.Verify(x => x.GetAllPlayers(), Times.Once);
+
+            Assert.AreEqual(expectedResult, actualResult);
         }
-        
+
         [TestCase("down")]
         [TestCase("up")]
         [TestCase("left")]
@@ -276,16 +261,16 @@ namespace ActionHandling.Tests
                 Health = 100,
                 Stamina = 100,
                 GameGuid = null,
-                XPosition = 26,
-                YPosition = 12
+                XPosition = 10,
+                YPosition = 20
             };
 
-            Player player = new Player("Gert", 26, 12, "#", PlayerGuid);
-
+            Player player = new Player("Gert", 10, 20, "#", PlayerGuid);
+            player.Inventory.Armor = ItemFactory.GetJacket();
             PlayerPOCO attackedPlayerPOCO = new PlayerPOCO
             {
                 PlayerGuid = AttackedPlayerGuid,
-                Health = 100,
+                Health = 0,
                 Stamina = 100,
                 GameGuid = null,
                 XPosition = 26,
@@ -294,12 +279,138 @@ namespace ActionHandling.Tests
 
             Player attackedPlayer = new Player("Henk", 26, 11, "E", AttackedPlayerGuid);
 
+            _attackDTO.Damage = 20;
+            _attackDTO.Stamina = 100;
+            _attackDTO.PlayerGuid = PlayerGuid;
+            _attackDTO.AttackedPlayerGuid = AttackedPlayerGuid;
+            _attackDTO.XPosition = 26;
+            _attackDTO.YPosition = 11;
+
+            _mockedClientController.Setup(x => x.IsBackupHost).Returns(true);
+            _mockedClientController.Setup(x => x.GetOriginId()).Returns(PlayerGuid);
+            _mockedClientController.Object.SetSessionId(GameGuid);
+
+            _mockedWorldService.Setup(mock => mock.GetPlayer(player.Id)).Returns(player);
+            _mockedWorldService.Setup(mock => mock.GetPlayer(attackedPlayer.Id)).Returns(attackedPlayer);
+
+
+            var payload = JsonConvert.SerializeObject(_attackDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            packetHeaderDTO.OriginID = PlayerGuid;
+            packetHeaderDTO.SessionID = null;
+            packetHeaderDTO.PacketType = PacketType.Attack;
+            packetHeaderDTO.Target = "host";
+            _packetDTO.Header = packetHeaderDTO;
+
+            List<Player> list = new List<Player>();
+            list.Add(player);
+            list.Add(attackedPlayer);
+
+
+            _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(list);
+
+            List<PlayerPOCO> playerPOCOList = new();
+            playerPOCOList.Add(attackedPlayerPOCO);
+            playerPOCOList.Add(playerPOCO);
+            IEnumerable<PlayerPOCO> en = playerPOCOList;
+            var task = Task.FromResult(en);
+
+            _mockedPlayerPocoDatabaseService.Setup(mock => mock.GetAllAsync())
+                .Returns(task);
+            _mockedPlayerPocoDatabaseService.Setup(mock => mock.UpdateAsync(attackedPlayerPOCO));
+            _mockedPlayerPocoDatabaseService.Setup(mock => mock.UpdateAsync(playerPOCO));
+
+            PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO()
+            {
+                PlayerGUID = PlayerGuid,
+                GameGUID = null,
+                ItemName = "Bandana",
+                ArmorPoints = 1
+            };
+            PlayerItemPOCO playerArmorPOCO = new PlayerItemPOCO()
+            {
+                PlayerGUID = PlayerGuid,
+                GameGUID = null,
+                ItemName = "Jacket",
+                ArmorPoints = 20
+            };
+
+            List<PlayerItemPOCO> playerItemPOCOList = new();
+            playerItemPOCOList.Add(playerItemPOCO);
+            playerItemPOCOList.Add(playerArmorPOCO);
+            IEnumerable<PlayerItemPOCO> enItem = playerItemPOCOList;
+            var taskItem = Task.FromResult(enItem);
+
+            _mockedPlayerItemPocoDatabaseService.Setup(mock => mock.GetAllAsync())
+                .Returns(taskItem);
+            _mockedPlayerItemPocoDatabaseService.Setup(mock => mock.UpdateAsync(playerItemPOCO));
+            _mockedPlayerItemPocoDatabaseService.Setup(mock => mock.UpdateAsync(playerArmorPOCO));
+            var expectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
+
+            //Act
+            var actualResult = _sut.HandlePacket(_packetDTO);
+
+
+            //Assert
+            _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
+            _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(2));
+            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Once);
+            _mockedWorldService.Verify(mock => mock.GetPlayer(attackedPlayer.Id), Times.Once);
+            _mockedWorldService.Verify(x => x.GetAllPlayers(), Times.Exactly(2));
+            _mockedPlayerItemPocoDatabaseService.Verify(mock => mock.GetAllAsync(), Times.Exactly(2));
+            _mockedPlayerItemPocoDatabaseService.Verify(mock => mock.UpdateAsync(playerItemPOCO), Times.Once);
+            _mockedPlayerItemPocoDatabaseService.Verify(mock => mock.UpdateAsync(playerArmorPOCO), Times.Once);
+            _mockedPlayerPocoDatabaseService.Verify(mock => mock.GetAllAsync(), Times.Exactly(2));
+            _mockedPlayerPocoDatabaseService.Verify(mock => mock.UpdateAsync(attackedPlayerPOCO), Times.Once);
+            _mockedPlayerPocoDatabaseService.Verify(mock => mock.UpdateAsync(playerPOCO), Times.Once);
+
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [TestCase("down")]
+        [TestCase("up")]
+        [TestCase("left")]
+        [TestCase("right")]
+        [Test]
+        public void Test_HandlePacket_HandleAttack_does_damage_to_health(String direction)
+        {
+            //Arrange
+            string GameGuid = Guid.NewGuid().ToString();
+            string PlayerGuid = Guid.NewGuid().ToString();
+            string AttackedPlayerGuid = Guid.NewGuid().ToString();
+
+            PlayerPOCO playerPOCO = new PlayerPOCO
+            {
+                PlayerGuid = PlayerGuid,
+                Health = 100,
+                Stamina = 100,
+                GameGuid = null,
+                XPosition = 10,
+                YPosition = 20
+            };
+
+            Player player = new Player("Gert", 10, 20, "#", PlayerGuid);
+            PlayerPOCO attackedPlayerPOCO = new PlayerPOCO
+            {
+                PlayerGuid = AttackedPlayerGuid,
+                Health = 0,
+                Stamina = 100,
+                GameGuid = null,
+                XPosition = 26,
+                YPosition = 11
+            };
+
+            Player attackedPlayer = new Player("Henk", 26, 11, "E", AttackedPlayerGuid);
 
             _attackDTO.Damage = 20;
             _attackDTO.Stamina = 100;
             _attackDTO.PlayerGuid = PlayerGuid;
             _attackDTO.AttackedPlayerGuid = AttackedPlayerGuid;
-            
+            _attackDTO.XPosition = 26;
+            _attackDTO.YPosition = 11;
+
             _mockedClientController.Setup(x => x.IsBackupHost).Returns(true);
             _mockedClientController.Setup(x => x.GetOriginId()).Returns(PlayerGuid);
             _mockedClientController.Object.SetSessionId(GameGuid);
@@ -333,12 +444,171 @@ namespace ActionHandling.Tests
             _mockedPlayerPocoDatabaseService.Setup(mock => mock.GetAllAsync())
                 .Returns(task);
 
+            _mockedPlayerPocoDatabaseService.Setup(mock => mock.UpdateAsync(attackedPlayerPOCO));
+            _mockedPlayerPocoDatabaseService.Setup(mock => mock.UpdateAsync(playerPOCO));
+
+            PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO()
+            {
+                PlayerGUID = PlayerGuid,
+                GameGUID = null,
+                ItemName = "Bandana",
+                ArmorPoints = 1
+            };
+
+            List<PlayerItemPOCO> playerItemPOCOList = new();
+            playerItemPOCOList.Add(playerItemPOCO);
+            IEnumerable<PlayerItemPOCO> enItem = playerItemPOCOList;
+            var taskItem = Task.FromResult(enItem);
+
+            _mockedPlayerItemPocoDatabaseService.Setup(mock => mock.GetAllAsync())
+                .Returns(taskItem);
+
+            _mockedPlayerPocoDatabaseService.Setup(mock => mock.UpdateAsync(attackedPlayerPOCO));
+            _mockedPlayerItemPocoDatabaseService.Setup(mock => mock.UpdateAsync(playerItemPOCO));
+
+            var expectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
 
             //Act
             var actualResult = _sut.HandlePacket(_packetDTO);
 
+
             //Assert
-            _mockedWorldService.Verify(mock => mock.DisplayWorld(), Times.Once);
+            _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
+            _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(2));
+            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Once);
+            _mockedWorldService.Verify(mock => mock.GetPlayer(attackedPlayer.Id), Times.Once);
+            _mockedWorldService.Verify(x => x.GetAllPlayers(), Times.Exactly(2));
+            _mockedPlayerItemPocoDatabaseService.Verify(mock => mock.GetAllAsync(), Times.Once);
+            _mockedPlayerItemPocoDatabaseService.Verify(mock => mock.UpdateAsync(playerItemPOCO), Times.Once);
+            _mockedPlayerPocoDatabaseService.Verify(mock => mock.GetAllAsync(), Times.Exactly(2));
+            _mockedPlayerPocoDatabaseService.Verify(mock => mock.UpdateAsync(playerPOCO), Times.Once);
+            _mockedPlayerPocoDatabaseService.Verify(mock => mock.UpdateAsync(attackedPlayerPOCO), Times.Once);
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [TestCase("down")]
+        [TestCase("up")]
+        [TestCase("left")]
+        [TestCase("right")]
+        [Test]
+        public void Test_HandlePacket_HandleAttack_Destoyed_Armor(String direction)
+        {
+            //Arrange
+            string GameGuid = Guid.NewGuid().ToString();
+            string PlayerGuid = Guid.NewGuid().ToString();
+            string AttackedPlayerGuid = Guid.NewGuid().ToString();
+
+            PlayerPOCO playerPOCO = new PlayerPOCO
+            {
+                PlayerGuid = PlayerGuid,
+                Health = 100,
+                Stamina = 100,
+                GameGuid = null,
+                XPosition = 10,
+                YPosition = 20
+            };
+
+            Player player = new Player("Gert", 10, 20, "#", PlayerGuid);
+            PlayerPOCO attackedPlayerPOCO = new PlayerPOCO
+            {
+                PlayerGuid = AttackedPlayerGuid,
+                Health = 0,
+                Stamina = 100,
+                GameGuid = null,
+                XPosition = 26,
+                YPosition = 11
+            };
+
+            Player attackedPlayer = new Player("Henk", 26, 11, "E", AttackedPlayerGuid);
+            var item = ItemFactory.GetJacket();
+            item.ArmorProtectionPoints = 1;
+            attackedPlayer.Inventory.Armor = item;
+
+            _attackDTO.Damage = 20;
+            _attackDTO.Stamina = 100;
+            _attackDTO.PlayerGuid = PlayerGuid;
+            _attackDTO.AttackedPlayerGuid = AttackedPlayerGuid;
+            _attackDTO.XPosition = 26;
+            _attackDTO.YPosition = 11;
+
+            _mockedClientController.Setup(x => x.IsBackupHost).Returns(true);
+            _mockedClientController.Setup(x => x.GetOriginId()).Returns(PlayerGuid);
+            _mockedClientController.Object.SetSessionId(GameGuid);
+
+            _mockedWorldService.Setup(mock => mock.GetPlayer(player.Id)).Returns(player);
+            _mockedWorldService.Setup(mock => mock.GetPlayer(attackedPlayer.Id)).Returns(attackedPlayer);
+
+
+            var payload = JsonConvert.SerializeObject(_attackDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            packetHeaderDTO.OriginID = PlayerGuid;
+            packetHeaderDTO.SessionID = null;
+            packetHeaderDTO.PacketType = PacketType.Attack;
+            packetHeaderDTO.Target = "host";
+            _packetDTO.Header = packetHeaderDTO;
+
+            List<Player> list = new List<Player>();
+            list.Add(player);
+            list.Add(attackedPlayer);
+
+
+            _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(list);
+
+            List<PlayerPOCO> playerPOCOList = new();
+            playerPOCOList.Add(attackedPlayerPOCO);
+            playerPOCOList.Add(playerPOCO);
+            IEnumerable<PlayerPOCO> en = playerPOCOList;
+            var task = Task.FromResult(en);
+
+            _mockedPlayerPocoDatabaseService.Setup(mock => mock.GetAllAsync())
+                .Returns(task);
+            _mockedPlayerPocoDatabaseService.Setup(mock => mock.UpdateAsync(playerPOCO));
+
+            PlayerItemPOCO playerItemPOCO = new PlayerItemPOCO()
+            {
+                PlayerGUID = PlayerGuid,
+                GameGUID = null,
+                ItemName = "Bandana",
+                ArmorPoints = 1
+            };
+            PlayerItemPOCO playerArmorPOCO = new PlayerItemPOCO()
+            {
+                PlayerGUID = PlayerGuid,
+                GameGUID = null,
+                ItemName = "Jacket",
+                ArmorPoints = 1
+            };
+
+            List<PlayerItemPOCO> playerItemPOCOList = new();
+            playerItemPOCOList.Add(playerItemPOCO);
+            playerItemPOCOList.Add(playerArmorPOCO);
+            IEnumerable<PlayerItemPOCO> enItem = playerItemPOCOList;
+            var taskItem = Task.FromResult(enItem);
+
+            _mockedPlayerItemPocoDatabaseService.Setup(mock => mock.GetAllAsync())
+                .Returns(taskItem);
+            _mockedPlayerItemPocoDatabaseService.Setup(mock => mock.UpdateAsync(playerItemPOCO));
+            var expectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
+
+            //Act
+            var actualResult = _sut.HandlePacket(_packetDTO);
+
+
+            //Assert
+            _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
+            _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(2));
+            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Once);
+            _mockedWorldService.Verify(mock => mock.GetPlayer(attackedPlayer.Id), Times.Once);
+            _mockedWorldService.Verify(x => x.GetAllPlayers(), Times.Exactly(2));
+            _mockedPlayerItemPocoDatabaseService.Verify(mock => mock.GetAllAsync(), Times.Exactly(1));
+            _mockedPlayerItemPocoDatabaseService.Verify(mock => mock.UpdateAsync(playerItemPOCO), Times.Once);
+            _mockedPlayerPocoDatabaseService.Verify(mock => mock.GetAllAsync(), Times.Exactly(2));
+            _mockedPlayerPocoDatabaseService.Verify(mock => mock.UpdateAsync(playerPOCO), Times.Once);
+
+
+            Assert.AreEqual(expectedResult, actualResult);
         }
     }
 }

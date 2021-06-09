@@ -241,18 +241,6 @@ namespace ActionHandling
                     }
                 }
             }
-            else
-            {
-                var attackedCreature = _creatureDatabaseService.GetAllAsync().Result
-                    .FirstOrDefault(attackedCreature => attackedCreature.CreatureGuid == attackDto.AttackedPlayerGuid);
-                attackedCreature.Health -= attackDto.Damage;
-                _creatureDatabaseService.UpdateAsync(attackedCreature);
-
-                if (attackedCreature.Health <= 0)
-                {
-                    _messageService.AddMessage("RIP"); //TODO implement death of creature
-                }
-            }
         }
 
         private void HandleAttack(AttackDTO attackDto)
