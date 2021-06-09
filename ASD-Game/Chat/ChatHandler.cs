@@ -1,12 +1,12 @@
-﻿using Chat.DTO;
-using Network;
+using ASD_Game.Chat.DTO;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
+using ASD_Game.World.Services;
 using Newtonsoft.Json;
-using System;
-using Network.DTO;
-using WorldGeneration;
-using Messages;
 
-namespace Chat
+namespace ASD_Game.Chat
 {
     public class ChatHandler : IPacketHandler, IChatHandler
     {

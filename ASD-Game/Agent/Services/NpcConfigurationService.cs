@@ -2,7 +2,7 @@
 using Agent.Models;
 using System.Collections.Generic;
 
-namespace Agent.Services
+namespace ASD_Game.Agent.Services
 {
     public class NpcConfigurationService : BaseConfigurationService
     {

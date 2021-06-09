@@ -1,4 +1,6 @@
-﻿namespace Network
+﻿using ASD_Game.Network.DTO;
+
+namespace ASD_Game.Network
 {
     public interface IPacketListener
     {

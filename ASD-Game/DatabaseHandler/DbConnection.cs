@@ -1,11 +1,11 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.POCO;
 using LiteDB;
 using LiteDB.Async;
 
-namespace DatabaseHandler
+namespace ASD_Game.DatabaseHandler
 {
     [ExcludeFromCodeCoverage]
     public class DBConnection : IDBConnection
@@ -16,7 +16,7 @@ namespace DatabaseHandler
         {
             //FK Player -> Game
             BsonMapper.Global.Entity<PlayerPOCO>()
-                .DbRef(x => x.GameGuid, nameof(GamePOCO));
+                .DbRef(x => x.GameGUID, nameof(GamePOCO));
 
             //FK Game -> Player
             BsonMapper.Global.Entity<GamePOCO>()
@@ -36,15 +36,15 @@ namespace DatabaseHandler
 
             //FK PlayerItem -> Item
             BsonMapper.Global.Entity<PlayerItemPOCO>()
-                .DbRef(x => x.ItemName, nameof(ItemPOCO));
+                .DbRef(x => x.ItemName, nameof(PlayerItemPOCO));
 
             //FK Game -> WorldItem
             BsonMapper.Global.Entity<GamePOCO>()
-                .DbRef(x => x.GameGuid, nameof(WorldItemPOCO));
+                .DbRef(x => x.GameGUID, nameof(WorldItemPOCO));
 
             //FK WorldItem -> Item
             BsonMapper.Global.Entity<WorldItemPOCO>()
-                .DbRef(x => x.ItemName, nameof(ItemPOCO));
+                .DbRef(x => x.ItemName, nameof(PlayerItemPOCO));
         }
 
         [ExcludeFromCodeCoverage]

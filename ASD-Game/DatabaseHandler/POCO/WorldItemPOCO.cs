@@ -1,8 +1,8 @@
-﻿using LiteDB;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using LiteDB;
 
-namespace DatabaseHandler.POCO
+namespace ASD_Game.DatabaseHandler.POCO
 {
     [ExcludeFromCodeCoverage]
     public class WorldItemPOCO

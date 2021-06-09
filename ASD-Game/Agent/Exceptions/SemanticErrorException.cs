@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Agent.Exceptions
+namespace ASD_Game.Agent.Exceptions
 {
     [Serializable]
     [ExcludeFromCodeCoverage]

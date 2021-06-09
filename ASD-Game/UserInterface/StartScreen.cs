@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 
-namespace UserInterface
+namespace ASD_Game.UserInterface
 {
     public class StartScreen : Screen
     {
@@ -14,10 +13,10 @@ namespace UserInterface
         
         private readonly List<string> _options = new()
         {
-            "Host a new session", 
-            "Join a session", 
-            "Load a session", 
-            "Agent editor", 
+            "Host a new session",
+            "Join a session",
+            "Load a session",
+            "Agent editor",
             "Leave game"
         };
 
@@ -31,6 +30,7 @@ namespace UserInterface
             DrawOptionBox();
             DrawInputBox(INPUT_X, INPUT_Y + _options.Count, INPUT_MESSAGE);
         }
+
         private void DrawOptionBox()
         {
             DrawBox(OPTIONS_X, OPTIONS_Y, OPTIONS_WIDTH, _options.Count);

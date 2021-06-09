@@ -1,15 +1,15 @@
-﻿using Agent.Exceptions;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
+using ASD_Game.Agent.Exceptions;
 
-namespace Agent
+namespace ASD_Game.Agent
 {
     public class FileHandler
     {
         private readonly string[] _allowedTypes = new[] { ".txt", ".cfg" };
         private static readonly char _separator = Path.DirectorySeparatorChar;
-
+        
         public virtual string ImportFile(string filepath)
         {
             if (!File.Exists(filepath))

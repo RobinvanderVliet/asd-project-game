@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DatabaseHandler.Repository;
+using ASD_Game.DatabaseHandler.Repository;
 using LiteDB;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace DatabaseHandler.Services
+namespace ASD_Game.DatabaseHandler.Services
 {
     public class DatabaseService<T> : IDatabaseService<T>
     {
@@ -31,7 +31,6 @@ namespace DatabaseHandler.Services
                 throw;
             }
         }
-        
 
         public Task<int> UpdateAsync(T obj)
         {
@@ -45,7 +44,7 @@ namespace DatabaseHandler.Services
                 throw;
             }
         }
-
+        
         public Task<int> DeleteAsync(T obj)
         {
             try

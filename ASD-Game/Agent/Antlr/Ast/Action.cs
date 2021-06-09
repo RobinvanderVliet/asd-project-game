@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Agent.Antlr.Ast
+namespace ASD_Game.Agent.Antlr.Ast
 {
     public class Action : Node
     {

@@ -1,39 +1,41 @@
 using System;
 using ActionHandling;
-using Agent.Antlr.Ast;
-using Chat;
-using InputHandling.Antlr.Ast;
-using InputHandling.Antlr.Ast.Actions;
-using InputHandling.Exceptions;
-using Network;
+using ASD_Game.ActionHandling;
+using ASD_Game.Chat;
+using ASD_Game.InputHandling.Antlr.Ast;
+using ASD_Game.InputHandling.Antlr.Ast.Actions;
+using ASD_Game.InputHandling.Exceptions;
+using ASD_Game.Network;
+using ASD_Game.Network.Enum;
+using ASD_Game.Session;
+using ASD_Game.Session.DTO;
+using ASD_Game.Session.GameConfiguration;
 using Newtonsoft.Json;
-using Session;
-using Session.DTO;
-using Session.GameConfiguration;
-using AST = InputHandling.Antlr.Ast.AST;
-using ItemFrequency = InputHandling.Antlr.Ast.Actions.ItemFrequency;
-using MonsterDifficulty = InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
+using MonsterDifficulty = ASD_Game.InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
-namespace InputHandling.Antlr.Transformer
+namespace ASD_Game.InputHandling.Antlr.Transformer
 {
     public class Evaluator : IEvaluator
     {
-        private ISessionHandler _sessionHandler;
-        private IMoveHandler _moveHandler;
-        private IGameSessionHandler _gameSessionHandler;
-        private IChatHandler _chatHandler;
-        private IClientController _clientController;
-        private IInventoryHandler _inventoryHandler;
+        
+        private readonly IAttackHandler _attackHandler;
+        private readonly ISessionHandler _sessionHandler;
+        private readonly IMoveHandler _moveHandler;
+        private readonly IGameSessionHandler _gameSessionHandler;
+        private readonly IChatHandler _chatHandler;
+        private readonly IClientController _clientController;
+        private readonly IInventoryHandler _inventoryHandler;
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private string _commando;
 
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IInventoryHandler inventoryHandler, IClientController clientController)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IAttackHandler attackHandler, IInventoryHandler inventoryHandler, IClientController clientController)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
             _gameSessionHandler = gameSessionHandler;
             _chatHandler = chatHandler;
+            _attackHandler = attackHandler;
             _clientController = clientController;
             _inventoryHandler = inventoryHandler;
         }
@@ -51,6 +53,9 @@ namespace InputHandling.Antlr.Transformer
                 {
                     case Attack:
                         TransformAttack((Attack)nodeBody[i]);
+                        break;
+                    case CreateSession:
+                        TransformCreateSession((CreateSession)nodeBody[i]);
                         break;
                     case Drop:
                         TransformDrop((Drop)nodeBody[i]);
@@ -78,9 +83,6 @@ namespace InputHandling.Antlr.Transformer
                         break;
                     case Shout:
                         TransformShout((Shout)nodeBody[i]);
-                        break;
-                    case CreateSession:
-                        TransformCreateSession((CreateSession)nodeBody[i]);
                         break;
                     case JoinSession:
                         TransformJoinSession((JoinSession)nodeBody[i]);
@@ -140,7 +142,7 @@ namespace InputHandling.Antlr.Transformer
 
         private void TransformAttack(Attack attack)
         {
-            // TODO: Call AttackHandler method with (attack.Direction.DirectionValue)
+            _attackHandler.SendAttack(attack.Direction.DirectionValue);
         }
 
         private void TransformExit()

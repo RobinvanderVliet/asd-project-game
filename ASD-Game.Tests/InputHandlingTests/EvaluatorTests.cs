@@ -1,21 +1,23 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using ActionHandling;
-using Chat;
-using InputHandling.Antlr.Ast;
-using InputHandling.Antlr.Ast.Actions;
-using InputHandling.Antlr.Transformer;
-using InputHandling.Exceptions;
+using ASD_Game.ActionHandling;
+using ASD_Game.Chat;
+using ASD_Game.InputHandling.Antlr.Ast;
+using ASD_Game.InputHandling.Antlr.Ast.Actions;
+using ASD_Game.InputHandling.Antlr.Transformer;
+using ASD_Game.InputHandling.Exceptions;
+using ASD_Game.Network;
+using ASD_Game.Network.Enum;
+using ASD_Game.Session;
+using ASD_Game.Session.DTO;
+using ASD_Game.Session.GameConfiguration;
 using Moq;
-using Network;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using Session;
-using Session.DTO;
-using Session.GameConfiguration;
-using ItemFrequency = InputHandling.Antlr.Ast.Actions.ItemFrequency;
-using MonsterDifficulty = InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
+using ItemFrequency = ASD_Game.InputHandling.Antlr.Ast.Actions.ItemFrequency;
+using MonsterDifficulty = ASD_Game.InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
-namespace InputHandling.Tests
+namespace ASD_Game.Tests.InputHandlingTests
 {
     [ExcludeFromCodeCoverage]
     public class EvaluatorTests
@@ -25,6 +27,8 @@ namespace InputHandling.Tests
         private Mock<IMoveHandler> _mockedMoveHandler;
         private Mock<IGameSessionHandler> _mockedGameSessionHandler;
         private Mock<IChatHandler> _mockedChatHandler;
+        private Mock<IAttackHandler> _mockedAttackHandler;
+    
         private Mock<IClientController> _mockedClientController;
         private Mock<IInventoryHandler> _mockedInventoryHandler;
         [SetUp]
@@ -34,9 +38,10 @@ namespace InputHandling.Tests
             _mockedMoveHandler = new Mock<IMoveHandler>();
             _mockedGameSessionHandler = new Mock<IGameSessionHandler>();
             _mockedChatHandler = new Mock<IChatHandler>();
+            _mockedAttackHandler = new Mock<IAttackHandler>();
             _mockedClientController = new Mock<IClientController>();
             _mockedInventoryHandler = new Mock<IInventoryHandler>();
-            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedInventoryHandler.Object, _mockedClientController.Object);
+            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedAttackHandler.Object, _mockedInventoryHandler.Object, _mockedClientController.Object);
         }
     
         [Test]
@@ -158,7 +163,7 @@ namespace InputHandling.Tests
             requestSessions.AddChild(new RequestSessions());
             return new AST(requestSessions);
         }
-
+    
         [Test]
         public void Test_Apply_HandleCreateSessionActionIsCalled()
         {
