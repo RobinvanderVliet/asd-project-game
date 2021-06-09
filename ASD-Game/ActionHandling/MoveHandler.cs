@@ -190,12 +190,16 @@ namespace ASD_Game.ActionHandling
 
         private void ChangeAIPosition(MoveDTO moveDTO)
         {
-            var character = _worldService.GetAI(moveDTO.UserId);
-            character.XPosition = moveDTO.XPosition;
-            character.YPosition = moveDTO.YPosition;
             var player = _worldService.GetCurrentPlayer();
             int viewdistance = _worldService.GetViewDistance();
-            if (IsCharacterInView(character, player, viewdistance))
+            var character = _worldService.GetAI(moveDTO.UserId);
+            bool aiIsInView = IsCharacterInView(character, player, viewdistance);
+
+            character.XPosition = moveDTO.XPosition;
+            character.YPosition = moveDTO.YPosition;
+            bool aiIsNowInView = IsCharacterInView(character, player, viewdistance);
+
+            if (aiIsInView || aiIsNowInView)
             {
                 _worldService.DisplayWorld();
             }
@@ -203,9 +207,9 @@ namespace ASD_Game.ActionHandling
 
         public bool IsCharacterInView(Character ai, Character player, int viewDistance)
         {
-            if(ai.YPosition >= player.YPosition - viewDistance - 1 && ai.YPosition <= player.YPosition + viewDistance + 1)
+            if(ai.YPosition >= player.YPosition - viewDistance && ai.YPosition <= player.YPosition + viewDistance + 1)
             {
-                if(ai.XPosition >= player.XPosition - viewDistance - 1 && ai.XPosition <= player.XPosition + viewDistance + 1)
+                if(ai.XPosition >= player.XPosition - viewDistance && ai.XPosition <= player.XPosition + viewDistance + 1)
                 {
                     return true;
                 }
