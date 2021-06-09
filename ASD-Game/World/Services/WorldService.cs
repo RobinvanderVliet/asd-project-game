@@ -15,7 +15,7 @@ namespace ASD_Game.World.Services
         private readonly IItemService _itemService;
         private readonly IScreenHandler _screenHandler;
         private World _world;
-        public List<Character> _creatureMoves { get; set; }
+        public List<Character> CreatureMoves { get; set; }
         
         public WorldService(IScreenHandler screenHandler, IItemService itemService)
         {
@@ -85,14 +85,14 @@ namespace ASD_Game.World.Services
 
         public List<Monster> GetMonsters()
         {
-            return _world._creatures;
+            return _world.Creatures;
         }
 
         public void UpdateBrains(Genome genome)
         {
             if (_world != null)
             {
-                foreach (Character monster in _world._creatures)
+                foreach (Character monster in _world.Creatures)
                 {
                     if (monster is SmartMonster smartMonster)
                     {
