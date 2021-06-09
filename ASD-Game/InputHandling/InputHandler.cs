@@ -108,42 +108,48 @@ namespace ASD_Game.InputHandling
         public void HandleSessionScreenCommands()
         {
             SessionScreen sessionScreen = _screenHandler.Screen as SessionScreen;
+            _sessionHandler.RequestSessions();
             var input = GetCommand();
+            SendCommand(input);
 
-            if (input == RETURN_KEYWORD)
-            {
-                _screenHandler.TransitionTo(new StartScreen());
-                return;
-            }
 
-            var inputParts = input.Split(" ");
+            // _screenHandler.TransitionTo(new LobbyScreen());                
+            
 
-            if (inputParts.Length != 2)
-            {
-                sessionScreen.UpdateInputMessage("Provide both a session number and username (example: 1 Gerrit)");
-            }
-            else
-            {
-                int sessionNumber = 0;
-                int.TryParse(input[0].ToString(), out sessionNumber);
-
-                string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
-                
-                
-                if (sessionId.IsNullOrEmpty())
-                {
-                    sessionScreen.UpdateInputMessage("Not a valid session, try again!");
-                }
-                else if (_sessionHandler.NotAllowedToJoin)
-                {
-                    _screenHandler.UpdateInputMessage("Not allowed to join running game");
-                }
-                else
-                {
-                    _screenHandler.TransitionTo(new LobbyScreen());
-                    SendCommand("join_session \"" + sessionId + "\" \"" + inputParts[1].Replace("\"", "") + "\"");
-                }
-            }
+            // if (input == RETURN_KEYWORD)
+            // {
+            //     _screenHandler.TransitionTo(new StartScreen());
+            //     return;
+            // }
+            //
+            // var inputParts = input.Split(" ");
+            //
+            // if (inputParts.Length != 2)
+            // {
+            //     sessionScreen.UpdateInputMessage("Provide both a session number and username (example: 1 Gerrit)");
+            // }
+            // else
+            // {
+            //     int sessionNumber = 0;
+            //     int.TryParse(input[0].ToString(), out sessionNumber);
+            //
+            //     string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
+            //     
+            //     
+            //     if (sessionId.IsNullOrEmpty())
+            //     {
+            //         sessionScreen.UpdateInputMessage("Not a valid session, try again!");
+            //     }
+            //     else if (_sessionHandler.NotAllowedToJoin)
+            //     {
+            //         _screenHandler.UpdateInputMessage("Not allowed to join running game");
+            //     }
+            //     else
+            //     {
+            //         _screenHandler.TransitionTo(new LobbyScreen());
+            //         SendCommand("join_session \"" + sessionId + "\" \"" + inputParts[1].Replace("\"", "") + "\"");
+            //     }
+            // }
         }
 
         public void HandleLobbyScreenCommands()

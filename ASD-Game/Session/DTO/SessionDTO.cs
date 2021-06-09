@@ -11,6 +11,8 @@ namespace ASD_Game.Session.DTO
         public List<string[]> Clients { get; set; }
         
         public int SessionSeed { get; set; }
+        
+        public bool SessionStarted { get; set; }
 
         public SessionDTO(SessionType sessionType)
         {

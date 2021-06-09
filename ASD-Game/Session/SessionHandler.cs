@@ -72,19 +72,20 @@ namespace ASD_Game.Session
 
                 SessionDTO receivedSessionDTO =
                     JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
-                _session = new Session(receivedSessionDTO.Name);
 
-                _session.SessionId = sessionId;
-                _clientController.SetSessionId(sessionId);
-                _messageService.AddMessage("Trying to join game with name: " + _session.Name);
+                    _session = new Session(receivedSessionDTO.Name);
+                    _session.SessionId = sessionId;
+                    _clientController.SetSessionId(sessionId);
+                    _messageService.AddMessage("Trying to join game with name: " + _session.Name);
 
-                SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
-                sessionDTO.Clients = new List<string[]>();
-                sessionDTO.Clients.Add(new[] {_clientController.GetOriginId(), userName});
-                sessionDTO.Clients.Add(new[] {_clientController.GetOriginId(), userName});
-                sessionDTO.SessionSeed = receivedSessionDTO.SessionSeed;
-                SendSessionDTO(sessionDTO);
-                joinSession = true;
+                    SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
+                    sessionDTO.Clients = new List<string[]>();
+                    sessionDTO.Clients.Add(new[] {_clientController.GetOriginId(), userName});
+                    sessionDTO.SessionStarted = receivedSessionDTO.SessionStarted;
+                    sessionDTO.SessionSeed = receivedSessionDTO.SessionSeed;
+                    SendSessionDTO(sessionDTO);
+                    joinSession = true;
+                // }
             }
 
             return joinSession;
@@ -168,22 +169,25 @@ namespace ASD_Game.Session
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
-            if (packet.HandlerResponse.ResultMessage.Equals("Not allowed to join saved or running game") && packet.Header.Target.Equals(_clientController.GetOriginId()))
-            {
-                NotAllowedToJoin = true; 
-            }
-            else
-            {
-                NotAllowedToJoin = false; 
-            }
+            // if (packet.HandlerResponse.ResultMessage.Equals("Not allowed to join saved or running game") && packet.Header.Target.Equals(_clientController.GetOriginId()))
+            // {
+            //     NotAllowedToJoin = true; 
+            // }
+            // else
+            // {
+            //     NotAllowedToJoin = false; 
+            // }
 
             if (packet.Header.SessionID == _session?.SessionId)
             {
-              
-
-                if (packet.Header.Target == _clientController.GetOriginId() &&
-                    sessionDTO.SessionType == SessionType.RequestToJoinSession)
+                if (packet.Header.Target == _clientController.GetOriginId())
                 {
+                    if (packet.HandlerResponse.ResultMessage.Equals("Not allowed to join saved or running game") && packet.Header.Target.Equals(_clientController.GetOriginId()))
+                    {
+                        _clientController.SetSessionId(String.Empty);
+                        return new HandlerResponseDTO(SendAction.Ignore, null);
+                    }
+
                     JoinExistingGame(packet);
                 }
 
@@ -384,6 +388,7 @@ namespace ASD_Game.Session
             sessionDTO.Name = _session.Name;
             sessionDTO.SessionSeed = _session.SessionSeed;
             sessionDTO.SavedGame = _session.SavedGame;
+            sessionDTO.SessionStarted = _session.GameStarted;
             var jsonObject = JsonConvert.SerializeObject(sessionDTO);
             return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
         }
@@ -397,22 +402,23 @@ namespace ASD_Game.Session
             {
                 if (_screenHandler.Screen is SessionScreen screen)
                 {
-                    var hostName = String.Empty;
-                    var amountOfPlayers = "0";
-                    if (sessionDTO.Clients != null && sessionDTO.Clients.Count > 0)
-                    {
-                        //   hostName = sessionDTO.Clients.First()[1];
-                        //      amountOfPlayers = sessionDTO.Clients.Count.ToString();
-                    }
-                    else
-                    {
-                        // TODO: remove after/during integration
-                        hostName = "Unnamed player";
-                        amountOfPlayers = "1";
-                    }
-
-                    screen.UpdateWithNewSession(new[]
-                        {packet.Header.SessionID, sessionDTO.Name, hostName, amountOfPlayers});
+                    // var hostName = String.Empty;
+                    // var amountOfPlayers = "0";
+                    // if (sessionDTO.Clients != null && sessionDTO.Clients.Count > 0)
+                    // {
+                    //     //   hostName = sessionDTO.Clients.First()[1];
+                    //     //      amountOfPlayers = sessionDTO.Clients.Count.ToString();
+                    // }
+                    // else
+                    // {
+                    //     // TODO: remove after/during integration
+                    //     hostName = "Unnamed player";
+                    //     amountOfPlayers = "1";
+                    // }
+                    //
+                    // screen.UpdateWithNewSession(new[]
+                    //     {packet.Header.SessionID, sessionDTO.Name, hostName, amountOfPlayers});
+                    Console.WriteLine("Id " + packet.Header.SessionID + " Name: " + sessionDTO.Name + " Already running?: " + sessionDTO.SessionStarted);
                 }
             }
             else
@@ -428,7 +434,7 @@ namespace ASD_Game.Session
         private HandlerResponseDTO AddPlayerToSession(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
-
+        
             if (packet.Header.Target == "host")
             {
                 return HostAddsPlayer(sessionDTO, packet);
@@ -447,6 +453,58 @@ namespace ASD_Game.Session
             }
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
+        
+        // public HandlerResponseDTO AddPlayerToSession(PacketDTO packet)
+        // {
+        //     SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
+        //
+        //     if (packet.Header.Target == "host")
+        //     {
+        //         if (_screenHandler.Screen is LobbyScreen screen)
+        //         {
+        //             screen.UpdateLobbyScreen(sessionDTO.Clients);
+        //         }
+        //
+        //         _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
+        //         sessionDTO.Clients = new List<string[]>();
+        //
+        //         sessionDTO.SessionSeed = _session.SessionSeed;
+        //
+        //         foreach (string[] client in _session.GetAllClients())
+        //         {
+        //             sessionDTO.Clients.Add(client);
+        //         }
+        //
+        //         return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
+        //     }
+        //     else
+        //     {
+        //         SessionDTO sessionDTOClients = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
+        //         _session.EmptyClients();
+        //
+        //         _session.SessionSeed = sessionDTOClients.SessionSeed;
+        //
+        //         foreach (string[] client in sessionDTOClients.Clients)
+        //         {
+        //             _session.AddClient(client[0], client[1]);
+        //         }
+        //
+        //         if (_screenHandler.Screen is LobbyScreen screen)
+        //         {
+        //             screen.UpdateLobbyScreen(sessionDTOClients.Clients);
+        //         }
+        //
+        //         if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost)
+        //         {
+        //             if (sessionDTOClients.Clients[1][0].Equals(_clientController.GetOriginId()))
+        //             {
+        //                 _clientController.IsBackupHost = true;
+        //                 PingHostTimer();
+        //             }
+        //         }
+        //         return new HandlerResponseDTO(SendAction.Ignore, null);
+        //     }
+        // }
 
         private HandlerResponseDTO HostAddsPlayer(SessionDTO sessionDTO, PacketDTO packet)
         {

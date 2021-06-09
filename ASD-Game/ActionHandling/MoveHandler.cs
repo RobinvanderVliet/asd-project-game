@@ -85,7 +85,10 @@ namespace ASD_Game.ActionHandling
             bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
             if (packet.Header.Target == "host" || packet.Header.Target == "client")
             {
-                return HandleMove(moveDTO, handleInDatabase);
+                if (packet.Header.SessionID.Equals(_clientController.SessionId))
+                {
+                    return HandleMove(moveDTO, handleInDatabase);   
+                }
             }
             else
             {
