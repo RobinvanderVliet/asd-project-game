@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using ASD_Game.Chat.DTO;
 
 namespace ASD_Game.UserInterface
@@ -18,8 +19,16 @@ namespace ASD_Game.UserInterface
         private const int INPUT_X = 0;
         private const int INPUT_Y = LOBBY_Y + BORDER_SIZE;
         private const string INPUT_MESSAGE = "Insert lobby message or command";
+        private const int DRAWING_PAUSE = 50;
+
+        private GameChatScreen _gameChatScreen;
+        public LobbyScreen()
+        {
+            _gameChatScreen = new GameChatScreen(CHAT_X, CHAT_Y, CHAT_WIDTH, CHAT_HEIGHT);
+        }
         public override void DrawScreen()
         {
+            _gameChatScreen.SetScreen(_screenHandler);
             DrawLobbyScreen();
         }
 
@@ -27,15 +36,14 @@ namespace ASD_Game.UserInterface
         {
             DrawHeader(GetHeaderText());
             DrawUserBox();
-            DrawChatBox();
-            UpdateChat(UpdateMessages());
+            _gameChatScreen.DrawScreen();
             DrawLobbyInput(INPUT_MESSAGE);
         }
 
-        private void DrawChatBox()
-        {
-            DrawBox(CHAT_X, CHAT_Y, CHAT_WIDTH, CHAT_HEIGHT);
-        }
+        // private void DrawChatBox()
+        // {
+        //     DrawBox(CHAT_X, CHAT_Y, CHAT_WIDTH, CHAT_HEIGHT);
+        // }
 
         private void DrawUserBox()
         {
@@ -49,6 +57,7 @@ namespace ASD_Game.UserInterface
 
         public virtual void UpdateLobbyScreen(List<string[]> clients)
         {
+            Thread.Sleep(DRAWING_PAUSE);
             foreach (string[] client in clients)
             {
                 int position = clients.IndexOf(client);
@@ -85,13 +94,20 @@ namespace ASD_Game.UserInterface
             }
         }
 
-        //REMOVE THIS FUNCTION WHEN CHAT HAS BEEN FULLY IMPLEMENTED
-        public List<ChatMessageDTO> UpdateMessages()
+        public void ShowMessages(Queue<string> messages)
         {
-            List<ChatMessageDTO> list = new();
-            list.Add(new ChatMessageDTO("swankie", "this is the first message"));
-            list.Add(new ChatMessageDTO("jeroen", "this is the second message"));
-            return list;
+            _gameChatScreen.ShowMessages(messages);
+        }
+
+        public void RedrawInputBox()
+        {
+            for(int i = INPUT_Y; i < _screenHandler.ConsoleHelper.GetConsoleHeight(); i++)
+            {
+                _screenHandler.ConsoleHelper.SetCursor(INPUT_X, i);
+                _screenHandler.ConsoleHelper.Write(new string(' ', _screenHandler.ConsoleHelper.GetConsoleWidth()));
+            }    
+            
+            DrawLobbyInput(INPUT_MESSAGE);
         }
     }
 }

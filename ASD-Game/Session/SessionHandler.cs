@@ -111,6 +111,11 @@ namespace ASD_Game.Session
             TrainingScenario.StartTraining
             );
             traingThread.Start();
+            
+            if (_screenHandler.Screen is LobbyScreen screen)
+            {
+                screen.UpdateLobbyScreen(_session.GetAllClients());
+            }
 
             _heartbeatHandler = new HeartbeatHandler();
             _messageService.AddMessage("Created session with the name: " + _session.Name);
@@ -367,7 +372,10 @@ namespace ASD_Game.Session
             {
                 if (_screenHandler.Screen is LobbyScreen screen)
                 {
-                    screen.UpdateLobbyScreen(sessionDTO.Clients);
+                    var updatedClientList = new List<string[]>();
+                    updatedClientList.AddRange(_session.GetAllClients());
+                    updatedClientList.AddRange(sessionDTO.Clients);
+                    screen.UpdateLobbyScreen(updatedClientList);
                 }
 
                 _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);

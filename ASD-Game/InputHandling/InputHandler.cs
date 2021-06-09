@@ -1,11 +1,12 @@
 using System;
-using System.Timers;
+using System.Threading;
 using ASD_Game.InputHandling.Antlr;
 using ASD_Game.Messages;
 using ASD_Game.Session;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
 using WebSocketSharp;
+using Timer = System.Timers.Timer;
 
 namespace ASD_Game.InputHandling
 {
@@ -151,20 +152,11 @@ namespace ASD_Game.InputHandling
                     return;
                 }
 
-                if (input == START_COMMAND)
-                {
-                    SendCommand(START_COMMAND);
-                }
-
-                if (input.Contains("SAY"))
+                if (input == START_COMMAND || input.Contains("say") || input.Contains("shout"))
                 {
                     SendCommand(input);
+                    _screenHandler.RedrawGameInputBox();
                 }
-                else if (input.Contains("SHOUT"))
-                {
-                    SendCommand(input);
-                }
-               
             }
 
         }
@@ -183,8 +175,8 @@ namespace ASD_Game.InputHandling
                 if (configurationCompleted)
                 {
                     _gameConfigurationHandler.SetGameConfiguration();
-                    _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(), _gameConfigurationHandler.GetUsername());
                     _screenHandler.TransitionTo(new LobbyScreen());
+                    _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(), _gameConfigurationHandler.GetUsername());
                 }
             }
         }

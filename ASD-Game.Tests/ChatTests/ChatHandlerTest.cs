@@ -5,6 +5,7 @@ using ASD_Game.Messages;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
+using ASD_Game.Session;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Services;
 using Moq;
@@ -28,6 +29,7 @@ namespace ASD_Game.Tests.ChatTests
         private Mock<IClientController> _mockedClientController;
         private Mock<IWorldService> _mockedWorldService;
         private Mock<IMessageService> _mockedMessageService;
+        private Mock<ISessionHandler> _mockedSessionHandler;
 
         [SetUp]
         public void Setup()
@@ -35,8 +37,9 @@ namespace ASD_Game.Tests.ChatTests
             _mockedClientController = new();
             _mockedWorldService = new();
             _mockedMessageService = new();
+            _mockedSessionHandler = new();
 
-            _sut = new ChatHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedMessageService.Object);
+            _sut = new ChatHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedMessageService.Object, _mockedSessionHandler.Object);
             _packetDTO = new PacketDTO();
 
         }

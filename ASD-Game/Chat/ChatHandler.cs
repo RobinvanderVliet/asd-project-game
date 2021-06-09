@@ -1,9 +1,13 @@
+using System.Linq;
 using ASD_Game.Chat.DTO;
 using ASD_Game.Messages;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
+using ASD_Game.Session;
+using ASD_Game.UserInterface;
 using ASD_Game.World.Services;
+using Castle.Core.Internal;
 using Newtonsoft.Json;
 
 namespace ASD_Game.Chat
@@ -13,14 +17,15 @@ namespace ASD_Game.Chat
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
         private readonly IMessageService _messageService;
+        private readonly ISessionHandler _sessionHandler;
 
-
-        public ChatHandler(IClientController clientController, IWorldService worldService, IMessageService messageService)
+        public ChatHandler(IClientController clientController, IWorldService worldService, IMessageService messageService, ISessionHandler sessionHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Chat);
             _worldService = worldService;
             _messageService = messageService;
+            _sessionHandler = sessionHandler;
         }
 
         public void SendSay(string message)
@@ -71,15 +76,13 @@ namespace ASD_Game.Chat
 
         private string GetUserIdentifier(string userId)
         {
-            var player = _worldService.GetPlayer(userId);
-            if (player?.Name != null)
+            var player = _sessionHandler.GetAllClients().Find(client => client[0].Equals(userId));
+            if (!player.IsNullOrEmpty())
             {
-                return player.Name;
+                return player[1];
             }
-            else
-            {
-                return $"player with id '{userId}'";
-            }
+
+            return $"player with id '{userId}'";
         }
     }
 }
