@@ -74,9 +74,14 @@ namespace Session
         {
             foreach (HeartbeatDTO player in leavers)
             {
-                _agentHandler.Replace(player.clientID);
+                ReplaceAgent(player);
                 _players.Remove(player);
             }
+        }
+
+        private void ReplaceAgent(HeartbeatDTO player)
+        {
+            _agentHandler.Replace(player.clientID);
         }
 
         private bool PlayerKnown(string clientID)
@@ -91,6 +96,11 @@ namespace Session
                 if (DateTime.Now - player.time >= waitTime)
                 {
                     player.online = false;
+                } else if (!player.online)
+                {
+                    // TODO: implement when player returns take over agent
+                    //ReplaceAgent(player);
+                    player.online = true;
                 }
                 else
                 {
