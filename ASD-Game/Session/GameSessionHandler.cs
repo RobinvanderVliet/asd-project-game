@@ -133,7 +133,8 @@ namespace ASD_Game.Session
         }
 
         public Player AddPlayersToWorld()
-        { // This function is only public for unit test purposes
+        { 
+            // This function is only public for unit test purposes
             List<string[]> allClients = _sessionHandler.GetAllClients();
             
             int spawnSeed = _sessionHandler.GetSessionSeed();

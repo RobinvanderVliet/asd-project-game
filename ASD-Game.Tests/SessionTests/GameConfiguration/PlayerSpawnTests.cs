@@ -88,8 +88,6 @@ namespace ASD_Game.Tests.SessionTests.GameConfiguration
 
             // Assert
             _mockedWorldService.Verify();
-            // _mockedWorldService.Verify(mock => mock.AddPlayerToWorld(player1, true));
-            // _mockedWorldService.Verify(mock => mock.AddPlayerToWorld(player2, false));
         }
     }
 }
