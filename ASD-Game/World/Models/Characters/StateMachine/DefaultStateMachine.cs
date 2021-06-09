@@ -64,6 +64,11 @@ namespace WorldGeneration.StateMachine
             _passiveStateMachine.Fire(creatureEvent);
         }
 
+        public bool WasStarted()
+        {
+            return _passiveStateMachine != null;
+        }
+
         protected void DefineDefaultBehaviour(
             ref StateMachineDefinitionBuilder<CharacterState, CharacterEvent.Event> builder, ref CharacterState state)
         {

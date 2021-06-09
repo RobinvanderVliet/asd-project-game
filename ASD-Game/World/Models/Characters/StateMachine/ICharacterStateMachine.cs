@@ -31,5 +31,11 @@ namespace WorldGeneration.StateMachine
         /// </summary>
         /// <param name="creatureEvent">Event that occured.</param>
         public void FireEvent(CharacterEvent.Event creatureEvent);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>true if statemachine was started before / if statemachine is not null</returns>
+        public bool WasStarted();
     }
 }

@@ -51,7 +51,7 @@ namespace Creature
             var agentPoco = allAgents.Result.First();
             
             // If agent is not activated
-            if (!agentPoco.Activated)
+            if (!agentPoco.Activated || agent == null)
             {
                 var agentConfiguration = agentPoco.AgentConfiguration;
 
@@ -63,6 +63,14 @@ namespace Creature
                     _agents.Add(player.Id, agent);
                 }
 
+                // Activate agent
+                agent.AgentStateMachine.StartStateMachine();
+
+                // Update database
+                agentPoco.Activated = true;
+            }
+            else if (!agent.AgentStateMachine.WasStarted())
+            {
                 // Activate agent
                 agent.AgentStateMachine.StartStateMachine();
 
