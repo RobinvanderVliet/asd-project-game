@@ -1,4 +1,4 @@
-namespace InputHandling
+namespace ASD_Game.InputHandling
 {
     public interface IInputHandler
     {

@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Session.DTO
+namespace ASD_Game.Session.DTO
 {
     [ExcludeFromCodeCoverage]
     public class HeartbeatDTO
     {
-        public string clientID { get; set; }
-        public bool online { get; set; }
-        public DateTime time { get; set; }
+        public string ClientID { get; set; }
+        public bool IsOnline { get; set; }
+        public DateTime Time { get; set; }
 
         public HeartbeatDTO(string clientID)
         {
-            this.clientID = clientID;
-            online = true;
-            time = DateTime.Now;
+            this.ClientID = clientID;
+            IsOnline = true;
+            Time = DateTime.Now;
         }
     }
 }

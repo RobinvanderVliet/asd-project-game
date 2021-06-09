@@ -50,13 +50,13 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using WorldGeneration.Models.Interfaces;
+using ASD_Game.World.Models.Interfaces;
 
 // Switch between using floats or doubles for input position
 
 //using FNLfloat = System.Double;
 
-namespace WorldGeneration
+namespace ASD_Game.World
 {
     [ExcludeFromCodeCoverage]
     public class FastNoiseLite : IFastNoise

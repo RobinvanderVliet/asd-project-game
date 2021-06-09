@@ -1,13 +1,22 @@
-﻿using Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
+using UserInterface;
+using System.IO;
+using ASD_Game.UserInterface;
 
 namespace UserInterface.Tests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
-    internal class GameWorldScreenTest
+    class GameWorldScreenTest
     {
+
         private GameWorldScreen _sut;
         private Mock<ScreenHandler> _mockedScreenHandler;
         private Mock<ConsoleHelper> _mockedConsoleHelper;
@@ -31,7 +40,7 @@ namespace UserInterface.Tests
         [Test]
         public void Test_DrawScreen_DrawsScreen()
         {
-            //Arrange
+            //Arrange            
             var ulCorner = "╔";
             var llCorner = "╚";
             var urCorner = "╗";
@@ -49,9 +58,9 @@ namespace UserInterface.Tests
 
         [Test]
         public void Test_UpdateWorld_DrawsWorldProperly()
-        {
+        {        
             //Arrange
-            char[,] newMap = new char[13, 13] {
+             char[,] newMap = new char[13, 13] {
             {'A','.','~','~','~','~','~','~','~','~','~','~','B'},
              {'.','.','~','~','~','~','~','~','~','~','~','~','~'},
              {'.','.','~','~','~','~','~','~','~','~','~','~','~'},
@@ -75,5 +84,6 @@ namespace UserInterface.Tests
             _mockedConsoleHelper.Verify(mock => mock.Write("C"), Times.Exactly(1));
             _mockedConsoleHelper.Verify(mock => mock.Write("D"), Times.Exactly(1));
         }
+
     }
 }

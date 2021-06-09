@@ -1,25 +1,26 @@
-using Items;
-using WorldGeneration.Models.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using UserInterface;
-using Characters;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.Items;
+using ASD_Game.Items.Services;
+using ASD_Game.UserInterface;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Interfaces;
 using World.Models.Characters.Algorithms.NeuralNetworking;
 
-namespace WorldGeneration
+namespace ASD_Game.World.Services
 {
-    [ExcludeFromCodeCoverage]
     public class WorldService : IWorldService
     {
-        private IScreenHandler _screenHandler;
+        private readonly IItemService _itemService;
+        private readonly IScreenHandler _screenHandler;
         private World _world;
-
         public List<Character> _creatureMoves { get; set; }
-
-        public WorldService(IScreenHandler screenHandler)
+        
+        public WorldService(IScreenHandler screenHandler, IItemService itemService)
         {
             _screenHandler = screenHandler;
+            _itemService = itemService;
         }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
@@ -32,7 +33,7 @@ namespace WorldGeneration
             _world.AddPlayerToWorld(player, isCurrentPlayer);
         }
 
-        public void AddCreatureToWorld(Character character)
+        public void AddCreatureToWorld(Monster character)
         {
             _world.AddCreatureToWorld(character);
         }
@@ -41,7 +42,7 @@ namespace WorldGeneration
         {
             _world.UpdateMap();
         }
-
+        
         public void DeleteMap()
         {
             _world.DeleteMap();
@@ -49,7 +50,22 @@ namespace WorldGeneration
 
         public void GenerateWorld(int seed)
         {
-            _world = new World(seed, 6, new MapFactory(), _screenHandler);
+            _world = new World(seed, 6, new MapFactory(), _screenHandler, _itemService);
+        }
+
+        public Player getCurrentPlayer()
+        {
+            return _world.CurrentPlayer;
+        }
+
+        public List<ItemSpawnDTO> getAllItems()
+        {
+            return _world.Items;
+        }
+
+        public void AddItemToWorld(ItemSpawnDTO itemSpawnDTO)
+        {
+            _world.AddItemToWorld(itemSpawnDTO);
         }
 
         public Player GetCurrentPlayer()
@@ -67,7 +83,7 @@ namespace WorldGeneration
             return _world.GetMapAroundCharacter(character);
         }
 
-        public List<Character> GetMonsters()
+        public List<Monster> GetMonsters()
         {
             return _world._creatures;
         }
@@ -105,31 +121,27 @@ namespace WorldGeneration
         {
             return player.Health <= 0;
         }
-
-        public IList<Item> GetItemsOnCurrentTile()
+        
+        public void LoadArea(int playerX, int playerY, int viewDistance)
         {
-            return _world.GetCurrentTile().ItemsOnTile;
-        }
-
-        public IList<Item> GetItemsOnCurrentTile(Player player)
-        {
-            return _world.GetTileForPlayer(player).ItemsOnTile;
+            _world.LoadArea(playerX, playerY, viewDistance);
         }
 
         public string SearchCurrentTile()
         {
             var itemsOnCurrentTile = GetItemsOnCurrentTile();
 
-            string result = "The following items are on the current tile:" + Environment.NewLine;
-            int index = 1;
+            var result = "The following items are on the current tile:" + Environment.NewLine;
+            var index = 1;
             foreach (var item in itemsOnCurrentTile)
             {
                 result += $"{index}. {item.ItemName}{Environment.NewLine}";
                 index += 1;
             }
+
             return result;
         }
-
+        
         public Player GetPlayer(string userId)
         {
             return _world.GetPlayer(userId);
@@ -150,11 +162,6 @@ namespace WorldGeneration
             return _world.CheckIfCharacterOnTile(tile);
         }
 
-        public void LoadArea(int playerX, int playerY, int viewDistance)
-        {
-            _world.LoadArea(playerX, playerY, viewDistance);
-        }
-
         public void DisplayStats()
         {
             Player player = GetCurrentPlayer();
@@ -171,6 +178,16 @@ namespace WorldGeneration
                 player.Inventory.GetConsumableAtIndex(0)?.ItemName ?? "Empty",
                 player.Inventory.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
                 player.Inventory.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
+        }
+        public IList<Item> GetItemsOnCurrentTile()
+        {
+            return _world.GetCurrentTile().ItemsOnTile;
+        }
+
+
+        public IList<Item> GetItemsOnCurrentTile(Player player)
+        {
+            return _world.GetTileForPlayer(player).ItemsOnTile;
         }
     }
 }

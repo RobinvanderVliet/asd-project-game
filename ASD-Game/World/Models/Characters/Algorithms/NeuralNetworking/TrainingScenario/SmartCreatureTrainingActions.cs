@@ -1,10 +1,10 @@
-﻿using Character.Pathfinder;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Character;
+using ASD_Game.World.Models.Characters.Algorithms.Pathfinder;
+using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
-namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
+namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
 {
     public class SmartCreatureTrainingActions
     {

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
-namespace WorldGeneration.StateMachine.Data
+namespace ASD_Game.World.Models.Characters.StateMachine.Data
 {
     [ExcludeFromCodeCoverage]
     public class MonsterData : ICharacterData
@@ -24,6 +24,8 @@ namespace WorldGeneration.StateMachine.Data
             get => _health;
             set => _health = value;
         }
+
+        public IWorld World { get; set; }
 
         public int Damage
         {

@@ -1,12 +1,11 @@
-﻿using Characters;
-using Character.Pathfinder;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using WorldGeneration;
+using ASD_Game.World.Models.Characters.Algorithms.Pathfinder;
+using ASD_Game.World.Services;
 
-namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
+namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
 {
     //Functionality already covered in the DataGatheringServiceForTraining
     [ExcludeFromCodeCoverage]
@@ -22,7 +21,7 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
         public List<List<Node>> MapNodes = new List<List<Node>>();
         public Player ClosestPlayer { get; set; }
         public Single DistanceToClosestPlayer { get; set; } = 9999999999999999999;
-        public WorldGeneration.Character ClosestMonster { get; set; }
+        public Character ClosestMonster { get; set; }
         public Single DistanceToClosestMonster { get; set; } = 9999999999999999999;
 
         public DataGatheringService(IWorldService worldService)
@@ -38,8 +37,8 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
 
         private void SetClosestMonster(SmartMonster smartMonster, int visionRange)
         {
-            List<WorldGeneration.Character> monsters = WorldService.GetMonsters();
-            foreach (WorldGeneration.Character monster in monsters)
+            List<Monster> monsters = WorldService.GetMonsters();
+            foreach (Character monster in monsters)
             {
                 Vector2 pPos = new Vector2(monster.XPosition, monster.YPosition);
                 Vector2 cPos = new Vector2(smartMonster.XPosition, smartMonster.YPosition);
@@ -88,7 +87,7 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
             }
         }
 
-        public List<List<Node>> TranslateCharacterMap(WorldGeneration.Character c)
+        public List<List<Node>> TranslateCharacterMap(Character c)
         {
             List<List<Node>> translatedMap = new List<List<Node>>();
             char[,] map = WorldService.GetMapAroundCharacter(c);
@@ -135,7 +134,7 @@ namespace World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
             return true;
         }
 
-        private bool IsPlayerInSight(WorldGeneration.Character c)
+        private bool IsPlayerInSight(Character c)
         {
             char[,] map = WorldService.GetMapAroundCharacter(c);
             for (int row = 0; row < _colCount; row++)

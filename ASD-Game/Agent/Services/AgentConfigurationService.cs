@@ -1,12 +1,12 @@
-﻿using Agent.Exceptions;
-using Agent.Mapper;
-using Agent.Models;
-using InputHandling;
-using Serilog;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using ASD_Game.Agent.Exceptions;
+using ASD_Game.Agent.Mapper;
+using ASD_Game.Agent.Models;
+using ASD_Game.InputHandling;
+using Serilog;
 
-namespace Agent.Services
+namespace ASD_Game.Agent.Services
 {
     public class AgentConfigurationService : BaseConfigurationService
     {

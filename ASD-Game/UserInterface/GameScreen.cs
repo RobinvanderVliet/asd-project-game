@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace UserInterface
+namespace ASD_Game.UserInterface
 {
     public class GameScreen : Screen
     {
@@ -61,7 +61,7 @@ namespace UserInterface
             {
                 _screenHandler.ConsoleHelper.SetCursor(INPUT_X, i);
                 _screenHandler.ConsoleHelper.Write(new string(' ', _screenHandler.ConsoleHelper.GetConsoleWidth()));
-            }
+            }           
             DrawInputBox(INPUT_X, INPUT_Y, "Insert an option");
         }
 

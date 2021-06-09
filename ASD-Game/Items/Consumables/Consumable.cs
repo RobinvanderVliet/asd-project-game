@@ -1,7 +1,7 @@
-﻿using Items.ItemStats;
 using System;
+using ASD_Game.Items.ItemStats;
 
-namespace Items.Consumables
+namespace ASD_Game.Items.Consumables
 {
     public class Consumable : Item
     {
@@ -9,6 +9,7 @@ namespace Items.Consumables
 
         public Consumable()
         {
+
         }
 
         public override string ToString()
@@ -29,7 +30,7 @@ namespace Items.Consumables
             {
                 inspect += $"{Environment.NewLine}RPP gain: {consumableHazzard.RPP.ToString()}";
             }
-
+        
             return inspect;
         }
     }

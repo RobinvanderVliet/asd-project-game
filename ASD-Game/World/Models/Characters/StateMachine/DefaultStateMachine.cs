@@ -3,12 +3,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
-using WorldGeneration.StateMachine.CustomRuleSet;
-using WorldGeneration.StateMachine.Data;
+using ASD_Game.Creature.Creature.StateMachine.CustomRuleSet;
+using ASD_Game.World.Models.Characters.StateMachine.Data;
+using ASD_Game.World.Models.Characters.StateMachine.State;
+using WorldGeneration.StateMachine;
 using WorldGeneration.StateMachine.Event;
-using WorldGeneration.StateMachine.State;
 
-namespace WorldGeneration.StateMachine
+namespace ASD_Game.World.Models.Characters.StateMachine
 {
     public abstract class DefaultStateMachine : ICharacterStateMachine
     {

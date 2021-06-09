@@ -1,13 +1,20 @@
-﻿using Moq;
-using NUnit.Framework;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Moq;
+using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
+using UserInterface;
+using System.IO;
+using ASD_Game.UserInterface;
 
 namespace UserInterface.Tests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
-    internal class GameChatScreenTest
+    class GameChatScreenTest
     {
         private GameChatScreen _sut;
         private Mock<ScreenHandler> _mockedScreenHandler;
@@ -31,7 +38,7 @@ namespace UserInterface.Tests
         [Test]
         public void Test_DrawScreen_DrawsScreen()
         {
-            //Arrange
+            //Arrange            
             var ulCorner = "╔";
             var llCorner = "╚";
             var urCorner = "╗";
@@ -91,16 +98,17 @@ namespace UserInterface.Tests
             //Assert
             _mockedConsoleHelper.Verify(mock => mock.Write(s1), Times.Once);
             _mockedConsoleHelper.Verify(mock => mock.Write(s2), Times.Once);
-        }
+            }
 
         [Test]
         public void Test_ShowMessages_CutsOfMessageWhenToLong()
         {
-            //Arrange
+            //Arrange        
             int maxSize = (CHAT_WIDTH - 2) * CHAT_HEIGHT;
             string s1 = new string('+', maxSize + 20);
             int lastRow = (CHAT_WIDTH - 2) * (CHAT_HEIGHT - 1);
             string s2 = s1.Substring(lastRow, (CHAT_WIDTH - 2) - 3) + "...";
+
 
             Queue<string> stringQueue = new Queue<string>();
             stringQueue.Enqueue(s1);
@@ -155,7 +163,7 @@ namespace UserInterface.Tests
                     stringQueue.Enqueue("-");
                 }
                 else if (i == 0)
-                {
+                {                 
                     stringQueue.Enqueue(startMessage + message);
                 }
                 else

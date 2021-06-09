@@ -1,4 +1,5 @@
-﻿namespace Agent.Antlr.Ast.Comparables
+
+namespace ASD_Game.Agent.Antlr.Ast.Comparables
 {
     public class Subject : Comparable
     {

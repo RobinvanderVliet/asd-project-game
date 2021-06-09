@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using ASD_Game.World;
+using ASD_Game.World.Models.Characters.StateMachine.Data;
 
 namespace WorldGeneration.StateMachine.Data
 {
@@ -26,6 +28,8 @@ namespace WorldGeneration.StateMachine.Data
             get => _health;
             set => _health = value;
         }
+
+        public IWorld World { get; set; }
 
         public int Damage
         {

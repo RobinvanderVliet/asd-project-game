@@ -1,14 +1,15 @@
-﻿using Items.Consumables;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using ASD_Game.Items.Consumables;
 
-namespace WorldGeneration
+namespace ASD_Game.World.Models.Characters
 {
-    [ExcludeFromCodeCoverage]
     public class Player : Character
     {
+        public string Id { get; set; }
         public int Stamina { get; set; }
         public Inventory Inventory { get; set; }
         public int RadiationLevel { get; set; }
+        [ExcludeFromCodeCoverage]
         public int Team { get; set; }
 
         //random default values for health&stamina for now

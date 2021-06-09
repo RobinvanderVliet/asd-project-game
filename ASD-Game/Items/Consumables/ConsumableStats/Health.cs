@@ -1,4 +1,4 @@
-namespace Items.Consumables.ConsumableStats
+namespace ASD_Game.Items.Consumables.ConsumableStats
 {
     public enum Health
     {

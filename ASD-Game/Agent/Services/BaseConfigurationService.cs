@@ -1,8 +1,10 @@
-﻿using Agent.Mapper;
 using System.Collections.Generic;
-using Configuration = Agent.Models.Configuration;
+using ASD_Game.Agent.Mapper;
+using ASD_Game.InputHandling;
+using Configuration = ASD_Game.Agent.Models.Configuration;
 
-namespace Agent.Services
+
+namespace ASD_Game.Agent.Services
 {
     public abstract class BaseConfigurationService
     {
@@ -14,8 +16,8 @@ namespace Agent.Services
         public Pipeline Pipeline { get => _pipeline; set => _pipeline = value; }
         public FileHandler FileHandler { get => _fileHandler; set => _fileHandler = value; }
 
-        // public InputHandler InputHandler;
-
+        public InputHandler InputHandler;
+        
         protected const string CANCEL_COMMAND = "cancel";
         protected const string LOAD_COMMAND = "load";
         public string LastError = "";

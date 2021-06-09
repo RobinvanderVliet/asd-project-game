@@ -1,11 +1,11 @@
-﻿using Items;
-using Items.ArmorStats;
-using Items.Consumables;
 using System;
 using System.Collections.Generic;
-using WorldGeneration.Exceptions;
+using ASD_Game.Items;
+using ASD_Game.Items.ArmorStats;
+using ASD_Game.Items.Consumables;
+using ASD_Game.World.Models.Characters.Exceptions;
 
-namespace WorldGeneration
+namespace ASD_Game.World.Models.Characters
 {
     public class Inventory
     {
@@ -93,7 +93,7 @@ namespace WorldGeneration
             {
                 return ConsumableItemList[i];
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 return null;
             }

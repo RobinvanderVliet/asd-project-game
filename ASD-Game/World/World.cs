@@ -1,38 +1,46 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using WorldGeneration.Models.Interfaces;
 using System.Linq;
-using UserInterface;
+using ASD_Game.ActionHandling.DTO;
+using ASD_Game.Items.Services;
+using ASD_Game.UserInterface;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Interfaces;
 
-using Characters;
-
-namespace WorldGeneration
+namespace ASD_Game.World
 {
     public class World : IWorld
     {
-        private Map _map;
+        private IMap _map;
         public Player CurrentPlayer { get; set; }
         public List<Player> Players { get; set; }
-        public List<Character> _creatures { get; set; }
+        public List<Monster> _creatures { get; set; }
         public List<Character> movesList = new List<Character>();
-
+        public List<ItemSpawnDTO> Items;
+        
         private readonly int _viewDistance;
         private readonly IScreenHandler _screenHandler;
         private static readonly char _separator = Path.DirectorySeparatorChar;
 
-        public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler)
+        public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService)
         {
-            Players = new();
-            _creatures = new();
-            var currentDirectory = Directory.GetCurrentDirectory();
-
-            Players = new();
-            _map = MapFactory.GenerateMap(dbLocation: $"Filename={currentDirectory}{_separator}ChunkDatabase.db;connection=shared;", seed: seed);
+            // Players = new();
+            // _creatures = new();
+            // var currentDirectory = Directory.GetCurrentDirectory();
+            //
+            // Players = new();
+            // _viewDistance = viewDistance;
+            // _screenHandler = screenHandler;
+            // DeleteMap();
+            Items = new();
+            Players = new ();
+            _creatures = new ();
+            _map = mapFactory.GenerateMap(itemService, Items, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
-            DeleteMap();
         }
-
+        
         public Player GetPlayer(string id)
         {
             return Players.Find(x => x.Id == id);
@@ -40,7 +48,7 @@ namespace WorldGeneration
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
         {
-            if (CurrentPlayer.Id == userId)
+            if (CurrentPlayer != null && CurrentPlayer.Id == userId)
             {
                 CurrentPlayer.XPosition = newXPosition;
                 CurrentPlayer.YPosition = newYPosition;
@@ -66,9 +74,10 @@ namespace WorldGeneration
                 CurrentPlayer = player;
             }
             Players.Add(player);
+            UpdateMap();
         }
 
-        public void AddCreatureToWorld(Character character)
+        public void AddCreatureToWorld(Monster character)
         {
             _creatures.Add(character);
         }
@@ -77,7 +86,7 @@ namespace WorldGeneration
         {
             if (CurrentPlayer != null && Players != null && _creatures != null)
             {
-                _screenHandler.UpdateWorld(_map.GetMapAroundCharacter(CurrentPlayer, _viewDistance, GetAllCharacters()));
+                _screenHandler.UpdateWorld(_map.GetCharArrayMapAroundCharacter(CurrentPlayer, _viewDistance, GetAllCharacters()));
             }
         }
 
@@ -86,6 +95,11 @@ namespace WorldGeneration
             _map.DeleteMap();
         }
 
+        public void AddItemToWorld(ItemSpawnDTO itemSpawnDto)
+        {
+            Items.Add(itemSpawnDto);
+            UpdateMap();
+        }
         public ITile GetLoadedTileByXAndY(int x, int y)
         {
             return _map.GetLoadedTileByXAndY(x, y);
@@ -98,7 +112,7 @@ namespace WorldGeneration
 
         public char[,] GetMapAroundCharacter(Character character)
         {
-            return _map.GetMapAroundCharacter(character, _viewDistance, GetAllCharacters());
+            return _map.GetCharArrayMapAroundCharacter(character, _viewDistance, GetAllCharacters());
         }
 
         private List<Character> GetAllCharacters()

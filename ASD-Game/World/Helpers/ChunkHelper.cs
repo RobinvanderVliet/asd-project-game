@@ -1,27 +1,20 @@
 ﻿using System;
-using WorldGeneration.Models;
-using WorldGeneration.Models.Interfaces;
+using ASD_Game.World.Models;
+using ASD_Game.World.Models.Interfaces;
 
-namespace WorldGeneration.Helper
+namespace ASD_Game.World.Helpers
 {
     public class ChunkHelper
     {
         public Chunk Chunk { get; set; }
-
         public ChunkHelper(Chunk chunk)
         {
-            Chunk = chunk;
-        }
-
-        public int[] GetTileCoordinatesInChunk(int indexInArray)
-        {
-            var x = indexInArray % Chunk.RowSize;
-            var y = (int)Math.Floor((double)indexInArray / Chunk.RowSize);
-            return new[] { x, y };
+            this.Chunk = chunk;
         }
 
         private int GetPositionInTileArrayByWorldCoordinates(int x, int y)
         {
+
             var yPos = Math.Abs(y);
             var chunkYPos = Math.Abs(Chunk.Y);
             while (x < 0)
@@ -37,3 +30,4 @@ namespace WorldGeneration.Helper
         public ITile GetTileByWorldCoordinates(int x, int y) => Chunk.Map[GetPositionInTileArrayByWorldCoordinates(x, y)];
     }
 }
+

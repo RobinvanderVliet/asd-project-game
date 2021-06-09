@@ -1,24 +1,28 @@
-using ActionHandling;
-using DatabaseHandler.POCO;
-using DatabaseHandler.Services;
-using Items;
-using Messages;
-using Network;
-using Network.DTO;
-using Newtonsoft.Json;
-using Session.DTO;
-using Session.GameConfiguration;
-using System;
 using System.Collections.Generic;
+using ASD_Game.ActionHandling;
+using ASD_Game.DatabaseHandler.POCO;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Items;
+using ASD_Game.Messages;
+using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Network.Enum;
+using ASD_Game.Session.DTO;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
+using ASD_Game.World.Models;
+using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Services;
+using Newtonsoft.Json;
+using System;
 using System.Timers;
-using UserInterface;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
+using ASD_Game.World.Models.Characters.StateMachine;
 using WorldGeneration;
-using WorldGeneration.Models;
 using WorldGeneration.StateMachine;
-using Characters;
 using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
-namespace Session
+namespace ASD_Game.Session
 {
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
     {
@@ -125,7 +129,7 @@ namespace Session
             var players = _worldService.GetAllPlayers();
             foreach (Player player in players)
             {
-                PlayerPOCO playerPoco = new PlayerPOCO { PlayerGuid = player.Id, GameGuid = _clientController.SessionId, GameGUIDAndPlayerGuid = _clientController.SessionId + player.Id, XPosition = player.XPosition, YPosition = player.YPosition };
+                PlayerPOCO playerPoco = new PlayerPOCO { PlayerGUID = player.Id, GameGUID = _clientController.SessionId, GameGUIDAndPlayerGuid = _clientController.SessionId + player.Id, XPosition = player.XPosition, YPosition = player.YPosition };
                 _playerDatabaseService.CreateAsync(playerPoco);
                 AddItemsToPlayer(player.Id, _clientController.SessionId);
             }
@@ -171,6 +175,7 @@ namespace Session
                     var playerObject = new Player(client[1], playerX, playerY, CharacterSymbol.ENEMY_PLAYER, client[0]);
                     _worldService.AddPlayerToWorld(playerObject, false);
                 }
+                
                 playerX += 2;
                 playerY += 2;
             }

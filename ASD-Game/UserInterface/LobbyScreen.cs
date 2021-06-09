@@ -1,7 +1,7 @@
-﻿using Chat.DTO;
 using System.Collections.Generic;
+using ASD_Game.Chat.DTO;
 
-namespace UserInterface
+namespace ASD_Game.UserInterface
 {
     public class LobbyScreen : Screen
     {
@@ -18,13 +18,12 @@ namespace UserInterface
         private const int INPUT_X = 0;
         private const int INPUT_Y = LOBBY_Y + BORDER_SIZE;
         private const string INPUT_MESSAGE = "Insert lobby message or command";
-
         public override void DrawScreen()
         {
             DrawLobbyScreen();
         }
 
-        public void DrawLobbyScreen()
+        public void DrawLobbyScreen() 
         {
             DrawHeader(GetHeaderText());
             DrawUserBox();

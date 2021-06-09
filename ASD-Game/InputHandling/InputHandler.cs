@@ -1,13 +1,13 @@
-﻿using InputHandling.Antlr;
-using Messages;
-using Session;
-using Session.GameConfiguration;
 using System;
 using System.Timers;
-using UserInterface;
+using ASD_Game.InputHandling.Antlr;
+using ASD_Game.Messages;
+using ASD_Game.Session;
+using ASD_Game.Session.GameConfiguration;
+using ASD_Game.UserInterface;
 using WebSocketSharp;
 
-namespace InputHandling
+namespace ASD_Game.InputHandling
 {
     public class InputHandler : IInputHandler
     {
@@ -66,36 +66,31 @@ namespace InputHandling
         {
             return _screenHandler.GetScreenInput();
         }
-
+        
         public void HandleStartScreenCommands()
         {
             var input = GetCommand();
             var option = 0;
             int.TryParse(input, out option);
-
+            
             switch (option)
             {
                 case 1:
                     _screenHandler.TransitionTo(new ConfigurationScreen());
                     break;
-
                 case 2:
                     _sessionHandler.RequestSessions();
                     _screenHandler.TransitionTo(new SessionScreen());
                     break;
-
                 case 3:
                     _screenHandler.TransitionTo(new LoadScreen());
                     break;
-
                 case 4:
                     _screenHandler.TransitionTo(new EditorScreen());
                     break;
-
                 case 5:
                     SendCommand("exit");
                     break;
-
                 default:
                     StartScreen startScreen = _screenHandler.Screen as StartScreen;
                     startScreen.UpdateInputMessage("Not a valid option, try again!");
@@ -105,15 +100,16 @@ namespace InputHandling
 
         public void HandleSessionScreenCommands()
         {
+
             SessionScreen sessionScreen = _screenHandler.Screen as SessionScreen;
             var input = GetCommand();
-
+            
             if (input == RETURN_KEYWORD)
             {
                 _screenHandler.TransitionTo(new StartScreen());
                 return;
             }
-
+            
             var inputParts = input.Split(" ");
 
             if (inputParts.Length != 2)
@@ -126,7 +122,7 @@ namespace InputHandling
                 int.TryParse(input[0].ToString(), out sessionNumber);
 
                 string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
-
+        
                 if (sessionId.IsNullOrEmpty())
                 {
                     sessionScreen.UpdateInputMessage("Not a valid session, try again!");
@@ -168,7 +164,9 @@ namespace InputHandling
                 {
                     SendCommand(input);
                 }
+               
             }
+
         }
         public void HandleConfigurationScreenCommands()
         {
