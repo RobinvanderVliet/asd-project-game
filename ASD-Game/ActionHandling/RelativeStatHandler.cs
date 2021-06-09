@@ -1,4 +1,3 @@
-using System;
 using Network;
 using Newtonsoft.Json;
 using System.Linq;
@@ -6,7 +5,6 @@ using System.Timers;
 using ActionHandling.DTO;
 using DatabaseHandler.POCO;
 using DatabaseHandler.Services;
-using Messages;
 using Network.DTO;
 using WorldGeneration;
 using WorldGeneration.Models.HazardousTiles;
@@ -27,15 +25,13 @@ namespace ActionHandling
         private readonly IClientController _clientController;
         private readonly IWorldService _worldService;
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
-        private readonly IMessageService _messageService;
 
-        public RelativeStatHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
+        public RelativeStatHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.RelativeStat);
             _worldService = worldService;
             _playerDatabaseService = playerDatabaseService;
-            _messageService = messageService;
         }
         
         public void CheckStaminaTimer()

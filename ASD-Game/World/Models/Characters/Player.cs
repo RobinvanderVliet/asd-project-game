@@ -45,7 +45,7 @@ namespace WorldGeneration
         }
 
         
-        public void AddStamina(int amount)
+        public virtual void AddStamina(int amount)
         {
             Stamina += amount;
 
@@ -60,7 +60,7 @@ namespace WorldGeneration
             }
         }
 
-        public void AddRadiationLevel(int amount)
+        public virtual void AddRadiationLevel(int amount)
         {
             RadiationLevel += amount;
 
@@ -75,7 +75,7 @@ namespace WorldGeneration
             }
         }
 
-        public void AddHealth(int amount)
+        public virtual void AddHealth(int amount)
         {
             Health += amount;
 
