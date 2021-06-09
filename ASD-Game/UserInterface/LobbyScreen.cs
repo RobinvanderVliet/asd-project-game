@@ -17,7 +17,7 @@ namespace ASD_Game.UserInterface
         private const int CHAT_HEIGHT = 8;
 
         private const int INPUT_X = 0;
-        private const int INPUT_Y = LOBBY_Y + BORDER_SIZE;
+        private const int INPUT_Y = LOBBY_Y + LOBBY_HEIGHT + BORDER_SIZE;
         private const string INPUT_MESSAGE = "Insert lobby message or command";
         private const int DRAWING_PAUSE = 50;
 
@@ -73,12 +73,12 @@ namespace ASD_Game.UserInterface
 
         public void ResetCursor()
         {
-            _screenHandler.ConsoleHelper.SetCursor(INPUT_X + 4, INPUT_Y + LOBBY_HEIGHT + 2);
+            _screenHandler.ConsoleHelper.SetCursor(INPUT_X + 4, INPUT_Y + 2);
         }
 
         public void DrawLobbyInput(string message)
         {
-            DrawInputBox(INPUT_X, INPUT_Y + LOBBY_HEIGHT, message);
+            DrawInputBox(INPUT_X, INPUT_Y, message);
         }
 
         public void UpdateChat(List<ChatMessageDTO> messages)
