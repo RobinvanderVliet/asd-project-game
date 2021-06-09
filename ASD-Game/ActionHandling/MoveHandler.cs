@@ -193,7 +193,24 @@ namespace ASD_Game.ActionHandling
             var character = _worldService.GetAI(moveDTO.UserId);
             character.XPosition = moveDTO.XPosition;
             character.YPosition = moveDTO.YPosition;
-            _worldService.DisplayWorld();
+            var player = _worldService.GetCurrentPlayer();
+            int viewdistance = _worldService.GetViewDistance();
+            if (IsCharacterInView(character, player, viewdistance))
+            {
+                _worldService.DisplayWorld();
+            }
+        }
+
+        public bool IsCharacterInView(Character ai, Character player, int viewDistance)
+        {
+            if(ai.YPosition >= player.YPosition - viewDistance - 1 && ai.YPosition <= player.YPosition + viewDistance + 1)
+            {
+                if(ai.XPosition >= player.XPosition - viewDistance - 1 && ai.XPosition <= player.XPosition + viewDistance + 1)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private List<ITile> GetTilesForPositions(int x1, int y1, int x2, int y2)
