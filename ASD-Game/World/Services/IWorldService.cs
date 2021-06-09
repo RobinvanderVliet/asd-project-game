@@ -35,6 +35,8 @@ namespace ASD_Game.World.Services
 
         List<Monster> GetMonsters();
 
+        public Character GetCharacterInClosestRangeToCurrentCharacter(Character character, int distance);
+        public Character GetCharacter(string id);
         public void UpdateBrains(Genome genome);
 
         public char[,] GetMapAroundCharacter(Character character);

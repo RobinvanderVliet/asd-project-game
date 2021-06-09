@@ -1,8 +1,7 @@
 ﻿using System;
 
 using ASD_Game.World.Models.Characters.StateMachine.Data;
-using WorldGeneration.StateMachine;
-
+using World.Models.Characters.StateMachine.Event;
 
 namespace ASD_Game.World.Models.Characters.StateMachine.State
 {
@@ -25,8 +24,8 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
 
         public virtual void DoWorldCheck()
         {
-            int attackRange = 3;
-            int visionRange = 6;
+            const int ATTACK_RANGE = 3;
+            const int VISION_RANGE = 6;
 
             //if (_characterData.WorldService.GetItemsOnCurrentTileWithPlayerId(_characterData.CharacterId) != null)
             //{
@@ -34,22 +33,33 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
             //}
             //else
             //{
-            //    if (Vector2.DistanceSquared(new Vector2(_characterData.Position.X, _characterData.Position.Y), new Vector2(_target.Position.X, _target.Position.Y)) <= visionRange)
-            //    {
-
-            //        if (Vector2.DistanceSquared(new Vector2(_characterData.Position.X, _characterData.Position.Y), new Vector2(_target.Position.X, _target.Position.Y)) <= attackRange)
-            //        {
-            //            _characterStateMachine.FireEvent(CharacterEvent.Event.CREATURE_IN_RANGE);
-            //        }
-            //        else
-            //        {
-            //            _characterStateMachine.FireEvent(CharacterEvent.Event.SPOTTED_CREATURE);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        _characterStateMachine.FireEvent(CharacterEvent.Event.LOST_CREATURE);
-            //    }
+            Character visionRangeTarget = _characterData.WorldService.GetCharacterInClosestRangeToCurrentCharacter(_characterData.WorldService.GetCharacter(_characterData.CharacterId), VISION_RANGE);
+            if (visionRangeTarget != null)
+            {
+                Character attackRangeTarget = _characterData.WorldService.GetCharacterInClosestRangeToCurrentCharacter(_characterData.WorldService.GetCharacter(_characterData.CharacterId), ATTACK_RANGE);
+                if (attackRangeTarget != null)
+                {
+                    //if (attackRangeTarget is World.Models.Characters.Agent)
+                    //_characterStateMachine.FireEvent(CharacterEvent.Event.CREATURE_IN_RANGE, (Player)attackRangeTarget.);
+                    if (attackRangeTarget is Monster)
+                    {
+                        //Monster monster = (Monster)attackRangeTarget;
+                        //_characterStateMachine.FireEvent(CharacterEvent.Event.CREATURE_IN_RANGE, monster.MonsterData);
+                    }
+                }
+                else
+                {
+                    if (visionRangeTarget is Monster)
+                    {
+                        Monster monster = (Monster)visionRangeTarget;
+                        _characterStateMachine.FireEvent(CharacterEvent.Event.SPOTTED_CREATURE, monster.MonsterData);
+                    }
+                }
+            }
+            else
+            {
+                //_characterStateMachine.FireEvent(CharacterEvent.Event.LOST_CREATURE);
+            }
             //}
         }
 
