@@ -23,15 +23,18 @@ namespace UserInterface.Tests
         }
 
         [Test]
+        //[Repeat(100)]
+
         public void Test_TransitionTo_ChangesAndDrawsScreen()
         {
             //Arrange
             var startScreen = _mockedStartScreen.Object;
+            _sut.ActionsInQueue = new System.Collections.Concurrent.BlockingCollection<Action>();
             //Act
             _sut.TransitionTo(startScreen);
             //Assert
             Assert.True(_sut.Screen.Equals(startScreen));
-            _mockedStartScreen.Verify(mock => mock.DrawScreen(), Times.Once);
+            Assert.True(_sut.ActionsInQueue.Count > 0);
         }
     }
 }
