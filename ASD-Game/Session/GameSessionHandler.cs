@@ -19,6 +19,7 @@ using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine;
 using WorldGeneration.StateMachine;
+using System.Collections.Generic;
 
 namespace ASD_Game.Session
 {
