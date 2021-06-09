@@ -125,15 +125,16 @@ namespace ASD_Game.ActionHandling
                     "slot 3" => inventory.ConsumableItemList[2],
                     _ => null
                 };
-                
+
                 if (inventoryItem != null)
                 {
                     output = inventoryItem.ToString();
                 }
             }
-            catch (ArgumentOutOfRangeException e) {}
-            
-            _messageService.AddMessage(output);
+            finally
+            {
+                _messageService.AddMessage(output);
+            }
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
