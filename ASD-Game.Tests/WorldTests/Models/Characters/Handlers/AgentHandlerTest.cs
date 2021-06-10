@@ -44,6 +44,7 @@ namespace Creature.Tests.Handlers
 
         [Test]
         [TestCase(false)]
+        [TestCase(true)]
         public void Test_Replace_ReplacesStateMachine(bool started)
         {
             // Arrange
