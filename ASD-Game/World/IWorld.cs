@@ -13,9 +13,7 @@ namespace ASD_Game.World
         List<Monster> Creatures { get; set; }
         List<ItemSpawnDTO> Items { get; set; }
         List<Character> MovesList { get; set; }
-
-        public Player GetPlayer(string id);
-
+        
         void UpdateCharacterPosition(string id, int newXPosition, int newYPosition);
 
         void AddPlayerToWorld(Player player, bool isCurrentPlayer = false);
