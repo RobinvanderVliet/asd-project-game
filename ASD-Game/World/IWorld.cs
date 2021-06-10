@@ -2,7 +2,6 @@ using ASD_Game.ActionHandling.DTO;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Interfaces;
 using System.Collections.Generic;
-using ASD_Game.World.Models.Interfaces;
 
 namespace ASD_Game.World
 {
