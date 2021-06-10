@@ -127,10 +127,14 @@ namespace ASD_Game.ActionHandling
 
                 if (characterToAttack != null)
                 {
-                    if(_worldService.GetPlayer(characterToAttack.Id) != null || _worldService.GetAI(characterToAttack.Id) != null)
+                    if(_worldService.GetPlayer(characterToAttack.Id) != null)
                     {
                         attackDto.AttackedPlayerGuid = characterToAttack.Id;
                         InsertDamageToDatabase(attackDto, true);
+                        packet.Payload = JsonConvert.SerializeObject(attackDto);
+                    } else if (_worldService.GetAI(characterToAttack.Id) != null)
+                    {
+                        attackDto.AttackedPlayerGuid = characterToAttack.Id;
                         packet.Payload = JsonConvert.SerializeObject(attackDto);
                     }
                 }
