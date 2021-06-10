@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items;
 using ASD_Game.Items.Services;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Interfaces;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Interfaces;
 
@@ -64,6 +66,11 @@ namespace ASD_Game.World.Services
             return _world.CurrentPlayer;
         }
 
+        public IWorld GetWorld()
+        {
+            return _world;
+        }
+
         public char[,] GetMapAroundCharacter(Character character)
         {
             return _world.GetMapAroundCharacter(character);
@@ -72,6 +79,11 @@ namespace ASD_Game.World.Services
         public List<Monster> GetMonsters()
         {
             return _world.Creatures;
+        }
+
+        public List<Character> GetAllCharacters()
+        {
+            return _world.GetAllCharacters();
         }
 
         public void UpdateBrains(Genome genome)
@@ -167,12 +179,12 @@ namespace ASD_Game.World.Services
                 player.Inventory.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
                 player.Inventory.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
         }
-        
         public IList<Item> GetItemsOnCurrentTile()
         {
             return _world.GetCurrentTile().ItemsOnTile;
         }
-        
+
+
         public IList<Item> GetItemsOnCurrentTile(Player player)
         {
             return _world.GetTileForPlayer(player).ItemsOnTile;
