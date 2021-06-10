@@ -166,6 +166,7 @@ namespace ASD_Game.InputHandling
             }
 
         }
+
         public void HandleConfigurationScreenCommands()
         {
             var input = GetCommand();

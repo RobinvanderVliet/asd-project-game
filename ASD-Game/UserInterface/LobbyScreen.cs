@@ -44,11 +44,6 @@ namespace ASD_Game.UserInterface
             DrawLobbyInput(INPUT_MESSAGE);
         }
 
-        // private void DrawChatBox()
-        // {
-        //     DrawBox(CHAT_X, CHAT_Y, CHAT_WIDTH, CHAT_HEIGHT);
-        // }
-
         private void DrawUserBox()
         {
             DrawBox(LOBBY_X, LOBBY_Y, LOBBY_WIDTH, LOBBY_HEIGHT);

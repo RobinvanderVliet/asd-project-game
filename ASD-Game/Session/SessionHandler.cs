@@ -119,7 +119,7 @@ namespace ASD_Game.Session
                 screen.UpdateLobbyScreen(_session.GetAllClients());
             }
 
-            _heartbeatHandler = new HeartbeatHandler();
+            _heartbeatHandler = new HeartbeatHandler(_messageService);
             _messageService.AddMessage("Created session with the name: " + _session.Name);
 
             return _session.InSession;
@@ -470,7 +470,7 @@ namespace ASD_Game.Session
             List<string> heartbeatSenders = new List<string>(clients);
             heartbeatSenders.Remove(_clientController.GetOriginId());
 
-            _heartbeatHandler = new HeartbeatHandler(heartbeatSenders);
+            _heartbeatHandler = new HeartbeatHandler(heartbeatSenders, _messageService);
 
             SessionDTO sessionDTO = new SessionDTO
             {
