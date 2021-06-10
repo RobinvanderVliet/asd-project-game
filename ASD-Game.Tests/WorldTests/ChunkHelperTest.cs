@@ -16,7 +16,7 @@
 //
 //         private Chunk _chunk;
 //         private ITile[] _tiles;
-//         private IMock<ChunkHelper> _chunkHelperMock;
+//         private Mock<ChunkHelper> _chunkHelperMock;
 //
 //         [SetUp]
 //         public void Setup()

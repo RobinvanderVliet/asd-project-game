@@ -1,9 +1,9 @@
-﻿using ASD_Game.Agent;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using Agent.Mapper;
 
-namespace Agent.Mapper
+namespace ASD_Game.Agent.Mapper
 {
     public class FileToSettingListMapper
     {
