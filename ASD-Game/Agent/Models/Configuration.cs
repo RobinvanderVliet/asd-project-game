@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Agent.Mapper;
+using ASD_Game.Agent.Mapper;
 
 namespace ASD_Game.Agent.Models
 {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using Agent.Mapper;
 using ASD_Game.Agent.Mapper;
 using NUnit.Framework;
 
