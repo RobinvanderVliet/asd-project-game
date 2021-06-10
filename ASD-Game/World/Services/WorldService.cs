@@ -7,7 +7,6 @@ using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Interfaces;
-using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 
 namespace ASD_Game.World.Services
 {
@@ -19,11 +18,10 @@ namespace ASD_Game.World.Services
         public List<Character> CreatureMoves { get; set; }
         private const int VIEWDISTANCE = 6;
         
-        public WorldService(IScreenHandler screenHandler, IItemService itemService, IWorld world)
+        public WorldService(IScreenHandler screenHandler, IItemService itemService)
         {
             _screenHandler = screenHandler;
             _itemService = itemService;
-            _world = world;
         }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
@@ -34,6 +32,11 @@ namespace ASD_Game.World.Services
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
         {
             _world.AddPlayerToWorld(player, isCurrentPlayer);
+        }
+
+        public void SetWorld(IWorld world)
+        {
+            _world = world;
         }
 
         public void AddCreatureToWorld(Monster character)

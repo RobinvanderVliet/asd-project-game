@@ -10,6 +10,8 @@ namespace ASD_Game.World.Services
     {
         List<Character> CreatureMoves { get; set; }
 
+        void SetWorld(IWorld world);
+
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition);
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer);

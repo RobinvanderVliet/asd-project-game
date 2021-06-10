@@ -68,7 +68,8 @@ namespace ASD_Game.Tests.WorldTests
             _screenHandlerObject = _screenHandlerMock.Object;
             _itemServiceMock = new Mock<IItemService>();
             _itemServiceObject = _itemServiceMock.Object;
-            _sut = new WorldService(_screenHandlerObject, _itemServiceObject, _worldObject);
+            _sut = new WorldService(_screenHandlerObject, _itemServiceObject);
+            _sut.SetWorld(_worldObject);
         }
 
         [Test]
@@ -162,7 +163,7 @@ namespace ASD_Game.Tests.WorldTests
         public void Test_GetCreatureMoves_ReturnsNullBecauseWorldIsNull()
         {
             //Arrange ---------
-            _sut = new WorldService(_screenHandlerObject, _itemServiceObject, null);
+            _sut.SetWorld(null);
             //Act ---------
             var actual = _sut.GetCreatureMoves();
             //Assert ---------
