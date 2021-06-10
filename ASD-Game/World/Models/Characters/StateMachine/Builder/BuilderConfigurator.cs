@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ASD_Game.Creature.Creature.StateMachine.CustomRuleSet;
 using ASD_Game.Items;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ASD_Game.World.Models.Characters.StateMachine.State;
 using Creature.Creature.StateMachine.State;
 using WorldGeneration.StateMachine;
-using WorldGeneration.StateMachine.CustomRuleSet;
 using WorldGeneration.StateMachine.Event;
 
 namespace ASD_Game.World.Models.Characters.StateMachine.Builder
@@ -37,7 +37,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Builder
                         builderInfo.Action = action.Key;
                         builderInfo.TargetState = action.Value;
 
-                        // Temporary
                         builderInfo.InitialStates = GetActionWithStateList().Select(state => state.Value).ToList();
 
                         if (ruleSet.Action == "default")
@@ -116,7 +115,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Builder
                     return CharacterEvent.Event.FOUND_ITEM;
                 }
             }
-            // TODO: Add more
 
             return CharacterEvent.Event.IDLE;
         }
@@ -210,12 +208,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Builder
             {
                 return double.Parse(comparisonString);
             }
-
-            if (comparisonString == "opponent")
-            {
-                // Needs context
-            }
-            // TODO: Add more
 
             return comparisonData;
         }

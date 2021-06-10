@@ -18,13 +18,13 @@ using ASD_Game.UserInterface;
 using ASD_Game.World.Services;
 using System.Timers;
 using ASD_Game.World.Models;
-using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine;
 using WorldGeneration.StateMachine;
 using System.Numerics;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ActionHandling;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 
 namespace ASD_Game.Session
 {
@@ -86,7 +86,6 @@ namespace ASD_Game.Session
             CheckAITimer();
         }
 
-        // TODO: get this config from the AgentConfigurationService
         public void SendAgentConfiguration()
         { 
             _configurationService.CreateConfiguration("agent");
@@ -215,9 +214,9 @@ namespace ASD_Game.Session
                 }
                 else
                 {
-                    // var newMonster = new SmartMonster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i, new DataGatheringService(_worldService));
-                    // SetBrain(newMonster);
-                    // _worldService.AddCreatureToWorld(newMonster);
+                    var newMonster = new SmartMonster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i, new DataGatheringService(_worldService));
+                    SetBrain(newMonster);
+                    _worldService.AddCreatureToWorld(newMonster);
                 }
             }
         }

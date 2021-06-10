@@ -12,7 +12,6 @@ using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.HazardousTiles;
 using ASD_Game.World.Services;
 using Timer = System.Timers.Timer;
-using World.Models.Characters;
 
 namespace ASD_Game.ActionHandling
 {

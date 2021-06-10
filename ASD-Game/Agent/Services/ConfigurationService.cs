@@ -35,7 +35,6 @@ namespace Agent.Services
             _fileToConfigurationMapper = fileToConfigurationMapper;
             _inlineConfig = new InlineConfig();
             _fileHandler = new FileHandler();
-            // Pipeline = new Pipeline();
         }
         
         public void CreateConfiguration(string name)

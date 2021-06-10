@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using WorldGeneration.StateMachine.CustomRuleSet;
+﻿using ASD_Game.Creature.Creature.StateMachine.CustomRuleSet;
+using System.Collections.Generic;
 
 namespace Creature.Creature.StateMachine.CustomRuleSet
 {

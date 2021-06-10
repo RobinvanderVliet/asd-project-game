@@ -5,7 +5,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.Exceptions
 {
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public class PathHasNoDestinationException : System.Exception
+    public class PathHasNoDestinationException : Exception
     {
         public PathHasNoDestinationException() : base()
         {

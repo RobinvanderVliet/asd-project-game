@@ -21,7 +21,6 @@ namespace Creature
         private readonly IConfigurationService _configurationService;
         private readonly IAgentCreator _agentCreator;
 
-        // string = playerId
         private Dictionary<string, World.Models.Characters.Agent> _agents;
 
         public AgentHandler(IWorldService worldService, IClientController clientController,
