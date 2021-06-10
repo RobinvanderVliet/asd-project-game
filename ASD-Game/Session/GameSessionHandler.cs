@@ -101,8 +101,6 @@ namespace ASD_Game.Session
             startGameDTO.SavedPlayers = playerLocations.ToList();
             startGameDTO.GameGuid = _clientController.SessionId;
             startGameDTO.SavedPlayerItems = playerItems.ToList();
-            
-
 
             return startGameDTO;
         }
@@ -111,7 +109,6 @@ namespace ASD_Game.Session
         {
             return PlayerSpawner.SpawnPlayers(_sessionHandler.GetAllClients(), _sessionHandler.GetSessionSeed(), _worldService, _clientController);
         }
-
 
         private void SendGameSessionDTO(StartGameDTO startGameDTO)
         {
@@ -139,8 +136,10 @@ namespace ASD_Game.Session
             {
                 PlayerPOCO playerPoco = new PlayerPOCO
                 {
-                    PlayerGUID = player.Id, GameGUID = _clientController.SessionId,
-                    GameGUIDAndPlayerGuid = _clientController.SessionId + player.Id, XPosition = player.XPosition,
+                    PlayerGUID = player.Id,
+                    GameGUID = _clientController.SessionId,
+                    GameGUIDAndPlayerGuid = _clientController.SessionId + player.Id,
+                    XPosition = player.XPosition,
                     YPosition = player.YPosition
                 };
                 _playerService.CreateAsync(playerPoco);
@@ -153,9 +152,9 @@ namespace ASD_Game.Session
             var gameConfigurationPOCO = new GameConfigurationPOCO
             {
                 GameGUID = _clientController.SessionId,
-                NPCDifficultyCurrent = (int) _gameConfigurationHandler.GetCurrentMonsterDifficulty(),
-                NPCDifficultyNew = (int) _gameConfigurationHandler.GetNewMonsterDifficulty(),
-                ItemSpawnRate = (int) _gameConfigurationHandler.GetSpawnRate()
+                NPCDifficultyCurrent = (int)_gameConfigurationHandler.GetCurrentMonsterDifficulty(),
+                NPCDifficultyNew = (int)_gameConfigurationHandler.GetNewMonsterDifficulty(),
+                ItemSpawnRate = (int)_gameConfigurationHandler.GetSpawnRate()
             };
             _gameConfigDatabaseService.CreateAsync(gameConfigurationPOCO);
         }
@@ -163,10 +162,10 @@ namespace ASD_Game.Session
         private void AddItemsToPlayer(string playerId, string gameId)
         {
             PlayerItemPOCO poco = new()
-                {PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGUID = gameId};
+            { PlayerGUID = playerId, ItemName = ItemFactory.GetBandana().ItemName, GameGUID = gameId };
             _ = _playerItemDatabaseService.CreateAsync(poco);
 
-            poco = new() {PlayerGUID = playerId, ItemName = ItemFactory.GetKnife().ItemName, GameGUID = gameId};
+            poco = new() { PlayerGUID = playerId, ItemName = ItemFactory.GetKnife().ItemName, GameGUID = gameId };
             _ = _playerItemDatabaseService.CreateAsync(poco);
         }
 
@@ -174,19 +173,20 @@ namespace ASD_Game.Session
         {
             var gamePOCO = new GamePOCO
             {
-                GameGUID = _clientController.SessionId, PlayerGUIDHost = _clientController.GetOriginId(),
-                GameName = _sessionHandler.GameName, Seed = _sessionHandler.GetSessionSeed()
+                GameGUID = _clientController.SessionId,
+                PlayerGUIDHost = _clientController.GetOriginId(),
+                GameName = _sessionHandler.GameName,
+                Seed = _sessionHandler.GetSessionSeed()
             };
             _gamePocoService.CreateAsync(gamePOCO);
         }
-        
-     
+
         private void HandleStartGameSession(StartGameDTO startGameDTO)
         {
             bool handleInDatabase = (_clientController.IsHost() || _clientController.IsBackupHost);
 
             _screenHandler.TransitionTo(new GameScreen());
-          
+
             Player currentPlayer = null;
 
             if (startGameDTO.GameGuid == null && !_sessionHandler.GameStarted())
@@ -221,8 +221,6 @@ namespace ASD_Game.Session
             _messageService.DisplayMessages();
         }
 
-
-
         private Player AddPlayerToWorldSavedGame(List<PlayerPOCO> savedPlayers)
         {
             Player currentPlayer = null;
@@ -236,7 +234,6 @@ namespace ASD_Game.Session
                     currentPlayer.Health = player.Health;
                     currentPlayer.Stamina = player.Stamina;
                     currentPlayer.RadiationLevel = player.RadiationLevel;
-
                 }
                 else
                 {
@@ -261,7 +258,7 @@ namespace ASD_Game.Session
                     Monster newMonster = new Monster("Zombie", _random.Next(12, 25), _random.Next(12, 25),
                         CharacterSymbol.TERMINATOR, "monst" + i);
                     SetStateMachine(newMonster);
-                   _worldService.AddCreatureToWorld(newMonster);
+                    _worldService.AddCreatureToWorld(newMonster);
                 }
                 else
                 {
@@ -275,9 +272,12 @@ namespace ASD_Game.Session
 
         private void SetBrain(SmartMonster monster)
         {
-            if (_sessionHandler.TrainingScenario.BrainTransplant() != null)
+            if (_sessionHandler.TrainingScenario != null)
             {
-                monster.Brain = _sessionHandler.TrainingScenario.BrainTransplant();
+                if (_sessionHandler.TrainingScenario.BrainTransplant() != null)
+                {
+                    monster.Brain = _sessionHandler.TrainingScenario.BrainTransplant();
+                }
             }
         }
 

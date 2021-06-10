@@ -40,6 +40,7 @@ namespace Session.Tests
 
         //Declaration of mocks
         private Mock<IClientController> _mockedClientController;
+
         private Mock<IWorldService> _mockedWorldService;
         private Mock<ISessionHandler> _mockedsessionHandler;
         private Mock<IDatabaseService<GamePOCO>> _mockedGamePOCOServices;
@@ -51,7 +52,6 @@ namespace Session.Tests
         private Mock<IGameConfigurationHandler> _mockedGameConfiguration;
         private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigurationPoco;
         private Mock<ITerrainTile> _mockedTile;
-
 
         // public GameSessionHandler(IClientController clientController, IWorldService worldService,
         //     ISessionHandler sessionHandler, IDatabaseService<GamePOCO> gamePocoService,
@@ -86,7 +86,6 @@ namespace Session.Tests
             _mockedTile.Setup(mock => mock.IsAccessible).Returns(true);
             _mockedWorldService.Setup(mock => mock.CheckIfCharacterOnTile(It.IsAny<ITile>())).Returns(false);
 
-
             _sut = new GameSessionHandler(_mockedClientController.Object, _mockedWorldService.Object,
                 _mockedsessionHandler.Object, _mockedGamePOCOServices.Object, _mockedPlayerPOCOServices.Object,
               _mockedScreenHandler.Object, _mockedRelativeStatHandler.Object,
@@ -102,13 +101,18 @@ namespace Session.Tests
             StartGameDTO startGameDto = new StartGameDTO();
             PlayerPOCO player = new PlayerPOCO
             {
-                GameGUID = "GameGuid1", Health = 1, Stamina = 1, PlayerGUID = "GameGuid1Player1",
-                GameGUIDAndPlayerGuid = "GameGuid1Player1", PlayerName = "Player1", TypePlayer = 1, XPosition = 0,
+                GameGUID = "GameGuid1",
+                Health = 1,
+                Stamina = 1,
+                PlayerGUID = "GameGuid1Player1",
+                GameGUIDAndPlayerGuid = "GameGuid1Player1",
+                PlayerName = "Player1",
+                TypePlayer = 1,
+                XPosition = 0,
                 YPosition = 0
             };
 
             List<PlayerPOCO> savedPlayers = new List<PlayerPOCO>();
-
 
             savedPlayers.Add(player);
             _mockedClientController.Setup(x => x.SessionId).Returns("GameGuid1");
@@ -138,7 +142,6 @@ namespace Session.Tests
             _mockedClientController.Verify(x => x.SendPayload(payload, PacketType.GameSession), Times.Once);
         }
 
-
         [Test]
         public void Test_SendGameSession_SendGameSessionSetsGameStartedOnTrue()
         {
@@ -148,13 +151,11 @@ namespace Session.Tests
             _mockedsessionHandler.Verify(x => x.SetGameStarted(true), Times.Once);
         }
 
-
         [Test]
         public void Test_HandlePacket_NewGameTransitionsToNewGameScreen()
         {
             _mockedsessionHandler.Setup(x => x.GetSavedGame()).Returns(false);
             StartGameDTO startGameDto = new StartGameDTO();
-
 
             var payload = JsonConvert.SerializeObject(startGameDto);
 
@@ -167,8 +168,7 @@ namespace Session.Tests
             packetHeaderDTO.Target = "hostOriginId";
             _packetDTO.Header = packetHeaderDTO;
             List<string[]> allClients = new List<string[]>();
-            allClients.Add(new string[] {"1234", "swankie"});
-
+            allClients.Add(new string[] { "1234", "swankie" });
 
             _mockedsessionHandler.Setup(mock => mock.GetSessionSeed()).Returns(1);
             _mockedsessionHandler.Setup(mock => mock.GetAllClients()).Returns(allClients);
@@ -197,7 +197,7 @@ namespace Session.Tests
             _packetDTO.Header = packetHeaderDTO;
 
             List<string[]> allClients = new List<string[]>();
-            allClients.Add(new string[] {"1234", "swankie"});
+            allClients.Add(new string[] { "1234", "swankie" });
 
             _mockedsessionHandler.Setup(mock => mock.GetAllClients()).Returns(allClients);
             _mockedsessionHandler.Setup(mock => mock.GetSessionSeed()).Returns(1);
@@ -228,12 +228,10 @@ namespace Session.Tests
             _packetDTO.Header = packetHeaderDTO;
             Player player = new Player("name1", 0, 0, "@", "1");
 
-
             List<string[]> allClients = new List<string[]>();
-            allClients.Add(new string[] {"1234", "swankie"});
+            allClients.Add(new string[] { "1234", "swankie" });
             List<Player> savedPlayers = new List<Player>();
             savedPlayers.Add(player);
-
 
             GamePOCO gamePOCO = new GamePOCO();
             gamePOCO.Seed = 1;
@@ -258,8 +256,8 @@ namespace Session.Tests
 
             _mockedGamePOCOServices.Verify(mock => mock.CreateAsync(It.IsAny<GamePOCO>()), Times.Once());
         }
-        
-         [Test]
+
+        [Test]
         public void Test_If_Started_New_Game_Insert_New_Player_In_Database()
         {
             StartGameDTO startGameDto = new StartGameDTO();
@@ -276,12 +274,10 @@ namespace Session.Tests
             _packetDTO.Header = packetHeaderDTO;
             Player player = new Player("name1", 0, 0, "@", "1");
 
-
             List<string[]> allClients = new List<string[]>();
-            allClients.Add(new string[] {"1234", "swankie"});
+            allClients.Add(new string[] { "1234", "swankie" });
             List<Player> savedPlayers = new List<Player>();
             savedPlayers.Add(player);
-
 
             GamePOCO gamePOCO = new GamePOCO();
             gamePOCO.Seed = 1;
@@ -306,8 +302,8 @@ namespace Session.Tests
 
             _mockedPlayerPOCOServices.Verify(mock => mock.CreateAsync(It.IsAny<PlayerPOCO>()), Times.Once());
         }
-        
-          [Test]
+
+        [Test]
         public void Test_If_Started_New_Game_Insert_New_PlayerItems_In_Database()
         {
             StartGameDTO startGameDto = new StartGameDTO();
@@ -324,12 +320,10 @@ namespace Session.Tests
             _packetDTO.Header = packetHeaderDTO;
             Player player = new Player("name1", 0, 0, "@", "1");
 
-
             List<string[]> allClients = new List<string[]>();
-            allClients.Add(new string[] {"1234", "swankie"});
+            allClients.Add(new string[] { "1234", "swankie" });
             List<Player> savedPlayers = new List<Player>();
             savedPlayers.Add(player);
-
 
             GamePOCO gamePOCO = new GamePOCO();
             gamePOCO.Seed = 1;
@@ -354,8 +348,8 @@ namespace Session.Tests
 
             _mockedPlayerItemService.Verify(mock => mock.CreateAsync(It.IsAny<PlayerItemPOCO>()), Times.AtLeast(1));
         }
-        
-         [Test]
+
+        [Test]
         public void Test_If_Started_New_Game_Insert_New_GameConfiguration_In_Database()
         {
             StartGameDTO startGameDto = new StartGameDTO();
@@ -372,12 +366,10 @@ namespace Session.Tests
             _packetDTO.Header = packetHeaderDTO;
             Player player = new Player("name1", 0, 0, "@", "1");
 
-
             List<string[]> allClients = new List<string[]>();
-            allClients.Add(new string[] {"1234", "swankie"});
+            allClients.Add(new string[] { "1234", "swankie" });
             List<Player> savedPlayers = new List<Player>();
             savedPlayers.Add(player);
-
 
             GamePOCO gamePOCO = new GamePOCO();
             gamePOCO.Seed = 1;
@@ -402,8 +394,8 @@ namespace Session.Tests
 
             _mockedGameConfigurationPoco.Verify(mock => mock.CreateAsync(It.IsAny<GameConfigurationPOCO>()), Times.AtLeast(1));
         }
-        
-          [Test]
+
+        [Test]
         public void Test_If_Started_New_Game_Client_Dont_Insert_New_GameConfiguration_In_Database()
         {
             StartGameDTO startGameDto = new StartGameDTO();
@@ -420,12 +412,10 @@ namespace Session.Tests
             _packetDTO.Header = packetHeaderDTO;
             Player player = new Player("name1", 0, 0, "@", "1");
 
-
             List<string[]> allClients = new List<string[]>();
-            allClients.Add(new string[] {"1234", "swankie"});
+            allClients.Add(new string[] { "1234", "swankie" });
             List<Player> savedPlayers = new List<Player>();
             savedPlayers.Add(player);
-
 
             GamePOCO gamePOCO = new GamePOCO();
             gamePOCO.Seed = 1;
@@ -443,8 +433,6 @@ namespace Session.Tests
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
             _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(savedPlayers);
-            
-            
 
             _mockedsessionHandler.Setup(x => x.GameStarted()).Returns(false);
 
@@ -452,24 +440,20 @@ namespace Session.Tests
 
             _mockedGameConfigurationPoco.Verify(mock => mock.CreateAsync(It.IsAny<GameConfigurationPOCO>()), Times.Never);
         }
-      
-    
-        //ToDo
-        //Out of bounds error because of new method to create new monsters. 
+
         [Test]
         public void Test_If_Started_Saved_Game_Generates_World_WithOldSessionSeed()
         {
             StartGameDTO startGameDto = new StartGameDTO();
             startGameDto.Seed = 1;
             startGameDto.GameGuid = "1";
-           
 
             PlayerPOCO player = new PlayerPOCO();
             player.PlayerGUID = "1";
             player.GameGUID = "1";
             player.XPosition = 10;
-            player.YPosition = 11; 
-            
+            player.YPosition = 11;
+
             List<PlayerPOCO> savedPlayers = new List<PlayerPOCO>();
             savedPlayers.Add(player);
             startGameDto.SavedPlayers = savedPlayers;
@@ -484,15 +468,25 @@ namespace Session.Tests
             _packetDTO.Header = packetHeaderDTO;
 
             List<string[]> allClients = new List<string[]>();
-            allClients.Add(new string[] {"1234", "swankie"});
-            
-            
-            Monster newMonster = new Monster("Zombie", 12, 15,
-                CharacterSymbol.TERMINATOR, "monst" );
-            char[,] monsterList = {{',', ',',',', ',',',', ',',',', ',',',', ',',',', ',',',', ','}, {',', ',',',', ',',',', ',',',', ',',',', ',',',', ',',',', ','}};
+            allClients.Add(new string[] { "1234", "swankie" });
 
-            Player playerinWorld = new Player("name1", 0, 0, "@", "1");
-            
+            Monster newMonster = new Monster("Zombie", 12, 15,
+                CharacterSymbol.TERMINATOR, "monst");
+            char[,] monsterList = { { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','} };
+
+            Player playerinWorld = new Player("name1", 20, 20, "@", "1");
 
             _mockedsessionHandler.Setup(mock => mock.GetAllClients()).Returns(allClients);
             _mockedsessionHandler.Setup(mock => mock.GetSessionSeed()).Returns(1);
@@ -519,7 +513,7 @@ namespace Session.Tests
             packetHeaderDTO.PacketType = PacketType.GameSession;
             packetHeaderDTO.Target = "hostOriginId";
             _packetDTO.Header = packetHeaderDTO;
-            
+
             HandlerResponseDTO expected = new HandlerResponseDTO(SendAction.Ignore, null);
             // Act -------------
             HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
@@ -528,14 +522,12 @@ namespace Session.Tests
             Assert.AreEqual(expected.Action, actualResult.Action);
             Assert.AreEqual(expected.ResultMessage, actualResult.ResultMessage);
         }
-        
-        
+
         [Test]
         public void Test_HandlePacket_StatHandler_CurrentPlayer_Get_Sets()
         {
             _mockedsessionHandler.Setup(x => x.GetSavedGame()).Returns(false);
             StartGameDTO startGameDto = new StartGameDTO();
-
 
             var payload = JsonConvert.SerializeObject(startGameDto);
 
@@ -548,13 +540,13 @@ namespace Session.Tests
             packetHeaderDTO.Target = "hostOriginId";
             _packetDTO.Header = packetHeaderDTO;
             List<string[]> allClients = new List<string[]>();
-            allClients.Add(new string[] {"1234", "swankie"});
+            allClients.Add(new string[] { "1234", "swankie" });
             Player playerinWorld = new Player("name1", 0, 0, "@", "1");
 
             _mockedsessionHandler.Setup(mock => mock.GetSessionSeed()).Returns(1);
             _mockedsessionHandler.Setup(mock => mock.GetAllClients()).Returns(allClients);
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns("1");
-            
+
             _mockedWorldService.Setup(x => x.GetCurrentPlayer()).Returns(playerinWorld);
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
@@ -563,13 +555,12 @@ namespace Session.Tests
 
             _mockedRelativeStatHandler.Verify(x => x.SetCurrentPlayer(playerinWorld), Times.Once);
         }
-        
+
         [Test]
         public void Test_HandlePacket_StatHandler_Checks_Stamina_timer_Gets_Called()
         {
             _mockedsessionHandler.Setup(x => x.GetSavedGame()).Returns(false);
             StartGameDTO startGameDto = new StartGameDTO();
-
 
             var payload = JsonConvert.SerializeObject(startGameDto);
 
@@ -582,13 +573,13 @@ namespace Session.Tests
             packetHeaderDTO.Target = "hostOriginId";
             _packetDTO.Header = packetHeaderDTO;
             List<string[]> allClients = new List<string[]>();
-            allClients.Add(new string[] {"1234", "swankie"});
+            allClients.Add(new string[] { "1234", "swankie" });
             Player playerinWorld = new Player("name1", 0, 0, "@", "1");
 
             _mockedsessionHandler.Setup(mock => mock.GetSessionSeed()).Returns(1);
             _mockedsessionHandler.Setup(mock => mock.GetAllClients()).Returns(allClients);
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns("1");
-            
+
             _mockedWorldService.Setup(x => x.GetCurrentPlayer()).Returns(playerinWorld);
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
@@ -597,13 +588,12 @@ namespace Session.Tests
 
             _mockedRelativeStatHandler.Verify(x => x.CheckStaminaTimer(), Times.Once);
         }
-        
+
         [Test]
         public void Test_HandlePacket_StatHandler_Checks_Radiation_timer_Gets_Called()
         {
             _mockedsessionHandler.Setup(x => x.GetSavedGame()).Returns(false);
             StartGameDTO startGameDto = new StartGameDTO();
-
 
             var payload = JsonConvert.SerializeObject(startGameDto);
 
@@ -616,13 +606,13 @@ namespace Session.Tests
             packetHeaderDTO.Target = "hostOriginId";
             _packetDTO.Header = packetHeaderDTO;
             List<string[]> allClients = new List<string[]>();
-            allClients.Add(new string[] {"1234", "swankie"});
+            allClients.Add(new string[] { "1234", "swankie" });
             Player playerinWorld = new Player("name1", 0, 0, "@", "1");
 
             _mockedsessionHandler.Setup(mock => mock.GetSessionSeed()).Returns(1);
             _mockedsessionHandler.Setup(mock => mock.GetAllClients()).Returns(allClients);
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns("1");
-            
+
             _mockedWorldService.Setup(x => x.GetCurrentPlayer()).Returns(playerinWorld);
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
@@ -631,6 +621,5 @@ namespace Session.Tests
 
             _mockedRelativeStatHandler.Verify(x => x.CheckRadiationTimer(), Times.Once);
         }
-        
     }
 }
