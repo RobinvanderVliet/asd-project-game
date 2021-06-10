@@ -2,8 +2,6 @@
 using System.Linq;
 using ASD_Game.Agent.Mapper;
 
-// using ASD_Game.Agent.Antlr.Ast;
-
 namespace ASD_Game.Agent.Models
 {
     public abstract class Configuration
