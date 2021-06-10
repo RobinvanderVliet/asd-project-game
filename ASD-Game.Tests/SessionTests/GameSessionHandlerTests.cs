@@ -138,7 +138,7 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_If_Started_New_Game_Generates_World()
+        public void Test_GenerateWorld_If_Started_New_Game()
         {
             //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
@@ -172,7 +172,7 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_If_Started_New_Game_Insert_New_Game_In_Database()
+        public void Test_NewGame_If_Started_New_Game_Insert_New_Game_In_Database()
         {
             //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
@@ -219,7 +219,7 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_If_Started_New_Game_Insert_New_Player_In_Database()
+        public void Test_NewGame_If_Started_New_Game_Insert_New_Player_In_Database()
         {
             //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
@@ -266,7 +266,7 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_If_Started_New_Game_Insert_New_PlayerItems_In_Database()
+        public void Test_InsertItem_If_Started_New_Game_Insert_New_PlayerItems_In_Database()
         {
             //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
@@ -313,7 +313,7 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_If_Started_New_Game_Insert_New_GameConfiguration_In_Database()
+        public void Test_NewConfig_If_Started_New_Game_Insert_New_GameConfiguration_In_Database()
         {
             //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
@@ -360,7 +360,7 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_If_Started_New_Game_Client_Dont_Insert_New_GameConfiguration_In_Database()
+        public void Test_NewGameConfig_If_Started_New_Game_Client_Dont_Insert_New_GameConfiguration_In_Database()
         {
             //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
@@ -408,7 +408,7 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_If_Started_Saved_Game_Generates_World_WithOldSessionSeed()
+        public void Test_StartSavedGame_If_Started_Saved_Game_Generates_World_WithOldSessionSeed()
         {
             //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
