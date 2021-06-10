@@ -69,7 +69,7 @@ namespace ASD_Game.Tests.WorldTests
             _spawnHandlerMockObject = _spawnHandlerMock.Object;
             
             _itemServiceMock = new Mock<IItemService>();
-            _itemServiceMock.Setup(wrm => wrm.GetSpawnHandler()).Returns(_spawnHandlerMockObject);
+            _itemServiceMock.Setup(itemService => itemService.GetSpawnHandler()).Returns(_spawnHandlerMockObject);
 ;           _itemServiceMockObject = _itemServiceMock.Object;
 
             _sut = new World.World(5, 2, _mapFactoryMockObject, _screenHandlerMockObject, _itemServiceMockObject);

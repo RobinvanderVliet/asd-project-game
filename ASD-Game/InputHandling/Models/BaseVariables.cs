@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace InputHandling.Models
+namespace ASD_Game.InputHandling.Models
 {
     public class BaseVariables
     {

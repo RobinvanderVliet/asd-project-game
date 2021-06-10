@@ -6,14 +6,16 @@ namespace ASD_Game.Items.Services
     public class ItemService : IItemService
     {
         private ISpawnHandler _spawnHandler;
-        public ItemService(ISpawnHandler spawnHandler)
+        private IRandomItemGenerator _randomItemGenerator;
+        public ItemService(ISpawnHandler spawnHandler, IRandomItemGenerator randomItemGenerator)
         {
             _spawnHandler = spawnHandler;
+            _randomItemGenerator = randomItemGenerator;
         }
         
         public Item GenerateItemFromNoise(float noiseResult, int x, int y)
         {
-            var item = RandomItemGenerator.GetRandomItem(noiseResult);
+            var item = _randomItemGenerator.GetRandomItem(noiseResult);
             if (item != null)
             {
                 item.ItemId = (x + "!" + y + "!");
