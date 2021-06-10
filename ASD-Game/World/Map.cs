@@ -110,7 +110,7 @@ namespace ASD_Game.World
             var characterOnTile = characters.FirstOrDefault(character => character.XPosition == tile.XPosition && character.YPosition == tile.YPosition);
             if(characterOnTile != null)
             {
-                return characterOnTile.Symbol;
+                return characterOnTile.GetSymbol();
             }
             if (tile.ItemsOnTile.Count != 0)
             {

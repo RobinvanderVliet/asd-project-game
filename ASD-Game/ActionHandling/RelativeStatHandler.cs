@@ -77,6 +77,7 @@ namespace ASD_Game.ActionHandling
             if (_worldService.IsDead(_worldService.GetCurrentPlayer()))
             {
                 _messageService.AddMessage("You died");
+                _player.GetSymbol();
                 _worldService.DisplayWorld();
                 _radiationTimer.Stop();
                 return;
