@@ -1,6 +1,3 @@
-using Moq;
-using Newtonsoft.Json;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -18,8 +15,11 @@ using ASD_Game.Session;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Services;
 using DatabaseHandler.POCO;
+using Moq;
+using Newtonsoft.Json;
+using NUnit.Framework;
 
-namespace ActionHandling.Tests
+namespace ASD_Game.Tests.ActionHandlingTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
