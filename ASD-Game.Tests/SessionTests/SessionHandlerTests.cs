@@ -1076,5 +1076,98 @@ namespace ASD_Game.Tests.SessionTests
             Assert.AreEqual(result.Action, SendAction.Ignore);
         }
 
+
+        [Test]
+        public void Test_Creating_Session_ExistingGame_SetsSessionWithExistingSessionId()
+        {
+            _sut.CreateSession("Test", "Robin", true, "2", 1);
+            
+            _mockedClientController.Verify(x => x.SetSessionId("2"), Times.Once);
+        }
+        
+        [Test]
+        public void Test_Creating_Session_ExistingGame_Sets_Host_Controller()
+        {
+            _sut.CreateSession("Test", "Robin", true, "2", 1);
+            
+            _mockedClientController.Verify(x => x.CreateHostController(), Times.Once);
+        }
+        
+        [Test]
+        public void Test_Joining_RunningSession_Not_Allowed_Returns_Ignore()
+        {
+            // Arrange ------------
+            string sessionId = "sessionId";
+            string hostOriginId = "hostTestOriginId";
+            string originId = "testOriginId";
+
+            SessionDTO sessionDTO = new SessionDTO(SessionType.RequestSessions);
+            var payload = JsonConvert.SerializeObject(sessionDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            packetHeaderDTO.OriginID = hostOriginId;
+            packetHeaderDTO.SessionID = sessionId;
+            packetHeaderDTO.PacketType = PacketType.Session;
+            packetHeaderDTO.Target = originId;
+            _packetDTO.Header = packetHeaderDTO;
+
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
+
+            SessionDTO sessionDTOInHandlerResponse = new SessionDTO(SessionType.RequestSessionsResponse);
+            sessionDTOInHandlerResponse.Name = "sessionName";
+            HandlerResponseDTO handlerResponseDTO = new HandlerResponseDTO(SendAction.SendToClients,
+                JsonConvert.SerializeObject(sessionDTOInHandlerResponse));
+            _packetDTO.HandlerResponse = handlerResponseDTO;
+
+            _sut.HandlePacket(_packetDTO);
+
+            SessionDTO sessionDTO2 = new SessionDTO(
+            ){
+                SessionStarted = true,
+                SessionId = sessionId,
+                SessionType = SessionType.RequestToJoinSession
+            };
+            
+            _sut.JoinSession(sessionId, "");
+
+
+            var payload2 = JsonConvert.SerializeObject(sessionDTO2);
+            _packetDTO.Payload = payload2;
+            PacketHeaderDTO packetHeaderDTO2 = new PacketHeaderDTO
+            {
+                OriginID = hostOriginId,
+                SessionID = sessionId,
+                Target = originId,
+                PacketType = PacketType.Session
+            };
+            _packetDTO.Header = packetHeaderDTO2;
+            
+            SessionDTO expectedSessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
+            expectedSessionDTO.Clients = new List<string[]>();
+            expectedSessionDTO.Clients.Add(new string[]{ originId, ""});
+            var expectedPayload = JsonConvert.SerializeObject(expectedSessionDTO);
+
+            _mockedClientController.Setup(mock => mock.SendPayload(expectedPayload, PacketType.Session));
+            _mockedClientController.Setup(mock => mock.SetSessionId(sessionId));
+            _mockedClientController.Setup(mock => mock.GetOriginId()).Returns(originId);
+
+            //Act ---------
+            
+            
+            HandlerResponseDTO expectedHandlerResponse = new HandlerResponseDTO(SendAction.Ignore, null);
+            _packetDTO.HandlerResponse = expectedHandlerResponse;
+           
+            // _sut.CreateSession("sessie", "Robin", false, sessionId, 2);
+            // _sut.JoinSession(sessionId, "meh");
+            // Act -------------
+            HandlerResponseDTO actualResult = _sut.HandlePacket(_packetDTO);
+
+            // Assert ----------
+            Assert.AreEqual(expectedHandlerResponse.Action, actualResult.Action);
+            Assert.AreEqual(expectedHandlerResponse.ResultMessage, actualResult.ResultMessage);
+            
+            
+        }
+
     }
 }

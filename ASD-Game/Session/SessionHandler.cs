@@ -184,7 +184,8 @@ namespace ASD_Game.Session
             {
                 if (packet.Header.Target == _clientController.GetOriginId())
                 {
-                   
+                    if (sessionDTO.SessionType == SessionType.RequestToJoinSession && packet.HandlerResponse.ResultMessage != null)
+                    {
                         if (packet.HandlerResponse.ResultMessage.Equals("Not allowed to join saved or running game") &&
                             packet.Header.Target.Equals(_clientController.GetOriginId()))
                         {
@@ -198,7 +199,9 @@ namespace ASD_Game.Session
                             AllowedToJoin = true;
                             JoinExistingGame(packet);
                         }
-                    
+
+                        AllowedToJoin = true;
+                    }
                 }
 
                 if (packet.Header.Target == "client" || packet.Header.Target == "host")
