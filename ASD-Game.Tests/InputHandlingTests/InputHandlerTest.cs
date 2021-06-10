@@ -10,7 +10,6 @@ using ASD_Game.UserInterface;
 using InputHandling.Models;
 using Moq;
 using NUnit.Framework;
-using UserInterface;
 
 namespace ASD_Game.Tests.InputHandlingTests
 {
