@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Timers;
 using ActionHandling;
@@ -132,11 +133,6 @@ namespace ASD_Game.ActionHandling
                     }
                 }
 
-                // var creatureToAttack =
-                //     allCreatures.Where(x =>
-                //         x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition &&
-                //         x.GameGuid == _clientController.SessionId);
-
                 InsertStaminaToDatabase(attackDto);
 
                 if (playerToAttack.Any())
@@ -148,12 +144,6 @@ namespace ASD_Game.ActionHandling
                         packet.Payload = JsonConvert.SerializeObject(attackDto);
                     }
                 }
-                // else if (creatureToAttack.Any())
-                // {
-                //     attackDto.AttackedPlayerGuid = creatureToAttack.FirstOrDefault().CreatureGuid;
-                //     InsertDamageToDatabase(attackDto, false);
-                //     packet.Payload = JsonConvert.SerializeObject(attackDto);
-                // }
                 else
                 {
                     if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
@@ -411,6 +401,7 @@ namespace ASD_Game.ActionHandling
             AIAttack(_worldService.GetCreatureMoves());
         }
 
+        [ExcludeFromCodeCoverage]
         private void CheckAITimer()
         {
             AIUpdateTimer = new Timer(_updateTime)
@@ -421,6 +412,7 @@ namespace ASD_Game.ActionHandling
             AIUpdateTimer.Start();
         }
 
+        [ExcludeFromCodeCoverage]
         private void CheckAITimerEvent(object sender, ElapsedEventArgs e)
         {
             AIUpdateTimer.Stop();

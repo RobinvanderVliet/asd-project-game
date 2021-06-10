@@ -20,6 +20,7 @@ using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine;
 using WorldGeneration.StateMachine;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ASD_Game.Session
 {
@@ -184,6 +185,7 @@ namespace ASD_Game.Session
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private void CheckAITimer()
         {
             AIUpdateTimer = new Timer(_brainUpdateTime);
@@ -192,6 +194,7 @@ namespace ASD_Game.Session
             AIUpdateTimer.Start();
         }
 
+        [ExcludeFromCodeCoverage]
         private void CheckAITimerEvent(object sender, ElapsedEventArgs e)
         {
             AIUpdateTimer.Stop();
@@ -199,6 +202,7 @@ namespace ASD_Game.Session
             AIUpdateTimer.Start();
         }
 
+        [ExcludeFromCodeCoverage]
         public void UpdateBrain()
         {
             if (_sessionHandler.TrainingScenario.BrainTransplant() != null)
@@ -207,6 +211,7 @@ namespace ASD_Game.Session
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private void SetStateMachine(Monster monster)
         {
             ICharacterStateMachine CSM = new MonsterStateMachine(monster.MonsterData, null);

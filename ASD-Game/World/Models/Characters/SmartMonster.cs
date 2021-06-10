@@ -112,7 +112,7 @@ namespace ASD_Game.World.Models.Characters
                 }
             }
 
-            if (max < 1.7)
+            if (max < 0.7)
             {
                 Smartactions.Wander(this);
                 return;

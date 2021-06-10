@@ -13,6 +13,7 @@ using ASD_Game.World.Services;
 using Newtonsoft.Json;
 using System.Timers;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ASD_Game.ActionHandling
 {
@@ -320,6 +321,7 @@ namespace ASD_Game.ActionHandling
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private void CheckAITimer()
         {
             AIUpdateTimer = new Timer(_updateTime);
@@ -328,6 +330,7 @@ namespace ASD_Game.ActionHandling
             AIUpdateTimer.Start();
         }
 
+        [ExcludeFromCodeCoverage]
         private void CheckAITimerEvent(object sender, ElapsedEventArgs e)
         {
             AIUpdateTimer.Stop();
