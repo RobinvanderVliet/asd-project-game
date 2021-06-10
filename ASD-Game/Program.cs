@@ -16,6 +16,7 @@ using ASD_Game.Network;
 using ASD_Game.Session;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
+using ASD_Game.World;
 using ASD_Game.World.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -63,6 +64,7 @@ namespace ASD_Game
                     services.AddScoped<IScreenHandler, ScreenHandler>();
                     services.AddScoped<IInputHandler, InputHandler>();
                     services.AddScoped<IPipeline, Pipeline>();
+                    services.AddScoped<IRandomItemGenerator, RandomItemGenerator>();
                     services.AddScoped<IEvaluator, Evaluator>();
                     services.AddScoped<IGameConfigurationHandler, GameConfigurationHandler>();
                 })
