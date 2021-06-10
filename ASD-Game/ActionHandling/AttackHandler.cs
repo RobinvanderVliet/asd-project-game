@@ -93,8 +93,21 @@ namespace ASD_Game.ActionHandling
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             AttackDTO attackDto = JsonConvert.DeserializeObject<AttackDTO>(packet.Payload);
+
+            if (_worldService.GetPlayer(attackDto.PlayerGuid) != null &&
+                _worldService.GetPlayer(attackDto.PlayerGuid).Stamina < 10)
+            {
+                if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
+                {
+                    _messageService.AddMessage("You did not have enough stamina to attack.");
+                }
+                return new HandlerResponseDTO(SendAction.ReturnToSender, "You did not have enough stamina to attack.");
+            }
+            LowerStamina(attackDto.PlayerGuid);
+            
             if (_clientController.IsHost() && packet.Header.Target.Equals("host") || _clientController.IsBackupHost)
             {
+                InsertStaminaToDatabase(attackDto);
                 var allPlayers = _worldService.GetAllPlayers();
                 var playerToAttack =
                     allPlayers.Where(x =>
@@ -126,8 +139,6 @@ namespace ASD_Game.ActionHandling
                         }
                     }
                 }
-
-                InsertStaminaToDatabase(attackDto);
 
                 if (playerToAttack.Any())
                 {
@@ -277,8 +288,7 @@ namespace ASD_Game.ActionHandling
             var creature = _worldService.GetAI(attackDto.AttackedPlayerGuid);
             var player = _worldService.GetPlayer(attackDto.PlayerGuid);
             bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
-
-            LowerStamina(attackDto.PlayerGuid);
+            
             if (printAttackMessage && player.Stamina < ATTACK_STAMINA)
             {
                 _messageService.AddMessage("You attacked an enemy.");
