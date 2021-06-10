@@ -127,7 +127,7 @@ namespace ASD_Game.ActionHandling
 
                 if (characterToAttack != null)
                 {
-                    if(_worldService.GetPlayer(characterToAttack.Id) != null)
+                    if(_worldService.GetPlayer(characterToAttack.Id) != null || _worldService.GetAI(characterToAttack.Id) != null)
                     {
                         attackDto.AttackedPlayerGuid = characterToAttack.Id;
                         InsertDamageToDatabase(attackDto, true);
