@@ -1,4 +1,4 @@
-using ASD_Game.Items.ArmorStats;
+﻿using ASD_Game.Items.ArmorStats;
 using ASD_Game.Items.Consumables;
 using ASD_Game.Items.Consumables.ConsumableStats;
 using ASD_Game.Items.ItemStats;
@@ -76,7 +76,7 @@ namespace ASD_Game.Items
             var weaponbuilder = new WeaponBuilder();
             weaponbuilder.SetName("P90");
             weaponbuilder.SetDescription("CS:GO players hate him.");
-            weaponbuilder.SetWeaponType(WeaponType.Melee);
+            weaponbuilder.SetWeaponType(WeaponType.Range);
             weaponbuilder.SetRarity(Rarity.Common);
             weaponbuilder.SetWeaponSpeed(WeaponSpeed.Slow);
             weaponbuilder.SetWeaponDistance(WeaponDistance.Close);

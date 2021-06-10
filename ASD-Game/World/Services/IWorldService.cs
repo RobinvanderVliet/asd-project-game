@@ -8,7 +8,9 @@ namespace ASD_Game.World.Services
 {
     public interface IWorldService
     {
-        public List<Character> _creatureMoves { get; set; }
+        List<Character> CreatureMoves { get; set; }
+
+        public void SetWorld(IWorld world);
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition);
 
@@ -33,6 +35,7 @@ namespace ASD_Game.World.Services
         List<Character> GetCreatureMoves();
 
         List<Monster> GetMonsters();
+        public List<Character> GetAllCharacters();
 
         public void UpdateBrains(Genome genome);
 

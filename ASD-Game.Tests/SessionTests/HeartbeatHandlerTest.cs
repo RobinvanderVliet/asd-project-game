@@ -3,7 +3,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 using ASD_Game.Session;
+using ASD_Game.Messages;
 using NUnit.Framework;
+using Moq;
 
 namespace ASD_Game.Tests.SessionTests
 {
@@ -15,11 +17,13 @@ namespace ASD_Game.Tests.SessionTests
         private HeartbeatHandler _sut;
         private StringWriter _stringWriter;
         private TextWriter _originalOutput;
+        private Mock<IMessageService> _mockedMessageService;
 
         [SetUp]
         public void Setup()
         {
-            _sut = new HeartbeatHandler();
+            _mockedMessageService = new Mock<IMessageService>();
+            _sut = new HeartbeatHandler(_mockedMessageService.Object);
             _stringWriter = new StringWriter();
             _originalOutput = Console.Out;
             Console.SetOut(_stringWriter);
@@ -30,39 +34,31 @@ namespace ASD_Game.Tests.SessionTests
         public void Test_ReceiveHeartbeat_Success()
         {
             //arrange
-            string expected = String.Empty;
+            var message = "Agents are enabled";
+            _mockedMessageService.Setup(mock => mock.AddMessage(message));
 
-            using (StringWriter sw = new StringWriter())
-            {
-                //Act ---------
-                Console.SetOut(sw);
-                _sut.ReceiveHeartbeat("test");
-                //Assert ---------
-                Assert.AreEqual(expected, sw.ToString());
-            }
+            // Act
+            _sut.ReceiveHeartbeat(message);
 
+            _mockedMessageService.Verify(mock => mock.AddMessage(message), Times.Never);           
         }
 
         [Test]
         public void Test_ReceiveHeartbeat_Fail()
         {
             //arrange
-            string expected = string.Format("Agents are enabled{0}", Environment.NewLine);
+            var message = "Agents are enabled";
+            _mockedMessageService.Setup(mock => mock.AddMessage(message));
 
-            using (StringWriter sw = new StringWriter())
-            {
+
                 //Act ---------
-                Console.SetOut(sw);
                 _sut.ReceiveHeartbeat("test");
                 _sut.ReceiveHeartbeat("test2");
                 Thread.Sleep(2000);
                 _sut.ReceiveHeartbeat("test2");
 
-                //Assert ---------
-                Assert.AreEqual(expected, sw.ToString());
-            }
-
+            //Assert ---------
+            _mockedMessageService.Verify(mock => mock.AddMessage(message), Times.Once);        
         }
     }
-
 }
