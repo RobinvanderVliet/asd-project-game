@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using World.Models.Characters.Algorithms.NeuralNetworking;
 
-namespace World.Models.Characters.Algorithms.NeuralNetworking
+namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
 {
     public class Genome
     {

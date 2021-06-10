@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using ASD_Game.UserInterface;
 using Moq;
 using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
-using UserInterface;
-using System.IO;
-using ASD_Game.UserInterface;
 
-namespace UserInterface.Tests
+namespace ASD_Game.Tests.UserInterfaceTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]

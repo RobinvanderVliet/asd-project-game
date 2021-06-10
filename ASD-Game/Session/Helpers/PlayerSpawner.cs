@@ -17,14 +17,14 @@ namespace ASD_Game.Session.Helpers
             Player currentPlayer = null;
             foreach (var client in allClients)
             {
-                var findEmptyTile = true;
-                while (findEmptyTile)
+                var canSpawnOnTile = false;
+                while (!canSpawnOnTile)
                 {
                     // changes the X and y coordinates based on the seed.
                     playerX = ChangePlayerX(spawnSeed, playerX);
                     playerY = ChangePlayerY(spawnSeed, playerY);
 
-                    findEmptyTile = FindEmptyTile(worldService, playerX, playerY);
+                    canSpawnOnTile = CheckIfPlayerCanSpawnOnTile(worldService, playerX, playerY);
                 }
             
                 if (clientController.GetOriginId() == client[0])
@@ -41,11 +41,11 @@ namespace ASD_Game.Session.Helpers
             return currentPlayer;
         }
 
-        private static bool FindEmptyTile(IWorldService worldService, int playerX, int playerY)
+        private static bool CheckIfPlayerCanSpawnOnTile(IWorldService worldService, int playerX, int playerY)
         {
             worldService.LoadArea(playerX, playerY, 0);
             var tile = worldService.GetTile(playerX, playerY);
-            return tile is not ITerrainTile || !tile.IsAccessible || worldService.CheckIfCharacterOnTile(tile);
+            return tile is ITerrainTile && tile.IsAccessible && !worldService.CheckIfCharacterOnTile(tile);
         }
 
         private static int ChangePlayerX(int spawnSeed, int playerX)

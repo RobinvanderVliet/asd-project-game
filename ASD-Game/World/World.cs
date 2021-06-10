@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items.Services;
@@ -15,12 +14,10 @@ namespace ASD_Game.World
         public Player CurrentPlayer { get; set; }
         public List<Player> Players { get; set; }
         public List<Monster> Creatures { get; set; }
-        public List<Character> movesList = new ();
-        public List<ItemSpawnDTO> Items;
-        
+        public List<Character> MovesList { get; set; }
+        public List<ItemSpawnDTO> Items { get; set; }
         private readonly int _viewDistance;
         private readonly IScreenHandler _screenHandler;
-        private static readonly char _separator = Path.DirectorySeparatorChar;
 
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService)
         {
@@ -120,7 +117,7 @@ namespace ASD_Game.World
          
         public void UpdateAI()
         {
-            movesList = new List<Character>();
+            MovesList = new List<Character>();
             foreach (Character monster in Creatures)
             {
                 if (monster is SmartMonster smartMonster)
@@ -136,7 +133,7 @@ namespace ASD_Game.World
         private void UpdateSmartMonster(SmartMonster smartMonster)
         {
             smartMonster.Update();
-            movesList.Add(smartMonster);
+            MovesList.Add(smartMonster);
         }
 
         public Character GetAI(string id)

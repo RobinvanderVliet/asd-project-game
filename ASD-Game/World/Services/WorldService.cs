@@ -5,6 +5,7 @@ using ASD_Game.Items;
 using ASD_Game.Items.Services;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Interfaces;
 using World.Models.Characters.Algorithms.NeuralNetworking;
 
@@ -14,7 +15,7 @@ namespace ASD_Game.World.Services
     {
         private readonly IItemService _itemService;
         private readonly IScreenHandler _screenHandler;
-        private World _world;
+        public IWorld World { get; set; }
         public List<Character> CreatureMoves { get; set; }
         
         public WorldService(IScreenHandler screenHandler, IItemService itemService)
@@ -25,74 +26,54 @@ namespace ASD_Game.World.Services
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
         {
-            _world.UpdateCharacterPosition(userId, newXPosition, newYPosition);
+            World.UpdateCharacterPosition(userId, newXPosition, newYPosition);
         }
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
         {
-            _world.AddPlayerToWorld(player, isCurrentPlayer);
+            World.AddPlayerToWorld(player, isCurrentPlayer);
         }
 
         public void AddCreatureToWorld(Monster character)
         {
-            _world.AddCreatureToWorld(character);
+            World.AddCreatureToWorld(character);
         }
 
         public void DisplayWorld()
         {
-            _world.UpdateMap();
+            World.UpdateMap();
         }
         
         public void DeleteMap()
         {
-            _world.DeleteMap();
+            World.DeleteMap();
         }
 
         public void GenerateWorld(int seed)
         {
-            _world = new World(seed, 6, new MapFactory(), _screenHandler, _itemService);
-        }
-
-        public Player getCurrentPlayer()
-        {
-            return _world.CurrentPlayer;
-        }
-
-        public List<ItemSpawnDTO> getAllItems()
-        {
-            return _world.Items;
-        }
-
-        public void AddItemToWorld(ItemSpawnDTO itemSpawnDTO)
-        {
-            _world.AddItemToWorld(itemSpawnDTO);
+            World = new World(seed, 6, new MapFactory(), _screenHandler, _itemService);
         }
 
         public Player GetCurrentPlayer()
         {
-            return _world.CurrentPlayer;
-        }
-
-        public World GetWorld()
-        {
-            return _world;
+            return World.CurrentPlayer;
         }
 
         public char[,] GetMapAroundCharacter(Character character)
         {
-            return _world.GetMapAroundCharacter(character);
+            return World.GetMapAroundCharacter(character);
         }
 
         public List<Monster> GetMonsters()
         {
-            return _world.Creatures;
+            return World.Creatures;
         }
 
         public void UpdateBrains(Genome genome)
         {
-            if (_world != null)
+            if (World != null)
             {
-                foreach (Character monster in _world.Creatures)
+                foreach (Character monster in World.Creatures)
                 {
                     if (monster is SmartMonster smartMonster)
                     {
@@ -104,17 +85,17 @@ namespace ASD_Game.World.Services
 
         public List<Character> GetCreatureMoves()
         {
-            if (_world != null)
+            if (World != null)
             {
-                _world.UpdateAI();
-                return _world.movesList;
+                World.UpdateAI();
+                return World.MovesList;
             }
             return null;
         }
 
         public List<Player> GetAllPlayers()
         {
-            return _world.Players;
+            return World.Players;
         }
 
         public bool IsDead(Player player)
@@ -124,7 +105,7 @@ namespace ASD_Game.World.Services
         
         public void LoadArea(int playerX, int playerY, int viewDistance)
         {
-            _world.LoadArea(playerX, playerY, viewDistance);
+            World.LoadArea(playerX, playerY, viewDistance);
         }
 
         public string SearchCurrentTile()
@@ -144,22 +125,22 @@ namespace ASD_Game.World.Services
         
         public Player GetPlayer(string userId)
         {
-            return _world.GetPlayer(userId);
+            return World.GetPlayer(userId);
         }
 
         public Character GetAI(string id)
         {
-            return _world.GetAI(id);
+            return World.GetAI(id);
         }
 
         public ITile GetTile(int x, int y)
         {
-            return _world.GetLoadedTileByXAndY(x, y);
+            return World.GetLoadedTileByXAndY(x, y);
         }
 
         public bool CheckIfCharacterOnTile(ITile tile)
         {
-            return _world.CheckIfCharacterOnTile(tile);
+            return World.CheckIfCharacterOnTile(tile);
         }
 
         public void DisplayStats()
@@ -179,15 +160,15 @@ namespace ASD_Game.World.Services
                 player.Inventory.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
                 player.Inventory.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
         }
+        
         public IList<Item> GetItemsOnCurrentTile()
         {
-            return _world.GetCurrentTile().ItemsOnTile;
+            return World.GetCurrentTile().ItemsOnTile;
         }
-
-
+        
         public IList<Item> GetItemsOnCurrentTile(Player player)
         {
-            return _world.GetTileForPlayer(player).ItemsOnTile;
+            return World.GetTileForPlayer(player).ItemsOnTile;
         }
     }
 }
