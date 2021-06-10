@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using Agent.Mapper;
+using ASD_Game.Agent.Mapper;
 using ASD_Game.InputHandling;
 using Configuration = ASD_Game.Agent.Models.Configuration;
-
 
 namespace ASD_Game.Agent.Services
 {

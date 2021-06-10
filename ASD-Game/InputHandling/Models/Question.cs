@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace InputCommandHandler.Models
+namespace ASD_Game.InputHandling.Models
 {
     [ExcludeFromCodeCoverage]
     public class Questions

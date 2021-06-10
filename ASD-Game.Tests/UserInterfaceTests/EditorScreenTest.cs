@@ -4,7 +4,7 @@ using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 
 
-namespace UserInterface.Tests
+namespace ASD_Game.Tests.UserInterfaceTests
 {
     [ExcludeFromCodeCoverage]
     public class EditorScreenTest
