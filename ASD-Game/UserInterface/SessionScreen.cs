@@ -42,12 +42,13 @@ namespace ASD_Game.UserInterface
         {
             foreach (var session in _sessionsInfoList)
             {
+                // Created by: " + session.Clients[0][1] + " | Players: " + session.Clients.Count + "/8"
                 int position = _sessionsInfoList.IndexOf(session);
                 _screenHandler.ConsoleHelper.SetCursor(SESSIONS_X + 1, SESSIONS_Y + position);
                 _screenHandler.ConsoleHelper.SetCursor(SESSIONS_X + BORDER_SIZE / 2, SESSIONS_Y + OFFSET_TOP + position);
                 _screenHandler.ConsoleHelper.Write(" ");
                 _screenHandler.ConsoleHelper.SetCursor(SESSIONS_X + OFFSET_LEFT, SESSIONS_Y + OFFSET_TOP + position);
-                _screenHandler.ConsoleHelper.Write("(" + (position + 1) + ") " + session.Name + " | Created by: " + session.Clients[0][1] + " | Players: " + session.Clients.Count + "/8" + " | Status: " + (session.SessionStarted ? "In progress" : "Not started"));
+                _screenHandler.ConsoleHelper.Write("(" + (position + 1) + ") " + session.Name + " | Status: " + (session.SessionStarted ? "In progress" : "Not started"));
                 _screenHandler.ConsoleHelper.Write(new string(' ', SCREEN_WIDTH - _screenHandler.ConsoleHelper.GetCursorLeft() - BORDER_SIZE / 2));
             }
 
@@ -63,7 +64,7 @@ namespace ASD_Game.UserInterface
         {
             if (_sessionsInfoList.ElementAtOrDefault(sessionNumber) != null)
             {
-                return _sessionsInfoList[0].SessionId;
+                return _sessionsInfoList.ElementAt(sessionNumber).SessionId;
             }
 
             return null;
