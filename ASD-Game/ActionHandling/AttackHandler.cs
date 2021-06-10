@@ -143,7 +143,7 @@ namespace ASD_Game.ActionHandling
                     attackDto.AttackedPlayerGuid = creatureToAttack.FirstOrDefault().Id;
                     if (attackDto.Stamina >= ATTACK_STAMINA)
                     {
-                        var attackedCreature = _worldService.GetCharacter(attackDto.AttackedPlayerGuid);
+                        var attackedCreature = _worldService.GetAI(attackDto.AttackedPlayerGuid);
                         attackedCreature.Health -= attackDto.Damage;
                         packet.Payload = JsonConvert.SerializeObject(attackDto);
                     }
@@ -274,7 +274,7 @@ namespace ASD_Game.ActionHandling
 
         private void HandleAttack(AttackDTO attackDto)
         {
-            var creature = _worldService.GetCharacter(attackDto.AttackedPlayerGuid);
+            var creature = _worldService.GetAI(attackDto.AttackedPlayerGuid);
             var player = _worldService.GetPlayer(attackDto.PlayerGuid);
             bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
 

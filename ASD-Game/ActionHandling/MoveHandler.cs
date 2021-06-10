@@ -192,7 +192,7 @@ namespace ASD_Game.ActionHandling
         {
             var player = _worldService.GetCurrentPlayer();
             int viewdistance = _worldService.GetViewDistance();
-            var character = _worldService.GetCharacter(moveDTO.UserId);
+            var character = _worldService.GetAI(moveDTO.UserId);
             bool aiIsInView = IsCharacterInView(character, player, viewdistance);
 
             character.XPosition = moveDTO.XPosition;

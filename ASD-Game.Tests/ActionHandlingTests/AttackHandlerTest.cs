@@ -729,7 +729,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
 
             _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(playerList);
             _mockedWorldService.Setup(x => x.GetMonsters()).Returns(creatureList);
-            _mockedWorldService.Setup(x => x.GetCharacter(monster.Id)).Returns(monster);
+            _mockedWorldService.Setup(x => x.GetAI(monster.Id)).Returns(monster);
 
             List<PlayerPOCO> playerPOCOList = new();
             playerPOCOList.Add(attackedPlayerPOCO);
@@ -757,7 +757,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
             _mockedWorldService.Verify(x => x.GetMonsters(), Times.Once);
             _mockedPlayerPocoDatabaseService.Verify(mock => mock.GetAllAsync(), Times.Once);
             _mockedPlayerPocoDatabaseService.Verify(mock => mock.UpdateAsync(playerPOCO), Times.Once);
-            _mockedWorldService.Verify(x => x.GetCharacter(monster.Id), Times.Exactly(2));
+            _mockedWorldService.Verify(x => x.GetAI(monster.Id), Times.Exactly(2));
 
 
             Assert.AreEqual(expectedResult, actualResult);
