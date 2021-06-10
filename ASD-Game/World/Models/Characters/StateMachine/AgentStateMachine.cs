@@ -5,7 +5,8 @@ using ASD_Game.World.Models.Characters.StateMachine.Builder;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ASD_Game.World.Models.Characters.StateMachine.State;
 using Creature.Creature.StateMachine.CustomRuleSet;
-using World.Models.Characters.StateMachine.Event;
+using Creature.Creature.StateMachine.State;
+using WorldGeneration.StateMachine.Event;
 
 namespace ASD_Game.World.Models.Characters.StateMachine
 {
@@ -111,13 +112,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine
             //         }
             //     }
             // }
-
-            // Follow creature
-            builder.In(wanderState).On(CharacterEvent.Event.SPOTTED_CREATURE).Goto(followCreatureState).Execute<ICharacterData>(followCreatureState.SetTargetData);
-            builder.In(followCreatureState).On(CharacterEvent.Event.SPOTTED_CREATURE).Goto(followCreatureState).Execute<ICharacterData>(followCreatureState.SetTargetData);
-            builder.In(wanderState).On(CharacterEvent.Event.CREATURE_IN_RANGE).Goto(followCreatureState).Execute<ICharacterData>(followCreatureState.SetTargetData);
-            builder.In(followCreatureState).On(CharacterEvent.Event.CREATURE_IN_RANGE).Goto(followCreatureState).Execute<ICharacterData>(followCreatureState.SetTargetData);
-
 
             builder.WithInitialState(wanderState);
 

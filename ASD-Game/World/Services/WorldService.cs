@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Text;
 using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items;
@@ -89,58 +88,6 @@ namespace ASD_Game.World.Services
         public List<Monster> GetMonsters()
         {
             return _world._creatures;
-        }
-
-        public Character GetCharacterInClosestRangeToCurrentCharacter(Character character, int distance)
-        {
-            List<Monster> monsters = GetMonsters();
-            List<Player> players = GetAllPlayers();
-
-            //if (character is Monster)
-            //{
-            //    foreach (var player in players)
-            //    {
-            //        if (Vector2.Distance(new Vector2(character.XPosition, character.YPosition), new Vector2(player.XPosition, player.YPosition)) <= distance)
-            //        {
-            //            return player;
-            //        }
-            //    }
-            //}
-            if (character is not Monster)
-            {
-                foreach (var monster in monsters)
-                {
-                    if (Vector2.Distance(new Vector2(character.XPosition, character.YPosition), new Vector2(monster.XPosition, monster.YPosition)) <= distance)
-                    {
-                        return monster;
-                    }
-                }
-            }
-            //}
-            
-            return null;
-        }
-
-        public Character GetCharacter(string id)
-        {
-            List<Monster> monsters = GetMonsters();
-            List<Player> players = GetAllPlayers();
-
-            foreach (var player in players)
-            {
-                if (player.Id == id)
-                {
-                    return player;
-                }
-            }
-            foreach (var monster in monsters)
-            {
-                if (monster.Id == id)
-                {
-                    return monster;
-                }
-            }
-            return null;
         }
 
         public void UpdateBrains(Genome genome)

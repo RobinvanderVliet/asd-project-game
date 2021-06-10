@@ -3,8 +3,10 @@ using System.Linq;
 using ASD_Game.Items;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ASD_Game.World.Models.Characters.StateMachine.State;
-using World.Models.Characters.StateMachine.Event;
+using Creature.Creature.StateMachine.State;
+using WorldGeneration.StateMachine;
 using WorldGeneration.StateMachine.CustomRuleSet;
+using WorldGeneration.StateMachine.Event;
 
 namespace ASD_Game.World.Models.Characters.StateMachine.Builder
 {

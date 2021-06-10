@@ -154,12 +154,12 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
             return true;
         }
 
-        public Vector2 TransformPath(Vector2 nextpos)
+        private Vector2 TransformPath(Vector2 nextpos)
         {
             return nextpos + _pathingOffset;
         }
 
-        public void ViewPointCalculator(Vector2 pos)
+        private void ViewPointCalculator(Vector2 pos)
         {
             _pathingOffset = new Vector2(pos.X - 6, pos.Y - 6);
         }
