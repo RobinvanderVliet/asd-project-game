@@ -190,8 +190,8 @@ namespace ASD_Game.Tests.ActionHandlingTests
             //Assert
 
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
-            _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(2));
-            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Once);
+            _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(3));
+            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Exactly(4));
             _mockedWorldService.Verify(x => x.GetAllPlayers(), Times.Once);
             _mockedWorldService.Verify(x => x.GetMonsters(), Times.Once);
             _mockedPlayerPocoDatabaseService.Verify(mock => mock.GetAllAsync(), Times.Once);
@@ -213,8 +213,26 @@ namespace ASD_Game.Tests.ActionHandlingTests
             string GameGuid = Guid.NewGuid().ToString();
             string PlayerGuid = Guid.NewGuid().ToString();
             string AttackedPlayerGuid = Guid.NewGuid().ToString();
+            PlayerPOCO playerPOCO = new PlayerPOCO
+            {
+                PlayerGUID = PlayerGuid,
+                Health = 100,
+                Stamina = 100,
+                GameGUID = null,
+                XPosition = 10,
+                YPosition = 20
+            };
 
             Player player = new Player("Gert", 10, 20, "#", PlayerGuid);
+            PlayerPOCO attackedPlayerPOCO = new PlayerPOCO
+            {
+                PlayerGUID = AttackedPlayerGuid,
+                Health = 0,
+                Stamina = 100,
+                GameGUID = null,
+                XPosition = 26,
+                YPosition = 11
+            };
 
             Player attackedPlayer = new Player("Henk", 26, 11, "E", AttackedPlayerGuid);
             attackedPlayer.Health = 0;
@@ -243,7 +261,18 @@ namespace ASD_Game.Tests.ActionHandlingTests
             list.Add(player);
             list.Add(attackedPlayer);
 
+            List<PlayerPOCO> playerPOCOList = new();
+            playerPOCOList.Add(attackedPlayerPOCO);
+            playerPOCOList.Add(playerPOCO);
+            IEnumerable<PlayerPOCO> en = playerPOCOList;
+            var task = Task.FromResult(en);
+
+            _mockedPlayerPocoDatabaseService.Setup(mock => mock.GetAllAsync())
+                .Returns(task);
+            _mockedPlayerPocoDatabaseService.Setup(mock => mock.UpdateAsync(playerPOCO));
+            
             _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(list);
+            _mockedWorldService.Setup(x => x.GetPlayer(PlayerGuid)).Returns(player);
 
             var expectedResult = new HandlerResponseDTO(SendAction.Ignore, null);
             
@@ -256,8 +285,9 @@ namespace ASD_Game.Tests.ActionHandlingTests
             _mockedMessageService.Verify(mock => mock.AddMessage("You can't attack this enemy, he is already dead."),
                 Times.Once);
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
-            _mockedClientController.Verify(x => x.GetOriginId(), Times.Once);
+            _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(2));
             _mockedWorldService.Verify(x => x.GetAllPlayers(), Times.Once);
+            _mockedWorldService.Verify(x => x.GetPlayer(PlayerGuid), Times.Exactly(3));
 
             Assert.AreEqual(expectedResult, actualResult);
         }
@@ -382,7 +412,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
             
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
             _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(3));
-            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Exactly(2));
+            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Exactly(4));
             _mockedWorldService.Verify(mock => mock.GetPlayer(attackedPlayer.Id), Times.Once);
             _mockedWorldService.Verify(x => x.GetAllPlayers(), Times.Exactly(2));
             _mockedWorldService.Verify(x => x.GetMonsters(), Times.Once);
@@ -509,7 +539,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
             
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
             _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(3));
-            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Exactly(2));
+            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Exactly(4));
             _mockedWorldService.Verify(mock => mock.GetPlayer(attackedPlayer.Id), Times.Once);
             _mockedWorldService.Verify(x => x.GetAllPlayers(), Times.Exactly(2));
             _mockedWorldService.Verify(x => x.GetMonsters(), Times.Once);
@@ -642,7 +672,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
             
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
             _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(3));
-            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Exactly(2));
+            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Exactly(4));
             _mockedWorldService.Verify(mock => mock.GetPlayer(attackedPlayer.Id), Times.Once);
             _mockedWorldService.Verify(x => x.GetAllPlayers(), Times.Exactly(2));
             _mockedWorldService.Verify(x => x.GetMonsters(), Times.Once);
@@ -752,7 +782,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
             
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
             _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(2));
-            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Exactly(2));
+            _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Exactly(4));
             _mockedWorldService.Verify(x => x.GetAllPlayers(), Times.Once);
             _mockedWorldService.Verify(x => x.GetMonsters(), Times.Once);
             _mockedPlayerPocoDatabaseService.Verify(mock => mock.GetAllAsync(), Times.Once);
@@ -775,8 +805,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
             string GameGuid = Guid.NewGuid().ToString();
             string PlayerGuid = Guid.NewGuid().ToString();
             string AttackedPlayerGuid = Guid.NewGuid().ToString();
-
-            Player player = new Player("Gert", 10, 20, "#", PlayerGuid);
+            
 
             Player attackedPlayer = new Player("Henk", 14, 11, "E", AttackedPlayerGuid);
 
@@ -799,6 +828,27 @@ namespace ASD_Game.Tests.ActionHandlingTests
             packetHeaderDTO.PacketType = PacketType.Attack;
             packetHeaderDTO.Target = "host";
             _packetDTO.Header = packetHeaderDTO;
+            
+            PlayerPOCO playerPOCO = new PlayerPOCO
+            {
+                PlayerGUID = PlayerGuid,
+                Health = 100,
+                Stamina = 100,
+                GameGUID = null,
+                XPosition = 10,
+                YPosition = 20
+            };
+
+            Player player = new Player("Gert", 10, 20, "#", PlayerGuid);
+            PlayerPOCO attackedPlayerPOCO = new PlayerPOCO
+            {
+                PlayerGUID = AttackedPlayerGuid,
+                Health = 0,
+                Stamina = 100,
+                GameGUID = null,
+                XPosition = 26,
+                YPosition = 11
+            };
 
             List<Player> playerList = new List<Player>();
             playerList.Add(player);
@@ -810,9 +860,19 @@ namespace ASD_Game.Tests.ActionHandlingTests
             List<Monster> creatureList = new List<Monster>();
             creatureList.Add(monster);
 
+            List<PlayerPOCO> playerPOCOList = new();
+            playerPOCOList.Add(attackedPlayerPOCO);
+            playerPOCOList.Add(playerPOCO);
+            IEnumerable<PlayerPOCO> en = playerPOCOList;
+            var task = Task.FromResult(en);
+
+            _mockedPlayerPocoDatabaseService.Setup(mock => mock.GetAllAsync())
+                .Returns(task);
+            _mockedPlayerPocoDatabaseService.Setup(mock => mock.UpdateAsync(playerPOCO));
 
             _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(playerList);
             _mockedWorldService.Setup(x => x.GetMonsters()).Returns(creatureList);
+            _mockedWorldService.Setup(x => x.GetPlayer(PlayerGuid)).Returns(player);
 
             var expectedResult = new HandlerResponseDTO(SendAction.Ignore, null);
             
@@ -825,8 +885,9 @@ namespace ASD_Game.Tests.ActionHandlingTests
             _mockedMessageService.Verify(mock => mock.AddMessage("You can't attack this enemy, he is already dead."),
                 Times.Once);
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
-            _mockedClientController.Verify(x => x.GetOriginId(), Times.Once);
+            _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(2));
             _mockedWorldService.Verify(x => x.GetAllPlayers(), Times.Once);
+            _mockedWorldService.Verify(x => x.GetPlayer(PlayerGuid), Times.Exactly(3));
 
             Assert.AreEqual(expectedResult, actualResult);
         }
