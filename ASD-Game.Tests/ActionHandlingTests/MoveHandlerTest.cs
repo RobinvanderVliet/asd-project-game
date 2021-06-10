@@ -8,6 +8,7 @@ using ASD_Game.Messages;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
+using ASD_Game.UserInterface;
 using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Interfaces;
@@ -90,7 +91,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
         }
 
         [Test]
-        public void Test_HandlePacket()
+        public void Test_HandlePacket_CorrectHostPacket()
         {
             // arrange
             PacketDTO _packetDTO = new PacketDTO();
@@ -136,8 +137,130 @@ namespace ASD_Game.Tests.ActionHandlingTests
             packetHeaderDTO.Target = "host";
             _packetDTO.Header = packetHeaderDTO;
 
-            var expectedResult = new HandlerResponseDTO(SendAction.ReturnToSender,
-                "There is no enemy to attack");
+            // act
+            _sut.HandlePacket(_packetDTO);
+
+            // assert
+            _mockedWorldService.Verify(mock => mock.DisplayWorld(), Times.Once);
+        }
+
+        [Test]
+        public void Test_HandlePacket_PlayerHasNoStamina()
+        {
+            // arrange
+            PacketDTO _packetDTO = new PacketDTO();
+            MoveDTO _moveDTO = new MoveDTO();
+
+            string GameGuid = Guid.NewGuid().ToString();
+            string PlayerGuid = Guid.NewGuid().ToString();
+            int _stamina = 1;
+            int _XPosition = 10;
+            int _YPosition = 20;
+
+            Player player = new Player("Gert", _XPosition, _YPosition, "#", PlayerGuid);
+            player.Stamina = _stamina;
+
+            _moveDTO.Stamina = _stamina;
+            _moveDTO.UserId = PlayerGuid;
+            _moveDTO.XPosition = _XPosition + 5;
+
+            _mockedClientController.Setup(x => x.GetOriginId()).Returns(PlayerGuid);
+            _mockedClientController.Object.SetSessionId(GameGuid);
+            _mockedWorldService.Setup(mock => mock.GetPlayer(player.Id)).Returns(player);
+
+            ITile tile = new GrassTile(_XPosition, _YPosition);
+            _mockedWorldService.Setup(mock => mock.GetTile(It.IsAny<int>(), It.IsAny<int>())).Returns(tile);
+
+            var payload = JsonConvert.SerializeObject(_moveDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            packetHeaderDTO.OriginID = PlayerGuid;
+            packetHeaderDTO.SessionID = null;
+            packetHeaderDTO.PacketType = PacketType.Attack;
+            packetHeaderDTO.Target = "host";
+            _packetDTO.Header = packetHeaderDTO;
+
+            var expectedResult = new HandlerResponseDTO(SendAction.ReturnToSender, "You do not have enough stamina to move!");
+
+            // act
+            var actualResult = _sut.HandlePacket(_packetDTO);
+
+            // assert
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [Test]
+        public void Test_HandlePacket_DifferentPacket()
+        {
+            // arrange
+            PacketDTO _packetDTO = new PacketDTO();
+            MoveDTO _moveDTO = new MoveDTO();
+
+            var payload = JsonConvert.SerializeObject(_moveDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            packetHeaderDTO.Target = "error";
+            _packetDTO.Header = packetHeaderDTO;
+
+            _mockedMessageService.Setup(mock => mock.AddMessage(null));
+            _mockedClientController.Setup(mock => mock.IsHost()).Returns(true);
+            _mockedClientController.Setup(mock => mock.IsBackupHost).Returns(true);
+            _packetDTO.HandlerResponse = new HandlerResponseDTO(SendAction.Ignore, null);
+
+            var expectedResult = new HandlerResponseDTO(SendAction.Ignore, null);
+
+            // act
+            var actualResult = _sut.HandlePacket(_packetDTO);
+
+            // assert
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [Test]
+        public void Test_HandlePacket_AIPacket()
+        {
+            // arrange
+            PacketDTO _packetDTO = new PacketDTO();
+            MoveDTO _moveDTO = new MoveDTO();
+
+            string GameGuid = Guid.NewGuid().ToString();
+            string PlayerGuid = Guid.NewGuid().ToString();
+            int _health = 100;
+            int _stamina = 100;
+            int _XPosition = 10;
+            int _YPosition = 20;
+
+            PlayerPOCO playerPOCO = new PlayerPOCO
+            {
+                PlayerGUID = null,
+                Health = _health,
+                Stamina = _stamina,
+                GameGUID = null,
+                XPosition = _XPosition,
+                YPosition = _YPosition
+            };
+
+            Player player = new Player("Gert", 10, 20, "#", PlayerGuid);
+
+            _moveDTO.Stamina = 1;
+            _moveDTO.UserId = PlayerGuid;
+            _moveDTO.XPosition = _XPosition + 1;
+            _moveDTO.YPosition = _YPosition + 1;
+
+            _mockedClientController.Object.SetSessionId(GameGuid);
+            _mockedWorldService.Setup(mock => mock.GetPlayer(player.Id)).Returns(player);
+
+            ITile tile = new GrassTile(_XPosition, _YPosition);
+            _mockedWorldService.Setup(mock => mock.GetTile(It.IsAny<int>(), It.IsAny<int>())).Returns(tile);
+
+            var payload = JsonConvert.SerializeObject(_moveDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            packetHeaderDTO.OriginID = PlayerGuid;
+            packetHeaderDTO.SessionID = null;
+            packetHeaderDTO.PacketType = PacketType.Attack;
+            packetHeaderDTO.Target = "host";
+            _packetDTO.Header = packetHeaderDTO;
 
             // act
             _sut.HandlePacket(_packetDTO);
