@@ -165,7 +165,6 @@ namespace ASD_Game.ActionHandling
                     {
                         _messageService.AddMessage("There is no enemy to attack");
                     }
-                    LowerStamina(attackDto.PlayerGuid);
                     return new HandlerResponseDTO(SendAction.ReturnToSender,
                         "There is no enemy to attack");
                 }
@@ -273,11 +272,7 @@ namespace ASD_Game.ActionHandling
         {
             var player = _worldService.GetPlayer(playerId);
             bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
-            if (player.Stamina < ATTACK_STAMINA && printAttackMessage)
-            {
-                _messageService.AddMessage("You're out of stamina, you can't attack.");
-            }
-            else
+            if (player.Stamina >= ATTACK_STAMINA && printAttackMessage)
             {
                 player.Stamina -= ATTACK_STAMINA;
             }
