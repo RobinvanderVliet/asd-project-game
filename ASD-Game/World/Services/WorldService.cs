@@ -145,7 +145,7 @@ namespace ASD_Game.World.Services
             return _world.GetPlayer(id);
         }
 
-        public Character GetAI(string id)
+        public Character GetCharacter(string id)
         {
             return _world.GetAI(id);
         }

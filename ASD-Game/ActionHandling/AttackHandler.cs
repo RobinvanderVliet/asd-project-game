@@ -143,8 +143,8 @@ namespace ASD_Game.ActionHandling
                     attackDto.AttackedPlayerGuid = creatureToAttack.FirstOrDefault().Id;
                     if (attackDto.Stamina >= ATTACK_STAMINA)
                     {
-                        var creature = _worldService.GetAI(attackDto.AttackedPlayerGuid);
-                        creature.Health -= attackDto.Damage;
+                        var attackedCreature = _worldService.GetCharacter(attackDto.AttackedPlayerGuid);
+                        attackedCreature.Health -= attackDto.Damage;
                         packet.Payload = JsonConvert.SerializeObject(attackDto);
                     }
                 }
@@ -152,10 +152,9 @@ namespace ASD_Game.ActionHandling
                 {
                     if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
                     {
-                        LowerStamina(attackDto);
                         _messageService.AddMessage("There is no enemy to attack");
                     }
-
+                    LowerStamina(attackDto.PlayerGuid);
                     return new HandlerResponseDTO(SendAction.ReturnToSender,
                         "There is no enemy to attack");
                 }
@@ -259,9 +258,9 @@ namespace ASD_Game.ActionHandling
             }
         }
 
-        private void LowerStamina(AttackDTO attackDto)
+        private void LowerStamina(string playerId)
         {
-            var player = _worldService.GetPlayer(attackDto.PlayerGuid);
+            var player = _worldService.GetPlayer(playerId);
             bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
             if (player.Stamina < ATTACK_STAMINA && printAttackMessage)
             {
@@ -275,12 +274,12 @@ namespace ASD_Game.ActionHandling
 
         private void HandleAttack(AttackDTO attackDto)
         {
-            var creature = _worldService.GetAI(attackDto.AttackedPlayerGuid);
+            var creature = _worldService.GetCharacter(attackDto.AttackedPlayerGuid);
             var player = _worldService.GetPlayer(attackDto.PlayerGuid);
             bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
 
-            LowerStamina(attackDto);
-            if (printAttackMessage)
+            LowerStamina(attackDto.PlayerGuid);
+            if (printAttackMessage && player.Stamina < ATTACK_STAMINA)
             {
                 _messageService.AddMessage("You attacked an enemy.");
             }
