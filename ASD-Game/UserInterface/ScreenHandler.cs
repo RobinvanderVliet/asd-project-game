@@ -64,7 +64,6 @@ namespace ASD_Game.UserInterface
             {
                 var gameScreen = Screen as GameScreen;
                 _actionsInQueue.Add(gameScreen.RedrawInputBox);
-                _displayThread = new Thread(gameScreen.RedrawInputBox);
             }
         }
 
