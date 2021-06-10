@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ASD_Game.ActionHandling.DTO;
 using ASD_Game.DatabaseHandler.POCO;
-using ASD_Game.DatabaseHandler.Services;
-using ASD_Game.Messages;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
@@ -12,6 +10,8 @@ using ASD_Game.World.Models.Interfaces;
 using ASD_Game.World.Services;
 using Newtonsoft.Json;
 using System.Timers;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Messages;
 
 namespace ASD_Game.ActionHandling
 {
@@ -94,7 +94,7 @@ namespace ASD_Game.ActionHandling
             return new(SendAction.Ignore, null);
         }
 
-        public HandlerResponseDTO HandleMove(MoveDTO moveDTO, bool handleInDatabase)
+        private HandlerResponseDTO HandleMove(MoveDTO moveDTO, bool handleInDatabase)
         {
             if (_worldService.GetPlayer(moveDTO.UserId) != null)
             {
