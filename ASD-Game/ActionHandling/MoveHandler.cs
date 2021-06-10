@@ -12,7 +12,6 @@ using Newtonsoft.Json;
 using System.Timers;
 using ASD_Game.DatabaseHandler.Services;
 using ASD_Game.Messages;
-using WorldGeneration.Models.Interfaces;
 
 namespace ASD_Game.ActionHandling
 {
