@@ -46,6 +46,20 @@ namespace Session.Tests
         private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigurationPoco;
         private Mock<ITerrainTile> _mockedTile;
 
+        private char[,] _map = { { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                 { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                 { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                 { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                 { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                 { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                 { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                 { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                 { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                 { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                 { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                 { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
+                                 { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','} };
+
         [SetUp]
         public void Setup()
         {
@@ -107,6 +121,8 @@ namespace Session.Tests
             _mockedsessionHandler.Setup(mock => mock.GetSessionSeed()).Returns(1);
             _mockedsessionHandler.Setup(mock => mock.GetAllClients()).Returns(allClients);
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns("1");
+            _mockedWorldService.Setup(x => x.GetMapAroundCharacter(It.IsAny<Character>())).Returns(_map);
+            _mockedsessionHandler.Setup(x => x.TrainingScenario).Returns(new TrainingScenario());
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
 
@@ -136,6 +152,8 @@ namespace Session.Tests
             _mockedsessionHandler.Setup(mock => mock.GetAllClients()).Returns(allClients);
             _mockedsessionHandler.Setup(mock => mock.GetSessionSeed()).Returns(1);
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns("1");
+            _mockedWorldService.Setup(x => x.GetMapAroundCharacter(It.IsAny<Character>())).Returns(_map);
+            _mockedsessionHandler.Setup(x => x.TrainingScenario).Returns(new TrainingScenario());
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
 
@@ -176,6 +194,8 @@ namespace Session.Tests
             _mockedClientController.Setup(x => x.SessionId).Returns("1");
             _mockedClientController.Setup(x => x.GetOriginId()).Returns("1");
             _mockedClientController.Setup(x => x.IsHost()).Returns(true);
+            _mockedWorldService.Setup(x => x.GetMapAroundCharacter(It.IsAny<Character>())).Returns(_map);
+            _mockedsessionHandler.Setup(x => x.TrainingScenario).Returns(new TrainingScenario());
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
             _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(savedPlayers);
@@ -218,6 +238,8 @@ namespace Session.Tests
             _mockedClientController.Setup(x => x.SessionId).Returns("1");
             _mockedClientController.Setup(x => x.GetOriginId()).Returns("1");
             _mockedClientController.Setup(x => x.IsHost()).Returns(true);
+            _mockedWorldService.Setup(x => x.GetMapAroundCharacter(It.IsAny<Character>())).Returns(_map);
+            _mockedsessionHandler.Setup(x => x.TrainingScenario).Returns(new TrainingScenario());
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
             _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(savedPlayers);
@@ -260,6 +282,8 @@ namespace Session.Tests
             _mockedClientController.Setup(x => x.SessionId).Returns("1");
             _mockedClientController.Setup(x => x.GetOriginId()).Returns("1");
             _mockedClientController.Setup(x => x.IsHost()).Returns(true);
+            _mockedWorldService.Setup(x => x.GetMapAroundCharacter(It.IsAny<Character>())).Returns(_map);
+            _mockedsessionHandler.Setup(x => x.TrainingScenario).Returns(new TrainingScenario());
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
             _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(savedPlayers);
@@ -303,6 +327,8 @@ namespace Session.Tests
             _mockedClientController.Setup(x => x.GetOriginId()).Returns("1");
             _mockedClientController.Setup(x => x.IsHost()).Returns(true);
             _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(savedPlayers);
+            _mockedWorldService.Setup(x => x.GetMapAroundCharacter(It.IsAny<Character>())).Returns(_map);
+            _mockedsessionHandler.Setup(x => x.TrainingScenario).Returns(new TrainingScenario());
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
 
@@ -345,6 +371,8 @@ namespace Session.Tests
             _mockedClientController.Setup(x => x.GetOriginId()).Returns("1");
             _mockedClientController.Setup(x => x.IsHost()).Returns(false);
             _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(savedPlayers);
+            _mockedWorldService.Setup(x => x.GetMapAroundCharacter(It.IsAny<Character>())).Returns(_map);
+            _mockedsessionHandler.Setup(x => x.TrainingScenario).Returns(new TrainingScenario());
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
             _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(savedPlayers);
@@ -385,26 +413,13 @@ namespace Session.Tests
 
             Monster newMonster = new Monster("Zombie", 12, 15,
                 CharacterSymbol.TERMINATOR, "monst");
-            char[,] monsterList = { { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
-                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
-                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
-                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
-                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
-                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
-                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
-                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
-                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
-                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
-                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
-                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
-                                    { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','} };
 
             Player playerinWorld = new Player("name1", 20, 20, "@", "1");
 
             _mockedsessionHandler.Setup(mock => mock.GetAllClients()).Returns(allClients);
             _mockedsessionHandler.Setup(mock => mock.GetSessionSeed()).Returns(1);
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns("1");
-            _mockedWorldService.Setup(x => x.GetMapAroundCharacter(It.IsAny<Character>())).Returns(monsterList);
+            _mockedWorldService.Setup(x => x.GetMapAroundCharacter(It.IsAny<Character>())).Returns(_map);
             _mockedsessionHandler.Setup(x => x.TrainingScenario).Returns(new TrainingScenario());
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
@@ -437,6 +452,8 @@ namespace Session.Tests
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns("1");
 
             _mockedWorldService.Setup(x => x.GetCurrentPlayer()).Returns(playerinWorld);
+            _mockedWorldService.Setup(x => x.GetMapAroundCharacter(It.IsAny<Character>())).Returns(_map);
+            _mockedsessionHandler.Setup(x => x.TrainingScenario).Returns(new TrainingScenario());
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
 
@@ -469,6 +486,8 @@ namespace Session.Tests
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns("1");
 
             _mockedWorldService.Setup(x => x.GetCurrentPlayer()).Returns(playerinWorld);
+            _mockedWorldService.Setup(x => x.GetMapAroundCharacter(It.IsAny<Character>())).Returns(_map);
+            _mockedsessionHandler.Setup(x => x.TrainingScenario).Returns(new TrainingScenario());
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
 
@@ -499,6 +518,8 @@ namespace Session.Tests
             _mockedsessionHandler.Setup(mock => mock.GetSessionSeed()).Returns(1);
             _mockedsessionHandler.Setup(mock => mock.GetAllClients()).Returns(allClients);
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns("1");
+            _mockedWorldService.Setup(x => x.GetMapAroundCharacter(It.IsAny<Character>())).Returns(_map);
+            _mockedsessionHandler.Setup(x => x.TrainingScenario).Returns(new TrainingScenario());
 
             _mockedWorldService.Setup(x => x.GetCurrentPlayer()).Returns(playerinWorld);
 
