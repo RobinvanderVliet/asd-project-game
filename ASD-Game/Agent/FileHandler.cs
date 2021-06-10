@@ -39,6 +39,11 @@ namespace ASD_Game.Agent
         {
             string safeFileLocation = GetBaseDirectory() + $"{_separator}Resource{_separator}{fileName}";
 
+            if (File.Exists(safeFileLocation))
+            {
+                File.Delete(safeFileLocation);
+            }
+            
             CreateDirectory(safeFileLocation);
 
             using (FileStream fileStream = File.Open(safeFileLocation, FileMode.OpenOrCreate))
@@ -67,7 +72,7 @@ namespace ASD_Game.Agent
             return childDirectory;
         }
 
-        private string GoBackToRoot(String path)
+        private string GoBackToRoot(string path)
         {
             return Directory.GetParent
                 (Directory.GetParent
@@ -75,5 +80,6 @@ namespace ASD_Game.Agent
                         (Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).ToString()).ToString()).ToString()).ToString();
 
         }
+        
     }
 }

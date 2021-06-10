@@ -247,13 +247,13 @@ namespace ASD_Game.Agent.Antlr.Parser
             _currentContainer.Peek().AddChild(temp);
         }
 
-        public override void EnterOpponent([NotNull] AgentConfigurationParser.OpponentContext context)
+        public override void EnterAgent([NotNull] AgentConfigurationParser.AgentContext context)
         {
-            Opponent opponent = new Opponent(context.OPPONENT().GetText());
-            _currentContainer.Push(opponent);
+            AgentSubject agentSubject = new AgentSubject(context.AGENT().GetText());
+            _currentContainer.Push(agentSubject);
         }
 
-        public override void ExitOpponent([NotNull] AgentConfigurationParser.OpponentContext context)
+        public override void ExitAgent([NotNull] AgentConfigurationParser.AgentContext context)
         {
             Node temp = _currentContainer.Pop();
             _currentContainer.Peek().AddChild(temp);

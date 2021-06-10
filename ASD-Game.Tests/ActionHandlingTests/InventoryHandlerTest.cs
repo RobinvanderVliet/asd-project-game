@@ -44,7 +44,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
             _mockedMessageService = new();
             _mockedWorldItemDatabaseService = new();
 
-            _sut = new InventoryHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerDatabaseService.Object, _mockedPlayerItemDatabaseService.Object, _mockedWorldItemDatabaseService.Object, _mockedMessageService.Object);
+            _sut = new InventoryHandler(_mockedClientController.Object, _mockedWorldService.Object, _mockedPlayerDatabaseService.Object, _mockedPlayerItemDatabaseService.Object, _mockedMessageService.Object);
         }
 
         [Test]

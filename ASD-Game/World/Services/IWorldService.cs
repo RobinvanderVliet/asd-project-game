@@ -55,5 +55,7 @@ namespace ASD_Game.World.Services
         public void DisplayStats();
 
         public Character GetAI(string id);
+
+        public int GetViewDistance();
     }
 }

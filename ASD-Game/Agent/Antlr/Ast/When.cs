@@ -4,10 +4,10 @@ namespace ASD_Game.Agent.Antlr.Ast
 {
     public class When : Node
     {
-        private Comparable _comparableL;
-        private Comparable _comparableR;
-        private Comparison _comparison;
-        private ActionReference _then;
+        public Comparable ComparableL;
+        public Comparable ComparableR;
+        public Comparison Comparison;
+        public ActionReference Then;
 
         public override string GetNodeType()
         {
@@ -18,14 +18,14 @@ namespace ASD_Game.Agent.Antlr.Ast
         {
             var children = new List<Node>();
 
-            if (_comparableL != null)
-                children.Add(_comparableL);
-            if (_comparison != null)
-                children.Add(_comparison);
-            if (_comparableR != null)
-                children.Add(_comparableR);
-            if (_then != null)
-                children.Add(_then);
+            if (ComparableL != null)
+                children.Add(ComparableL);
+            if (Comparison != null)
+                children.Add(Comparison);
+            if (ComparableR != null)
+                children.Add(ComparableR);
+            if (Then != null)
+                children.Add(Then);
 
             children.AddRange(body);
             return children;
@@ -36,13 +36,13 @@ namespace ASD_Game.Agent.Antlr.Ast
             switch (node)
             {
                 case Comparable comparable:
-                    if (_comparableL == null)
+                    if (ComparableL == null) 
                     {
-                        _comparableL = comparable;
+                        ComparableL = comparable;
                     }
-                    else if (_comparableR == null)
+                    else if (ComparableR == null) 
                     {
-                        _comparableR = comparable;
+                        ComparableR = comparable;
                     }
                     else
                     {
@@ -50,10 +50,10 @@ namespace ASD_Game.Agent.Antlr.Ast
                     }
                     break;
                 case ActionReference action:
-                    _then = action;
+                    Then = action;
                     break;
                 case Comparison comparison:
-                    _comparison = comparison;
+                    Comparison = comparison;
                     break;
                 default:
                     body.Add(node);
@@ -62,48 +62,5 @@ namespace ASD_Game.Agent.Antlr.Ast
 
             return this;
         }
-
-
-        public Comparable GetComparableL()
-        {
-            return _comparableL;
-        }
-
-        public void SetComparableL(Comparable comparable)
-        {
-            _comparableL = comparable;
-        }
-
-
-        public Comparable GetComparableR()
-        {
-            return _comparableR;
-        }
-
-        public void SetComparableR(Comparable comparable)
-        {
-            _comparableR = comparable;
-        }
-
-        public Comparison GetComparison()
-        {
-            return _comparison;
-        }
-
-        public void SetComparison(Comparison comparison)
-        {
-            _comparison = comparison;
-        }
-
-        public ActionReference GetThen()
-        {
-            return _then;
-        }
-
-        public void SetThen(ActionReference then)
-        {
-            _then = then;
-        }
-
     }
 }

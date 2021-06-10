@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
+using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items;
 using ASD_Game.Items.Services;
 using ASD_Game.UserInterface;
@@ -13,8 +15,9 @@ namespace ASD_Game.World.Services
     {
         private readonly IItemService _itemService;
         private readonly IScreenHandler _screenHandler;
-        public IWorld World { get; set; }
-        public List<Character> CreatureMoves { get; set; }
+        private World _world;
+        public List<Character> _creatureMoves { get; set; }
+        private const int VIEWDISTANCE = 6;
         
         public WorldService(IScreenHandler screenHandler, IItemService itemService)
         {
@@ -49,7 +52,7 @@ namespace ASD_Game.World.Services
 
         public void GenerateWorld(int seed)
         {
-            World = new World(seed, 6, new MapFactory(), _screenHandler, _itemService);
+            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, _itemService);
         }
 
         public Player GetCurrentPlayer()
@@ -109,21 +112,23 @@ namespace ASD_Game.World.Services
         public string SearchCurrentTile()
         {
             var itemsOnCurrentTile = GetItemsOnCurrentTile();
+            StringBuilder result = new StringBuilder();
 
-            var result = "The following items are on the current tile:" + Environment.NewLine;
+            result.Append("The following items are on the current tile:" + Environment.NewLine);
+
             var index = 1;
             foreach (var item in itemsOnCurrentTile)
             {
-                result += $"{index}. {item.ItemName}{Environment.NewLine}";
+                result.Append($"{index}. {item.ItemName}{Environment.NewLine}");
                 index += 1;
             }
 
-            return result;
+            return result.ToString();
         }
         
-        public Player GetPlayer(string userId)
+        public Player GetPlayer(string id)
         {
-            return World.GetPlayer(userId);
+            return _world.GetPlayer(id);
         }
 
         public Character GetAI(string id)
@@ -167,6 +172,11 @@ namespace ASD_Game.World.Services
         public IList<Item> GetItemsOnCurrentTile(Player player)
         {
             return World.GetTileForPlayer(player).ItemsOnTile;
+        }
+
+        public int GetViewDistance()
+        {
+            return VIEWDISTANCE;
         }
     }
 }

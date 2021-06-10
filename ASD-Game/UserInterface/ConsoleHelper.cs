@@ -35,7 +35,12 @@ namespace ASD_Game.UserInterface
         {
             return Console.CursorTop;
         }
-
+        
+        public virtual void WriteLine(string text)
+        {
+            Console.WriteLine(text);
+        }
+        
         public virtual string ReadLine()
         {
             return Console.ReadLine();
