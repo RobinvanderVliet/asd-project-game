@@ -14,16 +14,14 @@ namespace ASD_Game.World.Models
 
         public Chunk()
         {
-            
         }
 
-        public Chunk(int x, int y, ITile[] map, int rowSize, int seed)
+        public Chunk(int x, int y, ITile[] map, int rowSize)
         {
             X = x;
             Y = y;
             Map = map;
             RowSize = rowSize;
-            Seed = seed;
         }
     }
 }

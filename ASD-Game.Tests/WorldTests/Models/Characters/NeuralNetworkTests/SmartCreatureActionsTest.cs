@@ -4,7 +4,6 @@ using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingScena
 using ASD_Game.World.Models.Characters.Algorithms.Pathfinder;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using NUnit.Framework;
-using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
 namespace ASD_Game.Tests.WorldTests.Models.Characters.NeuralNetworkTests
 {
