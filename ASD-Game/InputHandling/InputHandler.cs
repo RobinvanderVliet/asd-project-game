@@ -143,7 +143,7 @@ namespace ASD_Game.InputHandling
                 else
                 {
                     SendCommand("join_session \"" + sessionId + "\" \"" + inputParts[1].Replace("\"", "") + "\"");
-                    
+                    Thread.Sleep(50);
                     if (_sessionHandler.AllowedToJoin)
                     {
                         _screenHandler.TransitionTo(new LobbyScreen());
