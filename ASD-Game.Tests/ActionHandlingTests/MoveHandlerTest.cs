@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using ActionHandling.DTO;
 using ASD_Game.ActionHandling;
 using ASD_Game.ActionHandling.DTO;
 using ASD_Game.DatabaseHandler.POCO;
@@ -11,6 +12,7 @@ using ASD_Game.Network.Enum;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Services;
 using Moq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace ASD_Game.Tests.ActionHandlingTests
@@ -89,24 +91,51 @@ namespace ASD_Game.Tests.ActionHandlingTests
         public void Test_HandlePacket()
         {
             // arrange
-            PacketDTO packetDTO = new PacketDTO();
+            PacketDTO _packetDTO = new PacketDTO();
+            MoveDTO _moveDTO = new MoveDTO();
+
+            string GameGuid = Guid.NewGuid().ToString();
+            string PlayerGuid = Guid.NewGuid().ToString();
+            int _health = 100;
+            int _stamina = 100;
+            int _XPosition = 10;
+            int _YPosition = 20;
+
+            PlayerPOCO playerPOCO = new PlayerPOCO
+            {
+                PlayerGUID = PlayerGuid,
+                Health = _health,
+                Stamina = _stamina,
+                GameGUID = null,
+                XPosition = _XPosition,
+                YPosition = _YPosition
+            };
+
+            Player player = new Player("Gert", 10, 20, "#", PlayerGuid);
+
+            _moveDTO.Stamina = 1;
+            _moveDTO.UserId = PlayerGuid;
+            _moveDTO.XPosition = _XPosition+1;
+            _moveDTO.YPosition = _YPosition+1;
+
+            _mockedClientController.Setup(x => x.GetOriginId()).Returns(PlayerGuid);
+            _mockedClientController.Object.SetSessionId(GameGuid);
+            _mockedWorldService.Setup(mock => mock.GetPlayer(player.Id)).Returns(player);
+
+            var payload = JsonConvert.SerializeObject(_moveDTO);
+            _packetDTO.Payload = payload;
+            PacketHeaderDTO packetHeaderDTO = new PacketHeaderDTO();
+            packetHeaderDTO.OriginID = PlayerGuid;
+            packetHeaderDTO.SessionID = null;
+            packetHeaderDTO.PacketType = PacketType.Attack;
+            packetHeaderDTO.Target = "host";
+            _packetDTO.Header = packetHeaderDTO;
+
+            var expectedResult = new HandlerResponseDTO(SendAction.ReturnToSender,
+                "There is no enemy to attack");
 
             // act
-            _sut.HandlePacket(packetDTO);
-
-            // assert
-
-        }
-
-        [Test]
-        public void Test_HandleMove()
-        {
-            // arrange
-            MoveDTO moveDTO = new MoveDTO();
-            bool handleInDatabase = false;
-
-            // act
-            _sut.HandleMove(moveDTO, handleInDatabase);
+            _sut.HandlePacket(_packetDTO);
 
             // assert
 
