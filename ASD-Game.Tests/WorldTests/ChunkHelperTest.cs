@@ -27,19 +27,5 @@
 //             _sut = _chunkHelperMock.Object;
 //             _sut.Chunk = _chunk;
 //         }
-//         
-//         [Test]
-//         public void Test_GetPositionInTileArrayByWorldCoordinates()
-//         {
-//         int x = 1;
-//         int y = 2;
-//         
-//         //Arrange ---------
-//         
-//         //Act ---------
-//         
-//         //Assert ---------
-//         Assert.That(true);
-//         }
 //     }
 // }

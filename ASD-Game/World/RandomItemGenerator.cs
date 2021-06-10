@@ -2,10 +2,10 @@ using ASD_Game.Items;
 
 namespace ASD_Game.World
 {
-    public static class RandomItemGenerator
+    public class RandomItemGenerator : IRandomItemGenerator
     {
 
-        public static Item GetRandomItem(float noise)
+        public Item GetRandomItem(float noise)
         {
             return (noise * 100) switch
             {

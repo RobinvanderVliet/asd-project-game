@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using ASD_Game.Agent.Exceptions;
 using ASD_Game.Agent.Mapper;
 using ASD_Game.Agent.Models;

@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items;
 using ASD_Game.Items.Services;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
-using ASD_Game.World.Models.Interfaces;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
+using ASD_Game.World.Models.Interfaces;
 
 namespace ASD_Game.World.Services
 {
@@ -15,8 +14,8 @@ namespace ASD_Game.World.Services
     {
         private readonly IItemService _itemService;
         private readonly IScreenHandler _screenHandler;
-        private World _world;
-        public List<Character> _creatureMoves { get; set; }
+        private IWorld _world;
+        public List<Character> CreatureMoves { get; set; }
         private const int VIEWDISTANCE = 6;
         
         public WorldService(IScreenHandler screenHandler, IItemService itemService)
@@ -33,6 +32,11 @@ namespace ASD_Game.World.Services
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
         {
             _world.AddPlayerToWorld(player, isCurrentPlayer);
+        }
+
+        public void SetWorld(IWorld world)
+        {
+            _world = world;
         }
 
         public void AddCreatureToWorld(Monster character)
@@ -55,29 +59,9 @@ namespace ASD_Game.World.Services
             _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, _itemService);
         }
 
-        public Player getCurrentPlayer()
-        {
-            return _world.CurrentPlayer;
-        }
-
-        public List<ItemSpawnDTO> getAllItems()
-        {
-            return _world.Items;
-        }
-
-        public void AddItemToWorld(ItemSpawnDTO itemSpawnDTO)
-        {
-            _world.AddItemToWorld(itemSpawnDTO);
-        }
-
         public Player GetCurrentPlayer()
         {
             return _world.CurrentPlayer;
-        }
-
-        public World GetWorld()
-        {
-            return _world;
         }
 
         public char[,] GetMapAroundCharacter(Character character)
@@ -87,14 +71,14 @@ namespace ASD_Game.World.Services
 
         public List<Monster> GetMonsters()
         {
-            return _world._creatures;
+            return _world.Creatures;
         }
 
         public void UpdateBrains(Genome genome)
         {
             if (_world != null)
             {
-                foreach (Character monster in _world._creatures)
+                foreach (Character monster in _world.Creatures)
                 {
                     if (monster is SmartMonster smartMonster)
                     {
@@ -109,7 +93,7 @@ namespace ASD_Game.World.Services
             if (_world != null)
             {
                 _world.UpdateAI();
-                return _world.movesList;
+                return _world.MovesList;
             }
             return null;
         }
@@ -183,12 +167,12 @@ namespace ASD_Game.World.Services
                 player.Inventory.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
                 player.Inventory.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
         }
+        
         public IList<Item> GetItemsOnCurrentTile()
         {
             return _world.GetCurrentTile().ItemsOnTile;
         }
-
-
+        
         public IList<Item> GetItemsOnCurrentTile(Player player)
         {
             return _world.GetTileForPlayer(player).ItemsOnTile;
