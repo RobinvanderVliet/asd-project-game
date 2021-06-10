@@ -15,8 +15,8 @@ namespace ASD_Game.World.Services
     {
         private readonly IItemService _itemService;
         private readonly IScreenHandler _screenHandler;
-        private World _world;
-        public List<Character> _creatureMoves { get; set; }
+        public IWorld World;
+        public List<Character> CreatureMoves { get; set; }
         private const int VIEWDISTANCE = 6;
         
         public WorldService(IScreenHandler screenHandler, IItemService itemService)
@@ -52,7 +52,7 @@ namespace ASD_Game.World.Services
 
         public void GenerateWorld(int seed)
         {
-            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, _itemService);
+            World = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, _itemService);
         }
 
         public Player GetCurrentPlayer()
@@ -128,7 +128,7 @@ namespace ASD_Game.World.Services
         
         public Player GetPlayer(string id)
         {
-            return _world.GetPlayer(id);
+            return World.GetPlayer(id);
         }
 
         public Character GetAI(string id)

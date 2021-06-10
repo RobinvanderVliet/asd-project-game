@@ -3,15 +3,11 @@ using ASD_Game.Items;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Interfaces;
-using World.Models.Characters.Algorithms.NeuralNetworking;
 
 namespace ASD_Game.World.Services
 {
     public interface IWorldService
     {
-        List<Character> CreatureMoves { get; set; }
-        IWorld World { get; set; }
-
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition);
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer);
