@@ -42,6 +42,11 @@ namespace ASD_Game.Agent.Antlr.Ast
             error = new ASTError(message);
         }
 
+        public bool HasError()
+        {
+            return error != null;
+        }
+
         private string BuildString(StringBuilder builder)
         {
             builder.Append("[" + GetNodeType() + "]");
