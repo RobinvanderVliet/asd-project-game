@@ -8,8 +8,6 @@ using ASD_Game.Messages;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
-using ASD_Game.UserInterface;
-using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Interfaces;
 using ASD_Game.World.Models.TerrainTiles;
