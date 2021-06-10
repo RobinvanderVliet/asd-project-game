@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using ASD_Game.ActionHandling.DTO;
@@ -16,7 +15,7 @@ namespace ASD_Game.World
         public Player CurrentPlayer { get; set; }
         public List<Player> Players { get; set; }
         public List<Monster> Creatures { get; set; }
-        public List<Character> movesList = new List<Character>();
+        public List<Character> movesList = new ();
         public List<ItemSpawnDTO> Items;
         
         private readonly int _viewDistance;
@@ -25,14 +24,6 @@ namespace ASD_Game.World
 
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService)
         {
-            // Players = new();
-            // _creatures = new();
-            // var currentDirectory = Directory.GetCurrentDirectory();
-            //
-            // Players = new();
-            // _viewDistance = viewDistance;
-            // _screenHandler = screenHandler;
-            // DeleteMap();
             Items = new();
             Players = new ();
             Creatures = new ();
