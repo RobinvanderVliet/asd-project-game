@@ -1,5 +1,6 @@
 using ASD_Game.ActionHandling.DTO;
 using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Interfaces;
 using System.Collections.Generic;
 using ASD_Game.World.Models.Interfaces;
 
@@ -12,12 +13,12 @@ namespace ASD_Game.World
         List<Monster> Creatures { get; set; }
         List<ItemSpawnDTO> Items { get; set; }
         List<Character> MovesList { get; set; }
-
+        
         void UpdateCharacterPosition(string id, int newXPosition, int newYPosition);
 
         void AddPlayerToWorld(Player player, bool isCurrentPlayer = false);
 
-        void AddCreatureToWorld(Monster player);
+        void AddCreatureToWorld(Monster monster);
 
         void UpdateMap();
 

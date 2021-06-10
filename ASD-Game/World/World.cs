@@ -114,7 +114,7 @@ namespace ASD_Game.World
         {
             _map.LoadArea(playerX, playerY, viewDistance);
         }
-
+         
         public void UpdateAI()
         {
             MovesList = new List<Character>();
