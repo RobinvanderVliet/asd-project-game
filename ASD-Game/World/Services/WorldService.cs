@@ -81,6 +81,11 @@ namespace ASD_Game.World.Services
             return _world.Creatures;
         }
 
+        public List<Character> GetAllCharacters()
+        {
+            return _world.GetAllCharacters();
+        }
+
         public void UpdateBrains(Genome genome)
         {
             if (_world != null)

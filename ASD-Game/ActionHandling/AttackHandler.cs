@@ -8,6 +8,7 @@ using ASD_Game.Messages;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
+using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Services;
 using DatabaseHandler.POCO;
 using Newtonsoft.Json;
@@ -108,13 +109,13 @@ namespace ASD_Game.ActionHandling
             if (_clientController.IsHost() && packet.Header.Target.Equals("host") || _clientController.IsBackupHost)
             {
                 InsertStaminaToDatabase(attackDto);
-                var allPlayers = _worldService.GetAllPlayers();
-                var playerToAttack =
-                    allPlayers.Where(x =>
+                var allCharacters = _worldService.GetAllCharacters();
+                var characterToAttack =
+                    allCharacters.Find(x =>
                         x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition);
-                if (playerToAttack.FirstOrDefault() != null)
+                if (characterToAttack != null)
                 {
-                    if (playerToAttack.FirstOrDefault().Health <= 0)
+                    if (characterToAttack.Health <= 0)
                     {
                         if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
                         {
@@ -124,38 +125,12 @@ namespace ASD_Game.ActionHandling
                     }
                 }
 
-                var allCreatures = _worldService.GetMonsters();
-                var creatureToAttack =
-                    allCreatures.Where(x =>
-                        x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition);
-                if (creatureToAttack.FirstOrDefault() != null)
+                if (characterToAttack != null)
                 {
-                    if (creatureToAttack.FirstOrDefault().Health <= 0)
+                    if(_worldService.GetPlayer(characterToAttack.Id) != null)
                     {
-                        if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
-                        {
-                            _messageService.AddMessage("You can't attack this enemy, he is already dead.");
-                            return new HandlerResponseDTO(SendAction.Ignore, null);
-                        }
-                    }
-                }
-
-                if (playerToAttack.Any())
-                {
-                    attackDto.AttackedPlayerGuid = playerToAttack.FirstOrDefault().Id;
-                    if (attackDto.Stamina >= ATTACK_STAMINA)
-                    {
+                        attackDto.AttackedPlayerGuid = characterToAttack.Id;
                         InsertDamageToDatabase(attackDto, true);
-                        packet.Payload = JsonConvert.SerializeObject(attackDto);
-                    }
-                }
-                else if (creatureToAttack.Any())
-                {
-                    attackDto.AttackedPlayerGuid = creatureToAttack.FirstOrDefault().Id;
-                    if (attackDto.Stamina >= ATTACK_STAMINA)
-                    {
-                        var attackedCreature = _worldService.GetAI(attackDto.AttackedPlayerGuid);
-                        attackedCreature.Health -= attackDto.Damage;
                         packet.Payload = JsonConvert.SerializeObject(attackDto);
                     }
                 }
@@ -284,7 +259,7 @@ namespace ASD_Game.ActionHandling
             var player = _worldService.GetPlayer(attackDto.PlayerGuid);
             bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
             
-            if (printAttackMessage && player.Stamina < ATTACK_STAMINA)
+            if (printAttackMessage)
             {
                 _messageService.AddMessage("You attacked an enemy.");
             }
@@ -365,6 +340,10 @@ namespace ASD_Game.ActionHandling
                         }
                     }
                 }
+            }
+            else
+            {
+                creature.Health -= attackDto.Damage;
             }
 
             _worldService.DisplayStats();

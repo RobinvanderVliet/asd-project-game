@@ -114,7 +114,7 @@ namespace ASD_Game.World
             return _map.GetCharArrayMapAroundCharacter(character, _viewDistance, GetAllCharacters());
         }
 
-        private List<Character> GetAllCharacters()
+        public List<Character> GetAllCharacters()
         {
             List<Character> characters = Players.Cast<Character>().ToList();
             characters.AddRange(Creatures);
