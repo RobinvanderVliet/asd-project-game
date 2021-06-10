@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Timers;
 using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
@@ -91,11 +92,16 @@ namespace ASD_Game.Session
             startGameDTO.Seed = _sessionHandler.GetSessionSeed();
 
             var allPlayerId = _playerService.GetAllAsync();
+            var allItems = _playerItemDatabaseService.GetAllAsync();
             allPlayerId.Wait();
+            allItems.Wait();
             var playerLocations = allPlayerId.Result.Where(x => x.GameGUID == _clientController.SessionId);
+            var playerItems = allItems.Result.Where(x => x.GameGUID == _clientController.SessionId);
 
             startGameDTO.SavedPlayers = playerLocations.ToList();
             startGameDTO.GameGuid = _clientController.SessionId;
+            startGameDTO.SavedPlayerItems = playerItems.ToList();
+            
 
 
             return startGameDTO;
@@ -181,7 +187,6 @@ namespace ASD_Game.Session
 
             _screenHandler.TransitionTo(new GameScreen());
           
-
             Player currentPlayer = null;
 
             if (startGameDTO.GameGuid == null && !_sessionHandler.GameStarted())
@@ -225,15 +230,22 @@ namespace ASD_Game.Session
             {
                 if (_clientController.GetOriginId() == player.PlayerGUID)
                 {
-                    currentPlayer = new Player("gerrit", player.XPosition, player.YPosition,
+                    currentPlayer = new Player(player.PlayerName, player.XPosition, player.YPosition,
                         CharacterSymbol.CURRENT_PLAYER, player.PlayerGUID);
                     _worldService.AddPlayerToWorld(currentPlayer, true);
+                    currentPlayer.Health = player.Health;
+                    currentPlayer.Stamina = player.Stamina;
+                    currentPlayer.RadiationLevel = player.RadiationLevel;
+
                 }
                 else
                 {
-                    var enemyPlayer = new Player("arie", player.XPosition, player.YPosition,
+                    var enemyPlayer = new Player(player.PlayerName, player.XPosition, player.YPosition,
                         CharacterSymbol.ENEMY_PLAYER, player.PlayerGUID);
                     _worldService.AddPlayerToWorld(enemyPlayer, false);
+                    enemyPlayer.Health = player.Health;
+                    enemyPlayer.Stamina = player.Stamina;
+                    enemyPlayer.RadiationLevel = player.RadiationLevel;
                 }
             }
 
