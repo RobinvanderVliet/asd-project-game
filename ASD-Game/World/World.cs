@@ -131,11 +131,6 @@ namespace ASD_Game.World
             MovesList = new List<Character>();
             foreach (Character monster in Creatures)
             {
-                if (monster.Health <= 0)
-                {
-                    monster.GetSymbol();
-                }
-
                 if (monster is SmartMonster smartMonster)
                 {
                     if (smartMonster.Brain != null)
