@@ -1,0 +1,29 @@
+﻿aggressiveness = high
+explore = random
+combat = offensive
+ 
+ 
+combat{
+    when player nearby player then attack
+ 
+    attack{
+        when health less than 50 then flee otherwise engage
+     }
+ 
+    engage{
+        when inventory contains "knife" then use "knife"
+     }
+}
+ 
+explore{
+    when player finds "item" then collect
+ 
+    collect{
+        when inventory does not contain "item" then grab otherwise replace
+     }
+ 
+    replace{
+        when "item" RPP greater than current then swap
+    }
+}
+    
