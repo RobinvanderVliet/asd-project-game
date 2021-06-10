@@ -113,14 +113,14 @@ namespace ASD_Game.Session
             TrainingScenario.StartTraining
             );
             traingThread.Start();
-
-            _heartbeatHandler = new HeartbeatHandler();
-            _messageService.AddMessage("Created session with the name: " + _session.Name);
-
+            
             if (_screenHandler.Screen is LobbyScreen screen)
             {
                 screen.UpdateLobbyScreen(_session.GetAllClients());
             }
+
+            _heartbeatHandler = new HeartbeatHandler(_messageService);
+            _messageService.AddMessage("Created session with the name: " + _session.Name);
 
             return _session.InSession;
         }
@@ -374,6 +374,13 @@ namespace ASD_Game.Session
 
             if (packet.Header.Target == "host")
             {
+                if (_screenHandler.Screen is LobbyScreen screen)
+                {
+                    var updatedClientList = new List<string[]>();
+                    updatedClientList.AddRange(_session.GetAllClients());
+                    updatedClientList.AddRange(sessionDTO.Clients);
+                    screen.UpdateLobbyScreen(updatedClientList);
+                }
 
                 _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
                 sessionDTO.Clients = new List<string[]>();
@@ -383,11 +390,6 @@ namespace ASD_Game.Session
                 foreach (string[] client in _session.GetAllClients())
                 {
                     sessionDTO.Clients.Add(client);
-                }
-
-                if (_screenHandler.Screen is LobbyScreen screen)
-                {
-                    screen.UpdateLobbyScreen(_session.GetAllClients());
                 }
 
                 return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
@@ -468,7 +470,7 @@ namespace ASD_Game.Session
             List<string> heartbeatSenders = new List<string>(clients);
             heartbeatSenders.Remove(_clientController.GetOriginId());
 
-            _heartbeatHandler = new HeartbeatHandler(heartbeatSenders);
+            _heartbeatHandler = new HeartbeatHandler(heartbeatSenders, _messageService);
 
             SessionDTO sessionDTO = new SessionDTO
             {
