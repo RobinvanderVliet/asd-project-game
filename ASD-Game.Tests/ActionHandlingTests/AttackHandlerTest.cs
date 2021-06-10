@@ -66,6 +66,7 @@ namespace ActionHandling.Tests
         public void Test_SendAttack_SendsTheMessageAndPacketTypeToClientController(String direction)
         {
             //Arrange
+            
             int x = 26;
             int y = 11;
             string PlayerGuid = Guid.NewGuid().ToString();
@@ -78,16 +79,19 @@ namespace ActionHandling.Tests
             _attackDTO.YPosition = 11;
             _attackDTO.Damage = 20;
             _attackDTO.PlayerGuid = PlayerGuid;
-            //attackDTO.AttackedPlayerGuid = AttackGuid;
 
             _mockedClientController.Setup(ClientController => ClientController.GetOriginId())
                 .Returns(PlayerGuid);
             var payload = JsonConvert.SerializeObject(_attackDTO);
 
             _mockedClientController.Setup(mock => mock.SendPayload(payload, PacketType.Attack));
-            //Act ---------
+            
+            //Act
+            
             _sut.SendAttack(direction);
-            //Assert ---------
+            
+            //Assert
+            
             _mockedClientController.Verify(mock => mock.SendPayload(It.IsAny<String>(), PacketType.Attack),
                 Times.Once());
             _mockedClientController.Verify(ClientController => ClientController.GetOriginId(), Times.Once);
@@ -102,6 +106,7 @@ namespace ActionHandling.Tests
         public void Test_HandlePacket_HandleAttack(String direction)
         {
             //Arrange
+            
             string GameGuid = Guid.NewGuid().ToString();
             string PlayerGuid = Guid.NewGuid().ToString();
             string AttackedPlayerGuid = Guid.NewGuid().ToString();
@@ -177,10 +182,13 @@ namespace ActionHandling.Tests
 
             var expectedResult = new HandlerResponseDTO(SendAction.ReturnToSender,
                 "There is no enemy to attack");
+
             //Act
+
             var actualResult = _sut.HandlePacket(_packetDTO);
 
             //Assert
+
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
             _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(2));
             _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Once);
@@ -201,6 +209,7 @@ namespace ActionHandling.Tests
         public void Test_HandlePacket_HandleAttack_PlayerIsAlreadyDead(String direction)
         {
             //Arrange
+            
             string GameGuid = Guid.NewGuid().ToString();
             string PlayerGuid = Guid.NewGuid().ToString();
             string AttackedPlayerGuid = Guid.NewGuid().ToString();
@@ -233,14 +242,17 @@ namespace ActionHandling.Tests
             List<Player> list = new List<Player>();
             list.Add(player);
             list.Add(attackedPlayer);
-            
+
             _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(list);
 
             var expectedResult = new HandlerResponseDTO(SendAction.Ignore, null);
+            
             //Act
+            
             var actualResult = _sut.HandlePacket(_packetDTO);
 
             //Assert
+            
             _mockedMessageService.Verify(mock => mock.AddMessage("You can't attack this enemy, he is already dead."),
                 Times.Once);
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
@@ -258,6 +270,7 @@ namespace ActionHandling.Tests
         public void Test_HandlePacket_HandleAttack_TakesDamageDown(String direction)
         {
             //Arrange
+            
             string GameGuid = Guid.NewGuid().ToString();
             string PlayerGuid = Guid.NewGuid().ToString();
             string AttackedPlayerGuid = Guid.NewGuid().ToString();
@@ -362,10 +375,11 @@ namespace ActionHandling.Tests
             var expectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
 
             //Act
+            
             var actualResult = _sut.HandlePacket(_packetDTO);
-
-
+            
             //Assert
+            
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
             _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(3));
             _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Exactly(2));
@@ -388,6 +402,7 @@ namespace ActionHandling.Tests
         public void Test_HandlePacket_HandleAttack_does_damage_to_health(String direction)
         {
             //Arrange
+            
             string GameGuid = Guid.NewGuid().ToString();
             string PlayerGuid = Guid.NewGuid().ToString();
             string AttackedPlayerGuid = Guid.NewGuid().ToString();
@@ -486,10 +501,12 @@ namespace ActionHandling.Tests
             var expectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
 
             //Act
+            
             var actualResult = _sut.HandlePacket(_packetDTO);
 
 
             //Assert
+            
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
             _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(3));
             _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Exactly(2));
@@ -513,6 +530,7 @@ namespace ActionHandling.Tests
         public void Test_HandlePacket_HandleAttack_Destroyed_Armor(String direction)
         {
             //Arrange
+            
             string GameGuid = Guid.NewGuid().ToString();
             string PlayerGuid = Guid.NewGuid().ToString();
             string AttackedPlayerGuid = Guid.NewGuid().ToString();
@@ -617,10 +635,11 @@ namespace ActionHandling.Tests
             var expectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
 
             //Act
+            
             var actualResult = _sut.HandlePacket(_packetDTO);
-
-
+            
             //Assert
+            
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
             _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(3));
             _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Exactly(2));
@@ -644,6 +663,7 @@ namespace ActionHandling.Tests
         public void Test_HandlePacket_HandleAttack_Attack_Creature(String direction)
         {
             //Arrange
+            
             string GameGuid = Guid.NewGuid().ToString();
             string PlayerGuid = Guid.NewGuid().ToString();
             string AttackedPlayerGuid = Guid.NewGuid().ToString();
@@ -724,10 +744,12 @@ namespace ActionHandling.Tests
             var expectedResult = new HandlerResponseDTO(SendAction.SendToClients, null);
 
             //Act
+            
             var actualResult = _sut.HandlePacket(_packetDTO);
 
 
             //Assert
+            
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);
             _mockedClientController.Verify(x => x.GetOriginId(), Times.Exactly(2));
             _mockedWorldService.Verify(mock => mock.GetPlayer(player.Id), Times.Exactly(2));
@@ -749,6 +771,7 @@ namespace ActionHandling.Tests
         public void Test_HandlePacket_HandleAttack_CreatureIsAlreadyDead(String direction)
         {
             //Arrange
+            
             string GameGuid = Guid.NewGuid().ToString();
             string PlayerGuid = Guid.NewGuid().ToString();
             string AttackedPlayerGuid = Guid.NewGuid().ToString();
@@ -792,10 +815,13 @@ namespace ActionHandling.Tests
             _mockedWorldService.Setup(x => x.GetMonsters()).Returns(creatureList);
 
             var expectedResult = new HandlerResponseDTO(SendAction.Ignore, null);
+            
             //Act
+            
             var actualResult = _sut.HandlePacket(_packetDTO);
 
             //Assert
+            
             _mockedMessageService.Verify(mock => mock.AddMessage("You can't attack this enemy, he is already dead."),
                 Times.Once);
             _mockedClientController.Verify(x => x.IsBackupHost, Times.Once);

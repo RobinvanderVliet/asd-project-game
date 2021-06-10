@@ -29,5 +29,12 @@ namespace ASD_Game.World.Models.Characters
             Symbol = symbol;
             Id = id;
         }
+        public string GetSymbol()
+        {    if (Health <= 0)
+            {
+                return "X";
+            }
+            return Symbol;
+        }
     }
 }
