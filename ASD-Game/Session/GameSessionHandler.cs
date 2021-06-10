@@ -24,7 +24,7 @@ using WorldGeneration.StateMachine;
 using System.Numerics;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
-
+using ActionHandling;
 
 namespace ASD_Game.Session
 {
@@ -44,6 +44,7 @@ namespace ASD_Game.Session
         private readonly IWorldService _worldService;
         private readonly IMessageService _messageService;
         private readonly IMoveHandler _moveHandler;
+        private readonly IAttackHandler _attackHandler;
         private Timer AIUpdateTimer;
         private int _brainUpdateTime = 60000;
         private Random _random = new Random();
@@ -62,7 +63,8 @@ namespace ASD_Game.Session
             IMessageService messageService,
             INetworkComponent networkComponent,
             IConfigurationService configurationService,
-            IMoveHandler moveHandler
+            IMoveHandler moveHandler,
+            IAttackHandler attackHandler
         )
         {
             _clientController = clientController;
@@ -80,6 +82,7 @@ namespace ASD_Game.Session
             _networkComponent = networkComponent;
             _configurationService = configurationService;
             _moveHandler = moveHandler;
+            _attackHandler = attackHandler;
             CheckAITimer();
         }
 
@@ -190,16 +193,21 @@ namespace ASD_Game.Session
 
         private void CreateMonsters()
         {
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 15; i++)
             {
-                if (i >= 15)
+                if (i >= 0)
                 {
                     var newMonster = new Monster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i);
-                    MonsterData newMonsterData = new(newMonster.XPosition, newMonster.YPosition, 0);
-                    newMonsterData.WorldService = _worldService;
-                    newMonsterData.MoveHandler = _moveHandler;
-                    newMonsterData.Position = new Vector2(newMonster.XPosition, newMonster.YPosition);
-                    newMonsterData.CharacterId = newMonster.Id;
+                    var newMonsterData = new MonsterData(newMonster.XPosition, newMonster.YPosition, 0)
+                    {
+                        WorldService = _worldService,
+                        MoveHandler = _moveHandler,
+                        AttackHandler = _attackHandler,
+                        Health = newMonster.Health,
+                        VisionRange = 6,
+                        Position = new Vector2(newMonster.XPosition, newMonster.YPosition),
+                        CharacterId = newMonster.Id
+                    };
                     newMonster.MonsterData = newMonsterData;
                     SetStateMachine(newMonster);
                     newMonster.MonsterStateMachine.StartStateMachine();
