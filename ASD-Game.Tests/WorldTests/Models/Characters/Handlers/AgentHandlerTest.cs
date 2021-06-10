@@ -4,12 +4,16 @@ using Agent.Services;
 using ASD_Game.DatabaseHandler.POCO;
 using ASD_Game.DatabaseHandler.Services;
 using ASD_Game.Network;
+using ASD_Game.Network.DTO;
+using ASD_Game.Session;
 using ASD_Game.World;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.Algorithms.Creator;
 using ASD_Game.World.Services;
 using Moq;
+using Newtonsoft.Json;
 using NUnit.Framework;
+using Session.DTO;
 using WorldGeneration.StateMachine;
 
 namespace Creature.Tests.Handlers
@@ -81,6 +85,46 @@ namespace Creature.Tests.Handlers
             {
                 mockedAgentStateMachine.Verify(machine => machine.StartStateMachine(), Times.Once);
                 mockedAgentStateMachine.Verify(machine => machine.StopStateMachine(), Times.Once);
+            }
+        }
+
+        [Test]
+        [TestCase("random-player-id")]
+        [TestCase("invalid-player-id")]
+        public void Test_HandlePacket_InsertsOrUpdatesAgentConfiguration(string playerId)
+        {
+            // Arrange
+            var agentConfigurationDto = new AgentConfigurationDTO(SessionType.SendAgentConfiguration)
+            {
+                AgentConfiguration = new List<KeyValuePair<string, string>>(),
+                PlayerId = playerId
+            };
+            var packetDto = new PacketDTO();
+            var header = new PacketHeaderDTO {Target = "host"};
+            packetDto.Header = header;
+            packetDto.Payload = JsonConvert.SerializeObject(agentConfigurationDto);
+            var agentPoco = new AgentPOCO
+            {
+                AgentConfiguration = agentConfigurationDto.AgentConfiguration,
+                PlayerGUID = "random-player-id"
+            };
+            List<AgentPOCO> playerItemPOCOs = new() {agentPoco};
+            IEnumerable<AgentPOCO> enumerable = playerItemPOCOs;
+
+
+            _mockedAgentDatabaseService.Setup(mock => mock.GetAllAsync()).Returns(Task.FromResult(enumerable));
+
+            // Act
+            sut.HandlePacket(packetDto);
+
+            // Assert
+            if (playerId == agentPoco.PlayerGUID)
+            {
+                _mockedAgentDatabaseService.Verify(db => db.UpdateAsync(agentPoco), Times.Exactly(1));
+            }
+            else
+            {
+                _mockedAgentDatabaseService.Verify(db => db.UpdateAsync(agentPoco), Times.Exactly(0));
             }
         }
     }
