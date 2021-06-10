@@ -102,16 +102,6 @@ namespace ASD_Game.Tests.ActionHandlingTests
             int _XPosition = 10;
             int _YPosition = 20;
 
-            PlayerPOCO playerPOCO = new PlayerPOCO
-            {
-                PlayerGUID = PlayerGuid,
-                Health = _health,
-                Stamina = _stamina,
-                GameGUID = null,
-                XPosition = _XPosition,
-                YPosition = _YPosition
-            };
-
             Player player = new Player("Gert", 10, 20, "#", PlayerGuid);
 
             _moveDTO.Stamina = 1;
@@ -227,16 +217,6 @@ namespace ASD_Game.Tests.ActionHandlingTests
             int _stamina = 100;
             int _XPosition = 10;
             int _YPosition = 20;
-
-            PlayerPOCO playerPOCO = new PlayerPOCO
-            {
-                PlayerGUID = null,
-                Health = _health,
-                Stamina = _stamina,
-                GameGUID = null,
-                XPosition = _XPosition,
-                YPosition = _YPosition
-            };
 
             Player player = new Player("Gert", 10, 20, "#", PlayerGuid);
 
