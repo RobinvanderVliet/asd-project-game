@@ -22,7 +22,7 @@ namespace ASD_Game.ActionHandling
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IMessageService _messageService;
         private Timer AIUpdateTimer;
-        private int _updateTime = 7000;
+        private int _updateTime = 7000; // Smartmonster timer
 
         public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
         {

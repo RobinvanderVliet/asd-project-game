@@ -145,7 +145,6 @@ namespace ASD_Game.ActionHandling
                     {
                         var creature = _worldService.GetAI(attackDto.AttackedPlayerGuid);
                         creature.Health -= attackDto.Damage;
-                        //InsertDamageToDatabase(attackDto, false);
                         packet.Payload = JsonConvert.SerializeObject(attackDto);
                     }
                 }
@@ -285,7 +284,7 @@ namespace ASD_Game.ActionHandling
             {
                 _messageService.AddMessage("You attacked an enemy.");
             }
-            
+
             if (creature == null)
             {
                 var attackedPlayer = _worldService.GetPlayer(attackDto.AttackedPlayerGuid);
@@ -309,8 +308,7 @@ namespace ASD_Game.ActionHandling
                     {
                         HelmetPoints = attackedPlayer.Inventory.Helmet.ArmorProtectionPoints;
                     }
-
-                    //First damage is substracted from the helmet, after that from body armor and finally from the player him/herself.
+                    
                     if (HelmetPoints - attackDto.Damage <= 0 && HelmetPoints != 0)
                     {
                         if (printAttackedMessage)

@@ -155,9 +155,9 @@ namespace ActionHandling.Tests
             List<Player> playerList = new List<Player>();
             playerList.Add(player);
             playerList.Add(attackedPlayer);
-            
+
             Monster monster = new Monster("zombie", 10, 20, "T", "monst1");
-            
+
             List<Monster> creatureList = new List<Monster>();
             creatureList.Add(monster);
 
@@ -233,8 +233,7 @@ namespace ActionHandling.Tests
             List<Player> list = new List<Player>();
             list.Add(player);
             list.Add(attackedPlayer);
-
-
+            
             _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(list);
 
             var expectedResult = new HandlerResponseDTO(SendAction.Ignore, null);
@@ -314,9 +313,9 @@ namespace ActionHandling.Tests
             List<Player> playerList = new List<Player>();
             playerList.Add(player);
             playerList.Add(attackedPlayer);
-            
+
             Monster monster = new Monster("zombie", 10, 20, "T", "monst1");
-            
+
             List<Monster> creatureList = new List<Monster>();
             creatureList.Add(monster);
 
@@ -377,7 +376,6 @@ namespace ActionHandling.Tests
             _mockedPlayerItemPocoDatabaseService.Verify(mock => mock.UpdateAsync(playerItemPOCO), Times.Once);
             _mockedPlayerPocoDatabaseService.Verify(mock => mock.GetAllAsync(), Times.Exactly(2));
             _mockedPlayerPocoDatabaseService.Verify(mock => mock.UpdateAsync(playerPOCO), Times.Once);
-
 
             Assert.AreEqual(expectedResult, actualResult);
         }
@@ -444,9 +442,9 @@ namespace ActionHandling.Tests
             List<Player> playerList = new List<Player>();
             playerList.Add(player);
             playerList.Add(attackedPlayer);
-            
+
             Monster monster = new Monster("zombie", 10, 20, "T", "monst1");
-            
+
             List<Monster> creatureList = new List<Monster>();
             creatureList.Add(monster);
 
@@ -512,7 +510,7 @@ namespace ActionHandling.Tests
         [TestCase("left")]
         [TestCase("right")]
         [Test]
-        public void Test_HandlePacket_HandleAttack_Destoyed_Armor(String direction)
+        public void Test_HandlePacket_HandleAttack_Destroyed_Armor(String direction)
         {
             //Arrange
             string GameGuid = Guid.NewGuid().ToString();
@@ -572,9 +570,9 @@ namespace ActionHandling.Tests
             List<Player> playerList = new List<Player>();
             playerList.Add(player);
             playerList.Add(attackedPlayer);
-            
+
             Monster monster = new Monster("zombie", 10, 20, "T", "monst1");
-            
+
             List<Monster> creatureList = new List<Monster>();
             creatureList.Add(monster);
 
@@ -637,7 +635,8 @@ namespace ActionHandling.Tests
 
             Assert.AreEqual(expectedResult, actualResult);
         }
-                [TestCase("down")]
+
+        [TestCase("down")]
         [TestCase("up")]
         [TestCase("left")]
         [TestCase("right")]
@@ -701,9 +700,9 @@ namespace ActionHandling.Tests
             List<Player> playerList = new List<Player>();
             playerList.Add(player);
             playerList.Add(attackedPlayer);
-            
+
             Monster monster = new Monster("zombie", 26, 11, "T", "monst1");
-            
+
             List<Monster> creatureList = new List<Monster>();
             creatureList.Add(monster);
 
@@ -741,7 +740,7 @@ namespace ActionHandling.Tests
 
             Assert.AreEqual(expectedResult, actualResult);
         }
-        
+
         [TestCase("up")]
         [TestCase("down")]
         [TestCase("left")]
@@ -781,10 +780,10 @@ namespace ActionHandling.Tests
             List<Player> playerList = new List<Player>();
             playerList.Add(player);
             playerList.Add(attackedPlayer);
-            
+
             Monster monster = new Monster("zombie", 26, 11, "T", "monst1");
             monster.Health = 0;
-            
+
             List<Monster> creatureList = new List<Monster>();
             creatureList.Add(monster);
 
