@@ -191,16 +191,23 @@ namespace ASD_Game.Session
                         {
                             AllowedToJoin = false;
                             _clientController.SetSessionId(String.Empty);
+                            var screen = _screenHandler.Screen as SessionScreen;
+                            screen.UpdateInputMessage("Cannot join this session!");
                             return new HandlerResponseDTO(SendAction.Ignore, null);
                         }
 
-                        if (sessionDTO.SessionStarted)
+                        if (sessionDTO.SessionStarted && AllowedToJoin)
                         {
-                            AllowedToJoin = true;
                             JoinExistingGame(packet);
                         }
-
+                        
+                        _screenHandler.TransitionTo(new LobbyScreen());
                         AllowedToJoin = true;
+                        
+                        // if (AllowedToJoin)
+                        // {
+                        //     _screenHandler.TransitionTo(new LobbyScreen());
+                        // }
                     }
                 }
 
@@ -446,6 +453,7 @@ namespace ASD_Game.Session
                 }
                 else
                 {
+                    _screenHandler.TransitionTo(new LobbyScreen());
                     ClientAddsPlayer(sessionDTO, packet);
                 }
             }
