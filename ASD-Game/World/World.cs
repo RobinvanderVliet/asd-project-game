@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items.Services;
@@ -18,9 +20,18 @@ namespace ASD_Game.World
         public List<ItemSpawnDTO> Items { get; set; }
         private readonly int _viewDistance;
         private readonly IScreenHandler _screenHandler;
+        private static readonly char _separator = Path.DirectorySeparatorChar;
 
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService)
         {
+            // Players = new();
+            // _creatures = new();
+            // var currentDirectory = Directory.GetCurrentDirectory();
+            //
+            // Players = new();
+            // _viewDistance = viewDistance;
+            // _screenHandler = screenHandler;
+            // DeleteMap();
             Items = new();
             Players = new ();
             Creatures = new ();
@@ -103,7 +114,7 @@ namespace ASD_Game.World
             return _map.GetCharArrayMapAroundCharacter(character, _viewDistance, GetAllCharacters());
         }
 
-        private List<Character> GetAllCharacters()
+        public List<Character> GetAllCharacters()
         {
             List<Character> characters = Players.Cast<Character>().ToList();
             characters.AddRange(Creatures);

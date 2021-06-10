@@ -68,13 +68,11 @@ namespace ASD_Game.UserInterface
             {
                 var gameScreen = Screen as GameScreen;
                 _actionsInQueue.Add(gameScreen.RedrawInputBox);
-                _displayThread = new Thread(gameScreen.RedrawInputBox);
             } 
             else if (_screen is LobbyScreen)
             {
                 var lobbyScreen = Screen as LobbyScreen;
                 _actionsInQueue.Add(lobbyScreen.RedrawInputBox);
-                _displayThread = new Thread(lobbyScreen.RedrawInputBox);
             }
         }
 
