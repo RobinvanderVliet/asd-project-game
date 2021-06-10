@@ -91,11 +91,14 @@ namespace Session.Tests
         [Test]
         public void Test_SendGameSession_NewGameSendsEmptyGameDTO()
         {
+            //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
 
+            //Act
             _sut.SendGameSession();
             var payload = JsonConvert.SerializeObject(startGameDto);
 
+            //Assert
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
             _mockedClientController.Verify(x => x.SendPayload(payload, PacketType.GameSession), Times.Once);
         }
@@ -103,6 +106,7 @@ namespace Session.Tests
         [Test]
         public void Test_HandlePacket_NewGameTransitionsToNewGameScreen()
         {
+            //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
 
             var payload = JsonConvert.SerializeObject(startGameDto);
@@ -126,14 +130,17 @@ namespace Session.Tests
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
 
+            //Act
             _sut.HandlePacket(_packetDTO);
 
+            //Assert
             _mockedScreenHandler.Verify(x => x.TransitionTo(It.IsAny<GameScreen>()), Times.Once());
         }
 
         [Test]
         public void Test_If_Started_New_Game_Generates_World()
         {
+            //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
 
             var payload = JsonConvert.SerializeObject(startGameDto);
@@ -157,13 +164,17 @@ namespace Session.Tests
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
 
+            //Act
             _sut.HandlePacket(_packetDTO);
+
+            //Assert
             _mockedWorldService.Verify(x => x.GenerateWorld(1), Times.Once);
         }
 
         [Test]
         public void Test_If_Started_New_Game_Insert_New_Game_In_Database()
         {
+            //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
             startGameDto.GameGuid = null;
 
@@ -200,14 +211,17 @@ namespace Session.Tests
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
             _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(savedPlayers);
 
+            //Act
             _sut.HandlePacket(_packetDTO);
 
+            //Assert
             _mockedGamePOCOServices.Verify(mock => mock.CreateAsync(It.IsAny<GamePOCO>()), Times.Once());
         }
 
         [Test]
         public void Test_If_Started_New_Game_Insert_New_Player_In_Database()
         {
+            //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
             startGameDto.GameGuid = null;
 
@@ -244,14 +258,17 @@ namespace Session.Tests
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
             _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(savedPlayers);
 
+            //Act
             _sut.HandlePacket(_packetDTO);
 
+            //Assert
             _mockedPlayerPOCOServices.Verify(mock => mock.CreateAsync(It.IsAny<PlayerPOCO>()), Times.Once());
         }
 
         [Test]
         public void Test_If_Started_New_Game_Insert_New_PlayerItems_In_Database()
         {
+            //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
             startGameDto.GameGuid = null;
 
@@ -288,14 +305,17 @@ namespace Session.Tests
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
             _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(savedPlayers);
 
+            //Act
             _sut.HandlePacket(_packetDTO);
 
+            //Assert
             _mockedPlayerItemService.Verify(mock => mock.CreateAsync(It.IsAny<PlayerItemPOCO>()), Times.AtLeast(1));
         }
 
         [Test]
         public void Test_If_Started_New_Game_Insert_New_GameConfiguration_In_Database()
         {
+            //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
             startGameDto.GameGuid = null;
 
@@ -332,14 +352,17 @@ namespace Session.Tests
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
 
+            //Act
             _sut.HandlePacket(_packetDTO);
 
+            //Assert
             _mockedGameConfigurationPoco.Verify(mock => mock.CreateAsync(It.IsAny<GameConfigurationPOCO>()), Times.AtLeast(1));
         }
 
         [Test]
         public void Test_If_Started_New_Game_Client_Dont_Insert_New_GameConfiguration_In_Database()
         {
+            //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
             startGameDto.GameGuid = null;
 
@@ -377,16 +400,17 @@ namespace Session.Tests
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
             _mockedWorldService.Setup(x => x.GetAllPlayers()).Returns(savedPlayers);
 
+            //Act
             _sut.HandlePacket(_packetDTO);
 
+            //Assert
             _mockedGameConfigurationPoco.Verify(mock => mock.CreateAsync(It.IsAny<GameConfigurationPOCO>()), Times.Never);
         }
 
-        //ToDo
-        //Out of bounds error because of new method to create new monsters.
         [Test]
         public void Test_If_Started_Saved_Game_Generates_World_WithOldSessionSeed()
         {
+            //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
             startGameDto.GameGuid = "1";
 
@@ -424,13 +448,17 @@ namespace Session.Tests
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
 
+            //Act
             _sut.HandlePacket(_packetDTO);
+
+            //Assert
             _mockedWorldService.Verify(x => x.GenerateWorld(1), Times.Once);
         }
 
         [Test]
         public void Test_HandlePacket_StatHandler_CurrentPlayer_Get_Sets()
         {
+            //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
 
             var payload = JsonConvert.SerializeObject(startGameDto);
@@ -457,14 +485,17 @@ namespace Session.Tests
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
 
+            //Act
             _sut.HandlePacket(_packetDTO);
 
+            //Assert
             _mockedRelativeStatHandler.Verify(x => x.SetCurrentPlayer(playerinWorld), Times.Once);
         }
 
         [Test]
         public void Test_HandlePacket_StatHandler_Checks_Stamina_timer_Gets_Called()
         {
+            //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
 
             var payload = JsonConvert.SerializeObject(startGameDto);
@@ -491,14 +522,17 @@ namespace Session.Tests
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
 
+            //Act
             _sut.HandlePacket(_packetDTO);
 
+            //Assert
             _mockedRelativeStatHandler.Verify(x => x.CheckStaminaTimer(), Times.Once);
         }
 
         [Test]
         public void Test_HandlePacket_StatHandler_Checks_Radiation_timer_Gets_Called()
         {
+            //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
 
             var payload = JsonConvert.SerializeObject(startGameDto);
@@ -525,8 +559,10 @@ namespace Session.Tests
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
 
+            //Act
             _sut.HandlePacket(_packetDTO);
 
+            //Assert
             _mockedRelativeStatHandler.Verify(x => x.CheckRadiationTimer(), Times.Once);
         }
     }
