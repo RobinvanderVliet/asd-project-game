@@ -13,65 +13,66 @@ namespace ASD_Game.World.Services
     {
         private readonly IItemService _itemService;
         private readonly IScreenHandler _screenHandler;
-        public IWorld World { get; set; }
+        private IWorld _world;
         public List<Character> CreatureMoves { get; set; }
         
-        public WorldService(IScreenHandler screenHandler, IItemService itemService)
+        public WorldService(IScreenHandler screenHandler, IItemService itemService, IWorld world)
         {
             _screenHandler = screenHandler;
             _itemService = itemService;
+            _world = world;
         }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
         {
-            World.UpdateCharacterPosition(userId, newXPosition, newYPosition);
+            _world.UpdateCharacterPosition(userId, newXPosition, newYPosition);
         }
 
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
         {
-            World.AddPlayerToWorld(player, isCurrentPlayer);
+            _world.AddPlayerToWorld(player, isCurrentPlayer);
         }
 
         public void AddCreatureToWorld(Monster character)
         {
-            World.AddCreatureToWorld(character);
+            _world.AddCreatureToWorld(character);
         }
 
         public void DisplayWorld()
         {
-            World.UpdateMap();
+            _world.UpdateMap();
         }
         
         public void DeleteMap()
         {
-            World.DeleteMap();
+            _world.DeleteMap();
         }
 
         public void GenerateWorld(int seed)
         {
-            World = new World(seed, 6, new MapFactory(), _screenHandler, _itemService);
+            _world = new World(seed, 6, new MapFactory(), _screenHandler, _itemService);
         }
 
         public Player GetCurrentPlayer()
         {
-            return World.CurrentPlayer;
+            return _world.CurrentPlayer;
         }
 
         public char[,] GetMapAroundCharacter(Character character)
         {
-            return World.GetMapAroundCharacter(character);
+            return _world.GetMapAroundCharacter(character);
         }
 
         public List<Monster> GetMonsters()
         {
-            return World.Creatures;
+            return _world.Creatures;
         }
 
         public void UpdateBrains(Genome genome)
         {
-            if (World != null)
+            if (_world != null)
             {
-                foreach (Character monster in World.Creatures)
+                foreach (Character monster in _world.Creatures)
                 {
                     if (monster is SmartMonster smartMonster)
                     {
@@ -83,17 +84,17 @@ namespace ASD_Game.World.Services
 
         public List<Character> GetCreatureMoves()
         {
-            if (World != null)
+            if (_world != null)
             {
-                World.UpdateAI();
-                return World.MovesList;
+                _world.UpdateAI();
+                return _world.MovesList;
             }
             return null;
         }
 
         public List<Player> GetAllPlayers()
         {
-            return World.Players;
+            return _world.Players;
         }
 
         public bool IsDead(Player player)
@@ -103,7 +104,7 @@ namespace ASD_Game.World.Services
         
         public void LoadArea(int playerX, int playerY, int viewDistance)
         {
-            World.LoadArea(playerX, playerY, viewDistance);
+            _world.LoadArea(playerX, playerY, viewDistance);
         }
 
         public string SearchCurrentTile()
@@ -123,22 +124,22 @@ namespace ASD_Game.World.Services
         
         public Player GetPlayer(string userId)
         {
-            return World.GetPlayer(userId);
+            return _world.GetPlayer(userId);
         }
 
         public Character GetAI(string id)
         {
-            return World.GetAI(id);
+            return _world.GetAI(id);
         }
 
         public ITile GetTile(int x, int y)
         {
-            return World.GetLoadedTileByXAndY(x, y);
+            return _world.GetLoadedTileByXAndY(x, y);
         }
 
         public bool CheckIfCharacterOnTile(ITile tile)
         {
-            return World.CheckIfCharacterOnTile(tile);
+            return _world.CheckIfCharacterOnTile(tile);
         }
 
         public void DisplayStats()
@@ -161,12 +162,12 @@ namespace ASD_Game.World.Services
         
         public IList<Item> GetItemsOnCurrentTile()
         {
-            return World.GetCurrentTile().ItemsOnTile;
+            return _world.GetCurrentTile().ItemsOnTile;
         }
         
         public IList<Item> GetItemsOnCurrentTile(Player player)
         {
-            return World.GetTileForPlayer(player).ItemsOnTile;
+            return _world.GetTileForPlayer(player).ItemsOnTile;
         }
     }
 }

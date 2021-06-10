@@ -10,7 +10,6 @@ namespace ASD_Game.World.Services
     public interface IWorldService
     {
         List<Character> CreatureMoves { get; set; }
-        IWorld World { get; set; }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition);
 

@@ -68,10 +68,7 @@ namespace ASD_Game.Tests.WorldTests
             _screenHandlerObject = _screenHandlerMock.Object;
             _itemServiceMock = new Mock<IItemService>();
             _itemServiceObject = _itemServiceMock.Object;
-            _sut = new WorldService(_screenHandlerObject, _itemServiceObject)
-            {
-                World = _worldObject
-            };
+            _sut = new WorldService(_screenHandlerObject, _itemServiceObject, _worldObject);
         }
 
         [Test]
@@ -140,17 +137,7 @@ namespace ASD_Game.Tests.WorldTests
             //Assert ---------
             Assert.AreEqual(_player, currentPlayer);
         }
-        
-        [Test]
-        public void Test_GetWorld_GetsTheWorldObject()
-        {
-            //Arrange ---------
-            //Act ---------
-            var world = _sut.World;
-            //Assert ---------
-            Assert.AreEqual(_worldObject, world);
-        }
-        
+
         [Test]
         public void Test_GetMapAroundCharacter_VerifyThatGetMapAroundCharacterIsCalledFromWorld()
         {
@@ -175,7 +162,7 @@ namespace ASD_Game.Tests.WorldTests
         public void Test_GetCreatureMoves_ReturnsNullBecauseWorldIsNull()
         {
             //Arrange ---------
-            _sut.World = null;
+            _sut = new WorldService(_screenHandlerObject, _itemServiceObject, null);
             //Act ---------
             var actual = _sut.GetCreatureMoves();
             //Assert ---------
