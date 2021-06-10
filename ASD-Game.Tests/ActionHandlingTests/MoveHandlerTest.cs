@@ -138,7 +138,7 @@ namespace ASD_Game.Tests.ActionHandlingTests
             _sut.HandlePacket(_packetDTO);
 
             // assert
-
+            _mockedWorldService.Verify(mock => mock.DisplayWorld(), Times.Once);
         }
 
     }
