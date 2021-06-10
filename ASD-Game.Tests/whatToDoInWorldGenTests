@@ -1,7 +1,0 @@
-1. Noisemap generator unit tests repareren en aanvullen. Line coverage is laag en er zijn functies [ExcludeFromCodeCoverage]
-2. World unit tests aanvullen. Geteste functies zijn goed maar er zijn een heleboel nieuwe functies die nog niet getest zijn.
-3. Models testsen. Dit gebeurt nog nouwelijks.
-4. Random Item generator test repareren.
-5. MapFactory testen.
-
-6. Als dit alles gedaan is kijken of er nog iets anders is dat moet worden gedaan.

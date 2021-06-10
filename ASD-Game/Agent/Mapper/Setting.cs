@@ -1,4 +1,4 @@
-﻿namespace Agent.Mapper
+﻿namespace ASD_Game.Agent.Mapper
 {
     public class Setting
     {

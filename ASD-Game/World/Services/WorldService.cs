@@ -8,6 +8,7 @@ using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Interfaces;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
+using ASD_Game.World.Models.Interfaces;
 
 namespace ASD_Game.World.Services
 {
@@ -35,6 +36,11 @@ namespace ASD_Game.World.Services
             _world.AddPlayerToWorld(player, isCurrentPlayer);
         }
 
+        public void SetWorld(IWorld world)
+        {
+            _world = world;
+        }
+
         public void AddCreatureToWorld(Monster character)
         {
             _world.AddCreatureToWorld(character);
@@ -54,16 +60,6 @@ namespace ASD_Game.World.Services
         {
             _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, _itemService);
         }
-        
-        public List<ItemSpawnDTO> getAllItems()
-        {
-            return _world.Items;
-        }
-
-        public void AddItemToWorld(ItemSpawnDTO itemSpawnDTO)
-        {
-            _world.AddItemToWorld(itemSpawnDTO);
-        }
 
         public Player GetCurrentPlayer()
         {
@@ -82,14 +78,14 @@ namespace ASD_Game.World.Services
 
         public List<Monster> GetMonsters()
         {
-            return _world._creatures;
+            return _world.Creatures;
         }
 
         public void UpdateBrains(Genome genome)
         {
             if (_world != null)
             {
-                foreach (Character monster in _world._creatures)
+                foreach (Character monster in _world.Creatures)
                 {
                     if (monster is SmartMonster smartMonster)
                     {
@@ -98,12 +94,13 @@ namespace ASD_Game.World.Services
                 }
             }
         }
+
         public List<Character> GetCreatureMoves()
         {
             if (_world != null)
             {
                 _world.UpdateAI();
-                return _world.movesList;
+                return _world.MovesList;
             }
             return null;
         }
