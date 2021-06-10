@@ -27,10 +27,8 @@ namespace ASD_Game.World.Models.Characters.StateMachine
         public override void StartStateMachine()
         {
             var builder = new StateMachineDefinitionBuilder<CharacterState, CharacterEvent.Event>();
-            var ruleSetFactory = new RuleSetFactory();
-            var rulesetList = ruleSetFactory.GetRuleSetListFromSettingsList(CharacterData.RuleSet);
+            var rulesetList = RuleSetFactory.GetRuleSetListFromSettingsList(CharacterData.RuleSet);
             var builderConfigurator = new BuilderConfigurator(rulesetList, CharacterData, this);
-            var builderInfoList = builderConfigurator.GetBuilderInfoList();
 
             CharacterData.BuilderConfigurator = builderConfigurator;
 

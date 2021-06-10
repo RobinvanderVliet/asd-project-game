@@ -43,7 +43,7 @@ namespace Creature.Tests.Creature.StateMachine.CustomRuleSet
             // Arrange
 
             // Act
-            List<RuleSet> rulesetList = _sut.GetRuleSetListFromSettingsList(_rulesetSettingsList);
+            List<RuleSet> rulesetList = RuleSetFactory.GetRuleSetListFromSettingsList(_rulesetSettingsList);
 
             // Assert
             Assert.AreEqual(rulesetList.Count, 3);
@@ -55,7 +55,7 @@ namespace Creature.Tests.Creature.StateMachine.CustomRuleSet
             // Arrange
 
             // Act
-            List<RuleSet> rulesetList = _sut.GetRuleSetListFromSettingsList(_rulesetSettingsList);
+            List<RuleSet> rulesetList = RuleSetFactory.GetRuleSetListFromSettingsList(_rulesetSettingsList);
             string setting1 = rulesetList[0].Setting;
             string setting2 = rulesetList[1].Setting;
             string setting3 = rulesetList[2].Setting;
@@ -72,7 +72,7 @@ namespace Creature.Tests.Creature.StateMachine.CustomRuleSet
             // Arrange
 
             // Act
-            List<RuleSet> rulesetList = _sut.GetRuleSetListFromSettingsList(_rulesetSettingsList);
+            List<RuleSet> rulesetList = RuleSetFactory.GetRuleSetListFromSettingsList(_rulesetSettingsList);
             string action1 = rulesetList[0].Action;
             string action2 = rulesetList[1].Action;
             string action3 = rulesetList[2].Action;
@@ -89,7 +89,7 @@ namespace Creature.Tests.Creature.StateMachine.CustomRuleSet
             // Arrange
 
             // Act
-            List<KeyValuePair<string, string>> rulesetList = _sut.GetSimpleRuleSetListFromSettingsList(_rulesetSettingsList);
+            List<KeyValuePair<string, string>> rulesetList = RuleSetFactory.GetSimpleRuleSetListFromSettingsList(_rulesetSettingsList);
 
             // Assert
             Assert.AreEqual(rulesetList.Count, 2);

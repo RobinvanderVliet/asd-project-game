@@ -5,7 +5,7 @@ namespace Creature.Creature.StateMachine.CustomRuleSet
 {
     public class RuleSetFactory
     {
-        public List<RuleSet> GetRuleSetListFromSettingsList(IEnumerable<KeyValuePair<string, string>> rulesetSettingsList)
+        public static List<RuleSet> GetRuleSetListFromSettingsList(IEnumerable<KeyValuePair<string, string>> rulesetSettingsList)
         {
             List<RuleSet> rulesetList = new();
             RuleSet ruleset = new();
@@ -49,7 +49,7 @@ namespace Creature.Creature.StateMachine.CustomRuleSet
             return rulesetList;
         }
 
-        public List<KeyValuePair<string, string>> GetSimpleRuleSetListFromSettingsList(List<KeyValuePair<string, string>> rulesetSettingsList)
+        public static List<KeyValuePair<string, string>> GetSimpleRuleSetListFromSettingsList(List<KeyValuePair<string, string>> rulesetSettingsList)
         {
             List<KeyValuePair<string, string>> rulesetList = new();
 
