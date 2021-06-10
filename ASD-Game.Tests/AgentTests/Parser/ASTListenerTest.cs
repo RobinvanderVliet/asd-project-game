@@ -74,7 +74,7 @@ namespace ASD_Game.Tests.AgentTests.Parser
             var sut = ParseTestFile(file);
 
             //Assert
-            Assert.AreEqual(expected.root.ToString(), sut.root.ToString());
+            Assert.AreEqual(expected.Root.ToString(), sut.Root.ToString());
         }
 
     }

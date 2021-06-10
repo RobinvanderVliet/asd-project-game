@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using ASD_Game.Agent.Mapper;
+using Agent.Mapper;
 using ASD_Game.InputHandling;
 using Configuration = ASD_Game.Agent.Models.Configuration;
 
@@ -8,7 +8,7 @@ namespace ASD_Game.Agent.Services
 {
     public abstract class BaseConfigurationService
     {
-        public FileToDictionaryMapper FileToDictionaryMapper;
+        public FileToSettingListMapper FileToSettingListMapper;
 
         private FileHandler _fileHandler;
         private Pipeline _pipeline;
@@ -20,12 +20,12 @@ namespace ASD_Game.Agent.Services
         
         protected const string CANCEL_COMMAND = "cancel";
         protected const string LOAD_COMMAND = "load";
+        protected const string EDITOR_COMMAND = "editor";
         public string LastError = "";
 
         public abstract void CreateConfiguration(string configurationName, string filepath);
 
         public abstract List<Configuration> GetConfigurations();
 
-        public abstract void Configure();
     }
 }

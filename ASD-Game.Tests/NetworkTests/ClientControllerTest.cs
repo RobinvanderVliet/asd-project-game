@@ -129,30 +129,28 @@ namespace ASD_Game.Tests.NetworkTests
         public void Test_SendPayload_PayloadIsNull()
         {
             //Arrange
-            string expectedExceptionMessage = "Payload is empty.";
             string payload = null;
             var packetType = PacketType.Chat;
 
             //Act
-            var ex = Assert.Throws<Exception>(() => _sut.SendPayload(payload, packetType));
+            _sut.SendPayload(payload, packetType);
 
             //Assert
-            Assert.AreEqual(expectedExceptionMessage, ex.Message);
+            _mockedNetworkComponent.Verify(mock => mock.SendPacket(It.IsAny<PacketDTO>()), Times.Never);
         }
 
         [Test]
         public void Test_SendPayload_PayloadIsEmpty()
         {
             //Arrange
-            string expectedExceptionMessage = "Payload is empty.";
             string payload = "";
             var packetType = PacketType.Chat;
 
             //Act
-            var ex = Assert.Throws<Exception>(() => _sut.SendPayload(payload, packetType));
+            _sut.SendPayload(payload, packetType);
 
             //Assert
-            Assert.AreEqual(expectedExceptionMessage, ex.Message);
+            _mockedNetworkComponent.Verify(mock => mock.SendPacket(It.IsAny<PacketDTO>()), Times.Never);
         }
 
         [Test]

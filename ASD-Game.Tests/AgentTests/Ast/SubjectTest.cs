@@ -60,11 +60,11 @@ namespace ASD_Game.Tests.AgentTests.Ast
         public void Test_GetNodeOpponent_CorrectOutput()
         {
             //Arrange
-            var node = new Opponent(TESTNAME);
+            var node = new AgentSubject(TESTNAME);
             //Act
             var result = node.GetNodeType();
             //Assert
-            Assert.AreEqual("Opponent", result);
+            Assert.AreEqual("Agent", result);
         }
 
         [Test]

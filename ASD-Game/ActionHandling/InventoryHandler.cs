@@ -23,15 +23,12 @@ namespace ASD_Game.ActionHandling
         private readonly IMessageService _messageService;
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
-        private readonly IDatabaseService<WorldItemPOCO> _worldItemDatabaseService;
 
-
-        public InventoryHandler(IClientController clientController, 
-                                IWorldService worldService, 
-                                IDatabaseService<PlayerPOCO> playerDatabaseService, 
-                                IDatabaseService<PlayerItemPOCO> playerItemDatabaseService, 
-                                IDatabaseService<WorldItemPOCO> worldItemDatabaseService, 
-                                IMessageService messageService)
+        public InventoryHandler(IClientController clientController,
+            IWorldService worldService,
+            IDatabaseService<PlayerPOCO> playerDatabaseService,
+            IDatabaseService<PlayerItemPOCO> playerItemDatabaseService,
+            IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Inventory);
@@ -39,7 +36,6 @@ namespace ASD_Game.ActionHandling
             _messageService = messageService;
             _playerDatabaseService = playerDatabaseService;
             _playerItemDatabaseService = playerItemDatabaseService;
-            _worldItemDatabaseService = worldItemDatabaseService;
         }
 
         public void UseItem(int index)
@@ -129,13 +125,13 @@ namespace ASD_Game.ActionHandling
                     "slot 3" => inventory.ConsumableItemList[2],
                     _ => null
                 };
-                
+
                 if (inventoryItem != null)
                 {
                     output = inventoryItem.ToString();
                 }
             }
-            catch (ArgumentOutOfRangeException e) {}
+            catch(ArgumentOutOfRangeException) {}
             
             _messageService.AddMessage(output);
         }
@@ -312,7 +308,7 @@ namespace ASD_Game.ActionHandling
                     PlayerPOCO playerPOCO = result.FirstOrDefault(player => player.PlayerGUID == inventoryDTO.UserId && player.GameGUID == _clientController.SessionId );
 
                     playerPOCO.Health = player.Health;
-                    //add stamina to playerPOCO
+                    playerPOCO.Stamina = player.Stamina;
                     _ = _playerDatabaseService.UpdateAsync(playerPOCO);
                 }
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
