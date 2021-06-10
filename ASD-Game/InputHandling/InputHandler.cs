@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Timers;
 using ASD_Game.Agent.Services;
 using ASD_Game.InputHandling.Antlr;
 using ASD_Game.InputHandling.Models;
@@ -159,23 +158,15 @@ namespace ASD_Game.InputHandling
                     return;
                 }
 
-                if (input == START_COMMAND) 
-                {
-                    SendCommand(START_COMMAND);
-                }
-
-                if (input.Contains("SAY"))
+                if (input == START_COMMAND || input.Contains("say") || input.Contains("shout"))
                 {
                     SendCommand(input);
+                    _screenHandler.RedrawGameInputBox();
                 }
-                else if (input.Contains("SHOUT"))
-                {
-                    SendCommand(input);
-                }
-               
             }
 
         }
+
         public void HandleConfigurationScreenCommands()
         {
             var input = GetCommand();
@@ -193,7 +184,6 @@ namespace ASD_Game.InputHandling
                     _gameConfigurationHandler.SetGameConfiguration();
                     _screenHandler.TransitionTo(new LobbyScreen());
                     _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(), _gameConfigurationHandler.GetUsername());
-
                 }
             }
         }
