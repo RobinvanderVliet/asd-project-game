@@ -65,7 +65,9 @@ namespace Session.Tests
         {
             var standardOutput = new StreamWriter(Console.OpenStandardOutput());
             standardOutput.AutoFlush = true;
+
             Console.SetOut(standardOutput);
+
             _mockedClientController = new Mock<IClientController>();
             _mockedPlayerPOCOServices = new Mock<IDatabaseService<PlayerPOCO>>();
             _mockedWorldService = new Mock<IWorldService>();
@@ -78,10 +80,14 @@ namespace Session.Tests
             _mockedGameConfiguration = new Mock<IGameConfigurationHandler>();
             _mockedGameConfigurationPoco = new Mock<IDatabaseService<GameConfigurationPOCO>>();
             _mockedTile = new Mock<ITerrainTile>();
+
             _mockedWorldService.Setup(mock => mock.LoadArea(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()));
+
             _mockedWorldService.Setup(mock => mock.GetTile(It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(_mockedTile.Object);
+
             _mockedTile.Setup(mock => mock.IsAccessible).Returns(true);
+
             _mockedWorldService.Setup(mock => mock.CheckIfCharacterOnTile(It.IsAny<ITile>())).Returns(false);
 
             _sut = new GameSessionHandler(_mockedClientController.Object, _mockedsessionHandler.Object, _mockedRelativeStatHandler.Object, _mockedGameConfiguration.Object, _mockedScreenHandler.Object, _mockedPlayerPOCOServices.Object, _mockedGamePOCOServices.Object, _mockedGameConfigurationPoco.Object, _mockedPlayerItemService.Object, _mockedWorldService.Object, _mockedMessageService.Object);
@@ -138,7 +144,7 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_GenerateWorld_If_Started_New_Game()
+        public void Test_GenerateWorld_IfStartedNewGame()
         {
             //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
@@ -172,7 +178,7 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_NewGame_If_Started_New_Game_Insert_New_Game_In_Database()
+        public void Test_NewGame_IfStartedNewGameInsertNewGameInDatabase()
         {
             //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
@@ -219,7 +225,7 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_NewGame_If_Started_New_Game_Insert_New_Player_In_Database()
+        public void Test_NewGame_IfStartedNewGameInsertNewPlayerInDatabase()
         {
             //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
@@ -266,7 +272,7 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_InsertItem_If_Started_New_Game_Insert_New_PlayerItems_In_Database()
+        public void Test_InsertItem_IfStartedNewGameInsertNewPlayerItemsInDatabase()
         {
             //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
@@ -313,7 +319,7 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_NewConfig_If_Started_New_Game_Insert_New_GameConfiguration_In_Database()
+        public void Test_NewConfig_IfStartedNewGameInsertNewGameConfigurationInDatabase()
         {
             //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
@@ -360,7 +366,7 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_NewGameConfig_If_Started_New_Game_Client_Dont_Insert_New_GameConfiguration_In_Database()
+        public void Test_NewGameConfig_IfStartedNewGameClientDontInsertNewGameConfigurationInDatabase()
         {
             //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
@@ -408,7 +414,7 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_StartSavedGame_If_Started_Saved_Game_Generates_World_WithOldSessionSeed()
+        public void Test_StartSavedGame_IfStartedSavedGameGeneratesWorldWithOldSessionSeed()
         {
             //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
@@ -456,7 +462,7 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_HandlePacket_StatHandler_CurrentPlayer_Get_Sets()
+        public void Test_HandlePacket_StatHandlerCurrentPlayerGetSets()
         {
             //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
@@ -493,7 +499,7 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_HandlePacket_StatHandler_Checks_Stamina_timer_Gets_Called()
+        public void Test_HandlePacket_StatHandlerChecksStaminaTimerGetsCalled()
         {
             //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
@@ -530,7 +536,7 @@ namespace Session.Tests
         }
 
         [Test]
-        public void Test_HandlePacket_StatHandler_Checks_Radiation_timer_Gets_Called()
+        public void Test_HandlePacket_StatHandlerChecksRadiationTimerGetsCalled()
         {
             //Arrange
             StartGameDTO startGameDto = new StartGameDTO();
