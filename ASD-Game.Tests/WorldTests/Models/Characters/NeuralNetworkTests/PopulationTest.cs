@@ -2,7 +2,6 @@
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using NUnit.Framework;
-using World.Models.Characters.Algorithms.NeuralNetworking;
 
 namespace ASD_Game.Tests.WorldTests.Models.Characters.NeuralNetworkTests
 {

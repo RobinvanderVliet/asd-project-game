@@ -3,7 +3,6 @@ using System.Numerics;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using NUnit.Framework;
-using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
 namespace ASD_Game.Tests.WorldTests.Models.Characters.NeuralNetworkTests
 {

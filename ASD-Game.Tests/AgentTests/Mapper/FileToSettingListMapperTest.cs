@@ -5,7 +5,7 @@ using System.IO;
 using Agent.Mapper;
 using NUnit.Framework;
 
-namespace Agent.Tests.Mapper
+namespace ASD_Game.Tests.AgentTests.Mapper
 {
     [ExcludeFromCodeCoverage]
     public class FileToSettingListMapperTest

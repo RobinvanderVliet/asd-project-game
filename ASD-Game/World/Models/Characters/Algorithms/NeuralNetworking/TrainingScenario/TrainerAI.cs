@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Numerics;
-using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
 namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario
 {
