@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using ActionHandling.DTO;
 using ASD_Game.ActionHandling;
 using ASD_Game.ActionHandling.DTO;
 using ASD_Game.DatabaseHandler.POCO;
@@ -9,7 +8,10 @@ using ASD_Game.Messages;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
+using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Interfaces;
+using ASD_Game.World.Models.TerrainTiles;
 using ASD_Game.World.Services;
 using Moq;
 using Newtonsoft.Json;
@@ -121,6 +123,9 @@ namespace ASD_Game.Tests.ActionHandlingTests
             _mockedClientController.Setup(x => x.GetOriginId()).Returns(PlayerGuid);
             _mockedClientController.Object.SetSessionId(GameGuid);
             _mockedWorldService.Setup(mock => mock.GetPlayer(player.Id)).Returns(player);
+
+            ITile tile = new GrassTile(_XPosition, _YPosition);
+            _mockedWorldService.Setup(mock => mock.GetTile(It.IsAny<int>(), It.IsAny<int>())).Returns(tile);
 
             var payload = JsonConvert.SerializeObject(_moveDTO);
             _packetDTO.Payload = payload;
