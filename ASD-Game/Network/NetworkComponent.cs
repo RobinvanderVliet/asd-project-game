@@ -15,7 +15,18 @@ namespace ASD_Game.Network
         public NetworkComponent()
         {
             _webSocketConnection = new WebSocketConnection(this);
+            InitializeOriginId();
+        }
 
+        public NetworkComponent(IWebSocketConnection webSocketConnection)
+        {
+            //Constructor solely used for testing purposes
+            _webSocketConnection = webSocketConnection;
+            _originId = Guid.NewGuid().ToString();
+        }
+
+        private void InitializeOriginId()
+        {
             if (_webSocketConnection.UserSettingsConfig.OriginId.IsNullOrEmpty())
             {
                 _originId = Guid.NewGuid().ToString();
@@ -25,14 +36,6 @@ namespace ASD_Game.Network
             {
                 _originId = _webSocketConnection.UserSettingsConfig.OriginId;
             }
-            
-        }
-
-        public NetworkComponent(IWebSocketConnection webSocketConnection)
-        {
-            //Constructor solely used for testing purposes
-            _webSocketConnection = webSocketConnection;
-            _originId = Guid.NewGuid().ToString();
         }
 
         public void ReceivePacket(PacketDTO packet)

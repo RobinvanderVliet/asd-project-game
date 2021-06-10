@@ -33,7 +33,6 @@ namespace ASD_Game.Session
         private readonly IWorldService _worldService;
         private readonly IDatabaseService<PlayerPOCO> _playerService;
         private readonly IDatabaseService<GamePOCO> _gamePocoService;
-        private readonly IDatabaseService<ClientHistoryPOCO> _clientHistoryService;
         private readonly IScreenHandler _screenHandler;
         private readonly IRelativeStatHandler _relativeStatHandler;
         private readonly IMessageService _messageService;
@@ -46,8 +45,7 @@ namespace ASD_Game.Session
 
         public GameSessionHandler(IClientController clientController, IWorldService worldService,
             ISessionHandler sessionHandler, IDatabaseService<GamePOCO> gamePocoService,
-            IDatabaseService<PlayerPOCO> playerService,
-            IDatabaseService<ClientHistoryPOCO> clientHistoryService, IScreenHandler screenHandler,
+            IDatabaseService<PlayerPOCO> playerService, IScreenHandler screenHandler,
             IRelativeStatHandler relativeStatHandler, IMessageService messageService,
             IDatabaseService<PlayerItemPOCO> playerItemDatabaseService,
             IGameConfigurationHandler gameConfigurationHandler,
@@ -59,7 +57,6 @@ namespace ASD_Game.Session
             _sessionHandler = sessionHandler;
             _gamePocoService = gamePocoService;
             _playerService = playerService;
-            _clientHistoryService = clientHistoryService;
             _screenHandler = screenHandler;
             _relativeStatHandler = relativeStatHandler;
             _messageService = messageService;

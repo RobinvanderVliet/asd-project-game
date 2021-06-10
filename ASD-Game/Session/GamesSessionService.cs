@@ -15,16 +15,14 @@ namespace Session
     public class GamesSessionService : IGamesSessionService
     {
         private readonly ISessionHandler _sessionHandler;
-        private readonly IDatabaseService<ClientHistoryPOCO> _clientHistoryService;
         private readonly IDatabaseService<GamePOCO> _gamePocoService;
         private readonly IScreenHandler _screenHandler;
         private readonly IClientController _clientController; 
 
-        public GamesSessionService(ISessionHandler sessionHandler,
-            IDatabaseService<ClientHistoryPOCO> clientHistoryService, IDatabaseService<GamePOCO> gamePocoService, IScreenHandler screenHandler, IClientController clientController)
+        public GamesSessionService(ISessionHandler sessionHandler, IDatabaseService<GamePOCO> gamePocoService,
+            IScreenHandler screenHandler, IClientController clientController)
         {
             _sessionHandler = sessionHandler;
-            _clientHistoryService = clientHistoryService;
             _gamePocoService = gamePocoService;
             _screenHandler = screenHandler;
             _clientController = clientController;
@@ -62,11 +60,10 @@ namespace Session
                 var gameName = allGames.Result.Where(x => x.GameGUID == value).Select(x => x.GameName).First()
                     .ToString();
                 var seed = allGames.Result.Where(x => x.GameGUID == value).Select(x => x.Seed).FirstOrDefault();
-                //get host userName from somewhere.
+
+                //todo: get host username from somewhere.
                 _sessionHandler.CreateSession(gameName, "gerrie", true, value, seed);
             }
         }
     }
-
-    
 }
