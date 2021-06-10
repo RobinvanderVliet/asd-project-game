@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Linq;
 using System.Timers;
 using ASD_Game.ActionHandling.DTO;
@@ -10,7 +11,6 @@ using ASD_Game.Network.Enum;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.HazardousTiles;
 using ASD_Game.World.Services;
-using Newtonsoft.Json;
 using Timer = System.Timers.Timer;
 using World.Models.Characters;
 
@@ -31,8 +31,7 @@ namespace ASD_Game.ActionHandling
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IMessageService _messageService;
 
-        public RelativeStatHandler(IClientController clientController, IWorldService worldService,
-            IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
+        public RelativeStatHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.RelativeStat);

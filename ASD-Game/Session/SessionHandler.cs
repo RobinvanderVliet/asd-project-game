@@ -14,9 +14,8 @@ using ASD_Game.Session.DTO;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
 using ASD_Game.World;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 using Newtonsoft.Json;
-
-using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 using Timer = System.Timers.Timer;
 
 namespace ASD_Game.Session

@@ -2,7 +2,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace World.Models.Characters.Algorithms.NeuralNetworking
+namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
 {
     [ExcludeFromCodeCoverage]
     public class ConnectionGene

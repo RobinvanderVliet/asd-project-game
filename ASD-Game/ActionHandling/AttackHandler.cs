@@ -347,7 +347,6 @@ namespace ASD_Game.ActionHandling
                     }
                     else
                     {
-                        _messageService.AddMessage("You died");
                         attackedPlayer.Health = 0;
                     }
 

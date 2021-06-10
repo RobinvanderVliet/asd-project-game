@@ -2,9 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
-using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
-namespace World.Models.Character.Tests.NeuralNetworkTest
+namespace ASD_Game.Tests.WorldTests.Models.Characters.NeuralNetworkTests
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
