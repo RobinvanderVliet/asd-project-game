@@ -18,7 +18,6 @@ namespace Session.Tests
     {
         private GamesSessionService sut;
         private Mock<IDatabaseService<GamePOCO>> _mockedDatabaseGameService;
-        private Mock<IDatabaseService<ClientHistoryPOCO>> _mockedDatabaseClientHistory;
         private Mock<ISessionHandler> _mockedSessionHandler;
         private Mock<IScreenHandler> _mockedScreenHandler;
         private Mock<IClientController> _mockedClientController;
@@ -27,14 +26,13 @@ namespace Session.Tests
         public void GameSessionServiceSetup()
         {
             _mockedSessionHandler = new Mock<ISessionHandler>();
-            _mockedDatabaseClientHistory = new Mock<IDatabaseService<ClientHistoryPOCO>>();
             _mockedDatabaseGameService = new Mock<IDatabaseService<GamePOCO>>();
             _mockedScreenHandler = new Mock<IScreenHandler>();
             _mockedClientController = new Mock<IClientController>();
 
 
-            sut = new GamesSessionService(_mockedSessionHandler.Object, _mockedDatabaseClientHistory.Object,
-                _mockedDatabaseGameService.Object, _mockedScreenHandler.Object, _mockedClientController.Object);
+            sut = new GamesSessionService(_mockedSessionHandler.Object, _mockedDatabaseGameService.Object,
+                _mockedScreenHandler.Object, _mockedClientController.Object);
         }
 
         /// <summary>
