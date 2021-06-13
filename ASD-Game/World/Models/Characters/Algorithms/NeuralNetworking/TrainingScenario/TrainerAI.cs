@@ -17,8 +17,8 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
 
         public TrainerAI(Vector2 loc, string type)
         {
-            Damage = _random.Next(1, 10);
-            Health = _random.Next(1, 50);
+            Damage = _random.Next(1, 20);
+            Health = _random.Next(1, 200);
             Location = loc;
             Type = type;
             _dataGatheringService = new DataGatheringServiceForTraining();

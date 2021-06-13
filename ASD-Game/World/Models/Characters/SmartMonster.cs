@@ -18,7 +18,7 @@ namespace ASD_Game.World.Models.Characters
         public bool Replay = false;
 
         public static readonly int GenomeInputs = 14;
-        public static readonly int GenomeOutputs = 7;
+        public static readonly int GenomeOutputs = 8;
 
         public float[] Vision = new float[GenomeInputs];
         public float[] Decision = new float[GenomeOutputs];
@@ -149,6 +149,10 @@ namespace ASD_Game.World.Models.Characters
 
                 case 6:
                     Smartactions.WalkRight(this);
+                    break;
+
+                case 7:
+                    Smartactions.RunToPlayer(_dataGatheringService.ClosestPlayer, this);
                     break;
             }
         }
