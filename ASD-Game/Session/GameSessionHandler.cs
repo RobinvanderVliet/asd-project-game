@@ -26,6 +26,7 @@ using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ActionHandling;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 
+
 namespace ASD_Game.Session
 {
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
@@ -44,7 +45,6 @@ namespace ASD_Game.Session
         private readonly IWorldService _worldService;
         private readonly IMessageService _messageService;
         private readonly IMoveHandler _moveHandler;
-        private readonly IAttackHandler _attackHandler;
         private Timer AIUpdateTimer;
         private int _brainUpdateTime = 60000;
         private Random _random = new Random();
@@ -63,8 +63,7 @@ namespace ASD_Game.Session
             IMessageService messageService,
             INetworkComponent networkComponent,
             IConfigurationService configurationService,
-            IMoveHandler moveHandler,
-            IAttackHandler attackHandler
+            IMoveHandler moveHandler
         )
         {
             _clientController = clientController;
@@ -82,7 +81,6 @@ namespace ASD_Game.Session
             _networkComponent = networkComponent;
             _configurationService = configurationService;
             _moveHandler = moveHandler;
-            _attackHandler = attackHandler;
             CheckAITimer();
         }
 
@@ -192,9 +190,9 @@ namespace ASD_Game.Session
 
         private void CreateMonsters()
         {
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 20; i++)
             {
-                if (i >= 0)
+                if (i >= 15)
                 {
                     var newMonster = new Monster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i);
                     var newMonsterData = new MonsterData(newMonster.XPosition, newMonster.YPosition, 0)
