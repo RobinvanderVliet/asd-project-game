@@ -9,12 +9,12 @@ using ASD_Game.Session;
 using ASD_Game.World;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.Algorithms.Creator;
+using ASD_Game.World.Models.Characters.StateMachine;
 using ASD_Game.World.Services;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Session.DTO;
-using WorldGeneration.StateMachine;
 
 namespace Creature.Tests.Handlers
 {

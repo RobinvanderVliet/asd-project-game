@@ -4,7 +4,7 @@ using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.StateMachine;
 using NUnit.Framework;
-using WorldGeneration.StateMachine.Event;
+using World.Models.Characters.StateMachine.Event;
 
 namespace ASD_Game.Tests.WorldTests.Models.Characters.StateMachineTests
 {
