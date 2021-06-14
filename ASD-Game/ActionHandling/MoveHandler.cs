@@ -368,17 +368,31 @@ namespace ASD_Game.ActionHandling
                 int x = currentPlayer.XPosition - closestPlayer.XPosition;
                 int y = currentPlayer.YPosition - closestPlayer.YPosition;
 
-                string xDirection = x < 0 ? "left" : "right";
-                string yDirection = y < 0 ? "up" : "down";
+                var xDirection = x > 0 ? "left" : "right";
+                var yDirection = y > 0 ? "down" : "up";
 
                 x = Math.Abs(x);
                 y = Math.Abs(y);
+
+                var xTiles = $"{x} tile{(x != 1 ? "s" : "")} {xDirection}";
+                var yTiles = $"{y} tile{(y != 1 ? "s" : "")} {yDirection}";
                 
-                _messageService.AddMessage($"The closest player is {x} tiles {xDirection} and {y} tiles {yDirection}.");
+                if (x == 0)
+                {
+                    _messageService.AddMessage($"The closest player is {yTiles}.");
+                }
+                else if (y == 0)
+                {
+                    _messageService.AddMessage($"The closest player is {xTiles}.");
+                }
+                else
+                {
+                    _messageService.AddMessage($"The closest player is {xTiles} and {yTiles}.");
+                }
             }
             else
             {
-                _messageService.AddMessage("That is strange, there are no living players left...");
+                _messageService.AddMessage("That is strange, there are no other living players left...");
             }
         }
     }
