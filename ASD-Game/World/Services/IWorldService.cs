@@ -34,9 +34,10 @@ namespace ASD_Game.World.Services
 
         public IList<Item> GetItemsOnCurrentTile();
 
-        List<Character> GetCreatureMoves();
+        List<Character> GetCreatureMoves(string type);
 
         List<Monster> GetMonsters();
+
         public List<Character> GetAllCharacters();
 
         public void UpdateBrains(Genome genome);
@@ -60,6 +61,8 @@ namespace ASD_Game.World.Services
         public Character GetAI(string id);
 
         public int GetViewDistance();
+
+        public void SetAILogic();
 
         public void CheckLastManStanding();
     }
