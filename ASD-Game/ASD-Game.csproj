@@ -1,53 +1,68 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>ASD_project</RootNamespace>
+    <RootNamespace>ASD_Game</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Antlr4" Version="4.6.6">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
-    <PackageReference Include="Serilog.Extensions.Hosting" Version="4.1.2" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	<PackageReference Include="Serilog" Version="2.10.0" />
+	<PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
+	<PackageReference Include="Antlr4.CodeGenerator" Version="4.6.6" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DatabaseHandler\DatabaseHandler.csproj" />
-    <ProjectReference Include="..\WorldGeneration\WorldGeneration.csproj" />
+	<None Include="Properties\PublishProfiles\FolderProfile.pubxml.user" />
   </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Antlr4" Version="4.6.6">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
+		<PackageReference Include="Appccelerate.StateMachine" Version="5.1.0" />
+		<PackageReference Include="AutoMapper" Version="10.1.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+		<PackageReference Include="LiteDB" Version="5.0.10" />
+		<PackageReference Include="LiteDB.Async" Version="0.0.8" />
+		<PackageReference Include="MathNet.Numerics" Version="4.15.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+		<PackageReference Include="Moq" Version="4.16.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Serilog" Version="2.10.0" />
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="4.1.2" />
+		<PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+		<PackageReference Include="WebSocketSharp-netstandard" Version="1.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Antlr4 Update="Agent\Antlr\Grammar\AgentConfiguration.g4">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CustomToolNamespace>Agent.Antlr.Grammar</CustomToolNamespace>
+		</Antlr4>
+		<Antlr4 Update="InputHandling\Antlr\Grammar\PlayerCommands.g4">
+			<CustomToolNamespace>InputHandling.Antlr.Grammar</CustomToolNamespace>
+		</Antlr4>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="appsettings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Chat\Chat.csproj" />
-    <ProjectReference Include="..\InputCommandHandler\InputCommandHandler.csproj" />
-    <ProjectReference Include="..\Player\Player.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Agent\Agent.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="resource\agent\" />
+    <Folder Include="resource\agent" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="resource\config\agent" />
     <Folder Include="resource\config\npc" />
   </ItemGroup>
-
 </Project>

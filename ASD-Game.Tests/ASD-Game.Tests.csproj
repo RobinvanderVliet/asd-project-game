@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>ASD_Game.Tests</RootNamespace>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.msbuild" Version="3.0.3">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Moq" Version="4.16.1" />
+        <PackageReference Include="NUnit" Version="3.13.2" />
+        <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+		<PackageReference Include="AutoBogus.Moq" Version="2.13.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="AgentTests\Resource\npcFileTest_2.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="AgentTests\Resource\AgentTestFile.txt" />
+      <EmbeddedResource Include="AgentTests\Resource\AgentTestFileParseException.txt" />
+      <EmbeddedResource Include="AgentTests\Resource\agent_test.cfg" />
+      <EmbeddedResource Include="AgentTests\Resource\export test file 1.txt" />
+      <EmbeddedResource Include="AgentTests\Resource\import_test_file_1.txt" />
+      <EmbeddedResource Include="AgentTests\Resource\npcFileTest.txt" />
+      <EmbeddedResource Include="AgentTests\Resource\test1.txt" />
+      <EmbeddedResource Include="AgentTests\Resource\test2.txt" />
+      <EmbeddedResource Include="AgentTests\Resource\test3.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Include="AgentTests\Resource\AgentTestFileWrongExtension.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ASD-Game\ASD-Game.csproj" />
+    </ItemGroup>
+
+</Project>
