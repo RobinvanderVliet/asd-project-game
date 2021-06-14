@@ -26,25 +26,20 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
         {
             const int ATTACK_RANGE = 1;
             const int VISION_RANGE = 6;
-
-            //if (_characterData.WorldService.GetItemsOnCurrentTileWithPlayerId(_characterData.CharacterId) != null)
-            //{
-            //    _characterStateMachine.FireEvent(CharacterEvent.Event.FOUND_ITEM);
-            //}
-            //else
-            //{
+            
             Character visionRangeTarget = _characterData.WorldService.GetCharacterInClosestRangeToCurrentCharacter(_characterData.WorldService.GetCharacter(_characterData.CharacterId), VISION_RANGE);
             if (visionRangeTarget != null)
             {
                 Character attackRangeTarget = _characterData.WorldService.GetCharacterInClosestRangeToCurrentCharacter(_characterData.WorldService.GetCharacter(_characterData.CharacterId), ATTACK_RANGE);
                 if (attackRangeTarget != null)
                 {
-                    if (attackRangeTarget is global::World.Models.Characters.Agent)
+                    if (attackRangeTarget is Player)
                     {
-                        var player = (global::World.Models.Characters.Agent)attackRangeTarget;
-                        _characterStateMachine.FireEvent(CharacterEvent.Event.CREATURE_IN_RANGE, player.AgentData);
+                        var player = (Player)attackRangeTarget;
+                        var agentData = new AgentData(player.XPosition, player.YPosition, 50);
+                        _characterStateMachine.FireEvent(CharacterEvent.Event.CREATURE_IN_RANGE, agentData);
                     }
-                    if (attackRangeTarget is Monster)
+                    else if (attackRangeTarget is Monster)
                     {
                         Monster monster = (Monster)attackRangeTarget;
                         _characterStateMachine.FireEvent(CharacterEvent.Event.CREATURE_IN_RANGE, monster.MonsterData);
@@ -52,18 +47,20 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                 }
                 else
                 {
-                    if (visionRangeTarget is Monster)
+                    if (visionRangeTarget is Player)
+                    {
+                        var player = (Player)visionRangeTarget;
+                        var agentData = new AgentData(player.XPosition, player.YPosition, 50);
+                        _characterStateMachine.FireEvent(CharacterEvent.Event.SPOTTED_CREATURE, agentData);
+                    }
+                    else if (visionRangeTarget is Monster)
                     {
                         Monster monster = (Monster)visionRangeTarget;
                         _characterStateMachine.FireEvent(CharacterEvent.Event.SPOTTED_CREATURE, monster.MonsterData);
-                    }
+                    } 
+                    
                 }
             }
-            else
-            {
-                //_characterStateMachine.FireEvent(CharacterEvent.Event.LOST_CREATURE);
-            }
-            //}
         }
 
         public int CompareTo(object obj)

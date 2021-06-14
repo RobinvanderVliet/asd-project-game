@@ -1,5 +1,4 @@
 ﻿using ASD_Game.World.Models.Characters.StateMachine.Data;
-using ASD_Game.World.Models.Characters.StateMachine.State;
 
 namespace ASD_Game.World.Models.Characters.StateMachine.State
 {

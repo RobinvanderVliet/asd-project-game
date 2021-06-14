@@ -40,7 +40,7 @@ namespace ASD_Game.World.Services
         List<Monster> GetMonsters();
         public List<Character> GetAllCharacters();
 
-        public Character GetCharacterInClosestRangeToCurrentCharacter(Character character, int distance);
+        public Character GetCharacterInClosestRangeToCurrentCharacter(Character currentCharacter, int distance);
         public Character GetCharacter(string id);
         public void UpdateBrains(Genome genome);
 

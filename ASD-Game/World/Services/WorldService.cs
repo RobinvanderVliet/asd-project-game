@@ -91,32 +91,28 @@ namespace ASD_Game.World.Services
             return _world.GetAllCharacters();
         }
 
-        public Character GetCharacterInClosestRangeToCurrentCharacter(Character character, int distance)
+        public Character GetCharacterInClosestRangeToCurrentCharacter(Character currentCharacter, int distance)
         {
-            List<Monster> monsters = GetMonsters();
-            List<Player> players = GetAllPlayers();
-
-            if (character is Monster)
+            var monsters = GetMonsters();
+            var players = GetAllPlayers();
+            
+            foreach (var player in players)
             {
-                foreach (var player in players)
+                if (Vector2.Distance(new Vector2(currentCharacter.XPosition, currentCharacter.YPosition), new Vector2(player.XPosition, player.YPosition)) <= distance
+                    && player.Id != currentCharacter.Id)
                 {
-                    if (Vector2.Distance(new Vector2(character.XPosition, character.YPosition), new Vector2(player.XPosition, player.YPosition)) <= distance)
-                    {
-                        return player;
-                    }
+                    return player;
                 }
             }
-            if (character is not Monster)
+            
+            foreach (var monster in monsters)
             {
-                foreach (var monster in monsters)
+                if (Vector2.Distance(new Vector2(currentCharacter.XPosition, currentCharacter.YPosition), new Vector2(monster.XPosition, monster.YPosition)) <= distance
+                    && monster.Id != currentCharacter.Id)
                 {
-                    if (Vector2.Distance(new Vector2(character.XPosition, character.YPosition), new Vector2(monster.XPosition, monster.YPosition)) <= distance)
-                    {
-                        return monster;
-                    }
+                    return monster;
                 }
             }
-            //}
             
             return null;
         }

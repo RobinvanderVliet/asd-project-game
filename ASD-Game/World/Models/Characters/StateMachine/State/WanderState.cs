@@ -8,23 +8,26 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
     public class WanderState : CharacterState
     {
         private const int MAX_MOVEMENT_SPEED = 3;
-        public WanderState(ICharacterData characterData, ICharacterStateMachine characterStateMachine) : base(characterData, characterStateMachine)
+
+        public WanderState(ICharacterData characterData, ICharacterStateMachine characterStateMachine) : base(
+            characterData, characterStateMachine)
         {
         }
 
         public override void Do()
         {
             DoWorldCheck();
-            
+            Console.WriteLine("In wander");
+
             var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
             var _builderConfiguration = _characterData.BuilderConfigurator;
 
-            //foreach (var builderInfo in _builderInfoList)
-            //{
-            //    if (builderInfo.Action == "wander")
-            //    {
-            //        if (_builderConfiguration.GetGuard(_characterData, _target, builderInfo))
-            //        {
+            foreach (var builderInfo in _builderInfoList)
+            {
+                if (builderInfo.Action == "wander")
+                {
+                    if (_builderConfiguration.GetGuard(_characterData, _target, builderInfo))
+                    {
                         if (_characterData is AgentData)
                         {
                             if (_characterData.WorldService.GetPlayer(_characterData.CharacterId).Stamina >= 20)
@@ -34,11 +37,11 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                         }
                         else
                         {
-                            //MoveRandomDirection();
+                            MoveRandomDirection();
                         }
-            //        }
-            //    }
-            //}
+                    }
+                }
+            }
         }
 
         private void MoveRandomDirection()
