@@ -104,7 +104,7 @@ namespace Creature
                 InsertAgentConfiguration(configurationDto);
             }
 
-            return new HandlerResponseDTO(SendAction.Ignore, null);
+            return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
         private void InsertAgentConfiguration(AgentConfigurationDTO configurationDto)
