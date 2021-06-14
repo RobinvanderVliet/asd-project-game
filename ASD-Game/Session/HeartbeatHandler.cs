@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Timers;
 using ASD_Game.Session.DTO;
 using ASD_Game.Messages;
+using System.Threading;
+using System.Diagnostics;
 
 namespace ASD_Game.Session
 {
@@ -12,15 +14,35 @@ namespace ASD_Game.Session
         TimeSpan waitTime = TimeSpan.FromMilliseconds(1000);
 
         private int TIMER = 1000;
-        private Timer _heartbeatTimer;
+        private Thread _checkHeartbeatThread;
+        private bool _runThread;
         private IMessageService _messageService;
 
         public HeartbeatHandler(IMessageService messageService)
         {
             _players = new List<HeartbeatDTO>();
-            _heartbeatTimer = new Timer(TIMER);
             _messageService = messageService;
-            CheckHeartbeatTimer();
+            StartHeartbeatThread();
+        }
+
+        private void StartHeartbeatThread()
+        {
+            _runThread = true;
+            _checkHeartbeatThread = new Thread(() =>
+            {
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                while (_runThread)
+                {
+                    if (stopwatch.ElapsedMilliseconds >= TIMER)
+                    {
+                        CheckHeartbeatEvent();
+                        stopwatch.Restart();
+                    }
+                }
+
+            })
+            { Priority = ThreadPriority.Highest, IsBackground = true };
+            _checkHeartbeatThread.Start();
         }
 
         public HeartbeatHandler(List<string> players, IMessageService messageService)
@@ -30,9 +52,8 @@ namespace ASD_Game.Session
             {
                 _players.Add(new HeartbeatDTO(player));
             }
-            _heartbeatTimer = new Timer(TIMER);
             _messageService = messageService;
-            CheckHeartbeatTimer();
+            StartHeartbeatThread();
         }
 
         public void ReceiveHeartbeat(string clientId)
@@ -48,18 +69,9 @@ namespace ASD_Game.Session
             }
         }
 
-        private void CheckHeartbeatTimer()
+        private void CheckHeartbeatEvent()
         {
-            _heartbeatTimer.AutoReset = true;
-            _heartbeatTimer.Elapsed += CheckHeartbeatEvent;
-            _heartbeatTimer.Start();
-        }
-
-        private void CheckHeartbeatEvent(object sender, ElapsedEventArgs e)
-        {
-            _heartbeatTimer.Stop();
             UpdateStatus();
-            _heartbeatTimer.Start();
         }
 
         private void CheckStatus()
