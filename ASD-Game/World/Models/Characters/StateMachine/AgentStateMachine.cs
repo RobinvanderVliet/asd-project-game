@@ -67,7 +67,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine
             ruleSet3.Action = "engage";
             ruleSet3.Comparable = "health";
             ruleSet3.Threshold = "50";
-            ruleSet3.Comparison = "greater than";
+            ruleSet3.Comparison = "less than";
             ruleSet3.ComparisonTrue = "flee";
             ruleSet3.ComparisonFalse = "attack";
 
@@ -79,6 +79,18 @@ namespace ASD_Game.World.Models.Characters.StateMachine
             };
 
             var builderConfigurator = new BuilderConfigurator(rulesetList, CharacterData, this);
+
+            builderConfigurator.ActionsWithStateList = new()
+            {
+                new KeyValuePair<string, CharacterState>("idle", idleState),
+                new KeyValuePair<string, CharacterState>("inventory", inventoryState),
+                new KeyValuePair<string, CharacterState>("flee", fleeFromCharacterState),
+                new KeyValuePair<string, CharacterState>("follow", followCreatureState),
+                new KeyValuePair<string, CharacterState>("wander", wanderState),
+                new KeyValuePair<string, CharacterState>("use", useConsumableState),
+                new KeyValuePair<string, CharacterState>("attack", attackState)
+            };
+
             var builderInfoList = builderConfigurator.GetBuilderInfoList();
 
             CharacterData.BuilderConfigurator = builderConfigurator;
@@ -87,79 +99,80 @@ namespace ASD_Game.World.Models.Characters.StateMachine
             {
                 foreach (var initialState in builderInfo.InitialStates)
                 {
-                    bool condition = false;
+                    bool condition = true;
 
                     builder.In(initialState).On(builderInfo.Event)
-                        //.If<object>((targetData) => condition = builderConfigurator.GetGuard(_characterData, targetData, builderInfo) == true)
+                        .If<object>((targetData) => condition = builderConfigurator.GetGuard(_characterData, targetData, builderInfo) == true)
                         .Goto(builderInfo.TargetState).Execute<ICharacterData>(builderInfo.TargetState.SetTargetData);
                     System.Diagnostics.Debug.WriteLine("builder.In(" + initialState + ").On(" + builderInfo.Event + ").If(" + condition + ").Goto(" + builderInfo.TargetState + ")");
                 }
             }
+            System.Diagnostics.Debug.WriteLine("-----------------------------");
 
 
 
 
-            foreach (var action in builderConfigurator.GetActionWithStateList())
-            {
-                if (!builderInfoList.Any(x => x.Action == action.Key))
-                {
-                    if (action.Key == "idle")
-                    {
-                        // Idle
-                        builder.In(wanderState).On(CharacterEvent.Event.IDLE).Goto(idleState).Execute<ICharacterData>(wanderState.SetTargetData); //IF not using a Target then remove execute.
-                    }
-                    else if (action.Key == "wander")
-                    {
-                        // Wandering
-                        builder.In(followCreatureState).On(CharacterEvent.Event.LOST_CREATURE).Goto(wanderState).Execute<ICharacterData>(wanderState.SetTargetData);
-                        builder.In(fleeFromCharacterState).On(CharacterEvent.Event.LOST_CREATURE).Goto(wanderState).Execute<ICharacterData>(wanderState.SetTargetData);
-                        builder.In(idleState).On(CharacterEvent.Event.WANDERING).Goto(wanderState).Execute<ICharacterData>(wanderState.SetTargetData);
-                    }
-                    else if (action.Key == "inventory")
-                    {
-                        // Manage inventory
-                        builder.In(wanderState).On(CharacterEvent.Event.FOUND_ITEM).Goto(inventoryState).Execute<ICharacterData>(inventoryState.SetTargetData);
-                        builder.In(fleeFromCharacterState).On(CharacterEvent.Event.FOUND_ITEM).Goto(inventoryState).Execute<ICharacterData>(inventoryState.SetTargetData);
-                        builder.In(followCreatureState).On(CharacterEvent.Event.FOUND_ITEM).Goto(inventoryState).Execute<ICharacterData>(inventoryState.SetTargetData);
-                    }
-                    else if (action.Key == "consumable")
-                    {
-                        // Use Consumable
-                        builder.In(fleeFromCharacterState).On(CharacterEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICharacterData>(useConsumableState.SetTargetData);
-                        builder.In(followCreatureState).On(CharacterEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICharacterData>(useConsumableState.SetTargetData);
-                        builder.In(wanderState).On(CharacterEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICharacterData>(useConsumableState.SetTargetData);
-                        builder.In(fleeFromCharacterState).On(CharacterEvent.Event.OUT_OF_STAMINA).Goto(useConsumableState).Execute<ICharacterData>(useConsumableState.SetTargetData);
-                        builder.In(wanderState).On(CharacterEvent.Event.OUT_OF_STAMINA).Goto(useConsumableState).Execute<ICharacterData>(useConsumableState.SetTargetData);
-                    }
-                    else if (action.Key == "follow")
-                    {
-                        // Follow creature
-                        builder.In(wanderState).On(CharacterEvent.Event.SPOTTED_CREATURE).Goto(followCreatureState).Execute<ICharacterData>(followCreatureState.SetTargetData);
-                        builder.In(attackState).On(CharacterEvent.Event.CREATURE_OUT_OF_RANGE).Goto(followCreatureState).Execute<ICharacterData>(followCreatureState.SetTargetData);
-                    }
-                    else if (action.Key == "attack")
-                    {
-                        // Attack creature
-                        builder.In(followCreatureState).On(CharacterEvent.Event.CREATURE_IN_RANGE).Goto(attackState).Execute<ICharacterData>(attackState.SetTargetData);
-                        builder.In(attackState).On(CharacterEvent.Event.CREATURE_IN_RANGE).Execute<ICharacterData>(attackState.SetTargetData);
-                        builder.In(attackState).On(CharacterEvent.Event.OUT_OF_STAMINA).Execute<ICharacterData>(attackState.SetTargetData);
-                    }
-                    else if (action.Key == "flee")
-                    {
-                        // Flee From creature
-                        builder.In(attackState).On(CharacterEvent.Event.ALMOST_DEAD).Goto(fleeFromCharacterState).Execute<ICharacterData>(fleeFromCharacterState.SetTargetData);
-                    }
-                }
-            }
+            //foreach (var action in builderConfigurator.GetActionWithStateList())
+            //{
+            //    if (!builderInfoList.Any(x => x.Action == action.Key))
+            //    {
+            //        if (action.Key == "idle")
+            //        {
+            //            // Idle
+            //            builder.In(wanderState).On(CharacterEvent.Event.IDLE).Goto(idleState).Execute<ICharacterData>(wanderState.SetTargetData); //IF not using a Target then remove execute.
+            //        }
+            //        else if (action.Key == "wander")
+            //        {
+            //            // Wandering
+            //            builder.In(followCreatureState).On(CharacterEvent.Event.LOST_CREATURE).Goto(wanderState).Execute<ICharacterData>(wanderState.SetTargetData);
+            //            builder.In(fleeFromCharacterState).On(CharacterEvent.Event.LOST_CREATURE).Goto(wanderState).Execute<ICharacterData>(wanderState.SetTargetData);
+            //            builder.In(idleState).On(CharacterEvent.Event.WANDERING).Goto(wanderState).Execute<ICharacterData>(wanderState.SetTargetData);
+            //        }
+            //        else if (action.Key == "inventory")
+            //        {
+            //            // Manage inventory
+            //            builder.In(wanderState).On(CharacterEvent.Event.FOUND_ITEM).Goto(inventoryState).Execute<ICharacterData>(inventoryState.SetTargetData);
+            //            builder.In(fleeFromCharacterState).On(CharacterEvent.Event.FOUND_ITEM).Goto(inventoryState).Execute<ICharacterData>(inventoryState.SetTargetData);
+            //            builder.In(followCreatureState).On(CharacterEvent.Event.FOUND_ITEM).Goto(inventoryState).Execute<ICharacterData>(inventoryState.SetTargetData);
+            //        }
+            //        else if (action.Key == "consumable")
+            //        {
+            //            // Use Consumable
+            //            builder.In(fleeFromCharacterState).On(CharacterEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICharacterData>(useConsumableState.SetTargetData);
+            //            builder.In(followCreatureState).On(CharacterEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICharacterData>(useConsumableState.SetTargetData);
+            //            builder.In(wanderState).On(CharacterEvent.Event.ALMOST_DEAD).Goto(useConsumableState).Execute<ICharacterData>(useConsumableState.SetTargetData);
+            //            builder.In(fleeFromCharacterState).On(CharacterEvent.Event.OUT_OF_STAMINA).Goto(useConsumableState).Execute<ICharacterData>(useConsumableState.SetTargetData);
+            //            builder.In(wanderState).On(CharacterEvent.Event.OUT_OF_STAMINA).Goto(useConsumableState).Execute<ICharacterData>(useConsumableState.SetTargetData);
+            //        }
+            //        else if (action.Key == "follow")
+            //        {
+            //            // Follow creature
+            //            builder.In(wanderState).On(CharacterEvent.Event.SPOTTED_CREATURE).Goto(followCreatureState).Execute<ICharacterData>(followCreatureState.SetTargetData);
+            //            builder.In(attackState).On(CharacterEvent.Event.CREATURE_OUT_OF_RANGE).Goto(followCreatureState).Execute<ICharacterData>(followCreatureState.SetTargetData);
+            //        }
+            //        else if (action.Key == "attack")
+            //        {
+            //            // Attack creature
+            //            builder.In(followCreatureState).On(CharacterEvent.Event.CREATURE_IN_RANGE).Goto(attackState).Execute<ICharacterData>(attackState.SetTargetData);
+            //            builder.In(attackState).On(CharacterEvent.Event.CREATURE_IN_RANGE).Execute<ICharacterData>(attackState.SetTargetData);
+            //            builder.In(attackState).On(CharacterEvent.Event.OUT_OF_STAMINA).Execute<ICharacterData>(attackState.SetTargetData);
+            //        }
+            //        else if (action.Key == "flee")
+            //        {
+            //            // Flee From creature
+            //            builder.In(attackState).On(CharacterEvent.Event.ALMOST_DEAD).Goto(fleeFromCharacterState).Execute<ICharacterData>(fleeFromCharacterState.SetTargetData);
+            //        }
+            //    }
+            //}
 
             // Follow creature
 
-            builder.In(wanderState).On(CharacterEvent.Event.SPOTTED_CREATURE).Goto(followCreatureState).Execute<ICharacterData>(followCreatureState.SetTargetData);
-            builder.In(followCreatureState).On(CharacterEvent.Event.SPOTTED_CREATURE).Goto(followCreatureState).Execute<ICharacterData>(followCreatureState.SetTargetData);
+            //builder.In(wanderState).On(CharacterEvent.Event.SPOTTED_CREATURE).Goto(followCreatureState).Execute<ICharacterData>(followCreatureState.SetTargetData);
+            //builder.In(followCreatureState).On(CharacterEvent.Event.SPOTTED_CREATURE).Goto(followCreatureState).Execute<ICharacterData>(followCreatureState.SetTargetData);
 
-            builder.In(wanderState).On(CharacterEvent.Event.CREATURE_IN_RANGE).Goto(attackState).Execute<ICharacterData>(attackState.SetTargetData);
-            builder.In(attackState).On(CharacterEvent.Event.CREATURE_IN_RANGE).Goto(attackState).Execute<ICharacterData>(attackState.SetTargetData);
-            builder.In(followCreatureState).On(CharacterEvent.Event.CREATURE_IN_RANGE).Goto(attackState).Execute<ICharacterData>(attackState.SetTargetData);
+            //builder.In(wanderState).On(CharacterEvent.Event.CREATURE_IN_RANGE).Goto(attackState).Execute<ICharacterData>(attackState.SetTargetData);
+            //builder.In(attackState).On(CharacterEvent.Event.CREATURE_IN_RANGE).Goto(attackState).Execute<ICharacterData>(attackState.SetTargetData);
+            //builder.In(followCreatureState).On(CharacterEvent.Event.CREATURE_IN_RANGE).Goto(attackState).Execute<ICharacterData>(attackState.SetTargetData);
 
             builder.WithInitialState(wanderState);
 

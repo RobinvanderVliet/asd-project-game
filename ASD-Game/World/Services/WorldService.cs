@@ -97,16 +97,16 @@ namespace ASD_Game.World.Services
             List<Monster> monsters = GetMonsters();
             List<Player> players = GetAllPlayers();
 
-            //if (character is Monster)
-            //{
-            //    foreach (var player in players)
-            //    {
-            //        if (Vector2.Distance(new Vector2(character.XPosition, character.YPosition), new Vector2(player.XPosition, player.YPosition)) <= distance)
-            //        {
-            //            return player;
-            //        }
-            //    }
-            //}
+            if (character is Monster)
+            {
+                foreach (var player in players)
+                {
+                    if (Vector2.Distance(new Vector2(character.XPosition, character.YPosition), new Vector2(player.XPosition, player.YPosition)) <= distance)
+                    {
+                        return player;
+                    }
+                }
+            }
             if (character is not Monster)
             {
                 foreach (var monster in monsters)

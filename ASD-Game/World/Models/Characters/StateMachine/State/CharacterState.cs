@@ -39,8 +39,11 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                 Character attackRangeTarget = _characterData.WorldService.GetCharacterInClosestRangeToCurrentCharacter(_characterData.WorldService.GetCharacter(_characterData.CharacterId), ATTACK_RANGE);
                 if (attackRangeTarget != null)
                 {
-                    //if (attackRangeTarget is World.Models.Characters.Agent)
-                    //_characterStateMachine.FireEvent(CharacterEvent.Event.CREATURE_IN_RANGE, (Player)attackRangeTarget.);
+                    if (attackRangeTarget is global::World.Models.Characters.Agent)
+                    {
+                        var player = (global::World.Models.Characters.Agent)attackRangeTarget;
+                        _characterStateMachine.FireEvent(CharacterEvent.Event.CREATURE_IN_RANGE, player.AgentData);
+                    }
                     if (attackRangeTarget is Monster)
                     {
                         Monster monster = (Monster)attackRangeTarget;

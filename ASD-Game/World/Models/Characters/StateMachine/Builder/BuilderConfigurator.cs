@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ASD_Game.Creature.Creature.StateMachine.CustomRuleSet;
 using ASD_Game.Items;
@@ -14,18 +15,21 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Builder
         private readonly ICharacterData _characterData;
         private readonly ICharacterStateMachine _stateMachine;
 
+        public List<KeyValuePair<string, CharacterState>> ActionsWithStateList;
+
         public BuilderConfigurator(List<RuleSet> rulesetList, ICharacterData characterData, ICharacterStateMachine stateMachine)
         {
             _rulesetList = rulesetList;
             _characterData = characterData;
             _stateMachine = stateMachine;
+            ActionsWithStateList = new();
         }
 
         public List<BuilderInfo> GetBuilderInfoList()
         {
             List<BuilderInfo> builderInfoList = new List<BuilderInfo>();
 
-            foreach (var action in GetActionWithStateList())
+            foreach (var action in ActionsWithStateList)
             {
                 foreach (RuleSet ruleSet in _rulesetList)
                 {
@@ -35,7 +39,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Builder
                         builderInfo.Action = action.Key;
                         builderInfo.TargetState = action.Value;
 
-                        builderInfo.InitialStates = GetActionWithStateList().Select(state => state.Value).ToList();
+                        builderInfo.InitialStates = ActionsWithStateList.Select(state => state.Value).ToList();
 
                         if (ruleSet.Action == "default")
                         {
@@ -57,7 +61,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Builder
                                     builderInfo.TargetState = action.Value;
 
                                     // Temporary
-                                    builderInfo.InitialStates = GetActionWithStateList().Select(state => state.Value).ToList();
+                                    builderInfo.InitialStates = ActionsWithStateList.Select(state => state.Value).ToList();
 
                                     CharacterEvent.Event CharacterEvent = GetEvent(ruleSet2, ruleSet.Action);
                                     builderInfo.Event = CharacterEvent;
@@ -136,15 +140,15 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Builder
 
                 if (builderInfo.RuleSets[1].Comparison == "less than")
                 {
-                    secondRulesetCondition = (double)comparableObject < (double)thresholdObject;
+                    secondRulesetCondition = Convert.ToInt32(comparableObject) < Convert.ToInt32(thresholdObject);
                 }
                 else if (builderInfo.RuleSets[1].Comparison == "greater than")
                 {
-                    secondRulesetCondition = (double)comparableObject > (double)thresholdObject;
+                    secondRulesetCondition = Convert.ToInt32(comparableObject) > Convert.ToInt32(thresholdObject);
                 }
                 else if (builderInfo.RuleSets[1].Comparison == "is equal to")
                 {
-                    secondRulesetCondition = comparableObject == thresholdObject;
+                    secondRulesetCondition = Convert.ToInt32(comparableObject) == Convert.ToInt32(thresholdObject);
                 }
                 else if (builderInfo.RuleSets[1].Comparison == "contains")
                 {
@@ -187,7 +191,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Builder
             if (comparisonString == "health")
             {
                 var data = (ICharacterData)comparisonData;
-                return data.Health;
+                return data.WorldService.GetCharacter(data.CharacterId).Health;
             }
 
             if (comparisonString == "stamina")
@@ -233,8 +237,8 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Builder
         {
             return new List<KeyValuePair<string, CharacterState>>
             {
-                new("engage", new EngageState(_characterData, _stateMachine)),
-                new("collect", new CollectState(_characterData, _stateMachine)),
+                //new("engage", new EngageState(_characterData, _stateMachine)),
+                //new("collect", new CollectState(_characterData, _stateMachine)),
                 new("follow", new FollowCreatureState(_characterData, _stateMachine)),
                 new("flee", new FleeFromCreatureState(_characterData, _stateMachine)),
                 new("attack", new AttackState(_characterData, _stateMachine)),

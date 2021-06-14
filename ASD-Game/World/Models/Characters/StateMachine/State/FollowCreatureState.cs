@@ -28,6 +28,8 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                 {
                     if (_builderConfiguration.GetGuard(_characterData, _target, builderInfo))
                     {
+                        Console.WriteLine("Player health: " + _characterData.WorldService.GetCharacter(_characterData.CharacterId).Health);
+
                         DataGatheringService dataGatheringService = new(_characterData.WorldService);
                         Character character = _characterData.WorldService.GetCharacter(_characterData.CharacterId);
                         PathFinder pathFinder = new PathFinder(dataGatheringService.TranslateCharacterMap(character));

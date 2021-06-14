@@ -13,6 +13,8 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
         
         public override void Do()
         {
+            DoWorldCheck();
+
             var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
             var _builderConfiguration = _characterData.BuilderConfigurator;
 
@@ -24,6 +26,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                     {
                         //TODO implement Attack logic +gather targetData
 
+                        Console.WriteLine("Player health: " + _characterData.WorldService.GetCharacter(_characterData.CharacterId).Health);
 
                         _target.AttackHandler.SendAttack("");
                         _target.Health -= 5;
