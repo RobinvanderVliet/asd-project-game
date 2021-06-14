@@ -97,7 +97,9 @@ namespace ASD_Game.ActionHandling
                 {
                     statDto.Health = -1;
                 }
+
                 SendStat(statDto);
+                _worldService.CheckLastManStanding();
             }
         }
 

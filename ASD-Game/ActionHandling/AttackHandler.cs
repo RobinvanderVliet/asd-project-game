@@ -381,6 +381,7 @@ namespace ASD_Game.ActionHandling
 
             _worldService.DisplayStats();
             _worldService.DisplayWorld();
+            _worldService.CheckLastManStanding();
         }
 
         public void AIAttack(List<Character> creatureMoves)

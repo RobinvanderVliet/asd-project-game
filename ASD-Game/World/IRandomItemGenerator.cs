@@ -4,6 +4,6 @@ namespace ASD_Game.World
 {
     public interface IRandomItemGenerator
     {
-        Item GetRandomItem(float noise);
+        Item GetRandomItem(float noise, int chanceThereIsAItem);
     }
 }

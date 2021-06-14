@@ -1,29 +1,32 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items;
 using ASD_Game.Items.Services;
+using ASD_Game.Messages;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Interfaces;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
-using ASD_Game.World.Models.Interfaces;
 
 namespace ASD_Game.World.Services
 {
     public class WorldService : IWorldService
     {
-        private readonly IItemService _itemService;
+        public IItemService ItemService { get; }
         private readonly IScreenHandler _screenHandler;
+        private readonly IMessageService _messageService;
         private IWorld _world;
         public List<Character> CreatureMoves { get; set; }
         private const int VIEWDISTANCE = 6;
+        private bool gameEnded = false;
         
-        public WorldService(IScreenHandler screenHandler, IItemService itemService)
+        public WorldService(IScreenHandler screenHandler, IItemService itemService, IMessageService messageService)
         {
             _screenHandler = screenHandler;
-            _itemService = itemService;
+            ItemService = itemService;
+            _messageService = messageService;
         }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
@@ -58,7 +61,7 @@ namespace ASD_Game.World.Services
 
         public void GenerateWorld(int seed)
         {
-            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, _itemService);
+            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, ItemService);
         }
 
         public Player GetCurrentPlayer()
@@ -168,6 +171,8 @@ namespace ASD_Game.World.Services
             _screenHandler.SetStatValues(
                 player.Name,
                 0,
+                GetAllPlayers().Count(player => player.Health > 0),
+                GetAllPlayers().Count,
                 player.Health,
                 player.Stamina,
                 player.GetArmorPoints(),
@@ -193,6 +198,29 @@ namespace ASD_Game.World.Services
         public int GetViewDistance()
         {
             return VIEWDISTANCE;
+        }
+
+        public void CheckLastManStanding()
+        {
+            if (gameEnded || GetAllPlayers().Count == 1)
+            {
+                return;
+            }
+
+            int livingPlayers = 0;
+            Player livingPlayer = null;
+
+            foreach (var player in GetAllPlayers().Where(player => player.Health > 0))
+            {
+                livingPlayers++;
+                livingPlayer = player;
+            }
+
+            if (livingPlayers == 1)
+            {
+                _messageService.AddMessage(livingPlayer.Name + " is the last player in the game and won! Congratulations!");
+                gameEnded = true;
+            }
         }
     }
 }
