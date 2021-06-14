@@ -73,7 +73,7 @@ namespace ASD_Game.Session
 
                 _session.SessionId = sessionId;
                 _clientController.SetSessionId(sessionId);
-                _messageService.AddMessage("Trying to join game with name: " + _session.Name);
+                _messageService.AddMessage("Joined game with name: " + _session.Name);
 
                 SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
                 sessionDTO.Clients = new List<string[]>();
