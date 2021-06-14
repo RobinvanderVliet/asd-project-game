@@ -2,7 +2,7 @@ using LiteDB.Async;
 
 namespace ASD_Game.DatabaseHandler
 {
-    public interface IDBConnection
+    public interface IDbConnection
     {
         public ILiteDatabaseAsync GetConnectionAsync();
     }

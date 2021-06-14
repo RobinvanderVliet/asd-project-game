@@ -56,7 +56,7 @@ namespace ASD_Game
                     services.AddScoped<IWorldService, WorldService>();
                     services.AddScoped<IMessageService, MessageService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
-                    services.AddSingleton<IDBConnection, DBConnection>();
+                    services.AddSingleton<IDbConnection, DbConnection>();
                     services.AddScoped<IItemService, ItemService>();
                     services.AddScoped<ISpawnHandler, SpawnHandler>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
