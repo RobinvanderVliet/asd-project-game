@@ -22,9 +22,11 @@ namespace Creature
         private readonly IAgentCreator _agentCreator;
 
         private Dictionary<string, World.Models.Characters.Agent> _agents;
+        private bool _agentIsActive;
 
         public AgentHandler(IWorldService worldService, IClientController clientController,
-            IDatabaseService<AgentPOCO> databaseService, IConfigurationService configurationService, IAgentCreator agentCreator)
+            IDatabaseService<AgentPOCO> databaseService, IConfigurationService configurationService,
+            IAgentCreator agentCreator)
         {
             _worldService = worldService;
             _configurationService = configurationService;
@@ -38,54 +40,78 @@ namespace Creature
 
         public void Replace(string playerId)
         {
-            // TODO: when current player is being replaced then let the config from his pc be loaded
             if (_worldService.GetWorld() == null) return;
-
             var player = _worldService.GetPlayer(playerId);
-            _agents.TryGetValue(playerId, out var agent);
 
-            var allAgents = _databaseService.GetAllAsync();
-            allAgents.Wait();
-
-            // If player in database
-            if (allAgents.Result.All(x => x.PlayerGUID != player.Id)) return;
-
-            var agentPoco = allAgents.Result.First();
-
-            // If agent is not activated
-            if (!agentPoco.Activated || agent == null)
+            if (player.Id == playerId)
             {
-                var agentConfiguration = agentPoco.AgentConfiguration;
+                _agents.TryGetValue(playerId, out var agent);
 
-                // Get agent from database
-                agent = _agentCreator.CreateAgent(player, agentConfiguration);
-                _agents.Add(player.Id, agent);
-
-                // Activate agent
-                agent.AgentStateMachine.StartStateMachine();
-
-                // Update database
-                agentPoco.Activated = true;
-            }
-            else if (!agent.AgentStateMachine.WasStarted())
-            {
-                // Activate agent
-                agent.AgentStateMachine.StartStateMachine();
-
-                // Update database
-                agentPoco.Activated = true;
+                if (agent == null)
+                {
+                    agent = _agentCreator.CreateAgent(player, _configurationService.Configuration.Settings);
+                    agent.AgentStateMachine.StartStateMachine();
+                    _agents.Add(player.Id, agent);
+                    _agentIsActive = true;
+                }
+                else if (_agentIsActive)
+                {
+                    agent.AgentStateMachine.StopStateMachine();
+                    _agentIsActive = false;
+                }
+                else
+                {
+                    agent.AgentStateMachine.StartStateMachine();
+                    _agentIsActive = true;
+                }
             }
             else
             {
-                // Deactivate agent
-                agent.AgentStateMachine.StopStateMachine();
+                _agents.TryGetValue(playerId, out var agent);
 
-                // Update database
-                agentPoco.Activated = false;
+                var allAgents = _databaseService.GetAllAsync();
+                allAgents.Wait();
+
+                // If player in database
+                if (allAgents.Result.All(x => x.PlayerGUID != player.Id)) return;
+
+                var agentPoco = allAgents.Result.First();
+
+                // If agent is not activated
+                if (!agentPoco.Activated || agent == null)
+                {
+                    var agentConfiguration = agentPoco.AgentConfiguration;
+
+                    // Get agent from database
+                    agent = _agentCreator.CreateAgent(player, agentConfiguration);
+                    _agents.Add(player.Id, agent);
+
+                    // Activate agent
+                    agent.AgentStateMachine.StartStateMachine();
+
+                    // Update database
+                    agentPoco.Activated = true;
+                }
+                else if (!agent.AgentStateMachine.WasStarted())
+                {
+                    // Activate agent
+                    agent.AgentStateMachine.StartStateMachine();
+
+                    // Update database
+                    agentPoco.Activated = true;
+                }
+                else
+                {
+                    // Deactivate agent
+                    agent.AgentStateMachine.StopStateMachine();
+
+                    // Update database
+                    agentPoco.Activated = false;
+                }
+
+                var updateAsync = _databaseService.UpdateAsync(agentPoco);
+                updateAsync.Wait();
             }
-
-            var updateAsync = _databaseService.UpdateAsync(agentPoco);
-            updateAsync.Wait();
         }
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
