@@ -129,7 +129,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
                 {
                     smartMonster.MoveType = "Attack";
                     smartMonster.Destination = PPos;
-                    if (smartMonster.MonsterData.Damage >= _dataGatheringService.ClosestPlayer.Health)
+                    if (smartMonster.MonsterData.Damage >= _dataGatheringService.ClosestPlayer.Health || smartMonster.MonsterData.Damage >= _dataGatheringService.ClosestMonster.Health)
                     {
                         LevelUp(smartMonster);
                     }
@@ -179,9 +179,20 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
         {
             if (player != null)
             {
-                Vector2 playerPos = new Vector2(player.XPosition, player.YPosition);
-                Path = _pathfinder.FindPath(smartMonster.CreatureData.Position, playerPos);
-                smartMonster.CreatureData.Position = Path.Pop().Position;
+                if (smartMonster._dataGatheringService.DistanceToClosestPlayer > 1)
+                {
+                    ViewPointCalculator(smartMonster.CreatureData.Position);
+                    Vector2 playerPos = new Vector2(player.XPosition - _pathingOffset.X, player.YPosition - _pathingOffset.Y);
+                    Path = _pathfinder.FindPath(_startPos, playerPos);
+                    if (Path != null && Path.Count != 0)
+                    {
+                        smartMonster.CreatureData.Position = TransformPath(Path.Pop().Position);
+                    }
+                }
+                else
+                {
+                    Attack(player, smartMonster);
+                }
             }
         }
 

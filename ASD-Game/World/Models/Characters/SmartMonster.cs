@@ -74,7 +74,7 @@ namespace ASD_Game.World.Models.Characters
 
             if (_dataGatheringService.ClosestPlayer == null)
             {
-                Vision[4] = 0;
+                Vision[4] = 9999;
                 Vision[6] = 0;
                 Vision[7] = 0;
                 Vision[8] = 0;
@@ -90,7 +90,7 @@ namespace ASD_Game.World.Models.Characters
             }
             if (_dataGatheringService.ClosestMonster == null)
             {
-                Vision[5] = 0;
+                Vision[5] = 9999;
                 Vision[10] = 0;
                 Vision[11] = 0;
                 Vision[12] = 0;
