@@ -96,6 +96,8 @@ namespace ASD_Game.Session
             _screenHandler.TransitionTo(new GameScreen());
 
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
+            _worldService.ItemService.ChanceThereIsAItem = (int)_gameConfigurationHandler.GetItemSpawnRate();
+            
             CreateMonsters();
 
             Player currentPlayer = AddPlayersToWorld();
@@ -146,7 +148,7 @@ namespace ASD_Game.Session
                 GameGUID = _clientController.SessionId,
                 NPCDifficultyCurrent = (int)_gameConfigurationHandler.GetCurrentMonsterDifficulty(),
                 NPCDifficultyNew = (int)_gameConfigurationHandler.GetNewMonsterDifficulty(),
-                ItemSpawnRate = (int)_gameConfigurationHandler.GetSpawnRate()
+                ItemSpawnRate = (int)_gameConfigurationHandler.GetItemSpawnRate()
             };
             _gameConfigDatabaseService.CreateAsync(gameConfigurationPOCO);
         }

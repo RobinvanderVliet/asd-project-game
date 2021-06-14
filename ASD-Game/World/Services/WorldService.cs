@@ -1,20 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items;
 using ASD_Game.Items.Services;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Interfaces;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
-using ASD_Game.World.Models.Interfaces;
 
 namespace ASD_Game.World.Services
 {
     public class WorldService : IWorldService
     {
-        private readonly IItemService _itemService;
+        public IItemService ItemService { get; }
         private readonly IScreenHandler _screenHandler;
         private IWorld _world;
         public List<Character> CreatureMoves { get; set; }
@@ -23,7 +21,7 @@ namespace ASD_Game.World.Services
         public WorldService(IScreenHandler screenHandler, IItemService itemService)
         {
             _screenHandler = screenHandler;
-            _itemService = itemService;
+            ItemService = itemService;
         }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
@@ -58,7 +56,7 @@ namespace ASD_Game.World.Services
 
         public void GenerateWorld(int seed)
         {
-            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, _itemService);
+            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, ItemService);
         }
 
         public Player GetCurrentPlayer()

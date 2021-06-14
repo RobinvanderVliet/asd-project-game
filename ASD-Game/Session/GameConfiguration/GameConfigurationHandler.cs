@@ -32,7 +32,7 @@ namespace ASD_Game.Session.GameConfiguration
             _configurationChoices = new List<List<string>>();
             NewMonsterDifficulty = MonsterDifficulty.Medium;
             CurrentMonsterDifficulty = MonsterDifficulty.Medium;
-            SpawnRate = ItemSpawnRate.Low;
+            SpawnRate = ItemSpawnRate.Medium;
             _gameConfigDatabaseService = gameConfigDatabaseService;
         }
 
@@ -256,7 +256,7 @@ namespace ASD_Game.Session.GameConfiguration
             get { return _configurationChoices; }
         }
 
-        public ItemSpawnRate GetSpawnRate()
+        public ItemSpawnRate GetItemSpawnRate()
         {
             return SpawnRate;
         }
