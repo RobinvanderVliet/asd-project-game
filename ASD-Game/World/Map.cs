@@ -106,7 +106,7 @@ namespace ASD_Game.World
         private Chunk GenerateNewChunk(int chunkX, int chunkY)
         { 
             // Calls upon the noise map generator to generate a chunk based on a seed. This will ensure the chunk is the same for a given seed every time you generate it.
-            return _noiseMapGenerator.GenerateChunk(chunkX, chunkY, _chunkSize);
+            return _noiseMapGenerator.GenerateChunk(chunkX, chunkY);
         }
 
         private Chunk GetLoadedChunkForTileXAndY(int x, int y)

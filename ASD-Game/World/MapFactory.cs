@@ -22,7 +22,7 @@ namespace ASD_Game.World
                 seed = GenerateSeed();
             }
 
-            return new Map(new NoiseMapGenerator(seed, itemService, items), chunkSize);
+            return new Map(new NoiseMapGenerator(seed, itemService, items, chunkSize), chunkSize);
         }
 
         public int GenerateSeed()

@@ -6,46 +6,51 @@ using ASD_Game.World.Models;
 using ASD_Game.World.Models.HazardousTiles;
 using ASD_Game.World.Models.Interfaces;
 using ASD_Game.World.Models.TerrainTiles;
+using WorldGeneration;
+using WorldGeneration.Models.Enums;
+
 namespace ASD_Game.World
 {
     public class NoiseMapGenerator : INoiseMapGenerator
     {
         private IFastNoise _worldNoise;
         private IFastNoise _itemNoise;
+        private IFastNoise _roadNoise;
         private IItemService _itemService;
         private List<ItemSpawnDTO> _items;
+        private RoadPresetFactory _roadPresetFactory;
+        private int _chunkRowSize;
 
-        public NoiseMapGenerator(int seed, IItemService itemService, List<ItemSpawnDTO> items)
+        public NoiseMapGenerator(int seed, IItemService itemService, List<ItemSpawnDTO> items, int chunkRowSize)
         {
-            _worldNoise = new FastNoiseLite();
-            _worldNoise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
-            _worldNoise.SetFrequency(0.015f);
-            _worldNoise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
-            _worldNoise.SetSeed(seed);
-            _itemNoise = new FastNoiseLite();
-            _itemNoise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
-            _itemNoise.SetFrequency(10f);
-            _itemNoise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
-            _itemNoise.SetSeed(seed);
+            _worldNoise = SetupNoise(0.015f, seed);
+            _itemNoise = SetupNoise(10f,seed);
+            _roadNoise = SetupNoise(0.12f, seed);
             _itemService = itemService;
             _items = items;
+            _roadPresetFactory = new RoadPresetFactory(chunkRowSize);
+            _chunkRowSize = chunkRowSize;
         }
 
-        public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize)
+        public Chunk GenerateChunk(int chunkX, int chunkY)
         {
-            var map = new ITile[chunkRowSize * chunkRowSize];
-            for (var y = 0; y < chunkRowSize; y++)
+            var map = new ITile[_chunkRowSize * _chunkRowSize];
+            // check which edges of the chunk will have roads.
+           CompassDirections compassDirection = GetCompassDirections(chunkX, chunkY);
+           var roadmap = _roadPresetFactory.GetRoadPreset(compassDirection);
+            
+            for (var y = 0; y < _chunkRowSize; y++)
             {
-                for (var x = 0; x < chunkRowSize; x++)
+                for (var x = 0; x < _chunkRowSize; x++)
                 {
-                    map[y * chunkRowSize + x] = CreateTileWithItemFromNoise(
-                        _worldNoise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize)
-                        , _itemNoise.GetNoise(x + chunkX * chunkRowSize, y + chunkY * chunkRowSize)
-                        , x + chunkRowSize * chunkX
-                        , chunkRowSize * chunkY - chunkRowSize + y);
+                    map[y * _chunkRowSize + x] = CreateTileWithItemFromNoise(
+                        _worldNoise.GetNoise(x + chunkX * _chunkRowSize, y + chunkY * _chunkRowSize)
+                        , _itemNoise.GetNoise(x + chunkX * _chunkRowSize, y + chunkY * _chunkRowSize)
+                        , x + _chunkRowSize * chunkX
+                        , _chunkRowSize * chunkY - _chunkRowSize + y);
                 }
             }
-            return new Chunk(chunkX, chunkY, map, chunkRowSize);
+            return new Chunk(chunkX, chunkY, map, _chunkRowSize);
         }
         
         private ITile CreateTileWithItemFromNoise(float worldNoise, float itemNoise, int x, int y)
@@ -84,16 +89,61 @@ namespace ASD_Game.World
                 (< -4) => new DirtTile(x, y),
                 (< 2) => new GrassTile(x, y),
                 (< 3) => new SpikeTile(x, y),
-                (< 8) => new StreetTile(x, y),
+                (< 8) => new DirtTile(x, y), // This used to generate StreetTile, but those should no longer be randomly generated.
                 _ => new GasTile(x, y)
             };
         }
         
+        private CompassDirections GetCompassDirections (int chunkX, int chunkY)
+        {
+            // Step 1: generate four binaries based on the compass directions.
+            // These use the coordinate of the current chunk and the adjacent chunk, so when the calculation is repeated in the adjacent chunk it will result in the same result.
+            int north = GetBinaryForRoads(chunkY + chunkY + 1);
+            int south = GetBinaryForRoads(chunkY + chunkY - 1);
+            int east = GetBinaryForRoads(chunkX + chunkX + 1);
+            int west = GetBinaryForRoads(chunkX + chunkX - 1);
+            
+            // Step 2: based on the previous binaries, a switch case is used to return the correct compass direction.
+            switch (north, south, east, west)
+            {
+                case (0, 0, 0, 0):
+                    return CompassDirections.NoRoads;
+                case (1, 0, 0, 0):
+                    return CompassDirections.NorthOnly;
+                case (0, 1, 0, 0):
+                    return CompassDirections.SouthOnly;
+                case (0, 0, 1, 0):
+                    return CompassDirections.EastOnly;
+                case (0, 0, 0, 1):
+                    return CompassDirections.WestOnly;
+                default:
+                    // Default solution, also used for roads not yet implemented.
+                    return CompassDirections.NoRoads;
+            }
+        }
+
+        private int GetBinaryForRoads(int combinedcoordinates)
+        {
+            var noiseResult = _roadNoise.GetNoise(combinedcoordinates, combinedcoordinates) * 10;
+            return (int) (noiseResult % 2);
+        }
+        
         [ExcludeFromCodeCoverage]
-        public void SetNoise (IFastNoise noise)
+        public void SetNoiseForUnitTests (IFastNoise noise)
         {
             _itemNoise = noise;
             _worldNoise = noise;
+            _roadNoise = noise;
+        }
+
+        private IFastNoise SetupNoise(float frequency, int seed)
+        {
+            var noise = new FastNoiseLite();
+            noise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
+            noise.SetFrequency(frequency);
+            noise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
+            noise.SetSeed(seed);
+            return noise;
         }
     }
 }

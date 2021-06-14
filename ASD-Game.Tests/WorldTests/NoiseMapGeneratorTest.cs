@@ -41,10 +41,8 @@ namespace ASD_Game.Tests.WorldTests
             _mockedItemServiceobject = _mockedItemService.Object;
             _items = new List<ItemSpawnDTO>();
 
-            _sut = new NoiseMapGenerator(0, _mockedItemServiceobject, _items);
-            _sut.SetNoise(_mockedNoiseObject);
-            
-            
+            _sut = new NoiseMapGenerator(0, _mockedItemServiceobject, _items, 5);
+            _sut.SetNoiseForUnitTests(_mockedNoiseObject);
         }
 
         [Test]
@@ -119,7 +117,7 @@ namespace ASD_Game.Tests.WorldTests
             var result = _sut.GetTileFromNoise(_noise, _coordinateX, _coordinateY);
             
             //Assert ---------
-            Assert.IsInstanceOf<StreetTile>(result);
+            Assert.IsInstanceOf<DirtTile>(result);
         }
         
         
@@ -158,13 +156,16 @@ namespace ASD_Game.Tests.WorldTests
         {
             //Arrange ---------
             int chunkrowsize = 3;
+            _sut = new NoiseMapGenerator(0, _mockedItemServiceobject, _items, chunkrowsize);
+            _sut.SetNoiseForUnitTests(_mockedNoiseObject);
+
             _mockedNoise.Setup(noise => noise.GetNoise(_coordinateX, _coordinateY)).Returns(0).Verifiable();
             _mockedItemService
                 .Setup(mock => mock.GenerateItemFromNoise(It.IsAny<float>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(null as Item);
 
             //Act ---------
-            var result = _sut.GenerateChunk(_coordinateX, _coordinateY, chunkrowsize);
+            var result = _sut.GenerateChunk(_coordinateX, _coordinateY);
             
             //Assert ---------
             Assert.AreEqual(chunkrowsize * chunkrowsize,result.Map.Length);
@@ -175,13 +176,16 @@ namespace ASD_Game.Tests.WorldTests
         {
             //Arrange ---------
             int chunkrowsize = 3;
+            _sut = new NoiseMapGenerator(0, _mockedItemServiceobject, _items, chunkrowsize);
+            _sut.SetNoiseForUnitTests(_mockedNoiseObject);
+
             _mockedNoise.Setup(noise => noise.GetNoise(_coordinateX, _coordinateY)).Returns(0).Verifiable();
             _mockedItemService
                 .Setup(mock => mock.GenerateItemFromNoise(It.IsAny<float>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(null as Item);
             
             //Act ---------
-            var result = _sut.GenerateChunk(_coordinateX, _coordinateY, chunkrowsize);
+            var result = _sut.GenerateChunk(_coordinateX, _coordinateY);
             
             //Assert ---------
             Assert.AreEqual(_coordinateX, result.X);
@@ -192,13 +196,16 @@ namespace ASD_Game.Tests.WorldTests
         {
             //Arrange ---------
             int chunkrowsize = 3;
+            _sut = new NoiseMapGenerator(0, _mockedItemServiceobject, _items, chunkrowsize);
+            _sut.SetNoiseForUnitTests(_mockedNoiseObject);
+
             _mockedNoise.Setup(noise => noise.GetNoise(_coordinateX, _coordinateY)).Returns(0).Verifiable();
             _mockedItemService
                 .Setup(mock => mock.GenerateItemFromNoise(It.IsAny<float>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(null as Item);
             
             //Act ---------
-            var result = _sut.GenerateChunk(_coordinateX, _coordinateY, chunkrowsize);
+            var result = _sut.GenerateChunk(_coordinateX, _coordinateY);
             
             //Assert ---------
             Assert.AreEqual(_coordinateY, result.Y);
@@ -209,10 +216,13 @@ namespace ASD_Game.Tests.WorldTests
         {
             //Arrange ---------
             int chunkrowsize = 3;
+            _sut = new NoiseMapGenerator(0, _mockedItemServiceobject, _items, chunkrowsize);
+            _sut.SetNoiseForUnitTests(_mockedNoiseObject);
+
             _mockedNoise.Setup(noise => noise.GetNoise(_coordinateX, _coordinateY)).Returns(0).Verifiable();
             
             //Act ---------
-            var result = _sut.GenerateChunk(_coordinateX, _coordinateY, chunkrowsize);
+            var result = _sut.GenerateChunk(_coordinateX, _coordinateY);
             
             //Assert ---------
             Assert.AreEqual(chunkrowsize, result.RowSize);
@@ -223,10 +233,13 @@ namespace ASD_Game.Tests.WorldTests
         {
             //Arrange ---------
             int chunkrowsize = 1;
+            _sut = new NoiseMapGenerator(0, _mockedItemServiceobject, _items, chunkrowsize);
+            _sut.SetNoiseForUnitTests(_mockedNoiseObject);
+
             _mockedNoise.Setup(noise => noise.GetNoise(It.IsAny<float>(), It.IsAny<float>())).Returns(-0.81f).Verifiable();
 
             //Act ---------
-            _sut.GenerateChunk(_coordinateX, _coordinateY, chunkrowsize);
+            _sut.GenerateChunk(_coordinateX, _coordinateY);
             
             //Assert ---------
             _mockedItemService.VerifyNoOtherCalls();
@@ -237,6 +250,8 @@ namespace ASD_Game.Tests.WorldTests
         {
             //Arrange ---------
             int chunkrowsize = 1;
+            _sut = new NoiseMapGenerator(0, _mockedItemServiceobject, _items, chunkrowsize);
+
             Item item = new Item();
             _mockedNoise.Setup(noise => noise.GetNoise(It.IsAny<float>(), It.IsAny<float>())).Returns(0).Verifiable();
             _mockedItemService
@@ -244,7 +259,7 @@ namespace ASD_Game.Tests.WorldTests
                 .Returns(item);
 
             //Act ---------
-            var result = _sut.GenerateChunk(_coordinateX, _coordinateY, chunkrowsize);
+            var result = _sut.GenerateChunk(_coordinateX, _coordinateY);
             
             //Assert ---------
             Assert.True(result.Map[0].ItemsOnTile.Count == 1);
@@ -254,7 +269,10 @@ namespace ASD_Game.Tests.WorldTests
         public void GenerateItemFromNoiseItemAlreadyExists() 
         {
             //Arrange ---------
-            int chunkrowsize = 1;
+            var chunkrowsize = 1;
+            _sut = new NoiseMapGenerator(0, _mockedItemServiceobject, _items, chunkrowsize);
+            _sut.SetNoiseForUnitTests(_mockedNoiseObject);
+
             Item item = new Item();
             _mockedNoise.Setup(noise => noise.GetNoise(It.IsAny<float>(), It.IsAny<float>())).Returns(0).Verifiable();
             _mockedItemService
@@ -262,8 +280,8 @@ namespace ASD_Game.Tests.WorldTests
                 .Returns(item);
 
             //Act ---------
-            _sut.GenerateChunk(_coordinateX, _coordinateY, chunkrowsize);
-            var result = _sut.GenerateChunk(_coordinateX, _coordinateY, chunkrowsize);
+            _sut.GenerateChunk(_coordinateX, _coordinateY);
+            var result = _sut.GenerateChunk(_coordinateX, _coordinateY);
             
             //Assert ---------
             Assert.True(result.Map[0].ItemsOnTile.Count == 0);

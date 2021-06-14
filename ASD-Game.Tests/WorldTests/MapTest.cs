@@ -57,12 +57,12 @@ namespace ASD_Game.Tests.WorldTests
 
             //Initialisation of mocks
             _noiseMapGeneratorMock = new Mock<INoiseMapGenerator>();
-            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(0,0, 2)).Returns(chunk1).Verifiable();
-            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(-1,0, 2)).Returns(chunk2).Verifiable();
-            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(0,-1, 2)).Returns(chunk3).Verifiable();
-            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(-1,-1, 2)).Returns(chunk4).Verifiable();
-            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(It.IsAny<int>(),It.IsAny<int>(), 2))
-                .Returns((int x, int y, int size) => new Chunk(x, y, map5, _chunkSize)).Verifiable();
+            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(0,0)).Returns(chunk1).Verifiable();
+            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(-1,0)).Returns(chunk2).Verifiable();
+            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(0,-1)).Returns(chunk3).Verifiable();
+            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(-1,-1)).Returns(chunk4).Verifiable();
+            _noiseMapGeneratorMock.Setup(noiseMapGenerator => noiseMapGenerator.GenerateChunk(It.IsAny<int>(),It.IsAny<int>()))
+                .Returns((int x, int y) => new Chunk(x, y, map5, _chunkSize)).Verifiable();
             _noiseMapGeneratorMockObject = _noiseMapGeneratorMock.Object;
 
             _character1 = new Player("naam1", 0, 0, CharacterSymbol.CURRENT_PLAYER, "a");
@@ -122,7 +122,7 @@ namespace ASD_Game.Tests.WorldTests
             //Act ---------
             _sut.GetCharArrayMapAroundCharacter(_character1,viewDistance, _characterList);
             //Assert ---------
-            _noiseMapGeneratorMock.Verify(noiseMapGenerator => noiseMapGenerator.GenerateChunk(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()), Times.Between(0, maxLoadingLimit, Range.Inclusive));
+            _noiseMapGeneratorMock.Verify(noiseMapGenerator => noiseMapGenerator.GenerateChunk(It.IsAny<int>(), It.IsAny<int>()), Times.Between(0, maxLoadingLimit, Range.Inclusive));
         }
         
         [Test]
