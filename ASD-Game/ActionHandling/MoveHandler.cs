@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ASD_Game.ActionHandling.DTO;
@@ -337,6 +338,48 @@ namespace ASD_Game.ActionHandling
             AIUpdateTimer.Stop();
             GetAIMoves();
             AIUpdateTimer.Start();
+        }
+
+        public void SearchNearestPlayer()
+        {
+            var currentPlayer = _worldService.GetCurrentPlayer();
+
+            int minDistance = 0;
+            Player closestPlayer = null;
+
+            foreach (var player in _worldService.GetAllPlayers())
+            {
+                if (player.Id == currentPlayer.Id || player.Health == 0)
+                {
+                    continue;
+                }
+
+                int distance = Math.Abs(currentPlayer.XPosition - player.XPosition) + Math.Abs(currentPlayer.YPosition - player.YPosition);
+
+                if (minDistance == 0 || distance < minDistance)
+                {
+                    minDistance = distance;
+                    closestPlayer = player;
+                }
+            }
+
+            if (closestPlayer != null)
+            {
+                int x = currentPlayer.XPosition - closestPlayer.XPosition;
+                int y = currentPlayer.YPosition - closestPlayer.YPosition;
+
+                string xDirection = x < 0 ? "left" : "right";
+                string yDirection = y < 0 ? "up" : "down";
+
+                x = Math.Abs(x);
+                y = Math.Abs(y);
+                
+                _messageService.AddMessage($"The closest player is {x} tiles {xDirection} and {y} tiles {yDirection}.");
+            }
+            else
+            {
+                _messageService.AddMessage("That is strange, there are no living players left...");
+            }
         }
     }
 }

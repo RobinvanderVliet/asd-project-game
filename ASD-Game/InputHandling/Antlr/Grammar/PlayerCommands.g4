@@ -27,6 +27,8 @@ START_SESSION : 'start_session';
 SET_MONSTER_DIFFICULTY : 'monster_difficulty';
 SET_ITEM_FREQUENCY : 'item_spawn_rate';
 INSPECT : 'inspect';
+LOOK : 'look';
+EXPLORE : 'explore';
 USE : 'use';
 SEARCH : 'search';
 
@@ -83,6 +85,7 @@ command:
     SET_MONSTER_DIFFICULTY SPACE (EASY | MEDIUM | HARD | IMPOSSIBLE) #monsterdifficulty | 
     SET_ITEM_FREQUENCY SPACE (LOW | MEDIUM | HIGH) #itemfrequency |
     INSPECT SPACE inventorySlot #inspect |
+    (LOOK | EXPLORE) #look |
     USE SPACE step #use	|
     SEARCH #search;
 
