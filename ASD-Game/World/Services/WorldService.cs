@@ -4,6 +4,7 @@ using System.Text;
 using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items;
 using ASD_Game.Items.Services;
+using ASD_Game.Messages;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Interfaces;
@@ -16,14 +17,17 @@ namespace ASD_Game.World.Services
     {
         private readonly IItemService _itemService;
         private readonly IScreenHandler _screenHandler;
+        private readonly IMessageService _messageService;
         private IWorld _world;
         public List<Character> CreatureMoves { get; set; }
         private const int VIEWDISTANCE = 6;
+        private bool gameEnded = false;
         
-        public WorldService(IScreenHandler screenHandler, IItemService itemService)
+        public WorldService(IScreenHandler screenHandler, IItemService itemService, IMessageService messageService)
         {
             _screenHandler = screenHandler;
             _itemService = itemService;
+            _messageService = messageService;
         }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
@@ -193,6 +197,29 @@ namespace ASD_Game.World.Services
         public int GetViewDistance()
         {
             return VIEWDISTANCE;
+        }
+
+        public void CheckLastManStanding()
+        {
+            if (gameEnded || GetAllPlayers().Count == 1)
+            {
+                return;
+            }
+
+            int livingPlayers = 0;
+            Player livingPlayer = null;
+
+            foreach (var player in GetAllPlayers().Where(player => player.Health > 0))
+            {
+                livingPlayers++;
+                livingPlayer = player;
+            }
+
+            if (livingPlayers == 1)
+            {
+                _messageService.AddMessage(livingPlayer.Name + " is the last player in the game and won! Congratulations!");
+                gameEnded = true;
+            }
         }
     }
 }
