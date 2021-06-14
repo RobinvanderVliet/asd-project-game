@@ -39,6 +39,7 @@ namespace ASD_Game.InputHandling.Antlr.Transformer
             _clientController = clientController;
             _inventoryHandler = inventoryHandler;
         }
+
         public void Apply(AST ast)
         {
             TransformNode(ast.Root);
@@ -150,7 +151,8 @@ namespace ASD_Game.InputHandling.Antlr.Transformer
 
         private void TransformExit()
         {
-            // TODO: Implement exitHandler
+            Environment.Exit(0);
+            //_screenHandler.TransitionTo(new StartScreen());
         }
 
         private void TransformPause()
