@@ -177,7 +177,7 @@ namespace ASD_Game.Tests.WorldTests
         public void Test_AddCreatureToWorld_AddsCreature() 
         {
             //Arrange ---------
-            _sut.AddCreatureToWorld(_creature);
+            _sut.AddMonsterToWorld(_creature);
             //Act ---------
             _sut.UpdateCharacterPosition(_creature.Id, _creature.XPosition, _creature.YPosition);
             _sut.AddPlayerToWorld(_friendlyPlayer, true);
@@ -192,7 +192,7 @@ namespace ASD_Game.Tests.WorldTests
             var characters = new List<Character> {_friendlyPlayer, _enemyPlayer, _creature};
             _sut.AddPlayerToWorld(_friendlyPlayer);
             _sut.AddPlayerToWorld(_enemyPlayer);
-            _sut.AddCreatureToWorld(_creature);
+            _sut.AddMonsterToWorld(_creature);
             //Act ---------
             var results = _sut.GetMapAroundCharacter(_friendlyPlayer);
             //Assert ---------

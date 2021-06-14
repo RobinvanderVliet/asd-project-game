@@ -413,7 +413,7 @@ namespace ASD_Game.ActionHandling
 
         public void GetAIMoves()
         {
-            AIAttack(_worldService.GetCreatureMoves());
+            AIAttack(_worldService.GetCreatureMoves("Attack"));
         }
 
         [ExcludeFromCodeCoverage]

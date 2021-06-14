@@ -25,7 +25,8 @@ namespace ASD_Game.ActionHandling
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IMessageService _messageService;
         private Timer AIUpdateTimer;
-        private int _updateTime = 7000; // Smartmonster timer
+        private int _updateTime = 4000; // Smartmonster timer
+        
         private List<MoveDTO> _AIMoves = new List<MoveDTO>();
 
         public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
@@ -200,8 +201,11 @@ namespace ASD_Game.ActionHandling
             foreach (MoveDTO move in _AIMoves)
             {
                 var character = _worldService.GetAI(move.UserId);
-                character.XPosition = move.XPosition;
-                character.YPosition = move.YPosition;
+                if (character != null)
+                {
+                    character.XPosition = move.XPosition;
+                    character.YPosition = move.YPosition;
+                }
             }
             _worldService.DisplayWorld();
         }
@@ -319,7 +323,7 @@ namespace ASD_Game.ActionHandling
 
         public void GetAIMoves()
         {
-            MoveAIs(_worldService.GetCreatureMoves());
+            MoveAIs(_worldService.GetCreatureMoves("Move"));
             if (_AIMoves.Count > 0)
             {
                 ChangeAIPosition(_AIMoves);

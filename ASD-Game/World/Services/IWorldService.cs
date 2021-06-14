@@ -35,9 +35,10 @@ namespace ASD_Game.World.Services
 
         public IList<Item> GetItemsOnCurrentTile();
 
-        List<Character> GetCreatureMoves();
+        List<Character> GetCreatureMoves(string type);
 
         List<Monster> GetMonsters();
+
         public List<Character> GetAllCharacters();
 
         public Character GetCharacterInClosestRangeToCurrentCharacter(Character currentCharacter, int distance);
@@ -65,6 +66,8 @@ namespace ASD_Game.World.Services
         public IWorld GetWorld();
         
         public int GetViewDistance();
+
+        public void SetAILogic();
 
         public void CheckLastManStanding();
     }
