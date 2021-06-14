@@ -15,6 +15,7 @@ using ASD_Game.World.Services;
 using Newtonsoft.Json;
 using System;
 using System.Timers;
+using ASD_Game.Items.Services;
 using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine;
@@ -35,6 +36,7 @@ namespace ASD_Game.Session
         private readonly IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
         private readonly IWorldService _worldService;
         private readonly IMessageService _messageService;
+        private IItemService _itemService;
         private Timer AIUpdateTimer;
         private int _brainUpdateTime = 60000;
         private Random _random = new Random();
@@ -96,7 +98,8 @@ namespace ASD_Game.Session
             _screenHandler.TransitionTo(new GameScreen());
 
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
-            _worldService.ItemService.ChanceThereIsAItem = (int)_gameConfigurationHandler.GetItemSpawnRate();
+            _gameConfigurationHandler.ItemService = _worldService.ItemService;
+            _itemService.ChanceThereIsAItem = (int)_gameConfigurationHandler.GetItemSpawnRate();
             
             CreateMonsters();
 
