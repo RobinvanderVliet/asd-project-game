@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Threading.Tasks;
+using ASD_Game.DatabaseHandler.POCO;
 using LiteDB;
 using LiteDB.Async;
 
@@ -16,7 +18,7 @@ namespace ASD_Game.DatabaseHandler.Repository
         [ExcludeFromCodeCoverage]
         public Repository(string collection = null)
         {
-            IDBConnection connection = new DBConnection();
+            IDbConnection connection = new DbConnection();
             _db = connection.GetConnectionAsync();
             _collection = collection ?? typeof(T).Name;
         }
@@ -27,28 +29,16 @@ namespace ASD_Game.DatabaseHandler.Repository
             return result;
         }
 
-        public async Task<T> ReadAsync(T obj)
-        {
-            var chunk = await _db.GetCollection<T>(_collection)
-                .FindOneAsync(c => c.Equals(obj));
-            return chunk;
-        }
-
         public async Task<int> UpdateAsync(T obj)
         {
             var results = await _db.GetCollection<T>(_collection).UpdateAsync(obj);
-            
-            if (results)
-            {
-                return 1;
-            }
-            throw new InvalidOperationException($"Object op type {typeof(T)} does not exist in database.");
+                return results ? 1 : 0;
         }
 
         public async Task<int> DeleteAsync(T obj)
         {
             var results = await _db.GetCollection<T>(_collection)
-                .DeleteManyAsync(c => c.Equals(obj));
+                    .DeleteManyAsync(c => c.Equals(obj));
             return results;
         }
 

@@ -66,6 +66,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.Pathfinder
                             {
                                 adjNode.Parent = currentNode;
                                 adjNode.DistanceToTarget = Math.Abs(adjNode.Position.X - endNode.Position.X) + Math.Abs(adjNode.Position.Y - endNode.Position.Y);
+
                                 adjNode.Cost = adjNode.Weight + adjNode.Parent.Cost;
                                 openList.Add(adjNode);
                             }

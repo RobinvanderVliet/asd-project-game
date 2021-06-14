@@ -15,8 +15,10 @@ namespace ASD_Game.World
         private IMap _map;
         public Player CurrentPlayer { get; set; }
         public List<Player> Players { get; set; }
+        public List<Monster> DeadCreatures { get; set; } = new List<Monster>();
+        public List<Character> MovesList { get; set; } = new List<Character>();
+        public List<Character> AttackList { get; set; } = new List<Character>();
         public List<Monster> Monsters { get; set; }
-        public List<Character> MovesList { get; set; }
         public List<ItemSpawnDTO> Items { get; set; }
         private readonly int _viewDistance;
         private readonly IScreenHandler _screenHandler;
@@ -120,9 +122,13 @@ namespace ASD_Game.World
 
         public void UpdateAI()
         {
-            MovesList = new List<Character>();
+            deleteDeadMonsters();
             foreach (Character monster in Monsters)
             {
+                if (monster.Health <= 0)
+                {
+                    DeadCreatures.Add((Monster)monster);
+                }
                 if (monster is SmartMonster smartMonster)
                 {
                     if (smartMonster.Brain == null)
@@ -138,10 +144,30 @@ namespace ASD_Game.World
             }
         }
 
+        public void deleteDeadMonsters()
+        {
+            if (DeadCreatures != null)
+            {
+                foreach (Monster monster in DeadCreatures)
+                {
+                    string montid = monster.Id;
+                    Monster x = (Monster)GetAI(montid);
+                    Monsters.Remove(x);
+                }
+            }
+        }
+
         private void UpdateSmartMonster(SmartMonster smartMonster)
         {
             smartMonster.Update();
-            MovesList.Add(smartMonster);
+            if (smartMonster.MoveType == "Move")
+            {
+                MovesList.Add(smartMonster);
+            }
+            else
+            {
+                AttackList.Add(smartMonster);
+            }
         }
 
         public Character GetAI(string id)

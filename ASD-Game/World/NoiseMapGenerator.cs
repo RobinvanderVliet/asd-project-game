@@ -7,6 +7,7 @@ using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.HazardousTiles;
 using ASD_Game.World.Models.Interfaces;
 using ASD_Game.World.Models.TerrainTiles;
+
 namespace ASD_Game.World
 {
     public class NoiseMapGenerator : INoiseMapGenerator
@@ -54,18 +55,18 @@ namespace ASD_Game.World
             }
             return new Chunk(chunkX, chunkY, map, chunkRowSize);
         }
-        
+
         private ITile CreateTileWithItemFromNoise(float worldNoise, float itemNoise, int x, int y)
         {
             var tile = GetTileFromNoise(worldNoise, x, y);
-            
+
             if (!tile.IsAccessible)
             {
                 return tile;
             }
 
             SpawnMonsterOnTile(x, y, itemNoise);
-            
+
             var item = _itemService.GenerateItemFromNoise(itemNoise, x, y);
             var itemSpawnDTO = new ItemSpawnDTO { Item = item, XPosition = x, YPosition = y };
 
@@ -75,13 +76,13 @@ namespace ASD_Game.World
             }
             if (_items.Exists(itemInList => itemInList.Item.ItemId == item.ItemId))
             {
-                  return tile;
+                return tile;
             }
-            
+
             _items.Add(itemSpawnDTO);
             tile.ItemsOnTile.Add(item);
-            
-            return tile;                      
+
+            return tile;
         }
 
         public ITile GetTileFromNoise(float noise, int x, int y)
@@ -97,7 +98,7 @@ namespace ASD_Game.World
                 _ => new GasTile(x, y)
             };
         }
-        
+
         private void SpawnMonsterOnTile(int x, int y, float noise)
         {
             if (noise * 100 < -100 + _monsterSpawnChance)
@@ -105,13 +106,13 @@ namespace ASD_Game.World
                 var id = "monst" + x + "!" + y;
                 if (!_monsters.Exists(monster => monster.Id == id))
                 {
-                    _monsters.Add(_enemySpawner.spawnMonster(x, y, id, 5)); 
+                    _monsters.Add(_enemySpawner.spawnMonster(x, y, id, 5));
                 }
             }
         }
-        
+
         [ExcludeFromCodeCoverage]
-        public void SetNoise (IFastNoise noise)
+        public void SetNoise(IFastNoise noise)
         {
             _itemNoise = noise;
             _worldNoise = noise;

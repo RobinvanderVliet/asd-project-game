@@ -17,6 +17,8 @@ using System.Timers;
 using ASD_Game.Items.Services;
 using ASD_Game.World.Models.Characters.StateMachine;
 using WorldGeneration.StateMachine;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ASD_Game.Session
 {
@@ -98,7 +100,7 @@ namespace ASD_Game.Session
 
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
             _gameConfigurationHandler.ItemService = _worldService.ItemService;
-            _itemService.ChanceThereIsAItem = (int)_gameConfigurationHandler.GetItemSpawnRate();
+            _itemService.ChanceForItemOnTile = (int)_gameConfigurationHandler.GetItemSpawnRate();
 
             Player currentPlayer = AddPlayersToWorld();
 
@@ -107,10 +109,12 @@ namespace ASD_Game.Session
                 _worldService.LoadArea(currentPlayer.XPosition, currentPlayer.YPosition, 10);
             }
 
-            _worldService.SetAILogic();
             _relativeStatHandler.SetCurrentPlayer(_worldService.GetCurrentPlayer());
             _relativeStatHandler.CheckStaminaTimer();
             _relativeStatHandler.CheckRadiationTimer();
+
+            _worldService.SetAILogic();
+
             _worldService.DisplayWorld();
             _worldService.DisplayStats();
             _messageService.DisplayMessages();
@@ -167,6 +171,7 @@ namespace ASD_Game.Session
             AIUpdateTimer.Start();
         }
 
+        [ExcludeFromCodeCoverage]
         private void CheckAITimerEvent(object sender, ElapsedEventArgs e)
         {
             AIUpdateTimer.Stop();
@@ -174,6 +179,7 @@ namespace ASD_Game.Session
             AIUpdateTimer.Start();
         }
 
+        [ExcludeFromCodeCoverage]
         public void UpdateBrain()
         {
             if (_sessionHandler.TrainingScenario.BrainTransplant() != null)
@@ -182,10 +188,16 @@ namespace ASD_Game.Session
             }
         }
 
-        public void SetStateMachine(Monster monster)
+        [ExcludeFromCodeCoverage]
+        private void SetStateMachine(Monster monster)
         {
             ICharacterStateMachine CSM = new MonsterStateMachine(monster.MonsterData, null);
             monster.MonsterStateMachine = CSM;
+        }
+
+        void IGameSessionHandler.SetStateMachine(Monster monster)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

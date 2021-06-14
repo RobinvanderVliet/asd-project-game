@@ -10,17 +10,17 @@ namespace ASD_Game.World.Models.Characters
     public class SmartMonster : Monster
     {
         public MonsterData CreatureData;
-        private DataGatheringService _dataGatheringService;
-        public SmartCreatureActions Smartactions;
-        private IWorldService _worldService;
+        public DataGatheringService _dataGatheringService { get; set; }
+        public SmartCreatureActions Smartactions { get; set; }
 
         public Vector2 Destination { get; set; }
+        public string MoveType { get; set; }
 
         public Genome Brain;
         public bool Replay = false;
 
         public static readonly int GenomeInputs = 14;
-        public static readonly int GenomeOutputs = 7;
+        public static readonly int GenomeOutputs = 8;
 
         public float[] Vision = new float[GenomeInputs];
         public float[] Decision = new float[GenomeOutputs];
@@ -40,16 +40,10 @@ namespace ASD_Game.World.Models.Characters
 
         public SmartMonster(string name, int xPosition, int yPosition, string symbol, string id) : base(name, xPosition, yPosition, symbol, id)
         {
-            CreatureData = CreateMonsterData(0);
+            CreatureData = CreateMonsterData(1);
             _dataGatheringService = null;
             Smartactions = null;
             Destination = new Vector2(xPosition, yPosition);
-        }
-
-        public void SetLogic(IWorldService worldService)
-        {
-            _dataGatheringService = new DataGatheringService(worldService);
-            Smartactions = new SmartCreatureActions(this, _dataGatheringService);
         }
 
         public void Update()
@@ -77,11 +71,10 @@ namespace ASD_Game.World.Models.Characters
             Vision[2] = CreatureData.Damage;
             Vision[3] = (float)CreatureData.Health;
             _dataGatheringService.ScanMap(this, CreatureData.VisionRange);
-            Vision[4] = _dataGatheringService.DistanceToClosestPlayer;
-            Vision[5] = _dataGatheringService.DistanceToClosestMonster;
 
             if (_dataGatheringService.ClosestPlayer == null)
             {
+                Vision[4] = 0;
                 Vision[6] = 0;
                 Vision[7] = 0;
                 Vision[8] = 0;
@@ -89,6 +82,7 @@ namespace ASD_Game.World.Models.Characters
             }
             else
             {
+                Vision[4] = _dataGatheringService.DistanceToClosestPlayer;
                 Vision[6] = (float)_dataGatheringService.ClosestPlayer.Health;
                 Vision[7] = 10;//TODO _dataGatheringService.closestPlayer.Damage;
                 Vision[8] = _dataGatheringService.ClosestPlayer.XPosition;
@@ -96,6 +90,7 @@ namespace ASD_Game.World.Models.Characters
             }
             if (_dataGatheringService.ClosestMonster == null)
             {
+                Vision[5] = 0;
                 Vision[10] = 0;
                 Vision[11] = 0;
                 Vision[12] = 0;
@@ -103,6 +98,7 @@ namespace ASD_Game.World.Models.Characters
             }
             else
             {
+                Vision[5] = _dataGatheringService.DistanceToClosestMonster;
                 Vision[10] = (float)_dataGatheringService.ClosestMonster.Health;
                 Vision[11] = 10;//TODO _dataGatheringService.closestMonster.Damage;
                 Vision[12] = _dataGatheringService.ClosestMonster.XPosition;
@@ -126,7 +122,7 @@ namespace ASD_Game.World.Models.Characters
                 }
             }
 
-            if (max < 1.7)
+            if (max < 0.7)
             {
                 Smartactions.Wander(this);
                 return;
@@ -136,7 +132,6 @@ namespace ASD_Game.World.Models.Characters
             {
                 case 0:
                     Smartactions.Attack(_dataGatheringService.ClosestPlayer, this);
-                    Smartactions.Wander(this);
                     break;
 
                 case 1:
@@ -147,20 +142,24 @@ namespace ASD_Game.World.Models.Characters
                     Smartactions.RunToMonster(_dataGatheringService.ClosestMonster, this);
                     break;
 
+                //case 3:
+                //    Smartactions.WalkUp(this);
+                //    break;
+
+                //case 4:
+                //    Smartactions.WalkDown(this);
+                //    break;
+
+                //case 5:
+                //    Smartactions.WalkLeft(this);
+                //    break;
+
+                //case 6:
+                //    Smartactions.WalkRight(this);
+                //    break;
+
                 case 3:
-                    Smartactions.WalkUp(this);
-                    break;
-
-                case 4:
-                    Smartactions.WalkDown(this);
-                    break;
-
-                case 5:
-                    Smartactions.WalkLeft(this);
-                    break;
-
-                case 6:
-                    Smartactions.WalkRight(this);
+                    Smartactions.RunToPlayer(_dataGatheringService.ClosestPlayer, this);
                     break;
             }
         }

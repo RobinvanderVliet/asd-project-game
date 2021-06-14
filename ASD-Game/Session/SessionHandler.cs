@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Timers;
@@ -34,8 +35,13 @@ namespace ASD_Game.Session
         private Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;
         private int _hostInactiveCounter = 0;
-        private Timer _hostPingTimer;
-        private Timer _senderHeartbeatTimer;
+
+        private Thread _pingThread;
+        private bool _runPingThread;
+
+        private Thread _sendHeartbeatThread;
+        private bool _runSendHeartbeatThread;
+
         private IGameConfigurationHandler _gameConfigurationHandler;
 
         public SessionHandler(IClientController clientController, IScreenHandler screenHandler, IGameConfigurationHandler gameConfigurationHandler, IMessageService messageService)
@@ -66,14 +72,14 @@ namespace ASD_Game.Session
             }
             else
             {
-                SendHeartbeatTimer();
+                StartSendHeartbeatThread();
 
                 SessionDTO receivedSessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
                 _session = new Session(receivedSessionDTO.Name);
 
                 _session.SessionId = sessionId;
                 _clientController.SetSessionId(sessionId);
-                _messageService.AddMessage("Trying to join game with name: " + _session.Name);
+                _messageService.AddMessage("Joined game with name: " + _session.Name);
 
                 SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
                 sessionDTO.Clients = new List<string[]>();
@@ -86,18 +92,24 @@ namespace ASD_Game.Session
             return joinSession;
         }
 
-        private void SendHeartbeatTimer()
+        private void StartSendHeartbeatThread()
         {
-            _senderHeartbeatTimer = new Timer(INTERVALTIMEPINGTIMER);
-            _senderHeartbeatTimer.Enabled = true;
-            _senderHeartbeatTimer.AutoReset = true;
-            _senderHeartbeatTimer.Elapsed += SenderHeartbeatEvent;
-            _senderHeartbeatTimer.Start();
-        }
+            _runSendHeartbeatThread = true;
+            _sendHeartbeatThread = new Thread(() =>
+            {
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                while (_runSendHeartbeatThread)
+                {
+                    if (stopwatch.ElapsedMilliseconds >= INTERVALTIMEPINGTIMER)
+                    {
+                        SendHeartbeat();
+                        stopwatch.Restart();
+                    }
+                }
 
-        private void SenderHeartbeatEvent(object sender, ElapsedEventArgs e)
-        {
-            SendHeartbeat();
+            })
+            { Priority = ThreadPriority.Highest, IsBackground = true };
+            _sendHeartbeatThread.Start();
         }
 
         public bool CreateSession(string sessionName, string userName)
@@ -284,13 +296,12 @@ namespace ASD_Game.Session
             if (!_hostActive)
             {
                 _hostInactiveCounter++;
-
                 if (_hostInactiveCounter >= 5)
                 {
-                    _hostPingTimer.Dispose();
                     _hostActive = true;
                     _hostInactiveCounter = 0;
                     SwapToHost();
+                    StopPingThread();
                 }
             }
             else
@@ -411,7 +422,7 @@ namespace ASD_Game.Session
                     if (sessionDTOClients.Clients[1][0].Equals(_clientController.GetOriginId()))
                     {
                         _clientController.IsBackupHost = true;
-                        PingHostTimer();
+                        StartPingThread();
                     }
                 }
                 
@@ -422,6 +433,31 @@ namespace ASD_Game.Session
 
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
+        }
+
+        private void StartPingThread()
+        {
+            _runPingThread = true;
+            _pingThread = new Thread(() =>
+            {
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                while (_runPingThread)
+                {
+                    if (stopwatch.ElapsedMilliseconds >= INTERVALTIMEPINGTIMER)
+                    {
+                        HostPingEvent();
+                        stopwatch.Restart();
+                    }
+                }
+
+            })
+            { Priority = ThreadPriority.Highest, IsBackground = true };
+            _pingThread.Start();
+        }
+
+        private void StopPingThread()
+        {
+            _runPingThread = false;
         }
 
         public int GetSessionSeed()
@@ -441,16 +477,7 @@ namespace ASD_Game.Session
             _clientController.SendPayload(jsonObject, PacketType.Session);
         }
 
-        private void PingHostTimer()
-        {
-            _hostPingTimer = new Timer(INTERVALTIMEPINGTIMER);
-            _hostPingTimer.Enabled = true;
-            _hostPingTimer.AutoReset = true;
-            _hostPingTimer.Elapsed += HostPingEvent;
-            _hostPingTimer.Start();
-        }
-
-        public void HostPingEvent(Object source, ElapsedEventArgs e)
+        public void HostPingEvent()
         {
             SendPing();
             Thread.Sleep(WAITTIMEPINGTIMER);
@@ -462,7 +489,7 @@ namespace ASD_Game.Session
             _clientController.CreateHostController();
             _clientController.IsBackupHost = false;
 
-            _senderHeartbeatTimer.Close();
+            StopSendHeartbeatThread();
 
             _messageService.AddMessage("Look at me, I'm the captain (Host) now!");
 
@@ -481,9 +508,10 @@ namespace ASD_Game.Session
             _clientController.SendPayload(jsonObject, PacketType.Session);
         }
 
-        public Timer getHostPingTimer()
+        private void StopSendHeartbeatThread()
         {
-            return _hostPingTimer;
+            _runSendHeartbeatThread = false;
+            _sendHeartbeatThread.Join();
         }
 
         public bool getHostActive()
@@ -494,11 +522,6 @@ namespace ASD_Game.Session
         public void setHostActive(bool boolean)
         {
             _hostActive = boolean;
-        }
-
-        public void setHostPingTimer(Timer timer)
-        {
-            _hostPingTimer = timer;
         }
 
         public void SetSession(Session ses)

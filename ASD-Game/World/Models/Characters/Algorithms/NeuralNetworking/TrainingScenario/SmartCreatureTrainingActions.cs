@@ -85,13 +85,36 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
                 {
                     smartmonster.DamageDealt = smartmonster.DamageDealt + smartmonster.CreatureData.Damage;
                     smartmonster.EnemysKilled++;
+                    LevelUp(smartmonster);
                 }
                 else
                 {
                     player.Health = player.Health - smartmonster.CreatureData.Damage;
                     smartmonster.DamageDealt = smartmonster.DamageDealt + smartmonster.CreatureData.Damage;
                 }
+                if (player.Health <= 0)
+                {
+                    smartmonster.Score -= 100;
+                }
             }
+            else
+            {
+                smartmonster.Score -= 100;
+            }
+        }
+
+        private void LevelUp(SmartMonsterForTraining smartmonster)
+        {
+            int oldHP = (int)smartmonster.CreatureData.Health;
+            int oldDMG = smartmonster.CreatureData.Damage;
+            int newHP = (int)(oldHP * 1.5);
+            int newDMG = (int)(oldDMG * 1.5);
+
+            smartmonster.HealthHealed = newHP - oldHP;
+            smartmonster.StatsGained = newDMG - oldDMG;
+
+            smartmonster.CreatureData.Damage = newDMG;
+            smartmonster.CreatureData.Health = newHP;
         }
 
         public void Flee(TrainerAI player, SmartMonsterForTraining smartmonster)
@@ -107,6 +130,16 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
             if (monster != null)
             {
                 Path = _pathfinder.FindPath(smartMonster.CreatureData.Position, monster.Location);
+                CheckPath(smartMonster);
+                smartMonster.CreatureData.Position = Path.Pop().Position;
+            }
+        }
+
+        public void RunToPlayer(TrainerAI player, SmartMonsterForTraining smartMonster)
+        {
+            if (player != null)
+            {
+                Path = _pathfinder.FindPath(smartMonster.CreatureData.Position, player.Location);
                 CheckPath(smartMonster);
                 smartMonster.CreatureData.Position = Path.Pop().Position;
             }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using ASD_Game.Items;
 using ASD_Game.Items.Services;
+using ASD_Game.Messages;
 using ASD_Game.UserInterface;
 using ASD_Game.World;
 using ASD_Game.World.Models;
@@ -33,6 +34,8 @@ namespace ASD_Game.Tests.WorldTests
         private IScreenHandler _screenHandlerObject;
         private Mock<IItemService> _itemServiceMock;
         private IItemService _itemServiceObject;
+        private Mock<IMessageService> _messageServiceMock;
+        private IMessageService _messageServiceObject;
 
         [SetUp]
         public void Setup()
@@ -59,6 +62,8 @@ namespace ASD_Game.Tests.WorldTests
                     It.IsAny<int>(),
                     It.IsAny<int>(),
                     It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
                     It.IsAny<string>(),
                     It.IsAny<string>(),
                     It.IsAny<string>(),
@@ -68,7 +73,9 @@ namespace ASD_Game.Tests.WorldTests
             _screenHandlerObject = _screenHandlerMock.Object;
             _itemServiceMock = new Mock<IItemService>();
             _itemServiceObject = _itemServiceMock.Object;
-            _sut = new WorldService(_screenHandlerObject, _itemServiceObject);
+            _messageServiceMock = new Mock<IMessageService>();
+            _messageServiceObject = _messageServiceMock.Object;
+            _sut = new WorldService(_screenHandlerObject, _itemServiceObject, _messageServiceObject);
             _sut.SetWorld(_worldObject);
         }
 
@@ -306,6 +313,8 @@ namespace ASD_Game.Tests.WorldTests
             _screenHandlerMock.Verify(screenHandler => screenHandler.SetStatValues(
                 _player.Name,
                 0,
+                1,
+                1,
                 _player.Health,
                 _player.Stamina,
                 _player.GetArmorPoints(),
