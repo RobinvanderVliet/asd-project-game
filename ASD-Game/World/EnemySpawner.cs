@@ -11,17 +11,17 @@ namespace ASD_Game.World
     public class EnemySpawner : IEnemySpawner
     {
         public Monster spawnMonster(int x, int y, string id, int smartBrainedChance)
-        {/*
+        {
             if (new Random().Next() > smartBrainedChance)
             {
-                SmartMonster monster = new SmartMonster("Gerard Gerardsen", x, y, CharacterSymbol.TERMINATOR, id, null);
+                SmartMonster monster = new SmartMonster("Gerard Gerardsen", x, y, CharacterSymbol.TERMINATOR, id);
                 return monster;
             }
             else
-            {*/
+            {
                 Monster monster = new Monster("George Clooney", x, y, CharacterSymbol.ZOMBIE, id);
                 return monster;
-            //}
+            }
         }
     }
 }

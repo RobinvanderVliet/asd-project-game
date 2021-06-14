@@ -169,15 +169,15 @@ namespace ASD_Game.Session
             {
                 if (i < 0)
                 {
-                    Monster newMonster = new Monster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i);
-                    SetStateMachine(newMonster);
-                    _worldService.AddCreatureToWorld(newMonster);
+                    //Monster newMonster = new Monster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i);
+                    //SetStateMachine(newMonster);
+                    //_worldService.AddCreatureToWorld(newMonster);
                 }
                 else
                 {
-                    SmartMonster newMonster = new SmartMonster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i, new DataGatheringService(_worldService));
-                    SetBrain(newMonster);
-                    _worldService.AddCreatureToWorld(newMonster);
+                    //SmartMonster newMonster = new SmartMonster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i, new DataGatheringService(_worldService));
+                    //SetBrain(newMonster);
+                    //_worldService.AddCreatureToWorld(newMonster);
                 }
             }
         }
