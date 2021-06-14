@@ -43,6 +43,7 @@ namespace ASD_Game.Session
         private Timer AIUpdateTimer;
         private int _brainUpdateTime = 60000;
         private Random _random = new Random();
+        private int MAX_HEALTH = 100;
 
         public GameSessionHandler(IClientController clientController, IWorldService worldService,
             ISessionHandler sessionHandler, IDatabaseService<GamePOCO> gamePocoService,
@@ -141,7 +142,8 @@ namespace ASD_Game.Session
                     GameGUID = _clientController.SessionId,
                     GameGUIDAndPlayerGuid = _clientController.SessionId + player.Id,
                     XPosition = player.XPosition,
-                    YPosition = player.YPosition
+                    YPosition = player.YPosition,
+                    Health = MAX_HEALTH
                 };
                 _playerService.CreateAsync(playerPoco);
                 AddItemsToPlayer(player.Id, _clientController.SessionId);

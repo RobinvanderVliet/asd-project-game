@@ -198,11 +198,13 @@ namespace ASD_Game.Session
 
                         if (sessionDTO.SessionStarted && AllowedToJoin)
                         {
+                            
                             JoinExistingGame(packet);
                         }
-                        
-                        _screenHandler.TransitionTo(new LobbyScreen());
-                        AllowedToJoin = true;
+                        else
+                        {
+                            _screenHandler.TransitionTo(new LobbyScreen());
+                        }
                         
                         // if (AllowedToJoin)
                         // {
