@@ -60,5 +60,7 @@ namespace ASD_Game.World.Services
         public Character GetAI(string id);
 
         public int GetViewDistance();
+
+        public void CheckLastManStanding();
     }
 }
