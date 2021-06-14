@@ -115,34 +115,41 @@ namespace ASD_Game.InputHandling
         public void HandleSessionScreenCommands()
         {
             SessionScreen sessionScreen = _screenHandler.Screen as SessionScreen;
-            string input = GetCommand();
-
-            if (input == RETURN_KEYWORD)
+            var input = GetCommand();
+            // Needed to handle input on client when host has started session
+            if (_screenHandler.Screen is GameScreen)
             {
-                _screenHandler.TransitionTo(new StartScreen());
-                return;
-            }
-
-            string[] inputParts = input.Split(" ");
-
-            if (inputParts.Length != 2)
-            {
-                sessionScreen.UpdateInputMessage("Provide both a session number and username (example: 1 Gerrit)");
+                HandleGameScreenCommands(input);
             }
             else
             {
-                int sessionNumber = 0;
-                int.TryParse(input[0].ToString(), out sessionNumber);
-
-                string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
-
-                if (sessionId.IsNullOrEmpty())
+                if (input == RETURN_KEYWORD)
                 {
-                    sessionScreen.UpdateInputMessage("Not a valid session, try again!");
+                    _screenHandler.TransitionTo(new StartScreen());
+                    return;
+                }
+
+                string[] inputParts = input.Split(" ");
+
+                if (inputParts.Length != 2)
+                {
+                    sessionScreen.UpdateInputMessage("Provide both a session number and username (example: 1 Gerrit)");
                 }
                 else
                 {
-                    _sessionHandler.JoinSession(sessionId, inputParts[1].Replace("\"", ""));
+                    int sessionNumber = 0;
+                    int.TryParse(input[0].ToString(), out sessionNumber);
+
+                    string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
+
+                    if (sessionId.IsNullOrEmpty())
+                    {
+                        sessionScreen.UpdateInputMessage("Not a valid session, try again!");
+                    }
+                    else
+                    {
+                        _sessionHandler.JoinSession(sessionId, inputParts[1].Replace("\"", ""));
+                    }
                 }
             }
         }

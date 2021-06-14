@@ -122,6 +122,7 @@ namespace ASD_Game.Session
 
             if (startGameDTO is not null)
             {
+                _screenHandler.TransitionTo(new GameScreen());
                 HandleStartGameSession(startGameDTO);
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
@@ -185,7 +186,6 @@ namespace ASD_Game.Session
         {
             bool handleInDatabase = (_clientController.IsHost() || _clientController.IsBackupHost);
 
-            _screenHandler.TransitionTo(new GameScreen());
 
             Player currentPlayer = null;
 
