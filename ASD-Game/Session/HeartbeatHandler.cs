@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Timers;
 using ASD_Game.Session.DTO;
+using ASD_Game.Messages;
 
 namespace ASD_Game.Session
 {
@@ -12,15 +13,17 @@ namespace ASD_Game.Session
 
         private int TIMER = 1000;
         private Timer _heartbeatTimer;
+        private IMessageService _messageService;
 
-        public HeartbeatHandler()
+        public HeartbeatHandler(IMessageService messageService)
         {
             _players = new List<HeartbeatDTO>();
             _heartbeatTimer = new Timer(TIMER);
+            _messageService = messageService;
             CheckHeartbeatTimer();
         }
 
-        public HeartbeatHandler(List<string> players)
+        public HeartbeatHandler(List<string> players, IMessageService messageService)
         {
             _players = new List<HeartbeatDTO>();
             foreach (var player in players)
@@ -28,6 +31,7 @@ namespace ASD_Game.Session
                 _players.Add(new HeartbeatDTO(player));
             }
             _heartbeatTimer = new Timer(TIMER);
+            _messageService = messageService;
             CheckHeartbeatTimer();
         }
 
@@ -69,7 +73,7 @@ namespace ASD_Game.Session
 
         private void EnablePlayerAgent(List<HeartbeatDTO> leavers)
         {
-            Console.WriteLine("Agents are enabled");
+            _messageService.AddMessage("Agents are enabled");
             foreach (HeartbeatDTO player in leavers)
             {
                 _players.Remove(player);

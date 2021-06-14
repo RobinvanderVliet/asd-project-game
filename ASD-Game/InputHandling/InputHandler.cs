@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Timers;
 using ASD_Game.Agent.Services;
 using ASD_Game.InputHandling.Antlr;
+using ASD_Game.InputHandling.Models;
 using ASD_Game.Messages;
 using ASD_Game.Session;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
 using Session;
 using InputCommandHandler.Models;
-using InputHandling.Models;
 using WebSocketSharp;
 using Timer = System.Timers.Timer;
 
@@ -79,21 +78,21 @@ namespace ASD_Game.InputHandling
         {
             return _screenHandler.GetScreenInput();
         }
-        
+
         public void HandleStartScreenCommands()
         {
             var input = GetCommand();
             var option = 0;
             int.TryParse(input, out option);
-            
+
             switch (option)
             {
                 case 1:
                     _screenHandler.TransitionTo(new ConfigurationScreen());
                     break;
                 case 2:
-                    _screenHandler.TransitionTo(new SessionScreen());
                     _sessionHandler.RequestSessions();
+                    _screenHandler.TransitionTo(new SessionScreen());
                     break;
                 case 3:
                     _screenHandler.TransitionTo(new LoadScreen());
@@ -170,18 +169,10 @@ namespace ASD_Game.InputHandling
                     return;
                 }
 
-                if (input == START_COMMAND) 
-                {
-                    SendCommand(START_COMMAND);
-                }
-
-                if (input.Contains("SAY"))
+                if (input == START_COMMAND || input.Contains("say") || input.Contains("shout"))
                 {
                     SendCommand(input);
-                }
-                else if (input.Contains("SHOUT"))
-                {
-                    SendCommand(input);
+                    _screenHandler.RedrawGameInputBox();
                 }
             }
         }

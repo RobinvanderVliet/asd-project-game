@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using ASD_Game.Items;
 using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Interfaces;
-using World.Models.Characters.Algorithms.NeuralNetworking;
 
 namespace ASD_Game.World.Services
 {
     public interface IWorldService
     {
-        public List<Character> _creatureMoves { get; set; }
+        List<Character> CreatureMoves { get; set; }
+
+        public void SetWorld(IWorld world);
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition);
 
@@ -33,6 +35,7 @@ namespace ASD_Game.World.Services
         List<Character> GetCreatureMoves();
 
         List<Monster> GetMonsters();
+        public List<Character> GetAllCharacters();
 
         public void UpdateBrains(Genome genome);
 

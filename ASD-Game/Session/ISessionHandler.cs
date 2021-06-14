@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
 namespace ASD_Game.Session
 {

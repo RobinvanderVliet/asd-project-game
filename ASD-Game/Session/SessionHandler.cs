@@ -13,8 +13,8 @@ using ASD_Game.Session.DTO;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
 using ASD_Game.World;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 using Newtonsoft.Json;
-using World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 using Timer = System.Timers.Timer;
 
 namespace ASD_Game.Session
@@ -81,6 +81,7 @@ namespace ASD_Game.Session
                     JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
 
                 _session = new Session(receivedSessionDTO.Name);
+
                 _session.SessionId = sessionId;
                 _clientController.SetSessionId(sessionId);
                 _messageService.AddMessage("Trying to join game with name: " + _session.Name);
@@ -144,6 +145,7 @@ namespace ASD_Game.Session
                 TrainingScenario.StartTraining
             );
             traingThread.Start();
+            
 
             _session.SavedGame = savedGame;
 
@@ -154,6 +156,9 @@ namespace ASD_Game.Session
             {
                 screen.UpdateLobbyScreen(_session.GetAllClients());
             }
+
+            _heartbeatHandler = new HeartbeatHandler(_messageService);
+            _messageService.AddMessage("Created session with the name: " + _session.Name);
 
             return _session.InSession;
         }
@@ -259,14 +264,12 @@ namespace ASD_Game.Session
                 {
                     return HandleRequestSessions();
                 }
-
                 if (packet.Header.Target == _clientController.GetOriginId()
                     && sessionDTO.SessionType == SessionType.RequestSessions)
                 {
                     return AddRequestedSessions(packet);
                 }
             }
-
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
@@ -286,7 +289,6 @@ namespace ASD_Game.Session
                 _gameConfigurationHandler.SetDifficulty((MonsterDifficulty) difficulty, _clientController.SessionId);
                 return new HandlerResponseDTO(SendAction.SendToClients, packetDto.Payload);
             }
-
             if (_clientController.IsBackupHost)
             {
                 SessionDTO sessionDTO =
@@ -294,7 +296,6 @@ namespace ASD_Game.Session
                 int difficulty = int.Parse(sessionDTO.Name);
                 _gameConfigurationHandler.SetDifficulty((MonsterDifficulty) difficulty, _clientController.SessionId);
             }
-
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
@@ -317,7 +318,6 @@ namespace ASD_Game.Session
                 _messageService.AddMessage(spawnrate + "");
                 _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
             }
-
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
@@ -344,7 +344,6 @@ namespace ASD_Game.Session
                     Console.WriteLine("I'm Mr. BackupHost! Look at me!");
                     return new HandlerResponseDTO(SendAction.Ignore, null);
                 }
-
                 return new HandlerResponseDTO(SendAction.Ignore, null);
             }
         }
@@ -616,7 +615,7 @@ namespace ASD_Game.Session
             List<string> heartbeatSenders = new List<string>(clients);
             heartbeatSenders.Remove(_clientController.GetOriginId());
 
-            _heartbeatHandler = new HeartbeatHandler(heartbeatSenders);
+            _heartbeatHandler = new HeartbeatHandler(heartbeatSenders, _messageService);
 
             SessionDTO sessionDTO = new SessionDTO
             {

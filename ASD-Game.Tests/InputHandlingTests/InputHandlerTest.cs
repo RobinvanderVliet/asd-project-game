@@ -3,15 +3,13 @@ using System.Diagnostics.CodeAnalysis;
 using ASD_Game.InputHandling;
 using ASD_Game.InputHandling.Antlr;
 using ASD_Game.InputHandling.Antlr.Transformer;
+using ASD_Game.InputHandling.Models;
 using ASD_Game.Messages;
 using ASD_Game.Session;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
-using InputHandling.Models;
 using Moq;
 using NUnit.Framework;
-using Session;
-using UserInterface;
 
 namespace ASD_Game.Tests.InputHandlingTests
 {
@@ -26,8 +24,7 @@ namespace ASD_Game.Tests.InputHandlingTests
         private Mock<StartScreen> _mockedStartScreen;
         private Mock<SessionScreen> _mockedSessionScreen;
         private Mock<IGameConfigurationHandler> _mockedGameConfigurationHandler;
-        private Mock<IMessageService> _mockedMessageService;
-        private Mock<IGamesSessionService> _mockedGamesSessionService;
+        public Mock<MessageService> mockedMessagesService;
         private Mock<ConsoleHelper> _mockedConsole;
 
         [SetUp]
@@ -42,15 +39,10 @@ namespace ASD_Game.Tests.InputHandlingTests
             _mockedStartScreen = new Mock<StartScreen>();
             _mockedSessionScreen = new Mock<SessionScreen>();
             _mockedGameConfigurationHandler = new Mock<IGameConfigurationHandler>();
-            _mockedScreenHandler.Object.ConsoleHelper = new Mock<ConsoleHelper>().Object;
-            _mockedMessageService = new Mock<IMessageService>();
-            _mockedGamesSessionService = new Mock<IGamesSessionService>();
-
-            
-            _mockedConsole = new Mock<ConsoleHelper>();
+            _mockedConsole = new();
             _mockedScreenHandler.Object.ConsoleHelper = _mockedConsole.Object;
-            _mockedMessageService = new Mock<IMessageService>();
-            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedMessageService.Object, _mockedGameConfigurationHandler.Object, _mockedGamesSessionService.Object, _mockedScreenHandler.Object);
+            mockedMessagesService = new(_mockedScreenHandler.Object);
+            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedScreenHandler.Object, mockedMessagesService.Object, _mockedGameConfigurationHandler.Object);
         }
 
         [Test]
@@ -75,7 +67,8 @@ namespace ASD_Game.Tests.InputHandlingTests
         public void Test_HandleStartScreenCommands_HandlesInput(string input)
         {
             //Arrange
-            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedMessageService.Object, _mockedGameConfigurationHandler.Object, _mockedGamesSessionService.Object, _mockedInterfaceScreenHandler.Object);
+            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedInterfaceScreenHandler.Object, mockedMessagesService.Object, _mockedGameConfigurationHandler.Object);
+
             _mockedInterfaceScreenHandler.Setup(mock => mock.GetScreenInput()).Returns(input);
             _mockedInterfaceScreenHandler.Setup(mock => mock.Screen).Returns(_mockedStartScreen.Object);
             _mockedStartScreen.Setup(mock => mock.UpdateInputMessage(It.IsAny<string>()));
@@ -117,9 +110,11 @@ namespace ASD_Game.Tests.InputHandlingTests
         public void Test_HandleSessionScreenCommands_HandlesInput(string input)
         {
             //Arrange
+            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedInterfaceScreenHandler.Object, mockedMessagesService.Object, _mockedGameConfigurationHandler.Object);
+            
             var testId = "testId";
             var username = "Gerrit";
-            _sut = new InputHandler(_mockedPipeline.Object, _mockedSessionHandler.Object, _mockedMessageService.Object, _mockedGameConfigurationHandler.Object, _mockedGamesSessionService.Object, _mockedInterfaceScreenHandler.Object);
+            
             _mockedInterfaceScreenHandler.Setup(mock => mock.GetScreenInput()).Returns(input);
             _mockedInterfaceScreenHandler.Setup(mock => mock.Screen).Returns(_mockedSessionScreen.Object);
             _mockedSessionScreen.Setup(mock => mock.GetSessionIdByVisualNumber(0)).Returns(testId);
@@ -147,44 +142,6 @@ namespace ASD_Game.Tests.InputHandlingTests
                 else
                 {
                     _mockedSessionScreen.Verify(mock => mock.UpdateInputMessage("Not a valid session, try again!"));
-                }
-            }
-        }
-        
-        [TestCase("1")]
-        [TestCase("")]
-        [TestCase("error")]
-        [TestCase("return")]
-        public void Test_HandleLoadScreenCommands_HandlesInput(string input)
-        {
-            //Arrange
-            var testId = "testId";
-            _mockedScreenHandler.Setup(mock => mock.GetScreenInput()).Returns(input);
-            _mockedScreenHandler.Setup(mock => mock.GetSessionByPosition(0)).Returns(testId);
-            _mockedScreenHandler.Setup(mock => mock.GetSessionByPosition(-1)).Returns("");
-            _mockedSessionScreen.Setup(mock => mock.UpdateInputMessage(It.IsAny<string>()));
-            
-            //Act
-            _sut.HandleLoadScreenCommands();
-            
-            //Assert
-            if (input.Equals("return"))
-            {
-                _mockedScreenHandler.Verify(mock => mock.TransitionTo(It.IsAny<StartScreen>()), Times.Once);
-            }
-            else
-            {
-                if (input.Equals("1"))
-                {
-                    _mockedGamesSessionService.Verify(mock => mock.LoadGame(testId));
-                }
-                else if (input.Equals(""))
-                {
-                    _mockedScreenHandler.Verify(mock=> mock.UpdateInputMessage("Session number cannot be left blank, please try again!"));
-                }
-                else
-                {
-                    _mockedScreenHandler.Verify(mock=> mock.UpdateInputMessage("Not a valid session number, please try again!"));
                 }
             }
         }

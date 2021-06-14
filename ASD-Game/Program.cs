@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using ActionHandling;
 using ASD_Game.ActionHandling;
@@ -15,6 +16,7 @@ using ASD_Game.Network;
 using ASD_Game.Session;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
+using ASD_Game.World;
 using ASD_Game.World.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +26,7 @@ using Session;
 
 namespace ASD_Game
 {
+    [ExcludeFromCodeCoverage]
     partial class Program
     {
         static void Main(string[] args)
@@ -39,7 +42,6 @@ namespace ASD_Game
             
             Log.Logger.Information("Application starting");
             
-            //Example of dependency injection with GreetingService
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
@@ -64,6 +66,7 @@ namespace ASD_Game
                     services.AddScoped<IScreenHandler, ScreenHandler>();
                     services.AddScoped<IInputHandler, InputHandler>();
                     services.AddScoped<IPipeline, Pipeline>();
+                    services.AddScoped<IRandomItemGenerator, RandomItemGenerator>();
                     services.AddScoped<IEvaluator, Evaluator>();
                     services.AddScoped<IGameConfigurationHandler, GameConfigurationHandler>();
                 })

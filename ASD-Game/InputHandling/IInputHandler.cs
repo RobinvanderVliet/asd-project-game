@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using InputHandling.Models;
+using ASD_Game.InputHandling.Models;
 
 namespace ASD_Game.InputHandling
 {

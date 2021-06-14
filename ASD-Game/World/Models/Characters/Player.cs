@@ -41,8 +41,8 @@ namespace ASD_Game.World.Models.Characters
                 AddStamina((consumable as StaminaConsumable).getStamina());
             }
         }
-
-        public void AddStamina(int amount)
+        
+        public virtual void AddStamina(int amount)
         {
             Stamina += amount;
 
@@ -58,7 +58,7 @@ namespace ASD_Game.World.Models.Characters
             }
         }
 
-        public void AddRadiationLevel(int amount)
+        public virtual void AddRadiationLevel(int amount)
         {
             RadiationLevel += amount;
 
@@ -74,7 +74,7 @@ namespace ASD_Game.World.Models.Characters
             }
         }
 
-        public void AddHealth(int amount)
+        public virtual void AddHealth(int amount)
         {
             Health += amount;
 
@@ -103,7 +103,5 @@ namespace ASD_Game.World.Models.Characters
             }
             return armorpoints;
         }
-
-
     }
 }

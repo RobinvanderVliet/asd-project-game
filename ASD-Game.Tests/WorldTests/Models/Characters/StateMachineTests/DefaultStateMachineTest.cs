@@ -53,38 +53,39 @@ namespace ASD_Game.Tests.WorldTests.Models.Characters.StateMachineTests
             _monsterStateMachine.FireEvent(CharacterEvent.Event.LOST_PLAYER);
         }
 
-        // [Test]
-        // public void Test_FireEvent_NotSuccessfulStateChange()
-        // {
-        //     _correctlyTransitioned = true;
-        //     _monsterStateMachine = new MonsterStateMachine(_monster.MonsterData, null);
-        //     _monsterStateMachine.StartStateMachine();
-        //
-        //     //Arrange
-        //     _monsterStateMachine._passiveStateMachine.TransitionCompleted += (sender, args) =>
-        //     {
-        //         _correctlyTransitioned = true;
-        //     };
-        //
-        //     _monsterStateMachine._passiveStateMachine.TransitionDeclined += (sender, args) =>
-        //     {
-        //         _correctlyTransitioned = false;
-        //     };
-        //
-        //     _monsterStateMachine._passiveStateMachine.TransitionExceptionThrown += (sender, args) =>
-        //     {
-        //         _correctlyTransitioned = false;
-        //     };
-        //
-        //     //Act
-        //     _monsterStateMachine.FireEvent(CharacterEvent.Event.PLAYER_IN_RANGE);
-        //     // FireEvent works with a queue which gets cleared on a interval. There was a possibility that the event 
-        //     // was not yet completed before doing the assertion and thus making the test fail.            
-        //     Thread.Sleep(1000);
-        //
-        //     //Assert
-        //     Assert.IsFalse(_correctlyTransitioned);
-        // }
+        [Test]
+        [Ignore("Hard to test because Appcelerate, this test does not give a consistent result")]
+        public void Test_FireEvent_NotSuccessfulStateChange()
+        {
+            _correctlyTransitioned = true;
+            _monsterStateMachine = new MonsterStateMachine(_monster.MonsterData, null);
+            _monsterStateMachine.StartStateMachine();
+
+            //Arrange
+            _monsterStateMachine._passiveStateMachine.TransitionCompleted += (sender, args) =>
+            {
+                _correctlyTransitioned = true;
+            };
+
+            _monsterStateMachine._passiveStateMachine.TransitionDeclined += (sender, args) =>
+            {
+                _correctlyTransitioned = false;
+            };
+
+            _monsterStateMachine._passiveStateMachine.TransitionExceptionThrown += (sender, args) =>
+            {
+                _correctlyTransitioned = false;
+            };
+
+            //Act
+            _monsterStateMachine.FireEvent(CharacterEvent.Event.PLAYER_IN_RANGE);
+            // FireEvent works with a queue which gets cleared on a interval. There was a possibility that the event 
+            // was not yet completed before doing the assertion and thus making the test fail.            
+            Thread.Sleep(1000);
+
+            //Assert
+            Assert.IsFalse(_correctlyTransitioned);
+        }
 
         [Test]
         public void Test_FireEvent_SuccessfulStateChangeWithArgument()
@@ -116,36 +117,37 @@ namespace ASD_Game.Tests.WorldTests.Models.Characters.StateMachineTests
             _monsterStateMachine.FireEvent(CharacterEvent.Event.LOST_PLAYER);
         }
 
-        // [Test]
-        // public void Test_FireEvent_NotSuccessfulStateChangeWithArgument()
-        // {
-        //     _correctlyTransitioned = true;
-        //     _monsterStateMachine = new MonsterStateMachine(_monster.MonsterData, null);
-        //     _monsterStateMachine.StartStateMachine();
-        //     //Arrange
-        //     _monsterStateMachine._passiveStateMachine.TransitionCompleted += (sender, args) =>
-        //     {
-        //         _correctlyTransitioned = true;
-        //     };
-        //
-        //     _monsterStateMachine._passiveStateMachine.TransitionDeclined += (sender, args) =>
-        //     {
-        //         _correctlyTransitioned = false;
-        //     };
-        //     _monsterStateMachine._passiveStateMachine.TransitionExceptionThrown += (sender, args) =>
-        //     {
-        //         _correctlyTransitioned = false;
-        //     };
-        //
-        //     //Act
-        //     _monsterStateMachine.FireEvent(CharacterEvent.Event.PLAYER_IN_RANGE, _monster.MonsterData);
-        //     // FireEvent works with a queue which gets cleared on a interval. There was a possibility that the event 
-        //     // was not yet completed before doing the assertion and thus making the test fail.
-        //     Thread.Sleep(1000);
-        //
-        //     //Assert
-        //     Assert.IsFalse(_correctlyTransitioned);
-        // }
+        [Test]
+        [Ignore("Hard to test because Appcelerate, this test does not give a consistent result")]
+        public void Test_FireEvent_NotSuccessfulStateChangeWithArgument()
+        {
+            _correctlyTransitioned = true;
+            _monsterStateMachine = new MonsterStateMachine(_monster.MonsterData, null);
+            _monsterStateMachine.StartStateMachine();
+            //Arrange
+            _monsterStateMachine._passiveStateMachine.TransitionCompleted += (sender, args) =>
+            {
+                _correctlyTransitioned = true;
+            };
+
+            _monsterStateMachine._passiveStateMachine.TransitionDeclined += (sender, args) =>
+            {
+                _correctlyTransitioned = false;
+            };
+            _monsterStateMachine._passiveStateMachine.TransitionExceptionThrown += (sender, args) =>
+            {
+                _correctlyTransitioned = false;
+            };
+
+            //Act
+            _monsterStateMachine.FireEvent(CharacterEvent.Event.PLAYER_IN_RANGE, _monster.MonsterData);
+            // FireEvent works with a queue which gets cleared on a interval. There was a possibility that the event 
+            // was not yet completed before doing the assertion and thus making the test fail.
+            Thread.Sleep(1000);
+
+            //Assert
+            Assert.IsFalse(_correctlyTransitioned);
+        }
 
         [Test]
         public void Test_StartStateMachine_StateMachineIsActive()

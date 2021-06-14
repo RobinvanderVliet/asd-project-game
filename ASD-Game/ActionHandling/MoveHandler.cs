@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ASD_Game.ActionHandling.DTO;
 using ASD_Game.DatabaseHandler.POCO;
-using ASD_Game.DatabaseHandler.Services;
-using ASD_Game.Messages;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
@@ -12,6 +10,8 @@ using ASD_Game.World.Models.Interfaces;
 using ASD_Game.World.Services;
 using Newtonsoft.Json;
 using System.Timers;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Messages;
 
 namespace ASD_Game.ActionHandling
 {
@@ -22,7 +22,7 @@ namespace ASD_Game.ActionHandling
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IMessageService _messageService;
         private Timer AIUpdateTimer;
-        private int _updateTime = 2000;
+        private int _updateTime = 7000; // Smartmonster timer
 
         public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
         {
@@ -97,7 +97,7 @@ namespace ASD_Game.ActionHandling
             return new(SendAction.Ignore, null);
         }
 
-        public HandlerResponseDTO HandleMove(MoveDTO moveDTO, bool handleInDatabase)
+        private HandlerResponseDTO HandleMove(MoveDTO moveDTO, bool handleInDatabase)
         {
             if (_worldService.GetPlayer(moveDTO.UserId) != null)
             {

@@ -56,6 +56,11 @@ namespace ASD_Game.UserInterface
             {
                 var gameScreen = Screen as GameScreen;
                 ActionsInQueue.Add(() => gameScreen.ShowMessages(messages));
+                _actionsInQueue.Add(() => gameScreen.ShowMessages(messages));
+            } else if (_screen is LobbyScreen)
+            {
+                var lobbyScreen = Screen as LobbyScreen;
+                _actionsInQueue.Add(() => lobbyScreen.ShowMessages(messages));
             }
         }
 
@@ -71,6 +76,12 @@ namespace ASD_Game.UserInterface
                 var gameScreen = Screen as GameScreen;
                 ActionsInQueue.Add(gameScreen.RedrawInputBox);
                 _displayThread = new Thread(gameScreen.RedrawInputBox);
+                _actionsInQueue.Add(gameScreen.RedrawInputBox);
+            } 
+            else if (_screen is LobbyScreen)
+            {
+                var lobbyScreen = Screen as LobbyScreen;
+                _actionsInQueue.Add(lobbyScreen.RedrawInputBox);
             }
         }
 

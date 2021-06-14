@@ -2,7 +2,6 @@
 using System.Numerics;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
-using World.Models.Characters.Algorithms.NeuralNetworking;
 
 namespace ASD_Game.World.Models.Characters
 {
@@ -37,17 +36,20 @@ namespace ASD_Game.World.Models.Characters
         public float CurrDistanceToPlayer;
         public float CurrDistanceToMonster;
 
-        public SmartMonster(string name, int xPosition, int yPosition, string symbol, string id, DataGatheringService datagatheringservice) : base(name, xPosition, yPosition, symbol, id)
+        public SmartMonster(string name, int xPosition, int yPosition, string symbol, string id, DataGatheringService dataGatheringService) : base(name, xPosition, yPosition, symbol, id)
         {
             CreatureData = CreateMonsterData(0);
-            _dataGatheringService = datagatheringservice;
-            Smartactions = new SmartCreatureActions(this, datagatheringservice);
+            _dataGatheringService = dataGatheringService;
+            Smartactions = new SmartCreatureActions(this, dataGatheringService);
         }
 
         public void Update()
         {
             _dataGatheringService.CheckNewPosition(this);
-            Destination = new Vector2(this.XPosition, this.YPosition);
+            if (Health <= 0)
+            {
+                Dead = true;
+            }
             if (!Dead)
             {
                 LifeSpan++;
