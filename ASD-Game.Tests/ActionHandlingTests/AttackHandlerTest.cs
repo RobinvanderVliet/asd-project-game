@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
@@ -14,7 +14,6 @@ using ASD_Game.Network.Enum;
 using ASD_Game.Session;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Services;
-using DatabaseHandler.POCO;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;

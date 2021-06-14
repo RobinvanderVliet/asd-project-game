@@ -25,7 +25,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
         public int Gen = 0;
 
         public static readonly int GenomeInputs = 14;
-        public static readonly int GenomeOutputs = 7;
+        public static readonly int GenomeOutputs = 8;
 
         public float[] Vision = new float[GenomeInputs];
         public float[] Decision = new float[GenomeOutputs];
@@ -87,6 +87,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
             Vision[1] = CreatureData.Position.Y;
             Vision[2] = CreatureData.Damage;
             Vision[3] = (float)CreatureData.Health;
+
             _dataGatheringService.ScanMap(this, CreatureData.VisionRange);
             Vision[4] = _dataGatheringService.DistanceToClosestPlayer;
             Vision[5] = _dataGatheringService.DistanceToClosestMonster;
@@ -146,17 +147,17 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
             {
                 case 0:
                     Smartactions.Attack(_dataGatheringService.ClosestPlayer, this);
-                    Score = +20;
+                    Score += 20;
                     break;
 
                 case 1:
                     Smartactions.Flee(_dataGatheringService.ClosestPlayer, this);
-                    Score = -8;
+                    Score -= 8;
                     break;
 
                 case 2:
                     Smartactions.RunToMonster(_dataGatheringService.ClosestMonster, this);
-                    Score = -3;
+                    Score -= 3;
                     break;
 
                 case 3:
@@ -173,6 +174,11 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
 
                 case 6:
                     Smartactions.WalkRight(this);
+                    break;
+
+                case 7:
+                    Smartactions.RunToPlayer(_dataGatheringService.ClosestPlayer, this);
+                    Score += 10;
                     break;
             }
         }
@@ -204,7 +210,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
                 deathpoints = -100;
             }
             Fitness =
-                (float)((DamageDealt * 10 - DamageTaken * 2)/* + (lifeSpan / 300)*/ + HealthHealed + StatsGained + killPoints + deathpoints + Score);
+                (float)((DamageDealt * 10 - DamageTaken * 2) - (LifeSpan * 10) + HealthHealed + StatsGained + killPoints + deathpoints + Score);
             Score = (int)Fitness;
         }
 

@@ -489,91 +489,69 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
             {
                 case 0:
                     return "Creature X pos";
-                    break;
 
                 case 1:
                     return "Creature Y pos";
-                    break;
 
                 case 2:
                     return "Creature damage";
-                    break;
 
                 case 3:
                     return "Creature Health";
-                    break;
 
                 case 4:
                     return "Distance to closest player";
-                    break;
 
                 case 5:
                     return "Distance to closest monster";
-                    break;
 
                 case 6:
                     return "Closest player health";
-                    break;
 
                 case 7:
                     return "Closest player damage";
-                    break;
 
                 case 8:
                     return "Closest player X pos";
-                    break;
 
                 case 9:
                     return "Closest player Y pos";
-                    break;
 
                 case 10:
                     return "Closest Monster Health";
-                    break;
 
                 case 11:
                     return "Closest Monster damage";
-                    break;
 
                 case 12:
                     return "Closest Monster X pos";
-                    break;
 
                 case 13:
                     return "Closest Monster Y pos";
-                    break;
 
                 case 14:
                     return "Attack ction";
-                    break;
 
                 case 15:
                     return "Flee action";
-                    break;
 
                 case 16:
                     return "Run to monster action";
-                    break;
 
                 case 17:
                     return "walk up";
-                    break;
 
                 case 18:
                     return "walk down";
-                    break;
 
                 case 19:
                     return "walk left";
-                    break;
 
                 case 20:
                     return "walk right";
-                    break;
 
                 case 21:
                     return "Bias node";
-                    break;
 
                 default:
                     return "hiddennode";

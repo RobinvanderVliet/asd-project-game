@@ -89,7 +89,6 @@ namespace ASD_Game.InputHandling
                 case 2:
                     _screenHandler.TransitionTo(new SessionScreen());
                     _sessionHandler.RequestSessions();
-                    
                     break;
                 case 3:
                     _screenHandler.TransitionTo(new LoadScreen());

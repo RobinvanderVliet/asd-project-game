@@ -15,7 +15,8 @@ namespace ASD_Game.World
         public Player CurrentPlayer { get; set; }
         public List<Player> Players { get; set; }
         public List<Monster> Creatures { get; set; }
-        public List<Character> MovesList { get; set; }
+        public List<Monster> DeadCreatures { get; set; } = new List<Monster>();
+        public List<Character> MovesList { get; set; } = new List<Character>();
         public List<ItemSpawnDTO> Items { get; set; }
         private readonly int _viewDistance;
         private readonly IScreenHandler _screenHandler;
@@ -24,13 +25,13 @@ namespace ASD_Game.World
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService)
         {
             Items = new();
-            Players = new ();
-            Creatures = new ();
+            Players = new();
+            Creatures = new();
             _map = mapFactory.GenerateMap(itemService, Items, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
         }
-        
+
         public Player GetPlayer(string id)
         {
             return Players.Find(x => x.Id == id);
@@ -90,6 +91,7 @@ namespace ASD_Game.World
             Items.Add(itemSpawnDto);
             UpdateMap();
         }
+
         public ITile GetLoadedTileByXAndY(int x, int y)
         {
             return _map.GetLoadedTileByXAndY(x, y);
@@ -116,18 +118,36 @@ namespace ASD_Game.World
         {
             _map.LoadArea(playerX, playerY, viewDistance);
         }
-         
+
         public void UpdateAI()
         {
-            MovesList = new List<Character>();
+            MovesList.Clear();
+            deleteDeadMonsters();
             foreach (Character monster in Creatures)
             {
+                if (monster.Health <= 0)
+                {
+                    DeadCreatures.Add((Monster)monster);
+                }
                 if (monster is SmartMonster smartMonster)
                 {
                     if (smartMonster.Brain != null)
                     {
                         UpdateSmartMonster(smartMonster);
                     }
+                }
+            }
+        }
+
+        public void deleteDeadMonsters()
+        {
+            if (DeadCreatures != null)
+            {
+                foreach (Monster monster in DeadCreatures)
+                {
+                    string montid = monster.Id;
+                    Monster x = (Monster)GetAI(montid);
+                    Creatures.Remove(x);
                 }
             }
         }

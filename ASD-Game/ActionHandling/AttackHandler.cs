@@ -1,4 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Timers;
 using ActionHandling;
 using ActionHandling.DTO;
 using ASD_Game.DatabaseHandler.POCO;
@@ -10,7 +14,6 @@ using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Services;
-using DatabaseHandler.POCO;
 using Newtonsoft.Json;
 
 namespace ASD_Game.ActionHandling
@@ -26,6 +29,8 @@ namespace ASD_Game.ActionHandling
         private readonly IDatabaseService<CreaturePOCO> _creatureDatabaseService;
         private readonly IMessageService _messageService;
 
+        private Timer AIUpdateTimer;
+        private int _updateTime = 2000;
 
         public AttackHandler(IClientController clientController, IWorldService worldService,
             IDatabaseService<PlayerPOCO> playerDatabaseService,
@@ -39,6 +44,7 @@ namespace ASD_Game.ActionHandling
             _playerItemDatabaseService = playerItemDatabaseService;
             _creatureDatabaseService = creatureDatabaseService;
             _messageService = messageService;
+            CheckAITimer();
         }
 
         public void SendAttack(string direction)
@@ -50,7 +56,7 @@ namespace ASD_Game.ActionHandling
             }
 
             Weapon weapon = _worldService.GetCurrentPlayer().Inventory.Weapon;
-            int weaponDistance = (int) weapon.Distance;
+            int weaponDistance = (int)weapon.Distance;
             int x = 0;
             int y = 0;
             switch (direction)
@@ -59,15 +65,18 @@ namespace ASD_Game.ActionHandling
                 case "east":
                     x = weaponDistance;
                     break;
+
                 case "left":
                 case "west":
                     x = -weaponDistance;
                     break;
+
                 case "forward":
                 case "up":
                 case "north":
                     y = weaponDistance;
                     break;
+
                 case "backward":
                 case "down":
                 case "south":
@@ -79,7 +88,7 @@ namespace ASD_Game.ActionHandling
             AttackDTO attackDto = new AttackDTO();
             attackDto.XPosition = currentPlayer.XPosition + x;
             attackDto.YPosition = currentPlayer.YPosition + y;
-            attackDto.Damage = (int) weapon.Damage;
+            attackDto.Damage = (int)weapon.Damage;
             attackDto.Stamina = currentPlayer.Stamina;
             attackDto.PlayerGuid = _clientController.GetOriginId();
             SendAttackDTO(attackDto);
@@ -104,15 +113,28 @@ namespace ASD_Game.ActionHandling
                 }
                 return new HandlerResponseDTO(SendAction.ReturnToSender, "You did not have enough stamina to attack.");
             }
-            LowerStamina(attackDto.PlayerGuid);
-            
+            if (!attackDto.PlayerGuid.StartsWith("monst"))
+            {
+                LowerStamina(attackDto.PlayerGuid);
+            }
+
             if (_clientController.IsHost() && packet.Header.Target.Equals("host") || _clientController.IsBackupHost)
             {
-                InsertStaminaToDatabase(attackDto);
                 var allCharacters = _worldService.GetAllCharacters();
                 var characterToAttack =
                     allCharacters.Find(x =>
                         x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition);
+
+                if (attackDto.PlayerGuid.StartsWith("monst"))
+                {
+                    if (characterToAttack != null)
+                    {
+                        attackDto.AttackedPlayerGuid = characterToAttack.Id;
+                        HandleAttack(attackDto);
+                        return new HandlerResponseDTO(SendAction.SendToClients, null);
+                    }
+                }
+                InsertStaminaToDatabase(attackDto);
                 if (characterToAttack != null)
                 {
                     if (characterToAttack.Health <= 0)
@@ -127,12 +149,13 @@ namespace ASD_Game.ActionHandling
 
                 if (characterToAttack != null)
                 {
-                    if(_worldService.GetPlayer(characterToAttack.Id) != null)
+                    if (_worldService.GetPlayer(characterToAttack.Id) != null)
                     {
                         attackDto.AttackedPlayerGuid = characterToAttack.Id;
                         InsertDamageToDatabase(attackDto, true);
                         packet.Payload = JsonConvert.SerializeObject(attackDto);
-                    } else if (_worldService.GetAI(characterToAttack.Id) != null)
+                    }
+                    else if (_worldService.GetAI(characterToAttack.Id) != null)
                     {
                         attackDto.AttackedPlayerGuid = characterToAttack.Id;
                         packet.Payload = JsonConvert.SerializeObject(attackDto);
@@ -162,8 +185,11 @@ namespace ASD_Game.ActionHandling
             var player = _playerDatabaseService.GetAllAsync().Result
                 .FirstOrDefault(player =>
                     player.PlayerGUID == attackDto.PlayerGuid && player.GameGUID == _clientController.SessionId);
-            player.Stamina -= ATTACK_STAMINA;
-            _playerDatabaseService.UpdateAsync(player);
+            if (player != null)
+            {
+                player.Stamina -= ATTACK_STAMINA;
+                _playerDatabaseService.UpdateAsync(player);
+            }
         }
 
         private void InsertDamageToDatabase(AttackDTO attackDto, bool isPlayer) // both armor and health damage
@@ -261,13 +287,15 @@ namespace ASD_Game.ActionHandling
         {
             var creature = _worldService.GetAI(attackDto.AttackedPlayerGuid);
             var player = _worldService.GetPlayer(attackDto.PlayerGuid);
-            bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
-            
-            if (printAttackMessage)
+            if (player != null)
             {
-                _messageService.AddMessage("You attacked an enemy.");
-            }
+                bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
 
+                if (printAttackMessage)
+                {
+                    _messageService.AddMessage("You attacked an enemy.");
+                }
+            }
             if (creature == null)
             {
                 var attackedPlayer = _worldService.GetPlayer(attackDto.AttackedPlayerGuid);
@@ -291,7 +319,7 @@ namespace ASD_Game.ActionHandling
                     {
                         HelmetPoints = attackedPlayer.Inventory.Helmet.ArmorProtectionPoints;
                     }
-                    
+
                     if (HelmetPoints - attackDto.Damage <= 0 && HelmetPoints != 0)
                     {
                         if (printAttackedMessage)
@@ -353,6 +381,58 @@ namespace ASD_Game.ActionHandling
             _worldService.DisplayStats();
             _worldService.DisplayWorld();
             _worldService.CheckLastManStanding();
+        }
+
+        public void AIAttack(List<Character> creatureMoves)
+        {
+            List<AttackDTO> attackDTOs = new List<AttackDTO>();
+            if (creatureMoves != null)
+            {
+                foreach (Character move in creatureMoves)
+                {
+                    if (move is SmartMonster smartMonster)
+                    {
+                        if (smartMonster.MoveType == "Attack")
+                        {
+                            AttackDTO attackDTO = new();
+                            attackDTO.XPosition = (int)smartMonster.Destination.X;
+                            attackDTO.YPosition = (int)smartMonster.Destination.Y;
+                            attackDTO.Stamina = 100;
+                            attackDTO.Damage = smartMonster.CreatureData.Damage;
+                            attackDTO.PlayerGuid = smartMonster.Id;
+                            attackDTOs.Add(attackDTO);
+                        }
+                    }
+                }
+                foreach (AttackDTO attack in attackDTOs)
+                {
+                    SendAttackDTO(attack);
+                }
+            }
+        }
+
+        public void GetAIMoves()
+        {
+            AIAttack(_worldService.GetCreatureMoves());
+        }
+
+        [ExcludeFromCodeCoverage]
+        private void CheckAITimer()
+        {
+            AIUpdateTimer = new Timer(_updateTime)
+            {
+                AutoReset = true
+            };
+            AIUpdateTimer.Elapsed += CheckAITimerEvent;
+            AIUpdateTimer.Start();
+        }
+
+        [ExcludeFromCodeCoverage]
+        private void CheckAITimerEvent(object sender, ElapsedEventArgs e)
+        {
+            AIUpdateTimer.Stop();
+            GetAIMoves();
+            AIUpdateTimer.Start();
         }
     }
 }
