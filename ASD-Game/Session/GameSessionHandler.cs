@@ -102,8 +102,6 @@ namespace ASD_Game.Session
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
             _gameConfigurationHandler.ItemService = _worldService.ItemService;
             _itemService.ChanceThereIsAItem = (int)_gameConfigurationHandler.GetItemSpawnRate();
-            
-            CreateMonsters();
 
             Player currentPlayer = AddPlayersToWorld();
 
@@ -161,25 +159,6 @@ namespace ASD_Game.Session
         private Player AddPlayersToWorld()
         {
             return PlayerSpawner.SpawnPlayers(_sessionHandler.GetAllClients(), _sessionHandler.GetSessionSeed(), _worldService, _clientController);
-        }
-
-        private void CreateMonsters()
-        {
-            for (int i = 0; i < 0; i++)
-            {
-                if (i < 0)
-                {
-                    Monster newMonster = new Monster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i);
-                    SetStateMachine(newMonster);
-                    _worldService.AddCreatureToWorld(newMonster);
-                }
-                else
-                {
-                    SmartMonster newMonster = new SmartMonster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i, new DataGatheringService(_worldService));
-                    SetBrain(newMonster);
-                    _worldService.AddCreatureToWorld(newMonster);
-                }
-            }
         }
 
         public void SetBrain(SmartMonster monster)

@@ -2,6 +2,7 @@
 using System.Numerics;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
+using ASD_Game.World.Services;
 
 namespace ASD_Game.World.Models.Characters
 {
@@ -11,6 +12,7 @@ namespace ASD_Game.World.Models.Characters
         public MonsterData CreatureData;
         private DataGatheringService _dataGatheringService;
         public SmartCreatureActions Smartactions;
+        private IWorldService _worldService;
 
         public Vector2 Destination { get; set; }
 
@@ -36,25 +38,34 @@ namespace ASD_Game.World.Models.Characters
         public float CurrDistanceToPlayer;
         public float CurrDistanceToMonster;
 
-        public SmartMonster(string name, int xPosition, int yPosition, string symbol, string id, DataGatheringService dataGatheringService) : base(name, xPosition, yPosition, symbol, id)
+        public SmartMonster(string name, int xPosition, int yPosition, string symbol, string id) : base(name, xPosition, yPosition, symbol, id)
         {
             CreatureData = CreateMonsterData(0);
-            _dataGatheringService = dataGatheringService;
-            Smartactions = new SmartCreatureActions(this, dataGatheringService);
+            _dataGatheringService = new DataGatheringService(_worldService);
+            Smartactions = new SmartCreatureActions(this, null);
+            Destination = new Vector2(xPosition, yPosition);
+        }
+
+        public void SetDataGetheringService(IWorldService worldService)
+        {
+            _dataGatheringService = new DataGatheringService(worldService);
         }
 
         public void Update()
         {
-            _dataGatheringService.CheckNewPosition(this);
-            if (Health <= 0)
+            if (_dataGatheringService != null)
             {
-                Dead = true;
-            }
-            if (!Dead)
-            {
-                LifeSpan++;
-                Look();
-                Think();
+                _dataGatheringService.CheckNewPosition(this);
+                if (Health <= 0)
+                {
+                    Dead = true;
+                }
+                if (!Dead)
+                {
+                    LifeSpan++;
+                    Look();
+                    Think();
+                }
             }
         }
 
