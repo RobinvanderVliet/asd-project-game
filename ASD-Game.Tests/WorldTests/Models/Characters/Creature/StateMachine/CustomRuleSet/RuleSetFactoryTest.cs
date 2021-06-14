@@ -1,8 +1,8 @@
-﻿using ASD_Game.Creature.Creature.StateMachine.CustomRuleSet;
-using Creature.Creature.StateMachine.CustomRuleSet;
+﻿using Creature.Creature.StateMachine.CustomRuleSet;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using ASD_Game.World.Models.Characters.StateMachine.CustomRuleSet;
 
 namespace Creature.Tests.Creature.StateMachine.CustomRuleSet
 {
