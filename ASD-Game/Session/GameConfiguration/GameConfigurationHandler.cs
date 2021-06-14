@@ -36,6 +36,11 @@ namespace ASD_Game.Session.GameConfiguration
             _gameConfigDatabaseService = gameConfigDatabaseService;
         }
 
+        public void SetCurrentScreen() 
+        {
+            _configurationScreen = _screenHandler.Screen as ConfigurationScreen;
+        }
+        
         public void SetGameConfiguration()
         {
             _configurationChoices.Clear();
@@ -103,6 +108,11 @@ namespace ASD_Game.Session.GameConfiguration
                     "The chosen option does not exist, please choose one of the existing options by typing their corresponding number");
                 _nextScreen = false;
             }
+
+            if (_nextScreen == true && !_configurationScreen.GetInputText().Equals("Choose an option")) 
+            {
+                _configurationScreen.UpdateInputMessage("Choose an option");
+            }
         }
 
         public void UpdateItemSpawnrate(string input)
@@ -136,6 +146,11 @@ namespace ASD_Game.Session.GameConfiguration
                 _configurationScreen.UpdateInputMessage(
                     "The chosen option does not exist, please choose one of the existing options by typing their corresponding number");
                 _nextScreen = false; 
+            }
+
+            if (_nextScreen == true && !_configurationScreen.GetInputText().Equals("Choose an option"))
+            {
+                _configurationScreen.UpdateInputMessage("Choose an option");
             }
         }
 

@@ -11,5 +11,6 @@ namespace ASD_Game.Session.GameConfiguration
         void SetGameConfiguration();
         void SetDifficulty(MonsterDifficulty monsterDifficulty, string sessionId);
         void SetSpawnRate(ItemSpawnRate spawnRate, string sessionId);
+        void SetCurrentScreen();
     }
 }

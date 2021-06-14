@@ -177,6 +177,8 @@ namespace ASD_Game.InputHandling
             }
             else
             {
+                _gameConfigurationHandler.SetCurrentScreen();
+                
                 bool configurationCompleted = _gameConfigurationHandler.HandleAnswer(input);
 
                 if (configurationCompleted)
