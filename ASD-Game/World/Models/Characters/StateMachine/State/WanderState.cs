@@ -20,17 +20,17 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
             //var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
             //var _builderConfiguration = _characterData.BuilderConfigurator;
             
-            if (_characterData is AgentData)
-            {
-                if (_characterData.WorldService.GetPlayer(_characterData.CharacterId).Stamina >= 20)
-                {
+            // if (_characterData is AgentData)
+            // {
+            //     if (_characterData.WorldService.GetPlayer(_characterData.CharacterId).Stamina >= 20)
+            //     {
                     MoveRandomDirection();
-                }
-            }
-            else
-            {
-                MoveRandomDirection();
-            }
+            //     }
+            // }
+            // else
+            // {
+            //     MoveRandomDirection();
+            // }
             
             // foreach (var builderInfo in _builderInfoList)
             // {
