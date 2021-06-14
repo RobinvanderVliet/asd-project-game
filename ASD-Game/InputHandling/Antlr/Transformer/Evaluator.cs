@@ -10,7 +10,6 @@ using ASD_Game.Network.Enum;
 using ASD_Game.Session;
 using ASD_Game.Session.DTO;
 using ASD_Game.Session.GameConfiguration;
-using ASD_Game.UserInterface;
 using Newtonsoft.Json;
 using MonsterDifficulty = ASD_Game.InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
@@ -26,12 +25,11 @@ namespace ASD_Game.InputHandling.Antlr.Transformer
         private readonly IChatHandler _chatHandler;
         private readonly IClientController _clientController;
         private readonly IInventoryHandler _inventoryHandler;
-        private readonly IScreenHandler _screenHandler;
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private string _commando;
 
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IAttackHandler attackHandler, IInventoryHandler inventoryHandler, IClientController clientController, IScreenHandler screenHandler)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IAttackHandler attackHandler, IInventoryHandler inventoryHandler, IClientController clientController)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
@@ -40,7 +38,6 @@ namespace ASD_Game.InputHandling.Antlr.Transformer
             _attackHandler = attackHandler;
             _clientController = clientController;
             _inventoryHandler = inventoryHandler;
-            _screenHandler = screenHandler;
         }
 
         public void Apply(AST ast)
