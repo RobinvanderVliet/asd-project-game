@@ -10,8 +10,8 @@ using ASD_Game.Messages;
 using ASD_Game.Session;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
-using Session;
 using InputCommandHandler.Models;
+using Session;
 using WebSocketSharp;
 using Timer = System.Timers.Timer;
 
@@ -21,30 +21,30 @@ namespace ASD_Game.InputHandling
     {
         private readonly IPipeline _pipeline;
         private readonly ISessionHandler _sessionHandler;
-        private readonly IGameConfigurationHandler _gameConfigurationHandler;
+        private readonly IScreenHandler _screenHandler;
+        private static Timer _timer;
         private readonly IMessageService _messageService;
-        private static Timer aTimer;
+        private readonly IGameConfigurationHandler _gameConfigurationHandler;
+        private readonly IGamesSessionService _gamesSessionService;
+
         private const string RETURN_KEYWORD = "return";
         private string _enteredSessionName;
-        private readonly IGamesSessionService _gamesSessionService;
-        private readonly IScreenHandler _screenHandler;
 
         public string START_COMMAND = "start_session";
 
-        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler,
-            IMessageService messageService, IGameConfigurationHandler gameConfigurationHandler,
-            IGamesSessionService gamesSessionService, IScreenHandler screenHandler)
+        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler, IMessageService messageService, IGameConfigurationHandler gameConfigurationHandler, IGamesSessionService gamesSessionService)
         {
             _pipeline = pipeline;
             _sessionHandler = sessionHandler;
+            _screenHandler = screenHandler;
             _gameConfigurationHandler = gameConfigurationHandler;
             _gamesSessionService = gamesSessionService;
-            _screenHandler = screenHandler;
             _messageService = messageService;
         }
 
-        public InputHandler()
+        public InputHandler(IGamesSessionService gamesSessionService)
         {
+            _gamesSessionService = gamesSessionService;
             //Empty constructor needed for testing purposes
         }
 
@@ -96,7 +96,6 @@ namespace ASD_Game.InputHandling
                     break;
                 case 3:
                     _screenHandler.TransitionTo(new LoadScreen());
-                    _gamesSessionService.RequestSavedGames();
                     break;
                 case 4:
                     _screenHandler.TransitionTo(new EditorScreen());
@@ -114,41 +113,35 @@ namespace ASD_Game.InputHandling
         public void HandleSessionScreenCommands()
         {
             SessionScreen sessionScreen = _screenHandler.Screen as SessionScreen;
-            var input = GetCommand();
-            // Needed to handle input on client when host has started session
-            if (_screenHandler.Screen is GameScreen)
+            string input = GetCommand();
+
+            if (input == RETURN_KEYWORD)
             {
-                HandleGameScreenCommands(input);
+                _screenHandler.TransitionTo(new StartScreen());
+                return;
+            }
+
+            string[] inputParts = input.Split(" ");
+
+            if (inputParts.Length != 2)
+            {
+                sessionScreen.UpdateInputMessage("Provide both a session number and username (example: 1 Gerrit)");
             }
             else
             {
-                if (input == RETURN_KEYWORD)
-                {
-                    _screenHandler.TransitionTo(new StartScreen());
-                    return;
-                }
+                int sessionNumber = 0;
+                int.TryParse(input[0].ToString(), out sessionNumber);
 
-                string[] inputParts = input.Split(" ");
+                string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
 
-                if (inputParts.Length != 2)
+                if (sessionId.IsNullOrEmpty())
                 {
-                    sessionScreen.UpdateInputMessage("Provide both a session number and username (example: 1 Gerrit)");
+                    sessionScreen.UpdateInputMessage("Not a valid session, try again!");
                 }
                 else
                 {
-                    int sessionNumber = 0;
-                    int.TryParse(input[0].ToString(), out sessionNumber);
-
-                    string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
-
-                    if (sessionId.IsNullOrEmpty())
-                    {
-                        sessionScreen.UpdateInputMessage("Not a valid session, try again!");
-                    }
-                    else
-                    {
-                        _sessionHandler.JoinSession(sessionId, inputParts[1].Replace("\"", ""));
-                    }
+                    _screenHandler.TransitionTo(new LobbyScreen());
+                    SendCommand("join_session \"" + sessionId + "\" \"" + inputParts[1].Replace("\"", "") + "\"");
                 }
             }
         }
@@ -169,11 +162,20 @@ namespace ASD_Game.InputHandling
                     return;
                 }
 
-                if (input == START_COMMAND || input.Contains("say") || input.Contains("shout"))
+                if (input == START_COMMAND) 
+                {
+                    SendCommand(START_COMMAND);
+                }
+
+                if (input.Contains("SAY"))
                 {
                     SendCommand(input);
-                    _screenHandler.RedrawGameInputBox();
                 }
+                else if (input.Contains("SHOUT"))
+                {
+                    SendCommand(input);
+                }
+               
             }
         }
 
@@ -210,6 +212,7 @@ namespace ASD_Game.InputHandling
                 _screenHandler.UpdateInputMessage("Session number cannot be left blank, please try again!");
             }
         }
+
         public void HandleConfigurationScreenCommands()
         {
             var input = GetCommand();
@@ -226,7 +229,7 @@ namespace ASD_Game.InputHandling
                 {
                     _gameConfigurationHandler.SetGameConfiguration();
                     _screenHandler.TransitionTo(new LobbyScreen());
-                    _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(), _gameConfigurationHandler.GetUsername(),false, null, null);
+                    _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(), _gameConfigurationHandler.GetUsername(), false, null, null);
 
                 }
             }

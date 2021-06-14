@@ -80,6 +80,7 @@ namespace Session.Tests
             _mockedGameConfiguration = new Mock<IGameConfigurationHandler>();
             _mockedGameConfigurationPoco = new Mock<IDatabaseService<GameConfigurationPOCO>>();
             _mockedTile = new Mock<ITerrainTile>();
+            
 
             _mockedWorldService.Setup(mock => mock.LoadArea(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()));
 
@@ -90,7 +91,7 @@ namespace Session.Tests
 
             _mockedWorldService.Setup(mock => mock.CheckIfCharacterOnTile(It.IsAny<ITile>())).Returns(false);
 
-            _sut = new GameSessionHandler(_mockedClientController.Object, _mockedsessionHandler.Object, _mockedRelativeStatHandler.Object, _mockedGameConfiguration.Object, _mockedScreenHandler.Object, _mockedPlayerPOCOServices.Object, _mockedGamePOCOServices.Object, _mockedGameConfigurationPoco.Object, _mockedPlayerItemService.Object, _mockedWorldService.Object, _mockedMessageService.Object);
+            _sut = new GameSessionHandler(_mockedClientController.Object,_mockedWorldService.Object, _mockedsessionHandler.Object,_mockedGamePOCOServices.Object, _mockedPlayerPOCOServices.Object, _mockedScreenHandler.Object, _mockedRelativeStatHandler.Object, _mockedMessageService.Object, _mockedPlayerItemService.Object, _mockedGameConfiguration.Object,   _mockedGameConfigurationPoco.Object);
             _packetDTO = new PacketDTO();
         }
 
