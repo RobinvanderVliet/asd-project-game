@@ -23,8 +23,6 @@ using WorldGeneration.StateMachine;
 using System.Numerics;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
-using ActionHandling;
-using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 
 
 namespace ASD_Game.Session
@@ -195,16 +193,11 @@ namespace ASD_Game.Session
                 if (i >= 15)
                 {
                     var newMonster = new Monster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i);
-                    var newMonsterData = new MonsterData(newMonster.XPosition, newMonster.YPosition, 0)
-                    {
-                        WorldService = _worldService,
-                        MoveHandler = _moveHandler,
-                        AttackHandler = _attackHandler,
-                        Health = newMonster.Health,
-                        VisionRange = 6,
-                        Position = new Vector2(newMonster.XPosition, newMonster.YPosition),
-                        CharacterId = newMonster.Id
-                    };
+                    MonsterData newMonsterData = new(newMonster.XPosition, newMonster.YPosition, 0);
+                    newMonsterData.WorldService = _worldService;
+                    newMonsterData.MoveHandler = _moveHandler;
+                    newMonsterData.Position = new Vector2(newMonster.XPosition, newMonster.YPosition);
+                    newMonsterData.CharacterId = newMonster.Id;
                     newMonster.MonsterData = newMonsterData;
                     SetStateMachine(newMonster);
                     newMonster.MonsterStateMachine.StartStateMachine();
