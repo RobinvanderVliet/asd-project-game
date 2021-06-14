@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading.Tasks;
+using ASD_Game.DatabaseHandler.POCO;
 using LiteDB;
 using LiteDB.Async;
 
@@ -31,7 +32,12 @@ namespace ASD_Game.DatabaseHandler.Repository
             }
             catch (LiteAsyncException ex)
             {
-                Console.WriteLine("[{0}][{1}] ({2}) Source: {3}, Message: {4}\r\n[StackTrace] {5}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.Source, ex.Message, ex.StackTrace);
+                Console.WriteLine("[{0}][{1}] ({2}) Source: {3}, Message: {4}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.Source, ex.Message);
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine("[InnerException][{0}][{1}] ({2}) Source: {3}, Message: {4}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.InnerException.Source, ex.InnerException.Message);
+                }
+                Console.WriteLine(ex.StackTrace);
                 throw new LiteAsyncException("Exception thrown in Repository.", ex);
             }
         }
@@ -44,7 +50,12 @@ namespace ASD_Game.DatabaseHandler.Repository
             }
             catch (LiteAsyncException ex)
             {
-                Console.WriteLine("[{0}][{1}] ({2}) Source: {3}, Message: {4}\r\n[StackTrace] {5}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.Source, ex.Message, ex.StackTrace);
+                Console.WriteLine("[{0}][{1}] ({2}) Source: {3}, Message: {4}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.Source, ex.Message);
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine("[InnerException][{0}][{1}] ({2}) Source: {3}, Message: {4}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.InnerException.Source, ex.InnerException.Message);
+                }
+                Console.WriteLine(ex.StackTrace);
                 throw new LiteAsyncException("Exception thrown in Repository.", ex);
             }
         }
@@ -58,7 +69,12 @@ namespace ASD_Game.DatabaseHandler.Repository
             }
             catch (LiteAsyncException ex)
             {
-                Console.WriteLine("[{0}][{1}] ({2}) Source: {3}, Message: {4}\r\n[StackTrace] {5}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.Source, ex.Message, ex.StackTrace);
+                Console.WriteLine("[{0}][{1}] ({2}) Source: {3}, Message: {4}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.Source, ex.Message);
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine("[InnerException][{0}][{1}] ({2}) Source: {3}, Message: {4}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.InnerException.Source, ex.InnerException.Message);
+                }
+                Console.WriteLine(ex.StackTrace);
                 throw new LiteAsyncException("Exception thrown in Repository.", ex);
             }
         }
@@ -71,7 +87,12 @@ namespace ASD_Game.DatabaseHandler.Repository
             }
             catch (LiteAsyncException ex)
             {
-                Console.WriteLine("[{0}][{1}] ({2}) Source: {3}, Message: {4}\r\n[StackTrace] {5}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.Source, ex.Message, ex.StackTrace);
+                Console.WriteLine("[{0}][{1}] ({2}) Source: {3}, Message: {4}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.Source, ex.Message);
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine("[InnerException][{0}][{1}] ({2}) Source: {3}, Message: {4}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.InnerException.Source, ex.InnerException.Message);
+                }
+                Console.WriteLine(ex.StackTrace);
                 throw new LiteAsyncException("Exception thrown in Repository.", ex);
             }
         }
@@ -84,7 +105,12 @@ namespace ASD_Game.DatabaseHandler.Repository
             }
             catch (LiteAsyncException ex)
             {
-                Console.WriteLine("[{0}][{1}] ({2}) Source: {3}, Message: {4}\r\n[StackTrace] {5}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.Source, ex.Message, ex.StackTrace);
+                Console.WriteLine("[{0}][{1}] ({2}) Source: {3}, Message: {4}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.Source, ex.Message);
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine("[InnerException][{0}][{1}] ({2}) Source: {3}, Message: {4}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.InnerException.Source, ex.InnerException.Message);
+                }
+                Console.WriteLine(ex.StackTrace);
                 throw new LiteAsyncException("Exception thrown in Repository.", ex);
             }
         }

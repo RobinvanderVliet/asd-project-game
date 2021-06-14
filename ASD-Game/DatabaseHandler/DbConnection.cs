@@ -22,7 +22,12 @@ namespace ASD_Game.DatabaseHandler
             }
             catch (LiteAsyncException ex)
             {
-                Console.WriteLine("[{0}][{1}] Source: {2}, Message: {3}\r\n[StackTrace] {4}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, ex.Source, ex.Message, ex.StackTrace);
+                Console.WriteLine("[{0}] ({1}) Source: {2}, Message: {3}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, ex.Source, ex.Message);
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine("[InnerException][{0}] ({1}) Source: {2}, Message: {3}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, ex.InnerException.Source, ex.InnerException.Message);
+                }
+                Console.WriteLine(ex.StackTrace);
                 throw new LiteAsyncException("Exception thrown in DBConnection.", ex);
             }
         }
