@@ -99,7 +99,6 @@ namespace ASD_Game.ActionHandling
                 }
 
                 SendStat(statDto);
-                _worldService.CheckLastManStanding();
             }
         }
 
@@ -155,13 +154,11 @@ namespace ASD_Game.ActionHandling
                 }
 
                 InsertToDatabase(relativeStatDTO, handleInDatabase, player);
+                _worldService.CheckLastManStanding();
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
-            else
-            {
-                _worldService.DisplayWorld();
-            }
 
+            _worldService.DisplayWorld();
             return new HandlerResponseDTO(SendAction.ReturnToSender, null);
         }
 
