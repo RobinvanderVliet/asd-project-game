@@ -39,7 +39,7 @@ namespace ASD_Game.Tests.ItemTests
         public void GenerateItemFromNoiseNullItemTest()
         {
             // Arrange
-            _randomItemGeneratorMock.Setup(mock => mock.GetRandomItem(It.IsAny<float>())).Returns(null as Item);
+            _randomItemGeneratorMock.Setup(mock => mock.GetRandomItem(It.IsAny<float>(), It.IsAny<int>())).Returns(null as Item);
             // Act
             var result = _sut.GenerateItemFromNoise(0f, 0, 0);
             // Assert
@@ -50,7 +50,7 @@ namespace ASD_Game.Tests.ItemTests
         public void GenerateItemFromNoiseActualItemTest()
         {
             // Arrange
-            _randomItemGeneratorMock.Setup(mock => mock.GetRandomItem(It.IsAny<float>())).Returns(ItemFactory.GetAK47());
+            _randomItemGeneratorMock.Setup(mock => mock.GetRandomItem(It.IsAny<float>(), It.IsAny<int>())).Returns(ItemFactory.GetAK47());
             // Act
             var result = _sut.GenerateItemFromNoise(0f, 0, 0);
             // Assert

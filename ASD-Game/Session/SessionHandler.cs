@@ -228,7 +228,7 @@ namespace ASD_Game.Session
             {
                 SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.Payload);
                 int spawnrate = int.Parse(sessionDTO.Name);
-                _messageService.AddMessage(spawnrate + "");
+                _messageService.AddMessage("Spawnrate set to " + (ItemSpawnRate)spawnrate);
                 _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate)spawnrate, _clientController.SessionId);
                 return new HandlerResponseDTO(SendAction.SendToClients, packetDto.Payload);
             }
@@ -236,7 +236,7 @@ namespace ASD_Game.Session
             {
                 SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
                 int spawnrate = int.Parse(sessionDTO.Name);
-                _messageService.AddMessage(spawnrate + "");
+                _messageService.AddMessage("Spawnrate set to " + (ItemSpawnRate)spawnrate);
                 _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate)spawnrate, _clientController.SessionId);
             }
             return new HandlerResponseDTO(SendAction.Ignore, null);

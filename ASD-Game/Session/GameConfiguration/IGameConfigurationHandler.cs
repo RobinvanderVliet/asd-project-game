@@ -1,10 +1,13 @@
+using ASD_Game.Items.Services;
+
 namespace ASD_Game.Session.GameConfiguration
 {
     public interface IGameConfigurationHandler
     {
+        IItemService ItemService { get; set; }
         MonsterDifficulty GetNewMonsterDifficulty();
         MonsterDifficulty GetCurrentMonsterDifficulty();
-        ItemSpawnRate GetSpawnRate();
+        ItemSpawnRate GetItemSpawnRate();
         string GetUsername();
         string GetSessionName();
         bool HandleAnswer(string input);

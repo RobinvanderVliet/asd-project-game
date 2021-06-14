@@ -351,6 +351,7 @@ namespace ASD_Game.ActionHandling
 
             _worldService.DisplayStats();
             _worldService.DisplayWorld();
+            _worldService.CheckLastManStanding();
         }
     }
 }

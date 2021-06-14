@@ -55,6 +55,8 @@ namespace ASD_Game.Tests.UserInterfaceTests
             //Arrange
             string name = "TestName";
             int score = 0;
+            int playersAlive = 1;
+            int playersTotal = 2;
             int health = 100;
             int stamina = 100;
             int armor = 10;
@@ -67,11 +69,12 @@ namespace ASD_Game.Tests.UserInterfaceTests
             string slotThree = "Empty";
 
             //Act
-            _sut.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree);
+            _sut.SetStatValues(name, score, playersAlive, playersTotal, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree);
 
             //Assert
             _mockedConsoleHelper.Verify(mock => mock.Write(name), Times.Exactly(1));
             _mockedConsoleHelper.Verify(mock => mock.Write("Score: " + score), Times.Exactly(1));
+            _mockedConsoleHelper.Verify(mock => mock.Write($"Players alive: {playersAlive} / {playersTotal}"), Times.Exactly(1));
             _mockedConsoleHelper.Verify(mock => mock.Write("Health: " + health), Times.Exactly(1));
             _mockedConsoleHelper.Verify(mock => mock.Write("Stamina: " + stamina), Times.Exactly(1));
             _mockedConsoleHelper.Verify(mock => mock.Write("Armor: " + armor), Times.Exactly(1));

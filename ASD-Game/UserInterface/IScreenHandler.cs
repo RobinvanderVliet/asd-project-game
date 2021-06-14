@@ -12,7 +12,7 @@ namespace ASD_Game.UserInterface
         public void ShowMessages(Queue<string> messages);
         public void RedrawGameInputBox();
         void UpdateWorld(char[,] map);
-        public void SetStatValues(string name, int score, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree);
+        public void SetStatValues(string name, int score, int playersAlive, int playersTotal, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree);
         public void SetScreenInput(string input);
     }
 }

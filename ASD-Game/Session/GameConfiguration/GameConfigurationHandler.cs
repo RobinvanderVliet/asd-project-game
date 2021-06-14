@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ASD_Game.DatabaseHandler.POCO;
 using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Items.Services;
 using ASD_Game.UserInterface;
 
 namespace ASD_Game.Session.GameConfiguration
@@ -17,6 +18,7 @@ namespace ASD_Game.Session.GameConfiguration
         private readonly List<string> _configurationHeader;
         private readonly List<List<string>> _configurationChoices;
         private IDatabaseService<GameConfigurationPOCO> _gameConfigDatabaseService;
+        public IItemService ItemService { get; set; }
         public MonsterDifficulty NewMonsterDifficulty { get; set; }
         public MonsterDifficulty CurrentMonsterDifficulty { get; set; }
         public ItemSpawnRate SpawnRate { get; set; }
@@ -32,7 +34,7 @@ namespace ASD_Game.Session.GameConfiguration
             _configurationChoices = new List<List<string>>();
             NewMonsterDifficulty = MonsterDifficulty.Medium;
             CurrentMonsterDifficulty = MonsterDifficulty.Medium;
-            SpawnRate = ItemSpawnRate.Low;
+            SpawnRate = ItemSpawnRate.Medium;
             _gameConfigDatabaseService = gameConfigDatabaseService;
         }
 
@@ -152,8 +154,9 @@ namespace ASD_Game.Session.GameConfiguration
         {
             var gameConfiguration = _gameConfigDatabaseService.GetAllAsync().Result.FirstOrDefault(configuration => configuration.GameGUID == sessionId);
 
-            gameConfiguration.ItemSpawnRate = (int) spawnRate;
+            gameConfiguration.ItemSpawnRate = (int)spawnRate;
             _gameConfigDatabaseService.UpdateAsync(gameConfiguration);
+            ItemService.ChanceThereIsAItem = (int)spawnRate;
         }
 
         public int AdjustMonsterValue(int monsterProperty)
@@ -256,7 +259,7 @@ namespace ASD_Game.Session.GameConfiguration
             get { return _configurationChoices; }
         }
 
-        public ItemSpawnRate GetSpawnRate()
+        public ItemSpawnRate GetItemSpawnRate()
         {
             return SpawnRate;
         }

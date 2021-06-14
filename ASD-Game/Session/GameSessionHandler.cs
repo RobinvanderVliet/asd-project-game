@@ -15,6 +15,7 @@ using ASD_Game.World.Services;
 using Newtonsoft.Json;
 using System;
 using System.Timers;
+using ASD_Game.Items.Services;
 using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine;
@@ -35,6 +36,7 @@ namespace ASD_Game.Session
         private readonly IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
         private readonly IWorldService _worldService;
         private readonly IMessageService _messageService;
+        private IItemService _itemService;
         private Timer AIUpdateTimer;
         private int _brainUpdateTime = 60000;
         private Random _random = new Random();
@@ -50,7 +52,8 @@ namespace ASD_Game.Session
             IDatabaseService<GameConfigurationPOCO> gameConfigDatabaseService,
             IDatabaseService<PlayerItemPOCO> playerItemDatabaseService,
             IWorldService worldService,
-            IMessageService messageService
+            IMessageService messageService,
+            IItemService itemService
         )
         {
             _clientController = clientController;
@@ -65,6 +68,7 @@ namespace ASD_Game.Session
             _playerItemDatabaseService = playerItemDatabaseService;
             _worldService = worldService;
             _messageService = messageService;
+            _itemService = itemService;
             CheckAITimer();
         }
 
@@ -96,6 +100,9 @@ namespace ASD_Game.Session
             _screenHandler.TransitionTo(new GameScreen());
 
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
+            _gameConfigurationHandler.ItemService = _worldService.ItemService;
+            _itemService.ChanceThereIsAItem = (int)_gameConfigurationHandler.GetItemSpawnRate();
+            
             CreateMonsters();
 
             Player currentPlayer = AddPlayersToWorld();
@@ -146,7 +153,7 @@ namespace ASD_Game.Session
                 GameGUID = _clientController.SessionId,
                 NPCDifficultyCurrent = (int)_gameConfigurationHandler.GetCurrentMonsterDifficulty(),
                 NPCDifficultyNew = (int)_gameConfigurationHandler.GetNewMonsterDifficulty(),
-                ItemSpawnRate = (int)_gameConfigurationHandler.GetSpawnRate()
+                ItemSpawnRate = (int)_gameConfigurationHandler.GetItemSpawnRate()
             };
             _gameConfigDatabaseService.CreateAsync(gameConfigurationPOCO);
         }
