@@ -101,7 +101,7 @@ namespace ASD_Game.Session
 
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
             _gameConfigurationHandler.ItemService = _worldService.ItemService;
-            _itemService.ChanceThereIsAItem = (int)_gameConfigurationHandler.GetItemSpawnRate();
+            _itemService.ChanceForItemOnTile = (int)_gameConfigurationHandler.GetItemSpawnRate();
             
             CreateMonsters();
 
