@@ -52,7 +52,8 @@ namespace ASD_Game.Session
             IDatabaseService<GameConfigurationPOCO> gameConfigDatabaseService,
             IDatabaseService<PlayerItemPOCO> playerItemDatabaseService,
             IWorldService worldService,
-            IMessageService messageService
+            IMessageService messageService,
+            IItemService itemService
         )
         {
             _clientController = clientController;
@@ -67,6 +68,7 @@ namespace ASD_Game.Session
             _playerItemDatabaseService = playerItemDatabaseService;
             _worldService = worldService;
             _messageService = messageService;
+            _itemService = itemService;
             CheckAITimer();
         }
 
@@ -98,7 +100,6 @@ namespace ASD_Game.Session
             _screenHandler.TransitionTo(new GameScreen());
 
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
-            _itemService = _worldService.ItemService;
             _gameConfigurationHandler.ItemService = _worldService.ItemService;
             _itemService.ChanceThereIsAItem = (int)_gameConfigurationHandler.GetItemSpawnRate();
             
