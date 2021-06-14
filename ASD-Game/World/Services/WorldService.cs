@@ -21,12 +21,16 @@ namespace ASD_Game.World.Services
         private IWorld _world;
         public List<Character> CreatureMoves { get; set; }
         private const int VIEWDISTANCE = 6;
+        private bool _logicSet = false;
+        private IEnemySpawner _enemySpawner;
+
         private bool gameEnded = false;
-        
+
         public WorldService(IScreenHandler screenHandler, IItemService itemService, IMessageService messageService)
         {
             _screenHandler = screenHandler;
             ItemService = itemService;
+            _enemySpawner = new EnemySpawner();
             _messageService = messageService;
         }
 
@@ -47,14 +51,14 @@ namespace ASD_Game.World.Services
 
         public void AddCreatureToWorld(Monster character)
         {
-            _world.AddCreatureToWorld(character);
+            _world.AddMonsterToWorld(character);
         }
 
         public void DisplayWorld()
         {
             _world.UpdateMap();
         }
-        
+
         public void DeleteMap()
         {
             _world.DeleteMap();
@@ -62,7 +66,7 @@ namespace ASD_Game.World.Services
 
         public void GenerateWorld(int seed)
         {
-            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, ItemService);
+            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, ItemService, _enemySpawner);
         }
 
         public Player GetCurrentPlayer()
@@ -82,7 +86,7 @@ namespace ASD_Game.World.Services
 
         public List<Monster> GetMonsters()
         {
-            return _world.Creatures;
+            return _world.Monsters;
         }
 
         public List<Character> GetAllCharacters()
@@ -94,7 +98,7 @@ namespace ASD_Game.World.Services
         {
             if (_world != null)
             {
-                foreach (Character monster in _world.Creatures)
+                foreach (Character monster in _world.Monsters)
                 {
                     if (monster is SmartMonster smartMonster)
                     {
@@ -104,12 +108,45 @@ namespace ASD_Game.World.Services
             }
         }
 
-        public List<Character> GetCreatureMoves()
+        public void SetAILogic()
+        {
+            List<SmartMonster> setup = new();
+            foreach (Character monster in _world.Monsters)
+            {
+                if (monster is SmartMonster smartMonster)
+                {
+                    smartMonster._dataGatheringService = new DataGatheringService(this);
+                    setup.Add((SmartMonster)monster);
+                }
+            }
+            SetAIActions(setup);
+        }
+
+        private void SetAIActions(List<SmartMonster> smartMonsters)
+        {
+            foreach (SmartMonster monster in smartMonsters)
+            {
+                SmartMonster smartMonster = (SmartMonster)_world.GetAI(monster.Id);
+                smartMonster.Smartactions = new SmartCreatureActions(smartMonster);
+            }
+        }
+
+        public List<Character> GetCreatureMoves(string type)
         {
             if (_world != null)
             {
-                _world.UpdateAI();
-                return _world.MovesList;
+                if (type == "Attack")
+                {
+                    _world.AttackList.Clear();
+                    _world.UpdateAI();
+                    return _world.AttackList;
+                }
+                else
+                {
+                    _world.MovesList.Clear();
+                    _world.UpdateAI();
+                    return _world.MovesList;
+                }
             }
             return null;
         }
@@ -123,7 +160,7 @@ namespace ASD_Game.World.Services
         {
             return player.Health <= 0;
         }
-        
+
         public void LoadArea(int playerX, int playerY, int viewDistance)
         {
             _world.LoadArea(playerX, playerY, viewDistance);
@@ -156,7 +193,7 @@ namespace ASD_Game.World.Services
 
             return result.ToString();
         }
-        
+
         public Player GetPlayer(string id)
         {
             return _world.GetPlayer(id);
@@ -196,11 +233,11 @@ namespace ASD_Game.World.Services
                 player.Inventory.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
                 player.Inventory.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
         }
+
         public IList<Item> GetItemsOnCurrentTile()
         {
             return _world.GetCurrentTile().ItemsOnTile;
         }
-
 
         public IList<Item> GetItemsOnCurrentTile(Player player)
         {

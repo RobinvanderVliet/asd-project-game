@@ -94,8 +94,12 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
                 }
                 if (player.Health <= 0)
                 {
-                    smartmonster.Score -= 100;
+                    smartmonster.Score -= 1000;
                 }
+            }
+            else
+            {
+                smartmonster.Score -= 500;
             }
         }
 
@@ -135,9 +139,12 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
         {
             if (player != null)
             {
-                Path = _pathfinder.FindPath(smartMonster.CreatureData.Position, player.Location);
-                CheckPath(smartMonster);
-                smartMonster.CreatureData.Position = Path.Pop().Position;
+                if (smartMonster.CurrDistanceToPlayer > 1)
+                {
+                    Path = _pathfinder.FindPath(smartMonster.CreatureData.Position, player.Location);
+                    CheckPath(smartMonster);
+                    smartMonster.CreatureData.Position = Path.Pop().Position;
+                }
             }
         }
 
