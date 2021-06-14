@@ -156,7 +156,7 @@ namespace ASD_Game.Session.GameConfiguration
 
             gameConfiguration.ItemSpawnRate = (int)spawnRate;
             _gameConfigDatabaseService.UpdateAsync(gameConfiguration);
-            ItemService.ChanceThereIsAItem = (int)spawnRate;
+            ItemService.ChanceForItemOnTile = (int)spawnRate;
         }
 
         public int AdjustMonsterValue(int monsterProperty)
