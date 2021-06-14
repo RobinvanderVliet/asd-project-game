@@ -38,6 +38,7 @@ namespace Creature
 
         public void Replace(string playerId)
         {
+            // TODO: when current player is being replaced then let the config from his pc be loaded
             if (_worldService.GetWorld() == null) return;
 
             var player = _worldService.GetPlayer(playerId);
@@ -90,7 +91,7 @@ namespace Creature
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var configurationDto = JsonConvert.DeserializeObject<AgentConfigurationDTO>(packet.Payload);
-            if (packet.Header.Target != "host") return new HandlerResponseDTO(SendAction.Ignore, null);
+            if (packet.Header.Target != "host" && !_clientController.IsBackupHost) return new HandlerResponseDTO(SendAction.Ignore, null);
 
             var allAgents = _databaseService.GetAllAsync();
             allAgents.Wait();
