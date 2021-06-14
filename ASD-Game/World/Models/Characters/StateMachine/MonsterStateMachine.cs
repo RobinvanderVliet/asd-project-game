@@ -6,8 +6,8 @@ using ASD_Game.World.Models.Characters.StateMachine.Builder;
 using Creature.Creature.StateMachine.CustomRuleSet;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ASD_Game.World.Models.Characters.StateMachine.State;
-using WorldGeneration.StateMachine.CustomRuleSet;
 using World.Models.Characters.StateMachine.Event;
+using ASD_Game.Creature.Creature.StateMachine.CustomRuleSet;
 
 namespace ASD_Game.World.Models.Characters.StateMachine
 {

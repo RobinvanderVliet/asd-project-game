@@ -19,11 +19,11 @@ using ASD_Game.World.Services;
 using System.Timers;
 using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters.StateMachine;
-using WorldGeneration.StateMachine;
 using System.Numerics;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ActionHandling;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 
 namespace ASD_Game.Session
 {

@@ -24,7 +24,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
         public Character ClosestMonster { get; set; }
         public Single DistanceToClosestMonster { get; set; } = 9999999999999999999;
 
-        private Vector2 _pathingOffset;
+        public Vector2 _pathingOffset;
 
         public DataGatheringService(IWorldService worldService)
         {

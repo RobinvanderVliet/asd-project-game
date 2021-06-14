@@ -1,6 +1,6 @@
 ﻿using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ASD_Game.World.Models.Characters.StateMachine.State;
-using WorldGeneration.StateMachine;
+using System;
 
 namespace ASD_Game.World.Models.Characters.StateMachine.State
 {
@@ -15,14 +15,20 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
         {
             var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
             var _builderConfiguration = _characterData.BuilderConfigurator;
-            
+
             foreach (var builderInfo in _builderInfoList)
             {
                 if (builderInfo.Action == "attack")
                 {
                     if (_builderConfiguration.GetGuard(_characterData, _target, builderInfo))
                     {
-                        //TODO implement Attack logic + gather targetData
+                        //TODO implement Attack logic +gather targetData
+
+
+                        _target.AttackHandler.SendAttack("");
+                        _target.Health -= 5;
+                        Console.WriteLine("Enemy health: " + _target.Health);
+
                     }
                 }
             }

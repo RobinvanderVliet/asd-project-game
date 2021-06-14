@@ -24,7 +24,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
 
         public virtual void DoWorldCheck()
         {
-            const int ATTACK_RANGE = 3;
+            const int ATTACK_RANGE = 1;
             const int VISION_RANGE = 6;
 
             //if (_characterData.WorldService.GetItemsOnCurrentTileWithPlayerId(_characterData.CharacterId) != null)
@@ -43,8 +43,8 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                     //_characterStateMachine.FireEvent(CharacterEvent.Event.CREATURE_IN_RANGE, (Player)attackRangeTarget.);
                     if (attackRangeTarget is Monster)
                     {
-                        //Monster monster = (Monster)attackRangeTarget;
-                        //_characterStateMachine.FireEvent(CharacterEvent.Event.CREATURE_IN_RANGE, monster.MonsterData);
+                        Monster monster = (Monster)attackRangeTarget;
+                        _characterStateMachine.FireEvent(CharacterEvent.Event.CREATURE_IN_RANGE, monster.MonsterData);
                     }
                 }
                 else

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Numerics;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
-using WorldGeneration.StateMachine;
 
 
 namespace ASD_Game.World.Models.Characters.StateMachine.State
@@ -17,32 +16,29 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
         {
             DoWorldCheck();
             
-            //var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
-            //var _builderConfiguration = _characterData.BuilderConfigurator;
-            
-            if (_characterData is AgentData)
-            {
-                if (_characterData.WorldService.GetPlayer(_characterData.CharacterId).Stamina >= 20)
-                {
-                    MoveRandomDirection();
-                }
-            }
-            else
-            {
-                //MoveRandomDirection();
-            }
-            
-            // foreach (var builderInfo in _builderInfoList)
-            // {
-            //     if (builderInfo.Action == "wander")
-            //     {
-            //         if (_builderConfiguration.GetGuard(_characterData, _target, builderInfo))
-            //         {
-            //             //int steps = new Random().Next(10);
-            //             //_characterData.MoveHandler.SendMove(PickRandomDirection(), steps);
-            //         }
-            //     }
-            // }
+            var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
+            var _builderConfiguration = _characterData.BuilderConfigurator;
+
+            //foreach (var builderInfo in _builderInfoList)
+            //{
+            //    if (builderInfo.Action == "wander")
+            //    {
+            //        if (_builderConfiguration.GetGuard(_characterData, _target, builderInfo))
+            //        {
+                        if (_characterData is AgentData)
+                        {
+                            if (_characterData.WorldService.GetPlayer(_characterData.CharacterId).Stamina >= 20)
+                            {
+                                MoveRandomDirection();
+                            }
+                        }
+                        else
+                        {
+                            //MoveRandomDirection();
+                        }
+            //        }
+            //    }
+            //}
         }
 
         private void MoveRandomDirection()

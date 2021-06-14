@@ -2,7 +2,6 @@
 using System.Numerics;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ASD_Game.World.Models.Characters.StateMachine.State;
-using WorldGeneration.StateMachine;
 
 namespace ASD_Game.World.Models.Characters.StateMachine.State
 {
@@ -17,7 +16,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
         {
             var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
             var _builderConfiguration = _characterData.BuilderConfigurator;
-            
+
             foreach (var builderInfo in _builderInfoList)
             {
                 if (builderInfo.Action == "flee")

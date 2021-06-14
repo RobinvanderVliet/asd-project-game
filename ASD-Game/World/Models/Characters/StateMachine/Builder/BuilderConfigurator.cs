@@ -5,7 +5,6 @@ using ASD_Game.Items;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ASD_Game.World.Models.Characters.StateMachine.State;
 using World.Models.Characters.StateMachine.Event;
-using WorldGeneration.StateMachine.CustomRuleSet;
 
 namespace ASD_Game.World.Models.Characters.StateMachine.Builder
 {
