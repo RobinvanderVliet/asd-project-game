@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using ActionHandling;
 using Agent.Mapper;
@@ -19,6 +20,7 @@ using ASD_Game.Session;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters.Algorithms.Creator;
+using ASD_Game.World;
 using ASD_Game.World.Services;
 using Creature;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +30,7 @@ using Serilog;
 
 namespace ASD_Game
 {
+    [ExcludeFromCodeCoverage]
     partial class Program
     {
         static void Main(string[] args)
@@ -43,7 +46,6 @@ namespace ASD_Game
             
             Log.Logger.Information("Application starting");
             
-            //Example of dependency injection with GreetingService
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
@@ -59,7 +61,7 @@ namespace ASD_Game
                     services.AddScoped<IWorldService, WorldService>();
                     services.AddScoped<IMessageService, MessageService>();
                     services.AddScoped<IGameSessionHandler, GameSessionHandler>();
-                    services.AddSingleton<IDBConnection, DBConnection>();
+                    services.AddSingleton<IDbConnection, DbConnection>();
                     services.AddScoped<IItemService, ItemService>();
                     services.AddScoped<ISpawnHandler, SpawnHandler>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -69,6 +71,7 @@ namespace ASD_Game
                     services.AddScoped<IAgentCreator, AgentCreator>();
                     services.AddScoped<IAgentHandler, AgentHandler>();
                     services.AddScoped<IPipeline, Pipeline>();
+                    services.AddScoped<IRandomItemGenerator, RandomItemGenerator>();
                     services.AddScoped<IEvaluator, Evaluator>();
                     services.AddScoped<IConfigurationService, ConfigurationService>();
                     services.AddScoped<IFileToConfigurationMapper, FileToConfigurationMapper>();

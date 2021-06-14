@@ -4,6 +4,9 @@ using System.Timers;
 using Creature;
 
 using ASD_Game.Session.DTO;
+using ASD_Game.Messages;
+using System.Threading;
+using System.Diagnostics;
 
 
 namespace ASD_Game.Session
@@ -15,25 +18,48 @@ namespace ASD_Game.Session
         TimeSpan waitTime = TimeSpan.FromMilliseconds(1000);
 
         private int TIMER = 1000;
-        private Timer _heartbeatTimer;
+        private Thread _checkHeartbeatThread;
+        private bool _runThread;
+        private IMessageService _messageService;
 
-        public HeartbeatHandler(IAgentHandler agentHandler)
+        public HeartbeatHandler(IMessageService messageService, IAgentHandler agentHandler)
         {
             _agentHandler = agentHandler;
+            _messageService = messageService;
             _players = new List<HeartbeatDTO>();
-            _heartbeatTimer = new Timer(TIMER);
-            CheckHeartbeatTimer();
+            StartHeartbeatThread();
         }
 
-        public HeartbeatHandler(List<string> players)
+        public HeartbeatHandler(List<string> players, IMessageService messageService, IAgentHandler agentHandler)
         {
+            _agentHandler = agentHandler;
             _players = new List<HeartbeatDTO>();
             foreach (var player in players)
             {
                 _players.Add(new HeartbeatDTO(player));
             }
-            _heartbeatTimer = new Timer(TIMER);
-            CheckHeartbeatTimer();
+            _messageService = messageService;
+            StartHeartbeatThread();
+        }
+
+        private void StartHeartbeatThread()
+        {
+            _runThread = true;
+            _checkHeartbeatThread = new Thread(() =>
+            {
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                while (_runThread)
+                {
+                    if (stopwatch.ElapsedMilliseconds >= TIMER)
+                    {
+                        CheckHeartbeatEvent();
+                        stopwatch.Restart();
+                    }
+                }
+
+            })
+            { Priority = ThreadPriority.Highest, IsBackground = true };
+            _checkHeartbeatThread.Start();
         }
 
         public void ReceiveHeartbeat(string clientId)
@@ -49,18 +75,9 @@ namespace ASD_Game.Session
             }
         }
 
-        private void CheckHeartbeatTimer()
+        private void CheckHeartbeatEvent()
         {
-            _heartbeatTimer.AutoReset = true;
-            _heartbeatTimer.Elapsed += CheckHeartbeatEvent;
-            _heartbeatTimer.Start();
-        }
-
-        private void CheckHeartbeatEvent(object sender, ElapsedEventArgs e)
-        {
-            _heartbeatTimer.Stop();
             UpdateStatus();
-            _heartbeatTimer.Start();
         }
 
         private void CheckStatus()
@@ -74,6 +91,8 @@ namespace ASD_Game.Session
 
         private void EnablePlayerAgent(List<HeartbeatDTO> leavers)
         {
+            _messageService.AddMessage("Agents are enabled");
+
             foreach (HeartbeatDTO player in leavers)
             {
                 ReplaceAgent(player);
@@ -98,7 +117,8 @@ namespace ASD_Game.Session
                 if (DateTime.Now - player.Time >= waitTime)
                 {
                     player.IsOnline = false;
-                } else if (!player.IsOnline)
+                } 
+                else if (!player.IsOnline)
                 {
                     // TODO: implement when player returns take over agent
                     //ReplaceAgent(player);

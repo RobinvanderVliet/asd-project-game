@@ -21,13 +21,16 @@
             DrawBox(_xPosition, _yPosition, _width, _height);
         }
 
-        private void DrawUserInfo(string userName, int score)
+        private void DrawUserInfo(string userName, int score, int playersAlive, int playersTotal)
         {
             _screenHandler.ConsoleHelper.SetCursor(OFFSET_LEFT, _yPosition + 1);
             _screenHandler.ConsoleHelper.Write(userName);
             _screenHandler.ConsoleHelper.SetCursor(OFFSET_LEFT, _yPosition + 2);
             _screenHandler.ConsoleHelper.Write("Score: " + score);
+            _screenHandler.ConsoleHelper.SetCursor(OFFSET_LEFT, _yPosition + 4);
+            _screenHandler.ConsoleHelper.Write($"Players alive: {playersAlive} / {playersTotal}");
         }
+
         private void DrawUserStats(int health, int stamina, int armor, int radiationLevel)
         {
             int xpos = (_width / 5) + BORDER_SIZE;
@@ -74,12 +77,12 @@
             DrawScreen();
         }
         
-        public void SetStatValues(string name, int score, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree)
+        public void SetStatValues(string name, int score, int playersAlive, int playersTotal, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree)
         {
             int originalCursorX = _screenHandler.ConsoleHelper.GetCursorLeft();
             int originalCursorY = _screenHandler.ConsoleHelper.GetCursorTop();
             ClearAllStats();
-            DrawUserInfo(name, score);
+            DrawUserInfo(name, score, playersAlive,  playersTotal);
             DrawUserStats(health, stamina, armor, radiation);
             DrawUserEquipment(helm, body, weapon);
             DrawUserInventory(slotOne, slotTwo, slotThree);

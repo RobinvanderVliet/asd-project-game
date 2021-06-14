@@ -1,4 +1,4 @@
-namespace ASD_Game.Creature.Creature.StateMachine.CustomRuleSet
+namespace ASD_Game.World.Models.Characters.StateMachine.CustomRuleSet
 {
     public class RuleSet
     {

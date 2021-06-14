@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Linq;
 using System.Text;
-using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items;
 using ASD_Game.Items.Services;
+using ASD_Game.Messages;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
@@ -15,16 +16,19 @@ namespace ASD_Game.World.Services
 {
     public class WorldService : IWorldService
     {
-        private readonly IItemService _itemService;
+        public IItemService ItemService { get; }
         private readonly IScreenHandler _screenHandler;
-        private World _world;
-        public List<Character> _creatureMoves { get; set; }
+        private readonly IMessageService _messageService;
+        private IWorld _world;
+        public List<Character> CreatureMoves { get; set; }
         private const int VIEWDISTANCE = 6;
+        private bool gameEnded = false;
         
-        public WorldService(IScreenHandler screenHandler, IItemService itemService)
+        public WorldService(IScreenHandler screenHandler, IItemService itemService, IMessageService messageService)
         {
             _screenHandler = screenHandler;
-            _itemService = itemService;
+            ItemService = itemService;
+            _messageService = messageService;
         }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
@@ -35,6 +39,11 @@ namespace ASD_Game.World.Services
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
         {
             _world.AddPlayerToWorld(player, isCurrentPlayer);
+        }
+
+        public void SetWorld(IWorld world)
+        {
+            _world = world;
         }
 
         public void AddCreatureToWorld(Monster character)
@@ -54,22 +63,7 @@ namespace ASD_Game.World.Services
 
         public void GenerateWorld(int seed)
         {
-            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, _itemService);
-        }
-
-        public Player getCurrentPlayer()
-        {
-            return _world.CurrentPlayer;
-        }
-
-        public List<ItemSpawnDTO> getAllItems()
-        {
-            return _world.Items;
-        }
-
-        public void AddItemToWorld(ItemSpawnDTO itemSpawnDTO)
-        {
-            _world.AddItemToWorld(itemSpawnDTO);
+            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, ItemService);
         }
 
         public Player GetCurrentPlayer()
@@ -89,7 +83,12 @@ namespace ASD_Game.World.Services
 
         public List<Monster> GetMonsters()
         {
-            return _world._creatures;
+            return _world.Creatures;
+        }
+
+        public List<Character> GetAllCharacters()
+        {
+            return _world.GetAllCharacters();
         }
 
         public Character GetCharacterInClosestRangeToCurrentCharacter(Character character, int distance)
@@ -148,7 +147,7 @@ namespace ASD_Game.World.Services
         {
             if (_world != null)
             {
-                foreach (Character monster in _world._creatures)
+                foreach (Character monster in _world.Creatures)
                 {
                     if (monster is SmartMonster smartMonster)
                     {
@@ -163,7 +162,7 @@ namespace ASD_Game.World.Services
             if (_world != null)
             {
                 _world.UpdateAI();
-                return _world.movesList;
+                return _world.MovesList;
             }
             return null;
         }
@@ -192,14 +191,19 @@ namespace ASD_Game.World.Services
         public string SearchCurrentTile()
         {
             var itemsOnCurrentTile = GetItemsOnCurrentTile();
-            StringBuilder result = new StringBuilder();
 
-            result.Append("The following items are on the current tile:" + Environment.NewLine);
+            if (itemsOnCurrentTile.Count == 0)
+            {
+                return "There are no items on the current tile!";
+            }
+
+            var result = new StringBuilder();
+            result.Append("The following items are on the current tile:");
 
             var index = 1;
             foreach (var item in itemsOnCurrentTile)
             {
-                result.Append($"{index}. {item.ItemName}{Environment.NewLine}");
+                result.Append($"{Environment.NewLine}{index}. {item.ItemName}");
                 index += 1;
             }
 
@@ -232,6 +236,8 @@ namespace ASD_Game.World.Services
             _screenHandler.SetStatValues(
                 player.Name,
                 0,
+                GetAllPlayers().Count(player => player.Health > 0),
+                GetAllPlayers().Count,
                 player.Health,
                 player.Stamina,
                 player.GetArmorPoints(),
@@ -257,6 +263,29 @@ namespace ASD_Game.World.Services
         public int GetViewDistance()
         {
             return VIEWDISTANCE;
+        }
+
+        public void CheckLastManStanding()
+        {
+            if (gameEnded || GetAllPlayers().Count == 1)
+            {
+                return;
+            }
+
+            int livingPlayers = 0;
+            Player livingPlayer = null;
+
+            foreach (var player in GetAllPlayers().Where(player => player.Health > 0))
+            {
+                livingPlayers++;
+                livingPlayer = player;
+            }
+
+            if (livingPlayers == 1)
+            {
+                _messageService.AddMessage(livingPlayer.Name + " is the last player in the game and won! Congratulations!");
+                gameEnded = true;
+            }
         }
     }
 }

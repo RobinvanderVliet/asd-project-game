@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ASD_Game.ActionHandling.DTO;
 using ASD_Game.DatabaseHandler.POCO;
-using ASD_Game.DatabaseHandler.Services;
-using ASD_Game.Messages;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
@@ -12,6 +10,10 @@ using ASD_Game.World.Models.Interfaces;
 using ASD_Game.World.Services;
 using Newtonsoft.Json;
 using System.Timers;
+using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Messages;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ASD_Game.ActionHandling
 
@@ -23,7 +25,8 @@ namespace ASD_Game.ActionHandling
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IMessageService _messageService;
         private Timer AIUpdateTimer;
-        private int _updateTime = 2000;
+        private int _updateTime = 7000; // Smartmonster timer
+        private List<MoveDTO> _AIMoves = new List<MoveDTO>();
 
         public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
         {
@@ -52,15 +55,18 @@ namespace ASD_Game.ActionHandling
                 case "east":
                     x = stepsValue;
                     break;
+
                 case "left":
                 case "west":
                     x = -stepsValue;
                     break;
+
                 case "forward":
                 case "up":
                 case "north":
                     y = +stepsValue;
                     break;
+
                 case "backward":
                 case "down":
                 case "south":
@@ -95,7 +101,7 @@ namespace ASD_Game.ActionHandling
             return new(SendAction.Ignore, null);
         }
 
-        public HandlerResponseDTO HandleMove(MoveDTO moveDTO, bool handleInDatabase)
+        private HandlerResponseDTO HandleMove(MoveDTO moveDTO, bool handleInDatabase)
         {
             if (_worldService.GetPlayer(moveDTO.UserId) != null)
             {
@@ -150,7 +156,7 @@ namespace ASD_Game.ActionHandling
                     return new HandlerResponseDTO(SendAction.SendToClients, resultMessage);
                 }
             }
-            ChangeAIPosition(moveDTO);
+            _AIMoves.Add(moveDTO);
             return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
@@ -189,24 +195,15 @@ namespace ASD_Game.ActionHandling
             _worldService.DisplayWorld();
         }
 
-        private void ChangeAIPosition(MoveDTO moveDTO)
+        private void ChangeAIPosition(List<MoveDTO> moveDTO)
         {
-            var character = _worldService.GetAI(moveDTO.UserId);
-            character.XPosition = moveDTO.XPosition;
-            character.YPosition = moveDTO.YPosition;
-            _worldService.DisplayWorld();
-        }
-
-        public bool IsCharacterInView(Character ai, Character player, int viewDistance)
-        {
-            if(ai.YPosition >= player.YPosition - viewDistance && ai.YPosition <= player.YPosition + viewDistance + 1)
+            foreach (MoveDTO move in _AIMoves)
             {
-                if(ai.XPosition >= player.XPosition - viewDistance && ai.XPosition <= player.XPosition + viewDistance + 1)
-                {
-                    return true;
-                }
+                var character = _worldService.GetAI(move.UserId);
+                character.XPosition = move.XPosition;
+                character.YPosition = move.YPosition;
             }
-            return false;
+            _worldService.DisplayWorld();
         }
 
         private List<ITile> GetTilesForPositions(int x1, int y1, int x2, int y2)
@@ -253,12 +250,12 @@ namespace ASD_Game.ActionHandling
         private int GetStaminaCostForTiles(List<ITile> tiles)
         {
             var staminaCosts = 0;
-            
+
             foreach (var tile in tiles)
             {
                 staminaCosts += tile.StaminaCost;
             }
-            
+
             return staminaCosts;
         }
 
@@ -294,14 +291,18 @@ namespace ASD_Game.ActionHandling
         public void MoveAIs(List<Character> creatureMoves)
         {
             List<MoveDTO> moveDTOs = new List<MoveDTO>();
+            List<Character> _creatureMoves = creatureMoves;
             if (creatureMoves != null)
             {
-                foreach (Character move in creatureMoves)
+                foreach (Character move in _creatureMoves)
                 {
                     if (move is SmartMonster smartMonster)
                     {
-                        MoveDTO moveDTO = new(smartMonster.Id, (int)smartMonster.Destination.X, (int)smartMonster.Destination.Y);
-                        moveDTOs.Add(moveDTO);
+                        if (smartMonster.MoveType == "Move")
+                        {
+                            MoveDTO moveDTO = new(smartMonster.Id, (int)smartMonster.Destination.X, (int)smartMonster.Destination.Y);
+                            moveDTOs.Add(moveDTO);
+                        }
                     }
                 }
                 foreach (MoveDTO move in moveDTOs)
@@ -319,8 +320,13 @@ namespace ASD_Game.ActionHandling
         public void GetAIMoves()
         {
             MoveAIs(_worldService.GetCreatureMoves());
+            if (_AIMoves.Count > 0)
+            {
+                ChangeAIPosition(_AIMoves);
+            }
         }
 
+        [ExcludeFromCodeCoverage]
         private void CheckAITimer()
         {
             AIUpdateTimer = new Timer(_updateTime);
@@ -329,6 +335,7 @@ namespace ASD_Game.ActionHandling
             AIUpdateTimer.Start();
         }
 
+        [ExcludeFromCodeCoverage]
         private void CheckAITimerEvent(object sender, ElapsedEventArgs e)
         {
             AIUpdateTimer.Stop();

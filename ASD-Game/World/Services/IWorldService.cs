@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ASD_Game.Items;
+using ASD_Game.Items.Services;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Interfaces;
@@ -8,7 +9,10 @@ namespace ASD_Game.World.Services
 {
     public interface IWorldService
     {
-        public List<Character> _creatureMoves { get; set; }
+        IItemService ItemService { get; }
+        List<Character> CreatureMoves { get; set; }
+
+        public void SetWorld(IWorld world);
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition);
 
@@ -34,6 +38,7 @@ namespace ASD_Game.World.Services
         List<Character> GetCreatureMoves();
 
         List<Monster> GetMonsters();
+        public List<Character> GetAllCharacters();
 
         public Character GetCharacterInClosestRangeToCurrentCharacter(Character character, int distance);
         public Character GetCharacter(string id);
@@ -61,5 +66,6 @@ namespace ASD_Game.World.Services
         
         public int GetViewDistance();
 
+        public void CheckLastManStanding();
     }
 }

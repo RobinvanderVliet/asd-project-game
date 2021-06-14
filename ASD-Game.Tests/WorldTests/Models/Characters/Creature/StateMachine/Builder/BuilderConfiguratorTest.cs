@@ -8,9 +8,9 @@ using ASD_Game.Items.Consumables;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.StateMachine.Builder;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
-using WorldGeneration.StateMachine.CustomRuleSet;
 using ASD_Game.World.Models.Characters.StateMachine;
 using World.Models.Characters.StateMachine.Event;
+using ASD_Game.World.Models.Characters.StateMachine.CustomRuleSet;
 
 namespace Creature.Tests.Creature.StateMachine.Builder
 {

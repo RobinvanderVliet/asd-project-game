@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using Agent.Mapper;
+using ASD_Game.Agent.Mapper;
 using NUnit.Framework;
 
-namespace Agent.Tests.Mapper
+namespace ASD_Game.Tests.AgentTests.Mapper
 {
     [ExcludeFromCodeCoverage]
     public class FileToSettingListMapperTest

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ASD_Game.Creature.Creature.StateMachine.CustomRuleSet;
 using ASD_Game.Items;
+using ASD_Game.World.Models.Characters.StateMachine.CustomRuleSet;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ASD_Game.World.Models.Characters.StateMachine.State;
 using World.Models.Characters.StateMachine.Event;

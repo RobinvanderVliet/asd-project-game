@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading;
 using Agent.Services;
 using ASD_Game.InputHandling.Antlr;
+using ASD_Game.InputHandling.Models;
 using ASD_Game.Messages;
 using ASD_Game.Session;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
 using InputCommandHandler.Models;
-using InputHandling.Models;
 using WebSocketSharp;
 using Timer = System.Timers.Timer;
 
@@ -87,8 +87,8 @@ namespace ASD_Game.InputHandling
                     _screenHandler.TransitionTo(new ConfigurationScreen());
                     break;
                 case 2:
-                    _sessionHandler.RequestSessions();
                     _screenHandler.TransitionTo(new SessionScreen());
+                    _sessionHandler.RequestSessions();
                     break;
                 case 3:
                     _screenHandler.TransitionTo(new LoadScreen());
@@ -158,23 +158,15 @@ namespace ASD_Game.InputHandling
                     return;
                 }
 
-                if (input == START_COMMAND) 
-                {
-                    SendCommand(START_COMMAND);
-                }
-
-                if (input.Contains("SAY"))
+                if (input == START_COMMAND || input.Contains("say") || input.Contains("shout"))
                 {
                     SendCommand(input);
+                    _screenHandler.RedrawGameInputBox();
                 }
-                else if (input.Contains("SHOUT"))
-                {
-                    SendCommand(input);
-                }
-               
             }
 
         }
+
         public void HandleConfigurationScreenCommands()
         {
             var input = GetCommand();
@@ -185,6 +177,8 @@ namespace ASD_Game.InputHandling
             }
             else
             {
+                _gameConfigurationHandler.SetCurrentScreen();
+                
                 bool configurationCompleted = _gameConfigurationHandler.HandleAnswer(input);
 
                 if (configurationCompleted)
@@ -192,7 +186,6 @@ namespace ASD_Game.InputHandling
                     _gameConfigurationHandler.SetGameConfiguration();
                     _screenHandler.TransitionTo(new LobbyScreen());
                     _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(), _gameConfigurationHandler.GetUsername());
-
                 }
             }
         }

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ASD_Game.Creature.Creature.StateMachine.CustomRuleSet;
+using ASD_Game.World.Models.Characters.StateMachine.CustomRuleSet;
 using ASD_Game.World.Models.Characters.StateMachine.State;
 using World.Models.Characters.StateMachine.Event;
 

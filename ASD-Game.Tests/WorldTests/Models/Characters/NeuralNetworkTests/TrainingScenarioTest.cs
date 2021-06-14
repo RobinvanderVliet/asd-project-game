@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
-using ASD_Game.World.Models.Characters.StateMachine.Data;
+﻿using System.Diagnostics.CodeAnalysis;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
+using ASD_Game.World.Models.Characters.StateMachine.Data;
+using NUnit.Framework;
 
 namespace ASD_Game.Tests.WorldTests.Models.Characters.NeuralNetworkTests
 {
@@ -30,7 +30,7 @@ namespace ASD_Game.Tests.WorldTests.Models.Characters.NeuralNetworkTests
             //act
             _sut.SetupTraining();
             //assert
-            Assert.AreEqual(50, _sut.Pop.Pop.Count);
+            Assert.AreEqual(100, _sut.Pop.Pop.Count);
         }
     }
 }
