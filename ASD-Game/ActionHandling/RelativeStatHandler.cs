@@ -120,7 +120,6 @@ namespace ASD_Game.ActionHandling
             bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) ||
                                     _clientController.IsBackupHost;
 
-            // TODO: Dit geeft een NullReferenceException
             var player = _worldService.GetPlayer(relativeStatDTO.Id);
             if (player.Stamina < Player.STAMINA_MAX && relativeStatDTO.Stamina != 0)
             {
