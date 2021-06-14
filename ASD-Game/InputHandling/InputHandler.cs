@@ -97,7 +97,7 @@ namespace ASD_Game.InputHandling
                     _screenHandler.TransitionTo(new EditorScreen());
                     break;
                 case 5:
-                    Environment.Exit(0);
+                    SendCommand("exit");
                     break;
                 default:
                     StartScreen startScreen = _screenHandler.Screen as StartScreen;

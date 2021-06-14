@@ -1,3 +1,4 @@
+using System;
 using ActionHandling;
 using ASD_Game.ActionHandling;
 using ASD_Game.Chat;
@@ -150,7 +151,8 @@ namespace ASD_Game.InputHandling.Antlr.Transformer
 
         private void TransformExit()
         {
-            _screenHandler.TransitionTo(new StartScreen());
+            Environment.Exit(0);
+            //_screenHandler.TransitionTo(new StartScreen());
         }
 
         private void TransformPause()
