@@ -36,11 +36,11 @@ namespace ASD_Game.World.Models.Characters
         public float CurrDistanceToPlayer;
         public float CurrDistanceToMonster;
 
-        public SmartMonster(string name, int xPosition, int yPosition, string symbol, string id, DataGatheringService dataGatheringService) : base(name, xPosition, yPosition, symbol, id)
+        public SmartMonster(string name, int xPosition, int yPosition, string symbol, string id) : base(name, xPosition, yPosition, symbol, id)
         {
             CreatureData = CreateMonsterData(0);
-            _dataGatheringService = dataGatheringService;
-            Smartactions = new SmartCreatureActions(this, dataGatheringService);
+            _dataGatheringService = null;
+            Smartactions = new SmartCreatureActions(this, _dataGatheringService);
         }
 
         public void Update()

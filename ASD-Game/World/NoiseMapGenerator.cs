@@ -19,7 +19,7 @@ namespace ASD_Game.World
         private int _monsterSpawnChance;
         private IEnemySpawner _enemySpawner;
 
-        public NoiseMapGenerator(int seed, IItemService itemService, IEnemySpawner enemySpawner, List<ItemSpawnDTO> items, List<Monster> monsters)
+        public NoiseMapGenerator(int seed, IItemService itemService, IEnemySpawner enemySpawner, List<ItemSpawnDTO> items, List<Monster> monsters, int monsterSpawnChance = 5)
         {
             _worldNoise = new FastNoiseLite();
             _worldNoise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
@@ -34,7 +34,7 @@ namespace ASD_Game.World
             _itemService = itemService;
             _items = items;
             _monsters = monsters;
-            _monsterSpawnChance = 30;
+            _monsterSpawnChance = monsterSpawnChance;
             _enemySpawner = enemySpawner;
         }
 
