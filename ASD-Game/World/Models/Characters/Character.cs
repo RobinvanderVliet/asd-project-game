@@ -11,7 +11,13 @@ namespace ASD_Game.World.Models.Characters
         public int Health { get; set; }
         public int XPosition { get; set; }
         public int YPosition { get; set; }
-        public string Symbol { get; set; }
+        private string _symbol;
+        public string Symbol
+        {
+            get { return Health <= 0 ? "X" : _symbol; }
+            set { _symbol = value; }
+        }
+
         public Vector2 Destination { get; set; }
 
         public Character(string name, int xPosition, int yPosition, string symbol, string id)
@@ -22,16 +28,6 @@ namespace ASD_Game.World.Models.Characters
             YPosition = yPosition;
             Symbol = symbol;
             Id = id;
-        }
-
-        public string GetSymbol()
-        {
-            if (Health <= 0)
-            {
-                return "X";
-            }
-
-            return Symbol;
         }
     }
 }

@@ -144,6 +144,16 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
             }
         }
 
+        public void RunToPlayer(Player player, SmartMonster smartMonster)
+        {
+            if (player != null)
+            {
+                Vector2 playerPos = new Vector2(player.XPosition, player.YPosition);
+                Path = _pathfinder.FindPath(smartMonster.CreatureData.Position, playerPos);
+                smartMonster.CreatureData.Position = Path.Pop().Position;
+            }
+        }
+
         public void TakeDamage(int damage, SmartMonster smartMonster)
         {
             smartMonster.DamageTaken = damage;

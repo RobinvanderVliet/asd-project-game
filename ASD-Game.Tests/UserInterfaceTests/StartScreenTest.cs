@@ -3,7 +3,7 @@ using ASD_Game.UserInterface;
 using Moq;
 using NUnit.Framework;
 
-namespace UserInterface.Tests
+namespace ASD_Game.Tests.UserInterfaceTests
 {
     [ExcludeFromCodeCoverage]
     public class StartScreenTest

@@ -7,7 +7,8 @@ using ASD_Game.Items.Services;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Interfaces;
-using World.Models.Characters.Algorithms.NeuralNetworking;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
+using ASD_Game.World.Models.Interfaces;
 
 namespace ASD_Game.World.Services
 {
@@ -15,8 +16,8 @@ namespace ASD_Game.World.Services
     {
         private readonly IItemService _itemService;
         private readonly IScreenHandler _screenHandler;
-        private World _world;
-        public List<Character> _creatureMoves { get; set; }
+        private IWorld _world;
+        public List<Character> CreatureMoves { get; set; }
         private const int VIEWDISTANCE = 6;
         
         public WorldService(IScreenHandler screenHandler, IItemService itemService)
@@ -33,6 +34,11 @@ namespace ASD_Game.World.Services
         public void AddPlayerToWorld(Player player, bool isCurrentPlayer)
         {
             _world.AddPlayerToWorld(player, isCurrentPlayer);
+        }
+
+        public void SetWorld(IWorld world)
+        {
+            _world = world;
         }
 
         public void AddCreatureToWorld(Monster character)
@@ -55,27 +61,12 @@ namespace ASD_Game.World.Services
             _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, _itemService);
         }
 
-        public Player getCurrentPlayer()
-        {
-            return _world.CurrentPlayer;
-        }
-
-        public List<ItemSpawnDTO> getAllItems()
-        {
-            return _world.Items;
-        }
-
-        public void AddItemToWorld(ItemSpawnDTO itemSpawnDTO)
-        {
-            _world.AddItemToWorld(itemSpawnDTO);
-        }
-
         public Player GetCurrentPlayer()
         {
             return _world.CurrentPlayer;
         }
 
-        public World GetWorld()
+        public IWorld GetWorld()
         {
             return _world;
         }
@@ -87,14 +78,19 @@ namespace ASD_Game.World.Services
 
         public List<Monster> GetMonsters()
         {
-            return _world._creatures;
+            return _world.Creatures;
+        }
+
+        public List<Character> GetAllCharacters()
+        {
+            return _world.GetAllCharacters();
         }
 
         public void UpdateBrains(Genome genome)
         {
             if (_world != null)
             {
-                foreach (Character monster in _world._creatures)
+                foreach (Character monster in _world.Creatures)
                 {
                     if (monster is SmartMonster smartMonster)
                     {
@@ -109,7 +105,7 @@ namespace ASD_Game.World.Services
             if (_world != null)
             {
                 _world.UpdateAI();
-                return _world.movesList;
+                return _world.MovesList;
             }
             return null;
         }
