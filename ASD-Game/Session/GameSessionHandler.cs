@@ -13,11 +13,8 @@ using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Services;
 using Newtonsoft.Json;
-using System;
 using System.Timers;
 using ASD_Game.Items.Services;
-using ASD_Game.World.Models;
-using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine;
 using WorldGeneration.StateMachine;
 
@@ -38,8 +35,7 @@ namespace ASD_Game.Session
         private readonly IMessageService _messageService;
         private IItemService _itemService;
         private Timer AIUpdateTimer;
-        private int _brainUpdateTime = 60000;
-        private Random _random = new Random();
+        private int _brainUpdateTime = 10000;
 
         public GameSessionHandler(
             IClientController clientController,
@@ -70,6 +66,7 @@ namespace ASD_Game.Session
             _messageService = messageService;
             _itemService = itemService;
             CheckAITimer();
+            UpdateBrain();
         }
 
         public void SendGameSession()
@@ -110,6 +107,7 @@ namespace ASD_Game.Session
                 _worldService.LoadArea(currentPlayer.XPosition, currentPlayer.YPosition, 10);
             }
 
+            _worldService.SetAILogic();
             _relativeStatHandler.SetCurrentPlayer(_worldService.GetCurrentPlayer());
             _relativeStatHandler.CheckStaminaTimer();
             _relativeStatHandler.CheckRadiationTimer();
@@ -159,14 +157,6 @@ namespace ASD_Game.Session
         private Player AddPlayersToWorld()
         {
             return PlayerSpawner.SpawnPlayers(_sessionHandler.GetAllClients(), _sessionHandler.GetSessionSeed(), _worldService, _clientController);
-        }
-
-        public void SetBrain(SmartMonster monster)
-        {
-            if (_sessionHandler.TrainingScenario.BrainTransplant() != null)
-            {
-                monster.Brain = _sessionHandler.TrainingScenario.BrainTransplant();
-            }
         }
 
         private void CheckAITimer()

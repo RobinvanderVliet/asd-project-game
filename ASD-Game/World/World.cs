@@ -5,6 +5,7 @@ using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items.Services;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Interfaces;
 
 namespace ASD_Game.World
@@ -23,13 +24,13 @@ namespace ASD_Game.World
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService, IEnemySpawner enemySpawner)
         {
             Items = new();
-            Players = new ();
-            Monsters = new ();
+            Players = new();
+            Monsters = new();
             _map = mapFactory.GenerateMap(itemService, enemySpawner, Items, Monsters, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
         }
-        
+
         public Player GetPlayer(string id)
         {
             return Players.Find(x => x.Id == id);
@@ -89,6 +90,7 @@ namespace ASD_Game.World
             Items.Add(itemSpawnDto);
             UpdateMap();
         }
+
         public ITile GetLoadedTileByXAndY(int x, int y)
         {
             return _map.GetLoadedTileByXAndY(x, y);
@@ -115,7 +117,7 @@ namespace ASD_Game.World
         {
             _map.LoadArea(playerX, playerY, viewDistance);
         }
-         
+
         public void UpdateAI()
         {
             MovesList = new List<Character>();
@@ -123,7 +125,12 @@ namespace ASD_Game.World
             {
                 if (monster is SmartMonster smartMonster)
                 {
-                    if (smartMonster.Brain != null)
+                    if (smartMonster.Brain == null)
+                    {
+                        smartMonster.Brain = new Genome(14, 8);
+                        UpdateSmartMonster(smartMonster);
+                    }
+                    else
                     {
                         UpdateSmartMonster(smartMonster);
                     }

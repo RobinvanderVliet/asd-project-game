@@ -41,14 +41,15 @@ namespace ASD_Game.World.Models.Characters
         public SmartMonster(string name, int xPosition, int yPosition, string symbol, string id) : base(name, xPosition, yPosition, symbol, id)
         {
             CreatureData = CreateMonsterData(0);
-            _dataGatheringService = new DataGatheringService(_worldService);
-            Smartactions = new SmartCreatureActions(this, null);
+            _dataGatheringService = null;
+            Smartactions = null;
             Destination = new Vector2(xPosition, yPosition);
         }
 
-        public void SetDataGetheringService(IWorldService worldService)
+        public void SetLogic(IWorldService worldService)
         {
             _dataGatheringService = new DataGatheringService(worldService);
+            Smartactions = new SmartCreatureActions(this, _dataGatheringService);
         }
 
         public void Update()
@@ -125,7 +126,7 @@ namespace ASD_Game.World.Models.Characters
                 }
             }
 
-            if (max < 0.7)
+            if (max < 1.7)
             {
                 Smartactions.Wander(this);
                 return;

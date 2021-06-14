@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using ASD_Game.Items;
 using ASD_Game.Items.Services;
-using ASD_Game.Session;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Interfaces;
@@ -18,8 +17,9 @@ namespace ASD_Game.World.Services
         private IWorld _world;
         public List<Character> CreatureMoves { get; set; }
         private const int VIEWDISTANCE = 6;
+        private bool _logicSet = false;
         private IEnemySpawner _enemySpawner;
-        
+
         public WorldService(IScreenHandler screenHandler, IItemService itemService)
         {
             _screenHandler = screenHandler;
@@ -51,7 +51,7 @@ namespace ASD_Game.World.Services
         {
             _world.UpdateMap();
         }
-        
+
         public void DeleteMap()
         {
             _world.DeleteMap();
@@ -101,6 +101,17 @@ namespace ASD_Game.World.Services
             }
         }
 
+        public void SetAILogic()
+        {
+            foreach (Character monster in _world.Monsters)
+            {
+                if (monster is SmartMonster smartMonster)
+                {
+                    smartMonster.SetLogic(this);
+                }
+            }
+        }
+
         public List<Character> GetCreatureMoves()
         {
             if (_world != null)
@@ -120,7 +131,7 @@ namespace ASD_Game.World.Services
         {
             return player.Health <= 0;
         }
-        
+
         public void LoadArea(int playerX, int playerY, int viewDistance)
         {
             _world.LoadArea(playerX, playerY, viewDistance);
@@ -142,7 +153,7 @@ namespace ASD_Game.World.Services
 
             return result.ToString();
         }
-        
+
         public Player GetPlayer(string id)
         {
             return _world.GetPlayer(id);
@@ -180,11 +191,11 @@ namespace ASD_Game.World.Services
                 player.Inventory.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
                 player.Inventory.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
         }
+
         public IList<Item> GetItemsOnCurrentTile()
         {
             return _world.GetCurrentTile().ItemsOnTile;
         }
-
 
         public IList<Item> GetItemsOnCurrentTile(Player player)
         {

@@ -22,7 +22,7 @@ namespace ASD_Game.ActionHandling
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IMessageService _messageService;
         private Timer AIUpdateTimer;
-        private int _updateTime = 7000; // Smartmonster timer
+        private int _updateTime = 5000; // Smartmonster timer
 
         public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)
         {
@@ -51,15 +51,18 @@ namespace ASD_Game.ActionHandling
                 case "east":
                     x = stepsValue;
                     break;
+
                 case "left":
                 case "west":
                     x = -stepsValue;
                     break;
+
                 case "forward":
                 case "up":
                 case "north":
                     y = +stepsValue;
                     break;
+
                 case "backward":
                 case "down":
                 case "south":
@@ -207,9 +210,9 @@ namespace ASD_Game.ActionHandling
 
         public bool IsCharacterInView(Character ai, Character player, int viewDistance)
         {
-            if(ai.YPosition >= player.YPosition - viewDistance && ai.YPosition <= player.YPosition + viewDistance + 1)
+            if (ai.YPosition >= player.YPosition - viewDistance && ai.YPosition <= player.YPosition + viewDistance + 1)
             {
-                if(ai.XPosition >= player.XPosition - viewDistance && ai.XPosition <= player.XPosition + viewDistance + 1)
+                if (ai.XPosition >= player.XPosition - viewDistance && ai.XPosition <= player.XPosition + viewDistance + 1)
                 {
                     return true;
                 }
@@ -261,12 +264,12 @@ namespace ASD_Game.ActionHandling
         private int GetStaminaCostForTiles(List<ITile> tiles)
         {
             var staminaCosts = 0;
-            
+
             foreach (var tile in tiles)
             {
                 staminaCosts += tile.StaminaCost;
             }
-            
+
             return staminaCosts;
         }
 
