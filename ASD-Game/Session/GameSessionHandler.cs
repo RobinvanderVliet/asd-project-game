@@ -178,7 +178,7 @@ namespace ASD_Game.Session
                 else
                 {
                     Player curr = _worldService.GetCurrentPlayer();
-                    SmartMonster newMonster = new SmartMonster("Zombie", _random.Next(curr.XPosition - 1, curr.XPosition + 1), _random.Next(curr.YPosition - 1, curr.YPosition + 1), CharacterSymbol.TERMINATOR, "monst" + i, new DataGatheringService(_worldService));
+                    SmartMonster newMonster = new SmartMonster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i, new DataGatheringService(_worldService));
                     SetBrain(newMonster);
                     _worldService.AddCreatureToWorld(newMonster);
                 }
