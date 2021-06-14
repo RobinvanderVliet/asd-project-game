@@ -115,6 +115,8 @@ namespace ASD_Game.Tests.UserInterfaceTests
             //Arrange
             string name = "TestName";
             int score = 0;
+            int playersAlive = 1;
+            int playersTotal = 2;
             int health = 100;
             int stamina = 100;
             int armor = 10;
@@ -125,13 +127,13 @@ namespace ASD_Game.Tests.UserInterfaceTests
             string slotOne = "Bandage";
             string slotTwo = "Morphine";
             string slotThree = "Empty";
-            _mockedGameStatScreen.Setup(mock => mock.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree));
+            _mockedGameStatScreen.Setup(mock => mock.SetStatValues(name, score, playersAlive, playersTotal, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree));
 
             //Act
-            _sut.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree);
+            _sut.SetStatValues(name, score, playersAlive, playersTotal, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree);
 
             //Assert        
-            _mockedGameStatScreen.Verify(mock => mock.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree), Times.Once);
+            _mockedGameStatScreen.Verify(mock => mock.SetStatValues(name, score, playersAlive, playersTotal, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree), Times.Once);
         }
     }
 }

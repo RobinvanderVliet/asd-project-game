@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items;
@@ -172,6 +173,8 @@ namespace ASD_Game.World.Services
             _screenHandler.SetStatValues(
                 player.Name,
                 0,
+                GetAllPlayers().Count(player => player.Health > 0),
+                GetAllPlayers().Count,
                 player.Health,
                 player.Stamina,
                 player.GetArmorPoints(),
