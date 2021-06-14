@@ -98,6 +98,7 @@ namespace ASD_Game.Session
             _screenHandler.TransitionTo(new GameScreen());
 
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
+            _itemService = _worldService.ItemService;
             _gameConfigurationHandler.ItemService = _worldService.ItemService;
             _itemService.ChanceThereIsAItem = (int)_gameConfigurationHandler.GetItemSpawnRate();
             
