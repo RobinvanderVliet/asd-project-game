@@ -25,8 +25,9 @@ namespace ASD_Game.Session
             CheckHeartbeatTimer();
         }
 
-        public HeartbeatHandler(List<string> players)
+        public HeartbeatHandler(IAgentHandler agentHandler, List<string> players)
         {
+            _agentHandler = agentHandler;
             _players = new List<HeartbeatDTO>();
             foreach (var player in players)
             {
@@ -98,7 +99,8 @@ namespace ASD_Game.Session
                 if (DateTime.Now - player.Time >= waitTime)
                 {
                     player.IsOnline = false;
-                } else if (!player.IsOnline)
+                } 
+                else if (!player.IsOnline)
                 {
                     // TODO: implement when player returns take over agent
                     //ReplaceAgent(player);

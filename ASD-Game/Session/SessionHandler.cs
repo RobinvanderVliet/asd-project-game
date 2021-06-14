@@ -475,7 +475,7 @@ namespace ASD_Game.Session
             List<string> heartbeatSenders = new List<string>(clients);
             heartbeatSenders.Remove(_clientController.GetOriginId());
 
-            _heartbeatHandler = new HeartbeatHandler(heartbeatSenders);
+            _heartbeatHandler = new HeartbeatHandler(_agentHandler, heartbeatSenders);
 
             SessionDTO sessionDTO = new SessionDTO
             {
