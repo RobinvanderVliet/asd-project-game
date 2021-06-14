@@ -66,5 +66,10 @@ namespace ASD_Game.UserInterface
             _inputText = message;
             DrawScreen();
         }
+
+        public string GetInputText() 
+        {
+            return _inputText;
+        }
     }
 }
