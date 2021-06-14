@@ -165,7 +165,7 @@ namespace ASD_Game.Session
 
         private void CreateMonsters()
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 0; i++)
             {
                 if (i < 0)
                 {
@@ -182,7 +182,7 @@ namespace ASD_Game.Session
             }
         }
 
-        private void SetBrain(SmartMonster monster)
+        public void SetBrain(SmartMonster monster)
         {
             if (_sessionHandler.TrainingScenario.BrainTransplant() != null)
             {
@@ -213,7 +213,7 @@ namespace ASD_Game.Session
             }
         }
 
-        private void SetStateMachine(Monster monster)
+        public void SetStateMachine(Monster monster)
         {
             ICharacterStateMachine CSM = new MonsterStateMachine(monster.MonsterData, null);
             monster.MonsterStateMachine = CSM;

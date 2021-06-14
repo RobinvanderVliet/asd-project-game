@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ASD_Game.Items;
 using ASD_Game.Items.Services;
+using ASD_Game.Session;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Interfaces;
@@ -17,11 +18,13 @@ namespace ASD_Game.World.Services
         private IWorld _world;
         public List<Character> CreatureMoves { get; set; }
         private const int VIEWDISTANCE = 6;
+        private IEnemySpawner _enemySpawner;
         
         public WorldService(IScreenHandler screenHandler, IItemService itemService)
         {
             _screenHandler = screenHandler;
             ItemService = itemService;
+            _enemySpawner = new EnemySpawner();
         }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
@@ -41,7 +44,7 @@ namespace ASD_Game.World.Services
 
         public void AddCreatureToWorld(Monster character)
         {
-            _world.AddCreatureToWorld(character);
+            _world.AddMonsterToWorld(character);
         }
 
         public void DisplayWorld()
@@ -56,7 +59,7 @@ namespace ASD_Game.World.Services
 
         public void GenerateWorld(int seed)
         {
-            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, ItemService);
+            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, ItemService, _enemySpawner);
         }
 
         public Player GetCurrentPlayer()
@@ -76,7 +79,7 @@ namespace ASD_Game.World.Services
 
         public List<Monster> GetMonsters()
         {
-            return _world.Creatures;
+            return _world.Monsters;
         }
 
         public List<Character> GetAllCharacters()
@@ -88,7 +91,7 @@ namespace ASD_Game.World.Services
         {
             if (_world != null)
             {
-                foreach (Character monster in _world.Creatures)
+                foreach (Character monster in _world.Monsters)
                 {
                     if (monster is SmartMonster smartMonster)
                     {

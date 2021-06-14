@@ -9,7 +9,7 @@ namespace ASD_Game.World
     {
         List<Player> Players { get; set; }
         Player CurrentPlayer { get; set; }
-        List<Monster> Creatures { get; set; }
+        List<Monster> Monsters { get; set; }
         List<ItemSpawnDTO> Items { get; set; }
         List<Character> MovesList { get; set; }
         public List<Character> GetAllCharacters();
@@ -19,7 +19,7 @@ namespace ASD_Game.World
 
         void AddPlayerToWorld(Player player, bool isCurrentPlayer = false);
 
-        void AddCreatureToWorld(Monster monster);
+        void AddMonsterToWorld(Monster monster);
 
         void UpdateMap();
 

@@ -14,19 +14,18 @@ namespace ASD_Game.World
         private IMap _map;
         public Player CurrentPlayer { get; set; }
         public List<Player> Players { get; set; }
-        public List<Monster> Creatures { get; set; }
+        public List<Monster> Monsters { get; set; }
         public List<Character> MovesList { get; set; }
         public List<ItemSpawnDTO> Items { get; set; }
         private readonly int _viewDistance;
         private readonly IScreenHandler _screenHandler;
-        private static readonly char _separator = Path.DirectorySeparatorChar;
 
-        public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService)
+        public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService, IEnemySpawner enemySpawner)
         {
             Items = new();
             Players = new ();
-            Creatures = new ();
-            _map = mapFactory.GenerateMap(itemService, Items, seed);
+            Monsters = new ();
+            _map = mapFactory.GenerateMap(itemService, enemySpawner, Items, Monsters, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
         }
@@ -49,7 +48,7 @@ namespace ASD_Game.World
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
-            var creature = Creatures.FirstOrDefault(x => x.Id == userId);
+            var creature = Monsters.FirstOrDefault(x => x.Id == userId);
             if (GetAI(userId) != null)
             {
                 creature.XPosition = newXPosition;
@@ -67,14 +66,14 @@ namespace ASD_Game.World
             UpdateMap();
         }
 
-        public void AddCreatureToWorld(Monster character)
+        public void AddMonsterToWorld(Monster character)
         {
-            Creatures.Add(character);
+            Monsters.Add(character);
         }
 
         public void UpdateMap()
         {
-            if (CurrentPlayer != null && Players != null && Creatures != null)
+            if (CurrentPlayer != null && Players != null && Monsters != null)
             {
                 _screenHandler.UpdateWorld(_map.GetCharArrayMapAroundCharacter(CurrentPlayer, _viewDistance, GetAllCharacters()));
             }
@@ -108,7 +107,7 @@ namespace ASD_Game.World
         public List<Character> GetAllCharacters()
         {
             List<Character> characters = Players.Cast<Character>().ToList();
-            characters.AddRange(Creatures);
+            characters.AddRange(Monsters);
             return characters;
         }
 
@@ -120,7 +119,7 @@ namespace ASD_Game.World
         public void UpdateAI()
         {
             MovesList = new List<Character>();
-            foreach (Character monster in Creatures)
+            foreach (Character monster in Monsters)
             {
                 if (monster is SmartMonster smartMonster)
                 {
@@ -140,7 +139,7 @@ namespace ASD_Game.World
 
         public Character GetAI(string id)
         {
-            return Creatures.Find(x => x.Id == id);
+            return Monsters.Find(x => x.Id == id);
         }
 
         public ITile GetCurrentTile()

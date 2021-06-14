@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items.Services;
 using ASD_Game.World.Models;
+using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.HazardousTiles;
 using ASD_Game.World.Models.Interfaces;
 using ASD_Game.World.Models.TerrainTiles;
@@ -14,8 +15,11 @@ namespace ASD_Game.World
         private IFastNoise _itemNoise;
         private IItemService _itemService;
         private List<ItemSpawnDTO> _items;
+        private List<Monster> _monsters;
+        private int _monsterSpawnChance;
+        private IEnemySpawner _enemySpawner;
 
-        public NoiseMapGenerator(int seed, IItemService itemService, List<ItemSpawnDTO> items)
+        public NoiseMapGenerator(int seed, IItemService itemService, IEnemySpawner enemySpawner, List<ItemSpawnDTO> items, List<Monster> monsters)
         {
             _worldNoise = new FastNoiseLite();
             _worldNoise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
@@ -29,6 +33,9 @@ namespace ASD_Game.World
             _itemNoise.SetSeed(seed);
             _itemService = itemService;
             _items = items;
+            _monsters = monsters;
+            _monsterSpawnChance = 30;
+            _enemySpawner = enemySpawner;
         }
 
         public Chunk GenerateChunk(int chunkX, int chunkY, int chunkRowSize)
@@ -56,6 +63,8 @@ namespace ASD_Game.World
             {
                 return tile;
             }
+
+            SpawnMonsterOnTile(x, y, itemNoise);
             
             var item = _itemService.GenerateItemFromNoise(itemNoise, x, y);
             var itemSpawnDTO = new ItemSpawnDTO { Item = item, XPosition = x, YPosition = y };
@@ -87,6 +96,18 @@ namespace ASD_Game.World
                 (< 8) => new StreetTile(x, y),
                 _ => new GasTile(x, y)
             };
+        }
+        
+        private void SpawnMonsterOnTile(int x, int y, float noise)
+        {
+            if (noise * 100 < -100 + _monsterSpawnChance)
+            {
+                var id = "monst" + x + "!" + y;
+                if (!_monsters.Exists(monster => monster.Id == id))
+                {
+                    _monsters.Add(_enemySpawner.spawnMonster(x, y, id, 5)); 
+                }
+            }
         }
         
         [ExcludeFromCodeCoverage]

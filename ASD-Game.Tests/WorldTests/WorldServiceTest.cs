@@ -44,8 +44,8 @@ namespace ASD_Game.Tests.WorldTests
             //Initialisation of mocks
             _worldMock = new Mock<IWorld>();
             _worldMock.Setup(world => world.CurrentPlayer).Returns(_player);
-            _worldMock.Setup(world => world.Creatures).Returns(_creatures);
-            _worldMock.Setup(world => world.AddCreatureToWorld(It.IsAny<Monster>())).Verifiable();
+            _worldMock.Setup(world => world.Monsters).Returns(_creatures);
+            _worldMock.Setup(world => world.AddMonsterToWorld(It.IsAny<Monster>())).Verifiable();
             _worldMock.Setup(world => world.AddPlayerToWorld(It.IsAny<Player>(), It.IsAny<bool>())).Verifiable();
             _worldMock.Setup(world => world.GetCurrentTile().ItemsOnTile);
             _worldMock.Setup(world => world.GetTileForPlayer(It.IsAny<Player>()).ItemsOnTile);
@@ -104,7 +104,7 @@ namespace ASD_Game.Tests.WorldTests
             //Act ---------
             _sut.AddCreatureToWorld(_monster);
             //Assert ---------
-            _worldMock.Verify(world => world.AddCreatureToWorld(_monster), Times.Once);
+            _worldMock.Verify(world => world.AddMonsterToWorld(_monster), Times.Once);
         }
 
         [Test]
@@ -156,7 +156,7 @@ namespace ASD_Game.Tests.WorldTests
             //Act ---------
             _sut.GetMonsters();
             //Assert ---------
-            _worldMock.Verify(world => world.Creatures, Times.Once);
+            _worldMock.Verify(world => world.Monsters, Times.Once);
         }
         
         [Test]
