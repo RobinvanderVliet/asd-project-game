@@ -20,6 +20,8 @@ using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine;
 using WorldGeneration.StateMachine;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ASD_Game.Session
 {
@@ -102,7 +104,7 @@ namespace ASD_Game.Session
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
             _gameConfigurationHandler.ItemService = _worldService.ItemService;
             _itemService.ChanceThereIsAItem = (int)_gameConfigurationHandler.GetItemSpawnRate();
-            
+
             CreateMonsters();
 
             Player currentPlayer = AddPlayersToWorld();
@@ -165,7 +167,7 @@ namespace ASD_Game.Session
 
         private void CreateMonsters()
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 1; i++)
             {
                 if (i < 0)
                 {
@@ -175,6 +177,7 @@ namespace ASD_Game.Session
                 }
                 else
                 {
+                    Player curr = _worldService.GetCurrentPlayer();
                     SmartMonster newMonster = new SmartMonster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i, new DataGatheringService(_worldService));
                     SetBrain(newMonster);
                     _worldService.AddCreatureToWorld(newMonster);
@@ -182,7 +185,7 @@ namespace ASD_Game.Session
             }
         }
 
-        private void SetBrain(SmartMonster monster)
+        public void SetBrain(SmartMonster monster)
         {
             if (_sessionHandler.TrainingScenario.BrainTransplant() != null)
             {
@@ -190,6 +193,7 @@ namespace ASD_Game.Session
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private void CheckAITimer()
         {
             AIUpdateTimer = new Timer(_brainUpdateTime);
@@ -198,6 +202,7 @@ namespace ASD_Game.Session
             AIUpdateTimer.Start();
         }
 
+        [ExcludeFromCodeCoverage]
         private void CheckAITimerEvent(object sender, ElapsedEventArgs e)
         {
             AIUpdateTimer.Stop();
@@ -205,6 +210,7 @@ namespace ASD_Game.Session
             AIUpdateTimer.Start();
         }
 
+        [ExcludeFromCodeCoverage]
         public void UpdateBrain()
         {
             if (_sessionHandler.TrainingScenario.BrainTransplant() != null)
@@ -213,6 +219,7 @@ namespace ASD_Game.Session
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private void SetStateMachine(Monster monster)
         {
             ICharacterStateMachine CSM = new MonsterStateMachine(monster.MonsterData, null);

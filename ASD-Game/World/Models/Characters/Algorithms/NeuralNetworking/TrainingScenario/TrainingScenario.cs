@@ -8,7 +8,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
     public class TrainingScenario
     {
         public Population Pop;
-        public Genome BestGene;
+        public Genome BestGene = new Genome(14, 8);
         public bool RunTraining = false;
         public bool RunOnce = false;
 
@@ -27,7 +27,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
                 14,
                 0
             );
-            Pop = new Population(50, data);
+            Pop = new Population(20, data);
             RunTraining = true;
         }
 
