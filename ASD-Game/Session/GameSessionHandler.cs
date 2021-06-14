@@ -98,10 +98,10 @@ namespace ASD_Game.Session
             _screenHandler.TransitionTo(new GameScreen());
 
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
-            CreateMonsters();
 
             Player currentPlayer = AddPlayersToWorld();
 
+            CreateMonsters();
             if (currentPlayer != null)
             {
                 _worldService.LoadArea(currentPlayer.XPosition, currentPlayer.YPosition, 10);
@@ -160,7 +160,7 @@ namespace ASD_Game.Session
 
         private void CreateMonsters()
         {
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1; i++)
             {
                 if (i < 0)
                 {
@@ -170,14 +170,15 @@ namespace ASD_Game.Session
                 }
                 else
                 {
-                    SmartMonster newMonster = new SmartMonster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i, new DataGatheringService(_worldService));
+                    Player curr = _worldService.GetCurrentPlayer();
+                    SmartMonster newMonster = new SmartMonster("Zombie", _random.Next(curr.XPosition - 1, curr.XPosition + 1), _random.Next(curr.YPosition - 1, curr.YPosition + 1), CharacterSymbol.TERMINATOR, "monst" + i, new DataGatheringService(_worldService));
                     SetBrain(newMonster);
                     _worldService.AddCreatureToWorld(newMonster);
                 }
             }
         }
 
-        private void SetBrain(SmartMonster monster)
+        public void SetBrain(SmartMonster monster)
         {
             if (_sessionHandler.TrainingScenario.BrainTransplant() != null)
             {

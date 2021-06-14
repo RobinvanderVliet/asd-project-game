@@ -16,6 +16,7 @@ namespace ASD_Game.World
         public Player CurrentPlayer { get; set; }
         public List<Player> Players { get; set; }
         public List<Monster> Creatures { get; set; }
+        public List<Monster> DeadCreatures { get; set; } = new List<Monster>();
         public List<Character> MovesList { get; set; } = new List<Character>();
         public List<ItemSpawnDTO> Items { get; set; }
         private readonly int _viewDistance;
@@ -24,14 +25,6 @@ namespace ASD_Game.World
 
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService)
         {
-            // Players = new();
-            // _creatures = new();
-            // var currentDirectory = Directory.GetCurrentDirectory();
-            //
-            // Players = new();
-            // _viewDistance = viewDistance;
-            // _screenHandler = screenHandler;
-            // DeleteMap();
             Items = new();
             Players = new();
             Creatures = new();
@@ -129,15 +122,33 @@ namespace ASD_Game.World
 
         public void UpdateAI()
         {
-            MovesList = new List<Character>();
+            MovesList.Clear();
+            deleteDeadMonsters();
             foreach (Character monster in Creatures)
             {
+                if (monster.Health <= 0)
+                {
+                    DeadCreatures.Add((Monster)monster);
+                }
                 if (monster is SmartMonster smartMonster)
                 {
                     if (smartMonster.Brain != null)
                     {
                         UpdateSmartMonster(smartMonster);
                     }
+                }
+            }
+        }
+
+        public void deleteDeadMonsters()
+        {
+            if (DeadCreatures != null)
+            {
+                foreach (Monster monster in DeadCreatures)
+                {
+                    string montid = monster.Id;
+                    Monster x = (Monster)GetAI(montid);
+                    Creatures.Remove(x);
                 }
             }
         }

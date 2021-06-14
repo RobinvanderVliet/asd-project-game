@@ -120,6 +120,20 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
             }
         }
 
+        private void LevelUp(SmartMonster smartMonster)
+        {
+            int oldHP = (int)smartMonster.CreatureData.Health;
+            int oldDMG = smartMonster.CreatureData.Damage;
+            int newHP = (int)(oldHP * 1.5);
+            int newDMG = (int)(oldDMG * 1.5);
+
+            smartMonster.HealthHealed = newHP - oldHP;
+            smartMonster.StatsGained = newDMG - oldDMG;
+
+            smartMonster.CreatureData.Damage = newDMG;
+            smartMonster.CreatureData.Health = newHP;
+        }
+
         public void Flee(Character player, SmartMonster smartMonster)
         {
             if (player != null)
