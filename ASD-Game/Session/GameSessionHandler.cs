@@ -23,7 +23,7 @@ using WorldGeneration.StateMachine;
 using System.Numerics;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
-
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 
 namespace ASD_Game.Session
 {
