@@ -7,15 +7,18 @@ namespace ASD_Game.Items.Services
     {
         private ISpawnHandler _spawnHandler;
         private IRandomItemGenerator _randomItemGenerator;
-        public ItemService(ISpawnHandler spawnHandler, IRandomItemGenerator randomItemGenerator)
+        public int ChanceThereIsAItem { get; set; }
+        
+        public ItemService(ISpawnHandler spawnHandler, IRandomItemGenerator randomItemGenerator, int chanceThereIsAItem = 60)
         {
             _spawnHandler = spawnHandler;
             _randomItemGenerator = randomItemGenerator;
+            ChanceThereIsAItem = chanceThereIsAItem;
         }
         
         public Item GenerateItemFromNoise(float noiseResult, int x, int y)
         {
-            var item = _randomItemGenerator.GetRandomItem(noiseResult);
+            var item = _randomItemGenerator.GetRandomItem(noiseResult, ChanceThereIsAItem);
             if (item != null)
             {
                 item.ItemId = (x + "!" + y + "!");

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using ASD_Game.ActionHandling.DTO;
@@ -24,14 +23,6 @@ namespace ASD_Game.World
 
         public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService)
         {
-            // Players = new();
-            // _creatures = new();
-            // var currentDirectory = Directory.GetCurrentDirectory();
-            //
-            // Players = new();
-            // _viewDistance = viewDistance;
-            // _screenHandler = screenHandler;
-            // DeleteMap();
             Items = new();
             Players = new ();
             Creatures = new ();
