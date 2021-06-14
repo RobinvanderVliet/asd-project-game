@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-using System.Diagnostics.CodeAnalysis;
-using ASD_Game.World.Models.Characters.StateMachine.Data;
+﻿using System.Diagnostics.CodeAnalysis;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
+using ASD_Game.World.Models.Characters.StateMachine.Data;
+using NUnit.Framework;
 
 namespace ASD_Game.Tests.WorldTests.Models.Characters.NeuralNetworkTests
 {

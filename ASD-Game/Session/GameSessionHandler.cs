@@ -17,6 +17,7 @@ using ASD_Game.Session.Helpers;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Services;
 using System.Timers;
+using ASD_Game.Items.Services;
 using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters.StateMachine;
 using WorldGeneration.StateMachine;
@@ -45,6 +46,7 @@ namespace ASD_Game.Session
         private readonly IMessageService _messageService;
         private readonly IMoveHandler _moveHandler;
         private readonly IAttackHandler _attackHandler;
+        private IItemService _itemService;
         private Timer AIUpdateTimer;
         private int _brainUpdateTime = 60000;
         private Random _random = new Random();
@@ -64,7 +66,9 @@ namespace ASD_Game.Session
             INetworkComponent networkComponent,
             IConfigurationService configurationService,
             IMoveHandler moveHandler,
-            IAttackHandler attackHandler
+            IAttackHandler attackHandler,
+            IItemService itemService
+
         )
         {
             _clientController = clientController;
@@ -83,6 +87,7 @@ namespace ASD_Game.Session
             _configurationService = configurationService;
             _moveHandler = moveHandler;
             _attackHandler = attackHandler;
+            _itemService = itemService;
             CheckAITimer();
         }
 
@@ -128,6 +133,9 @@ namespace ASD_Game.Session
             _screenHandler.TransitionTo(new GameScreen());
 
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
+            _gameConfigurationHandler.ItemService = _worldService.ItemService;
+            _itemService.ChanceThereIsAItem = (int)_gameConfigurationHandler.GetItemSpawnRate();
+            
             CreateMonsters();
 
             Player currentPlayer = AddPlayersToWorld();
@@ -180,7 +188,7 @@ namespace ASD_Game.Session
                 GameGUID = _clientController.SessionId,
                 NPCDifficultyCurrent = (int)_gameConfigurationHandler.GetCurrentMonsterDifficulty(),
                 NPCDifficultyNew = (int)_gameConfigurationHandler.GetNewMonsterDifficulty(),
-                ItemSpawnRate = (int)_gameConfigurationHandler.GetSpawnRate()
+                ItemSpawnRate = (int)_gameConfigurationHandler.GetItemSpawnRate()
             };
             _gameConfigDatabaseService.CreateAsync(gameConfigurationPOCO);
         }
@@ -194,30 +202,30 @@ namespace ASD_Game.Session
         {
             for (int i = 0; i < 15; i++)
             {
-                if (i >= 0)
-                {
-                    var newMonster = new Monster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i);
-                    var newMonsterData = new MonsterData(newMonster.XPosition, newMonster.YPosition, 0)
-                    {
-                        WorldService = _worldService,
-                        MoveHandler = _moveHandler,
-                        AttackHandler = _attackHandler,
-                        Health = newMonster.Health,
-                        VisionRange = 6,
-                        Position = new Vector2(newMonster.XPosition, newMonster.YPosition),
-                        CharacterId = newMonster.Id
-                    };
-                    newMonster.MonsterData = newMonsterData;
-                    SetStateMachine(newMonster);
-                    newMonster.MonsterStateMachine.StartStateMachine();
-                    _worldService.AddCreatureToWorld(newMonster);
-                }
-                else
-                {
+                // if (i >= 0)
+                // {
+                //     var newMonster = new Monster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i);
+                //     var newMonsterData = new MonsterData(newMonster.XPosition, newMonster.YPosition, 0)
+                //     {
+                //         WorldService = _worldService,
+                //         MoveHandler = _moveHandler,
+                //         AttackHandler = _attackHandler,
+                //         Health = newMonster.Health,
+                //         VisionRange = 6,
+                //         Position = new Vector2(newMonster.XPosition, newMonster.YPosition),
+                //         CharacterId = newMonster.Id
+                //     };
+                //     newMonster.MonsterData = newMonsterData;
+                //     SetStateMachine(newMonster);
+                //     newMonster.MonsterStateMachine.StartStateMachine();
+                //     _worldService.AddCreatureToWorld(newMonster);
+                // }
+                // else
+                // {
                     var newMonster = new SmartMonster("Zombie", _random.Next(12, 25), _random.Next(12, 25), CharacterSymbol.TERMINATOR, "monst" + i, new DataGatheringService(_worldService));
                     SetBrain(newMonster);
                     _worldService.AddCreatureToWorld(newMonster);
-                }
+                // }
             }
         }
 

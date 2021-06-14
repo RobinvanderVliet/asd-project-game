@@ -50,6 +50,10 @@ namespace ASD_Game.UserInterface
             {
                 var gameScreen = Screen as GameScreen;
                 _actionsInQueue.Add(() => gameScreen.ShowMessages(messages));
+            } else if (_screen is LobbyScreen)
+            {
+                var lobbyScreen = Screen as LobbyScreen;
+                _actionsInQueue.Add(() => lobbyScreen.ShowMessages(messages));
             }
         }
 
@@ -64,7 +68,11 @@ namespace ASD_Game.UserInterface
             {
                 var gameScreen = Screen as GameScreen;
                 _actionsInQueue.Add(gameScreen.RedrawInputBox);
-                _displayThread = new Thread(gameScreen.RedrawInputBox);
+            } 
+            else if (_screen is LobbyScreen)
+            {
+                var lobbyScreen = Screen as LobbyScreen;
+                _actionsInQueue.Add(lobbyScreen.RedrawInputBox);
             }
         }
 
@@ -77,12 +85,12 @@ namespace ASD_Game.UserInterface
             }
         }
 
-        public void SetStatValues(string name, int score, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree)
+        public void SetStatValues(string name, int score, int playersAlive, int playersTotal, int health, int stamina, int armor, int radiation, string helm, string body, string weapon, string slotOne, string slotTwo, string slotThree)
         {
             if (_screen is GameScreen)
             {
                 GameScreen gameScreen = _screen as GameScreen;
-                _actionsInQueue.Add(() => gameScreen.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree));
+                _actionsInQueue.Add(() => gameScreen.SetStatValues(name, score, playersAlive, playersTotal, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree));
             }
         }
 
