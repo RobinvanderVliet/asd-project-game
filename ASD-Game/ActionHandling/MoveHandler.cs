@@ -344,6 +344,12 @@ namespace ASD_Game.ActionHandling
         {
             var currentPlayer = _worldService.GetCurrentPlayer();
 
+            if (_worldService.IsDead(currentPlayer))
+            {
+                _messageService.AddMessage("You can't look for another player, you're dead!");
+                return;
+            }
+
             int minDistance = 0;
             Player closestPlayer = null;
 
