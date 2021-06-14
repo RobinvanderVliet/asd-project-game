@@ -129,6 +129,10 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
                 {
                     smartMonster.MoveType = "Attack";
                     smartMonster.Destination = PPos;
+                    if (smartMonster.MonsterData.Damage >= _dataGatheringService.ClosestPlayer.Health)
+                    {
+                        LevelUp(smartMonster);
+                    }
                 }
             }
         }

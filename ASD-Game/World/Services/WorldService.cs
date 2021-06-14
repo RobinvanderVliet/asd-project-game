@@ -134,13 +134,16 @@ namespace ASD_Game.World.Services
         {
             if (_world != null)
             {
-                _world.UpdateAI();
                 if (type == "Attack")
                 {
+                    _world.AttackList.Clear();
+                    _world.UpdateAI();
                     return _world.AttackList;
                 }
                 else
                 {
+                    _world.MovesList.Clear();
+                    _world.UpdateAI();
                     return _world.MovesList;
                 }
             }

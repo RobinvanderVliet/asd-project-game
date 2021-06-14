@@ -142,22 +142,6 @@ namespace ASD_Game.World.Models.Characters
                     Smartactions.RunToMonster(_dataGatheringService.ClosestMonster, this);
                     break;
 
-                //case 3:
-                //    Smartactions.WalkUp(this);
-                //    break;
-
-                //case 4:
-                //    Smartactions.WalkDown(this);
-                //    break;
-
-                //case 5:
-                //    Smartactions.WalkLeft(this);
-                //    break;
-
-                //case 6:
-                //    Smartactions.WalkRight(this);
-                //    break;
-
                 case 3:
                     Smartactions.RunToPlayer(_dataGatheringService.ClosestPlayer, this);
                     break;
