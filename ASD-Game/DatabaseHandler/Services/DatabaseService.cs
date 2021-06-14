@@ -1,22 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using ASD_Game.DatabaseHandler.Repository;
 using LiteDB;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
+using LiteDB.Async;
 
 namespace ASD_Game.DatabaseHandler.Services
 {
     public class DatabaseService<T> : IDatabaseService<T>
     {
-        private readonly ILogger<DatabaseService<T>> _log;
         private readonly IRepository<T> _repository;
 
         public DatabaseService(IRepository<T> repository = null)
         {
             _repository = repository ?? new Repository<T>();
-            _log = new NullLogger<DatabaseService<T>>();
         }
 
         public Task<BsonValue> CreateAsync(T obj)
@@ -25,10 +23,10 @@ namespace ASD_Game.DatabaseHandler.Services
             {
                 return _repository.CreateAsync(obj);
             }
-            catch (Exception ex)
+            catch (LiteAsyncException ex)
             {
-                _log.LogError("Exception thrown trying to create a {Obj}: {Message}", typeof(T), ex.Message);
-                throw;
+                Console.WriteLine("[{0}][{1}] ({2}) Source: {3}, Message: {4}\r\n[StackTrace] {5}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.Source, ex.Message, ex.StackTrace);
+                throw new LiteAsyncException("Exception thrown in DatabaseService.", ex);
             }
         }
 
@@ -38,10 +36,10 @@ namespace ASD_Game.DatabaseHandler.Services
             {
                 return _repository.UpdateAsync(obj);
             }
-            catch (Exception ex)
+            catch (LiteAsyncException ex)
             {
-                _log.LogError("Exception thrown trying to update a {Obj}: {Message}", typeof(T), ex.Message);
-                throw;
+                Console.WriteLine("[{0}][{1}] ({2}) Source: {3}, Message: {4}\r\n[StackTrace] {5}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.Source, ex.Message, ex.StackTrace);
+                throw new LiteAsyncException("Exception thrown in DatabaseService.", ex);
             }
         }
         
@@ -51,10 +49,10 @@ namespace ASD_Game.DatabaseHandler.Services
             {
                 return _repository.DeleteAsync(obj);
             }
-            catch (Exception ex)
+            catch (LiteAsyncException ex)
             {
-                _log.LogError("Exception thrown trying to delete {Obj} from database: {Message}", typeof(T), ex.Message);
-                throw;
+                Console.WriteLine("[{0}][{1}] ({2}) Source: {3}, Message: {4}\r\n[StackTrace] {5}", DateTime.Now.ToString(new CultureInfo("nl-NL")), GetType().Name, typeof(T), ex.Source, ex.Message, ex.StackTrace);
+                throw new LiteAsyncException("Exception thrown in DatabaseService.", ex);
             }
         }
 
