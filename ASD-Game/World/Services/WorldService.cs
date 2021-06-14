@@ -131,14 +131,19 @@ namespace ASD_Game.World.Services
         public string SearchCurrentTile()
         {
             var itemsOnCurrentTile = GetItemsOnCurrentTile();
-            StringBuilder result = new StringBuilder();
 
-            result.Append("The following items are on the current tile:" + Environment.NewLine);
+            if (itemsOnCurrentTile.Count == 0)
+            {
+                return "There are no items on the current tile!";
+            }
+
+            var result = new StringBuilder();
+            result.Append("The following items are on the current tile:");
 
             var index = 1;
             foreach (var item in itemsOnCurrentTile)
             {
-                result.Append($"{index}. {item.ItemName}{Environment.NewLine}");
+                result.Append($"{Environment.NewLine}{index}. {item.ItemName}");
                 index += 1;
             }
 
