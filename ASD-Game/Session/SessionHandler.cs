@@ -217,11 +217,6 @@ namespace ASD_Game.Session
 
                 if (packet.Header.Target == "client" || packet.Header.Target == "host")
                 {
-                    if (sessionDTO.SessionType == SessionType.RequestToJoinSession)
-                    {
-                        return AddPlayerToSession(packet);
-                    }
-
                     if (sessionDTO.SessionType == SessionType.SendHeartbeat)
                     {
                         return HandleHeartbeat(packet);
@@ -236,6 +231,10 @@ namespace ASD_Game.Session
                 if ((packet.Header.Target == "client" || packet.Header.Target == "host" ||
                      packet.Header.Target == _clientController.GetOriginId()))
                 {
+                    if (sessionDTO.SessionType == SessionType.RequestToJoinSession)
+                    {
+                        return AddPlayerToSession(packet);
+                    }
                     if (sessionDTO.SessionType == SessionType.EditMonsterDifficulty)
                     {
                         return HandleMonsterDifficulty(packet);
@@ -491,24 +490,25 @@ namespace ASD_Game.Session
             SessionDTO sessionDTOClients =
                 JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
             _session.EmptyClients();
-
             _session.SessionSeed = sessionDTOClients.SessionSeed;
-
-            foreach (string[] client in sessionDTOClients.Clients)
+    
+            _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
+            sessionDTO.Clients = new List<string[]>();
+            sessionDTO.SessionSeed = _session.SessionSeed;
+            foreach (string[] client in _session.GetAllClients())
             {
-                _session.AddClient(client[0], client[1]);
+                sessionDTO.Clients.Add(client);
             }
-
+    
+            if (_screenHandler.Screen is LobbyScreen screen)
+            {
+                screen.UpdateLobbyScreen(sessionDTOClients.Clients);
+            }
             if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost &&
                 sessionDTOClients.Clients.Count <= 2)
             {
                 _clientController.IsBackupHost = true;
                 PingHostTimer();
-            }
-
-            if (_screenHandler.Screen is LobbyScreen screen)
-            {
-                screen.UpdateLobbyScreen(sessionDTOClients.Clients);
             }
         }
 
