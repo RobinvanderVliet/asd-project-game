@@ -225,7 +225,7 @@ namespace ASD_Game.InputHandling
                 }
                 else
                 {
-                    editorScreen.PrintWarning("Please fill in an valid answer");
+                    editorScreen.PrintWarning("Please fill in a valid answer");
                 }
             }
 
