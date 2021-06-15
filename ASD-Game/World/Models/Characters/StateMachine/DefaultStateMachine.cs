@@ -43,10 +43,18 @@ namespace ASD_Game.World.Models.Characters.StateMachine
 
         protected void Update()
         {
-            _timer = new Timer((e) =>
+            if (_characterData.Health <= 0)
             {
-                FireEvent(CharacterEvent.Event.DO);
-            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(1000));
+                KillLoop();
+            }
+            else
+            {
+                _timer = new Timer((e) =>
+                {
+                    FireEvent(CharacterEvent.Event.DO);
+                }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(1000));
+            }
+            
         }
         
         protected void KillLoop()

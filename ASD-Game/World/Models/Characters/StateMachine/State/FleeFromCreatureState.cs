@@ -48,8 +48,8 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
             else
             {
                 _characterData.MoveHandler.SendAIMove(_characterData.CharacterId,
-                    Convert.ToInt32(_characterData.Position.X),
-                    Convert.ToInt32(_characterData.Position.Y)
+                    Convert.ToInt32(_characterData.Position.X + x),
+                    Convert.ToInt32(_characterData.Position.Y + y)
                 );
             }
         }

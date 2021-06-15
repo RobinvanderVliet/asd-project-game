@@ -30,7 +30,7 @@ namespace ASD_Game.ActionHandling
         private readonly IMessageService _messageService;
 
         private Timer AIUpdateTimer;
-        private int _updateTime = 2000;
+        private int _updateTime = 7000;
 
         public AttackHandler(IClientController clientController, IWorldService worldService,
             IDatabaseService<PlayerPOCO> playerDatabaseService,
