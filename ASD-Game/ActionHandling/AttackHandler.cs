@@ -403,6 +403,16 @@ namespace ASD_Game.ActionHandling
                             attackDTOs.Add(attackDTO);
                         }
                     }
+                    if (move is Monster monster)
+                    {
+                        AttackDTO attackDTO = new();
+                        attackDTO.XPosition = (int)monster.Destination.X;
+                        attackDTO.YPosition = (int)monster.Destination.Y;
+                        attackDTO.Stamina = 100;
+                        attackDTO.Damage = monster.MonsterData.Damage;
+                        attackDTO.PlayerGuid = monster.Id;
+                        attackDTOs.Add(attackDTO);
+                    }
                 }
                 foreach (AttackDTO attack in attackDTOs)
                 {
