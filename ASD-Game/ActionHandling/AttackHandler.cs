@@ -104,8 +104,6 @@ namespace ASD_Game.ActionHandling
         {
             AttackDTO attackDto = JsonConvert.DeserializeObject<AttackDTO>(packet.Payload);
 
-
-
             if (_worldService.GetPlayer(attackDto.PlayerGuid) != null &&
                 _worldService.GetPlayer(attackDto.PlayerGuid).Stamina < 10)
             {
@@ -124,7 +122,11 @@ namespace ASD_Game.ActionHandling
             if (_clientController.IsHost() && packet.Header.Target.Equals("host") || _clientController.IsBackupHost)
             {
                 var attackingCharacter = _worldService.GetCharacter(attackDto.PlayerGuid);
-                var characterToAttack = GetCharacterToAttack(attackingCharacter.XPosition, attackingCharacter.YPosition, attackDto.XPosition, attackDto.YPosition);               
+                var characterToAttack = GetCharacterToAttack(attackingCharacter.XPosition, attackingCharacter.YPosition, attackDto.XPosition, attackDto.YPosition);
+                if (attackingCharacter == null)
+                {
+                    return new HandlerResponseDTO(SendAction.Ignore, null);
+                }
 
                 if (attackDto.PlayerGuid.StartsWith("monst"))
                 {
@@ -279,11 +281,11 @@ namespace ASD_Game.ActionHandling
         private Character GetCharacterToAttack(int XPositionAttacker, int YPositionAttacker, int XPositionAttack, int YPositionAttack)
         {
             Character character = null;
-            if(XPositionAttacker != XPositionAttack)
+            if (XPositionAttacker != XPositionAttack)
             {
-                if(XPositionAttacker < XPositionAttack)
+                if (XPositionAttacker < XPositionAttack)
                 {
-                    for(int x = XPositionAttacker + 1; x <= XPositionAttack && character is null; x++)
+                    for (int x = XPositionAttacker + 1; x <= XPositionAttack && character is null; x++)
                     {
                         character = _worldService.GetCharacterOnTile(x, YPositionAttack);
                     }
