@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Timers;
@@ -10,6 +11,7 @@ using ASD_Game.Network;
 using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
 using ASD_Game.Session.DTO;
+using ASD_Game.Session.Exceptions;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
 using ASD_Game.World;
@@ -23,7 +25,8 @@ namespace ASD_Game.Session
     {
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
-
+        private const int MAXPLAYERS = 8;
+        
         private readonly IClientController _clientController;
 
         private Session _session;
@@ -36,8 +39,13 @@ namespace ASD_Game.Session
         private Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;
         private int _hostInactiveCounter = 0;
-        private Timer _hostPingTimer;
-        private Timer _senderHeartbeatTimer;
+
+        private Thread _pingThread;
+        private bool _runPingThread;
+
+        private Thread _sendHeartbeatThread;
+        private bool _runSendHeartbeatThread;
+
         private IGameConfigurationHandler _gameConfigurationHandler;
         public string GameName { get; set; }
         public bool AllowedToJoin { get; set; }
@@ -75,41 +83,52 @@ namespace ASD_Game.Session
             }
             else
             {
-                SendHeartbeatTimer();
+                StartSendHeartbeatThread();
 
-                SessionDTO receivedSessionDTO =
-                    JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
+                SessionDTO receivedSessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
+                if (receivedSessionDTO.Clients.Count < MAXPLAYERS)
+                {
+                    _session = new Session(receivedSessionDTO.Name);
 
-                _session = new Session(receivedSessionDTO.Name);
+                    _session.SessionId = sessionId;
+                    _clientController.SetSessionId(sessionId);
+                    _messageService.AddMessage("Joined game with name: " + _session.Name);
 
-                _session.SessionId = sessionId;
-                _clientController.SetSessionId(sessionId);
-                _messageService.AddMessage("Trying to join game with name: " + _session.Name);
-
-                SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
-                sessionDTO.Clients = new List<string[]>();
-                sessionDTO.Clients.Add(new[] {_clientController.GetOriginId(), userName});
-                sessionDTO.SessionStarted = receivedSessionDTO.SessionStarted;
-                sessionDTO.SessionSeed = receivedSessionDTO.SessionSeed;
-                SendSessionDTO(sessionDTO);
-                joinSession = true;
+                    SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
+                    sessionDTO.Clients = new List<string[]>();
+                    sessionDTO.Clients.Add(new[] {_clientController.GetOriginId(), userName});
+                    sessionDTO.SessionSeed = receivedSessionDTO.SessionSeed;
+                    sessionDTO.SessionStarted = receivedSessionDTO.SessionStarted;
+                    sendSessionDTO(sessionDTO);
+                    joinSession = true;
+                }
+                else
+                {
+                    throw new PlayerLimitException("This session is full you cant join, type return");
+                }
             }
 
             return joinSession;
         }
 
-        private void SendHeartbeatTimer()
+        private void StartSendHeartbeatThread()
         {
-            _senderHeartbeatTimer = new Timer(INTERVALTIMEPINGTIMER);
-            _senderHeartbeatTimer.Enabled = true;
-            _senderHeartbeatTimer.AutoReset = true;
-            _senderHeartbeatTimer.Elapsed += SenderHeartbeatEvent;
-            _senderHeartbeatTimer.Start();
-        }
+            _runSendHeartbeatThread = true;
+            _sendHeartbeatThread = new Thread(() =>
+            {
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                while (_runSendHeartbeatThread)
+                {
+                    if (stopwatch.ElapsedMilliseconds >= INTERVALTIMEPINGTIMER)
+                    {
+                        SendHeartbeat();
+                        stopwatch.Restart();
+                    }
+                }
 
-        private void SenderHeartbeatEvent(object sender, ElapsedEventArgs e)
-        {
-            SendHeartbeat();
+            })
+            { Priority = ThreadPriority.Highest, IsBackground = true };
+            _sendHeartbeatThread.Start();
         }
 
         public bool CreateSession(string sessionName, string userName, bool savedGame, string sessionId, int? seed)
@@ -301,18 +320,17 @@ namespace ASD_Game.Session
             {
                 SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.Payload);
                 int spawnrate = int.Parse(sessionDTO.Name);
-                _messageService.AddMessage(spawnrate + "");
-                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
+                _messageService.AddMessage("Spawnrate set to " + (ItemSpawnRate)spawnrate);
+                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate)spawnrate, _clientController.SessionId);
                 return new HandlerResponseDTO(SendAction.SendToClients, packetDto.Payload);
             }
 
             if (_clientController.IsBackupHost)
             {
-                SessionDTO sessionDTO =
-                    JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
+                SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDto.HandlerResponse.ResultMessage);
                 int spawnrate = int.Parse(sessionDTO.Name);
-                _messageService.AddMessage(spawnrate + "");
-                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate) spawnrate, _clientController.SessionId);
+                _messageService.AddMessage("Spawnrate set to " + (ItemSpawnRate)spawnrate);
+                _gameConfigurationHandler.SetSpawnRate((ItemSpawnRate)spawnrate, _clientController.SessionId);
             }
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
@@ -359,13 +377,12 @@ namespace ASD_Game.Session
             if (!_hostActive)
             {
                 _hostInactiveCounter++;
-
                 if (_hostInactiveCounter >= 5)
                 {
-                    _hostPingTimer.Dispose();
                     _hostActive = true;
                     _hostInactiveCounter = 0;
                     SwapToHost();
+                    StopPingThread();
                 }
             }
             else
@@ -490,8 +507,6 @@ namespace ASD_Game.Session
 
         private void ClientAddsPlayer(SessionDTO sessionDTO, PacketDTO packet)
         {
-            // SessionDTO sessionDTOClients =
-            //     JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
             _session.EmptyClients();
             _session.SessionSeed = sessionDTO.SessionSeed;
     
@@ -511,7 +526,7 @@ namespace ASD_Game.Session
                 sessionDTO.Clients.Count <= 2)
             {
                 _clientController.IsBackupHost = true;
-                PingHostTimer();
+                StartPingThread();
             }
         }
 
@@ -569,6 +584,31 @@ namespace ASD_Game.Session
             return startGameDTO;
         }
 
+        private void StartPingThread()
+        {
+            _runPingThread = true;
+            _pingThread = new Thread(() =>
+            {
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                while (_runPingThread)
+                {
+                    if (stopwatch.ElapsedMilliseconds >= INTERVALTIMEPINGTIMER)
+                    {
+                        HostPingEvent();
+                        stopwatch.Restart();
+                    }
+                }
+
+            })
+            { Priority = ThreadPriority.Highest, IsBackground = true };
+            _pingThread.Start();
+        }
+
+        private void StopPingThread()
+        {
+            _runPingThread = false;
+        }
+
         public int GetSessionSeed()
         {
             return _session.SessionSeed;
@@ -586,16 +626,7 @@ namespace ASD_Game.Session
             _clientController.SendPayload(jsonObject, PacketType.Session);
         }
 
-        private void PingHostTimer()
-        {
-            _hostPingTimer = new Timer(INTERVALTIMEPINGTIMER);
-            _hostPingTimer.Enabled = true;
-            _hostPingTimer.AutoReset = true;
-            _hostPingTimer.Elapsed += HostPingEvent;
-            _hostPingTimer.Start();
-        }
-
-        public void HostPingEvent(Object source, ElapsedEventArgs e)
+        public void HostPingEvent()
         {
             SendPing();
             Thread.Sleep(WAITTIMEPINGTIMER);
@@ -607,7 +638,7 @@ namespace ASD_Game.Session
             _clientController.CreateHostController();
             _clientController.IsBackupHost = false;
 
-            _senderHeartbeatTimer.Close();
+            StopSendHeartbeatThread();
 
             _messageService.AddMessage("Look at me, I'm the captain (Host) now!");
 
@@ -626,9 +657,10 @@ namespace ASD_Game.Session
             _clientController.SendPayload(jsonObject, PacketType.Session);
         }
 
-        public Timer getHostPingTimer()
+        private void StopSendHeartbeatThread()
         {
-            return _hostPingTimer;
+            _runSendHeartbeatThread = false;
+            _sendHeartbeatThread.Join();
         }
 
         public bool getHostActive()
@@ -640,12 +672,7 @@ namespace ASD_Game.Session
         {
             _hostActive = hostActive;
         }
-
-        public void setHostPingTimer(Timer timer)
-        {
-            _hostPingTimer = timer;
-        }
-
+        
         public bool GetSavedGame()
         {
             return _session.SavedGame;

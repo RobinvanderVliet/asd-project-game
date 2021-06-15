@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items.Services;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Interfaces;
 
 namespace ASD_Game.World
@@ -15,31 +15,24 @@ namespace ASD_Game.World
         private IMap _map;
         public Player CurrentPlayer { get; set; }
         public List<Player> Players { get; set; }
-        public List<Monster> Creatures { get; set; }
-        public List<Character> MovesList { get; set; }
+        public List<Monster> DeadCreatures { get; set; } = new List<Monster>();
+        public List<Character> MovesList { get; set; } = new List<Character>();
+        public List<Character> AttackList { get; set; } = new List<Character>();
+        public List<Monster> Monsters { get; set; }
         public List<ItemSpawnDTO> Items { get; set; }
         private readonly int _viewDistance;
         private readonly IScreenHandler _screenHandler;
-        private static readonly char _separator = Path.DirectorySeparatorChar;
 
-        public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService)
+        public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService, IEnemySpawner enemySpawner)
         {
-            // Players = new();
-            // _creatures = new();
-            // var currentDirectory = Directory.GetCurrentDirectory();
-            //
-            // Players = new();
-            // _viewDistance = viewDistance;
-            // _screenHandler = screenHandler;
-            // DeleteMap();
             Items = new();
-            Players = new ();
-            Creatures = new ();
-            _map = mapFactory.GenerateMap(itemService, Items, seed);
+            Players = new();
+            Monsters = new();
+            _map = mapFactory.GenerateMap(itemService, enemySpawner, Items, Monsters, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
         }
-        
+
         public Player GetPlayer(string id)
         {
             return Players.Find(x => x.Id == id);
@@ -58,7 +51,7 @@ namespace ASD_Game.World
                 player.XPosition = newXPosition;
                 player.YPosition = newYPosition;
             }
-            var creature = Creatures.FirstOrDefault(x => x.Id == userId);
+            var creature = Monsters.FirstOrDefault(x => x.Id == userId);
             if (GetAI(userId) != null)
             {
                 creature.XPosition = newXPosition;
@@ -76,14 +69,14 @@ namespace ASD_Game.World
             UpdateMap();
         }
 
-        public void AddCreatureToWorld(Monster character)
+        public void AddMonsterToWorld(Monster character)
         {
-            Creatures.Add(character);
+            Monsters.Add(character);
         }
 
         public void UpdateMap()
         {
-            if (CurrentPlayer != null && Players != null && Creatures != null)
+            if (CurrentPlayer != null && Players != null && Monsters != null)
             {
                 _screenHandler.UpdateWorld(_map.GetCharArrayMapAroundCharacter(CurrentPlayer, _viewDistance, GetAllCharacters()));
             }
@@ -99,6 +92,7 @@ namespace ASD_Game.World
             Items.Add(itemSpawnDto);
             UpdateMap();
         }
+
         public ITile GetLoadedTileByXAndY(int x, int y)
         {
             return _map.GetLoadedTileByXAndY(x, y);
@@ -117,7 +111,7 @@ namespace ASD_Game.World
         public List<Character> GetAllCharacters()
         {
             List<Character> characters = Players.Cast<Character>().ToList();
-            characters.AddRange(Creatures);
+            characters.AddRange(Monsters);
             return characters;
         }
 
@@ -125,15 +119,24 @@ namespace ASD_Game.World
         {
             _map.LoadArea(playerX, playerY, viewDistance);
         }
-         
+
         public void UpdateAI()
         {
-            MovesList = new List<Character>();
-            foreach (Character monster in Creatures)
+            deleteDeadMonsters();
+            foreach (Character monster in Monsters)
             {
+                if (monster.Health <= 0)
+                {
+                    DeadCreatures.Add((Monster)monster);
+                }
                 if (monster is SmartMonster smartMonster)
                 {
-                    if (smartMonster.Brain != null)
+                    if (smartMonster.Brain == null)
+                    {
+                        smartMonster.Brain = new Genome(14, 8);
+                        UpdateSmartMonster(smartMonster);
+                    }
+                    else
                     {
                         UpdateSmartMonster(smartMonster);
                     }
@@ -141,15 +144,35 @@ namespace ASD_Game.World
             }
         }
 
+        public void deleteDeadMonsters()
+        {
+            if (DeadCreatures != null)
+            {
+                foreach (Monster monster in DeadCreatures)
+                {
+                    string montid = monster.Id;
+                    Monster x = (Monster)GetAI(montid);
+                    Monsters.Remove(x);
+                }
+            }
+        }
+
         private void UpdateSmartMonster(SmartMonster smartMonster)
         {
             smartMonster.Update();
-            MovesList.Add(smartMonster);
+            if (smartMonster.MoveType == "Move")
+            {
+                MovesList.Add(smartMonster);
+            }
+            else
+            {
+                AttackList.Add(smartMonster);
+            }
         }
 
         public Character GetAI(string id)
         {
-            return Creatures.Find(x => x.Id == id);
+            return Monsters.Find(x => x.Id == id);
         }
 
         public ITile GetCurrentTile()

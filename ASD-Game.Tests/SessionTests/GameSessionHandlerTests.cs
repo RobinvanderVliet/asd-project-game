@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using Moq;
-using Newtonsoft.Json;
-using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using ASD_Game.ActionHandling;
 using ASD_Game.DatabaseHandler.POCO;
 using ASD_Game.DatabaseHandler.Services;
+using ASD_Game.Items.Services;
 using ASD_Game.Messages;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
@@ -18,11 +16,14 @@ using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 using ASD_Game.World.Models.Interfaces;
 using ASD_Game.World.Services;
-using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
+using Moq;
+using Newtonsoft.Json;
+using NUnit.Framework;
 
-namespace Session.Tests
+namespace ASD_Game.Tests.SessionTests
 {
     [ExcludeFromCodeCoverage]
     public class GameSessionHandlerTests
@@ -45,6 +46,7 @@ namespace Session.Tests
         private Mock<IGameConfigurationHandler> _mockedGameConfiguration;
         private Mock<IDatabaseService<GameConfigurationPOCO>> _mockedGameConfigurationPoco;
         private Mock<ITerrainTile> _mockedTile;
+        private Mock<IItemService> _mockedItemService;
 
         private char[,] _map = { { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
                                  { ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ',', ','},
@@ -79,8 +81,8 @@ namespace Session.Tests
             _mockedPlayerItemService = new Mock<IDatabaseService<PlayerItemPOCO>>();
             _mockedGameConfiguration = new Mock<IGameConfigurationHandler>();
             _mockedGameConfigurationPoco = new Mock<IDatabaseService<GameConfigurationPOCO>>();
+            _mockedItemService = new Mock<IItemService>();
             _mockedTile = new Mock<ITerrainTile>();
-            
 
             _mockedWorldService.Setup(mock => mock.LoadArea(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()));
 
@@ -91,7 +93,7 @@ namespace Session.Tests
 
             _mockedWorldService.Setup(mock => mock.CheckIfCharacterOnTile(It.IsAny<ITile>())).Returns(false);
 
-            _sut = new GameSessionHandler(_mockedClientController.Object,_mockedWorldService.Object, _mockedsessionHandler.Object,_mockedGamePOCOServices.Object, _mockedPlayerPOCOServices.Object, _mockedScreenHandler.Object, _mockedRelativeStatHandler.Object, _mockedMessageService.Object, _mockedPlayerItemService.Object, _mockedGameConfiguration.Object,   _mockedGameConfigurationPoco.Object);
+            _sut = new GameSessionHandler(_mockedClientController.Object, _mockedsessionHandler.Object, _mockedRelativeStatHandler.Object, _mockedGameConfiguration.Object, _mockedScreenHandler.Object, _mockedPlayerPOCOServices.Object, _mockedGamePOCOServices.Object, _mockedGameConfigurationPoco.Object, _mockedPlayerItemService.Object, _mockedWorldService.Object, _mockedMessageService.Object, _mockedItemService.Object);
             _packetDTO = new PacketDTO();
         }
 
@@ -134,6 +136,7 @@ namespace Session.Tests
             _mockedClientController.Setup(mock => mock.GetOriginId()).Returns("1");
             _mockedWorldService.Setup(x => x.GetMapAroundCharacter(It.IsAny<Character>())).Returns(_map);
             _mockedsessionHandler.Setup(x => x.TrainingScenario).Returns(new TrainingScenario());
+            
 
             _mockedClientController.Setup(x => x.SendPayload(payload, PacketType.GameSession));
 

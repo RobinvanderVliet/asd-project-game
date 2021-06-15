@@ -182,7 +182,17 @@ namespace ASD_Game.InputHandling.Antlr.Parser
         {
             _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
         }
-        
+
+        public override void EnterLook(PlayerCommandsParser.LookContext context)
+        {
+            _currentContainer.Push(new Look());
+        }
+
+        public override void ExitLook(PlayerCommandsParser.LookContext context)
+        {
+            _ast.Root.AddChild((ASTNode) _currentContainer.Pop());
+        }
+
         public override void EnterInventorySlot(PlayerCommandsParser.InventorySlotContext context)
         {
             ASTNode node = (ASTNode)_currentContainer.Peek();

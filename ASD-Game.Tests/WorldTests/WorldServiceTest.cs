@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using ASD_Game.Items;
 using ASD_Game.Items.Services;
+using ASD_Game.Messages;
 using ASD_Game.UserInterface;
 using ASD_Game.World;
 using ASD_Game.World.Models;
@@ -22,17 +23,21 @@ namespace ASD_Game.Tests.WorldTests
 
         //Declaration of variables
         private Player _player;
+
         private Monster _monster;
         private List<Monster> _creatures;
 
         //Declaration of mocks
         private WorldService _sut;
+
         private Mock<IWorld> _worldMock;
         private IWorld _worldObject;
         private Mock<IScreenHandler> _screenHandlerMock;
         private IScreenHandler _screenHandlerObject;
         private Mock<IItemService> _itemServiceMock;
         private IItemService _itemServiceObject;
+        private Mock<IMessageService> _messageServiceMock;
+        private IMessageService _messageServiceObject;
 
         [SetUp]
         public void Setup()
@@ -44,16 +49,18 @@ namespace ASD_Game.Tests.WorldTests
             //Initialisation of mocks
             _worldMock = new Mock<IWorld>();
             _worldMock.Setup(world => world.CurrentPlayer).Returns(_player);
-            _worldMock.Setup(world => world.Creatures).Returns(_creatures);
-            _worldMock.Setup(world => world.AddCreatureToWorld(It.IsAny<Monster>())).Verifiable();
+            _worldMock.Setup(world => world.Monsters).Returns(_creatures);
+            _worldMock.Setup(world => world.AddMonsterToWorld(It.IsAny<Monster>())).Verifiable();
             _worldMock.Setup(world => world.AddPlayerToWorld(It.IsAny<Player>(), It.IsAny<bool>())).Verifiable();
             _worldMock.Setup(world => world.GetCurrentTile().ItemsOnTile);
             _worldMock.Setup(world => world.GetTileForPlayer(It.IsAny<Player>()).ItemsOnTile);
             _worldObject = _worldMock.Object;
             _screenHandlerMock = new Mock<IScreenHandler>();
-            _screenHandlerMock.Setup(screenHandler => 
+            _screenHandlerMock.Setup(screenHandler =>
                 screenHandler.SetStatValues(
                     It.IsAny<string>(),
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
                     It.IsAny<int>(),
                     It.IsAny<int>(),
                     It.IsAny<int>(),
@@ -68,7 +75,9 @@ namespace ASD_Game.Tests.WorldTests
             _screenHandlerObject = _screenHandlerMock.Object;
             _itemServiceMock = new Mock<IItemService>();
             _itemServiceObject = _itemServiceMock.Object;
-            _sut = new WorldService(_screenHandlerObject, _itemServiceObject);
+            _messageServiceMock = new Mock<IMessageService>();
+            _messageServiceObject = _messageServiceMock.Object;
+            _sut = new WorldService(_screenHandlerObject, _itemServiceObject, _messageServiceObject);
             _sut.SetWorld(_worldObject);
         }
 
@@ -104,7 +113,7 @@ namespace ASD_Game.Tests.WorldTests
             //Act ---------
             _sut.AddCreatureToWorld(_monster);
             //Assert ---------
-            _worldMock.Verify(world => world.AddCreatureToWorld(_monster), Times.Once);
+            _worldMock.Verify(world => world.AddMonsterToWorld(_monster), Times.Once);
         }
 
         [Test]
@@ -148,7 +157,7 @@ namespace ASD_Game.Tests.WorldTests
             //Assert ---------
             _worldMock.Verify(world => world.GetMapAroundCharacter(_player), Times.Once);
         }
-        
+
         [Test]
         public void Test_GetMonsters_GetsTheCreatureListFromWorld()
         {
@@ -156,41 +165,41 @@ namespace ASD_Game.Tests.WorldTests
             //Act ---------
             _sut.GetMonsters();
             //Assert ---------
-            _worldMock.Verify(world => world.Creatures, Times.Once);
+            _worldMock.Verify(world => world.Monsters, Times.Once);
         }
-        
-        [Test]
-        public void Test_GetCreatureMoves_ReturnsNullBecauseWorldIsNull()
-        {
-            //Arrange ---------
-            _sut.SetWorld(null);
-            //Act ---------
-            var actual = _sut.GetCreatureMoves();
-            //Assert ---------
-            Assert.AreEqual(null, actual);
-        }
-        
-        [Test]
-        public void Test_GetCreatureMoves_CallsUpdateAI()
-        {
-            //Arrange ---------
-            //Act ---------
-            _sut.GetCreatureMoves();
-            //Assert ---------
-            _worldMock.Verify(world => world.UpdateAI(), Times.Once);
-        }
-        
+
+        //[Test]
+        //public void Test_GetCreatureMoves_ReturnsNullBecauseWorldIsNull()
+        //{
+        //    //Arrange ---------
+        //    _sut.SetWorld(null);
+        //    //Act ---------
+        //    var actual = _sut.GetCreatureMoves();
+        //    //Assert ---------
+        //    Assert.AreEqual(null, actual);
+        //}
+
+        //[Test]
+        //public void Test_GetCreatureMoves_CallsUpdateAI()
+        //{
+        //    //Arrange ---------
+        //    //Act ---------
+        //    _sut.GetCreatureMoves();
+        //    //Assert ---------
+        //    _worldMock.Verify(world => world.UpdateAI(), Times.Once);
+        //}
+
         [Test]
         public void Test_GetAllPlayers_GetsAllThePlayersInTheWorld()
         {
             //Arrange ---------
             //Act ---------
             _sut.GetAllPlayers();
-            
+
             //Assert ---------
             _worldMock.Verify(world => world.Players);
         }
-        
+
         [Test]
         public void Test_IsDead_CharacterIsNotDead()
         {
@@ -200,6 +209,7 @@ namespace ASD_Game.Tests.WorldTests
             //Assert ---------
             Assert.That(!_sut.IsDead(_player));
         }
+
         [Test]
         public void Test_IsDead_CharacterIsDead()
         {
@@ -209,7 +219,7 @@ namespace ASD_Game.Tests.WorldTests
             //Assert ---------
             Assert.That(_sut.IsDead(_player));
         }
-        
+
         [Test]
         public void Test_LoadArea_VerifiesThatLoadAreaFromWorldIsExecuted()
         {
@@ -222,7 +232,7 @@ namespace ASD_Game.Tests.WorldTests
             //Assert ---------
             _worldMock.Verify(world => world.LoadArea(x, y, viewDistance), Times.Once);
         }
-        
+
         [Test]
         public void Test_SearchCurrentTile_ReturnsItemsOnTileInAString()
         {
@@ -230,7 +240,7 @@ namespace ASD_Game.Tests.WorldTests
             //Act ---------
             //Assert ---------
         }
-        
+
         [Test]
         public void Test_GetPlayer_GetsAPlayerByUserID()
         {
@@ -240,7 +250,7 @@ namespace ASD_Game.Tests.WorldTests
             //Assert ---------
             _worldMock.Verify(world => world.GetPlayer(_player.Id));
         }
-        
+
         [Test]
         public void Test_GetAI_VerifyThatGetAIFromWorldIsExecuted()
         {
@@ -251,7 +261,7 @@ namespace ASD_Game.Tests.WorldTests
             //Assert ---------
             _worldMock.Verify(world => world.GetAI(id), Times.Once);
         }
-        
+
         [Test]
         public void Test_GetTile_VerifyThatGetLoadedTileByXAndYFromWorldIsExecuted()
         {
@@ -262,8 +272,8 @@ namespace ASD_Game.Tests.WorldTests
             _sut.GetTile(x, y);
             //Assert ---------
             _worldMock.Verify(world => world.GetLoadedTileByXAndY(x, y), Times.Once);
-        }    
-        
+        }
+
         [Test]
         public void Test_CheckIfCharacterOnTile_VerifyThatCheckIfCharacterOnTileFromWorldIsExecuted()
         {
@@ -274,7 +284,7 @@ namespace ASD_Game.Tests.WorldTests
             //Assert ---------
             _worldMock.Verify(world => world.CheckIfCharacterOnTile(tile), Times.Once);
         }
-        
+
         [Test]
         public void Test_GetItemsOnCurrentTile_VerifyThatGetCurrentTileFromWorldIsExecuted()
         {
@@ -284,7 +294,7 @@ namespace ASD_Game.Tests.WorldTests
             //Assert ---------
             _worldMock.Verify(world => world.GetCurrentTile(), Times.Once);
         }
-        
+
         [Test]
         public void Test_GetItemsOnCurrentTile_VerifyThatGetCurrentTileFromWorldIsExecutedWithPlayer()
         {
@@ -293,9 +303,8 @@ namespace ASD_Game.Tests.WorldTests
             _sut.GetItemsOnCurrentTile(_player);
             //Assert ---------
             _worldMock.Verify(world => world.GetTileForPlayer(_player), Times.Once);
-            
         }
-        
+
         [Test]
         public void Test_DisplayStats_VerifyThatSetStatValuesFromScreenHandlerIsExecutedWithPlayer()
         {
@@ -306,6 +315,8 @@ namespace ASD_Game.Tests.WorldTests
             _screenHandlerMock.Verify(screenHandler => screenHandler.SetStatValues(
                 _player.Name,
                 0,
+                1,
+                1,
                 _player.Health,
                 _player.Stamina,
                 _player.GetArmorPoints(),
@@ -316,7 +327,6 @@ namespace ASD_Game.Tests.WorldTests
                 "Empty",
                 "Empty",
                 "Empty"));
-            
         }
     }
 }

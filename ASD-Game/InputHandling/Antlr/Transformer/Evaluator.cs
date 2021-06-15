@@ -43,6 +43,7 @@ namespace ASD_Game.InputHandling.Antlr.Transformer
             _gamesSessionService = gamesSessionService;
             _inventoryHandler = inventoryHandler;
         }
+
         public void Apply(AST ast)
         {
             TransformNode(ast.Root);
@@ -111,7 +112,10 @@ namespace ASD_Game.InputHandling.Antlr.Transformer
                         break;
                     case Inspect:
                         TransformInspect((Inspect)nodeBody[i]);
-                        break;    
+                        break;
+                    case Look:
+                        TransformLook((Look)nodeBody[i]);
+                        break;
                     case Use:
                         TransformUse((Use)nodeBody[i]);
                         break;
@@ -157,7 +161,8 @@ namespace ASD_Game.InputHandling.Antlr.Transformer
 
         private void TransformExit()
         {
-            // TODO: Implement exitHandler
+            Environment.Exit(0);
+            //_screenHandler.TransitionTo(new StartScreen());
         }
 
         private void TransformPause()
@@ -281,6 +286,11 @@ namespace ASD_Game.InputHandling.Antlr.Transformer
             {
                 throw new SlotException($"The slot you provided {slot} is not valid.");
             }
+        }
+        
+        private void TransformLook(Look look)
+        {
+            _moveHandler.SearchNearestPlayer();
         }
 
         private void TransformSearch()

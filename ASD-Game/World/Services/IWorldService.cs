@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ASD_Game.Items;
+using ASD_Game.Items.Services;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Interfaces;
@@ -8,6 +9,7 @@ namespace ASD_Game.World.Services
 {
     public interface IWorldService
     {
+        IItemService ItemService { get; }
         List<Character> CreatureMoves { get; set; }
 
         public void SetWorld(IWorld world);
@@ -32,9 +34,10 @@ namespace ASD_Game.World.Services
 
         public IList<Item> GetItemsOnCurrentTile();
 
-        List<Character> GetCreatureMoves();
+        List<Character> GetCreatureMoves(string type);
 
         List<Monster> GetMonsters();
+
         public List<Character> GetAllCharacters();
 
         public void UpdateBrains(Genome genome);
@@ -58,5 +61,9 @@ namespace ASD_Game.World.Services
         public Character GetAI(string id);
 
         public int GetViewDistance();
+
+        public void SetAILogic();
+
+        public void CheckLastManStanding();
     }
 }

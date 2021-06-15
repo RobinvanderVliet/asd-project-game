@@ -11,7 +11,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
     [ExcludeFromCodeCoverage]
     public class DataGatheringService
     {
-        private IWorldService WorldService;
+        private IWorldService _worldService;
 
         private int _colCount = 12;
         private int _rowCount = 12;
@@ -26,7 +26,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
 
         public DataGatheringService(IWorldService worldService)
         {
-            WorldService = worldService;
+            _worldService = worldService;
         }
 
         public void ScanMap(SmartMonster smartMonster, int visionRange)
@@ -37,7 +37,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
 
         private void SetClosestMonster(SmartMonster smartMonster, int visionRange)
         {
-            List<Monster> monsters = WorldService.GetMonsters();
+            List<Monster> monsters = _worldService.GetMonsters();
             foreach (Character monster in monsters)
             {
                 Vector2 pPos = new Vector2(monster.XPosition, monster.YPosition);
@@ -53,7 +53,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
 
         private void SetClosestPlayer(SmartMonster smartMonster, int visionRange)
         {
-            List<Player> players = WorldService.GetAllPlayers();
+            List<Player> players = _worldService.GetAllPlayers();
             foreach (Player player in players)
             {
                 Vector2 pPos = new Vector2(player.XPosition, player.YPosition);
@@ -93,7 +93,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
         public List<List<Node>> TranslateCharacterMap(Character c)
         {
             List<List<Node>> translatedMap = new List<List<Node>>();
-            char[,] map = WorldService.GetMapAroundCharacter(c);
+            char[,] map = _worldService.GetMapAroundCharacter(c);
 
          
             for (int row = 0; row < _colCount; row++)
@@ -122,30 +122,25 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
             {
                 case '~':
                     return false;
-                    break;
 
                 case 'E':
                     return false;
-                    break;
 
                 case '#':
                     return false;
-                    break;
 
                 case 'T':
                     return false;
-                    break;
 
                 case '\u25B2':
                     return false;
-                    break;
             }
             return true;
         }
 
         private bool IsPlayerInSight(Character c)
         {
-            char[,] map = WorldService.GetMapAroundCharacter(c);
+            char[,] map = _worldService.GetMapAroundCharacter(c);
             for (int row = 0; row < _colCount; row++)
             {
                 for (int col = 0; col < _rowCount; col++)

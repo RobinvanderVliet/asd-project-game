@@ -1,29 +1,36 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items;
 using ASD_Game.Items.Services;
+using ASD_Game.Messages;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Interfaces;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
-using ASD_Game.World.Models.Interfaces;
 
 namespace ASD_Game.World.Services
 {
     public class WorldService : IWorldService
     {
-        private readonly IItemService _itemService;
+        public IItemService ItemService { get; }
         private readonly IScreenHandler _screenHandler;
+        private readonly IMessageService _messageService;
         private IWorld _world;
         public List<Character> CreatureMoves { get; set; }
         private const int VIEWDISTANCE = 6;
-        
-        public WorldService(IScreenHandler screenHandler, IItemService itemService)
+        private bool _logicSet = false;
+        private IEnemySpawner _enemySpawner;
+
+        private bool gameEnded = false;
+
+        public WorldService(IScreenHandler screenHandler, IItemService itemService, IMessageService messageService)
         {
             _screenHandler = screenHandler;
-            _itemService = itemService;
+            ItemService = itemService;
+            _enemySpawner = new EnemySpawner();
+            _messageService = messageService;
         }
 
         public void UpdateCharacterPosition(string userId, int newXPosition, int newYPosition)
@@ -43,14 +50,14 @@ namespace ASD_Game.World.Services
 
         public void AddCreatureToWorld(Monster character)
         {
-            _world.AddCreatureToWorld(character);
+            _world.AddMonsterToWorld(character);
         }
 
         public void DisplayWorld()
         {
             _world.UpdateMap();
         }
-        
+
         public void DeleteMap()
         {
             _world.DeleteMap();
@@ -58,7 +65,7 @@ namespace ASD_Game.World.Services
 
         public void GenerateWorld(int seed)
         {
-            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, _itemService);
+            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, ItemService, _enemySpawner);
         }
 
         public Player GetCurrentPlayer()
@@ -78,7 +85,7 @@ namespace ASD_Game.World.Services
 
         public List<Monster> GetMonsters()
         {
-            return _world.Creatures;
+            return _world.Monsters;
         }
 
         public List<Character> GetAllCharacters()
@@ -90,7 +97,7 @@ namespace ASD_Game.World.Services
         {
             if (_world != null)
             {
-                foreach (Character monster in _world.Creatures)
+                foreach (Character monster in _world.Monsters)
                 {
                     if (monster is SmartMonster smartMonster)
                     {
@@ -100,12 +107,45 @@ namespace ASD_Game.World.Services
             }
         }
 
-        public List<Character> GetCreatureMoves()
+        public void SetAILogic()
+        {
+            List<SmartMonster> setup = new();
+            foreach (Character monster in _world.Monsters)
+            {
+                if (monster is SmartMonster smartMonster)
+                {
+                    smartMonster._dataGatheringService = new DataGatheringService(this);
+                    setup.Add((SmartMonster)monster);
+                }
+            }
+            SetAIActions(setup);
+        }
+
+        private void SetAIActions(List<SmartMonster> smartMonsters)
+        {
+            foreach (SmartMonster monster in smartMonsters)
+            {
+                SmartMonster smartMonster = (SmartMonster)_world.GetAI(monster.Id);
+                smartMonster.Smartactions = new SmartCreatureActions(smartMonster);
+            }
+        }
+
+        public List<Character> GetCreatureMoves(string type)
         {
             if (_world != null)
             {
-                _world.UpdateAI();
-                return _world.MovesList;
+                if (type == "Attack")
+                {
+                    _world.AttackList.Clear();
+                    _world.UpdateAI();
+                    return _world.AttackList;
+                }
+                else
+                {
+                    _world.MovesList.Clear();
+                    _world.UpdateAI();
+                    return _world.MovesList;
+                }
             }
             return null;
         }
@@ -119,7 +159,7 @@ namespace ASD_Game.World.Services
         {
             return player.Health <= 0;
         }
-        
+
         public void LoadArea(int playerX, int playerY, int viewDistance)
         {
             _world.LoadArea(playerX, playerY, viewDistance);
@@ -128,20 +168,25 @@ namespace ASD_Game.World.Services
         public string SearchCurrentTile()
         {
             var itemsOnCurrentTile = GetItemsOnCurrentTile();
-            StringBuilder result = new StringBuilder();
 
-            result.Append("The following items are on the current tile:" + Environment.NewLine);
+            if (itemsOnCurrentTile.Count == 0)
+            {
+                return "There are no items on the current tile!";
+            }
+
+            var result = new StringBuilder();
+            result.Append("The following items are on the current tile:");
 
             var index = 1;
             foreach (var item in itemsOnCurrentTile)
             {
-                result.Append($"{index}. {item.ItemName}{Environment.NewLine}");
+                result.Append($"{Environment.NewLine}{index}. {item.ItemName}");
                 index += 1;
             }
 
             return result.ToString();
         }
-        
+
         public Player GetPlayer(string id)
         {
             return _world.GetPlayer(id);
@@ -168,6 +213,8 @@ namespace ASD_Game.World.Services
             _screenHandler.SetStatValues(
                 player.Name,
                 0,
+                GetAllPlayers().Count(player => player.Health > 0),
+                GetAllPlayers().Count,
                 player.Health,
                 player.Stamina,
                 player.GetArmorPoints(),
@@ -179,11 +226,11 @@ namespace ASD_Game.World.Services
                 player.Inventory.GetConsumableAtIndex(1)?.ItemName ?? "Empty",
                 player.Inventory.GetConsumableAtIndex(2)?.ItemName ?? "Empty");
         }
+
         public IList<Item> GetItemsOnCurrentTile()
         {
             return _world.GetCurrentTile().ItemsOnTile;
         }
-
 
         public IList<Item> GetItemsOnCurrentTile(Player player)
         {
@@ -193,6 +240,29 @@ namespace ASD_Game.World.Services
         public int GetViewDistance()
         {
             return VIEWDISTANCE;
+        }
+
+        public void CheckLastManStanding()
+        {
+            if (gameEnded || GetAllPlayers().Count == 1)
+            {
+                return;
+            }
+
+            int livingPlayers = 0;
+            Player livingPlayer = null;
+
+            foreach (var player in GetAllPlayers().Where(player => player.Health > 0))
+            {
+                livingPlayers++;
+                livingPlayer = player;
+            }
+
+            if (livingPlayers == 1)
+            {
+                _messageService.AddMessage(livingPlayer.Name + " is the last player in the game and won! Congratulations!");
+                gameEnded = true;
+            }
         }
     }
 }

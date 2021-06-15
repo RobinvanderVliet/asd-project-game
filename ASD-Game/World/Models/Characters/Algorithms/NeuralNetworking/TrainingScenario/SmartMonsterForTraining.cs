@@ -25,7 +25,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
         public int Gen = 0;
 
         public static readonly int GenomeInputs = 14;
-        public static readonly int GenomeOutputs = 7;
+        public static readonly int GenomeOutputs = 4;
 
         public float[] Vision = new float[GenomeInputs];
         public float[] Decision = new float[GenomeOutputs];
@@ -66,7 +66,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
         public void Update()
         {
             _dataGatheringService.CheckNewPosition(this);
-            if (TrainingMapGenerator.AllPlayersDead() || LifeSpan >= 1000)
+            if (TrainingMapGenerator.AllPlayersDead() || LifeSpan >= 100000)
             {
                 Dead = true;
             }
@@ -87,6 +87,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
             Vision[1] = CreatureData.Position.Y;
             Vision[2] = CreatureData.Damage;
             Vision[3] = (float)CreatureData.Health;
+
             _dataGatheringService.ScanMap(this, CreatureData.VisionRange);
             Vision[4] = _dataGatheringService.DistanceToClosestPlayer;
             Vision[5] = _dataGatheringService.DistanceToClosestMonster;
@@ -139,6 +140,10 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
             if (max < 0.7)
             {
                 Smartactions.Wander(this);
+                if (_dataGatheringService.ClosestPlayer != null || _dataGatheringService.DistanceToClosestMonster != null)
+                {
+                    Score -= 1000;
+                }
                 return;
             }
 
@@ -146,33 +151,32 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
             {
                 case 0:
                     Smartactions.Attack(_dataGatheringService.ClosestPlayer, this);
-                    Score = +20;
+                    if (_dataGatheringService.DistanceToClosestPlayer == 1)
+                    {
+                        Score += 500;
+                    }
                     break;
 
                 case 1:
                     Smartactions.Flee(_dataGatheringService.ClosestPlayer, this);
-                    Score = -8;
+                    Score -= 8;
                     break;
 
                 case 2:
                     Smartactions.RunToMonster(_dataGatheringService.ClosestMonster, this);
-                    Score = -3;
+                    Score -= 3;
                     break;
 
                 case 3:
-                    Smartactions.WalkUp(this);
-                    break;
-
-                case 4:
-                    Smartactions.WalkDown(this);
-                    break;
-
-                case 5:
-                    Smartactions.WalkLeft(this);
-                    break;
-
-                case 6:
-                    Smartactions.WalkRight(this);
+                    Smartactions.RunToPlayer(_dataGatheringService.ClosestPlayer, this);
+                    if (_dataGatheringService.DistanceToClosestPlayer > 1)
+                    {
+                        Score += 500;
+                    }
+                    else if (_dataGatheringService.DistanceToClosestPlayer <= 1)
+                    {
+                        Score -= 500;
+                    }
                     break;
             }
         }
@@ -197,14 +201,14 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingS
             //Fitness calculation
             if (EnemysKilled > 0)
             {
-                killPoints += 1000 * EnemysKilled;
+                killPoints += 400 * EnemysKilled;
             }
             if (Dead)
             {
                 deathpoints = -100;
             }
             Fitness =
-                (float)((DamageDealt * 10 - DamageTaken * 2)/* + (lifeSpan / 300)*/ + HealthHealed + StatsGained + killPoints + deathpoints + Score);
+                (float)((DamageDealt - DamageTaken) - (LifeSpan * 100) + HealthHealed + StatsGained + killPoints + deathpoints + Score / 10);
             Score = (int)Fitness;
         }
 

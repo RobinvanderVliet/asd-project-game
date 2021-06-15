@@ -18,12 +18,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Timers;
-using ASD_Game.World.Models;
-using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
+using ASD_Game.Items.Services;
 using ASD_Game.World.Models.Characters.StateMachine;
 using DatabaseHandler.POCO;
 using WorldGeneration;
 using WorldGeneration.StateMachine;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ASD_Game.Session
 {
@@ -40,22 +41,25 @@ namespace ASD_Game.Session
         private readonly IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
         private readonly IGameConfigurationHandler _gameConfigurationHandler;
         private IDatabaseService<GameConfigurationPOCO> _gameConfigDatabaseService;
+        private IItemService _itemService;
         private Timer AIUpdateTimer;
-        private int _brainUpdateTime = 60000;
         private Random _random = new Random();
         private int MAX_HEALTH = 100;
+        private int _brainUpdateTime = 10000;
 
         public GameSessionHandler(IClientController clientController, IWorldService worldService,
             ISessionHandler sessionHandler, IDatabaseService<GamePOCO> gamePocoService,
             IDatabaseService<PlayerPOCO> playerService, IScreenHandler screenHandler,
             IRelativeStatHandler relativeStatHandler, IMessageService messageService,
             IDatabaseService<PlayerItemPOCO> playerItemDatabaseService,
-            IGameConfigurationHandler gameConfigurationHandler,
+            IWorldService worldService,
+            IMessageService messageService,
+            IItemService itemService
+        IGameConfigurationHandler gameConfigurationHandler,
             IDatabaseService<GameConfigurationPOCO> gameConfigDatabaseService)
-        {
+        ){
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
-            _worldService = worldService;
             _sessionHandler = sessionHandler;
             _gamePocoService = gamePocoService;
             _playerService = playerService;
@@ -68,7 +72,9 @@ namespace ASD_Game.Session
             _playerItemDatabaseService = playerItemDatabaseService;
             _worldService = worldService;
             _messageService = messageService;
+            _itemService = itemService;
             CheckAITimer();
+            UpdateBrain();
         }
 
         public void SendGameSession()
@@ -157,7 +163,7 @@ namespace ASD_Game.Session
                 GameGUID = _clientController.SessionId,
                 NPCDifficultyCurrent = (int)_gameConfigurationHandler.GetCurrentMonsterDifficulty(),
                 NPCDifficultyNew = (int)_gameConfigurationHandler.GetNewMonsterDifficulty(),
-                ItemSpawnRate = (int)_gameConfigurationHandler.GetSpawnRate()
+                ItemSpawnRate = (int)_gameConfigurationHandler.GetItemSpawnRate()
             };
             _gameConfigDatabaseService.CreateAsync(gameConfigurationPOCO);
         }
@@ -249,38 +255,6 @@ namespace ASD_Game.Session
             }
 
             return currentPlayer;
-        }
-
-        private void CreateMonsters()
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                if (i < 0)
-                {
-                    Monster newMonster = new Monster("Zombie", _random.Next(12, 25), _random.Next(12, 25),
-                        CharacterSymbol.TERMINATOR, "monst" + i);
-                    SetStateMachine(newMonster);
-                    _worldService.AddCreatureToWorld(newMonster);
-                }
-                else
-                {
-                    SmartMonster newMonster = new SmartMonster("Zombie", _random.Next(12, 25), _random.Next(12, 25),
-                        CharacterSymbol.TERMINATOR, "monst" + i, new DataGatheringService(_worldService));
-                    SetBrain(newMonster);
-                    _worldService.AddCreatureToWorld(newMonster);
-                }
-            }
-        }
-
-        private void SetBrain(SmartMonster monster)
-        {
-            if (_sessionHandler.TrainingScenario != null)
-            {
-                if (_sessionHandler.TrainingScenario.BrainTransplant() != null)
-                {
-                    monster.Brain = _sessionHandler.TrainingScenario.BrainTransplant();
-                }
-            }
         }
 
         private void CheckAITimer()
