@@ -211,7 +211,7 @@ namespace ASD_Game.Session
                         return KickFromSession(packet);
                     }
                 }
-                
+
                 if (packet.Header.Target == "client" || packet.Header.Target == "host")
                 {
                     if (sessionDTO.SessionType == SessionType.RequestToJoinSession)
@@ -539,7 +539,7 @@ namespace ASD_Game.Session
         public HandlerResponseDTO AddPlayerToSession(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
-            
+
             if (packet.Header.Target == "host")
             {
                 if (_session.GameStarted || _session.SavedGame)
@@ -549,6 +549,8 @@ namespace ASD_Game.Session
                         return new HandlerResponseDTO(SendAction.ReturnToSender,
                             "Not allowed to join this session");
                     }
+
+                    return ActiveGameAddsPlayer(sessionDTO);
                 }
 
                 if (_screenHandler.Screen is LobbyScreen screen)
@@ -580,7 +582,6 @@ namespace ASD_Game.Session
                 if (sessionDTOClients.SessionStarted)
                 {
                     _screenHandler.TransitionTo(new GameScreen());
-                    return ActiveGameAddsPlayer(sessionDTOClients, packet);
                 }
                 else
                 {
@@ -675,7 +676,7 @@ namespace ASD_Game.Session
         //     }
         // }
 
-        private HandlerResponseDTO ActiveGameAddsPlayer(SessionDTO sessionDTO, PacketDTO packet)
+        private HandlerResponseDTO ActiveGameAddsPlayer(SessionDTO sessionDTO)
         {
             // check if ID matches
             var clientId = sessionDTO.Clients[0];
@@ -687,29 +688,21 @@ namespace ASD_Game.Session
                 allPlayerId.Result.FirstOrDefault(x =>
                     x.GameGUID == _session.SessionId && x.PlayerGUID == clientId[0]);
 
-            if (result != null)
+            _messageService.AddMessage(sessionDTO.Clients[0][1] + " has joined your session!");
+            _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
+            sessionDTO.Clients = new List<string[]>();
+
+            sessionDTO.SessionSeed = _session.SessionSeed;
+            StartGameDTO startGameDto = null;
+
+            if (GameStarted())
             {
-                _messageService.AddMessage(sessionDTO.Clients[0][1] + " has joined your session!");
-                _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
-                sessionDTO.Clients = new List<string[]>();
-
-                sessionDTO.SessionSeed = _session.SessionSeed;
-                StartGameDTO startGameDto = null;
-
-                if (GameStarted())
-                {
-                    startGameDto = HandlePlayerLocation(result);
-                }
-
-                var jsonObject = JsonConvert.SerializeObject(startGameDto);
-
-                return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
+                startGameDto = HandlePlayerLocation(result);
             }
-            else
-            {
-                return new HandlerResponseDTO(SendAction.ReturnToSender,
-                    "Not allowed to join saved or running game");
-            }
+
+            var jsonObject = JsonConvert.SerializeObject(startGameDto);
+
+            return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
         }
 
         public StartGameDTO HandlePlayerLocation(PlayerPOCO result)
