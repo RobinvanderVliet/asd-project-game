@@ -170,11 +170,11 @@ namespace ASD_Game.InputHandling
                     SendCommand(START_COMMAND);
                 }
 
-                if (input.Contains("SAY"))
+                if (input.Contains("say"))
                 {
                     SendCommand(input);
                 }
-                else if (input.Contains("SHOUT"))
+                else if (input.Contains("shout"))
                 {
                     SendCommand(input);
                 }

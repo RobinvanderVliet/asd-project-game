@@ -691,6 +691,8 @@ namespace ASD_Game.Session
                 allPlayerId.Result.FirstOrDefault(x =>
                     x.GameGUID == _session.SessionId && x.PlayerGUID == clientId[0]);
 
+            result.Stamina = 100;
+            
             _messageService.AddMessage(sessionDTO.Clients[0][1] + " has joined your session!");
             _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
             sessionDTO.Clients = new List<string[]>();
