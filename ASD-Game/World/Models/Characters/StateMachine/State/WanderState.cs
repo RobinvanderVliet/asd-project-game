@@ -17,28 +17,16 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
         {
             DoWorldCheck();
 
-            var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
-            var _builderConfiguration = _characterData.BuilderConfigurator;
-
-            foreach (var builderInfo in _builderInfoList)
+            if (_characterData is AgentData)
             {
-                if (builderInfo.Action == "wander")
+                if (_characterData.WorldService.GetPlayer(_characterData.CharacterId).Stamina >= 20)
                 {
-                    if (_builderConfiguration.GetGuard(_characterData, _target, builderInfo))
-                    {
-                        if (_characterData is AgentData)
-                        {
-                            if (_characterData.WorldService.GetPlayer(_characterData.CharacterId).Stamina >= 20)
-                            {
-                                MoveRandomDirection();
-                            }
-                        }
-                        else
-                        {
-                            MoveRandomDirection();
-                        }
-                    }
+                    MoveRandomDirection();
                 }
+            }
+            else
+            {
+                MoveRandomDirection();
             }
         }
 

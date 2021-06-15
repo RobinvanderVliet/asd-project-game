@@ -14,25 +14,13 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
         {
             DoWorldCheck();
 
-            var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
-            var _builderConfiguration = _characterData.BuilderConfigurator;
-
-            foreach (var builderInfo in _builderInfoList)
+            if (_characterData is AgentData)
             {
-                if (builderInfo.Action == "attack")
-                {
-                    if (_builderConfiguration.GetGuard(_characterData, _target, builderInfo))
-                    {
-                        if (_characterData is MonsterData)
-                        {
-                            AIAttack();
-                        }
-                        else
-                        {
-                            AgentAttack();
-                        }
-                    }
-                }
+                AgentAttack();
+            }
+            else
+            {
+                AIAttack();
             }
         }
 

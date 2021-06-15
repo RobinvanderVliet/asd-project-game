@@ -1,5 +1,5 @@
 ﻿using System;
-
+using ASD_Game.World.Models.Characters.StateMachine.CustomRuleSet;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using World.Models.Characters.StateMachine.Event;
 
@@ -26,10 +26,24 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
         {
             const int ATTACK_RANGE = 1;
             const int VISION_RANGE = 6;
-            
+
             Character visionRangeTarget = _characterData.WorldService.GetCharacterInClosestRangeToCurrentCharacter(_characterData.WorldService.GetCharacter(_characterData.CharacterId), VISION_RANGE);
             if (visionRangeTarget != null)
             {
+          
+                // TODO: make this player instead of agent
+                if (visionRangeTarget is Player && !ThresholdExists("player"))
+                {
+                    _characterStateMachine.FireEvent(CharacterEvent.Event.LOST_CREATURE);
+                    return;
+                }    
+                
+                if (visionRangeTarget is Monster && !ThresholdExists("monster"))
+                {
+                    _characterStateMachine.FireEvent(CharacterEvent.Event.LOST_CREATURE);
+                    return;
+                }    
+                
                 Character attackRangeTarget = _characterData.WorldService.GetCharacterInClosestRangeToCurrentCharacter(_characterData.WorldService.GetCharacter(_characterData.CharacterId), ATTACK_RANGE);
                 if (attackRangeTarget != null)
                 {
@@ -61,6 +75,10 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                     
                 }
             }
+            else
+            {
+                _characterStateMachine.FireEvent(CharacterEvent.Event.LOST_CREATURE);
+            }
         }
 
         public int CompareTo(object obj)
@@ -71,6 +89,19 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
         public virtual void SetTargetData(ICharacterData data)
         {
             _target = data;
+        }
+
+        private bool ThresholdExists(string threshold)
+        {
+            var infoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
+
+            foreach (var info in infoList)
+            {
+                var result = info.RuleSets.Find(ruleset => ruleset.Threshold == threshold);
+                if (result != null) return true;
+            }
+
+            return false;
         }
     }
 }

@@ -29,7 +29,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine
         public override void StartStateMachine()
         {
             var builder = new StateMachineDefinitionBuilder<CharacterState, CharacterEvent.Event>();
-            var ruleSetFactory = new RuleSetFactory();
 
             CharacterState idleState = new IdleState(CharacterData, this);
             CharacterState inventoryState = new InventoryState(CharacterData, this);
@@ -51,7 +50,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine
             ruleSet1.Setting = "combat";
             ruleSet1.Action = "default";
             ruleSet1.Comparable = "agent";
-            ruleSet1.Threshold = "agent";
+            ruleSet1.Threshold = "player";
             ruleSet1.Comparison = "sees";
             ruleSet1.ComparisonTrue = "follow";
 
@@ -59,16 +58,32 @@ namespace ASD_Game.World.Models.Characters.StateMachine
             ruleSet2.Setting = "combat";
             ruleSet2.Action = "default";
             ruleSet2.Comparable = "agent";
-            ruleSet2.Threshold = "agent";
+            ruleSet2.Threshold = "player";
             ruleSet2.Comparison = "nearby";
-            ruleSet2.ComparisonTrue = "attack";
+            ruleSet2.ComparisonTrue = "engage";
+            
+            // RuleSet ruleSet4 = new RuleSet();
+            // ruleSet4.Setting = "combat";
+            // ruleSet4.Action = "default";
+            // ruleSet4.Comparable = "agent";
+            // ruleSet4.Threshold = "monster";
+            // ruleSet4.Comparison = "sees";
+            // ruleSet4.ComparisonTrue = "follow";
+            //
+            // RuleSet ruleSet5 = new RuleSet();
+            // ruleSet5.Setting = "combat";
+            // ruleSet5.Action = "default";
+            // ruleSet5.Comparable = "agent";
+            // ruleSet5.Threshold = "monster";
+            // ruleSet5.Comparison = "nearby";
+            // ruleSet5.ComparisonTrue = "engage";
 
             RuleSet ruleSet3 = new RuleSet();
             ruleSet3.Setting = "combat";
             ruleSet3.Action = "engage";
             ruleSet3.Comparable = "health";
             ruleSet3.Threshold = "50";
-            ruleSet3.Comparison = "greater than";
+            ruleSet3.Comparison = "less than";
             ruleSet3.ComparisonTrue = "flee";
             ruleSet3.ComparisonFalse = "attack";
 
@@ -76,7 +91,9 @@ namespace ASD_Game.World.Models.Characters.StateMachine
             {
                 ruleSet1,
                 ruleSet2,
-                ruleSet3,
+                ruleSet3
+                // ruleSet4,
+                // ruleSet5
             };
 
             // var rulesetList = RuleSetFactory.GetRuleSetListFromSettingsList(_characterData.RuleSet);
@@ -102,16 +119,12 @@ namespace ASD_Game.World.Models.Characters.StateMachine
             {
                 foreach (var initialState in builderInfo.InitialStates)
                 {
-                    bool condition = true;
-
                     builder.In(initialState).On(builderInfo.Event)
-                        .If<object>((targetData) => condition = builderConfigurator.GetGuard(_characterData, targetData, builderInfo) == true)
+                        .If<object>((targetData) => builderConfigurator.GetGuard(_characterData, targetData, builderInfo))
                         .Goto(builderInfo.TargetState).Execute<ICharacterData>(builderInfo.TargetState.SetTargetData);
-                    System.Diagnostics.Debug.WriteLine("builder.In(" + initialState + ").On(" + builderInfo.Event + ").If(" + condition + ").Goto(" + builderInfo.TargetState + ")");
                 }
             }
-            System.Diagnostics.Debug.WriteLine("-----------------------------");
-            
+
             foreach (var action in builderConfigurator.GetActionWithStateList())
             {
                 if (!builderInfoList.Any(x => x.Action == action.Key))
@@ -127,6 +140,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine
                         builder.In(followCreatureState).On(CharacterEvent.Event.LOST_CREATURE).Goto(wanderState).Execute<ICharacterData>(wanderState.SetTargetData);
                         builder.In(fleeFromCharacterState).On(CharacterEvent.Event.LOST_CREATURE).Goto(wanderState).Execute<ICharacterData>(wanderState.SetTargetData);
                         builder.In(idleState).On(CharacterEvent.Event.WANDERING).Goto(wanderState).Execute<ICharacterData>(wanderState.SetTargetData);
+                        builder.In(attackState).On(CharacterEvent.Event.LOST_CREATURE).Goto(wanderState).Execute<ICharacterData>(wanderState.SetTargetData);
                     }
                     else if (action.Key == "inventory")
                     {
@@ -148,7 +162,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine
                     {
                         // Follow creature
                         builder.In(wanderState).On(CharacterEvent.Event.SPOTTED_CREATURE).Goto(followCreatureState).Execute<ICharacterData>(followCreatureState.SetTargetData);
-                        builder.In(attackState).On(CharacterEvent.Event.CREATURE_OUT_OF_RANGE).Goto(followCreatureState).Execute<ICharacterData>(followCreatureState.SetTargetData);
                     }
                     else if (action.Key == "attack")
                     {
