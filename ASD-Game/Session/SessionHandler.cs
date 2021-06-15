@@ -550,9 +550,7 @@ namespace ASD_Game.Session
                             "Not allowed to join this session");
                     }
                 }
-                
-                _screenHandler.TransitionTo(new LobbyScreen());
-                
+
                 if (_screenHandler.Screen is LobbyScreen screen)
                 {
                     var updatedClientList = new List<string[]>();
@@ -578,6 +576,16 @@ namespace ASD_Game.Session
                 SessionDTO sessionDTOClients =
                     JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
                 _session.EmptyClients();
+
+                if (sessionDTOClients.SessionStarted)
+                {
+                    _screenHandler.TransitionTo(new GameScreen());
+                    return ActiveGameAddsPlayer(sessionDTOClients, packet);
+                }
+                else
+                {
+                    _screenHandler.TransitionTo(new LobbyScreen());
+                }
 
                 _session.SessionSeed = sessionDTOClients.SessionSeed;
 
