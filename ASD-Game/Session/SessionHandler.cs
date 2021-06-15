@@ -101,6 +101,7 @@ namespace ASD_Game.Session
                     sessionDTO.SessionStarted = receivedSessionDTO.SessionStarted;
                     SendSessionDTO(sessionDTO);
                     joinSession = true;
+                    
                 }
                 else
                 {
@@ -450,44 +451,23 @@ namespace ASD_Game.Session
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
-        private HandlerResponseDTO AddPlayerToSession(PacketDTO packet)
+        public HandlerResponseDTO AddPlayerToSession(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
 
             if (packet.Header.Target == "host")
             {
-                return HostAddsPlayer(sessionDTO, packet);
-            }
-            else
-            {
-                if (packet.HandlerResponse.ResultMessage.Equals($"Not allowed to join saved or running game"))
+                if (_screenHandler.Screen is LobbyScreen screen)
                 {
-                    _messageService.AddMessage(packet.HandlerResponse.ResultMessage);
-                    return new HandlerResponseDTO(SendAction.Ignore, null);
+                    var updatedClientList = new List<string[]>();
+                    updatedClientList.AddRange(_session.GetAllClients());
+                    updatedClientList.AddRange(sessionDTO.Clients);
+                    screen.UpdateLobbyScreen(updatedClientList);
                 }
-                else
-                {
-                    if (_screenHandler.Screen is not GameScreen)
-                    {
-                        _screenHandler.TransitionTo(new LobbyScreen());
-                    }
-                    ClientAddsPlayer(sessionDTO, packet);
-                }
-            }
 
-            return new HandlerResponseDTO(SendAction.Ignore, null);
-        }
-
-        private HandlerResponseDTO HostAddsPlayer(SessionDTO sessionDTO, PacketDTO packet)
-        {
-            if (_session.SavedGame || _session.GameStarted)
-            {
-                return ActiveGameAddsPlayer(sessionDTO, packet);
-            }
-            else
-            {
                 _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
                 sessionDTO.Clients = new List<string[]>();
+                
                 sessionDTO.SessionSeed = _session.SessionSeed;
 
                 foreach (string[] client in _session.GetAllClients())
@@ -495,40 +475,89 @@ namespace ASD_Game.Session
                     sessionDTO.Clients.Add(client);
                 }
 
+                return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
+            }
+            else
+            {
+                SessionDTO sessionDTOClients = JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
+                _session.EmptyClients();
+
+                _session.SessionSeed = sessionDTOClients.SessionSeed;
+
+                foreach (string[] client in sessionDTOClients.Clients)
+                {
+                    _session.AddClient(client[0], client[1]);
+                }
+
+                if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost)
+                {
+                    if (sessionDTOClients.Clients[1][0].Equals(_clientController.GetOriginId()))
+                    {
+                        _clientController.IsBackupHost = true;
+                        StartPingThread();
+                    }
+                }
+                
                 if (_screenHandler.Screen is LobbyScreen screen)
                 {
                     screen.UpdateLobbyScreen(_session.GetAllClients());
                 }
 
-
-                return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
+                return new HandlerResponseDTO(SendAction.Ignore, null);
             }
         }
 
-        private void ClientAddsPlayer(SessionDTO sessionDTO, PacketDTO packet)
-        {
-            _session.EmptyClients();
-            _session.SessionSeed = sessionDTO.SessionSeed;
-    
-            _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
-            sessionDTO.Clients = new List<string[]>();
-            sessionDTO.SessionSeed = _session.SessionSeed;
-            foreach (string[] client in _session.GetAllClients())
-            {
-                sessionDTO.Clients.Add(client);
-            }
-    
-            if (_screenHandler.Screen is LobbyScreen screen)
-            {
-                screen.UpdateLobbyScreen(sessionDTO.Clients);
-            }
-            if (sessionDTO.Clients.Count > 0 && !_clientController.IsBackupHost &&
-                sessionDTO.Clients.Count <= 2)
-            {
-                _clientController.IsBackupHost = true;
-                StartPingThread();
-            }
-        }
+        // private HandlerResponseDTO HostAddsPlayer(SessionDTO sessionDTO, PacketDTO packet)
+        // {
+        //     if (_session.SavedGame || _session.GameStarted)
+        //     {
+        //         return ActiveGameAddsPlayer(sessionDTO, packet);
+        //     }
+        //     else
+        //     {
+        //         _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
+        //         sessionDTO.Clients = new List<string[]>();
+        //         sessionDTO.SessionSeed = _session.SessionSeed;
+        //
+        //         foreach (string[] client in _session.GetAllClients())
+        //         {
+        //             sessionDTO.Clients.Add(client);
+        //         }
+        //
+        //         if (_screenHandler.Screen is LobbyScreen screen)
+        //         {
+        //             screen.UpdateLobbyScreen(_session.GetAllClients());
+        //         }
+        //
+        //
+        //         return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
+        //     }
+        // }
+
+        // private void ClientAddsPlayer(SessionDTO sessionDTO, PacketDTO packet)
+        // {
+        //     _session.EmptyClients();
+        //     _session.SessionSeed = sessionDTO.SessionSeed;
+        //
+        //     _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
+        //     sessionDTO.Clients = new List<string[]>();
+        //     sessionDTO.SessionSeed = _session.SessionSeed;
+        //     foreach (string[] client in _session.GetAllClients())
+        //     {
+        //         sessionDTO.Clients.Add(client);
+        //     }
+        //
+        //     if (_screenHandler.Screen is LobbyScreen screen)
+        //     {
+        //         screen.UpdateLobbyScreen(sessionDTO.Clients);
+        //     }
+        //     if (sessionDTO.Clients.Count > 0 && !_clientController.IsBackupHost &&
+        //         sessionDTO.Clients.Count <= 2)
+        //     {
+        //         _clientController.IsBackupHost = true;
+        //         StartPingThread();
+        //     }
+        // }
 
         private HandlerResponseDTO ActiveGameAddsPlayer(SessionDTO sessionDTO, PacketDTO packet)
         {
