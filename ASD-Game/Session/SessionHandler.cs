@@ -9,6 +9,7 @@ using ASD_Game.Network;
 using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
 using ASD_Game.Session.DTO;
+using ASD_Game.Session.Exceptions;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
 using ASD_Game.World;
@@ -22,7 +23,8 @@ namespace ASD_Game.Session
     {
         private const int WAITTIMEPINGTIMER = 500;
         private const int INTERVALTIMEPINGTIMER = 1000;
-
+        private const int MAXPLAYERS = 8;
+        
         private readonly IClientController _clientController;
         private const bool DEBUG_INTERFACE = false; //TODO: remove when UI is complete, obviously
 
@@ -75,18 +77,25 @@ namespace ASD_Game.Session
                 StartSendHeartbeatThread();
 
                 SessionDTO receivedSessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packetDTO.HandlerResponse.ResultMessage);
-                _session = new Session(receivedSessionDTO.Name);
+                if (receivedSessionDTO.Clients.Count < MAXPLAYERS)
+                {
+                    _session = new Session(receivedSessionDTO.Name);
 
-                _session.SessionId = sessionId;
-                _clientController.SetSessionId(sessionId);
-                _messageService.AddMessage("Joined game with name: " + _session.Name);
+                    _session.SessionId = sessionId;
+                    _clientController.SetSessionId(sessionId);
+                    _messageService.AddMessage("Joined game with name: " + _session.Name);
 
-                SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
-                sessionDTO.Clients = new List<string[]>();
-                sessionDTO.Clients.Add(new[] { _clientController.GetOriginId(), userName });
-                sessionDTO.SessionSeed = receivedSessionDTO.SessionSeed;
-                sendSessionDTO(sessionDTO);
-                joinSession = true;
+                    SessionDTO sessionDTO = new SessionDTO(SessionType.RequestToJoinSession);
+                    sessionDTO.Clients = new List<string[]>();
+                    sessionDTO.Clients.Add(new[] {_clientController.GetOriginId(), userName});
+                    sessionDTO.SessionSeed = receivedSessionDTO.SessionSeed;
+                    sendSessionDTO(sessionDTO);
+                    joinSession = true;
+                }
+                else
+                {
+                    throw new PlayerLimitException("This session is full you cant join, type return");
+                }
             }
 
             return joinSession;
