@@ -128,10 +128,6 @@ namespace ASD_Game.InputHandling
                 {
                     sessionScreen.UpdateInputMessage("Not a valid session, try again!");
                 }
-                else if (username.Trim() == "")
-                {
-                    sessionScreen.UpdateInputMessage("Not a valid username, try again!");
-                }
                 else
                 {
                     _screenHandler.TransitionTo(new LobbyScreen());
