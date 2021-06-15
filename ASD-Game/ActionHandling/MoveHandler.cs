@@ -25,7 +25,7 @@ namespace ASD_Game.ActionHandling
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IMessageService _messageService;
         private Timer AIUpdateTimer;
-        private int _updateTime = 10000; // Smartmonster timer
+        private int _updateTime = 4000; // Smartmonster timer
 
         private List<MoveDTO> _AIMoves = new List<MoveDTO>();
 
