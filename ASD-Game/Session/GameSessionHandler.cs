@@ -38,8 +38,6 @@ namespace ASD_Game.Session
         private readonly IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
         private readonly IGameConfigurationHandler _gameConfigurationHandler;
         private IDatabaseService<GameConfigurationPOCO> _gameConfigDatabaseService;
-        private readonly IWorldService _worldService;
-        private readonly IMessageService _messageService;
         private readonly IMoveHandler _moveHandler;
         private IItemService _itemService;
         private Timer AIUpdateTimer;
@@ -76,6 +74,7 @@ namespace ASD_Game.Session
             _playerItemDatabaseService = playerItemDatabaseService;
             _itemService = itemService;
             _moveHandler = moveHandler;
+            _worldService = worldService;
             CheckAITimer();
             UpdateBrain();
         }
