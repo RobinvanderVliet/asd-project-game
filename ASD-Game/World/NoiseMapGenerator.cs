@@ -20,16 +20,18 @@ namespace ASD_Game.World
         private List<ItemSpawnDTO> _items;
         private RoadPresetFactory _roadPresetFactory;
         private int _chunkRowSize;
+        private bool _generateRoads;
 
         public NoiseMapGenerator(int seed, IItemService itemService, List<ItemSpawnDTO> items, int chunkRowSize)
         {
             _worldNoise = SetupNoise(0.015f, seed);
             _itemNoise = SetupNoise(10f,seed);
-            _roadNoise = SetupNoise(0.12f, seed);
+            _roadNoise = SetupNoise(10f, seed);
             _itemService = itemService;
             _items = items;
             _roadPresetFactory = new RoadPresetFactory(chunkRowSize);
             _chunkRowSize = chunkRowSize;
+            _generateRoads = true;
         }
 
         public Chunk GenerateChunk(int chunkX, int chunkY)
@@ -43,11 +45,20 @@ namespace ASD_Game.World
             {
                 for (var x = 0; x < _chunkRowSize; x++)
                 {
-                    map[y * _chunkRowSize + x] = CreateTileWithItemFromNoise(
-                        _worldNoise.GetNoise(x + chunkX * _chunkRowSize, y + chunkY * _chunkRowSize)
-                        , _itemNoise.GetNoise(x + chunkX * _chunkRowSize, y + chunkY * _chunkRowSize)
-                        , x + _chunkRowSize * chunkX
-                        , _chunkRowSize * chunkY - _chunkRowSize + y);
+                    if (roadmap[y * _chunkRowSize + x] != null && _generateRoads)
+                    {
+                        map[y * _chunkRowSize + x] = new StreetTile(x+ _chunkRowSize * chunkX
+                            , _chunkRowSize * chunkY - _chunkRowSize + y);
+                    }
+                    else
+                    {
+
+                        map[y * _chunkRowSize + x] = CreateTileWithItemFromNoise(
+                            _worldNoise.GetNoise(x + chunkX * _chunkRowSize, y + chunkY * _chunkRowSize)
+                            , _itemNoise.GetNoise(x + chunkX * _chunkRowSize, y + chunkY * _chunkRowSize)
+                            , x + _chunkRowSize * chunkX
+                            , _chunkRowSize * chunkY - _chunkRowSize + y);
+                    }
                 }
             }
             return new Chunk(chunkX, chunkY, map, _chunkRowSize);
@@ -98,10 +109,10 @@ namespace ASD_Game.World
         {
             // Step 1: generate four binaries based on the compass directions.
             // These use the coordinate of the current chunk and the adjacent chunk, so when the calculation is repeated in the adjacent chunk it will result in the same result.
-            int north = GetBinaryForRoads(chunkY + chunkY + 1);
-            int south = GetBinaryForRoads(chunkY + chunkY - 1);
-            int east = GetBinaryForRoads(chunkX + chunkX + 1);
-            int west = GetBinaryForRoads(chunkX + chunkX - 1);
+            var north = GetBinaryForRoads(chunkY + chunkY + 1);
+            var south = GetBinaryForRoads(chunkY + chunkY - 1);
+            var east = GetBinaryForRoads(chunkX + chunkX + 1);
+            var west = GetBinaryForRoads(chunkX + chunkX - 1);
             
             // Step 2: based on the previous binaries, a switch case is used to return the correct compass direction.
             switch (north, south, east, west)
@@ -116,15 +127,36 @@ namespace ASD_Game.World
                     return CompassDirections.EastOnly;
                 case (0, 0, 0, 1):
                     return CompassDirections.WestOnly;
+                case (1, 1, 0, 0):
+                    return CompassDirections.NorthToSouth;
+                case (1, 0, 1, 0):
+                    return CompassDirections.NorthToEast;
+                case (1, 0, 0, 1):
+                    return CompassDirections.NorthToWest;
+                case (0, 1, 1, 0):
+                    return CompassDirections.EastToSouth;
+                case (0, 1, 0, 1):
+                    return CompassDirections.EastToWest;
+                case (0, 0, 1, 1):
+                    return CompassDirections.NorthToSouth;
+                case (1, 1, 1, 0):
+                    return CompassDirections.AllButWest;
+                case (1, 1, 0, 1):
+                    return CompassDirections.AllButEast;
+                case (1, 0, 1, 1):
+                    return CompassDirections.AllButSouth;
+                case (0, 1, 1, 1):
+                    return CompassDirections.AllButNorth;
+                case (1, 1, 1, 1):
+                    return CompassDirections.AllRoads;
                 default:
-                    // Default solution, also used for roads not yet implemented.
                     return CompassDirections.NoRoads;
             }
         }
 
-        private int GetBinaryForRoads(int combinedcoordinates)
+        private int GetBinaryForRoads(int combinedCoordinates)
         {
-            var noiseResult = _roadNoise.GetNoise(combinedcoordinates, combinedcoordinates) * 10;
+            var noiseResult = _roadNoise.GetNoise(combinedCoordinates, combinedCoordinates) * 10;
             return (int) (noiseResult % 2);
         }
         
@@ -134,6 +166,12 @@ namespace ASD_Game.World
             _itemNoise = noise;
             _worldNoise = noise;
             _roadNoise = noise;
+        }
+
+        [ExcludeFromCodeCoverage]
+        public void TurnOffRoadGeneration()
+        {
+            _generateRoads = false;
         }
 
         private IFastNoise SetupNoise(float frequency, int seed)
