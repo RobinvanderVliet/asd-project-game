@@ -26,7 +26,7 @@ namespace ASD_Game.ActionHandling
         private readonly IMessageService _messageService;
         private Timer AIUpdateTimer;
         private int _updateTime = 4000; // Smartmonster timer
-
+        
         private List<MoveDTO> _AIMoves = new List<MoveDTO>();
 
         public MoveHandler(IClientController clientController, IWorldService worldService, IDatabaseService<PlayerPOCO> playerDatabaseService, IMessageService messageService)

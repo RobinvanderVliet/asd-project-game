@@ -1,8 +1,7 @@
 ﻿using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ASD_Game.World.Models.Characters.StateMachine.State;
-using WorldGeneration.StateMachine;
 
-namespace Creature.Creature.StateMachine.State
+namespace ASD_Game.World.Models.Characters.StateMachine.State
 {
     public class IdleState : CharacterState
     {

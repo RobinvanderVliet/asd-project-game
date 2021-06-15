@@ -43,11 +43,11 @@ namespace Agent.Services
             var configurationFileLocation = String.Empty;
             if (name.Equals("agent"))
             {
-                configurationFileLocation = "agent" + Path.DirectorySeparatorChar + name + "-config.cfg";    
+                configurationFileLocation = Path.DirectorySeparatorChar + "agent" + Path.DirectorySeparatorChar + name + "-config.cfg";    
             }
             else
             {
-                configurationFileLocation = "npc" + Path.DirectorySeparatorChar + name + "-config.cfg";
+                configurationFileLocation = Path.DirectorySeparatorChar + "npc" + Path.DirectorySeparatorChar + name + "-config.cfg";
             }
             
             if (!_fileHandler.FileExist(configurationFileLocation))
@@ -55,7 +55,7 @@ namespace Agent.Services
                 _fileHandler.ExportFile("explore=random" + Environment.NewLine + "combat=offensive", configurationFileLocation);
             }
 
-            configuration.Settings = _fileToConfigurationMapper.MapFileToConfiguration(_fileHandler.GetBaseDirectory() + Path.DirectorySeparatorChar + "resource" + Path.DirectorySeparatorChar + configurationFileLocation);
+            configuration.Settings = _fileToConfigurationMapper.MapFileToConfiguration(configurationFileLocation);
             Configuration = configuration;
         }
         

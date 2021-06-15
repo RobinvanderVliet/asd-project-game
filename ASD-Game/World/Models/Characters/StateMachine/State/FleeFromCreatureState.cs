@@ -2,12 +2,13 @@
 using System.Numerics;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ASD_Game.World.Models.Characters.StateMachine.State;
-using WorldGeneration.StateMachine;
 
-namespace Creature.Creature.StateMachine.State
+namespace ASD_Game.World.Models.Characters.StateMachine.State
 {
     public class FleeFromCreatureState : CharacterState
     {
+        private const int MAX_MOVEMENT_SPEED = 3;
+
         public FleeFromCreatureState(ICharacterData characterData, ICharacterStateMachine characterStateMachine) : base(characterData, characterStateMachine)
         {
             
@@ -15,35 +16,48 @@ namespace Creature.Creature.StateMachine.State
 
         public override void Do()
         {
+            DoWorldCheck();
+            
+            Console.WriteLine("In flee");
+
             var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
             var _builderConfiguration = _characterData.BuilderConfigurator;
-            
+
             foreach (var builderInfo in _builderInfoList)
             {
                 if (builderInfo.Action == "flee")
                 {
                     if (_builderConfiguration.GetGuard(_characterData, _target, builderInfo))
                     {
-                        String direction = "";
-                        if (Vector2.DistanceSquared(_characterData.Position, _target.Position) <=
-                            Vector2.DistanceSquared(
-                                new Vector2(_characterData.Position.X + 1, _characterData.Position.Y + 1),
-                                _target.Position))
-                        {
-                            direction = "up";
-                        }
-                        else if (Vector2.DistanceSquared(_characterData.Position, _target.Position) <=
-                                 Vector2.DistanceSquared(
-                                     new Vector2(_characterData.Position.X - 1, _characterData.Position.Y - 1),
-                                     _target.Position))
-                        {
-                            direction = "down";
-                        }
-
-                        _characterData.MoveHandler.SendMove(direction, 1);
+                        MoveRandomDirection();
                     }
                 }
             }
+        }
+        
+        private void MoveRandomDirection()
+        {
+            var x = 0;
+            var y = 0;
+
+            if (new Random().Next(10) >= 5)
+            {
+                x += new Random().Next(MAX_MOVEMENT_SPEED);
+            }
+            else
+            {
+                y += new Random().Next(MAX_MOVEMENT_SPEED);
+            }
+
+            _characterData.Position = new Vector2(
+                _characterData.Position.X + x,
+                _characterData.Position.Y + y
+            );
+
+            _characterData.MoveHandler.SendAIMove(_characterData.CharacterId,
+                Convert.ToInt32(_characterData.Position.X),
+                Convert.ToInt32(_characterData.Position.Y)
+            );
         }
     }
 }

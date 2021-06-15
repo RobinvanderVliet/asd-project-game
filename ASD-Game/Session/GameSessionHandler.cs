@@ -22,7 +22,6 @@ using System.Timers;
 using ASD_Game.Items.Services;
 using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters.StateMachine;
-using WorldGeneration.StateMachine;
 using ASD_Game.World.Models.Characters;
 using ActionHandling;
 using System.Diagnostics.CodeAnalysis;
@@ -133,6 +132,7 @@ namespace ASD_Game.Session
             _screenHandler.TransitionTo(new GameScreen());
 
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
+            
             _gameConfigurationHandler.ItemService = _worldService.ItemService;
             _itemService.ChanceForItemOnTile = (int)_gameConfigurationHandler.GetItemSpawnRate();
 

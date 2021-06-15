@@ -24,6 +24,8 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
         public Character ClosestMonster { get; set; }
         public Single DistanceToClosestMonster { get; set; } = 9999999999999999999;
 
+        public Vector2 _pathingOffset;
+
         public DataGatheringService(IWorldService worldService)
         {
             _worldService = worldService;
@@ -149,6 +151,16 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
                 }
             }
             return false;
+        }
+
+        public Vector2 TransformPath(Vector2 nextpos)
+        {
+            return nextpos + _pathingOffset;
+        }
+
+        public void ViewPointCalculator(Vector2 pos)
+        {
+            _pathingOffset = new Vector2(pos.X - 6, pos.Y - 6);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ASD_Game.World.Models.Characters.StateMachine.CustomRuleSet;
 using ASD_Game.World.Models.Characters.StateMachine.State;
-using WorldGeneration.StateMachine.Event;
+using World.Models.Characters.StateMachine.Event;
 
 namespace ASD_Game.World.Models.Characters.StateMachine.Builder
 {

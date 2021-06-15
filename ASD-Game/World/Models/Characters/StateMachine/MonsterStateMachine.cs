@@ -2,14 +2,13 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Appccelerate.StateMachine.Machine;
-
 using ASD_Game.World.Models.Characters.StateMachine.Builder;
 using ASD_Game.World.Models.Characters.StateMachine.CustomRuleSet;
 using Creature.Creature.StateMachine.CustomRuleSet;
-using Creature.Creature.StateMachine.State;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ASD_Game.World.Models.Characters.StateMachine.State;
-using WorldGeneration.StateMachine.Event;
+using World.Models.Characters.StateMachine.Event;
+
 
 namespace ASD_Game.World.Models.Characters.StateMachine
 {
