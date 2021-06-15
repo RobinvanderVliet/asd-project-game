@@ -12,7 +12,6 @@ using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
 using InputCommandHandler.Models;
 using WebSocketSharp;
-using static System.Int32;
 
 namespace ASD_Game.InputHandling
 {
@@ -74,7 +73,7 @@ namespace ASD_Game.InputHandling
         public void HandleStartScreenCommands()
         {
             var input = GetCommand();
-            TryParse(input, out var option);
+            int.TryParse(input, out var option);
 
             switch (option)
             {
@@ -120,7 +119,7 @@ namespace ASD_Game.InputHandling
             }
             else
             {
-                TryParse(input[0].ToString(), out var sessionNumber);
+                int.TryParse(input[0].ToString(), out var sessionNumber);
                 var username = input[1].ToString();
 
                 var sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
@@ -473,7 +472,7 @@ namespace ASD_Game.InputHandling
 
             //check second variable is of type item or interger
             correct = rule.IndexOf(variables.ReturnAllItems().FirstOrDefault(x => x.Equals(rule[3]))) == 3 ||
-                      TryParse(rule[3], out _) ||
+                      int.TryParse(rule[3], out _) ||
                       rule.FindLastIndex(x => x.Equals(variables.comparables.FirstOrDefault(x => x.Equals(rule[3])))) ==
                       3;
             if (!correct)
