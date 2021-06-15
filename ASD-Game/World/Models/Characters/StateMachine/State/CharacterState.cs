@@ -24,6 +24,10 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
 
         public virtual void DoWorldCheck()
         {
+            if (_characterData.Health <= 0)
+            {
+                return;
+            }
             const int ATTACK_RANGE = 1;
             const int VISION_RANGE = 6;
 
@@ -34,14 +38,14 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                 {
                     _characterStateMachine.FireEvent(CharacterEvent.Event.LOST_CREATURE);
                     return;
-                }    
-                
+                }
+
                 if (visionRangeTarget is Monster && !ThresholdExists("monster"))
                 {
                     _characterStateMachine.FireEvent(CharacterEvent.Event.LOST_CREATURE);
                     return;
-                }    
-                
+                }
+
                 Character attackRangeTarget = _characterData.WorldService.GetCharacterInClosestRangeToCurrentCharacter(_characterData.WorldService.GetCharacter(_characterData.CharacterId), ATTACK_RANGE);
                 if (attackRangeTarget != null)
                 {
@@ -69,8 +73,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                     {
                         Monster monster = (Monster)visionRangeTarget;
                         _characterStateMachine.FireEvent(CharacterEvent.Event.SPOTTED_CREATURE, monster.MonsterData);
-                    } 
-                    
+                    }
                 }
             }
             else
@@ -83,7 +86,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
         {
             throw new InvalidOperationException("State machine is not a comparable object.");
         }
-        
+
         public virtual void SetTargetData(ICharacterData data)
         {
             _target = data;

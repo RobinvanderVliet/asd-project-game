@@ -342,7 +342,7 @@ namespace ASD_Game.ActionHandling
                     _messageService.AddMessage("You attacked an enemy.");
                 }
             }
-            else if (creature == null)
+            if (creature == null)
             {
                 var attackedPlayer = _worldService.GetPlayer(attackDto.AttackedPlayerGuid);
 

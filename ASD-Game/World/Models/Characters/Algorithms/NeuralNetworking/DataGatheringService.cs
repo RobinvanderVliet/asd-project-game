@@ -133,6 +133,9 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
 
                 case '\u25B2':
                     return false;
+
+                case 'Z':
+                    return false;
             }
             return true;
         }

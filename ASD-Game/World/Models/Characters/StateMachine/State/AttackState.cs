@@ -1,5 +1,7 @@
-﻿using ASD_Game.World.Models.Characters.StateMachine.Data;
+﻿using ActionHandling.DTO;
+using ASD_Game.World.Models.Characters.StateMachine.Data;
 using System;
+using System.Numerics;
 
 namespace ASD_Game.World.Models.Characters.StateMachine.State
 {
@@ -32,24 +34,25 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
 
         private void AgentAttack()
         {
-            _characterData.AttackHandler.SendAttack(GetDirection());
-        }
-
-        private string GetDirection()
-        {
-            DoWorldCheck();
-            Character pl = _characterData.WorldService.GetCharacter(_characterData.CharacterId);
-            float PX = pl.XPosition;
-            float PY = pl.YPosition;
             Character cha = _characterData.WorldService.GetCharacter(_target.CharacterId);
-            float TX = cha.XPosition;
-            float TY = cha.YPosition;
+            Character pl = _characterData.WorldService.GetCharacter(_characterData.CharacterId);
+            if (cha != null)
+            {
+                Vector2 plPos = new Vector2(pl.XPosition, pl.YPosition);
+                Vector2 chaPos = new Vector2(cha.XPosition, cha.YPosition);
 
-            if (PX == TX && PY > TY) { return "down"; }
-            if (PX > TX && PY == TY) { return "right"; }
-            if (PX == TX && PY < TY) { return "up"; }
-            if (PX < TX && PY == TY) { return "left"; }
-            return null;
+                if (Vector2.Distance(plPos, chaPos) == 1)
+                {
+                    AttackDTO attackDTO = new();
+                    attackDTO.XPosition = cha.XPosition;
+                    attackDTO.YPosition = cha.YPosition;
+                    attackDTO.Stamina = 100;
+                    attackDTO.Damage = 50;
+                    attackDTO.PlayerGuid = pl.Id;
+
+                    _characterData.AttackHandler.SendAttackDTO(attackDTO);
+                }
+            }
         }
     }
 }

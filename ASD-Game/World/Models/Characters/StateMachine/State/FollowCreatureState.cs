@@ -53,10 +53,19 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                 }
                 else
                 {
-                    _characterData.MoveHandler.SendAIMove(_characterData.CharacterId,
-                        Convert.ToInt32(newPositionX),
-                        Convert.ToInt32(newPositionY)
-                    );
+                    Character cha = _characterData.WorldService.GetCharacter(_target.CharacterId);
+                    Character pl = _characterData.WorldService.GetCharacter(_characterData.CharacterId);
+
+                    Vector2 plPos = new Vector2(pl.XPosition, pl.YPosition);
+                    Vector2 chaPos = new Vector2(cha.XPosition, cha.YPosition);
+
+                    if (Vector2.Distance(plPos, chaPos) > 1)
+                    {
+                        _characterData.MoveHandler.SendAIMove(_characterData.CharacterId,
+                            Convert.ToInt32(newPositionX),
+                            Convert.ToInt32(newPositionY)
+                        );
+                    }
                 }
             }
         }
