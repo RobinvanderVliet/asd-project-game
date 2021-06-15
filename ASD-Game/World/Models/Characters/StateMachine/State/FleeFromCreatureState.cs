@@ -17,7 +17,10 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
         public override void Do()
         {
             DoWorldCheck();
-            MoveRandomDirection();
+            if (_characterData.Health > 0)
+            {
+                MoveRandomDirection();
+            }
         }
 
         private void MoveRandomDirection()
@@ -34,15 +37,21 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                 y += new Random().Next(MAX_MOVEMENT_SPEED);
             }
 
-            _characterData.Position = new Vector2(
-                _characterData.Position.X + x,
-                _characterData.Position.Y + y
-            );
-
-            _characterData.MoveHandler.SendAIMove(_characterData.CharacterId,
-                Convert.ToInt32(_characterData.Position.X),
-                Convert.ToInt32(_characterData.Position.Y)
-            );
+            if (_characterData is MonsterData)
+            {
+                _characterData.MoveType = "Move";
+                _characterData.Destination = new Vector2(
+                    _characterData.Position.X + x,
+                    _characterData.Position.Y + y
+                );
+            }
+            else
+            {
+                _characterData.MoveHandler.SendAIMove(_characterData.CharacterId,
+                    Convert.ToInt32(_characterData.Position.X),
+                    Convert.ToInt32(_characterData.Position.Y)
+                );
+            }
         }
     }
 }
