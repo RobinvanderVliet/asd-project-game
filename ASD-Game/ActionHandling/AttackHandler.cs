@@ -170,12 +170,17 @@ namespace ASD_Game.ActionHandling
                 }
                 else
                 {
-                    if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
+                    if (!attackDto.PlayerGuid.StartsWith("monst"))
                     {
-                        _messageService.AddMessage("There is no enemy to attack");
+                        if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
+                        {
+                            _messageService.AddMessage("There is no enemy to attack");
+                        }
+                        return new HandlerResponseDTO(SendAction.ReturnToSender,
+                            "There is no enemy to attack");   
                     }
-                    return new HandlerResponseDTO(SendAction.ReturnToSender,
-                        "There is no enemy to attack");
+
+                    return new HandlerResponseDTO(SendAction.Ignore, null);
                 }
             }
             else if (packet.Header.Target.Equals(_clientController.GetOriginId()))
