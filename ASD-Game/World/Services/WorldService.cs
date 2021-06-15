@@ -93,6 +93,17 @@ namespace ASD_Game.World.Services
             return _world.GetAllCharacters();
         }
 
+        public Character GetCharacter(string id)
+        {
+            return GetAllCharacters().Find(character => character.Id == id);
+        }
+
+        public Character GetCharacterOnTile(int x, int y)
+        {
+            var characters = GetAllCharacters();
+            return characters.Find(character => character.XPosition == x && character.YPosition == y);
+        }
+
         public void UpdateBrains(Genome genome)
         {
             if (_world != null)

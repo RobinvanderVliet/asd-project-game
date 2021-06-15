@@ -104,6 +104,8 @@ namespace ASD_Game.ActionHandling
         {
             AttackDTO attackDto = JsonConvert.DeserializeObject<AttackDTO>(packet.Payload);
 
+
+
             if (_worldService.GetPlayer(attackDto.PlayerGuid) != null &&
                 _worldService.GetPlayer(attackDto.PlayerGuid).Stamina < 10)
             {
@@ -113,6 +115,7 @@ namespace ASD_Game.ActionHandling
                 }
                 return new HandlerResponseDTO(SendAction.ReturnToSender, "You did not have enough stamina to attack.");
             }
+
             if (!attackDto.PlayerGuid.StartsWith("monst"))
             {
                 LowerStamina(attackDto.PlayerGuid);
@@ -120,10 +123,8 @@ namespace ASD_Game.ActionHandling
 
             if (_clientController.IsHost() && packet.Header.Target.Equals("host") || _clientController.IsBackupHost)
             {
-                var allCharacters = _worldService.GetAllCharacters();
-                var characterToAttack =
-                    allCharacters.Find(x =>
-                        x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition);
+                var attackingCharacter = _worldService.GetCharacter(attackDto.PlayerGuid);
+                var characterToAttack = GetCharacterToAttack(attackingCharacter.XPosition, attackingCharacter.YPosition, attackDto.XPosition, attackDto.YPosition);               
 
                 if (attackDto.PlayerGuid.StartsWith("monst"))
                 {
@@ -134,7 +135,9 @@ namespace ASD_Game.ActionHandling
                         return new HandlerResponseDTO(SendAction.SendToClients, null);
                     }
                 }
+
                 InsertStaminaToDatabase(attackDto);
+
                 if (characterToAttack != null)
                 {
                     if (characterToAttack.Health <= 0)
@@ -271,6 +274,46 @@ namespace ASD_Game.ActionHandling
                     }
                 }
             }
+        }
+
+        private Character GetCharacterToAttack(int XPositionAttacker, int YPositionAttacker, int XPositionAttack, int YPositionAttack)
+        {
+            Character character = null;
+            if(XPositionAttacker != XPositionAttack)
+            {
+                if(XPositionAttacker < XPositionAttack)
+                {
+                    for(int x = XPositionAttacker + 1; x <= XPositionAttack && character is null; x++)
+                    {
+                        character = _worldService.GetCharacterOnTile(x, YPositionAttack);
+                    }
+                }
+                else
+                {
+                    for (int x = XPositionAttacker - 1; x >= XPositionAttack && character is null; x--)
+                    {
+                        character = _worldService.GetCharacterOnTile(x, YPositionAttack);
+                    }
+                }
+            }
+            else
+            {
+                if (YPositionAttacker < YPositionAttack)
+                {
+                    for (int y = YPositionAttacker + 1; y <= YPositionAttack && character is null; y++)
+                    {
+                        character = _worldService.GetCharacterOnTile(XPositionAttack, y);
+                    }
+                }
+                else
+                {
+                    for (int y = YPositionAttacker - 1; y >= YPositionAttack && character is null; y--)
+                    {
+                        character = _worldService.GetCharacterOnTile(XPositionAttack, y);
+                    }
+                }
+            }
+            return character;
         }
 
         private void LowerStamina(string playerId)
