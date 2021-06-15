@@ -15,18 +15,16 @@ using ASD_Game.Session.GameConfiguration;
 using ASD_Game.Session.Helpers;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Services;
+using System.Timers;
+using ASD_Game.Items.Services;
 using Newtonsoft.Json;
 using System.Timers;
 using ASD_Game.Items.Services;
 using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters.StateMachine;
 using WorldGeneration.StateMachine;
-using System.Numerics;
 using ASD_Game.World.Models.Characters;
-using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ActionHandling;
-using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace ASD_Game.Session
