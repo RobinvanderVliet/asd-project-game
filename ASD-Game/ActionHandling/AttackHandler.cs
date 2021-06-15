@@ -136,6 +136,7 @@ namespace ASD_Game.ActionHandling
                     {
                         attackDto.AttackedPlayerGuid = characterToAttack.Id;
                         HandleAttack(attackDto);
+                        packet.Payload = JsonConvert.SerializeObject(attackDto);
                         return new HandlerResponseDTO(SendAction.SendToClients, null);
                     }
                 }
