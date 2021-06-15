@@ -11,7 +11,7 @@ namespace ASD_Game.Agent.Antlr.Checker
     {
         private readonly List<string> _actions = new()
         {
-            "engage", "collect"
+            "engage", "collect", "follow", "wander"
         };
         private readonly List<string> _actionReferences = new()
         {
@@ -25,7 +25,7 @@ namespace ASD_Game.Agent.Antlr.Checker
 
         private readonly List<string> _ruleValues = new ()
         {
-            "random", "circle", "line", "none", "defensive", "offensive"
+            "random", "circle", "line", "none", "defensive", "offensive" , "target-player", "target-objective"
         };
         
         private  readonly List<string> _weapons = new ()

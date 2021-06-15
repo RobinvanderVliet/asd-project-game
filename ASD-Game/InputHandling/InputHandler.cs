@@ -273,15 +273,14 @@ namespace ASD_Game.InputHandling
                     errorsCombined += error + ", ";
                 }
                 editorScreen.UpdateLastQuestion(errorsCombined +
-                                                Environment.NewLine + "Please fix the errors and retry" +
-                                                Environment.NewLine + "press enter to continue...");
+                                                "Please fix the errors and retry press enter to continue...");
                 _screenHandler.GetScreenInput();
                 editorScreen.ClearScreen();
                 _screenHandler.TransitionTo(new StartScreen());
             }
             
-            editorScreen.UpdateLastQuestion(Environment.NewLine + "Your agent has been configured successfully!" +
-                                            Environment.NewLine + "press enter to continue to the startscreen");
+            editorScreen.UpdateLastQuestion("Your agent has been configured successfully!" +
+                                            "press enter to continue to the startscreen");
             _screenHandler.GetScreenInput();
             editorScreen.ClearScreen();
             _screenHandler.TransitionTo(new StartScreen());
@@ -289,10 +288,8 @@ namespace ASD_Game.InputHandling
 
         public string CustomRuleHandleEditorScreenCommands(string type)
         {
-            string startText = "Please enter your own " + type + " rule"
-                               + Environment.NewLine
-                               + "This is an example line: When agent nearby player then attack (optional: otherwise flee)"
-                               + Environment.NewLine;
+            string startText = "Please enter your own " + type + " rule "
+                               + " This is an example line: When agent nearby player then attack (optional: otherwise flee)";
             StringBuilder builder = new StringBuilder();
             BaseVariables variables = new();
             bool nextLine = true;
@@ -302,8 +299,7 @@ namespace ASD_Game.InputHandling
 
             builder.Append(type + Environment.NewLine);
 
-            editorScreen.UpdateLastQuestion("This is and example line: When agent nearby player then attack" +
-                                            Environment.NewLine + "press enter to continue...");
+            editorScreen.UpdateLastQuestion("This is and example line: When agent nearby player then attack press enter to continue...");
 
             _screenHandler.GetScreenInput();
             editorScreen.ClearScreen();
@@ -312,9 +308,8 @@ namespace ASD_Game.InputHandling
             {
                 editorScreen.UpdateLastQuestion(
                     startText
-                    + "Type Help + armor, weapon, comparison, consumables, actions, bitcoinItems, comparables for possibilities"
-                    + Environment.NewLine
-                    + "Type Stop to stop the custom rules editor");
+                    + " Type Help + armor, weapon, comparison, consumables, actions, bitcoinItems, comparables for possibilities"
+                    + " Type Stop to stop the custom rules editor");
 
                 input = _screenHandler.GetScreenInput();
                 input = input.ToLower();
@@ -332,52 +327,45 @@ namespace ASD_Game.InputHandling
                     {
                         case "armor":
                             editorScreen.ClearScreen();
-                            editorScreen.UpdateLastQuestion("Possible armors: " + Environment.NewLine +
+                            editorScreen.UpdateLastQuestion("Possible armors: " +
                                                             string.Join(", ", variables.armor) +
-                                                            Environment.NewLine +
                                                             startText);
                             break;
                         case "weapon":
                             editorScreen.ClearScreen();
-                            editorScreen.UpdateLastQuestion("Possible weapons: " + Environment.NewLine +
+                            editorScreen.UpdateLastQuestion("Possible weapons: " + 
                                                             string.Join(", ", variables.weapons) +
-                                                            Environment.NewLine +
                                                             startText);
                             break;
                         case "comparison":
                             editorScreen.ClearScreen();
-                            editorScreen.UpdateLastQuestion("Possible comparison: " + Environment.NewLine +
+                            editorScreen.UpdateLastQuestion("Possible comparison: " + 
                                                             string.Join(", ",
                                                                 variables.comparison) +
-                                                            Environment.NewLine +
                                                             startText);
                             break;
                         case "consumables":
                             editorScreen.ClearScreen();
-                            editorScreen.UpdateLastQuestion("Possible consumables: " + Environment.NewLine +
+                            editorScreen.UpdateLastQuestion("Possible consumables: " +
                                                             string.Join(", ", variables.consumables) +
-                                                            Environment.NewLine +
                                                             startText);
                             break;
                         case "actions":
                             editorScreen.ClearScreen();
-                            editorScreen.UpdateLastQuestion("Possible actions: " + Environment.NewLine +
+                            editorScreen.UpdateLastQuestion("Possible actions: " + 
                                                             string.Join(", ", variables.actions) +
-                                                            Environment.NewLine +
                                                             startText);
                             break;
                         case "bitcoinitems":
                             editorScreen.ClearScreen();
-                            editorScreen.UpdateLastQuestion("Possible bitcoin items: " + Environment.NewLine +
+                            editorScreen.UpdateLastQuestion("Possible bitcoin items: " + 
                                                             string.Join(", ", variables.bitcoinItems) +
-                                                            Environment.NewLine +
                                                             startText);
                             break;
                         case "comparables":
                             editorScreen.ClearScreen();
-                            editorScreen.UpdateLastQuestion("Possible comparables: " + Environment.NewLine +
+                            editorScreen.UpdateLastQuestion("Possible comparables: " +
                                                             string.Join(", ", variables.comparables) +
-                                                            Environment.NewLine +
                                                             startText);
                             break;
                     }
@@ -396,8 +384,7 @@ namespace ASD_Game.InputHandling
                 else
                 {
                     editorScreen.ClearScreen();
-                    editorScreen.UpdateLastQuestion("Your rule did not pass the check and was not added" +
-                                                    Environment.NewLine + "press enter to continue...");
+                    editorScreen.UpdateLastQuestion("Your rule did not pass the check and was not added press enter to continue...");
                     _screenHandler.GetScreenInput();
                 }
 
@@ -463,7 +450,7 @@ namespace ASD_Game.InputHandling
             }
 
             //advanced rules
-            correct = (rule.Intersect(variables.actionReferences).Any());
+            correct = (rule.Intersect(variables.actionReferences).Any() || rule.Intersect(variables.actions).Any());
             if (correct && rule.Contains("use"))
             {
                 correct = rule.Intersect(variables.ReturnAllItems()).Any();
