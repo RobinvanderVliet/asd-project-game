@@ -551,27 +551,30 @@ namespace ASD_Game.Session
                     }
 
                     ActiveGameAddsPlayer(sessionDTO);
+                    return new HandlerResponseDTO(SendAction.Ignore, null);
                 }
-
-                if (_screenHandler.Screen is LobbyScreen screen)
+                else
                 {
-                    var updatedClientList = new List<string[]>();
-                    updatedClientList.AddRange(_session.GetAllClients());
-                    updatedClientList.AddRange(sessionDTO.Clients);
-                    screen.UpdateLobbyScreen(updatedClientList);
+                    if (_screenHandler.Screen is LobbyScreen screen)
+                    {
+                        var updatedClientList = new List<string[]>();
+                        updatedClientList.AddRange(_session.GetAllClients());
+                        updatedClientList.AddRange(sessionDTO.Clients);
+                        screen.UpdateLobbyScreen(updatedClientList);
+                    }
+
+                    _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
+                    sessionDTO.Clients = new List<string[]>();
+
+                    sessionDTO.SessionSeed = _session.SessionSeed;
+
+                    foreach (string[] client in _session.GetAllClients())
+                    {
+                        sessionDTO.Clients.Add(client);
+                    }
+
+                    return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));   
                 }
-
-                _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
-                sessionDTO.Clients = new List<string[]>();
-
-                sessionDTO.SessionSeed = _session.SessionSeed;
-
-                foreach (string[] client in _session.GetAllClients())
-                {
-                    sessionDTO.Clients.Add(client);
-                }
-
-                return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
             }
             else
             {
