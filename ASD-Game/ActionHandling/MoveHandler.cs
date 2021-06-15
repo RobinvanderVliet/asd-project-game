@@ -90,24 +90,19 @@ namespace ASD_Game.ActionHandling
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
-            bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
-            
-            _messageService.AddMessage(moveDTO.UserId);
-            // _messageService.AddMessage(moveDTO.XPosition.ToString());
-            // _messageService.AddMessage(moveDTO.YPosition.ToString());
+            var handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
             
             if (moveDTO.UserId.StartsWith("monst"))
             {
-                Change1AIPosition(moveDTO);
+                ChangeAIPosition(moveDTO);
+                return new HandlerResponseDTO(SendAction.SendToClients, null);
             } 
-            else if (packet.Header.Target == "host" || packet.Header.Target == "client")
+            if (packet.Header.Target == "host" || packet.Header.Target == "client")
             {
                 return HandleMove(moveDTO, handleInDatabase);
             }
-            else
-            {
-                _messageService.AddMessage(packet.HandlerResponse.ResultMessage);
-            }
+            _messageService.AddMessage(packet.HandlerResponse.ResultMessage);
+            
             return new(SendAction.Ignore, null);
         }
 
@@ -203,27 +198,8 @@ namespace ASD_Game.ActionHandling
             _worldService.DisplayStats();
             _worldService.DisplayWorld();
         }
-
-        private void ChangeAIPosition(List<MoveDTO> moveDTO)
-        {
-            foreach (MoveDTO move in _AIMoves)
-            {
-                var character = _worldService.GetAI(move.UserId);
-                // Console.WriteLine("----------------------Daadwerkelijk-------------------------");
-                if (character != null)
-                {
-                    character.XPosition = move.XPosition;
-                    character.YPosition = move.YPosition;
-                    // Console.WriteLine(character.Id);
-                    // Console.WriteLine(character.XPosition);
-                    // Console.WriteLine(character.YPosition);
-                }
-                // Console.WriteLine("-----------------------------------------------------------");
-            }
-            _worldService.DisplayWorld();
-        }
-
-        private void Change1AIPosition(MoveDTO moveDTO)
+        
+        private void ChangeAIPosition(MoveDTO moveDTO)
         {
             var character = _worldService.GetAI(moveDTO.UserId);
             if (character != null)
@@ -318,8 +294,7 @@ namespace ASD_Game.ActionHandling
 
         private void MoveAIs(List<Character> creatureMoves)
         {
-            List<MoveDTO> moveDTOs = new List<MoveDTO>();
-            List<Character> _creatureMoves = creatureMoves;
+            var _creatureMoves = creatureMoves;
             if (creatureMoves != null)
             {
                 foreach (Character move in _creatureMoves)
@@ -329,21 +304,10 @@ namespace ASD_Game.ActionHandling
                         if (smartMonster.MoveType == "Move")
                         {
                             MoveDTO moveDTO = new(smartMonster.Id, (int)smartMonster.Destination.X, (int)smartMonster.Destination.Y);
-                            moveDTOs.Add(moveDTO);
+                            SendMoveDTO(moveDTO);
                         }
                     }
                 }
-                // Console.WriteLine("------------------------Verplaatse mensen-------------------------");
-                foreach (MoveDTO move in moveDTOs)
-                {
-                    SendMoveDTO(move);
-                    
-                    // _messageService.AddMessage(move.UserId);
-                    // Console.WriteLine(move.UserId);
-                    // Console.WriteLine(move.XPosition);
-                    // Console.WriteLine(move.YPosition);
-                }
-                // Console.WriteLine("------------------------------------------------------------------");
             }
         }
 
