@@ -22,7 +22,6 @@ namespace ASD_Game.InputHandling.Antlr.Transformer
 {
     public class Evaluator : IEvaluator
     {
-        private readonly IAttackHandler _attackHandler;
         private readonly ISessionHandler _sessionHandler;
         private readonly IMoveHandler _moveHandler;
         private readonly IGameSessionHandler _gameSessionHandler;
@@ -38,7 +37,7 @@ namespace ASD_Game.InputHandling.Antlr.Transformer
         private const int MAXIMUM_STEPS = 10;
         private string _commando;
         
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IAttackHandler attackHandler, IInventoryHandler inventoryHandler, IClientController clientController, IAgentHandler agentHandler, IWorldService worldService)
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IAttackHandler attackHandler, IInventoryHandler inventoryHandler, IClientController clientController, IGamesSessionService gamesSessionService, IAgentHandler agentHandler, IWorldService worldService)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;

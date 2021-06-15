@@ -9,7 +9,6 @@ namespace ASD_Game.Session.DTO
     public class StartGameDTO
     {
         public string GameGuid { get; set; }
-        public Dictionary<string, int[]> PlayerLocations  {get; set;}
         public List<PlayerPOCO> SavedPlayers { get; set; }
         public List<PlayerItemPOCO> SavedPlayerItems { get; set; }
         public int Seed { get; set; }

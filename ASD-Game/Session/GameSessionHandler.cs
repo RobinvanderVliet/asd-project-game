@@ -15,19 +15,14 @@ using ASD_Game.Session.GameConfiguration;
 using ASD_Game.Session.Helpers;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Services;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using ASD_Game.Items.Services;
 using ASD_Game.World.Models;
-using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine;
-using WorldGeneration.StateMachine;
 using ASD_Game.World.Models.Characters;
 using ActionHandling;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ASD_Game.Session
 {
@@ -64,16 +59,13 @@ namespace ASD_Game.Session
             IRelativeStatHandler relativeStatHandler,
             IDatabaseService<PlayerItemPOCO> playerItemDatabaseService,
             IMessageService messageService,
-            IItemService itemService, 
             IGameConfigurationHandler gameConfigurationHandler,
             IDatabaseService<GameConfigurationPOCO> gameConfigDatabaseService,
-                IMoveHandler moveHandler,
             INetworkComponent networkComponent,
             IConfigurationService configurationService,
             IMoveHandler moveHandler,
             IAttackHandler attackHandler,
             IItemService itemService
-
         )
         {
             _clientController = clientController;
@@ -160,19 +152,59 @@ namespace ASD_Game.Session
             var payload = JsonConvert.SerializeObject(startGameDTO);
             _clientController.SendPayload(payload, PacketType.GameSession);
         }
-
+        
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-            var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
+            bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
 
-            if (startGameDTO is not null)
+            _screenHandler.TransitionTo(new GameScreen());
+
+            Player currentPlayer = null;
+            
+            if (!_sessionHandler.GameStarted())
             {
-                _screenHandler.TransitionTo(new GameScreen());
-                HandleStartGameSession(startGameDTO);
-                return new HandlerResponseDTO(SendAction.SendToClients, null);
+                _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
+
+                _gameConfigurationHandler.ItemService = _worldService.ItemService;
+                _itemService.ChanceForItemOnTile = (int) _gameConfigurationHandler.GetItemSpawnRate();
+
+                currentPlayer = AddPlayersToWorld();
+
+                if (handleInDatabase)
+                {
+                    InsertConfigurationIntoDatabase();
+                    InsertGameIntoDatabase();
+                    InsertPlayersIntoDatabase();
+                }
+            }
+            else
+            {
+                var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
+                _worldService.GenerateWorld(startGameDTO.Seed);
+                currentPlayer = AddPlayerToWorldSavedGame(startGameDTO.SavedPlayers);
             }
 
-            return new HandlerResponseDTO(SendAction.Ignore, null);
+            if (currentPlayer != null)
+            {
+                _worldService.LoadArea(currentPlayer.XPosition, currentPlayer.YPosition, 10);
+            }
+
+            
+            _relativeStatHandler.SetCurrentPlayer(_worldService.GetCurrentPlayer());
+            _relativeStatHandler.CheckStaminaTimer();
+            _relativeStatHandler.CheckRadiationTimer();
+
+            _worldService.SetAILogic();
+            _worldService.DisplayWorld();
+            _worldService.DisplayStats();
+            _messageService.DisplayMessages();
+
+            if (_clientController.IsHost())
+            {
+                _moveHandler.CheckAITimer();
+            }
+
+            return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
         private void InsertPlayersIntoDatabase()
@@ -230,46 +262,7 @@ namespace ASD_Game.Session
             };
             _gamePocoService.CreateAsync(gamePOCO);
         }
-
-        private void HandleStartGameSession(StartGameDTO startGameDTO)
-        {
-            bool handleInDatabase = (_clientController.IsHost() || _clientController.IsBackupHost);
-
-
-            Player currentPlayer = null;
-
-            if (startGameDTO.GameGuid == null && !_sessionHandler.GameStarted())
-            {
-                _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
-                currentPlayer = AddPlayersToWorld();
-
-                if (handleInDatabase)
-                {
-                    InsertGameIntoDatabase();
-                    InsertPlayersIntoDatabase();
-                    InsertConfigurationIntoDatabase();
-                }
-            }
-            else
-            {
-                _worldService.GenerateWorld(startGameDTO.Seed);
-                currentPlayer = AddPlayerToWorldSavedGame(startGameDTO.SavedPlayers);
-            }
-
-            if (currentPlayer != null)
-            {
-                _worldService.LoadArea(currentPlayer.XPosition, currentPlayer.YPosition, 10);
-                CreateMonsters();
-            }
-
-            _relativeStatHandler.SetCurrentPlayer(_worldService.GetCurrentPlayer());
-            _relativeStatHandler.CheckStaminaTimer();
-            _relativeStatHandler.CheckRadiationTimer();
-            _worldService.DisplayWorld();
-            _worldService.DisplayStats();
-            _messageService.DisplayMessages();
-        }
-
+        
         private Player AddPlayerToWorldSavedGame(List<PlayerPOCO> savedPlayers)
         {
             Player currentPlayer = null;
