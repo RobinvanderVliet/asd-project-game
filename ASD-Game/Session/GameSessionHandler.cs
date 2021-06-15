@@ -38,6 +38,9 @@ namespace ASD_Game.Session
         private readonly IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
         private readonly IGameConfigurationHandler _gameConfigurationHandler;
         private IDatabaseService<GameConfigurationPOCO> _gameConfigDatabaseService;
+        private readonly IWorldService _worldService;
+        private readonly IMessageService _messageService;
+        private readonly IMoveHandler _moveHandler;
         private IItemService _itemService;
         private Timer AIUpdateTimer;
         private Random _random = new Random();
@@ -56,8 +59,9 @@ namespace ASD_Game.Session
             IMessageService messageService,
             IItemService itemService, 
             IGameConfigurationHandler gameConfigurationHandler,
-            IDatabaseService<GameConfigurationPOCO> gameConfigDatabaseService
-        ){
+            IDatabaseService<GameConfigurationPOCO> gameConfigDatabaseService,
+                IMoveHandler moveHandler)
+        {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
             _sessionHandler = sessionHandler;
@@ -70,9 +74,8 @@ namespace ASD_Game.Session
             _gameConfigurationHandler = gameConfigurationHandler;
             _gameConfigDatabaseService = gameConfigDatabaseService;
             _playerItemDatabaseService = playerItemDatabaseService;
-            _worldService = worldService;
-            _messageService = messageService;
             _itemService = itemService;
+            _moveHandler = moveHandler;
             CheckAITimer();
             UpdateBrain();
         }

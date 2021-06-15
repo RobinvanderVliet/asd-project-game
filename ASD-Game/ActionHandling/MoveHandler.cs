@@ -36,7 +36,6 @@ namespace ASD_Game.ActionHandling
             _worldService = worldService;
             _playerDatabaseService = playerDatabaseService;
             _messageService = messageService;
-            CheckAITimer();
         }
 
         public void SendMove(string directionValue, int stepsValue)
@@ -77,11 +76,12 @@ namespace ASD_Game.ActionHandling
 
             var currentPlayer = _worldService.GetCurrentPlayer();
             MoveDTO moveDTO = new(currentPlayer.Id, currentPlayer.XPosition + x, currentPlayer.YPosition + y);
-
-            SendMoveDTO(moveDTO);
+            List<MoveDTO> list = new List<MoveDTO>();
+            list.Add(moveDTO);
+            SendMoveDTO(list);
         }
 
-        private void SendMoveDTO(MoveDTO moveDTO)
+        private void SendMoveDTO(List<MoveDTO> moveDTO)
         {
             var payload = JsonConvert.SerializeObject(moveDTO);
             _clientController.SendPayload(payload, PacketType.Move);
@@ -89,18 +89,26 @@ namespace ASD_Game.ActionHandling
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-            var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
-            bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
-            if (packet.Header.Target == "host" || packet.Header.Target == "client")
+            List<MoveDTO> moveDTOs = JsonConvert.DeserializeObject<List<MoveDTO>>(packet.Payload);
+            var handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
+
+            if (moveDTOs.Count == 1)
             {
-                if (packet.Header.SessionID.Equals(_clientController.SessionId))
+                var moveDTO = moveDTOs[0];
+                if (packet.Header.Target == "host" || packet.Header.Target == "client")
                 {
-                    return HandleMove(moveDTO, handleInDatabase);   
+                    return HandleMove(moveDTO, handleInDatabase);
                 }
+                _messageService.AddMessage(packet.HandlerResponse.ResultMessage);
             }
             else
             {
-                _messageService.AddMessage(packet.HandlerResponse.ResultMessage);
+                foreach (var moveDTO in moveDTOs)
+                {
+                    ChangeAIPosition(moveDTO);
+                }
+                _worldService.DisplayWorld();
+                return new HandlerResponseDTO(SendAction.SendToClients, null);
             }
             return new(SendAction.Ignore, null);
         }
@@ -110,7 +118,6 @@ namespace ASD_Game.ActionHandling
             if (_worldService.GetPlayer(moveDTO.UserId) != null)
             {
                 var player = _worldService.GetPlayer(moveDTO.UserId);
-
                 var newPosPlayerX = moveDTO.XPosition;
                 var newPosPlayerY = moveDTO.YPosition;
                 var oldPosPlayerX = player.XPosition;
@@ -134,31 +141,29 @@ namespace ASD_Game.ActionHandling
 
                     return new HandlerResponseDTO(SendAction.ReturnToSender, "You do not have enough stamina to move!");
                 }
-                else
+                
+                string resultMessage = null;
+                moveDTO.Stamina = playerStamina - staminaCost;
+                //allTiles.Count-1 because the maximum count movableTiles always has 1 less tile, since it doesn't contain the first tile
+                if (movableTiles.Count < allTiles.Count - 1)
                 {
-                    string resultMessage = null;
-                    moveDTO.Stamina = playerStamina - staminaCost;
-                    //allTiles.Count-1 because the maximum count movableTiles always has 1 less tile, since it doesn't contain the first tile
-                    if (movableTiles.Count < allTiles.Count - 1)
+                    moveDTO = ChangeMoveDTOToNewLocation(moveDTO, movableTiles, player);
+                    resultMessage = "You could not move to the next tile.";
+
+                    if (moveDTO.UserId == _clientController.GetOriginId())
                     {
-                        moveDTO = ChangeMoveDTOToNewLocation(moveDTO, movableTiles, player);
-                        resultMessage = "You could not move to the next tile.";
-
-                        if (moveDTO.UserId == _clientController.GetOriginId())
-                        {
-                            _messageService.AddMessage(resultMessage);
-                        }
+                        _messageService.AddMessage(resultMessage);
                     }
-
-                    ChangePlayerPosition(moveDTO);
-
-                    if (handleInDatabase)
-                    {
-                        InsertToDatabase(moveDTO);
-                    }
-
-                    return new HandlerResponseDTO(SendAction.SendToClients, resultMessage);
                 }
+
+                ChangePlayerPosition(moveDTO);
+
+                if (handleInDatabase)
+                {
+                    InsertToDatabase(moveDTO);
+                }
+
+                return new HandlerResponseDTO(SendAction.SendToClients, resultMessage);
             }
             _AIMoves.Add(moveDTO);
             return new HandlerResponseDTO(SendAction.SendToClients, null);
@@ -198,19 +203,15 @@ namespace ASD_Game.ActionHandling
             _worldService.DisplayStats();
             _worldService.DisplayWorld();
         }
-
-        private void ChangeAIPosition(List<MoveDTO> moveDTO)
+        
+        private void ChangeAIPosition(MoveDTO moveDTO)
         {
-            foreach (MoveDTO move in _AIMoves)
+            var character = _worldService.GetAI(moveDTO.UserId);
+            if (character != null)
             {
-                var character = _worldService.GetAI(move.UserId);
-                if (character != null)
-                {
-                    character.XPosition = move.XPosition;
-                    character.YPosition = move.YPosition;
-                }
+                character.XPosition = moveDTO.XPosition;
+                character.YPosition = moveDTO.YPosition;
             }
-            _worldService.DisplayWorld();
         }
 
         private List<ITile> GetTilesForPositions(int x1, int y1, int x2, int y2)
@@ -295,10 +296,10 @@ namespace ASD_Game.ActionHandling
             return movableTiles;
         }
 
-        public void MoveAIs(List<Character> creatureMoves)
+        private void MoveAIs(List<Character> creatureMoves)
         {
             List<MoveDTO> moveDTOs = new List<MoveDTO>();
-            List<Character> _creatureMoves = creatureMoves;
+            var _creatureMoves = creatureMoves;
             if (creatureMoves != null)
             {
                 foreach (Character move in _creatureMoves)
@@ -312,24 +313,17 @@ namespace ASD_Game.ActionHandling
                         }
                     }
                 }
-                foreach (MoveDTO move in moveDTOs)
-                {
-                    SendMoveDTO(move);
-                }
+                SendMoveDTO(moveDTOs);
             }
         }
 
-        public void GetAIMoves()
+        private void GetAIMoves()
         {
             MoveAIs(_worldService.GetCreatureMoves("Move"));
-            if (_AIMoves.Count > 0)
-            {
-                ChangeAIPosition(_AIMoves);
-            }
         }
 
         [ExcludeFromCodeCoverage]
-        private void CheckAITimer()
+        public void CheckAITimer()
         {
             AIUpdateTimer = new Timer(_updateTime);
             AIUpdateTimer.AutoReset = true;

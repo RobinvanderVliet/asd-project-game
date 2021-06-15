@@ -92,7 +92,6 @@ namespace ASD_Game.InputHandling
                     break;
                 case 3:
                     _screenHandler.TransitionTo(new LoadScreen());
-                    SendCommand("request_saved_games");
                     break;
                 case 4:
                     _screenHandler.TransitionTo(new EditorScreen());
@@ -277,7 +276,7 @@ namespace ASD_Game.InputHandling
                 }
                 else
                 {
-                    editorScreen.PrintWarning("Please fill in an valid answer");
+                    editorScreen.PrintWarning("Please fill in a valid answer");
                 }
             }
 

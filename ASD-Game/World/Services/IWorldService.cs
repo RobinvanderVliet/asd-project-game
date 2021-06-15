@@ -39,6 +39,9 @@ namespace ASD_Game.World.Services
         List<Monster> GetMonsters();
 
         public List<Character> GetAllCharacters();
+        public Character GetCharacter(string id);
+        public Character GetCharacterOnTile(int x, int y);
+        
 
         public void UpdateBrains(Genome genome);
 
