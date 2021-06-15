@@ -29,7 +29,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine
         public override void StartStateMachine()
         {
             var builder = new StateMachineDefinitionBuilder<CharacterState, CharacterEvent.Event>();
-            var ruleSetFactory = new RuleSetFactory();
 
             CharacterState idleState = new IdleState(CharacterData, this);
             CharacterState inventoryState = new InventoryState(CharacterData, this);
@@ -62,6 +61,22 @@ namespace ASD_Game.World.Models.Characters.StateMachine
             ruleSet2.Threshold = "player";
             ruleSet2.Comparison = "nearby";
             ruleSet2.ComparisonTrue = "engage";
+            
+            // RuleSet ruleSet4 = new RuleSet();
+            // ruleSet4.Setting = "combat";
+            // ruleSet4.Action = "default";
+            // ruleSet4.Comparable = "agent";
+            // ruleSet4.Threshold = "monster";
+            // ruleSet4.Comparison = "sees";
+            // ruleSet4.ComparisonTrue = "follow";
+            //
+            // RuleSet ruleSet5 = new RuleSet();
+            // ruleSet5.Setting = "combat";
+            // ruleSet5.Action = "default";
+            // ruleSet5.Comparable = "agent";
+            // ruleSet5.Threshold = "monster";
+            // ruleSet5.Comparison = "nearby";
+            // ruleSet5.ComparisonTrue = "engage";
 
             RuleSet ruleSet3 = new RuleSet();
             ruleSet3.Setting = "combat";
@@ -76,7 +91,9 @@ namespace ASD_Game.World.Models.Characters.StateMachine
             {
                 ruleSet1,
                 ruleSet2,
-                ruleSet3,
+                ruleSet3
+                // ruleSet4,
+                // ruleSet5
             };
 
             // var rulesetList = RuleSetFactory.GetRuleSetListFromSettingsList(_characterData.RuleSet);
