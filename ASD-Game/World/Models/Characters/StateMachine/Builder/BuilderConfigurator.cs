@@ -216,7 +216,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Builder
 
         private bool IsInstanceOf(object comparisonData, string comparisonString)
         {
-            if (comparisonString == "agent")
+            if (comparisonString == "agent" || comparisonString == "player")
             {
                 if (comparisonData.GetType() == typeof(AgentData))
                 {

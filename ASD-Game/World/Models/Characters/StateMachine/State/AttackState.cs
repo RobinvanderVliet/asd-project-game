@@ -13,29 +13,13 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
         public override void Do()
         {
             DoWorldCheck();
+            //TODO implement Attack logic +gather targetData
 
-            var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
-            var _builderConfiguration = _characterData.BuilderConfigurator;
-
-            foreach (var builderInfo in _builderInfoList)
-            {
-                if (builderInfo.Action == "attack")
-                {
-                    if (_builderConfiguration.GetGuard(_characterData, _target, builderInfo))
-                    {
-                        Console.WriteLine("Attacking...");
-                        //TODO implement Attack logic +gather targetData
-                        
-                        
-
-                        // Console.WriteLine("Player health: " + _characterData.WorldService.GetCharacter(_characterData.CharacterId).Health);
-                        //
-                        // _target.AttackHandler.SendAttack("");
-                        // _target.Health -= 5;
-                        // Console.WriteLine("Enemy health: " + _target.Health);
-                    }
-                }
-            }
+            // Console.WriteLine("Player health: " + _characterData.WorldService.GetCharacter(_characterData.CharacterId).Health);
+            //
+            // _target.AttackHandler.SendAttack("");
+            // _target.Health -= 5;
+            // Console.WriteLine("Enemy health: " + _target.Health);
         }
     }
 }

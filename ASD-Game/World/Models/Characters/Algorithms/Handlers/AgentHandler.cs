@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Agent.Services;
 using ASD_Game.DatabaseHandler.POCO;
 using ASD_Game.DatabaseHandler.Services;
@@ -61,6 +62,7 @@ namespace Creature
                 }
                 else
                 {
+                    agent.AgentStateMachine.CharacterData.Position = new Vector2(player.XPosition, player.YPosition);
                     agent.AgentStateMachine.StartStateMachine();
                     _agentIsActive = true;
                 }
