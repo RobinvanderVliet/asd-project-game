@@ -7,10 +7,8 @@ using ASD_Game.DatabaseHandler.Services;
 using ASD_Game.Network;
 using ASD_Game.Session;
 using ASD_Game.UserInterface;
-using DatabaseHandler.POCO;
 using Moq;
 using NUnit.Framework;
-using UserInterface;
 
 namespace Session.Tests
 {

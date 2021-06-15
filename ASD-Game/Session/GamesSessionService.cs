@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using ASD_Game.DatabaseHandler.POCO;
 using ASD_Game.DatabaseHandler.Services;
@@ -7,8 +5,6 @@ using ASD_Game.Network;
 using ASD_Game.Session;
 using ASD_Game.UserInterface;
 using Castle.Core.Internal;
-using DatabaseHandler.POCO;
-
 
 namespace Session
 {

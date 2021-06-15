@@ -99,7 +99,7 @@ namespace ASD_Game.UserInterface
             if (_screen is GameScreen)
             {
                 GameScreen gameScreen = _screen as GameScreen;
-                ActionsInQueue.Add(() => gameScreen.SetStatValues(name, score, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree));
+                ActionsInQueue.Add(() => gameScreen.SetStatValues(name, score, playersAlive, playersTotal, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree));
             }
         }
 

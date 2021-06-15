@@ -16,15 +16,12 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Timers;
 using ASD_Game.Items.Services;
+using ASD_Game.World.Models;
+using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine;
-using DatabaseHandler.POCO;
-using WorldGeneration;
 using WorldGeneration.StateMachine;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ASD_Game.Session
 {
@@ -47,16 +44,19 @@ namespace ASD_Game.Session
         private int MAX_HEALTH = 100;
         private int _brainUpdateTime = 10000;
 
-        public GameSessionHandler(IClientController clientController, IWorldService worldService,
-            ISessionHandler sessionHandler, IDatabaseService<GamePOCO> gamePocoService,
-            IDatabaseService<PlayerPOCO> playerService, IScreenHandler screenHandler,
-            IRelativeStatHandler relativeStatHandler, IMessageService messageService,
-            IDatabaseService<PlayerItemPOCO> playerItemDatabaseService,
+        public GameSessionHandler(
+            IClientController clientController, 
             IWorldService worldService,
+            ISessionHandler sessionHandler, 
+            IDatabaseService<GamePOCO> gamePocoService,
+            IDatabaseService<PlayerPOCO> playerService, 
+            IScreenHandler screenHandler,
+            IRelativeStatHandler relativeStatHandler,
+            IDatabaseService<PlayerItemPOCO> playerItemDatabaseService,
             IMessageService messageService,
-            IItemService itemService
-        IGameConfigurationHandler gameConfigurationHandler,
-            IDatabaseService<GameConfigurationPOCO> gameConfigDatabaseService)
+            IItemService itemService, 
+            IGameConfigurationHandler gameConfigurationHandler,
+            IDatabaseService<GameConfigurationPOCO> gameConfigDatabaseService
         ){
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
@@ -256,6 +256,35 @@ namespace ASD_Game.Session
 
             return currentPlayer;
         }
+        private void CreateMonsters()
+        {    for (int i = 0; i < 10; i++)
+            {
+                if (i < 0)
+                {
+                    Monster newMonster = new Monster("Zombie", _random.Next(12, 25), _random.Next(12, 25),
+                        CharacterSymbol.TERMINATOR, "monst" + i);
+                    SetStateMachine(newMonster);
+                    _worldService.AddCreatureToWorld(newMonster);
+                }
+                else
+                {
+                    SmartMonster newMonster = new SmartMonster("Zombie", _random.Next(12, 25), _random.Next(12, 25),
+                        CharacterSymbol.TERMINATOR, "monst" + i);
+                    SetBrain(newMonster);
+                    _worldService.AddCreatureToWorld(newMonster);
+                }
+            }
+        }
+        
+        private void SetBrain(SmartMonster monster)
+        {    if (_sessionHandler.TrainingScenario != null)
+            {
+                if (_sessionHandler.TrainingScenario.BrainTransplant() != null)
+                {
+                    monster.Brain = _sessionHandler.TrainingScenario.BrainTransplant();
+                }
+            }
+        }
 
         private void CheckAITimer()
         {
@@ -280,7 +309,7 @@ namespace ASD_Game.Session
             }
         }
 
-        private void SetStateMachine(Monster monster)
+        public void SetStateMachine(Monster monster)
         {
             ICharacterStateMachine CSM = new MonsterStateMachine(monster.MonsterData, null);
             monster.MonsterStateMachine = CSM;

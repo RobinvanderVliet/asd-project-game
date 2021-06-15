@@ -99,7 +99,7 @@ namespace ASD_Game.Session
                     sessionDTO.Clients.Add(new[] {_clientController.GetOriginId(), userName});
                     sessionDTO.SessionSeed = receivedSessionDTO.SessionSeed;
                     sessionDTO.SessionStarted = receivedSessionDTO.SessionStarted;
-                    sendSessionDTO(sessionDTO);
+                    SendSessionDTO(sessionDTO);
                     joinSession = true;
                 }
                 else

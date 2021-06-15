@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using ASD_Game.DatabaseHandler.POCO;
-using DatabaseHandler.POCO;
-
 namespace ASD_Game.Session.DTO
 {
     [ExcludeFromCodeCoverage]
