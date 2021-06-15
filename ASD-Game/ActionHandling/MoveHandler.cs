@@ -83,7 +83,6 @@ namespace ASD_Game.ActionHandling
         private void SendMoveDTO(MoveDTO moveDTO)
         {
             var payload = JsonConvert.SerializeObject(moveDTO);
-            // _messageService.AddMessage(payload);
             _clientController.SendPayload(payload, PacketType.Move);
         }
 
@@ -94,8 +93,7 @@ namespace ASD_Game.ActionHandling
             
             if (moveDTO.UserId.StartsWith("monst"))
             {
-                ChangeAIPosition(moveDTO);
-                return new HandlerResponseDTO(SendAction.SendToClients, null);
+                return ChangeAIPosition(moveDTO);
             } 
             if (packet.Header.Target == "host" || packet.Header.Target == "client")
             {
@@ -197,7 +195,7 @@ namespace ASD_Game.ActionHandling
             _worldService.DisplayWorld();
         }
         
-        private void ChangeAIPosition(MoveDTO moveDTO)
+        private HandlerResponseDTO ChangeAIPosition(MoveDTO moveDTO)
         {
             var character = _worldService.GetAI(moveDTO.UserId);
             if (character != null)
@@ -205,7 +203,12 @@ namespace ASD_Game.ActionHandling
                 character.XPosition = moveDTO.XPosition;
                 character.YPosition = moveDTO.YPosition;
             }
+            else
+            {
+                return new HandlerResponseDTO(SendAction.ReturnToSender, "Character doesn't exist");
+            }
             _worldService.DisplayWorld();
+            return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
         private List<ITile> GetTilesForPositions(int x1, int y1, int x2, int y2)
@@ -312,10 +315,6 @@ namespace ASD_Game.ActionHandling
         private void GetAIMoves()
         {
             MoveAIs(_worldService.GetCreatureMoves("Move"));
-            // if (_AIMoves.Count > 0)
-            // {
-            //     ChangeAIPosition(_AIMoves);
-            // }
         }
 
         [ExcludeFromCodeCoverage]
