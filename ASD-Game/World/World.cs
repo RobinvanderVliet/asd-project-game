@@ -141,6 +141,10 @@ namespace ASD_Game.World
                         UpdateSmartMonster(smartMonster);
                     }
                 }
+                else if (monster is Monster monst)
+                {
+                    UpdateMonster(monst);
+                }
             }
         }
 
@@ -154,6 +158,19 @@ namespace ASD_Game.World
                     Monster x = (Monster)GetAI(montid);
                     Monsters.Remove(x);
                 }
+            }
+        }
+
+        private void UpdateMonster(Monster monster)
+        {
+            monster.Update();
+            if (monster.MoveType == "Move")
+            {
+                MovesList.Add(monster);
+            }
+            else
+            {
+                AttackList.Add(monster);
             }
         }
 

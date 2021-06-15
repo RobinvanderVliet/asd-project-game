@@ -33,7 +33,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Data
             set => _health = value;
         }
 
-
         public List<KeyValuePair<string, string>> RuleSet { get; set; }
         public Inventory Inventory { get; set; }
         public int Team { get; set; }
@@ -44,8 +43,10 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Data
         public IAttackHandler AttackHandler { get; set; }
         public string CharacterId { get; set; }
 
-        public IWorld World { get; set; }
+        public string MoveType { get; set; }
+        public Vector2 Destination { get; set; }
 
+        public IWorld World { get; set; }
 
         public int Damage
         {

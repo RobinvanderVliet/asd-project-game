@@ -55,6 +55,8 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Data
 
         public IAttackHandler AttackHandler { get; set; }
         public string CharacterId { get; set; }
+        public string MoveType { get; set; }
+        public Vector2 Destination { get; set; }
 
         public AgentData(int xPos, int yPos, int difficulty)
         {

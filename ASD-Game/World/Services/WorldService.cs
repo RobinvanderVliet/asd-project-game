@@ -10,7 +10,6 @@ using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Interfaces;
 
-
 namespace ASD_Game.World.Services
 {
     public class WorldService : IWorldService
@@ -117,6 +116,10 @@ namespace ASD_Game.World.Services
                 {
                     smartMonster._dataGatheringService = new DataGatheringService(this);
                     setup.Add((SmartMonster)monster);
+                }
+                else if (monster is Monster monst)
+                {
+                    monst.MonsterStateMachine.StartStateMachine();
                 }
             }
             SetAIActions(setup);
