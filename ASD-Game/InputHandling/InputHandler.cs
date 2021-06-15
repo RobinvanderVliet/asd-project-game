@@ -96,6 +96,7 @@ namespace ASD_Game.InputHandling
                     break;
                 case 3:
                     _screenHandler.TransitionTo(new LoadScreen());
+                    SendCommand("request_saved_games");
                     break;
                 case 4:
                     _screenHandler.TransitionTo(new EditorScreen());
