@@ -1,3 +1,4 @@
+using System;
 using ASD_Game.ActionHandling;
 using ASD_Game.DatabaseHandler.POCO;
 using ASD_Game.DatabaseHandler.Services;
@@ -35,6 +36,7 @@ namespace ASD_Game.Session
         private readonly IDatabaseService<PlayerItemPOCO> _playerItemDatabaseService;
         private readonly IWorldService _worldService;
         private readonly IMessageService _messageService;
+        private readonly IMoveHandler _moveHandler;
         private IItemService _itemService;
         private Timer AIUpdateTimer;
         private int _brainUpdateTime = 10000;
@@ -51,8 +53,8 @@ namespace ASD_Game.Session
             IDatabaseService<PlayerItemPOCO> playerItemDatabaseService,
             IWorldService worldService,
             IMessageService messageService,
-            IItemService itemService
-        )
+            IItemService itemService,
+            IMoveHandler moveHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
@@ -67,6 +69,7 @@ namespace ASD_Game.Session
             _worldService = worldService;
             _messageService = messageService;
             _itemService = itemService;
+            _moveHandler = moveHandler;
             CheckAITimer();
             UpdateBrain();
         }
@@ -115,6 +118,13 @@ namespace ASD_Game.Session
 
             _worldService.SetAILogic();
 
+            if (_worldService.GetPlayer(_clientController.GetOriginId()).Name.Equals("Danny"))
+            {
+                _worldService.GetPlayer(_clientController.GetOriginId()).Inventory.Weapon = ItemFactory.GetKatana();
+                _worldService.GetPlayer(_clientController.GetOriginId()).Inventory.Armor = ItemFactory.GetTacticalVest();
+                _worldService.GetPlayer(_clientController.GetOriginId()).Inventory.Armor = ItemFactory.GetGasMask();
+            }
+
             _worldService.DisplayWorld();
             _worldService.DisplayStats();
             _messageService.DisplayMessages();
@@ -124,6 +134,11 @@ namespace ASD_Game.Session
                 InsertConfigurationIntoDatabase();
                 InsertGameIntoDatabase();
                 InsertPlayersIntoDatabase();
+            }
+            
+            if (_clientController.IsHost())
+            {
+                _moveHandler.CheckAITimer();
             }
 
             return new HandlerResponseDTO(SendAction.SendToClients, null);
