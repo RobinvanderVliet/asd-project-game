@@ -76,11 +76,12 @@ namespace ASD_Game.ActionHandling
 
             var currentPlayer = _worldService.GetCurrentPlayer();
             MoveDTO moveDTO = new(currentPlayer.Id, currentPlayer.XPosition + x, currentPlayer.YPosition + y);
-
-            SendMoveDTO(moveDTO);
+            List<MoveDTO> list = new List<MoveDTO>();
+            list.Add(moveDTO);
+            SendMoveDTO(list);
         }
 
-        private void SendMoveDTO(MoveDTO moveDTO)
+        private void SendMoveDTO(List<MoveDTO> moveDTO)
         {
             var payload = JsonConvert.SerializeObject(moveDTO);
             _clientController.SendPayload(payload, PacketType.Move);
@@ -88,19 +89,27 @@ namespace ASD_Game.ActionHandling
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-            var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
+            List<MoveDTO> moveDTOs = JsonConvert.DeserializeObject<List<MoveDTO>>(packet.Payload);
             var handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
-            
-            if (moveDTO.UserId.StartsWith("monst"))
+
+            if (moveDTOs.Count == 1)
             {
-                return ChangeAIPosition(moveDTO);
-            } 
-            if (packet.Header.Target == "host" || packet.Header.Target == "client")
-            {
-                return HandleMove(moveDTO, handleInDatabase);
+                var moveDTO = moveDTOs[0];
+                if (packet.Header.Target == "host" || packet.Header.Target == "client")
+                {
+                    return HandleMove(moveDTO, handleInDatabase);
+                }
+                _messageService.AddMessage(packet.HandlerResponse.ResultMessage);
             }
-            _messageService.AddMessage(packet.HandlerResponse.ResultMessage);
-            
+            else
+            {
+                foreach (var moveDTO in moveDTOs)
+                {
+                    ChangeAIPosition(moveDTO);
+                }
+                _worldService.DisplayWorld();
+                return new HandlerResponseDTO(SendAction.SendToClients, null);
+            }
             return new(SendAction.Ignore, null);
         }
 
@@ -195,7 +204,7 @@ namespace ASD_Game.ActionHandling
             _worldService.DisplayWorld();
         }
         
-        private HandlerResponseDTO ChangeAIPosition(MoveDTO moveDTO)
+        private void ChangeAIPosition(MoveDTO moveDTO)
         {
             var character = _worldService.GetAI(moveDTO.UserId);
             if (character != null)
@@ -203,12 +212,6 @@ namespace ASD_Game.ActionHandling
                 character.XPosition = moveDTO.XPosition;
                 character.YPosition = moveDTO.YPosition;
             }
-            else
-            {
-                return new HandlerResponseDTO(SendAction.ReturnToSender, "Character doesn't exist");
-            }
-            _worldService.DisplayWorld();
-            return new HandlerResponseDTO(SendAction.SendToClients, null);
         }
 
         private List<ITile> GetTilesForPositions(int x1, int y1, int x2, int y2)
@@ -295,6 +298,7 @@ namespace ASD_Game.ActionHandling
 
         private void MoveAIs(List<Character> creatureMoves)
         {
+            List<MoveDTO> moveDTOs = new List<MoveDTO>();
             var _creatureMoves = creatureMoves;
             if (creatureMoves != null)
             {
@@ -305,11 +309,12 @@ namespace ASD_Game.ActionHandling
                         if (smartMonster.MoveType == "Move")
                         {
                             MoveDTO moveDTO = new(smartMonster.Id, (int)smartMonster.Destination.X, (int)smartMonster.Destination.Y);
-                            SendMoveDTO(moveDTO);
+                            moveDTOs.Add(moveDTO);
                         }
                     }
                 }
             }
+            SendMoveDTO(moveDTOs);
         }
 
         private void GetAIMoves()
