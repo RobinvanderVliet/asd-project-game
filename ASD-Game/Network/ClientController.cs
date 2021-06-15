@@ -11,9 +11,11 @@ namespace ASD_Game.Network
         private readonly INetworkComponent _networkComponent;
         private IHostController _hostController;
         private string _sessionId;
+
         private readonly Dictionary<PacketType, IPacketHandler> _subscribers = new();
         public bool IsBackupHost { get; set; }
         public string SessionId { get => _sessionId; }
+
 
         public ClientController(INetworkComponent networkComponent)
         {
@@ -47,12 +49,6 @@ namespace ASD_Game.Network
         public void CreateHostController()
         {
             _hostController = new HostController(_networkComponent, this, _sessionId);
-        }
-
-        [ExcludeFromCodeCoverage]
-        public string GetOriginId()
-        {
-            return _networkComponent.GetOriginId();
         }
 
         public void SendPayload(string payload, PacketType packetType)
@@ -96,6 +92,12 @@ namespace ASD_Game.Network
         public void SetBackupHost(bool value)
         {
             IsBackupHost = value;
+        }
+        
+        [ExcludeFromCodeCoverage]
+        public string GetOriginId()
+        {
+            return _networkComponent.GetOriginId();
         }
     }
 }

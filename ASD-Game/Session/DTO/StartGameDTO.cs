@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using ASD_Game.DatabaseHandler.POCO;
+using Session.DTO;
+
 namespace ASD_Game.Session.DTO
 {
     [ExcludeFromCodeCoverage]
@@ -13,5 +15,7 @@ namespace ASD_Game.Session.DTO
         public int Seed { get; set; }
         public PlayerPOCO ExistingPlayer { get; set; }
 
+        public Dictionary<string, int[]> PlayerLocations { get; set; }
+        public AgentConfigurationDTO AgentConfigurationDto { get; set; }
     }
 }

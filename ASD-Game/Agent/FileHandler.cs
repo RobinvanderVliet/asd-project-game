@@ -12,7 +12,7 @@ namespace ASD_Game.Agent
         
         public virtual string ImportFile(string filepath)
         {
-            if (!File.Exists(filepath))
+            if (!FileExist(filepath))
             {
                 throw new FileException("File not found!");
             }
@@ -22,7 +22,7 @@ namespace ASD_Game.Agent
                 throw new FileException("The provided file is of an incorrect extension");
             }
 
-            using (FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
+            using (FileStream fileStream = new FileStream(GetResourceBaseDirectory() + _separator + filepath, FileMode.Open, FileAccess.Read))
             {
                 using (StreamReader reader = new StreamReader(fileStream))
                 {
@@ -37,7 +37,7 @@ namespace ASD_Game.Agent
 
         public virtual void ExportFile(string content, string fileName)
         {
-            string safeFileLocation = GetBaseDirectory() + $"{_separator}Resource{_separator}{fileName}";
+            string safeFileLocation = GetResourceBaseDirectory() + _separator + fileName;
 
             if (File.Exists(safeFileLocation))
             {
@@ -64,10 +64,18 @@ namespace ASD_Game.Agent
             }
         }
 
-        public string GetBaseDirectory()
+        public virtual string GetBaseDirectory()
         {
             string currentDirectory = string.Format(Path.GetFullPath(Path.Combine(GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory))));
             string childDirectory = Directory.GetDirectories(currentDirectory, "*Agent*")[0].ToString();
+
+            return childDirectory;
+        }
+        
+        public virtual string GetResourceBaseDirectory()
+        {
+            string currentDirectory = string.Format(Path.GetFullPath(Path.Combine(GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory))));
+            string childDirectory = Directory.GetDirectories(currentDirectory, "*Resource*")[0].ToString();
 
             return childDirectory;
         }
@@ -80,6 +88,10 @@ namespace ASD_Game.Agent
                         (Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).ToString()).ToString()).ToString()).ToString();
 
         }
-        
+
+        public virtual bool FileExist(string configurationFileLocation)
+        {
+            return File.Exists(GetResourceBaseDirectory() + _separator + configurationFileLocation);
+        }
     }
 }

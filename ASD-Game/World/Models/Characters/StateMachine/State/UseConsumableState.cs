@@ -1,33 +1,30 @@
-﻿using System;
+
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 
-namespace ASD_Game.World.Models.Characters.StateMachine.State
+
+ namespace ASD_Game.World.Models.Characters.StateMachine.State
 {
     public class UseConsumableState : CharacterState
     {
-        public UseConsumableState(ICharacterData characterData) : base(characterData)
+        public UseConsumableState(ICharacterData characterData, ICharacterStateMachine characterStateMachine) : base(characterData, characterStateMachine)
         {
-            _characterData = characterData;
-        }
-
-        public override void Entry()
-        {
-            Console.WriteLine("UseConsumable state Entry");
         }
 
         public override void Do()
         {
-            throw new NotImplementedException();
-        }
-
-        public override void Do(ICharacterData characterData)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Exit()
-        {
-            Console.WriteLine("UseConsumable state Exit");
+            var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
+            var _builderConfiguration = _characterData.BuilderConfigurator;
+            
+            foreach (var builderInfo in _builderInfoList)
+            {
+                if (builderInfo.Action == "attack")
+                {
+                    if (_builderConfiguration.GetGuard(_characterData, _target, builderInfo))
+                    {
+                        //TODO implement Attack logic + gather targetData
+                    }
+                }
+            }
         }
     }
 }

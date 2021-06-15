@@ -1,4 +1,8 @@
 using ASD_Game.ActionHandling;
+using System;
+using Agent.Services;
+using Newtonsoft.Json;
+using Session.DTO;
 using ASD_Game.DatabaseHandler.POCO;
 using ASD_Game.DatabaseHandler.Services;
 using ASD_Game.Items;
@@ -10,7 +14,6 @@ using ASD_Game.Session.DTO;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.Session.Helpers;
 using ASD_Game.UserInterface;
-using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Services;
 using Newtonsoft.Json;
 using System;
@@ -22,11 +25,16 @@ using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine;
 using WorldGeneration.StateMachine;
+using ASD_Game.World.Models.Characters;
+using ActionHandling;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ASD_Game.Session
 {
     public class GameSessionHandler : IPacketHandler, IGameSessionHandler
     {
+        private readonly INetworkComponent _networkComponent;
+        private readonly IConfigurationService _configurationService;
         private readonly IClientController _clientController;
         private readonly ISessionHandler _sessionHandler;
         private readonly IWorldService _worldService;
@@ -39,6 +47,7 @@ namespace ASD_Game.Session
         private readonly IGameConfigurationHandler _gameConfigurationHandler;
         private IDatabaseService<GameConfigurationPOCO> _gameConfigDatabaseService;
         private readonly IMoveHandler _moveHandler;
+        private readonly IAttackHandler _attackHandler;
         private IItemService _itemService;
         private Timer AIUpdateTimer;
         private Random _random = new Random();
@@ -58,7 +67,14 @@ namespace ASD_Game.Session
             IItemService itemService, 
             IGameConfigurationHandler gameConfigurationHandler,
             IDatabaseService<GameConfigurationPOCO> gameConfigDatabaseService,
-                IMoveHandler moveHandler)
+                IMoveHandler moveHandler,
+            INetworkComponent networkComponent,
+            IConfigurationService configurationService,
+            IMoveHandler moveHandler,
+            IAttackHandler attackHandler,
+            IItemService itemService
+
+        )
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.GameSession);
@@ -72,11 +88,31 @@ namespace ASD_Game.Session
             _gameConfigurationHandler = gameConfigurationHandler;
             _gameConfigDatabaseService = gameConfigDatabaseService;
             _playerItemDatabaseService = playerItemDatabaseService;
+            _worldService = worldService;
+            _messageService = messageService;
+            _networkComponent = networkComponent;
+            _configurationService = configurationService;
+            _moveHandler = moveHandler;
+            _attackHandler = attackHandler;
             _itemService = itemService;
             _moveHandler = moveHandler;
             _worldService = worldService;
             CheckAITimer();
             UpdateBrain();
+        }
+
+        public void SendAgentConfiguration()
+        {
+            _configurationService.CreateConfiguration("agent");
+            var configuration = _configurationService.Configuration;
+            var agentConfigurationDto = new AgentConfigurationDTO(SessionType.SendAgentConfiguration)
+            {
+                PlayerId = _clientController.GetOriginId(),
+                AgentConfiguration = configuration.Settings,
+                GameGUID = _clientController.SessionId
+            };
+            var payload = JsonConvert.SerializeObject(agentConfigurationDto);
+            _clientController.SendPayload(payload, PacketType.Agent);
         }
 
         public void SendGameSession()
@@ -161,6 +197,8 @@ namespace ASD_Game.Session
 
         private void InsertConfigurationIntoDatabase()
         {
+            SendAgentConfiguration();
+
             var gameConfigurationPOCO = new GameConfigurationPOCO
             {
                 GameGUID = _clientController.SessionId,
@@ -314,7 +352,7 @@ namespace ASD_Game.Session
 
         public void SetStateMachine(Monster monster)
         {
-            ICharacterStateMachine CSM = new MonsterStateMachine(monster.MonsterData, null);
+            ICharacterStateMachine CSM = new MonsterStateMachine(monster.MonsterData);
             monster.MonsterStateMachine = CSM;
         }
     }

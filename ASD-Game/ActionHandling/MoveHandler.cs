@@ -13,10 +13,13 @@ using Newtonsoft.Json;
 using System.Timers;
 using ASD_Game.DatabaseHandler.Services;
 using ASD_Game.Messages;
+
 using System;
+
 using System.Diagnostics.CodeAnalysis;
 
 namespace ASD_Game.ActionHandling
+
 {
     public class MoveHandler : IMoveHandler, IPacketHandler
     {
@@ -141,7 +144,7 @@ namespace ASD_Game.ActionHandling
 
                     return new HandlerResponseDTO(SendAction.ReturnToSender, "You do not have enough stamina to move!");
                 }
-                
+
                 string resultMessage = null;
                 moveDTO.Stamina = playerStamina - staminaCost;
                 //allTiles.Count-1 because the maximum count movableTiles always has 1 less tile, since it doesn't contain the first tile
@@ -203,7 +206,7 @@ namespace ASD_Game.ActionHandling
             _worldService.DisplayStats();
             _worldService.DisplayWorld();
         }
-        
+
         private void ChangeAIPosition(MoveDTO moveDTO)
         {
             var character = _worldService.GetAI(moveDTO.UserId);
@@ -312,12 +315,27 @@ namespace ASD_Game.ActionHandling
                             moveDTOs.Add(moveDTO);
                         }
                     }
+                    else
+                    {
+                        if (move is Monster monster)
+                        {
+                            MoveDTO moveDTO = new(monster.Id, (int)monster.Destination.X, (int)monster.Destination.Y);
+                            moveDTOs.Add(moveDTO);
+                        }
+                    }
                 }
                 SendMoveDTO(moveDTOs);
             }
         }
 
-        private void GetAIMoves()
+        public void SendAIMove(string id, int x, int y)
+        {
+            List<MoveDTO> moves = new();
+            moves.Add(new MoveDTO(id, x, y));
+            SendMoveDTO(moves);
+        }
+
+        public void GetAIMoves()
         {
             MoveAIs(_worldService.GetCreatureMoves("Move"));
         }
@@ -381,7 +399,7 @@ namespace ASD_Game.ActionHandling
 
                 var xTiles = $"{x} tile{(x != 1 ? "s" : "")} {xDirection}";
                 var yTiles = $"{y} tile{(y != 1 ? "s" : "")} {yDirection}";
-                
+
                 if (x == 0)
                 {
                     _messageService.AddMessage($"The closest player is {yTiles}.");

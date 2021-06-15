@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using ASD_Game.Agent.Services;
+using Agent.Services;
 using ASD_Game.InputHandling.Antlr;
 using ASD_Game.InputHandling.Models;
 using ASD_Game.Messages;
@@ -227,7 +227,7 @@ namespace ASD_Game.InputHandling
             else
             {
                 _gameConfigurationHandler.SetCurrentScreen();
-                
+
                 var configurationCompleted = _gameConfigurationHandler.HandleAnswer(input);
 
                 if (configurationCompleted)
@@ -303,9 +303,12 @@ namespace ASD_Game.InputHandling
                 }
             }
 
-            var agentConfigurationService = new AgentConfigurationService();
-            var errors = agentConfigurationService.Configure(finalString);
-            var errorsCombined = string.Empty;
+            var agentConfigurationService = new ConfigurationService();
+            List<string> errors = agentConfigurationService.Configure(finalString);
+
+/*            AgentService agentService = new AgentService();
+            List<string> errors = agentService.Configure(finalString);*/
+            string errorsCombined = string.Empty;
 
             if (errors.Count != 0)
             {
@@ -320,7 +323,7 @@ namespace ASD_Game.InputHandling
                 editorScreen.ClearScreen();
                 _screenHandler.TransitionTo(new StartScreen());
             }
-            
+
             editorScreen.UpdateLastQuestion(Environment.NewLine + "Your agent has been configured successfully!" +
                                             Environment.NewLine + "press enter to continue to the start screen");
             _screenHandler.GetScreenInput();
@@ -359,7 +362,6 @@ namespace ASD_Game.InputHandling
 
                 input = _screenHandler.GetScreenInput();
                 input = input.ToLower();
-
 
                 if (input.Equals("stop"))
                 {

@@ -15,6 +15,7 @@ using ASD_Game.Network.Enum;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Services;
 using Newtonsoft.Json;
+using World.Models.Characters;
 
 namespace ASD_Game.ActionHandling
 {
@@ -30,7 +31,7 @@ namespace ASD_Game.ActionHandling
         private readonly IMessageService _messageService;
 
         private Timer AIUpdateTimer;
-        private int _updateTime = 2000;
+        private int _updateTime = 7000;
 
         public AttackHandler(IClientController clientController, IWorldService worldService,
             IDatabaseService<PlayerPOCO> playerDatabaseService,
@@ -104,8 +105,6 @@ namespace ASD_Game.ActionHandling
         {
             AttackDTO attackDto = JsonConvert.DeserializeObject<AttackDTO>(packet.Payload);
 
-
-
             if (_worldService.GetPlayer(attackDto.PlayerGuid) != null &&
                 _worldService.GetPlayer(attackDto.PlayerGuid).Stamina < 10)
             {
@@ -124,7 +123,12 @@ namespace ASD_Game.ActionHandling
             if (_clientController.IsHost() && packet.Header.Target.Equals("host") || _clientController.IsBackupHost)
             {
                 var attackingCharacter = _worldService.GetCharacter(attackDto.PlayerGuid);
-                var characterToAttack = GetCharacterToAttack(attackingCharacter.XPosition, attackingCharacter.YPosition, attackDto.XPosition, attackDto.YPosition);               
+
+                if (attackingCharacter == null)
+                {
+                    return new HandlerResponseDTO(SendAction.Ignore, null);
+                }
+                var characterToAttack = GetCharacterToAttack(attackingCharacter.XPosition, attackingCharacter.YPosition, attackDto.XPosition, attackDto.YPosition);
 
                 if (attackDto.PlayerGuid.StartsWith("monst"))
                 {
@@ -132,6 +136,7 @@ namespace ASD_Game.ActionHandling
                     {
                         attackDto.AttackedPlayerGuid = characterToAttack.Id;
                         HandleAttack(attackDto);
+                        packet.Payload = JsonConvert.SerializeObject(attackDto);
                         return new HandlerResponseDTO(SendAction.SendToClients, null);
                     }
                 }
@@ -166,12 +171,17 @@ namespace ASD_Game.ActionHandling
                 }
                 else
                 {
-                    if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
+                    if (!attackDto.PlayerGuid.StartsWith("monst"))
                     {
-                        _messageService.AddMessage("There is no enemy to attack");
+                        if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
+                        {
+                            _messageService.AddMessage("There is no enemy to attack");
+                        }
+                        return new HandlerResponseDTO(SendAction.ReturnToSender,
+                            "There is no enemy to attack");   
                     }
-                    return new HandlerResponseDTO(SendAction.ReturnToSender,
-                        "There is no enemy to attack");
+
+                    return new HandlerResponseDTO(SendAction.Ignore, null);
                 }
             }
             else if (packet.Header.Target.Equals(_clientController.GetOriginId()))
@@ -279,11 +289,11 @@ namespace ASD_Game.ActionHandling
         private Character GetCharacterToAttack(int XPositionAttacker, int YPositionAttacker, int XPositionAttack, int YPositionAttack)
         {
             Character character = null;
-            if(XPositionAttacker != XPositionAttack)
+            if (XPositionAttacker != XPositionAttack)
             {
-                if(XPositionAttacker < XPositionAttack)
+                if (XPositionAttacker < XPositionAttack)
                 {
-                    for(int x = XPositionAttacker + 1; x <= XPositionAttack && character is null; x++)
+                    for (int x = XPositionAttacker + 1; x <= XPositionAttack && character is null; x++)
                     {
                         character = _worldService.GetCharacterOnTile(x, YPositionAttack);
                     }
@@ -342,9 +352,10 @@ namespace ASD_Game.ActionHandling
             if (creature == null)
             {
                 var attackedPlayer = _worldService.GetPlayer(attackDto.AttackedPlayerGuid);
-                bool printAttackedMessage = _clientController.GetOriginId().Equals(attackedPlayer.Id);
+
                 if (attackDto.AttackedPlayerGuid != null && attackedPlayer.Health != 0)
                 {
+                    bool printAttackedMessage = _clientController.GetOriginId().Equals(attackedPlayer.Id);
                     if (printAttackedMessage)
                     {
                         _messageService.AddMessage(
@@ -445,6 +456,16 @@ namespace ASD_Game.ActionHandling
                             attackDTO.PlayerGuid = smartMonster.Id;
                             attackDTOs.Add(attackDTO);
                         }
+                    }
+                    if (move is Monster monster)
+                    {
+                        AttackDTO attackDTO = new();
+                        attackDTO.XPosition = (int)monster.Destination.X;
+                        attackDTO.YPosition = (int)monster.Destination.Y;
+                        attackDTO.Stamina = 100;
+                        attackDTO.Damage = monster.MonsterData.Damage;
+                        attackDTO.PlayerGuid = monster.Id;
+                        attackDTOs.Add(attackDTO);
                     }
                 }
                 foreach (AttackDTO attack in attackDTOs)

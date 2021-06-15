@@ -1,33 +1,68 @@
 ﻿using System;
+using System.Numerics;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 
 namespace ASD_Game.World.Models.Characters.StateMachine.State
 {
     public class WanderState : CharacterState
     {
-        public WanderState(ICharacterData characterData) : base(characterData)
-        {
-            _characterData = characterData;
-        }
+        private const int MAX_MOVEMENT_SPEED = 3;
 
-        public override void Entry()
+        public WanderState(ICharacterData characterData, ICharacterStateMachine characterStateMachine) : base(
+            characterData, characterStateMachine)
         {
-            Console.WriteLine("Wander state Entry");
         }
 
         public override void Do()
         {
-            // Console.WriteLine("Ik doe iets");
+            DoWorldCheck();
+
+            if (_characterData is AgentData)
+            {
+                if (_characterData.WorldService.GetPlayer(_characterData.CharacterId).Stamina >= 20)
+                {
+                    MoveRandomDirection();
+                }
+            }
+            else
+            {
+                MoveRandomDirection();
+            }
         }
 
-        public override void Do(ICharacterData characterData)
+        private void MoveRandomDirection()
         {
-            // Console.WriteLine("Ik doe iets");
-        }
+            var x = 0;
+            var y = 0;
 
-        public override void Exit()
-        {
-            // Console.WriteLine("Wander state Exit");
+            if (new Random().Next(10) >= 5)
+            {
+                x += new Random().Next(MAX_MOVEMENT_SPEED);
+            }
+            else
+            {
+                y += new Random().Next(MAX_MOVEMENT_SPEED);
+            }
+
+            if (_characterData is MonsterData)
+            {
+                _characterData.Position = new Vector2(
+                    _characterData.Position.X + x,
+                    _characterData.Position.Y + y);
+
+                _characterData.MoveType = "Move";
+                _characterData.Destination = new Vector2(
+                    _characterData.Position.X + x,
+                    _characterData.Position.Y + y
+                );
+            }
+            else
+            {
+                _characterData.MoveHandler.SendAIMove(_characterData.CharacterId,
+                    Convert.ToInt32(_characterData.Position.X + x),
+                    Convert.ToInt32(_characterData.Position.Y + y)
+                );
+            }
         }
     }
 }

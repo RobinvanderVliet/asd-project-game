@@ -9,6 +9,6 @@ namespace ASD_Game.World.Models
         public const string FRIENDLY_PLAYER = "#";
         public const string ENEMY_PLAYER = "E";
         public const string TERMINATOR = "T";
-        public const string ZOMBIE = "|";
+        public const string ZOMBIE = "Z";
     }
 }
