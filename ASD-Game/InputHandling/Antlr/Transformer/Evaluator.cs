@@ -10,33 +10,42 @@ using ASD_Game.Network.Enum;
 using ASD_Game.Session;
 using ASD_Game.Session.DTO;
 using ASD_Game.Session.GameConfiguration;
+using ASD_Game.World.Services;
+using Creature;
 using Newtonsoft.Json;
+
 using MonsterDifficulty = ASD_Game.InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
 
 namespace ASD_Game.InputHandling.Antlr.Transformer
 {
     public class Evaluator : IEvaluator
     {
-        
         private readonly IAttackHandler _attackHandler;
         private readonly ISessionHandler _sessionHandler;
         private readonly IMoveHandler _moveHandler;
         private readonly IGameSessionHandler _gameSessionHandler;
         private readonly IChatHandler _chatHandler;
         private readonly IClientController _clientController;
+        private readonly IAgentHandler _agentHandler;
+        private readonly IWorldService _worldService;
         private readonly IInventoryHandler _inventoryHandler;
+        
         private const int MINIMUM_STEPS = 1;
         private const int MAXIMUM_STEPS = 10;
         private string _commando;
-
-        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IAttackHandler attackHandler, IInventoryHandler inventoryHandler, IClientController clientController)
+        
+        public Evaluator(ISessionHandler sessionHandler, IMoveHandler moveHandler, IGameSessionHandler gameSessionHandler, IChatHandler chatHandler, IAttackHandler attackHandler, IInventoryHandler inventoryHandler, IClientController clientController, IAgentHandler agentHandler, IWorldService worldService)
         {
             _sessionHandler = sessionHandler;
             _moveHandler = moveHandler;
             _gameSessionHandler = gameSessionHandler;
             _chatHandler = chatHandler;
+            _agentHandler = agentHandler;
+            _worldService = worldService;
+            _worldService = worldService;
             _attackHandler = attackHandler;
             _clientController = clientController;
+            _agentHandler = agentHandler;
             _inventoryHandler = inventoryHandler;
         }
 
@@ -162,7 +171,7 @@ namespace ASD_Game.InputHandling.Antlr.Transformer
 
         private void TransformReplace()
         {
-            // TODO: Replace by agent, maybe an AgentHandler?
+            _agentHandler.Replace(_worldService.GetCurrentPlayer().Id);
         }
 
         private void TransformResume()

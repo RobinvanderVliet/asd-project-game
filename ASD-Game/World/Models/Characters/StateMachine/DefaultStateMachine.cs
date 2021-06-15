@@ -3,17 +3,14 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.Machine;
-using ASD_Game.World.Models.Characters.StateMachine.CustomRuleSet;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ASD_Game.World.Models.Characters.StateMachine.State;
-using WorldGeneration.StateMachine;
-using WorldGeneration.StateMachine.Event;
+using World.Models.Characters.StateMachine.Event;
 
 namespace ASD_Game.World.Models.Characters.StateMachine
 {
     public abstract class DefaultStateMachine : ICharacterStateMachine
     {
-        protected RuleSet _ruleset;
         public PassiveStateMachine<CharacterState, CharacterEvent.Event> _passiveStateMachine;
         protected ICharacterData _characterData;
 
@@ -26,10 +23,9 @@ namespace ASD_Game.World.Models.Characters.StateMachine
 
         protected Timer _timer;
 
-        public DefaultStateMachine(ICharacterData characterData, RuleSet ruleset)
+        public DefaultStateMachine(ICharacterData characterData)
         {
             _characterData = characterData;
-            _ruleset = ruleset;
         }
 
         [ExcludeFromCodeCoverage]
@@ -38,12 +34,32 @@ namespace ASD_Game.World.Models.Characters.StateMachine
             _passiveStateMachine.Start();
         }
 
+        [ExcludeFromCodeCoverage]
+        public void StopStateMachine()
+        {
+            KillLoop();
+            _passiveStateMachine.Stop();
+        }
+
         protected void Update()
         {
-            _timer = new Timer((e) =>
+            if (_characterData.Health <= 0)
             {
-                FireEvent(CharacterEvent.Event.DO);
-            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(1000));
+                KillLoop();
+            }
+            else
+            {
+                _timer = new Timer((e) =>
+                {
+                    FireEvent(CharacterEvent.Event.DO);
+                }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(1000));
+            }
+            
+        }
+        
+        protected void KillLoop()
+        {
+            _timer.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
         public void FireEvent(CharacterEvent.Event creatureEvent, object argument)
@@ -56,11 +72,14 @@ namespace ASD_Game.World.Models.Characters.StateMachine
             _passiveStateMachine.Fire(creatureEvent);
         }
 
+        public bool WasStarted()
+        {
+            return _passiveStateMachine != null;
+        }
+
         protected void DefineDefaultBehaviour(
             ref StateMachineDefinitionBuilder<CharacterState, CharacterEvent.Event> builder, ref CharacterState state)
         {
-            builder.In(state).ExecuteOnEntry(state.Entry);
-            builder.In(state).ExecuteOnExit(state.Exit);
             builder.In(state).On(CharacterEvent.Event.DO).Execute(state.Do);
         }
     }

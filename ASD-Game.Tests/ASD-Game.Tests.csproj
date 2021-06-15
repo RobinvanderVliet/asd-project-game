@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
@@ -33,7 +34,7 @@
       <EmbeddedResource Include="AgentTests\Resource\test2.txt" />
       <EmbeddedResource Include="AgentTests\Resource\test3.txt" />
     </ItemGroup>
-
+    
     <ItemGroup>
       <Page Include="AgentTests\Resource\AgentTestFileWrongExtension.xml" />
     </ItemGroup>
@@ -41,5 +42,4 @@
     <ItemGroup>
       <ProjectReference Include="..\ASD-Game\ASD-Game.csproj" />
     </ItemGroup>
-
 </Project>

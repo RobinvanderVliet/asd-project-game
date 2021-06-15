@@ -1,5 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using ActionHandling;
+using ASD_Game.ActionHandling;
+using ASD_Game.World.Models.Characters.StateMachine.Builder;
+using ASD_Game.World.Services;
 
 namespace ASD_Game.World.Models.Characters.StateMachine.Data
 {
@@ -11,7 +16,10 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Data
         private int _damage = 10;
         private int _visionRange = 6;
 
-        public bool IsAlive { get => _health > 0; }
+        public bool IsAlive
+        {
+            get => _health > 0;
+        }
 
         public Vector2 Position
         {
@@ -24,6 +32,19 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Data
             get => _health;
             set => _health = value;
         }
+
+        public List<KeyValuePair<string, string>> RuleSet { get; set; }
+        public Inventory Inventory { get; set; }
+        public int Team { get; set; }
+        public int RadiationLevel { get; set; }
+        public IMoveHandler MoveHandler { get; set; }
+        public IWorldService WorldService { get; set; }
+        public BuilderConfigurator BuilderConfigurator { get; set; }
+        public IAttackHandler AttackHandler { get; set; }
+        public string CharacterId { get; set; }
+
+        public string MoveType { get; set; }
+        public Vector2 Destination { get; set; }
 
         public IWorld World { get; set; }
 
@@ -45,23 +66,28 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Data
             SetStats(difficulty);
         }
 
-        private void SetStats(int diff)
+        public void SetStats(int diff)
         {
             switch (diff)
             {
-                case 0:
+                case 50:
                     Health = Health / 2;
                     Damage = Damage / 2;
                     break;
 
-                case 50:
+                case 100:
                     Health = Health;
                     Damage = Damage;
                     break;
 
-                case 100:
+                case 200:
                     Health = Health * 2;
                     Damage = Damage * 2;
+                    break;
+
+                case 500:
+                    Health = Health * 4;
+                    Damage = Damage * 4;
                     break;
             }
         }

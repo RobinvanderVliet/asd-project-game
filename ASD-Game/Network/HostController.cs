@@ -31,7 +31,6 @@ namespace ASD_Game.Network
             HandlerResponseDTO handlerResponse = _client.HandlePacket(packet);
             packet.Header.SessionID = _sessionId;
 
-
             if (handlerResponse.Action == SendAction.SendToClients)
             {
                 packet.Header.Target = "client";

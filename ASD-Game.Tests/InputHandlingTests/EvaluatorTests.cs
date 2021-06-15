@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using ActionHandling;
+using Creature;
 using ASD_Game.ActionHandling;
 using ASD_Game.Chat;
 using ASD_Game.InputHandling.Antlr.Ast;
@@ -11,11 +12,13 @@ using ASD_Game.Network.Enum;
 using ASD_Game.Session;
 using ASD_Game.Session.DTO;
 using ASD_Game.Session.GameConfiguration;
+using ASD_Game.World.Services;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using ItemFrequency = ASD_Game.InputHandling.Antlr.Ast.Actions.ItemFrequency;
 using MonsterDifficulty = ASD_Game.InputHandling.Antlr.Ast.Actions.MonsterDifficulty;
+
 
 namespace ASD_Game.Tests.InputHandlingTests
 {
@@ -27,12 +30,12 @@ namespace ASD_Game.Tests.InputHandlingTests
         private Mock<IMoveHandler> _mockedMoveHandler;
         private Mock<IGameSessionHandler> _mockedGameSessionHandler;
         private Mock<IChatHandler> _mockedChatHandler;
+        private Mock<IAgentHandler> _agentHandlerMock;
         private Mock<IAttackHandler> _mockedAttackHandler;
-    
         private Mock<IClientController> _mockedClientController;
-    
         private Mock<IInventoryHandler> _mockedInventoryHandler;
-
+        private Mock<IWorldService> _mockedWorldService;
+        
         [SetUp]
         public void Setup()
         {
@@ -43,7 +46,10 @@ namespace ASD_Game.Tests.InputHandlingTests
             _mockedAttackHandler = new Mock<IAttackHandler>();
             _mockedClientController = new Mock<IClientController>();
             _mockedInventoryHandler = new Mock<IInventoryHandler>();
-            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedAttackHandler.Object, _mockedInventoryHandler.Object, _mockedClientController.Object);
+            _agentHandlerMock = new Mock<IAgentHandler>();
+            _mockedWorldService = new Mock<IWorldService>();
+            _sut = new Evaluator(_mockedSessionHandler.Object, _mockedMoveHandler.Object, _mockedGameSessionHandler.Object, _mockedChatHandler.Object, _mockedAttackHandler.Object, _mockedInventoryHandler.Object, _mockedClientController.Object,_agentHandlerMock.Object, _mockedWorldService.Object);
+
         }
     
         [Test]

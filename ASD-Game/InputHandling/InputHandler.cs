@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using ASD_Game.Agent.Services;
+using Agent.Services;
 using ASD_Game.InputHandling.Antlr;
 using ASD_Game.InputHandling.Models;
 using ASD_Game.Messages;
@@ -80,19 +80,24 @@ namespace ASD_Game.InputHandling
                 case 1:
                     _screenHandler.TransitionTo(new ConfigurationScreen());
                     break;
+
                 case 2:
                     _screenHandler.TransitionTo(new SessionScreen());
                     _sessionHandler.RequestSessions();
                     break;
+
                 case 3:
                     _screenHandler.TransitionTo(new LoadScreen());
                     break;
+
                 case 4:
                     _screenHandler.TransitionTo(new EditorScreen());
                     break;
+
                 case 5:
                     SendCommand("exit");
                     break;
+
                 default:
                     var startScreen = _screenHandler.Screen as StartScreen;
                     startScreen.UpdateInputMessage("Not a valid option, try again!");
@@ -158,7 +163,6 @@ namespace ASD_Game.InputHandling
                     _screenHandler.RedrawGameInputBox();
                 }
             }
-
         }
 
         public void HandleConfigurationScreenCommands()
@@ -172,7 +176,7 @@ namespace ASD_Game.InputHandling
             else
             {
                 _gameConfigurationHandler.SetCurrentScreen();
-                
+
                 var configurationCompleted = _gameConfigurationHandler.HandleAnswer(input);
 
                 if (configurationCompleted)
@@ -247,9 +251,12 @@ namespace ASD_Game.InputHandling
                 }
             }
 
-            var agentConfigurationService = new AgentConfigurationService();
-            var errors = agentConfigurationService.Configure(finalString);
-            var errorsCombined = string.Empty;
+            var agentConfigurationService = new ConfigurationService();
+            List<string> errors = agentConfigurationService.Configure(finalString);
+
+/*            AgentService agentService = new AgentService();
+            List<string> errors = agentService.Configure(finalString);*/
+            string errorsCombined = string.Empty;
 
             if (errors.Count != 0)
             {
@@ -264,7 +271,7 @@ namespace ASD_Game.InputHandling
                 editorScreen.ClearScreen();
                 _screenHandler.TransitionTo(new StartScreen());
             }
-            
+
             editorScreen.UpdateLastQuestion(Environment.NewLine + "Your agent has been configured successfully!" +
                                             Environment.NewLine + "press enter to continue to the start screen");
             _screenHandler.GetScreenInput();
@@ -304,7 +311,6 @@ namespace ASD_Game.InputHandling
                 input = _screenHandler.GetScreenInput();
                 input = input.ToLower();
 
-
                 if (input.Equals("stop"))
                 {
                     return string.Empty;
@@ -322,6 +328,7 @@ namespace ASD_Game.InputHandling
                                                             Environment.NewLine +
                                                             startText);
                             break;
+
                         case "weapon":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible weapons: " + Environment.NewLine +
@@ -329,6 +336,7 @@ namespace ASD_Game.InputHandling
                                                             Environment.NewLine +
                                                             startText);
                             break;
+
                         case "comparison":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible comparison: " + Environment.NewLine +
@@ -337,6 +345,7 @@ namespace ASD_Game.InputHandling
                                                             Environment.NewLine +
                                                             startText);
                             break;
+
                         case "consumables":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible consumables: " + Environment.NewLine +
@@ -344,6 +353,7 @@ namespace ASD_Game.InputHandling
                                                             Environment.NewLine +
                                                             startText);
                             break;
+
                         case "actions":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible actions: " + Environment.NewLine +
@@ -351,6 +361,7 @@ namespace ASD_Game.InputHandling
                                                             Environment.NewLine +
                                                             startText);
                             break;
+
                         case "bitcoinitems":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible bitcoin items: " + Environment.NewLine +
@@ -358,6 +369,7 @@ namespace ASD_Game.InputHandling
                                                             Environment.NewLine +
                                                             startText);
                             break;
+
                         case "comparables":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible comparables: " + Environment.NewLine +

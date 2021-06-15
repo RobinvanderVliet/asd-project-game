@@ -2,10 +2,13 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
+using Creature;
+using Moq;
 using ASD_Game.Session;
 using ASD_Game.Messages;
 using NUnit.Framework;
 using Moq;
+
 
 namespace ASD_Game.Tests.SessionTests
 {
@@ -19,11 +22,13 @@ namespace ASD_Game.Tests.SessionTests
         private TextWriter _originalOutput;
         private Mock<IMessageService> _mockedMessageService;
 
+
         [SetUp]
         public void Setup()
         {
+
             _mockedMessageService = new Mock<IMessageService>();
-            _sut = new HeartbeatHandler(_mockedMessageService.Object);
+            _sut = new HeartbeatHandler(_mockedMessageService.Object, null);
             _stringWriter = new StringWriter();
             _originalOutput = Console.Out;
             Console.SetOut(_stringWriter);

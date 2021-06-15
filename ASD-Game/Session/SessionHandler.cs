@@ -4,6 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Timers;
+
+
+using Creature;
 using ASD_Game.Messages;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
@@ -33,6 +36,7 @@ namespace ASD_Game.Session
         public TrainingScenario TrainingScenario { get; set; } = new TrainingScenario();
         private readonly IScreenHandler _screenHandler;
         private readonly IMessageService _messageService;
+        private readonly IAgentHandler _agentHandler;
 
         private Dictionary<string, PacketDTO> _availableSessions = new();
         private bool _hostActive = true;
@@ -46,11 +50,13 @@ namespace ASD_Game.Session
 
         private IGameConfigurationHandler _gameConfigurationHandler;
 
-        public SessionHandler(IClientController clientController, IScreenHandler screenHandler, IGameConfigurationHandler gameConfigurationHandler, IMessageService messageService)
+
+        public SessionHandler(IClientController clientController, IScreenHandler screenHandler, IGameConfigurationHandler gameConfigurationHandler, IMessageService messageService, IAgentHandler agentHandler)
         {
             _clientController = clientController;
             _clientController.SubscribeToPacketType(this, PacketType.Session);
             _screenHandler = screenHandler;
+            _agentHandler = agentHandler;
             _gameConfigurationHandler = gameConfigurationHandler;
             _messageService = messageService;
         }
@@ -130,21 +136,23 @@ namespace ASD_Game.Session
             _clientController.CreateHostController();
             _clientController.SetSessionId(_session.SessionId);
             _session.InSession = true;
+            
             Thread traingThread = new Thread(
             TrainingScenario.StartTraining
             );
             traingThread.Start();
-            
+
             if (_screenHandler.Screen is LobbyScreen screen)
             {
                 screen.UpdateLobbyScreen(_session.GetAllClients());
             }
 
-            _heartbeatHandler = new HeartbeatHandler(_messageService);
+            _heartbeatHandler = new HeartbeatHandler(_messageService, _agentHandler);
             _messageService.AddMessage("Created session with the name: " + _session.Name);
 
             return _session.InSession;
         }
+        
 
         public void RequestSessions()
         {
@@ -167,7 +175,6 @@ namespace ASD_Game.Session
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
-
             if (packet.Header.SessionID == _session?.SessionId)
             {
                 if (packet.Header.Target == "client" || packet.Header.Target == "host")
@@ -181,7 +188,6 @@ namespace ASD_Game.Session
                     {
                         return HandleHeartbeat(packet);
                     }
-
                     if (sessionDTO.SessionType == SessionType.NewBackUpHost)
                     {
                         return HandleNewBackupHost(packet);
@@ -505,8 +511,8 @@ namespace ASD_Game.Session
             var clients = _session.GetAllClients().Select(client => client.First()).ToArray();
             List<string> heartbeatSenders = new List<string>(clients);
             heartbeatSenders.Remove(_clientController.GetOriginId());
-
-            _heartbeatHandler = new HeartbeatHandler(heartbeatSenders, _messageService);
+            
+            _heartbeatHandler = new HeartbeatHandler(heartbeatSenders, _messageService, _agentHandler);
 
             SessionDTO sessionDTO = new SessionDTO
             {

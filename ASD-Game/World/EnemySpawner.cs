@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Buffers;
-using ASD_Game.Session;
 using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters;
-using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
-using ASD_Game.World.Services;
 
 namespace ASD_Game.World
 {
@@ -12,7 +8,7 @@ namespace ASD_Game.World
     {
         public Monster spawnMonster(int x, int y, string id, int smartBrainedChance)
         {
-            if (new Random().Next() > smartBrainedChance)
+            if (new Random().Next(0, 100) < smartBrainedChance)
             {
                 SmartMonster monster = new SmartMonster("Gerard Gerardsen", x, y, CharacterSymbol.TERMINATOR, id);
                 return monster;
@@ -20,6 +16,7 @@ namespace ASD_Game.World
             else
             {
                 Monster monster = new Monster("George Clooney", x, y, CharacterSymbol.ZOMBIE, id);
+                monster.MonsterData.CharacterId = id;
                 return monster;
             }
         }

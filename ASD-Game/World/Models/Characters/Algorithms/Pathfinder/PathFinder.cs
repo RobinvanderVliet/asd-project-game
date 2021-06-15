@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 
 namespace ASD_Game.World.Models.Characters.Algorithms.Pathfinder
+
 {
     public class PathFinder
     {
@@ -12,9 +13,12 @@ namespace ASD_Game.World.Models.Characters.Algorithms.Pathfinder
 
         public PathFinder(List<List<Node>> nodes)
         {
-            _grid = nodes;
-            _gridRows = _grid[0].Count;
-            _gridCols = _grid.Count;
+            if (nodes != null)
+            {
+                _grid = nodes;
+                _gridRows = _grid[0].Count;
+                _gridCols = _grid.Count;
+            }
         }
 
         private void resetGrid()

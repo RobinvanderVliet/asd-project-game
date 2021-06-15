@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Linq;
 using System.Text;
 using ASD_Game.Items;
@@ -7,14 +8,16 @@ using ASD_Game.Items.Services;
 using ASD_Game.Messages;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
-using ASD_Game.World.Models.Interfaces;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
+using ASD_Game.World.Models.Interfaces;
+using ASD_Game.Session.GameConfiguration;
 
 namespace ASD_Game.World.Services
 {
     public class WorldService : IWorldService
     {
         public IItemService ItemService { get; }
+        private readonly IGameConfigurationHandler _gameConfigHandler;
         private readonly IScreenHandler _screenHandler;
         private readonly IMessageService _messageService;
         private IWorld _world;
@@ -25,8 +28,9 @@ namespace ASD_Game.World.Services
 
         private bool gameEnded = false;
 
-        public WorldService(IScreenHandler screenHandler, IItemService itemService, IMessageService messageService)
+        public WorldService(IScreenHandler screenHandler, IItemService itemService, IMessageService messageService, IGameConfigurationHandler gameConfigurationHandler)
         {
+            _gameConfigHandler = gameConfigurationHandler;
             _screenHandler = screenHandler;
             ItemService = itemService;
             _enemySpawner = new EnemySpawner();
@@ -65,7 +69,7 @@ namespace ASD_Game.World.Services
 
         public void GenerateWorld(int seed)
         {
-            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, ItemService, _enemySpawner);
+            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, ItemService, _enemySpawner, _gameConfigHandler);
         }
 
         public Player GetCurrentPlayer()
@@ -93,15 +97,61 @@ namespace ASD_Game.World.Services
             return _world.GetAllCharacters();
         }
 
-        public Character GetCharacter(string id)
+        public Character GetCharacterInClosestRangeToCurrentCharacter(Character currentCharacter, int distance)
         {
-            return GetAllCharacters().Find(character => character.Id == id);
+            var monsters = GetMonsters();
+            var players = GetAllPlayers();
+
+            foreach (var player in players)
+            {
+                if (currentCharacter != null)
+                {
+                    if (Vector2.Distance(new Vector2(currentCharacter.XPosition, currentCharacter.YPosition), new Vector2(player.XPosition, player.YPosition)) <= distance
+                        && player.Id != currentCharacter.Id)
+                    {
+                        if (player.Health > 0)
+                        {
+                            return player;
+                        }
+                    }
+                }
+            }
+
+            foreach (var monster in monsters)
+            {
+                if (currentCharacter != null)
+                {
+                    if (Vector2.Distance(new Vector2(currentCharacter.XPosition, currentCharacter.YPosition), new Vector2(monster.XPosition, monster.YPosition)) <= distance
+                        && monster.Id != currentCharacter.Id)
+                    {
+                        return monster;
+                    }
+                }
+            }
+
+            return null;
         }
 
-        public Character GetCharacterOnTile(int x, int y)
+        public Character GetCharacter(string id)
         {
-            var characters = GetAllCharacters();
-            return characters.Find(character => character.XPosition == x && character.YPosition == y);
+            List<Monster> monsters = GetMonsters();
+            List<Player> players = GetAllPlayers();
+
+            foreach (var player in players)
+            {
+                if (player.Id == id)
+                {
+                    return player;
+                }
+            }
+            foreach (var monster in monsters)
+            {
+                if (monster.Id == id)
+                {
+                    return monster;
+                }
+            }
+            return null;
         }
 
         public void UpdateBrains(Genome genome)
@@ -113,6 +163,14 @@ namespace ASD_Game.World.Services
                     if (monster is SmartMonster smartMonster)
                     {
                         smartMonster.Brain = genome;
+                    }
+                    else if (monster is Monster monst)
+                    {
+                        if (!monst.MonsterStateMachine.WasStarted())
+                        {
+                            monst.MonsterData.WorldService = this;
+                            monst.MonsterStateMachine.StartStateMachine();
+                        }
                     }
                 }
             }
@@ -127,6 +185,11 @@ namespace ASD_Game.World.Services
                 {
                     smartMonster._dataGatheringService = new DataGatheringService(this);
                     setup.Add((SmartMonster)monster);
+                }
+                else if (monster is Monster monst)
+                {
+                    monst.MonsterData.WorldService = this;
+                    monst.MonsterStateMachine.StartStateMachine();
                 }
             }
             SetAIActions(setup);
@@ -163,7 +226,11 @@ namespace ASD_Game.World.Services
 
         public List<Player> GetAllPlayers()
         {
-            return _world.Players;
+            if (_world != null)
+            {
+                return _world.Players;
+            }
+            return null;
         }
 
         public bool IsDead(Player player)
@@ -174,6 +241,12 @@ namespace ASD_Game.World.Services
         public void LoadArea(int playerX, int playerY, int viewDistance)
         {
             _world.LoadArea(playerX, playerY, viewDistance);
+        }
+
+        public IList<Item> GetItemsOnCurrentTileWithPlayerId(string playerId)
+        {
+            var player = GetPlayer(playerId);
+            return _world.GetTileForPlayer(player).ItemsOnTile;
         }
 
         public string SearchCurrentTile()
@@ -274,6 +347,12 @@ namespace ASD_Game.World.Services
                 _messageService.AddMessage(livingPlayer.Name + " is the last player in the game and won! Congratulations!");
                 gameEnded = true;
             }
+        }
+
+        public Character GetCharacterOnTile(int x, int y)
+        {
+            var characters = GetAllCharacters();
+            return characters.Find(character => character.XPosition == x && character.YPosition == y);
         }
     }
 }
