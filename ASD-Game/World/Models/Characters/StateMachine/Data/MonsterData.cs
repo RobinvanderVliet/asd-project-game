@@ -66,23 +66,28 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Data
             SetStats(difficulty);
         }
 
-        private void SetStats(int diff)
+        public void SetStats(int diff)
         {
             switch (diff)
             {
-                case 0:
+                case 50:
                     Health = Health / 2;
                     Damage = Damage / 2;
                     break;
 
-                case 50:
+                case 100:
                     Health = Health;
                     Damage = Damage;
                     break;
 
-                case 100:
+                case 200:
                     Health = Health * 2;
                     Damage = Damage * 2;
+                    break;
+
+                case 500:
+                    Health = Health * 4;
+                    Damage = Damage * 4;
                     break;
             }
         }

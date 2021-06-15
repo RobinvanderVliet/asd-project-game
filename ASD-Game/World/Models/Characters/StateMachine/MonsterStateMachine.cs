@@ -9,7 +9,6 @@ using ASD_Game.World.Models.Characters.StateMachine.Data;
 using ASD_Game.World.Models.Characters.StateMachine.State;
 using World.Models.Characters.StateMachine.Event;
 
-
 namespace ASD_Game.World.Models.Characters.StateMachine
 {
     public class MonsterStateMachine : DefaultStateMachine
@@ -24,7 +23,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine
         public ICharacterData CharacterData
         {
             get => _characterData;
-            set => _characterData = (MonsterData) value;
+            set => _characterData = (MonsterData)value;
         }
 
         public override void StartStateMachine()

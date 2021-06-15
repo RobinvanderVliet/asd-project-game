@@ -22,7 +22,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Data
         public BuilderConfigurator BuilderConfigurator { get; set; }
         public IAttackHandler AttackHandler { get; set; }
         public string CharacterId { get; set; }
-
         public string MoveType { get; set; }
         public Vector2 Destination { get; set; }
     }

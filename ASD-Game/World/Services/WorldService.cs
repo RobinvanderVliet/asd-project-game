@@ -10,12 +10,14 @@ using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Interfaces;
+using ASD_Game.Session.GameConfiguration;
 
 namespace ASD_Game.World.Services
 {
     public class WorldService : IWorldService
     {
         public IItemService ItemService { get; }
+        private readonly IGameConfigurationHandler _gameConfigHandler;
         private readonly IScreenHandler _screenHandler;
         private readonly IMessageService _messageService;
         private IWorld _world;
@@ -26,8 +28,9 @@ namespace ASD_Game.World.Services
 
         private bool gameEnded = false;
 
-        public WorldService(IScreenHandler screenHandler, IItemService itemService, IMessageService messageService)
+        public WorldService(IScreenHandler screenHandler, IItemService itemService, IMessageService messageService, IGameConfigurationHandler gameConfigurationHandler)
         {
+            _gameConfigHandler = gameConfigurationHandler;
             _screenHandler = screenHandler;
             ItemService = itemService;
             _enemySpawner = new EnemySpawner();
@@ -66,7 +69,7 @@ namespace ASD_Game.World.Services
 
         public void GenerateWorld(int seed)
         {
-            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, ItemService, _enemySpawner);
+            _world = new World(seed, VIEWDISTANCE, new MapFactory(), _screenHandler, ItemService, _enemySpawner, _gameConfigHandler);
         }
 
         public Player GetCurrentPlayer()

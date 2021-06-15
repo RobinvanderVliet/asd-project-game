@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Buffers;
-using ASD_Game.Session;
 using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters;
-using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
-using ASD_Game.World.Services;
 
 namespace ASD_Game.World
 {
