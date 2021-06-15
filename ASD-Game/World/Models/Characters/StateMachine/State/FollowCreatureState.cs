@@ -24,12 +24,12 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
             ICharacterData targetData = _target;
 
             dataGatheringService.ViewPointCalculator(new Vector2(character.XPosition, character.YPosition));
-            
+
             Vector2 MPos = new Vector2(targetData.Position.X - dataGatheringService._pathingOffset.X,
                 targetData.Position.Y - dataGatheringService._pathingOffset.Y);
 
             Stack<Node> newPath = pathFinder.FindPath(new Vector2(6, 6), MPos);
-            
+
             if (newPath == null) return;
 
             if (!(newPath.Peek().Position.X == _characterData.Position.X &&
@@ -38,9 +38,13 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                 Vector2 destination = dataGatheringService.TransformPath(newPath.Pop().Position);
                 float newPositionX = destination.X;
                 float newPositionY = destination.Y;
-                
+
                 if (_characterData is MonsterData)
                 {
+                    _characterData.Position = new Vector2(
+                        newPositionX,
+                        newPositionY);
+
                     _characterData.MoveType = "Move";
                     _characterData.Destination = new Vector2(
                         newPositionX,
@@ -54,8 +58,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                         Convert.ToInt32(newPositionY)
                     );
                 }
-                
-
             }
         }
     }

@@ -37,10 +37,13 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
 
         private string GetDirection()
         {
-            float PX = _characterData.Position.X;
-            float PY = _characterData.Position.Y;
-            float TX = _target.Position.X;
-            float TY = _target.Position.Y;
+            DoWorldCheck();
+            Character pl = _characterData.WorldService.GetCharacter(_characterData.CharacterId);
+            float PX = pl.XPosition;
+            float PY = pl.YPosition;
+            Character cha = _characterData.WorldService.GetCharacter(_target.CharacterId);
+            float TX = cha.XPosition;
+            float TY = cha.YPosition;
 
             if (PX == TX && PY > TY) { return "down"; }
             if (PX > TX && PY == TY) { return "right"; }

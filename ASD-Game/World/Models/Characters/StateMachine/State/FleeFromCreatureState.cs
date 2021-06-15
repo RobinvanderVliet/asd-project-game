@@ -39,6 +39,10 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
 
             if (_characterData is MonsterData)
             {
+                _characterData.Position = new Vector2(
+                    _characterData.Position.X + x,
+                    _characterData.Position.Y + y);
+
                 _characterData.MoveType = "Move";
                 _characterData.Destination = new Vector2(
                     _characterData.Position.X + x,

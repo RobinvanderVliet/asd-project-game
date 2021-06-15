@@ -122,11 +122,12 @@ namespace ASD_Game.ActionHandling
             if (_clientController.IsHost() && packet.Header.Target.Equals("host") || _clientController.IsBackupHost)
             {
                 var attackingCharacter = _worldService.GetCharacter(attackDto.PlayerGuid);
-                var characterToAttack = GetCharacterToAttack(attackingCharacter.XPosition, attackingCharacter.YPosition, attackDto.XPosition, attackDto.YPosition);
+
                 if (attackingCharacter == null)
                 {
                     return new HandlerResponseDTO(SendAction.Ignore, null);
                 }
+                var characterToAttack = GetCharacterToAttack(attackingCharacter.XPosition, attackingCharacter.YPosition, attackDto.XPosition, attackDto.YPosition);
 
                 if (attackDto.PlayerGuid.StartsWith("monst"))
                 {

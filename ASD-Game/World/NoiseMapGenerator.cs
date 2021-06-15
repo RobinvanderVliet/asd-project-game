@@ -22,7 +22,7 @@ namespace ASD_Game.World
         private int _monsterSpawnChance;
         private IEnemySpawner _enemySpawner;
 
-        public NoiseMapGenerator(int seed, IItemService itemService, IEnemySpawner enemySpawner, List<ItemSpawnDTO> items, List<Monster> monsters, IGameConfigurationHandler gameConfigurationHandler, int monsterSpawnChance = 3)
+        public NoiseMapGenerator(int seed, IItemService itemService, IEnemySpawner enemySpawner, List<ItemSpawnDTO> items, List<Monster> monsters, IGameConfigurationHandler gameConfigurationHandler, int monsterSpawnChance = 2)
         {
             _worldNoise = new FastNoiseLite();
             _worldNoise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
@@ -109,7 +109,7 @@ namespace ASD_Game.World
                 var id = "monst" + x + "!" + y;
                 if (!_monsters.Exists(monster => monster.Id == id))
                 {
-                    Monster monster = _enemySpawner.spawnMonster(x, y, id, 40);
+                    Monster monster = _enemySpawner.spawnMonster(x, y, id, 10);
                     monster.MonsterData.SetStats((int)_gameConfigurationHandler.GetNewMonsterDifficulty());
                     _monsters.Add(monster);
                 }
