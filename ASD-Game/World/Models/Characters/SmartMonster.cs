@@ -2,6 +2,7 @@
 using System.Numerics;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
+using ASD_Game.World.Services;
 
 namespace ASD_Game.World.Models.Characters
 {
@@ -9,8 +10,8 @@ namespace ASD_Game.World.Models.Characters
     public class SmartMonster : Monster
     {
         public MonsterData CreatureData;
-        private DataGatheringService _dataGatheringService;
-        public SmartCreatureActions Smartactions;
+        public DataGatheringService _dataGatheringService { get; set; }
+        public SmartCreatureActions Smartactions { get; set; }
 
         public Vector2 Destination { get; set; }
         public string MoveType { get; set; }
@@ -37,25 +38,29 @@ namespace ASD_Game.World.Models.Characters
         public float CurrDistanceToPlayer;
         public float CurrDistanceToMonster;
 
-        public SmartMonster(string name, int xPosition, int yPosition, string symbol, string id, DataGatheringService dataGatheringService) : base(name, xPosition, yPosition, symbol, id)
+        public SmartMonster(string name, int xPosition, int yPosition, string symbol, string id) : base(name, xPosition, yPosition, symbol, id)
         {
-            CreatureData = CreateMonsterData(0);
-            _dataGatheringService = dataGatheringService;
-            Smartactions = new SmartCreatureActions(this, dataGatheringService);
+            CreatureData = CreateMonsterData(1);
+            _dataGatheringService = null;
+            Smartactions = null;
+            Destination = new Vector2(xPosition, yPosition);
         }
 
         public void Update()
         {
-            _dataGatheringService.CheckNewPosition(this);
-            if (Health <= 0)
+            if (_dataGatheringService != null)
             {
-                Dead = true;
-            }
-            if (!Dead)
-            {
-                LifeSpan++;
-                Look();
-                Think();
+                _dataGatheringService.CheckNewPosition(this);
+                if (Health <= 0)
+                {
+                    Dead = true;
+                }
+                if (!Dead)
+                {
+                    LifeSpan++;
+                    Look();
+                    Think();
+                }
             }
         }
 
@@ -66,11 +71,10 @@ namespace ASD_Game.World.Models.Characters
             Vision[2] = CreatureData.Damage;
             Vision[3] = (float)CreatureData.Health;
             _dataGatheringService.ScanMap(this, CreatureData.VisionRange);
-            Vision[4] = _dataGatheringService.DistanceToClosestPlayer;
-            Vision[5] = _dataGatheringService.DistanceToClosestMonster;
 
             if (_dataGatheringService.ClosestPlayer == null)
             {
+                Vision[4] = 9999;
                 Vision[6] = 0;
                 Vision[7] = 0;
                 Vision[8] = 0;
@@ -78,6 +82,7 @@ namespace ASD_Game.World.Models.Characters
             }
             else
             {
+                Vision[4] = _dataGatheringService.DistanceToClosestPlayer;
                 Vision[6] = (float)_dataGatheringService.ClosestPlayer.Health;
                 Vision[7] = 10;//TODO _dataGatheringService.closestPlayer.Damage;
                 Vision[8] = _dataGatheringService.ClosestPlayer.XPosition;
@@ -85,6 +90,7 @@ namespace ASD_Game.World.Models.Characters
             }
             if (_dataGatheringService.ClosestMonster == null)
             {
+                Vision[5] = 9999;
                 Vision[10] = 0;
                 Vision[11] = 0;
                 Vision[12] = 0;
@@ -92,6 +98,7 @@ namespace ASD_Game.World.Models.Characters
             }
             else
             {
+                Vision[5] = _dataGatheringService.DistanceToClosestMonster;
                 Vision[10] = (float)_dataGatheringService.ClosestMonster.Health;
                 Vision[11] = 10;//TODO _dataGatheringService.closestMonster.Damage;
                 Vision[12] = _dataGatheringService.ClosestMonster.XPosition;
@@ -136,22 +143,6 @@ namespace ASD_Game.World.Models.Characters
                     break;
 
                 case 3:
-                    Smartactions.WalkUp(this);
-                    break;
-
-                case 4:
-                    Smartactions.WalkDown(this);
-                    break;
-
-                case 5:
-                    Smartactions.WalkLeft(this);
-                    break;
-
-                case 6:
-                    Smartactions.WalkRight(this);
-                    break;
-
-                case 7:
                     Smartactions.RunToPlayer(_dataGatheringService.ClosestPlayer, this);
                     break;
             }

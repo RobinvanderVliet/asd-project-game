@@ -19,9 +19,9 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
         private Vector2 _startPos = new Vector2(6, 6);
         private Vector2 _pathingOffset;
 
-        public SmartCreatureActions(SmartMonster smartMonster, DataGatheringService dataGatheringService)
+        public SmartCreatureActions(SmartMonster smartMonster)
         {
-            _dataGatheringService = dataGatheringService;
+            _dataGatheringService = smartMonster._dataGatheringService;
             _pathfinder = new PathFinder(_dataGatheringService.TranslateCharacterMap(smartMonster));
         }
 
@@ -56,8 +56,11 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
                 Path = _pathfinder.FindPath(_startPos, destination);
                 if (Path != null)
                 {
-                    smartMonster.MoveType = "Move";
-                    smartMonster.Destination = TransformPath(Path.Pop().Position);
+                    if (Path.Count != 0)
+                    {
+                        smartMonster.MoveType = "Move";
+                        smartMonster.Destination = TransformPath(Path.Peek().Position);
+                    }
                 }
             }
         }
@@ -71,7 +74,11 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
                 Path = _pathfinder.FindPath(_startPos, destination);
                 if (Path != null)
                 {
-                    smartMonster.Destination = TransformPath(Path.Pop().Position);
+                    if (Path.Count != 0)
+                    {
+                        smartMonster.MoveType = "Move";
+                        smartMonster.Destination = TransformPath(Path.Peek().Position);
+                    }
                 }
             }
         }
@@ -85,8 +92,11 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
                 Path = _pathfinder.FindPath(_startPos, destination);
                 if (Path != null)
                 {
-                    smartMonster.MoveType = "Move";
-                    smartMonster.Destination = TransformPath(Path.Pop().Position);
+                    if (Path.Count != 0)
+                    {
+                        smartMonster.MoveType = "Move";
+                        smartMonster.Destination = TransformPath(Path.Peek().Position);
+                    }
                 }
             }
         }
@@ -100,8 +110,11 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
                 Path = _pathfinder.FindPath(_startPos, destination);
                 if (Path != null)
                 {
-                    smartMonster.MoveType = "Move";
-                    smartMonster.Destination = TransformPath(Path.Pop().Position);
+                    if (Path.Count != 0)
+                    {
+                        smartMonster.MoveType = "Move";
+                        smartMonster.Destination = TransformPath(Path.Peek().Position);
+                    }
                 }
             }
         }
@@ -116,6 +129,10 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
                 {
                     smartMonster.MoveType = "Attack";
                     smartMonster.Destination = PPos;
+                    if (smartMonster.MonsterData.Damage >= _dataGatheringService.ClosestPlayer.Health || smartMonster.MonsterData.Damage >= _dataGatheringService.ClosestMonster.Health)
+                    {
+                        LevelUp(smartMonster);
+                    }
                 }
             }
         }
@@ -150,7 +167,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
                 ViewPointCalculator(smartMonster.CreatureData.Position);
                 Vector2 MPos = new Vector2(monster.XPosition - _pathingOffset.X, monster.YPosition - _pathingOffset.Y);
                 Path = _pathfinder.FindPath(_startPos, MPos);
-                if (Path != null)
+                if (Path != null && Path.Count != 0)
                 {
                     smartMonster.MoveType = "Move";
                     smartMonster.Destination = TransformPath(Path.Pop().Position);
@@ -162,9 +179,20 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
         {
             if (player != null)
             {
-                Vector2 playerPos = new Vector2(player.XPosition, player.YPosition);
-                Path = _pathfinder.FindPath(smartMonster.CreatureData.Position, playerPos);
-                smartMonster.CreatureData.Position = Path.Pop().Position;
+                if (smartMonster._dataGatheringService.DistanceToClosestPlayer > 1)
+                {
+                    ViewPointCalculator(smartMonster.CreatureData.Position);
+                    Vector2 playerPos = new Vector2(player.XPosition - _pathingOffset.X, player.YPosition - _pathingOffset.Y);
+                    Path = _pathfinder.FindPath(_startPos, playerPos);
+                    if (Path != null && Path.Count != 0)
+                    {
+                        smartMonster.CreatureData.Position = TransformPath(Path.Pop().Position);
+                    }
+                }
+                else
+                {
+                    Attack(player, smartMonster);
+                }
             }
         }
 
