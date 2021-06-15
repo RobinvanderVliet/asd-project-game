@@ -164,6 +164,14 @@ namespace ASD_Game.World.Services
                     {
                         smartMonster.Brain = genome;
                     }
+                    else if (monster is Monster monst)
+                    {
+                        if (!monst.MonsterStateMachine.WasStarted())
+                        {
+                            monst.MonsterData.WorldService = this;
+                            monst.MonsterStateMachine.StartStateMachine();
+                        }
+                    }
                 }
             }
         }
