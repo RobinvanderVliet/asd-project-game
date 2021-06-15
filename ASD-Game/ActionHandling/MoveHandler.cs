@@ -313,8 +313,8 @@ namespace ASD_Game.ActionHandling
                         }
                     }
                 }
+                SendMoveDTO(moveDTOs);
             }
-            SendMoveDTO(moveDTOs);
         }
 
         private void GetAIMoves()
