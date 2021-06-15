@@ -116,11 +116,11 @@ namespace ASD_Game.InputHandling
                 return;
             }
 
-            var inputParts = input.Trim().Split(" ");
+            var inputParts = input.Split(" ");
 
             if (inputParts.Length != 2)
             {
-                sessionScreen.UpdateInputMessage("Provide both a session number and a username (example: 1 Gerrit)");
+                sessionScreen.UpdateInputMessage("Provide both a session number and username (example: 1 Gerrit)");
             }
             else
             {
@@ -132,10 +132,6 @@ namespace ASD_Game.InputHandling
                 if (sessionId.IsNullOrEmpty())
                 {
                     sessionScreen.UpdateInputMessage("Not a valid session, try again!");
-                }
-                else if (username.Trim() == "")
-                {
-                    sessionScreen.UpdateInputMessage("Not a valid username, try again!");
                 }
                 else
                 {
