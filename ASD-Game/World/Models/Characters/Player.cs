@@ -26,7 +26,7 @@ namespace ASD_Game.World.Models.Characters
             Stamina = STAMINA_MAX;
             Health = HEALTH_MAX;
             Inventory = new();
-            RadiationLevel = RADIATION_LEVEL_MIN;
+            RadiationLevel = 25;
             Team = 0;
         }
 
