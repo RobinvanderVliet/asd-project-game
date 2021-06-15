@@ -134,31 +134,29 @@ namespace ASD_Game.ActionHandling
 
                     return new HandlerResponseDTO(SendAction.ReturnToSender, "You do not have enough stamina to move!");
                 }
-                else
+                
+                string resultMessage = null;
+                moveDTO.Stamina = playerStamina - staminaCost;
+                //allTiles.Count-1 because the maximum count movableTiles always has 1 less tile, since it doesn't contain the first tile
+                if (movableTiles.Count < allTiles.Count - 1)
                 {
-                    string resultMessage = null;
-                    moveDTO.Stamina = playerStamina - staminaCost;
-                    //allTiles.Count-1 because the maximum count movableTiles always has 1 less tile, since it doesn't contain the first tile
-                    if (movableTiles.Count < allTiles.Count - 1)
+                    moveDTO = ChangeMoveDTOToNewLocation(moveDTO, movableTiles, player);
+                    resultMessage = "You could not move to the next tile.";
+
+                    if (moveDTO.UserId == _clientController.GetOriginId())
                     {
-                        moveDTO = ChangeMoveDTOToNewLocation(moveDTO, movableTiles, player);
-                        resultMessage = "You could not move to the next tile.";
-
-                        if (moveDTO.UserId == _clientController.GetOriginId())
-                        {
-                            _messageService.AddMessage(resultMessage);
-                        }
+                        _messageService.AddMessage(resultMessage);
                     }
-
-                    ChangePlayerPosition(moveDTO);
-
-                    if (handleInDatabase)
-                    {
-                        InsertToDatabase(moveDTO);
-                    }
-
-                    return new HandlerResponseDTO(SendAction.SendToClients, resultMessage);
                 }
+
+                ChangePlayerPosition(moveDTO);
+
+                if (handleInDatabase)
+                {
+                    InsertToDatabase(moveDTO);
+                }
+
+                return new HandlerResponseDTO(SendAction.SendToClients, resultMessage);
             }
             _AIMoves.Add(moveDTO);
             return new HandlerResponseDTO(SendAction.SendToClients, null);
