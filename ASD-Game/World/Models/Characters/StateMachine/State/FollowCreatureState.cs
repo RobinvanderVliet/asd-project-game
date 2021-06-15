@@ -24,7 +24,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
 
             foreach (var builderInfo in _builderInfoList)
             {
-                if (builderInfo.Action == "follow")
                 {
                     if (_builderConfiguration.GetGuard(_characterData, _target, builderInfo))
                     {

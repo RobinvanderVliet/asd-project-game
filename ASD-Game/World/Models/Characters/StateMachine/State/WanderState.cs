@@ -16,7 +16,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
         public override void Do()
         {
             DoWorldCheck();
-            Console.WriteLine("In wander");
 
             var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
             var _builderConfiguration = _characterData.BuilderConfigurator;

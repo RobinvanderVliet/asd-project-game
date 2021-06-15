@@ -11,14 +11,11 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
 
         public FleeFromCreatureState(ICharacterData characterData, ICharacterStateMachine characterStateMachine) : base(characterData, characterStateMachine)
         {
-            
         }
 
         public override void Do()
         {
             DoWorldCheck();
-            
-            Console.WriteLine("In flee");
 
             var _builderInfoList = _characterData.BuilderConfigurator.GetBuilderInfoList();
             var _builderConfiguration = _characterData.BuilderConfigurator;
@@ -34,7 +31,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                 }
             }
         }
-        
+
         private void MoveRandomDirection()
         {
             var x = 0;

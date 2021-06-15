@@ -20,6 +20,7 @@ namespace ASD_Game.World
             else
             {
                 Monster monster = new Monster("George Clooney", x, y, CharacterSymbol.ZOMBIE, id);
+                monster.MonsterData.CharacterId = id;
                 return monster;
             }
         }
