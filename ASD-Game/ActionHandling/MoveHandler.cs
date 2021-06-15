@@ -25,7 +25,7 @@ namespace ASD_Game.ActionHandling
         private readonly IDatabaseService<PlayerPOCO> _playerDatabaseService;
         private readonly IMessageService _messageService;
         private Timer AIUpdateTimer;
-        private int _updateTime = 4000; // Smartmonster timer
+        private int _updateTime = 10000; // Smartmonster timer
 
         private List<MoveDTO> _AIMoves = new List<MoveDTO>();
 
@@ -36,7 +36,6 @@ namespace ASD_Game.ActionHandling
             _worldService = worldService;
             _playerDatabaseService = playerDatabaseService;
             _messageService = messageService;
-            CheckAITimer();
         }
 
         public void SendMove(string directionValue, int stepsValue)
@@ -84,6 +83,7 @@ namespace ASD_Game.ActionHandling
         private void SendMoveDTO(MoveDTO moveDTO)
         {
             var payload = JsonConvert.SerializeObject(moveDTO);
+            // _messageService.AddMessage(payload);
             _clientController.SendPayload(payload, PacketType.Move);
         }
 
@@ -91,7 +91,16 @@ namespace ASD_Game.ActionHandling
         {
             var moveDTO = JsonConvert.DeserializeObject<MoveDTO>(packet.Payload);
             bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
-            if (packet.Header.Target == "host" || packet.Header.Target == "client")
+            
+            _messageService.AddMessage(moveDTO.UserId);
+            // _messageService.AddMessage(moveDTO.XPosition.ToString());
+            // _messageService.AddMessage(moveDTO.YPosition.ToString());
+            
+            if (moveDTO.UserId.StartsWith("monst"))
+            {
+                Change1AIPosition(moveDTO);
+            } 
+            else if (packet.Header.Target == "host" || packet.Header.Target == "client")
             {
                 return HandleMove(moveDTO, handleInDatabase);
             }
@@ -107,7 +116,6 @@ namespace ASD_Game.ActionHandling
             if (_worldService.GetPlayer(moveDTO.UserId) != null)
             {
                 var player = _worldService.GetPlayer(moveDTO.UserId);
-
                 var newPosPlayerX = moveDTO.XPosition;
                 var newPosPlayerY = moveDTO.YPosition;
                 var oldPosPlayerX = player.XPosition;
@@ -201,11 +209,27 @@ namespace ASD_Game.ActionHandling
             foreach (MoveDTO move in _AIMoves)
             {
                 var character = _worldService.GetAI(move.UserId);
+                // Console.WriteLine("----------------------Daadwerkelijk-------------------------");
                 if (character != null)
                 {
                     character.XPosition = move.XPosition;
                     character.YPosition = move.YPosition;
+                    // Console.WriteLine(character.Id);
+                    // Console.WriteLine(character.XPosition);
+                    // Console.WriteLine(character.YPosition);
                 }
+                // Console.WriteLine("-----------------------------------------------------------");
+            }
+            _worldService.DisplayWorld();
+        }
+
+        private void Change1AIPosition(MoveDTO moveDTO)
+        {
+            var character = _worldService.GetAI(moveDTO.UserId);
+            if (character != null)
+            {
+                character.XPosition = moveDTO.XPosition;
+                character.YPosition = moveDTO.YPosition;
             }
             _worldService.DisplayWorld();
         }
@@ -292,7 +316,7 @@ namespace ASD_Game.ActionHandling
             return movableTiles;
         }
 
-        public void MoveAIs(List<Character> creatureMoves)
+        private void MoveAIs(List<Character> creatureMoves)
         {
             List<MoveDTO> moveDTOs = new List<MoveDTO>();
             List<Character> _creatureMoves = creatureMoves;
@@ -309,24 +333,31 @@ namespace ASD_Game.ActionHandling
                         }
                     }
                 }
+                // Console.WriteLine("------------------------Verplaatse mensen-------------------------");
                 foreach (MoveDTO move in moveDTOs)
                 {
                     SendMoveDTO(move);
+                    
+                    // _messageService.AddMessage(move.UserId);
+                    // Console.WriteLine(move.UserId);
+                    // Console.WriteLine(move.XPosition);
+                    // Console.WriteLine(move.YPosition);
                 }
+                // Console.WriteLine("------------------------------------------------------------------");
             }
         }
 
-        public void GetAIMoves()
+        private void GetAIMoves()
         {
             MoveAIs(_worldService.GetCreatureMoves("Move"));
-            if (_AIMoves.Count > 0)
-            {
-                ChangeAIPosition(_AIMoves);
-            }
+            // if (_AIMoves.Count > 0)
+            // {
+            //     ChangeAIPosition(_AIMoves);
+            // }
         }
 
         [ExcludeFromCodeCoverage]
-        private void CheckAITimer()
+        public void CheckAITimer()
         {
             AIUpdateTimer = new Timer(_updateTime);
             AIUpdateTimer.AutoReset = true;
