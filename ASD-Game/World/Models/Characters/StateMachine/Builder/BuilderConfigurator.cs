@@ -79,7 +79,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Builder
 
         private CharacterEvent.Event GetEvent(RuleSet rule, string state)
         {
-            if ((rule.Comparable == "monster" || rule.Comparable == "agent") && (rule.Threshold == "monster" || rule.Threshold == "agent"))
+            if ((rule.Comparable == "monster" || rule.Comparable == "agent") && (rule.Threshold == "monster" || rule.Threshold == "agent" || rule.Threshold == "player"))
             {
                 if (rule.Comparison == "sees")
                 {
@@ -106,7 +106,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine.Builder
                     return CharacterEvent.Event.LOST_CREATURE;
                 }
             }
-            else if ((rule.Comparable == "monster" || rule.Comparable == "agent") && rule.Threshold == "item")
+            else if (rule.Comparable == "agent" && rule.Threshold == "item")
             {
                 if (rule.Comparison == "finds")
                 {
