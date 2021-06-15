@@ -25,7 +25,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
             ICharacterData targetData = _target;
 
             dataGatheringService.ViewPointCalculator(new Vector2(character.XPosition, character.YPosition));
-
+            
             Vector2 MPos = new Vector2(targetData.Position.X - dataGatheringService._pathingOffset.X,
                 targetData.Position.Y - dataGatheringService._pathingOffset.Y);
 

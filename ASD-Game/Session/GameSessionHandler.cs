@@ -1,3 +1,4 @@
+using System;
 using Agent.Services;
 using Newtonsoft.Json;
 using Session.DTO;
@@ -16,6 +17,10 @@ using ASD_Game.UserInterface;
 using ASD_Game.World.Services;
 using System.Timers;
 using ASD_Game.Items.Services;
+using Newtonsoft.Json;
+using System.Timers;
+using ASD_Game.Items.Services;
+using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters.StateMachine;
 using ASD_Game.World.Models.Characters;
 using ActionHandling;
@@ -86,7 +91,7 @@ namespace ASD_Game.Session
         }
 
         public void SendAgentConfiguration()
-        { 
+        {
             _configurationService.CreateConfiguration("agent");
             var configuration = _configurationService.Configuration;
             var agentConfigurationDto = new AgentConfigurationDTO(SessionType.SendAgentConfiguration)
@@ -98,7 +103,7 @@ namespace ASD_Game.Session
             var payload = JsonConvert.SerializeObject(agentConfigurationDto);
             _clientController.SendPayload(payload, PacketType.Agent);
         }
-        
+
         public void SendGameSession()
         {
             StartGameDTO startGameDTO = new StartGameDTO();
@@ -193,7 +198,7 @@ namespace ASD_Game.Session
         {
             return PlayerSpawner.SpawnPlayers(_sessionHandler.GetAllClients(), _sessionHandler.GetSessionSeed(), _worldService, _clientController);
         }
-        
+
         private void CheckAITimer()
         {
             AIUpdateTimer = new Timer(_brainUpdateTime);

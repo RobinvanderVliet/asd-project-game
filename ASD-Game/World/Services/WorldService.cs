@@ -11,7 +11,6 @@ using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
 using ASD_Game.World.Models.Interfaces;
 
-
 namespace ASD_Game.World.Services
 {
     public class WorldService : IWorldService
@@ -99,7 +98,7 @@ namespace ASD_Game.World.Services
         {
             var monsters = GetMonsters();
             var players = GetAllPlayers();
-            
+
             foreach (var player in players)
             {
                 if (Vector2.Distance(new Vector2(currentCharacter.XPosition, currentCharacter.YPosition), new Vector2(player.XPosition, player.YPosition)) <= distance
@@ -108,7 +107,7 @@ namespace ASD_Game.World.Services
                     return player;
                 }
             }
-            
+
             foreach (var monster in monsters)
             {
                 if (Vector2.Distance(new Vector2(currentCharacter.XPosition, currentCharacter.YPosition), new Vector2(monster.XPosition, monster.YPosition)) <= distance
@@ -117,7 +116,7 @@ namespace ASD_Game.World.Services
                     return monster;
                 }
             }
-            
+
             return null;
         }
 
@@ -166,6 +165,11 @@ namespace ASD_Game.World.Services
                 {
                     smartMonster._dataGatheringService = new DataGatheringService(this);
                     setup.Add((SmartMonster)monster);
+                }
+                else if (monster is Monster monst)
+                {
+                    monst.MonsterData.WorldService = this;
+                    monst.MonsterStateMachine.StartStateMachine();
                 }
             }
             SetAIActions(setup);

@@ -308,6 +308,14 @@ namespace ASD_Game.ActionHandling
                             moveDTOs.Add(moveDTO);
                         }
                     }
+                    else
+                    {
+                        if (move is Monster monster)
+                        {
+                            MoveDTO moveDTO = new(monster.Id, (int)monster.Destination.X, (int)monster.Destination.Y);
+                            moveDTOs.Add(moveDTO);
+                        }
+                    }
                 }
                 foreach (MoveDTO move in moveDTOs)
                 {

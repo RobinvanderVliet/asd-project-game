@@ -106,7 +106,7 @@ namespace ASD_Game.World
                 var id = "monst" + x + "!" + y;
                 if (!_monsters.Exists(monster => monster.Id == id))
                 {
-                    _monsters.Add(_enemySpawner.spawnMonster(x, y, id, 1));
+                    _monsters.Add(_enemySpawner.spawnMonster(x, y, id, 10));
                 }
             }
         }
