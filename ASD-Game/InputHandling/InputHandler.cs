@@ -143,7 +143,6 @@ namespace ASD_Game.InputHandling
                     }
                     else
                     {
-                        _screenHandler.TransitionTo(new LobbyScreen());
                         _sessionHandler.JoinSession(sessionId, inputParts[1].Replace("\"", ""));
                     }
                 }

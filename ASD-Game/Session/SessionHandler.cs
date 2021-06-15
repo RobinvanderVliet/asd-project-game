@@ -17,6 +17,7 @@ using ASD_Game.UserInterface;
 using ASD_Game.World;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 using Newtonsoft.Json;
+using WebSocketSharp;
 using Timer = System.Timers.Timer;
 
 namespace ASD_Game.Session
@@ -203,10 +204,19 @@ namespace ASD_Game.Session
 
             if (packet.Header.SessionID == _session?.SessionId)
             {
+                if (packet.Header.Target.Equals(_clientController.GetOriginId()))
+                {
+                    if (packet.HandlerResponse.ResultMessage.Equals("Not allowed to join this session"))
+                    {
+                        return KickFromSession(packet);
+                    }
+                }
+                
                 if (packet.Header.Target == "client" || packet.Header.Target == "host")
                 {
                     if (sessionDTO.SessionType == SessionType.RequestToJoinSession)
                     {
+                        // _screenHandler.TransitionTo(new LobbyScreen());
                         return AddPlayerToSession(packet);
                     }
 
@@ -257,6 +267,14 @@ namespace ASD_Game.Session
                 }
             }
 
+            return new HandlerResponseDTO(SendAction.Ignore, null);
+        }
+
+        private HandlerResponseDTO KickFromSession(PacketDTO packet)
+        {
+            _clientController.SetSessionId(String.Empty);
+            var screen = _screenHandler.Screen as SessionScreen;
+            screen.UpdateInputMessage(packet.HandlerResponse.ResultMessage);
             return new HandlerResponseDTO(SendAction.Ignore, null);
         }
 
@@ -521,7 +539,7 @@ namespace ASD_Game.Session
         public HandlerResponseDTO AddPlayerToSession(PacketDTO packet)
         {
             SessionDTO sessionDTO = JsonConvert.DeserializeObject<SessionDTO>(packet.Payload);
-
+            
             if (packet.Header.Target == "host")
             {
                 if (_session.GameStarted || _session.SavedGame)
@@ -531,13 +549,9 @@ namespace ASD_Game.Session
                         return new HandlerResponseDTO(SendAction.ReturnToSender,
                             "Not allowed to join this session");
                     }
-
-                    if (_session.GameStarted)
-                    {
-                        // Naar game screen en deze functie afkappen
-                        return new HandlerResponseDTO(SendAction.Ignore, null);
-                    }
                 }
+                
+                _screenHandler.TransitionTo(new LobbyScreen());
                 
                 if (_screenHandler.Screen is LobbyScreen screen)
                 {
