@@ -219,10 +219,12 @@ namespace ASD_Game.InputHandling
                 {
                     _screenHandler.ConsoleHelper.ClearConsole();
                     editorScreen.UpdateLastQuestion(questions.HelpCombat);
+                    _screenHandler.ConsoleHelper.ReadLine();
                 } else if(input.Equals("help explore"))
                 {
                     _screenHandler.ConsoleHelper.ClearConsole();
                     editorScreen.UpdateLastQuestion(questions.HelpExplore);
+                    _screenHandler.ConsoleHelper.ReadLine();
                 } else if (questions.EditorAnswers.ElementAt(i).Contains(input))
                 {
                     answers[i] = answers[i] + input;

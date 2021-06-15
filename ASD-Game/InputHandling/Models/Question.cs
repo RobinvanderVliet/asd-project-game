@@ -16,8 +16,8 @@ namespace InputCommandHandler.Models
         private readonly string[] COMBAT_ANSWERS = {"offensive", "defensive"};
         private readonly string[] EXTEND_ANSWERS = {"yes", "no"};
 
-        public readonly string HelpCombat = "offensive = , defensive =";
-        public readonly string HelpExplore = "random = ,  target player = , target objective =";
+        public readonly string HelpCombat = "offensive = , defensive = , press enter to continue!";
+        public readonly string HelpExplore = "random = ,  target player = , target objective = , press enter to continue!";
 
         private List<string> _editorQuestions;
         private List<string[]> _editorAnswers;
