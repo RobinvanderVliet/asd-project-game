@@ -111,11 +111,11 @@ namespace ASD_Game.InputHandling
                 return;
             }
 
-            var inputParts = input.Split(" ");
+            var inputParts = input.Trim().Split(" ");
 
             if (inputParts.Length != 2)
             {
-                sessionScreen.UpdateInputMessage("Provide both a session number and username (example: 1 Gerrit)");
+                sessionScreen.UpdateInputMessage("Provide both a session number and a username (example: 1 Gerrit)");
             }
             else
             {
@@ -225,7 +225,7 @@ namespace ASD_Game.InputHandling
                 }
                 else
                 {
-                    editorScreen.PrintWarning("Please fill in an valid answer");
+                    editorScreen.PrintWarning("Please fill in a valid answer");
                 }
             }
 
