@@ -18,7 +18,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
         public override void Do()
         {
             DoWorldCheck();
-            Console.Write("In following");
             DataGatheringService dataGatheringService = new(_characterData.WorldService);
             Character character = _characterData.WorldService.GetCharacter(_characterData.CharacterId);
             PathFinder pathFinder = new PathFinder(dataGatheringService.TranslateCharacterMap(character));
@@ -39,10 +38,24 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                 Vector2 destination = dataGatheringService.TransformPath(newPath.Pop().Position);
                 float newPositionX = destination.X;
                 float newPositionY = destination.Y;
-                _characterData.MoveHandler.SendAIMove(_characterData.CharacterId,
-                    Convert.ToInt32(newPositionX),
-                    Convert.ToInt32(newPositionY)
-                );
+                
+                if (_characterData is MonsterData)
+                {
+                    _characterData.MoveType = "Move";
+                    _characterData.Destination = new Vector2(
+                        newPositionX,
+                        newPositionY
+                    );
+                }
+                else
+                {
+                    _characterData.MoveHandler.SendAIMove(_characterData.CharacterId,
+                        Convert.ToInt32(newPositionX),
+                        Convert.ToInt32(newPositionY)
+                    );
+                }
+                
+
             }
         }
     }

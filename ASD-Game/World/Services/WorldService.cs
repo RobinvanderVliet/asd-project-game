@@ -107,7 +107,10 @@ namespace ASD_Game.World.Services
                 if (Vector2.Distance(new Vector2(currentCharacter.XPosition, currentCharacter.YPosition), new Vector2(player.XPosition, player.YPosition)) <= distance
                     && player.Id != currentCharacter.Id)
                 {
-                    return player;
+                    if (player.Health > 0)
+                    {
+                        return player;
+                    }
                 }
             }
 

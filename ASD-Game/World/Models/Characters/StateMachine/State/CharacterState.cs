@@ -30,8 +30,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
             Character visionRangeTarget = _characterData.WorldService.GetCharacterInClosestRangeToCurrentCharacter(_characterData.WorldService.GetCharacter(_characterData.CharacterId), VISION_RANGE);
             if (visionRangeTarget != null)
             {
-          
-                // TODO: make this player instead of agent
                 if (visionRangeTarget is Player && !ThresholdExists("player"))
                 {
                     _characterStateMachine.FireEvent(CharacterEvent.Event.LOST_CREATURE);
