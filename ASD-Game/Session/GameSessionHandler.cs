@@ -17,10 +17,6 @@ using ASD_Game.UserInterface;
 using ASD_Game.World.Services;
 using System.Timers;
 using ASD_Game.Items.Services;
-using Newtonsoft.Json;
-using System.Timers;
-using ASD_Game.Items.Services;
-using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters.StateMachine;
 using ASD_Game.World.Models.Characters;
 using ActionHandling;
@@ -86,6 +82,7 @@ namespace ASD_Game.Session
             _moveHandler = moveHandler;
             _attackHandler = attackHandler;
             _itemService = itemService;
+            _moveHandler = moveHandler;
             CheckAITimer();
             UpdateBrain();
         }
@@ -132,7 +129,7 @@ namespace ASD_Game.Session
             _screenHandler.TransitionTo(new GameScreen());
 
             _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
-            
+
             _gameConfigurationHandler.ItemService = _worldService.ItemService;
             _itemService.ChanceForItemOnTile = (int)_gameConfigurationHandler.GetItemSpawnRate();
 
@@ -149,6 +146,13 @@ namespace ASD_Game.Session
 
             _worldService.SetAILogic();
 
+            if (_worldService.GetPlayer(_clientController.GetOriginId()).Name.Equals("Danny"))
+            {
+                _worldService.GetPlayer(_clientController.GetOriginId()).Inventory.Weapon = ItemFactory.GetKatana();
+                _worldService.GetPlayer(_clientController.GetOriginId()).Inventory.Armor = ItemFactory.GetTacticalVest();
+                _worldService.GetPlayer(_clientController.GetOriginId()).Inventory.Armor = ItemFactory.GetGasMask();
+            }
+
             _worldService.DisplayWorld();
             _worldService.DisplayStats();
             _messageService.DisplayMessages();
@@ -158,6 +162,11 @@ namespace ASD_Game.Session
                 InsertConfigurationIntoDatabase();
                 InsertGameIntoDatabase();
                 InsertPlayersIntoDatabase();
+            }
+
+            if (_clientController.IsHost())
+            {
+                _moveHandler.CheckAITimer();
             }
 
             return new HandlerResponseDTO(SendAction.SendToClients, null);

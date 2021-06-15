@@ -344,5 +344,11 @@ namespace ASD_Game.World.Services
                 gameEnded = true;
             }
         }
+
+        public Character GetCharacterOnTile(int x, int y)
+        {
+            var characters = GetAllCharacters();
+            return characters.Find(character => character.XPosition == x && character.YPosition == y);
+        }
     }
 }

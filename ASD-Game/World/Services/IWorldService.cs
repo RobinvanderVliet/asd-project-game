@@ -31,6 +31,7 @@ namespace ASD_Game.World.Services
         public bool IsDead(Player player);
 
         public IList<Item> GetItemsOnCurrentTile(Player player);
+
         public IList<Item> GetItemsOnCurrentTileWithPlayerId(string playerId);
 
         public IList<Item> GetItemsOnCurrentTile();
@@ -41,8 +42,12 @@ namespace ASD_Game.World.Services
 
         public List<Character> GetAllCharacters();
 
-        public Character GetCharacterInClosestRangeToCurrentCharacter(Character currentCharacter, int distance);
         public Character GetCharacter(string id);
+
+        public Character GetCharacterOnTile(int x, int y);
+
+        public Character GetCharacterInClosestRangeToCurrentCharacter(Character currentCharacter, int distance);
+
         public void UpdateBrains(Genome genome);
 
         public char[,] GetMapAroundCharacter(Character character);
@@ -64,7 +69,7 @@ namespace ASD_Game.World.Services
         public Character GetAI(string id);
 
         public IWorld GetWorld();
-        
+
         public int GetViewDistance();
 
         public void SetAILogic();

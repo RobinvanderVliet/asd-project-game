@@ -111,7 +111,10 @@ namespace ASD_Game.InputHandling.Antlr.Transformer
                         break;
                     case Inspect:
                         TransformInspect((Inspect)nodeBody[i]);
-                        break;    
+                        break;
+                    case Look:
+                        TransformLook((Look)nodeBody[i]);
+                        break;
                     case Use:
                         TransformUse((Use)nodeBody[i]);
                         break;
@@ -282,6 +285,11 @@ namespace ASD_Game.InputHandling.Antlr.Transformer
             {
                 throw new SlotException($"The slot you provided {slot} is not valid.");
             }
+        }
+        
+        private void TransformLook(Look look)
+        {
+            _moveHandler.SearchNearestPlayer();
         }
 
         private void TransformSearch()
