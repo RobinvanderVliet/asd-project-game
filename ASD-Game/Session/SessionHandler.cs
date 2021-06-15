@@ -550,7 +550,7 @@ namespace ASD_Game.Session
                             "Not allowed to join this session");
                     }
 
-                    return ActiveGameAddsPlayer(sessionDTO);
+                    ActiveGameAddsPlayer(sessionDTO);
                 }
 
                 if (_screenHandler.Screen is LobbyScreen screen)
@@ -676,7 +676,7 @@ namespace ASD_Game.Session
         //     }
         // }
 
-        private HandlerResponseDTO ActiveGameAddsPlayer(SessionDTO sessionDTO)
+        private void ActiveGameAddsPlayer(SessionDTO sessionDTO)
         {
             // check if ID matches
             var clientId = sessionDTO.Clients[0];
@@ -702,7 +702,7 @@ namespace ASD_Game.Session
 
             var jsonObject = JsonConvert.SerializeObject(startGameDto);
 
-            return new HandlerResponseDTO(SendAction.ReturnToSender, jsonObject);
+            _clientController.SendPayload(jsonObject, PacketType.GameSession);
         }
 
         public StartGameDTO HandlePlayerLocation(PlayerPOCO result)
