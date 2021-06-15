@@ -8,16 +8,15 @@ using ASD_Game.Messages;
 using System.Threading;
 using System.Diagnostics;
 
-
 namespace ASD_Game.Session
 {
     public class HeartbeatHandler : IHeartbeatHandler
     {
         private readonly IAgentHandler _agentHandler;
         private List<HeartbeatDTO> _players;
-        TimeSpan waitTime = TimeSpan.FromMilliseconds(1000);
+        private TimeSpan waitTime = TimeSpan.FromMilliseconds(10000);
 
-        private int TIMER = 1000;
+        private int TIMER = 10000;
         private Thread _checkHeartbeatThread;
         private bool _runThread;
         private IMessageService _messageService;
@@ -56,7 +55,6 @@ namespace ASD_Game.Session
                         stopwatch.Restart();
                     }
                 }
-
             })
             { Priority = ThreadPriority.Highest, IsBackground = true };
             _checkHeartbeatThread.Start();
@@ -117,7 +115,7 @@ namespace ASD_Game.Session
                 if (DateTime.Now - player.Time >= waitTime)
                 {
                     player.IsOnline = false;
-                } 
+                }
                 else if (!player.IsOnline)
                 {
                     // TODO: implement when player returns take over agent

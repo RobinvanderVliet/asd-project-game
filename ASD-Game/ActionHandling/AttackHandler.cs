@@ -342,12 +342,13 @@ namespace ASD_Game.ActionHandling
                     _messageService.AddMessage("You attacked an enemy.");
                 }
             }
-            if (creature == null)
+            else if (creature == null)
             {
                 var attackedPlayer = _worldService.GetPlayer(attackDto.AttackedPlayerGuid);
-                bool printAttackedMessage = _clientController.GetOriginId().Equals(attackedPlayer.Id);
+
                 if (attackDto.AttackedPlayerGuid != null && attackedPlayer.Health != 0)
                 {
+                    bool printAttackedMessage = _clientController.GetOriginId().Equals(attackedPlayer.Id);
                     if (printAttackedMessage)
                     {
                         _messageService.AddMessage(
