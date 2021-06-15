@@ -450,7 +450,10 @@ namespace ASD_Game.Session
                 }
                 else
                 {
-                    _screenHandler.TransitionTo(new LobbyScreen());
+                    if (_screenHandler.Screen is not GameScreen)
+                    {
+                        _screenHandler.TransitionTo(new LobbyScreen());
+                    }
                     ClientAddsPlayer(sessionDTO, packet);
                 }
             }
@@ -487,10 +490,10 @@ namespace ASD_Game.Session
 
         private void ClientAddsPlayer(SessionDTO sessionDTO, PacketDTO packet)
         {
-            SessionDTO sessionDTOClients =
-                JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
+            // SessionDTO sessionDTOClients =
+            //     JsonConvert.DeserializeObject<SessionDTO>(packet.HandlerResponse.ResultMessage);
             _session.EmptyClients();
-            _session.SessionSeed = sessionDTOClients.SessionSeed;
+            _session.SessionSeed = sessionDTO.SessionSeed;
     
             _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
             sessionDTO.Clients = new List<string[]>();
@@ -502,10 +505,10 @@ namespace ASD_Game.Session
     
             if (_screenHandler.Screen is LobbyScreen screen)
             {
-                screen.UpdateLobbyScreen(sessionDTOClients.Clients);
+                screen.UpdateLobbyScreen(sessionDTO.Clients);
             }
-            if (sessionDTOClients.Clients.Count > 0 && !_clientController.IsBackupHost &&
-                sessionDTOClients.Clients.Count <= 2)
+            if (sessionDTO.Clients.Count > 0 && !_clientController.IsBackupHost &&
+                sessionDTO.Clients.Count <= 2)
             {
                 _clientController.IsBackupHost = true;
                 PingHostTimer();
