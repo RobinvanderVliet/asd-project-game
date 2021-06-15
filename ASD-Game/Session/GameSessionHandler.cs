@@ -147,6 +147,7 @@ namespace ASD_Game.Session
                 PlayerPOCO playerPoco = new PlayerPOCO
                 {
                     PlayerGUID = player.Id,
+                    PlayerName = player.Name,
                     GameGUID = _clientController.SessionId,
                     GameGUIDAndPlayerGuid = _clientController.SessionId + player.Id,
                     XPosition = player.XPosition,

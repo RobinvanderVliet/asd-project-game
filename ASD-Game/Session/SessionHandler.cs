@@ -627,58 +627,6 @@ namespace ASD_Game.Session
             return result;
         }
 
-        // private HandlerResponseDTO HostAddsPlayer(SessionDTO sessionDTO, PacketDTO packet)
-        // {
-        //     if (_session.SavedGame || _session.GameStarted)
-        //     {
-        //         return ActiveGameAddsPlayer(sessionDTO, packet);
-        //     }
-        //     else
-        //     {
-        //         _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
-        //         sessionDTO.Clients = new List<string[]>();
-        //         sessionDTO.SessionSeed = _session.SessionSeed;
-        //
-        //         foreach (string[] client in _session.GetAllClients())
-        //         {
-        //             sessionDTO.Clients.Add(client);
-        //         }
-        //
-        //         if (_screenHandler.Screen is LobbyScreen screen)
-        //         {
-        //             screen.UpdateLobbyScreen(_session.GetAllClients());
-        //         }
-        //
-        //
-        //         return new HandlerResponseDTO(SendAction.SendToClients, JsonConvert.SerializeObject(sessionDTO));
-        //     }
-        // }
-
-        // private void ClientAddsPlayer(SessionDTO sessionDTO, PacketDTO packet)
-        // {
-        //     _session.EmptyClients();
-        //     _session.SessionSeed = sessionDTO.SessionSeed;
-        //
-        //     _session.AddClient(sessionDTO.Clients[0][0], sessionDTO.Clients[0][1]);
-        //     sessionDTO.Clients = new List<string[]>();
-        //     sessionDTO.SessionSeed = _session.SessionSeed;
-        //     foreach (string[] client in _session.GetAllClients())
-        //     {
-        //         sessionDTO.Clients.Add(client);
-        //     }
-        //
-        //     if (_screenHandler.Screen is LobbyScreen screen)
-        //     {
-        //         screen.UpdateLobbyScreen(sessionDTO.Clients);
-        //     }
-        //     if (sessionDTO.Clients.Count > 0 && !_clientController.IsBackupHost &&
-        //         sessionDTO.Clients.Count <= 2)
-        //     {
-        //         _clientController.IsBackupHost = true;
-        //         StartPingThread();
-        //     }
-        // }
-
         private void ActiveGameAddsPlayer(SessionDTO sessionDTO)
         {
             // check if ID matches
