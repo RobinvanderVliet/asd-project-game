@@ -226,7 +226,11 @@ namespace ASD_Game.World.Services
 
         public List<Player> GetAllPlayers()
         {
-            return _world.Players;
+            if (_world != null)
+            {
+                return _world.Players;
+            }
+            return null;
         }
 
         public bool IsDead(Player player)

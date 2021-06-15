@@ -15,6 +15,7 @@ using ASD_Game.Network.Enum;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Services;
 using Newtonsoft.Json;
+using World.Models.Characters;
 
 namespace ASD_Game.ActionHandling
 {

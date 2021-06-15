@@ -20,7 +20,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.Creator
             _attackHandler = attackHandler;
         }
         
-        public global::World.Models.Characters.Agent CreateAgent(Player player, List<KeyValuePair<string, string>> agentConfiguration)
+        public global::World.Models.Characters.AgentAI CreateAgent(Player player, List<KeyValuePair<string, string>> agentConfiguration)
         {
             return new(player.Name, player.XPosition, player.YPosition, player.Symbol, player.Id)
             {

@@ -47,7 +47,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                     attackDTO.XPosition = cha.XPosition;
                     attackDTO.YPosition = cha.YPosition;
                     attackDTO.Stamina = 100;
-                    attackDTO.Damage = 50;
+                    attackDTO.Damage = 20;
                     attackDTO.PlayerGuid = pl.Id;
 
                     _characterData.AttackHandler.SendAttackDTO(attackDTO);

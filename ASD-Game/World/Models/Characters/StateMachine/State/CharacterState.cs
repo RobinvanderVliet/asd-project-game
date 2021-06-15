@@ -24,10 +24,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
 
         public virtual void DoWorldCheck()
         {
-            if (_characterData.Health <= 0)
-            {
-                return;
-            }
             const int ATTACK_RANGE = 1;
             const int VISION_RANGE = 6;
 

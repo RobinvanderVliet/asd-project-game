@@ -60,7 +60,7 @@ namespace Creature.Tests.Handlers
             };
             List<AgentPOCO> playerItemPOCOs = new() {agentPoco};
             IEnumerable<AgentPOCO> enumerable = playerItemPOCOs;
-            var agent = new global::World.Models.Characters.Agent(player.Name, player.XPosition, player.YPosition,
+            var agent = new global::World.Models.Characters.AgentAI(player.Name, player.XPosition, player.YPosition,
                 player.Symbol, player.Id);
             var mockedAgentStateMachine = new Mock<ICharacterStateMachine>();
             agent.AgentStateMachine = mockedAgentStateMachine.Object;

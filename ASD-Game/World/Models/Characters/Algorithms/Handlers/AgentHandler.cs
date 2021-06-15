@@ -1,16 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Timers;
 using Agent.Services;
 using ASD_Game.DatabaseHandler.POCO;
 using ASD_Game.DatabaseHandler.Services;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
+using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.Algorithms.Creator;
 using ASD_Game.World.Services;
 using Newtonsoft.Json;
 using Session.DTO;
+using World.Models.Characters;
 
 namespace Creature
 {
@@ -21,8 +24,9 @@ namespace Creature
         private readonly IDatabaseService<AgentPOCO> _databaseService;
         private readonly IConfigurationService _configurationService;
         private readonly IAgentCreator _agentCreator;
-
-        private Dictionary<string, World.Models.Characters.Agent> _agents;
+        private Timer timer;
+        private int timerdelay = 1000;
+        private Dictionary<string, AgentAI> _agents;
         private bool _agentIsActive;
 
         public AgentHandler(IWorldService worldService, IClientController clientController,
@@ -36,7 +40,8 @@ namespace Creature
             _clientController = clientController;
             _databaseService = databaseService;
             _clientController.SubscribeToPacketType(this, PacketType.Agent);
-            _agents = new Dictionary<string, World.Models.Characters.Agent>();
+            _agents = new Dictionary<string, AgentAI>();
+            CheckAITimer();
         }
 
         public void Replace(string playerId)
@@ -139,8 +144,10 @@ namespace Creature
         {
             var agentPoco = new AgentPOCO
             {
-                PlayerGUID = configurationDto.PlayerId, AgentConfiguration = configurationDto.AgentConfiguration,
-                GameGUID = configurationDto.GameGUID, Activated = configurationDto.Activated
+                PlayerGUID = configurationDto.PlayerId,
+                AgentConfiguration = configurationDto.AgentConfiguration,
+                GameGUID = configurationDto.GameGUID,
+                Activated = configurationDto.Activated
             };
             _databaseService.CreateAsync(agentPoco);
         }
@@ -151,6 +158,50 @@ namespace Creature
             var agentPoco = allAgentsResult.First(x => x.PlayerGUID == agentConfigurationDto.PlayerId);
             agentPoco.AgentConfiguration = agentConfigurationDto.AgentConfiguration;
             _databaseService.UpdateAsync(agentPoco);
+        }
+
+        private void CheckAITimer()
+        {
+            timer = new Timer(timerdelay)
+            {
+                AutoReset = true
+            };
+            timer.Elapsed += CheckAITimerEvent;
+            timer.Start();
+        }
+
+        private void CheckAITimerEvent(object sender, ElapsedEventArgs e)
+        {
+            timer.Stop();
+            CheckAgents();
+            timer.Start();
+        }
+
+        private void CheckAgents()
+        {
+            if (FindAgent() != null)
+            {
+                FindAgent().AgentStateMachine.StopStateMachine();
+            }
+        }
+
+        private AgentAI FindAgent()
+        {
+            List<Player> players = _worldService.GetAllPlayers();
+            if (players != null)
+            {
+                foreach (Player player in players)
+                {
+                    if (player.Health <= 0)
+                    {
+                        if (_agents.ContainsKey(player.Id))
+                        {
+                            return _agents[player.Id];
+                        }
+                    }
+                }
+            }
+            return null;
         }
     }
 }

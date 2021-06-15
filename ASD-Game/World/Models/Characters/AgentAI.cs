@@ -1,14 +1,15 @@
-﻿using ASD_Game.World.Models.Characters.StateMachine;
+﻿using ASD_Game.World.Models.Characters;
+using ASD_Game.World.Models.Characters.StateMachine;
 using ASD_Game.World.Models.Characters.StateMachine.Data;
 
 namespace World.Models.Characters
 {
-    public class Agent : ASD_Game.World.Models.Characters.Character
+    public class AgentAI : Character
     {
         public ICharacterStateMachine AgentStateMachine { get; set; }
         public AgentData AgentData { get; set; }
 
-        public Agent(string name, int xPosition, int yPosition, string symbol, string id) : base(name, xPosition, yPosition, symbol, id)
+        public AgentAI(string name, int xPosition, int yPosition, string symbol, string id) : base(name, xPosition, yPosition, symbol, id)
         {
             SetStats(0);
             AgentStateMachine = new AgentStateMachine(AgentData);

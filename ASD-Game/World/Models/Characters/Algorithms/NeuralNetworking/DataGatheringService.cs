@@ -94,19 +94,22 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
         {
             List<List<Node>> translatedMap = new List<List<Node>>();
             char[,] map = _worldService.GetMapAroundCharacter(c);
-
-            for (int row = 0; row < _colCount; row++)
+            if (map != null)
             {
-                List<Node> nodePoints = new List<Node>();
-                for (int col = 0; col < _rowCount; col++)
+                for (int row = 0; row < _colCount; row++)
                 {
-                    Vector2 nodeLocation = new Vector2(row, col);
-                    Node node = TranslateCharToNode(nodeLocation, map[_colCount, _rowCount]);
-                    nodePoints.Add(node);
+                    List<Node> nodePoints = new List<Node>();
+                    for (int col = 0; col < _rowCount; col++)
+                    {
+                        Vector2 nodeLocation = new Vector2(row, col);
+                        Node node = TranslateCharToNode(nodeLocation, map[row, col]);
+                        nodePoints.Add(node);
+                    }
+                    translatedMap.Add(nodePoints);
                 }
-                translatedMap.Add(nodePoints);
+                return translatedMap;
             }
-            return translatedMap;
+            return null;
         }
 
         private Node TranslateCharToNode(Vector2 pos, char c)
@@ -135,6 +138,9 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
                     return false;
 
                 case 'Z':
+                    return false;
+
+                case 'X':
                     return false;
             }
             return true;
