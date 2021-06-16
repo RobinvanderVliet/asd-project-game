@@ -174,24 +174,9 @@ namespace ASD_Game.World.Services
 
         public Character GetCharacter(string id)
         {
-            List<Monster> monsters = GetMonsters();
-            List<Player> players = GetAllPlayers();
+            var characters = _world.GetAllCharacters();
 
-            foreach (var player in players)
-            {
-                if (player.Id == id)
-                {
-                    return player;
-                }
-            }
-            foreach (var monster in monsters)
-            {
-                if (monster.Id == id)
-                {
-                    return monster;
-                }
-            }
-            return null;
+            return characters.Find(character => character.Id == id);
         }
 
         public void UpdateBrains(Genome genome)
