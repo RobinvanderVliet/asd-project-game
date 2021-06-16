@@ -557,10 +557,10 @@ namespace ASD_Game.Session
             sessionDTO.SessionSeed = _session.SessionSeed;
             StartGameDTO startGameDto = null;
 
-            // if (GameStarted())
-            // {
+            if (GameStarted())
+            {
                 startGameDto = HandlePlayerLocation(result);
-            // }
+            }
 
             var jsonObject = JsonConvert.SerializeObject(startGameDto);
 
