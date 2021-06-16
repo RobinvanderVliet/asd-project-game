@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace ASD_Game.UserInterface
@@ -30,9 +31,9 @@ namespace ASD_Game.UserInterface
 
         public virtual void UpdateLastQuestion(string question)
         {
-            var lines = Enumerable.Range(0, (question.Length / SCREEN_WIDTH - BORDER_SIZE))
-                .Select(x => question.Substring(x * (SCREEN_WIDTH - BORDER_SIZE), SCREEN_WIDTH - BORDER_SIZE));
-            _displayedQuestions = lines.ToArray(); ;
+            var regex = new Regex(@".{1," + (SCREEN_WIDTH - BORDER_SIZE - X_VALUE).ToString() + "}");
+            var groups = regex.Matches(question).Select(m => m.Value).ToArray();
+            _displayedQuestions = groups;
             DrawScreen();
         }
 
