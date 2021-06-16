@@ -44,14 +44,31 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                 if (Vector2.Distance(plPos, chaPos) == 1)
                 {
                     AttackDTO attackDTO = new();
-                    attackDTO.XPosition = cha.XPosition;
-                    attackDTO.YPosition = cha.YPosition;
-                    attackDTO.Stamina = 100;
-                    attackDTO.Damage = 20;
+                    attackDTO.Direction = GetDirectionFromCoordinates(pl.XPosition, pl.YPosition, cha.XPosition, cha.YPosition);
                     attackDTO.PlayerGuid = pl.Id;
 
                     _characterData.AttackHandler.SendAttackDTO(attackDTO);
                 }
+            }
+        }
+
+        private string GetDirectionFromCoordinates(int originX, int originY, int destinationX, int destinationY)
+        {
+            if (originX < destinationX)
+            {
+                return "right";
+            }
+            else if (originX > destinationX)
+            {
+                return "left";
+            }
+            else if (originY < destinationY)
+            {
+                return "up";
+            }
+            else
+            {
+                return "down";
             }
         }
     }

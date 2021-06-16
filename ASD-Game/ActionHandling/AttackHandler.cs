@@ -326,22 +326,9 @@ namespace ASD_Game.ActionHandling
                         {
                             AttackDTO attackDTO = new();
                             
-                            if (smartMonster.XPosition < smartMonster.Destination.X)
-                            {
-                                attackDTO.Direction = "right";
-                            }
-                            else if (smartMonster.XPosition > smartMonster.Destination.X)
-                            {
-                                attackDTO.Direction = "left";
-                            }
-                            else if (smartMonster.YPosition < smartMonster.Destination.Y)
-                            {
-                                attackDTO.Direction = "up";
-                            }
-                            else if (smartMonster.YPosition > smartMonster.Destination.Y)
-                            {
-                                attackDTO.Direction = "down";
-                            }
+                            
+                            attackDTO.Direction = GetDirectionFromCoordinates(smartMonster.XPosition, smartMonster.YPosition, (int) smartMonster.Destination.X, (int) smartMonster.Destination.Y);
+                            
                             
                             attackDTO.PlayerGuid = smartMonster.Id;
                             attackDTOs.Add(attackDTO);
@@ -350,10 +337,7 @@ namespace ASD_Game.ActionHandling
                     if (move is Monster monster)
                     {
                         AttackDTO attackDTO = new();
-                        attackDTO.XPosition = (int)monster.Destination.X;
-                        attackDTO.YPosition = (int)monster.Destination.Y;
-                        attackDTO.Stamina = 100;
-                        attackDTO.Damage = monster.MonsterData.Damage;
+                        attackDTO.Direction = GetDirectionFromCoordinates(monster.XPosition, monster.YPosition, (int)monster.Destination.X, (int)monster.Destination.Y);
                         attackDTO.PlayerGuid = monster.Id;
                         attackDTOs.Add(attackDTO);
                     }
@@ -362,6 +346,26 @@ namespace ASD_Game.ActionHandling
                 {
                     SendAttackDTO(attack);
                 }
+            }
+        }
+
+        private string GetDirectionFromCoordinates(int originX, int originY, int destinationX, int destinationY)
+        {
+            if (originX < destinationX)
+            {
+                return "right";
+            }
+            else if (originX > destinationX)
+            {
+                return "left";
+            }
+            else if (originY < destinationY)
+            {
+                return "up";
+            }
+            else
+            {
+                return "down";
             }
         }
 
