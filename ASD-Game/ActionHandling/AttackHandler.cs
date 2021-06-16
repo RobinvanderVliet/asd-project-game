@@ -143,10 +143,11 @@ namespace ASD_Game.ActionHandling
                         {
                             _messageService.AddMessage("Your helmet has been destroyed!");
                         }
-                        
-                        DeleteHelmet(attackedPlayer, handleInDatabase);
-                        
+
                         damage -= attackedPlayer.Inventory.Helmet.ArmorProtectionPoints;
+
+                        DeleteHelmet(attackedPlayer, handleInDatabase);
+
                     }
                     else
                     {
@@ -163,9 +164,9 @@ namespace ASD_Game.ActionHandling
                             _messageService.AddMessage("Your armor has been destroyed!");
                         }
                         
-                        DeleteArmor(attackedPlayer, handleInDatabase);
-                        
                         damage -= attackedPlayer.Inventory.Armor.ArmorProtectionPoints;
+
+                        DeleteArmor(attackedPlayer, handleInDatabase);
                     }
                     else
                     {
