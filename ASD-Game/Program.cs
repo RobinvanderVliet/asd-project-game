@@ -6,6 +6,7 @@ using Agent.Mapper;
 using Agent.Services;
 using ASD_Game.ActionHandling;
 using ASD_Game.Agent.Mapper;
+using ASD_Game.Agent.Services;
 using ASD_Game.Chat;
 using ASD_Game.DatabaseHandler;
 using ASD_Game.DatabaseHandler.Repository;
@@ -26,7 +27,6 @@ using Creature;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog;
 using Session;
 
 namespace ASD_Game
@@ -38,14 +38,6 @@ namespace ASD_Game
         {
             var builder = new ConfigurationBuilder();
             BuildConfig(builder);
-            
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(builder.Build())
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .CreateLogger();
-            
-            Log.Logger.Information("Application starting");
             
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
@@ -79,7 +71,6 @@ namespace ASD_Game
                     services.AddScoped<IFileToConfigurationMapper, FileToConfigurationMapper>();
                     services.AddScoped<IGameConfigurationHandler, GameConfigurationHandler>();
                 })
-                .UseSerilog()
                 .Build();
             
             var svc = ActivatorUtilities.CreateInstance<MainGame>(host.Services);

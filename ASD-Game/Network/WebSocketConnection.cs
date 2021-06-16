@@ -2,7 +2,6 @@ using System;
 using ASD_Game.Network.DTO;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System;
 using System.IO;
 using WebSocketSharp;
 
@@ -83,7 +82,7 @@ namespace ASD_Game.Network
         {
             try
             {
-                string pathToRoot = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\.."));
+                string pathToRoot = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory));
                 var filePath = Path.Combine(pathToRoot, "appsettings.json");
                 string json = File.ReadAllText(filePath);
                 dynamic jsonObj = JsonConvert.DeserializeObject(json);

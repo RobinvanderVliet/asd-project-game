@@ -1,13 +1,12 @@
-﻿using Agent.Mapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using ASD_Game.Agent;
+using Agent.Mapper;
+using Agent.Services;
 using ASD_Game.Agent.Exceptions;
 using ASD_Game.Agent.Models;
-using Serilog;
 
-namespace Agent.Services
+namespace ASD_Game.Agent.Services
 {
     public class ConfigurationService : IConfigurationService
     {
@@ -86,7 +85,7 @@ namespace Agent.Services
             catch (FileException e)
             {
                 LastError = e.Message;
-                Log.Logger.Information("File error: " + e.Message);
+                Console.WriteLine("File error: " + e.Message);
             }
             return Pipeline.GetErrors();
         }

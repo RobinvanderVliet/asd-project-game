@@ -67,7 +67,7 @@ namespace ASD_Game.Agent
         public virtual string GetBaseDirectory()
         {
             string currentDirectory = string.Format(Path.GetFullPath(Path.Combine(GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory))));
-            string childDirectory = Directory.GetDirectories(currentDirectory, "*Agent*")[0].ToString();
+            string childDirectory = Directory.GetDirectories(currentDirectory, "*Agent*")[0];
 
             return childDirectory;
         }
@@ -75,7 +75,7 @@ namespace ASD_Game.Agent
         public virtual string GetResourceBaseDirectory()
         {
             string currentDirectory = string.Format(Path.GetFullPath(Path.Combine(GoBackToRoot(AppDomain.CurrentDomain.BaseDirectory))));
-            string childDirectory = Directory.GetDirectories(currentDirectory, "*Resource*")[0].ToString();
+            string childDirectory = Directory.GetDirectories(currentDirectory, "*Resource*")[0];
 
             return childDirectory;
         }

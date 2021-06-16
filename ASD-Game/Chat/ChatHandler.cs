@@ -1,13 +1,9 @@
-using System.Linq;
 using ASD_Game.Chat.DTO;
 using ASD_Game.Messages;
 using ASD_Game.Network;
 using ASD_Game.Network.DTO;
 using ASD_Game.Network.Enum;
 using ASD_Game.Session;
-using ASD_Game.UserInterface;
-using ASD_Game.World.Services;
-using Castle.Core.Internal;
 using Newtonsoft.Json;
 
 namespace ASD_Game.Chat
@@ -75,7 +71,8 @@ namespace ASD_Game.Chat
         private string GetUserIdentifier(string userId)
         {
             var player = _sessionHandler.GetAllClients().Find(client => client[0].Equals(userId));
-            if (!player[1].IsNullOrEmpty())
+            // TODO: !player[1].IsNullOrEmpty()
+            if (!string.IsNullOrEmpty(player[1]))
             {
                 return player[1];
             }

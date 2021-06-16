@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using ASD_Game.Agent;
+using ASD_Game.Agent.Services;
 using ASD_Game.InputHandling;
 
 namespace Agent.Tests.Services
