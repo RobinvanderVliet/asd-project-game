@@ -156,12 +156,12 @@ namespace ASD_Game.Session
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
             bool handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
-
+            var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
             _screenHandler.TransitionTo(new GameScreen());
 
             Player currentPlayer = null;
             
-            if (!_sessionHandler.GameStarted())
+            if (startGameDTO.GameGuid == null && !_sessionHandler.GameStarted())
             {
                 _worldService.GenerateWorld(_sessionHandler.GetSessionSeed());
 
@@ -179,7 +179,6 @@ namespace ASD_Game.Session
             }
             else
             {
-                var startGameDTO = JsonConvert.DeserializeObject<StartGameDTO>(packet.Payload);
                 _worldService.GenerateWorld(startGameDTO.Seed);
                 currentPlayer = AddPlayerToWorldSavedGame(startGameDTO.SavedPlayers);
             }
