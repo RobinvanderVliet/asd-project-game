@@ -50,7 +50,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine
             ruleSet1.Setting = "combat";
             ruleSet1.Action = "default";
             ruleSet1.Comparable = "agent";
-            ruleSet1.Threshold = "player";
+            ruleSet1.Threshold = "monster";
             ruleSet1.Comparison = "sees";
             ruleSet1.ComparisonTrue = "follow";
 
@@ -58,7 +58,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine
             ruleSet2.Setting = "combat";
             ruleSet2.Action = "default";
             ruleSet2.Comparable = "agent";
-            ruleSet2.Threshold = "player";
+            ruleSet2.Threshold = "monster";
             ruleSet2.Comparison = "nearby";
             ruleSet2.ComparisonTrue = "engage";
             
