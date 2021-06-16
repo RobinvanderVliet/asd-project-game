@@ -7,6 +7,8 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
 {
     public abstract class CharacterState : IComparable
     {
+        private const int ATTACK_RANGE = 1;
+        private const int VISION_RANGE = 6;
         protected ICharacterData _characterData;
         protected ICharacterData _target;
         protected ICharacterStateMachine _characterStateMachine;
@@ -24,10 +26,15 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
 
         public virtual void DoWorldCheck()
         {
-            const int ATTACK_RANGE = 1;
-            const int VISION_RANGE = 6;
+            if (_characterData is AgentData)
+            {
+                Console.Write(_characterData.Health);
+            }
 
-            Character visionRangeTarget = _characterData.WorldService.GetCharacterInClosestRangeToCurrentCharacter(_characterData.WorldService.GetCharacter(_characterData.CharacterId), VISION_RANGE);
+            Character visionRangeTarget = GetClosestCharacterInRange(VISION_RANGE);
+
+            if (visionRangeTarget is SmartMonster) return;
+
             if (visionRangeTarget != null)
             {
                 if (visionRangeTarget is Player && !ThresholdExists("player"))
@@ -42,7 +49,9 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
                     return;
                 }
 
-                Character attackRangeTarget = _characterData.WorldService.GetCharacterInClosestRangeToCurrentCharacter(_characterData.WorldService.GetCharacter(_characterData.CharacterId), ATTACK_RANGE);
+                Character attackRangeTarget = GetClosestCharacterInRange(ATTACK_RANGE);
+                if (attackRangeTarget is SmartMonster) return;
+                
                 if (attackRangeTarget != null)
                 {
                     if (attackRangeTarget is Player)
@@ -76,6 +85,25 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
             {
                 _characterStateMachine.FireEvent(CharacterEvent.Event.LOST_CREATURE);
             }
+        }
+
+        private Character GetClosestCharacterInRange(int range)
+        {
+            Character closestCharacter = null;
+            if (ThresholdExists("player"))
+            {
+                closestCharacter =
+                    _characterData.WorldService.GetPlayerInClosestRangeToCurrentCharacter(
+                        _characterData.WorldService.GetCharacter(_characterData.CharacterId), range);
+            }
+            if (ThresholdExists("monster") && closestCharacter == null)
+            {
+                closestCharacter =
+                    _characterData.WorldService.GetMonsterInClosestRangeToCurrentCharacter(
+                        _characterData.WorldService.GetCharacter(_characterData.CharacterId), range);
+            }
+
+            return closestCharacter;
         }
 
         public int CompareTo(object obj)
