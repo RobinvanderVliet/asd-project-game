@@ -26,11 +26,6 @@ namespace ASD_Game.World.Models.Characters.StateMachine.State
 
         public virtual void DoWorldCheck()
         {
-            if (_characterData is AgentData)
-            {
-                Console.Write(_characterData.Health);
-            }
-
             Character visionRangeTarget = GetClosestCharacterInRange(VISION_RANGE);
 
             if (visionRangeTarget is SmartMonster) return;
