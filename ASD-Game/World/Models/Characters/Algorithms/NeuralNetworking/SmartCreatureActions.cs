@@ -136,7 +136,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
                 }
             }
         }
-
+        
         private void LevelUp(SmartMonster smartMonster)
         {
             int oldHP = (int)smartMonster.CreatureData.Health;
@@ -218,12 +218,12 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
             return true;
         }
 
-        private Vector2 TransformPath(Vector2 nextpos)
+        public Vector2 TransformPath(Vector2 nextpos)
         {
             return nextpos + _pathingOffset;
         }
 
-        private void ViewPointCalculator(Vector2 pos)
+        public void ViewPointCalculator(Vector2 pos)
         {
             _pathingOffset = new Vector2(pos.X - 6, pos.Y - 6);
         }

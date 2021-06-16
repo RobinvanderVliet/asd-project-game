@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items.Services;
+using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking;
@@ -12,6 +13,7 @@ namespace ASD_Game.World
 {
     public class World : IWorld
     {
+        private IGameConfigurationHandler _configurationHandler;
         private IMap _map;
         public Player CurrentPlayer { get; set; }
         public List<Player> Players { get; set; }
@@ -23,14 +25,15 @@ namespace ASD_Game.World
         private readonly int _viewDistance;
         private readonly IScreenHandler _screenHandler;
 
-        public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService, IEnemySpawner enemySpawner)
+        public World(int seed, int viewDistance, IMapFactory mapFactory, IScreenHandler screenHandler, IItemService itemService, IEnemySpawner enemySpawner, IGameConfigurationHandler gameConfigurationHandler)
         {
             Items = new();
             Players = new();
             Monsters = new();
-            _map = mapFactory.GenerateMap(itemService, enemySpawner, Items, Monsters, seed);
+            _map = mapFactory.GenerateMap(itemService, enemySpawner, Items, Monsters, gameConfigurationHandler, seed);
             _viewDistance = viewDistance;
             _screenHandler = screenHandler;
+            _configurationHandler = gameConfigurationHandler;
         }
 
         public Player GetPlayer(string id)
@@ -141,6 +144,10 @@ namespace ASD_Game.World
                         UpdateSmartMonster(smartMonster);
                     }
                 }
+                else if (monster is Monster monst)
+                {
+                    UpdateMonster(monst);
+                }
             }
         }
 
@@ -154,6 +161,19 @@ namespace ASD_Game.World
                     Monster x = (Monster)GetAI(montid);
                     Monsters.Remove(x);
                 }
+            }
+        }
+
+        private void UpdateMonster(Monster monster)
+        {
+            monster.Update();
+            if (monster.MoveType == "Move")
+            {
+                MovesList.Add(monster);
+            }
+            else
+            {
+                AttackList.Add(monster);
             }
         }
 

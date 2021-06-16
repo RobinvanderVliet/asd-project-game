@@ -11,14 +11,14 @@ namespace ASD_Game.Tests.AgentTests.Mapper
     [ExcludeFromCodeCoverage]
     public class FileToDictionaryMapperTest
     {
-        private FileToDictionaryMapper _sut;
+        private FileToConfigurationMapper _sut;
         private FileHandler _handler;
         private static readonly char _separator = Path.DirectorySeparatorChar;
 
         [SetUp]
         public void Setup()
         {
-            _sut = new FileToDictionaryMapper();
+            _sut = new FileToConfigurationMapper();
             _handler = new FileHandler();
 
         }

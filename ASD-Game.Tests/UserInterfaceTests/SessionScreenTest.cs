@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using ASD_Game.Session.DTO;
 using ASD_Game.UserInterface;
 using Moq;
 using NUnit.Framework;
@@ -26,38 +27,50 @@ namespace ASD_Game.Tests.UserInterfaceTests
 
         [Test]
         public void Test_UpdateWithNewSession_AddsNewSession()
-        {
+        { 
             //Arrange
-            var sessionInfo = new[] {"1", "TestSession", "Gerrit", "2"};
-
+            var sessionInfo = new List<SessionDTO>(); 
+            var session = new SessionDTO();
+            session.Name = "Test session";
+            session.SessionStarted = true;
+            session.SessionId = "session";
+            session.Clients = new List<string[]>();
+            session.Clients.Add(new []{"HostId", "HostName"});
+            sessionInfo.Add(session);
+        
             //Act
             _sut.UpdateWithNewSession(sessionInfo);
-            
+        
             //Assert
-            _mockedConsoleHelper.Verify(mock => mock.Write("(1) " + sessionInfo[1] + " | Created by: " + sessionInfo[2] + " | Players: " + sessionInfo[3] + "/8"), Times.Once);
+            _mockedConsoleHelper.Verify(mock => mock.Write("(1) " + sessionInfo[0].Name + " | Created by: " + sessionInfo[0].Clients[0][1] + " | Players: " + sessionInfo[0].Clients.Count + "/8 | Status: In progress"), Times.Once);
         }
 
         [Test]
         public void Test_GetSessionIdByVisualNumber_ReturnsSession()
         {
             //Arrange
-            var sessionId = "2212";
-            var sessionsInfoList = new List<string[]>();
-            sessionsInfoList.Add(new[] {sessionId, "TestSession", "Gerrit", "2"});
-            _sut.SessionInfoList = sessionsInfoList;
+            var sessionInfo = new List<SessionDTO>(); 
+            var session = new SessionDTO();
+            session.Name = "Test session";
+            session.SessionStarted = true;
+            session.SessionId = "session";
+            session.Clients = new List<string[]>();
+            session.Clients.Add(new []{"HostId", "HostName"});
+            sessionInfo.Add(session);
+            _sut.UpdateWithNewSession(sessionInfo);
             
             //Act
             var returnedSessionId = _sut.GetSessionIdByVisualNumber(0);
             
             //Assert
-            Assert.AreEqual(sessionId, returnedSessionId);
+            Assert.AreEqual(session.SessionId, returnedSessionId);
         }
         
         [Test]
         public void Test_GetSessionIdByVisualNumber_ReturnsNull()
         {
             //Arrange
-            var sessionsInfoList = new List<string[]>();
+            var sessionsInfoList = new List<SessionDTO>();
             _sut.SessionInfoList = sessionsInfoList;
             
             //Act

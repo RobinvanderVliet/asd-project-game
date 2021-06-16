@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking.TrainingScenario;
 
 namespace ASD_Game.Session
@@ -8,9 +8,20 @@ namespace ASD_Game.Session
         public TrainingScenario TrainingScenario { get; set; }
 
         public bool JoinSession(string sessionId, string userName);
-        public bool CreateSession(string sessionName, string userName);
+        public bool CreateSession(string sessionName, string userName, bool savedGame, string sessionId, int? seed);
         public void RequestSessions();
         public int GetSessionSeed();
         public List<string[]> GetAllClients();
+
+        public bool GetSavedGame();
+
+        public string GetSavedGameName();
+
+        public bool GameStarted();
+
+        public void SetGameStarted(bool startSessie);
+
+        public string GameName { get; set; }
+        bool AllowedToJoin { get; set; }
     }
 }

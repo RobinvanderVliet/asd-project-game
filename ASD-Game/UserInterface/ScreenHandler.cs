@@ -11,13 +11,20 @@ namespace ASD_Game.UserInterface
         public Screen Screen { get => _screen; set => _screen = value; }
         private ConsoleHelper _consoleHelper;
         public ConsoleHelper ConsoleHelper { get => _consoleHelper; set => _consoleHelper = value; }
-        private Thread _displayThread { get; set; }
         private BlockingCollection<Action> _actionsInQueue;
+        public BlockingCollection<Action> ActionsInQueue
+        {
+            get => _actionsInQueue;
+            set => _actionsInQueue = value;
+        }
+        private Thread _displayThread { get; set; }
+        
+        private bool _displaying;
         
         public ScreenHandler()
         {
             _consoleHelper = new ConsoleHelper();
-            _actionsInQueue = new();
+            ActionsInQueue = new();
 
             _displayThread = new Thread(RunDisplay);
             _displayThread.Start();
@@ -25,13 +32,13 @@ namespace ASD_Game.UserInterface
 
         private void RunDisplay()
         {
-            while(_actionsInQueue.TryTake(out Action a, -1))
+            while(ActionsInQueue.TryTake(out Action a, -1))
             {
                 a.Invoke();
             }
         }
 
-        public void TransitionTo(Screen screen)
+        public virtual void TransitionTo(Screen screen)
         {
             _consoleHelper.ClearConsole();
             _screen = screen;
@@ -40,20 +47,19 @@ namespace ASD_Game.UserInterface
         }
         public void DisplayScreen()
         {
-            _actionsInQueue.Add(_screen.DrawScreen);
+            ActionsInQueue.Add(_screen.DrawScreen);
         }
 
         public void ShowMessages(Queue<string> messages)
         {
-            
             if (_screen is GameScreen)
             {
                 var gameScreen = Screen as GameScreen;
-                _actionsInQueue.Add(() => gameScreen.ShowMessages(messages));
+                ActionsInQueue.Add(() => gameScreen.ShowMessages(messages));
             } else if (_screen is LobbyScreen)
             {
                 var lobbyScreen = Screen as LobbyScreen;
-                _actionsInQueue.Add(() => lobbyScreen.ShowMessages(messages));
+                ActionsInQueue.Add(() => lobbyScreen.ShowMessages(messages));
             }
         }
 
@@ -67,12 +73,14 @@ namespace ASD_Game.UserInterface
             if (_screen is GameScreen)
             {
                 var gameScreen = Screen as GameScreen;
-                _actionsInQueue.Add(gameScreen.RedrawInputBox);
+                ActionsInQueue.Add(gameScreen.RedrawInputBox);
+                _displayThread = new Thread(gameScreen.RedrawInputBox);
+                ActionsInQueue.Add(gameScreen.RedrawInputBox);
             } 
             else if (_screen is LobbyScreen)
             {
                 var lobbyScreen = Screen as LobbyScreen;
-                _actionsInQueue.Add(lobbyScreen.RedrawInputBox);
+                ActionsInQueue.Add(lobbyScreen.RedrawInputBox);
             }
         }
 
@@ -81,7 +89,7 @@ namespace ASD_Game.UserInterface
             if (_screen is GameScreen)
             {
                 var gameScreen = Screen as GameScreen;
-                _actionsInQueue.Add(() => gameScreen.UpdateWorld(map));
+                ActionsInQueue.Add(() => gameScreen.UpdateWorld(map));
             }
         }
 
@@ -90,13 +98,40 @@ namespace ASD_Game.UserInterface
             if (_screen is GameScreen)
             {
                 GameScreen gameScreen = _screen as GameScreen;
-                _actionsInQueue.Add(() => gameScreen.SetStatValues(name, score, playersAlive, playersTotal, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree));
+                ActionsInQueue.Add(() => gameScreen.SetStatValues(name, score, playersAlive, playersTotal, health, stamina, armor, radiation, helm, body, weapon, slotOne, slotTwo, slotThree));
+            }
+        }
+
+        public void UpdateSavedSessionsList(List<string[]> sessions)
+        {
+            if (_screen is LoadScreen)
+            {
+                LoadScreen loadScreen = _screen as LoadScreen;
+                loadScreen.UpdateSavedSessionsList(sessions);
             }
         }
 
         public virtual void SetScreenInput(string input)
         {
             _consoleHelper.WriteLine(input);
+        }
+
+        public virtual void UpdateInputMessage(string message)
+        {
+            if (_screen is LoadScreen screen)
+            {
+                screen.UpdateInputMessage(message);
+            }
+        }
+
+        public virtual string GetSessionByPosition(int sessionNumber)
+        {
+            if (_screen is LoadScreen screen)
+            {
+                return screen.GetSessionByPosition(sessionNumber);
+            }
+            
+            return String.Empty;
         }
     }
 }

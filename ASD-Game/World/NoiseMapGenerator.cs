@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using ASD_Game.ActionHandling.DTO;
 using ASD_Game.Items.Services;
+using ASD_Game.Session.GameConfiguration;
 using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Models.HazardousTiles;
@@ -12,6 +13,7 @@ namespace ASD_Game.World
 {
     public class NoiseMapGenerator : INoiseMapGenerator
     {
+        private IGameConfigurationHandler _gameConfigurationHandler;
         private IFastNoise _worldNoise;
         private IFastNoise _itemNoise;
         private IItemService _itemService;
@@ -20,7 +22,7 @@ namespace ASD_Game.World
         private int _monsterSpawnChance;
         private IEnemySpawner _enemySpawner;
 
-        public NoiseMapGenerator(int seed, IItemService itemService, IEnemySpawner enemySpawner, List<ItemSpawnDTO> items, List<Monster> monsters, int monsterSpawnChance = 5)
+        public NoiseMapGenerator(int seed, IItemService itemService, IEnemySpawner enemySpawner, List<ItemSpawnDTO> items, List<Monster> monsters, IGameConfigurationHandler gameConfigurationHandler, int monsterSpawnChance = 2)
         {
             _worldNoise = new FastNoiseLite();
             _worldNoise.SetNoiseType(FastNoiseLite.NoiseType.Cellular);
@@ -34,6 +36,7 @@ namespace ASD_Game.World
             _itemNoise.SetSeed(seed);
             _itemService = itemService;
             _items = items;
+            _gameConfigurationHandler = gameConfigurationHandler;
             _monsters = monsters;
             _monsterSpawnChance = monsterSpawnChance;
             _enemySpawner = enemySpawner;
@@ -106,7 +109,9 @@ namespace ASD_Game.World
                 var id = "monst" + x + "!" + y;
                 if (!_monsters.Exists(monster => monster.Id == id))
                 {
-                    _monsters.Add(_enemySpawner.spawnMonster(x, y, id, 1));
+                    Monster monster = _enemySpawner.spawnMonster(x, y, id, 10);
+                    monster.MonsterData.SetStats((int)_gameConfigurationHandler.GetNewMonsterDifficulty());
+                    _monsters.Add(monster);
                 }
             }
         }

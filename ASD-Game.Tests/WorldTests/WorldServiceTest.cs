@@ -77,7 +77,7 @@ namespace ASD_Game.Tests.WorldTests
             _itemServiceObject = _itemServiceMock.Object;
             _messageServiceMock = new Mock<IMessageService>();
             _messageServiceObject = _messageServiceMock.Object;
-            _sut = new WorldService(_screenHandlerObject, _itemServiceObject, _messageServiceObject);
+            //_sut = new WorldService(_screenHandlerObject, _itemServiceObject, _messageServiceObject);
             _sut.SetWorld(_worldObject);
         }
 

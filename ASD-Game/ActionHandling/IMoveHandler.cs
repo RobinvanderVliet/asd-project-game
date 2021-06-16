@@ -1,4 +1,4 @@
-﻿namespace ASD_Game.ActionHandling
+namespace ASD_Game.ActionHandling
 {
     public interface IMoveHandler
     {
@@ -7,5 +7,7 @@
         public void SearchNearestPlayer();
 
         public void CheckAITimer();
+
+        public void SendAIMove(string id, int x, int y);
     }
 }

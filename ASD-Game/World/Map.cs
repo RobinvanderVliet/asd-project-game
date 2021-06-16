@@ -64,28 +64,32 @@ namespace ASD_Game.World
 
         public char[,] GetCharArrayMapAroundCharacter(Character centerCharacter, int viewDistance, List<Character> allCharacters)
         {
-            // Returns a 2d char array centered around a character.
-            // The view distance is how far the map is rendered to all sides from the character.
-            // The character list should contain all characters you may wish to display.
-            if (viewDistance < 0)
+            if (centerCharacter != null)
             {
-                throw new InvalidOperationException("viewDistance smaller than 0.");
-            }
-
-            var tileArray = new char[viewDistance * 2 + 1, viewDistance * 2 + 1]; // The +1 is because the view window is the view distance to each side, plus the tile the character itself uses.
-            LoadArea(centerCharacter.XPosition, centerCharacter.YPosition, viewDistance);
-            // y is counting down because of writing top to bottom,
-            // x is counting up because writing left to right.
-            // x and y are NOT real world coordinates.
-            for (var y = tileArray.GetLength(0) - 1; y >= 0; y--)
-            {
-                for (var x = 0; x < tileArray.GetLength(1); x++)
+                // Returns a 2d char array centered around a character.
+                // The view distance is how far the map is rendered to all sides from the character.
+                // The character list should contain all characters you may wish to display.
+                if (viewDistance < 0)
                 {
-                    var currentTile = GetLoadedTileByXAndY(x + (centerCharacter.XPosition - viewDistance), (centerCharacter.YPosition + viewDistance) - y);
-                    tileArray[y, x] = GetDisplaySymbolForSpecificTile(currentTile, allCharacters).ToCharArray()[0];
+                    throw new InvalidOperationException("viewDistance smaller than 0.");
                 }
+
+                var tileArray = new char[viewDistance * 2 + 1, viewDistance * 2 + 1]; // The +1 is because the view window is the view distance to each side, plus the tile the character itself uses.
+                LoadArea(centerCharacter.XPosition, centerCharacter.YPosition, viewDistance);
+                // y is counting down because of writing top to bottom,
+                // x is counting up because writing left to right.
+                // x and y are NOT real world coordinates.
+                for (var y = tileArray.GetLength(0) - 1; y >= 0; y--)
+                {
+                    for (var x = 0; x < tileArray.GetLength(1); x++)
+                    {
+                        var currentTile = GetLoadedTileByXAndY(x + (centerCharacter.XPosition - viewDistance), (centerCharacter.YPosition + viewDistance) - y);
+                        tileArray[y, x] = GetDisplaySymbolForSpecificTile(currentTile, allCharacters).ToCharArray()[0];
+                    }
+                }
+                return tileArray;
             }
-            return tileArray;
+            return null;
         }
 
         private string GetDisplaySymbolForSpecificTile(ITile tile, List<Character> characters)

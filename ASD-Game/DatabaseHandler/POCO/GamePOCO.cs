@@ -10,5 +10,7 @@ namespace ASD_Game.DatabaseHandler.POCO
         public string GameGUID { get; set; }
         public string PlayerGUIDHost { get; set; }
         public int Seed { get; set; }
+        
+        public string GameName { get; set; }
     }
 }

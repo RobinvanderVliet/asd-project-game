@@ -2,7 +2,10 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using ActionHandling;
+using Agent.Mapper;
+using Agent.Services;
 using ASD_Game.ActionHandling;
+using ASD_Game.Agent.Mapper;
 using ASD_Game.Chat;
 using ASD_Game.DatabaseHandler;
 using ASD_Game.DatabaseHandler.Repository;
@@ -16,12 +19,15 @@ using ASD_Game.Network;
 using ASD_Game.Session;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
+using ASD_Game.World.Models.Characters.Algorithms.Creator;
 using ASD_Game.World;
 using ASD_Game.World.Services;
+using Creature;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Session;
 
 namespace ASD_Game
 {
@@ -61,11 +67,16 @@ namespace ASD_Game
                     services.AddScoped<ISpawnHandler, SpawnHandler>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
                     services.AddScoped(typeof(IDatabaseService<>), typeof(DatabaseService<>));
+                    services.AddScoped<IGamesSessionService, GamesSessionService>();
                     services.AddScoped<IScreenHandler, ScreenHandler>();
                     services.AddScoped<IInputHandler, InputHandler>();
+                    services.AddScoped<IAgentCreator, AgentCreator>();
+                    services.AddScoped<IAgentHandler, AgentHandler>();
                     services.AddScoped<IPipeline, Pipeline>();
                     services.AddScoped<IRandomItemGenerator, RandomItemGenerator>();
                     services.AddScoped<IEvaluator, Evaluator>();
+                    services.AddScoped<IConfigurationService, ConfigurationService>();
+                    services.AddScoped<IFileToConfigurationMapper, FileToConfigurationMapper>();
                     services.AddScoped<IGameConfigurationHandler, GameConfigurationHandler>();
                 })
                 .UseSerilog()

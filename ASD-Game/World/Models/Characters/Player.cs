@@ -9,11 +9,13 @@ namespace ASD_Game.World.Models.Characters
         public int Stamina { get; set; }
         public Inventory Inventory { get; set; }
         public int RadiationLevel { get; set; }
+
         [ExcludeFromCodeCoverage]
         public int Team { get; set; }
 
         //random default values for health&stamina for now
         public const int HEALTH_MIN = 0;
+
         public const int HEALTH_MAX = 100;
         public const int STAMINA_MIN = 0;
         public const int STAMINA_MAX = 100;
@@ -52,7 +54,7 @@ namespace ASD_Game.World.Models.Characters
 
         public void UseConsumable(Consumable consumable)
         {
-            if(consumable is HealthConsumable)
+            if (consumable is HealthConsumable)
             {
                 AddHealth((consumable as HealthConsumable).getHealth());
             }
@@ -61,7 +63,7 @@ namespace ASD_Game.World.Models.Characters
                 AddStamina((consumable as StaminaConsumable).getStamina());
             }
         }
-        
+
         public virtual void AddStamina(int amount)
         {
             Stamina += amount;

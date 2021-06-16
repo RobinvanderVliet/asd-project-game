@@ -1,21 +1,26 @@
-namespace WorldGeneration.StateMachine.Event
+namespace World.Models.Characters.StateMachine.Event
 {
     public class CharacterEvent
     {
         public enum Event
         {
+            IDLE,
+            WANDERING,
+            LOST_CREATURE,
+            SPOTTED_CREATURE,
+
             // Generic Events
             DO,
+            DO_WORLD_CHECK,
 
             // Specific Creature Event
             LOST_PLAYER,
-
             SPOTTED_PLAYER,
             ALMOST_DEAD,
-            REGAINED_HEALTH_PLAYER_OUT_OF_RANGE,
-            REGAINED_HEALTH_PLAYER_IN_RANGE,
-            PLAYER_OUT_OF_RANGE,
-            PLAYER_IN_RANGE
+            OUT_OF_STAMINA,
+            FOUND_ITEM,
+            CREATURE_OUT_OF_RANGE,
+            CREATURE_IN_RANGE
         };
     }
 }

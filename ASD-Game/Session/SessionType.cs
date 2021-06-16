@@ -8,6 +8,7 @@ namespace ASD_Game.Session
         SendPing,
         ReceivedPingResponse,
         SendHeartbeat,
+        SendAgentConfiguration,
         EditMonsterDifficulty,
         EditItemSpawnRate,
         NewBackUpHost

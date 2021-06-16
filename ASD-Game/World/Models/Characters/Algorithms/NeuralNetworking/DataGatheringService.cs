@@ -24,20 +24,23 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
         public Character ClosestMonster { get; set; }
         public Single DistanceToClosestMonster { get; set; } = 9999999999999999999;
 
+        public Vector2 _pathingOffset;
+
         public DataGatheringService(IWorldService worldService)
         {
             _worldService = worldService;
         }
 
-        public void ScanMap(SmartMonster smartMonster, int visionRange)
+        public void ScanMap(Character smartMonster, int visionRange)
         {
             SetClosestMonster(smartMonster, visionRange);
             SetClosestPlayer(smartMonster, visionRange);
         }
 
-        private void SetClosestMonster(SmartMonster smartMonster, int visionRange)
+        private void SetClosestMonster(Character smartMonster, int visionRange)
         {
             List<Monster> monsters = _worldService.GetMonsters();
+
             foreach (Character monster in monsters)
             {
                 Vector2 pPos = new Vector2(monster.XPosition, monster.YPosition);
@@ -51,7 +54,7 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
             }
         }
 
-        private void SetClosestPlayer(SmartMonster smartMonster, int visionRange)
+        private void SetClosestPlayer(Character smartMonster, int visionRange)
         {
             List<Player> players = _worldService.GetAllPlayers();
             foreach (Player player in players)
@@ -91,19 +94,22 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
         {
             List<List<Node>> translatedMap = new List<List<Node>>();
             char[,] map = _worldService.GetMapAroundCharacter(c);
-
-            for (int row = 0; row < _colCount; row++)
+            if (map != null)
             {
-                List<Node> nodePoints = new List<Node>();
-                for (int col = 0; col < _rowCount; col++)
+                for (int row = 0; row < _colCount; row++)
                 {
-                    Vector2 nodeLocation = new Vector2(row, col);
-                    Node node = TranslateCharToNode(nodeLocation, map[_colCount, _rowCount]);
-                    nodePoints.Add(node);
+                    List<Node> nodePoints = new List<Node>();
+                    for (int col = 0; col < _rowCount; col++)
+                    {
+                        Vector2 nodeLocation = new Vector2(row, col);
+                        Node node = TranslateCharToNode(nodeLocation, map[row, col]);
+                        nodePoints.Add(node);
+                    }
+                    translatedMap.Add(nodePoints);
                 }
-                translatedMap.Add(nodePoints);
+                return translatedMap;
             }
-            return translatedMap;
+            return null;
         }
 
         private Node TranslateCharToNode(Vector2 pos, char c)
@@ -130,6 +136,12 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
 
                 case '\u25B2':
                     return false;
+
+                case 'Z':
+                    return false;
+
+                case 'X':
+                    return false;
             }
             return true;
         }
@@ -148,6 +160,16 @@ namespace ASD_Game.World.Models.Characters.Algorithms.NeuralNetworking
                 }
             }
             return false;
+        }
+
+        public Vector2 TransformPath(Vector2 nextpos)
+        {
+            return nextpos + _pathingOffset;
+        }
+
+        public void ViewPointCalculator(Vector2 pos)
+        {
+            _pathingOffset = new Vector2(pos.X - 6, pos.Y - 6);
         }
     }
 }

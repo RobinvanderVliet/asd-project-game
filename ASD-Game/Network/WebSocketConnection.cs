@@ -2,6 +2,8 @@ using System;
 using ASD_Game.Network.DTO;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System;
+using System.IO;
 using WebSocketSharp;
 
 namespace ASD_Game.Network
@@ -12,10 +14,21 @@ namespace ASD_Game.Network
         private WebSocketConnectionConfig _webSocketConnectionConfig;
         private readonly IPacketListener _packetListener;
 
+        private UserSettingsConfig _userSettingsConfig;
+
+        public UserSettingsConfig UserSettingsConfig
+        {
+            get => _userSettingsConfig;
+            set => _userSettingsConfig = value;
+        }
+
+
         public WebSocketConnection(IPacketListener packetListener)
         {
             LoadConfigVariables();
-            _websocket = new WebSocket($"ws://{_webSocketConnectionConfig.Ip}:{_webSocketConnectionConfig.Port}/{_webSocketConnectionConfig.Path}");
+            _websocket =
+                new WebSocket(
+                    $"ws://{_webSocketConnectionConfig.Ip}:{_webSocketConnectionConfig.Port}/{_webSocketConnectionConfig.Path}");
             _packetListener = packetListener;
             AddBehaviorToWebsocket();
 
@@ -55,10 +68,45 @@ namespace ASD_Game.Network
         }
         private void LoadConfigVariables()
         {
-            var config = new ConfigurationBuilder().SetBasePath(AppDomain.CurrentDomain.BaseDirectory).AddJsonFile("appsettings.json").Build();
-            var section = config.GetSection(nameof(WebSocketConnectionConfig));
-            var result = section.Get<WebSocketConnectionConfig>();
-            _webSocketConnectionConfig = result;
+            var config = new ConfigurationBuilder().SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json").Build();
+            var connectionSection = config.GetSection(nameof(WebSocketConnectionConfig));
+            var connectionResult = connectionSection.Get<WebSocketConnectionConfig>();
+            _webSocketConnectionConfig = connectionResult;
+
+            var userSection = config.GetSection(nameof(UserSettingsConfig));
+            var userResult = userSection.Get<UserSettingsConfig>();
+            _userSettingsConfig = userResult;
+        }
+
+        public void AddOrUpdateConfigVariables<T>(string key, T value)
+        {
+            try
+            {
+                string pathToRoot = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\.."));
+                var filePath = Path.Combine(pathToRoot, "appsettings.json");
+                string json = File.ReadAllText(filePath);
+                dynamic jsonObj = JsonConvert.DeserializeObject(json);
+
+                var sectionPath = key.Split(":")[0];
+                if (!string.IsNullOrEmpty(sectionPath))
+                {
+                    var keyPath = key.Split(":")[1];
+                    jsonObj[sectionPath][keyPath] = value;
+                }
+                else
+                {
+                    jsonObj[sectionPath] = value;
+                }
+
+                string output = JsonConvert.SerializeObject(jsonObj, Formatting.Indented);
+                File.WriteAllText(filePath, output);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error writing configuration variables: " + e);
+            }
         }
     }
 }
