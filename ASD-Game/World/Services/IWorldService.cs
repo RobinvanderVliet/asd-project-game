@@ -47,6 +47,8 @@ namespace ASD_Game.World.Services
         public Character GetCharacterOnTile(int x, int y);
 
         public Character GetCharacterInClosestRangeToCurrentCharacter(Character currentCharacter, int distance);
+        public Monster GetMonsterInClosestRangeToCurrentCharacter(Character currentCharacter, int distance);
+        public Player GetPlayerInClosestRangeToCurrentCharacter(Character currentCharacter, int distance);
 
         public void UpdateBrains(Genome genome);
 

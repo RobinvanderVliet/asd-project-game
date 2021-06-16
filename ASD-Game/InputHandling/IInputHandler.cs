@@ -13,5 +13,6 @@ namespace ASD_Game.InputHandling
         public bool CheckInput(List<string> rule, BaseVariables variables);
         public void HandleConfigurationScreenCommands();
         public void HandleLobbyScreenCommands();
+        public void HandleLoadScreenCommands();
     }
 }

@@ -132,6 +132,46 @@ namespace ASD_Game.World.Services
             return null;
         }
 
+        public Monster GetMonsterInClosestRangeToCurrentCharacter(Character currentCharacter, int distance)
+        {
+            var monsters = GetMonsters();
+            
+            foreach (var monster in monsters)
+            {
+                if (currentCharacter != null)
+                {
+                    if (Vector2.Distance(new Vector2(currentCharacter.XPosition, currentCharacter.YPosition), new Vector2(monster.XPosition, monster.YPosition)) <= distance
+                        && monster.Id != currentCharacter.Id)
+                    {
+                        return monster;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public Player GetPlayerInClosestRangeToCurrentCharacter(Character currentCharacter, int distance)
+        {
+            var players = GetAllPlayers();
+
+            foreach (var player in players)
+            {
+                if (currentCharacter != null)
+                {
+                    if (Vector2.Distance(new Vector2(currentCharacter.XPosition, currentCharacter.YPosition), new Vector2(player.XPosition, player.YPosition)) <= distance
+                        && player.Id != currentCharacter.Id)
+                    {
+                        if (player.Health > 0)
+                        {
+                            return player;
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public Character GetCharacter(string id)
         {
             List<Monster> monsters = GetMonsters();

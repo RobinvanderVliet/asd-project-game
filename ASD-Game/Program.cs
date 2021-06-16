@@ -27,6 +27,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Session;
 
 namespace ASD_Game
 {
@@ -66,6 +67,7 @@ namespace ASD_Game
                     services.AddScoped<ISpawnHandler, SpawnHandler>();
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
                     services.AddScoped(typeof(IDatabaseService<>), typeof(DatabaseService<>));
+                    services.AddScoped<IGamesSessionService, GamesSessionService>();
                     services.AddScoped<IScreenHandler, ScreenHandler>();
                     services.AddScoped<IInputHandler, InputHandler>();
                     services.AddScoped<IAgentCreator, AgentCreator>();

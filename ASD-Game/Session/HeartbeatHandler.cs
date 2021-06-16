@@ -14,9 +14,9 @@ namespace ASD_Game.Session
     {
         private readonly IAgentHandler _agentHandler;
         private List<HeartbeatDTO> _players;
-        private TimeSpan waitTime = TimeSpan.FromMilliseconds(10000);
+        private TimeSpan waitTime = TimeSpan.FromMilliseconds(5000);
 
-        private int TIMER = 10000;
+        private int TIMER = 5000;
         private Thread _checkHeartbeatThread;
         private bool _runThread;
         private IMessageService _messageService;
@@ -119,7 +119,7 @@ namespace ASD_Game.Session
                 else if (!player.IsOnline)
                 {
                     // TODO: implement when player returns take over agent
-                    //ReplaceAgent(player);
+                    ReplaceAgent(player);
                     player.IsOnline = true;
                 }
                 else

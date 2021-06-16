@@ -11,6 +11,7 @@ using ASD_Game.Session;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
 using InputCommandHandler.Models;
+using Session;
 using WebSocketSharp;
 
 namespace ASD_Game.InputHandling
@@ -20,22 +21,27 @@ namespace ASD_Game.InputHandling
         private readonly IPipeline _pipeline;
         private readonly ISessionHandler _sessionHandler;
         private readonly IScreenHandler _screenHandler;
+        private static Timer _timer;
         private readonly IMessageService _messageService;
         private readonly IGameConfigurationHandler _gameConfigurationHandler;
+        private readonly IGamesSessionService _gamesSessionService;
+
         private const string RETURN_KEYWORD = "return";
         private const string START_COMMAND = "start_session";
 
-        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler, IMessageService messageService, IGameConfigurationHandler gameConfigurationHandler)
+        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler, IMessageService messageService, IGameConfigurationHandler gameConfigurationHandler, IGamesSessionService gamesSessionService)
         {
             _pipeline = pipeline;
             _sessionHandler = sessionHandler;
             _screenHandler = screenHandler;
             _gameConfigurationHandler = gameConfigurationHandler;
+            _gamesSessionService = gamesSessionService;
             _messageService = messageService;
         }
 
-        public InputHandler()
+        public InputHandler(IGamesSessionService gamesSessionService)
         {
+            _gamesSessionService = gamesSessionService;
             //Empty constructor needed for testing purposes
         }
 
@@ -80,24 +86,20 @@ namespace ASD_Game.InputHandling
                 case 1:
                     _screenHandler.TransitionTo(new ConfigurationScreen());
                     break;
-
                 case 2:
                     _screenHandler.TransitionTo(new SessionScreen());
                     _sessionHandler.RequestSessions();
                     break;
-
                 case 3:
                     _screenHandler.TransitionTo(new LoadScreen());
+                    _gamesSessionService.RequestSavedGames();
                     break;
-
                 case 4:
                     _screenHandler.TransitionTo(new EditorScreen());
                     break;
-
                 case 5:
                     SendCommand("exit");
                     break;
-
                 default:
                     var startScreen = _screenHandler.Screen as StartScreen;
                     startScreen.UpdateInputMessage("Not a valid option, try again!");
@@ -107,36 +109,42 @@ namespace ASD_Game.InputHandling
 
         public void HandleSessionScreenCommands()
         {
-            var sessionScreen = _screenHandler.Screen as SessionScreen;
+            SessionScreen sessionScreen = _screenHandler.Screen as SessionScreen;
             var input = GetCommand();
-
-            if (input == RETURN_KEYWORD)
+            // Needed to handle input on client when host has started session
+            if (_screenHandler.Screen is GameScreen)
             {
-                _screenHandler.TransitionTo(new StartScreen());
-                return;
-            }
-
-            var inputParts = input.Split(" ");
-
-            if (inputParts.Length != 2)
-            {
-                sessionScreen.UpdateInputMessage("Provide both a session number and username (example: 1 Gerrit)");
+                HandleGameScreenCommands(input);
             }
             else
             {
-                int.TryParse(input[0].ToString(), out var sessionNumber);
-                var username = input[1].ToString();
-
-                var sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
-
-                if (sessionId.IsNullOrEmpty())
+                if (input == RETURN_KEYWORD)
                 {
-                    sessionScreen.UpdateInputMessage("Not a valid session, try again!");
+                    _screenHandler.TransitionTo(new StartScreen());
+                    return;
+                }
+
+                string[] inputParts = input.Split(" ");
+
+                if (inputParts.Length != 2)
+                {
+                    sessionScreen.UpdateInputMessage("Provide both a session number and username (example: 1 Gerrit)");
                 }
                 else
                 {
-                    _screenHandler.TransitionTo(new LobbyScreen());
-                    SendCommand("join_session \"" + sessionId + "\" \"" + inputParts[1].Replace("\"", "") + "\"");
+                    int sessionNumber = 0;
+                    int.TryParse(input[0].ToString(), out sessionNumber);
+
+                    string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
+
+                    if (sessionId.IsNullOrEmpty())
+                    {
+                        sessionScreen.UpdateInputMessage("Not a valid session, try again!");
+                    }
+                    else
+                    {
+                        _sessionHandler.JoinSession(sessionId, inputParts[1].Replace("\"", ""));
+                    }
                 }
             }
         }
@@ -157,11 +165,54 @@ namespace ASD_Game.InputHandling
                     return;
                 }
 
-                if (input == START_COMMAND || input.Contains("say") || input.Contains("shout"))
+                if (input == START_COMMAND) 
+                {
+                    SendCommand(START_COMMAND);
+                }
+
+                if (input.Contains("say"))
                 {
                     SendCommand(input);
-                    _screenHandler.RedrawGameInputBox();
                 }
+                else if (input.Contains("shout"))
+                {
+                    SendCommand(input);
+                }
+               
+            }
+        }
+
+        public void HandleLoadScreenCommands()
+        {
+            LoadScreen loadScreen = _screenHandler.Screen as LoadScreen;
+            var input = GetCommand();
+
+            if (input == RETURN_KEYWORD)
+            {
+                _screenHandler.TransitionTo(new StartScreen());
+                return;
+            }
+
+            if (input.Length > 0)
+            {
+                int sessionNumber = 0;
+                int.TryParse(input, out sessionNumber);
+
+                string sessionId = _screenHandler.GetSessionByPosition(sessionNumber - 1);
+
+                if (sessionId.IsNullOrEmpty())
+                {
+                    _screenHandler.UpdateInputMessage("Not a valid session number, please try again!");
+                }
+                else
+                {
+                    _screenHandler.TransitionTo(new LobbyScreen());
+                    _gamesSessionService.LoadGame(sessionId);
+                }
+            }
+            else
+            {
+                _screenHandler.UpdateInputMessage("Session number cannot be left blank, please try again!");
             }
         }
 
@@ -183,7 +234,8 @@ namespace ASD_Game.InputHandling
                 {
                     _gameConfigurationHandler.SetGameConfiguration();
                     _screenHandler.TransitionTo(new LobbyScreen());
-                    _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(), _gameConfigurationHandler.GetUsername());
+                    _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(), _gameConfigurationHandler.GetUsername(), false, null, null);
+
                 }
             }
         }
@@ -328,7 +380,6 @@ namespace ASD_Game.InputHandling
                                                             Environment.NewLine +
                                                             startText);
                             break;
-
                         case "weapon":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible weapons: " + Environment.NewLine +
@@ -336,7 +387,6 @@ namespace ASD_Game.InputHandling
                                                             Environment.NewLine +
                                                             startText);
                             break;
-
                         case "comparison":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible comparison: " + Environment.NewLine +
@@ -345,7 +395,6 @@ namespace ASD_Game.InputHandling
                                                             Environment.NewLine +
                                                             startText);
                             break;
-
                         case "consumables":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible consumables: " + Environment.NewLine +
@@ -353,7 +402,6 @@ namespace ASD_Game.InputHandling
                                                             Environment.NewLine +
                                                             startText);
                             break;
-
                         case "actions":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible actions: " + Environment.NewLine +
@@ -361,7 +409,6 @@ namespace ASD_Game.InputHandling
                                                             Environment.NewLine +
                                                             startText);
                             break;
-
                         case "bitcoinitems":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible bitcoin items: " + Environment.NewLine +
@@ -369,7 +416,6 @@ namespace ASD_Game.InputHandling
                                                             Environment.NewLine +
                                                             startText);
                             break;
-
                         case "comparables":
                             editorScreen.ClearScreen();
                             editorScreen.UpdateLastQuestion("Possible comparables: " + Environment.NewLine +
