@@ -53,13 +53,14 @@ namespace ASD_Game.ActionHandling
             if (_worldService.IsDead(_worldService.GetCurrentPlayer()))
             {
                 _messageService.AddMessage("You can't attack, you're dead!");
-                return;
             }
-            
-            AttackDTO attackDTO = new AttackDTO();
-            attackDTO.Direction = direction;
-            attackDTO.PlayerGuid = _worldService.GetCurrentPlayer().Id;
-            SendAttackDTO(attackDTO);
+            else
+            {
+                AttackDTO attackDTO = new AttackDTO();
+                attackDTO.Direction = direction;
+                attackDTO.PlayerGuid = _worldService.GetCurrentPlayer().Id;
+                SendAttackDTO(attackDTO);
+            }
         }
 
         public void SendAttackDTO(AttackDTO attackDto)
