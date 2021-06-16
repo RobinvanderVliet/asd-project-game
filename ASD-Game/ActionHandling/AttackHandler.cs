@@ -176,11 +176,11 @@ namespace ASD_Game.ActionHandling
                 if (damage > 0)
                 {
                     TakeDamage(attackedPlayer, damage, handleInDatabase);
+                }
 
-                    if (isMe(attackedCharacter.Id))
-                    {
-                        _worldService.DisplayStats();
-                    }
+                if (isMe(attackedCharacter.Id))
+                {
+                    _worldService.DisplayStats();
                 }
             }
             else
@@ -204,8 +204,9 @@ namespace ASD_Game.ActionHandling
                 if (isMe(attackedPlayer.Id))
                 {
                     _messageService.AddMessage("You died.");
-                    _worldService.DisplayWorld();
                 }
+                _worldService.DisplayWorld();
+                _worldService.CheckLastManStanding();
             }
         }
 

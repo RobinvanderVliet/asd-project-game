@@ -164,7 +164,7 @@ namespace ASD_Game.World.Models.Characters
                 difficulty);
         }
         
-        public new int GetDamage()
+        public override int GetDamage()
         {
             return CreatureData.Damage;
         }

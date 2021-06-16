@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ASD_Game.Items;
 using ASD_Game.Network;
 using ASD_Game.World.Models;
 using ASD_Game.World.Models.Characters;
@@ -30,11 +31,23 @@ namespace ASD_Game.Session.Helpers
                 if (clientController.GetOriginId() == client[0])
                 {
                     currentPlayer = new Player(client[1], playerX, playerY, CharacterSymbol.CURRENT_PLAYER, client[0]);
+                    if (currentPlayer.Name.Equals("danny") || currentPlayer.Name.Equals("wimpex"))
+                    {
+                        currentPlayer.Inventory.Weapon = ItemFactory.GetBaseballBat();
+                        currentPlayer.Inventory.Armor = ItemFactory.GetTacticalVest();
+                        currentPlayer.Inventory.Helmet = ItemFactory.GetGasMask();
+                    }
                     worldService.AddPlayerToWorld(currentPlayer, true);
                 }
                 else
                 {
                     var playerObject = new Player(client[1], playerX, playerY, CharacterSymbol.ENEMY_PLAYER, client[0]);
+                    if (playerObject.Name.Equals("danny") || playerObject.Name.Equals("wimpex"))
+                    {
+                        playerObject.Inventory.Weapon = ItemFactory.GetBaseballBat();
+                        playerObject.Inventory.Armor = ItemFactory.GetTacticalVest();
+                        playerObject.Inventory.Helmet = ItemFactory.GetGasMask();
+                    }
                     worldService.AddPlayerToWorld(playerObject, false);
                 }
             }

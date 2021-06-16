@@ -106,13 +106,6 @@ namespace ASD_Game.Session
             _itemService.ChanceForItemOnTile = (int)_gameConfigurationHandler.GetItemSpawnRate();
 
             Player currentPlayer = AddPlayersToWorld();
-            
-            if (_worldService.GetPlayer(_clientController.GetOriginId()).Name.Equals("danny") || _worldService.GetPlayer(_clientController.GetOriginId()).Name.Equals("wimpex"))
-            {
-                _worldService.GetPlayer(_clientController.GetOriginId()).Inventory.Weapon = ItemFactory.GetBaseballBat();
-                _worldService.GetPlayer(_clientController.GetOriginId()).Inventory.Armor = ItemFactory.GetTacticalVest();
-                _worldService.GetPlayer(_clientController.GetOriginId()).Inventory.Helmet = ItemFactory.GetGasMask();
-            }
 
             if (currentPlayer != null)
             {
