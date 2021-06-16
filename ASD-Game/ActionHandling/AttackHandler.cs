@@ -144,9 +144,9 @@ namespace ASD_Game.ActionHandling
                             _messageService.AddMessage("Your helmet has been destroyed!");
                         }
                         
-                        DeleteHelmet(attackedPlayer, handleInDatabase);
-                        
                         damage -= attackedPlayer.Inventory.Helmet.ArmorProtectionPoints;
+                        
+                        DeleteHelmet(attackedPlayer, handleInDatabase);
                     }
                     else
                     {
@@ -163,9 +163,9 @@ namespace ASD_Game.ActionHandling
                             _messageService.AddMessage("Your armor has been destroyed!");
                         }
                         
-                        DeleteArmor(attackedPlayer, handleInDatabase);
-                        
                         damage -= attackedPlayer.Inventory.Armor.ArmorProtectionPoints;
+                        
+                        DeleteArmor(attackedPlayer, handleInDatabase);
                     }
                     else
                     {
@@ -247,6 +247,10 @@ namespace ASD_Game.ActionHandling
                     character = _worldService.GetCharacterOnTile(attackingCharacter.XPosition, attackingCharacter.YPosition - y);
                 }
             }
+            // _messageService.AddMessage(attackingCharacter.XPosition.ToString());
+            // _messageService.AddMessage(attackingCharacter.YPosition.ToString());
+            // _messageService.AddMessage(character.XPosition.ToString());
+            // _messageService.AddMessage(character.YPosition.ToString());
             return character;
         }
 

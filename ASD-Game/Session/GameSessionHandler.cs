@@ -109,7 +109,7 @@ namespace ASD_Game.Session
             
             if (_worldService.GetPlayer(_clientController.GetOriginId()).Name.Equals("danny") || _worldService.GetPlayer(_clientController.GetOriginId()).Name.Equals("wimpex"))
             {
-                _worldService.GetPlayer(_clientController.GetOriginId()).Inventory.Weapon = ItemFactory.GetKatana();
+                _worldService.GetPlayer(_clientController.GetOriginId()).Inventory.Weapon = ItemFactory.GetBaseballBat();
                 _worldService.GetPlayer(_clientController.GetOriginId()).Inventory.Armor = ItemFactory.GetTacticalVest();
                 _worldService.GetPlayer(_clientController.GetOriginId()).Inventory.Helmet = ItemFactory.GetGasMask();
             }

@@ -30,12 +30,12 @@ namespace ASD_Game.World.Models.Characters
             Id = id;
         }
 
-        public int GetRange()
+        public virtual int GetRange()
         {
             return 1;
         }
 
-        public int GetDamage()
+        public virtual int GetDamage()
         {
             return 1;
         }

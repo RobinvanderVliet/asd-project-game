@@ -30,7 +30,7 @@ namespace ASD_Game.World.Models.Characters
             Team = 0;
         }
         
-        public new int GetRange()
+        public override int GetRange()
         {
             if (Inventory.Weapon.Distance != null)
             {
@@ -40,7 +40,7 @@ namespace ASD_Game.World.Models.Characters
             return 1;
         }
         
-        public new int GetDamage()
+        public override int GetDamage()
         {
             if (Inventory.Weapon.Damage != null)
             {
