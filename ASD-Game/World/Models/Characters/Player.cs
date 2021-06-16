@@ -29,6 +29,26 @@ namespace ASD_Game.World.Models.Characters
             RadiationLevel = 25;
             Team = 0;
         }
+        
+        public new int GetRange()
+        {
+            if (Inventory.Weapon.Distance != null)
+            {
+                return (int) Inventory.Weapon.Distance;
+            }
+
+            return 1;
+        }
+        
+        public new int GetDamage()
+        {
+            if (Inventory.Weapon.Damage != null)
+            {
+                return (int) Inventory.Weapon.Damage;
+            }
+
+            return 1;
+        }
 
         public void UseConsumable(Consumable consumable)
         {

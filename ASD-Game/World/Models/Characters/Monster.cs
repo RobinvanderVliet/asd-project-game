@@ -28,5 +28,10 @@ namespace ASD_Game.World.Models.Characters
                 YPosition,
                 difficulty);
         }
+        
+        public new int GetDamage()
+        {
+            return MonsterData.Damage;
+        }
     }
 }

@@ -54,44 +54,11 @@ namespace ASD_Game.ActionHandling
                 _messageService.AddMessage("You can't attack, you're dead!");
                 return;
             }
-
-            Weapon weapon = _worldService.GetCurrentPlayer().Inventory.Weapon;
-            int weaponDistance = (int)weapon.Distance;
-            int x = 0;
-            int y = 0;
-            switch (direction)
-            {
-                case "right":
-                case "east":
-                    x = weaponDistance;
-                    break;
-
-                case "left":
-                case "west":
-                    x = -weaponDistance;
-                    break;
-
-                case "forward":
-                case "up":
-                case "north":
-                    y = weaponDistance;
-                    break;
-
-                case "backward":
-                case "down":
-                case "south":
-                    y = -weaponDistance;
-                    break;
-            }
-
-            var currentPlayer = _worldService.GetCurrentPlayer();
-            AttackDTO attackDto = new AttackDTO();
-            attackDto.XPosition = currentPlayer.XPosition + x;
-            attackDto.YPosition = currentPlayer.YPosition + y;
-            attackDto.Damage = (int)weapon.Damage;
-            attackDto.Stamina = currentPlayer.Stamina;
-            attackDto.PlayerGuid = _clientController.GetOriginId();
-            SendAttackDTO(attackDto);
+            
+            AttackDTO attackDTO = new AttackDTO();
+            attackDTO.Direction = direction;
+            attackDTO.PlayerGuid = _worldService.GetCurrentPlayer().Id;
+            SendAttackDTO(attackDTO);
         }
 
         public void SendAttackDTO(AttackDTO attackDto)
@@ -102,331 +69,247 @@ namespace ASD_Game.ActionHandling
 
         public HandlerResponseDTO HandlePacket(PacketDTO packet)
         {
-            AttackDTO attackDto = JsonConvert.DeserializeObject<AttackDTO>(packet.Payload);
-
-            if (_worldService.GetPlayer(attackDto.PlayerGuid) != null &&
-                _worldService.GetPlayer(attackDto.PlayerGuid).Stamina < 10)
+            AttackDTO attackDTO = JsonConvert.DeserializeObject<AttackDTO>(packet.Payload);
+            
+            var handleInDatabase = (_clientController.IsHost() && packet.Header.Target.Equals("host")) || _clientController.IsBackupHost;
+            
+            //check stamina
+            var attackingCharacter = _worldService.GetCharacter(attackDTO.PlayerGuid);
+            if (attackingCharacter is Player)
             {
-                if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
+                var attackingPlayer = (Player) attackingCharacter;
+                if (attackingPlayer.Stamina <= ATTACK_STAMINA)
                 {
-                    _messageService.AddMessage("You did not have enough stamina to attack.");
-                }
-                return new HandlerResponseDTO(SendAction.ReturnToSender, "You did not have enough stamina to attack.");
-            }
-
-            if (!attackDto.PlayerGuid.StartsWith("monst"))
-            {
-                LowerStamina(attackDto.PlayerGuid);
-            }
-
-            if (_clientController.IsHost() && packet.Header.Target.Equals("host") || _clientController.IsBackupHost)
-            {
-                var attackingCharacter = _worldService.GetCharacter(attackDto.PlayerGuid);
-                var characterToAttack = GetCharacterToAttack(attackingCharacter.XPosition, attackingCharacter.YPosition, attackDto.XPosition, attackDto.YPosition);
-
-                if (attackDto.PlayerGuid.StartsWith("monst"))
-                {
-                    if (characterToAttack != null)
+                    if (isMe(attackingPlayer.Id))
                     {
-                        attackDto.AttackedPlayerGuid = characterToAttack.Id;
-                        HandleAttack(attackDto);
-                        return new HandlerResponseDTO(SendAction.SendToClients, null);
+                        _messageService.AddMessage("You don't have enough stamina to attack.");
                     }
+                    return new HandlerResponseDTO(SendAction.ReturnToSender, "You don't have enough stamina to attack.");
+                }
+                else
+                {
+                    LowerStamina(attackingPlayer, handleInDatabase);
+                }
+            }
+
+            var attackedCharacter = GetCharacterToAttack(attackingCharacter, attackDTO.Direction);
+            
+            if (attackedCharacter == null)
+            {
+                if (isMe(attackingCharacter.Id))
+                {
+                    _messageService.AddMessage("There is no enemy to attack.");
                 }
 
-                InsertStaminaToDatabase(attackDto);
-
-                if (characterToAttack != null)
+                return new HandlerResponseDTO(SendAction.ReturnToSender, "There is no enemy to attack.");
+            }
+            else if (attackedCharacter.Health <= 0)
+            {
+                if (isMe(attackingCharacter.Id))
                 {
-                    if (characterToAttack.Health <= 0)
+                    _messageService.AddMessage("You can't attack this enemy, he is already dead.");
+                }
+
+                return new HandlerResponseDTO(SendAction.ReturnToSender, "You can't attack this enemy, he is already dead.");
+            }
+            
+            if (isMe(attackingCharacter.Id))
+            {
+                _messageService.AddMessage("You attacked an enemy.");
+                _worldService.DisplayStats();
+            }
+            
+            AttackCharacter(attackedCharacter, attackingCharacter.GetDamage(), handleInDatabase);
+            
+            return new(SendAction.SendToClients, null);
+        }
+
+        private void AttackCharacter(Character attackedCharacter, int damage, bool handleInDatabase)
+        {
+            if (attackedCharacter is Player)
+            {
+                var attackedPlayer = _worldService.GetPlayer(attackedCharacter.Id);
+                
+                if (isMe(attackedPlayer.Id))
+                {
+                    _messageService.AddMessage("You've been attacked! You took a total of: " + damage + " damage.");
+                }
+
+                if (damage > 0 && attackedPlayer.Inventory.Helmet != null)
+                {
+                    if (damage >= attackedPlayer.Inventory.Helmet.ArmorProtectionPoints)
                     {
-                        if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
+                        if (isMe(attackedPlayer.Id))
                         {
-                            _messageService.AddMessage("You can't attack this enemy, he is already dead.");
-                            return new HandlerResponseDTO(SendAction.Ignore, null);
+                            _messageService.AddMessage("Your helmet has been destroyed!");
                         }
-                    }
-                }
-
-                if (characterToAttack != null)
-                {
-                    if (_worldService.GetPlayer(characterToAttack.Id) != null)
-                    {
-                        attackDto.AttackedPlayerGuid = characterToAttack.Id;
-                        InsertDamageToDatabase(attackDto, true);
-                        packet.Payload = JsonConvert.SerializeObject(attackDto);
-                    }
-                    else if (_worldService.GetAI(characterToAttack.Id) != null)
-                    {
-                        attackDto.AttackedPlayerGuid = characterToAttack.Id;
-                        packet.Payload = JsonConvert.SerializeObject(attackDto);
-                    }
-
-                    _messageService.AddMessage(_worldService.GetPlayer(attackDto.PlayerGuid).Name);
-                    _messageService.AddMessage(_worldService.GetPlayer(attackDto.PlayerGuid).Health.ToString());
-                }
-                else
-                {
-                    if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
-                    {
-                        _messageService.AddMessage("There is no enemy to attack");
-                    }
-                    return new HandlerResponseDTO(SendAction.ReturnToSender,
-                        "There is no enemy to attack");
-                }
-            }
-            else if (packet.Header.Target.Equals(_clientController.GetOriginId()))
-            {
-                _messageService.AddMessage(packet.HandlerResponse.ResultMessage);
-            }
-
-            HandleAttack(attackDto);
-            return new HandlerResponseDTO(SendAction.SendToClients, null);
-        }
-
-        private void InsertStaminaToDatabase(AttackDTO attackDto)
-        {
-            var player = _playerDatabaseService.GetAllAsync().Result
-                .FirstOrDefault(player =>
-                    player.PlayerGUID == attackDto.PlayerGuid && player.GameGUID == _clientController.SessionId);
-            if (player != null)
-            {
-                player.Stamina -= ATTACK_STAMINA;
-                _playerDatabaseService.UpdateAsync(player);
-            }
-        }
-
-        private void InsertDamageToDatabase(AttackDTO attackDto, bool isPlayer) // both armor and health damage
-        {
-            int totalDamage = attackDto.Damage;
-            if (isPlayer)
-            {
-                var attackedPlayer = _playerDatabaseService.GetAllAsync().Result
-                    .FirstOrDefault(attackedPlayer => attackedPlayer.PlayerGUID == attackDto.AttackedPlayerGuid);
-
-                var attackedPlayerInArray =
-                    _worldService.GetAllPlayers().Where(player => player.Id == attackDto.PlayerGuid).FirstOrDefault();
-
-                if (attackedPlayerInArray.Inventory.Helmet != null)
-                {
-                    var attackedPlayerHelmet = attackedPlayerInArray.Inventory.Helmet;
-                    var helmetPoints = attackedPlayerHelmet.ArmorProtectionPoints;
-
-                    var attackedPlayerItem = _playerItemDatabaseService.GetAllAsync();
-                    attackedPlayerItem.Wait();
-                    var results = attackedPlayerItem.Result.OrderByDescending(a => a.ArmorPoints)
-                        .First(playerItem =>
-                            playerItem.PlayerGUID == attackDto.PlayerGuid &&
-                            playerItem.ItemName ==
-                            attackedPlayerHelmet.ItemName &&
-                            playerItem.GameGUID == _clientController.SessionId);
-
-                    if (helmetPoints - totalDamage <= 0 && helmetPoints != 0)
-                    {
-                        totalDamage -= results.ArmorPoints;
-                        results.ArmorPoints = 0;
-                        _playerItemDatabaseService.UpdateAsync(results);
-                        // TODO: Delete playerItemPoco form database (function DeleteAsync)
+                        
+                        DeleteHelmet(attackedPlayer, handleInDatabase);
+                        
+                        damage -= attackedPlayer.Inventory.Helmet.ArmorProtectionPoints;
                     }
                     else
                     {
-                        results.ArmorPoints -= totalDamage;
-                        _playerItemDatabaseService.UpdateAsync(results);
+                        UpdateHelmet(attackedPlayer, damage, handleInDatabase);
+                        damage = 0;
                     }
                 }
-
-                if (attackedPlayerInArray.Inventory.Armor != null)
+                if (damage > 0 && attackedPlayer.Inventory.Armor != null)
                 {
-                    var attackedPlayerBodyArmor = attackedPlayerInArray.Inventory.Armor;
-                    var bodyArmorPoints = attackedPlayerBodyArmor.ArmorProtectionPoints;
-                    var attackedPlayerItem = _playerItemDatabaseService.GetAllAsync();
-                    attackedPlayerItem.Wait();
-                    var results = attackedPlayerItem.Result.OrderByDescending(a => a.ArmorPoints)
-                        .First(playerItem => playerItem.PlayerGUID == attackDto.PlayerGuid &&
-                                             playerItem.ItemName ==
-                                             attackedPlayerBodyArmor.ItemName &&
-                                             playerItem.GameGUID == _clientController.SessionId);
-                    if (bodyArmorPoints - totalDamage <= 0 && bodyArmorPoints != 0)
+                    if (damage >= attackedPlayer.Inventory.Armor.ArmorProtectionPoints)
                     {
-                        totalDamage -= results.ArmorPoints;
-                        results.ArmorPoints = 0;
-                        // TODO: Delete playerItemPoco form database (function DeleteAsync)
+                        if (isMe(attackedPlayer.Id))
+                        {
+                            _messageService.AddMessage("Your armor has been destroyed!");
+                        }
+                        
+                        DeleteArmor(attackedPlayer, handleInDatabase);
+                        
+                        damage -= attackedPlayer.Inventory.Armor.ArmorProtectionPoints;
                     }
                     else
                     {
-                        results.ArmorPoints -= totalDamage;
-                        _playerItemDatabaseService.UpdateAsync(results);
+                        UpdateArmor(attackedPlayer, damage, handleInDatabase);
+                        damage = 0;
+                    }
+                }
+                if (damage > 0)
+                {
+                    TakeDamage(attackedPlayer, damage, handleInDatabase);
 
-                        attackedPlayer.Health -= totalDamage;
-                        _playerDatabaseService.UpdateAsync(attackedPlayer);
-                    }
-                }
-                else
-                {
-                    if (attackedPlayer.Health - totalDamage >= 0)
+                    if (isMe(attackedCharacter.Id))
                     {
-                        attackedPlayer.Health -= totalDamage;
-                        _playerDatabaseService.UpdateAsync(attackedPlayer);
-                    }
-                    else
-                    {
-                        attackedPlayer.Health = 0;
-                        _playerDatabaseService.UpdateAsync(attackedPlayer);
-                    }
-                }
-            }
-        }
-
-        private Character GetCharacterToAttack(int XPositionAttacker, int YPositionAttacker, int XPositionAttack, int YPositionAttack)
-        {
-            Character character = null;
-            if(XPositionAttacker != XPositionAttack)
-            {
-                if(XPositionAttacker < XPositionAttack)
-                {
-                    for(int x = XPositionAttacker + 1; x <= XPositionAttack && character is null; x++)
-                    {
-                        character = _worldService.GetCharacterOnTile(x, YPositionAttack);
-                    }
-                }
-                else
-                {
-                    for (int x = XPositionAttacker - 1; x >= XPositionAttack && character is null; x--)
-                    {
-                        character = _worldService.GetCharacterOnTile(x, YPositionAttack);
+                        _worldService.DisplayStats();
                     }
                 }
             }
             else
             {
-                if (YPositionAttacker < YPositionAttack)
+                attackedCharacter.Health -= damage;
+            }
+        }
+
+        private void TakeDamage(Player attackedPlayer, int damage, bool handleInDatabase)
+        {
+            attackedPlayer.AddHealth(-damage);
+            if (handleInDatabase)
+            {
+                var playerPOCO = _playerDatabaseService.GetAllAsync().Result.FirstOrDefault(playerPOCO => playerPOCO.PlayerGUID == attackedPlayer.Id && playerPOCO.GameGUID == _clientController.SessionId);
+                playerPOCO.Health = attackedPlayer.Health;
+                _playerDatabaseService.UpdateAsync(playerPOCO);
+            }
+
+            if (attackedPlayer.Health <= 0)
+            {
+                if (isMe(attackedPlayer.Id))
                 {
-                    for (int y = YPositionAttacker + 1; y <= YPositionAttack && character is null; y++)
-                    {
-                        character = _worldService.GetCharacterOnTile(XPositionAttack, y);
-                    }
+                    _messageService.AddMessage("You died.");
+                    _worldService.DisplayWorld();
                 }
-                else
+            }
+        }
+
+        private bool isMe(string id)
+        {
+            return id.Equals(_clientController.GetOriginId());
+        }
+
+        private Character GetCharacterToAttack(Character attackingCharacter, string direction)
+        {
+            int range = attackingCharacter.GetRange();
+            Character character = null;
+            
+            if(direction.Equals("right") || direction.Equals("east"))
+            {
+                for(int x = 1; x <= range && character is null; x++)
                 {
-                    for (int y = YPositionAttacker - 1; y >= YPositionAttack && character is null; y--)
-                    {
-                        character = _worldService.GetCharacterOnTile(XPositionAttack, y);
-                    }
+                    character = _worldService.GetCharacterOnTile(attackingCharacter.XPosition + x, attackingCharacter.YPosition);
+                }
+            }
+            else if (direction.Equals("left") || direction.Equals("west"))
+            {
+                for (int x = 1; x <= range && character is null; x++)
+                {
+                    character = _worldService.GetCharacterOnTile(attackingCharacter.XPosition - x, attackingCharacter.YPosition);
+                }
+            }
+            else if (direction.Equals("up") || direction.Equals("north") || direction.Equals("forward"))
+            {
+                for (int y = 1; y <= range && character is null; y++)
+                {
+                    character = _worldService.GetCharacterOnTile(attackingCharacter.XPosition, attackingCharacter.YPosition + y);
+                }
+            }
+            else if (direction.Equals("down") || direction.Equals("south") || direction.Equals("backward"))
+            {
+                for (int y = 1; y <= range && character is null; y++)
+                {
+                    character = _worldService.GetCharacterOnTile(attackingCharacter.XPosition, attackingCharacter.YPosition - y);
                 }
             }
             return character;
         }
 
-        private void LowerStamina(string playerId)
+        private void LowerStamina(Player attackingPlayer, bool handleInDatabase)
         {
-            var player = _worldService.GetPlayer(playerId);
-            bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
-            if (player.Stamina >= ATTACK_STAMINA && printAttackMessage)
+            attackingPlayer.AddStamina(-ATTACK_STAMINA);
+            if (handleInDatabase)
             {
-                player.Stamina -= ATTACK_STAMINA;
+                var playerPOCO = _playerDatabaseService.GetAllAsync().Result.FirstOrDefault(playerPOCO => playerPOCO.PlayerGUID == attackingPlayer.Id && playerPOCO.GameGUID == _clientController.SessionId);
+                playerPOCO.Stamina = attackingPlayer.Stamina;
+                _playerDatabaseService.UpdateAsync(playerPOCO);
             }
         }
 
-        private void HandleAttack(AttackDTO attackDto)
+        private void DeleteHelmet(Player attackedPlayer, bool handleInDatabase)
         {
-            var creature = _worldService.GetAI(attackDto.AttackedPlayerGuid);
-            var player = _worldService.GetPlayer(attackDto.PlayerGuid);
-            if (player != null)
+            if (handleInDatabase)
             {
-                bool printAttackMessage = _clientController.GetOriginId().Equals(player.Id);
-
-                if (printAttackMessage)
-                {
-                    _messageService.AddMessage("You attacked an enemy.");
-                }
+                var playerItemPOCO = _playerItemDatabaseService.GetAllAsync().Result.FirstOrDefault(playerItemPOCO => playerItemPOCO.PlayerGUID == attackedPlayer.Id && playerItemPOCO.GameGUID == _clientController.SessionId && playerItemPOCO.ItemName == attackedPlayer.Inventory.Helmet.ItemName);
+                _playerItemDatabaseService.DeleteAsync(playerItemPOCO);
             }
-            if (creature == null)
-            {
-                var attackedPlayer = _worldService.GetPlayer(attackDto.AttackedPlayerGuid);
-                bool printAttackedMessage = _clientController.GetOriginId().Equals(attackedPlayer.Id);
-                if (attackDto.AttackedPlayerGuid != null && attackedPlayer.Health != 0)
-                {
-                    if (printAttackedMessage)
-                    {
-                        _messageService.AddMessage(
-                            "You've been attacked! You took a total of: " + attackDto.Damage + " damage.");
-                    }
-
-                    int ArmorPoints = 0;
-                    int HelmetPoints = 0;
-                    if (attackedPlayer.Inventory.Armor != null)
-                    {
-                        ArmorPoints = attackedPlayer.Inventory.Armor.ArmorProtectionPoints;
-                    }
-
-                    if (attackedPlayer.Inventory.Helmet != null)
-                    {
-                        HelmetPoints = attackedPlayer.Inventory.Helmet.ArmorProtectionPoints;
-                    }
-
-                    if (HelmetPoints - attackDto.Damage <= 0 && HelmetPoints != 0)
-                    {
-                        if (printAttackedMessage)
-                        {
-                            _messageService.AddMessage("Your helmet has been destroyed!");
-                        }
-
-                        attackDto.Damage -= HelmetPoints;
-                        attackedPlayer.Inventory.Helmet = null;
-                        _worldService.DisplayStats();
-                    }
-                    else if (HelmetPoints != 0)
-                    {
-                        attackDto.Damage = 0;
-                        attackedPlayer.Inventory.Helmet.ArmorProtectionPoints -= attackDto.Damage;
-                        _worldService.DisplayStats();
-                    }
-
-                    if (ArmorPoints - attackDto.Damage <= 0 && ArmorPoints != 0)
-                    {
-                        if (printAttackedMessage)
-                        {
-                            _messageService.AddMessage("Your armor piece has been destroyed!");
-                        }
-
-                        attackDto.Damage -= ArmorPoints;
-                        attackedPlayer.Inventory.Armor = null;
-                        attackedPlayer.Health -= attackDto.Damage;
-                        _worldService.DisplayStats();
-                    }
-                    else if (ArmorPoints != 0)
-                    {
-                        attackedPlayer.Inventory.Armor.ArmorProtectionPoints -= attackDto.Damage;
-                        _worldService.DisplayStats();
-                    }
-                    else
-                    {
-                        if (attackedPlayer.Health - attackDto.Damage >= 0)
-                        {
-                            attackedPlayer.Health -= attackDto.Damage;
-                        }
-                        else
-                        {
-                            if (printAttackedMessage)
-                            {
-                                _messageService.AddMessage("You died");
-                            }
-
-                            attackedPlayer.Health = 0;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                creature.Health -= attackDto.Damage;
-            }
-
-            _worldService.DisplayStats();
-            _worldService.DisplayWorld();
-            _worldService.CheckLastManStanding();
+            attackedPlayer.Inventory.Helmet = null;
+                                    
         }
 
+        private void UpdateHelmet(Player attackedPlayer, int damage, bool handleInDatabase)
+        {
+            attackedPlayer.Inventory.Helmet.ArmorProtectionPoints -= damage;
+            if (handleInDatabase)
+            {
+                var playerItemPOCO = _playerItemDatabaseService.GetAllAsync().Result.FirstOrDefault(playerItemPOCO => playerItemPOCO.PlayerGUID == attackedPlayer.Id && playerItemPOCO.GameGUID == _clientController.SessionId && playerItemPOCO.ItemName == attackedPlayer.Inventory.Helmet.ItemName);
+                playerItemPOCO.ArmorPoints = attackedPlayer.Inventory.Helmet.ArmorProtectionPoints;
+                _playerItemDatabaseService.UpdateAsync(playerItemPOCO);
+            }
+        }
+
+        private void DeleteArmor(Player attackedPlayer, bool handleInDatabase)
+        {
+            if (handleInDatabase)
+            {
+                var playerItemPOCO = _playerItemDatabaseService.GetAllAsync().Result.FirstOrDefault(playerItemPOCO => playerItemPOCO.PlayerGUID == attackedPlayer.Id && playerItemPOCO.GameGUID == _clientController.SessionId && playerItemPOCO.ItemName == attackedPlayer.Inventory.Armor.ItemName);
+                _playerItemDatabaseService.DeleteAsync(playerItemPOCO);
+            }
+            attackedPlayer.Inventory.Armor = null;
+                                    
+        }
+
+        private void UpdateArmor(Player attackedPlayer, int damage, bool handleInDatabase)
+        {
+            attackedPlayer.Inventory.Armor.ArmorProtectionPoints -= damage;
+            if (handleInDatabase)
+            {
+                var playerItemPOCO = _playerItemDatabaseService.GetAllAsync().Result.FirstOrDefault(playerItemPOCO => playerItemPOCO.PlayerGUID == attackedPlayer.Id && playerItemPOCO.GameGUID == _clientController.SessionId && playerItemPOCO.ItemName == attackedPlayer.Inventory.Armor.ItemName);
+                playerItemPOCO.ArmorPoints = attackedPlayer.Inventory.Armor.ArmorProtectionPoints;
+                _playerItemDatabaseService.UpdateAsync(playerItemPOCO);
+            }
+        }
+
+        public void GetAIMoves()
+        {
+            AIAttack(_worldService.GetCreatureMoves("Attack"));
+        }
+        
         public void AIAttack(List<Character> creatureMoves)
         {
             List<AttackDTO> attackDTOs = new List<AttackDTO>();
@@ -439,10 +322,24 @@ namespace ASD_Game.ActionHandling
                         if (smartMonster.MoveType == "Attack")
                         {
                             AttackDTO attackDTO = new();
-                            attackDTO.XPosition = (int)smartMonster.Destination.X;
-                            attackDTO.YPosition = (int)smartMonster.Destination.Y;
-                            attackDTO.Stamina = 100;
-                            attackDTO.Damage = smartMonster.CreatureData.Damage;
+                            
+                            if (smartMonster.XPosition < smartMonster.Destination.X)
+                            {
+                                attackDTO.Direction = "right";
+                            }
+                            else if (smartMonster.XPosition > smartMonster.Destination.X)
+                            {
+                                attackDTO.Direction = "left";
+                            }
+                            else if (smartMonster.YPosition < smartMonster.Destination.Y)
+                            {
+                                attackDTO.Direction = "up";
+                            }
+                            else if (smartMonster.YPosition > smartMonster.Destination.Y)
+                            {
+                                attackDTO.Direction = "down";
+                            }
+                            
                             attackDTO.PlayerGuid = smartMonster.Id;
                             attackDTOs.Add(attackDTO);
                         }
@@ -453,11 +350,6 @@ namespace ASD_Game.ActionHandling
                     SendAttackDTO(attack);
                 }
             }
-        }
-
-        public void GetAIMoves()
-        {
-            AIAttack(_worldService.GetCreatureMoves("Attack"));
         }
 
         [ExcludeFromCodeCoverage]

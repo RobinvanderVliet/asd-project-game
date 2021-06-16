@@ -29,5 +29,15 @@ namespace ASD_Game.World.Models.Characters
             Symbol = symbol;
             Id = id;
         }
+
+        public int GetRange()
+        {
+            return 1;
+        }
+
+        public int GetDamage()
+        {
+            return 1;
+        }
     }
 }
