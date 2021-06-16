@@ -43,7 +43,7 @@ namespace ASD_Game.World.Models.Characters.StateMachine
 
         protected void Update()
         {
-            if (_characterData.Health <= 0)
+            if (_characterData.WorldService.GetCharacter(_characterData.CharacterId).Health <= 0)
             {
                 KillLoop();
             }
