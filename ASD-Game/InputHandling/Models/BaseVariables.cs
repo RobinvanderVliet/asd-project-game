@@ -81,7 +81,9 @@ namespace ASD_Game.InputHandling.Models
          public readonly List<string> actions = new()
         {
             "engage",
-            "collect"
+            "collect",
+            "follow",
+            "wander"
         };
 
         public readonly List<string> weapons = new()
