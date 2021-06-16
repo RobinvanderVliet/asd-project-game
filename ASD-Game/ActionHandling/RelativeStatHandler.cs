@@ -75,7 +75,6 @@ namespace ASD_Game.ActionHandling
         {
             if (_worldService.IsDead(_worldService.GetCurrentPlayer()))
             {
-                _messageService.AddMessage("You died");
                 _worldService.DisplayWorld();
                 _radiationTimer.Stop();
                 return;
@@ -154,6 +153,12 @@ namespace ASD_Game.ActionHandling
                 }
 
                 InsertToDatabase(relativeStatDTO, handleInDatabase, player);
+                
+                if (player.Health < 1 && player.Id == _clientController.GetOriginId())
+                {
+                    _messageService.AddMessage("You died");
+                }
+                
                 _worldService.CheckLastManStanding();
                 return new HandlerResponseDTO(SendAction.SendToClients, null);
             }

@@ -15,6 +15,7 @@ using ASD_Game.Network.Enum;
 using ASD_Game.World.Models.Characters;
 using ASD_Game.World.Services;
 using Newtonsoft.Json;
+using World.Models.Characters;
 
 namespace ASD_Game.ActionHandling
 {
@@ -30,7 +31,7 @@ namespace ASD_Game.ActionHandling
         private readonly IMessageService _messageService;
 
         private Timer AIUpdateTimer;
-        private int _updateTime = 2000;
+        private int _updateTime = 7000;
 
         public AttackHandler(IClientController clientController, IWorldService worldService,
             IDatabaseService<PlayerPOCO> playerDatabaseService,
@@ -113,6 +114,7 @@ namespace ASD_Game.ActionHandling
                 }
                 return new HandlerResponseDTO(SendAction.ReturnToSender, "You did not have enough stamina to attack.");
             }
+
             if (!attackDto.PlayerGuid.StartsWith("monst"))
             {
                 LowerStamina(attackDto.PlayerGuid);
@@ -120,10 +122,13 @@ namespace ASD_Game.ActionHandling
 
             if (_clientController.IsHost() && packet.Header.Target.Equals("host") || _clientController.IsBackupHost)
             {
-                var allCharacters = _worldService.GetAllCharacters();
-                var characterToAttack =
-                    allCharacters.Find(x =>
-                        x.XPosition == attackDto.XPosition && x.YPosition == attackDto.YPosition);
+                var attackingCharacter = _worldService.GetCharacter(attackDto.PlayerGuid);
+
+                if (attackingCharacter == null)
+                {
+                    return new HandlerResponseDTO(SendAction.Ignore, null);
+                }
+                var characterToAttack = GetCharacterToAttack(attackingCharacter.XPosition, attackingCharacter.YPosition, attackDto.XPosition, attackDto.YPosition);
 
                 if (attackDto.PlayerGuid.StartsWith("monst"))
                 {
@@ -131,10 +136,13 @@ namespace ASD_Game.ActionHandling
                     {
                         attackDto.AttackedPlayerGuid = characterToAttack.Id;
                         HandleAttack(attackDto);
+                        packet.Payload = JsonConvert.SerializeObject(attackDto);
                         return new HandlerResponseDTO(SendAction.SendToClients, null);
                     }
                 }
+
                 InsertStaminaToDatabase(attackDto);
+
                 if (characterToAttack != null)
                 {
                     if (characterToAttack.Health <= 0)
@@ -163,12 +171,17 @@ namespace ASD_Game.ActionHandling
                 }
                 else
                 {
-                    if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
+                    if (!attackDto.PlayerGuid.StartsWith("monst"))
                     {
-                        _messageService.AddMessage("There is no enemy to attack");
+                        if (_clientController.GetOriginId().Equals(attackDto.PlayerGuid))
+                        {
+                            _messageService.AddMessage("There is no enemy to attack");
+                        }
+                        return new HandlerResponseDTO(SendAction.ReturnToSender,
+                            "There is no enemy to attack");   
                     }
-                    return new HandlerResponseDTO(SendAction.ReturnToSender,
-                        "There is no enemy to attack");
+
+                    return new HandlerResponseDTO(SendAction.Ignore, null);
                 }
             }
             else if (packet.Header.Target.Equals(_clientController.GetOriginId()))
@@ -273,6 +286,46 @@ namespace ASD_Game.ActionHandling
             }
         }
 
+        private Character GetCharacterToAttack(int XPositionAttacker, int YPositionAttacker, int XPositionAttack, int YPositionAttack)
+        {
+            Character character = null;
+            if (XPositionAttacker != XPositionAttack)
+            {
+                if (XPositionAttacker < XPositionAttack)
+                {
+                    for (int x = XPositionAttacker + 1; x <= XPositionAttack && character is null; x++)
+                    {
+                        character = _worldService.GetCharacterOnTile(x, YPositionAttack);
+                    }
+                }
+                else
+                {
+                    for (int x = XPositionAttacker - 1; x >= XPositionAttack && character is null; x--)
+                    {
+                        character = _worldService.GetCharacterOnTile(x, YPositionAttack);
+                    }
+                }
+            }
+            else
+            {
+                if (YPositionAttacker < YPositionAttack)
+                {
+                    for (int y = YPositionAttacker + 1; y <= YPositionAttack && character is null; y++)
+                    {
+                        character = _worldService.GetCharacterOnTile(XPositionAttack, y);
+                    }
+                }
+                else
+                {
+                    for (int y = YPositionAttacker - 1; y >= YPositionAttack && character is null; y--)
+                    {
+                        character = _worldService.GetCharacterOnTile(XPositionAttack, y);
+                    }
+                }
+            }
+            return character;
+        }
+
         private void LowerStamina(string playerId)
         {
             var player = _worldService.GetPlayer(playerId);
@@ -299,9 +352,10 @@ namespace ASD_Game.ActionHandling
             if (creature == null)
             {
                 var attackedPlayer = _worldService.GetPlayer(attackDto.AttackedPlayerGuid);
-                bool printAttackedMessage = _clientController.GetOriginId().Equals(attackedPlayer.Id);
+
                 if (attackDto.AttackedPlayerGuid != null && attackedPlayer.Health != 0)
                 {
+                    bool printAttackedMessage = _clientController.GetOriginId().Equals(attackedPlayer.Id);
                     if (printAttackedMessage)
                     {
                         _messageService.AddMessage(
@@ -402,6 +456,16 @@ namespace ASD_Game.ActionHandling
                             attackDTO.PlayerGuid = smartMonster.Id;
                             attackDTOs.Add(attackDTO);
                         }
+                    }
+                    if (move is Monster monster)
+                    {
+                        AttackDTO attackDTO = new();
+                        attackDTO.XPosition = (int)monster.Destination.X;
+                        attackDTO.YPosition = (int)monster.Destination.Y;
+                        attackDTO.Stamina = 100;
+                        attackDTO.Damage = monster.MonsterData.Damage;
+                        attackDTO.PlayerGuid = monster.Id;
+                        attackDTOs.Add(attackDTO);
                     }
                 }
                 foreach (AttackDTO attack in attackDTOs)

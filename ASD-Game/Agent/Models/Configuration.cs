@@ -1,24 +1,21 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ASD_Game.Agent.Mapper;
+using System.Collections.Generic;
 
 namespace ASD_Game.Agent.Models
 {
-    public abstract class Configuration
+    public class Configuration
     {
-        private List<Setting> _settings;
+        private string _name;
+        private List<KeyValuePair<string, string>> _settings;
 
-        public List<Setting> Settings
+        public Configuration(string name)
+        {
+            _name = name;
+        }
+
+        public List<KeyValuePair<string, string>> Settings
         {
             get => _settings;
             set => _settings = value;
         }
-        
-        public string GetSetting(string settingkey)
-        {
-            return _settings.Where(x=>x.Property == settingkey).FirstOrDefault().Value;
-        }
     }
-
-
 }

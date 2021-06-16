@@ -1,8 +1,7 @@
 using ASD_Game.World.Models.Characters.StateMachine.Data;
-using WorldGeneration.StateMachine.Data;
-using WorldGeneration.StateMachine.Event;
+using World.Models.Characters.StateMachine.Event;
 
-namespace WorldGeneration.StateMachine
+namespace ASD_Game.World.Models.Characters.StateMachine
 {
     public interface ICharacterStateMachine
     {
@@ -15,6 +14,8 @@ namespace WorldGeneration.StateMachine
         /// Starts the ICreatureStateMachine using a custom RuleSet.
         /// </summary>
         public void StartStateMachine();
+
+        public void StopStateMachine();
 
         /// <summary>
         /// Fire events on a ICreatureStateMachine.
@@ -30,5 +31,11 @@ namespace WorldGeneration.StateMachine
         /// </summary>
         /// <param name="creatureEvent">Event that occured.</param>
         public void FireEvent(CharacterEvent.Event creatureEvent);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>true if statemachine was started before / if statemachine is not null</returns>
+        public bool WasStarted();
     }
 }

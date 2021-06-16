@@ -1,6 +1,7 @@
 using System;
 using ASD_Game.Network.DTO;
 using Newtonsoft.Json;
+using WebSocketSharp;
 
 namespace ASD_Game.Network
 {
@@ -14,7 +15,7 @@ namespace ASD_Game.Network
         public NetworkComponent()
         {
             _webSocketConnection = new WebSocketConnection(this);
-            _originId = Guid.NewGuid().ToString();
+            InitializeOriginId();
         }
 
         public NetworkComponent(IWebSocketConnection webSocketConnection)
@@ -22,6 +23,19 @@ namespace ASD_Game.Network
             //Constructor solely used for testing purposes
             _webSocketConnection = webSocketConnection;
             _originId = Guid.NewGuid().ToString();
+        }
+
+        private void InitializeOriginId()
+        {
+            if (_webSocketConnection.UserSettingsConfig.OriginId.IsNullOrEmpty())
+            {
+                _originId = Guid.NewGuid().ToString();
+                _webSocketConnection.AddOrUpdateConfigVariables("UserSettingsConfig:OriginId", _originId);
+            }
+            else
+            {
+                _originId = _webSocketConnection.UserSettingsConfig.OriginId;
+            }
         }
 
         public void ReceivePacket(PacketDTO packet)
@@ -60,7 +74,7 @@ namespace ASD_Game.Network
         {
             _hostController = hostController;
         }
-
+        
         public string GetOriginId()
         {
             return _originId;

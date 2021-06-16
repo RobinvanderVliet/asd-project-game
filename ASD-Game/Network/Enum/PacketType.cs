@@ -7,10 +7,10 @@
         Session,
         RelativeStat,
         Spawn,
-        Inventory,        
+        Inventory,
         GameSession,
+        Agent,
         Attack,
         Dead
-        
     }
 }

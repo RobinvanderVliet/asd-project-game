@@ -1,3 +1,5 @@
+using Moq;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -129,7 +131,7 @@ namespace ASD_Game.Tests.DatabaseHandlerTests
         /// ReadAsync(Chunk)
         ///
         /// The ReadAsync method from ChunkServices
-        /// should return null because the
+        /// should throw an exception because the
         /// requested Chunk does not exist.
         /// </summary>
         [Test]
@@ -203,7 +205,7 @@ namespace ASD_Game.Tests.DatabaseHandlerTests
                 }
             );
             _services = new DatabaseService<Chunk>(_repository.Object);
-
+            
             // Act & Assert
             Assert.Throws<InvalidOperationException>(() =>
             {
@@ -301,12 +303,13 @@ namespace ASD_Game.Tests.DatabaseHandlerTests
         {
             // Arrange
             _repository.Setup(chunkRepo => chunkRepo.GetAllAsync()).ReturnsAsync(_chunkInMemoryDatabase);
-            _repository.Setup(chunkRepo => chunkRepo.DeleteAllAsync()).ReturnsAsync(() =>
+            _repository.Setup(chunkRepo => chunkRepo.DeleteAllAsync()).ReturnsAsync(() => 
             {
                 _chunkInMemoryDatabase.Clear();
                 return 1;
             });
             _services = new DatabaseService<Chunk>(_repository.Object);
+            
 
             // Act
             var deleteAction = _services.DeleteAllAsync().Result;
@@ -318,3 +321,4 @@ namespace ASD_Game.Tests.DatabaseHandlerTests
         }
     }
 }
+

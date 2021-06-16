@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using ASD_Game.Agent.Services;
+using Agent.Services;
 using ASD_Game.InputHandling.Antlr;
 using ASD_Game.InputHandling.Models;
 using ASD_Game.Messages;
@@ -11,36 +11,37 @@ using ASD_Game.Session;
 using ASD_Game.Session.GameConfiguration;
 using ASD_Game.UserInterface;
 using InputCommandHandler.Models;
+using Session;
 using WebSocketSharp;
-using Timer = System.Timers.Timer;
 
 namespace ASD_Game.InputHandling
 {
     public class InputHandler : IInputHandler
     {
-        private IPipeline _pipeline;
-        private ISessionHandler _sessionHandler;
-        private IScreenHandler _screenHandler;
+        private readonly IPipeline _pipeline;
+        private readonly ISessionHandler _sessionHandler;
+        private readonly IScreenHandler _screenHandler;
         private static Timer _timer;
-        private IMessageService _messageService;
-        private IGameConfigurationHandler _gameConfigurationHandler;
+        private readonly IMessageService _messageService;
+        private readonly IGameConfigurationHandler _gameConfigurationHandler;
+        private readonly IGamesSessionService _gamesSessionService;
 
         private const string RETURN_KEYWORD = "return";
-        private string _enteredSessionName;
+        private const string START_COMMAND = "start_session";
 
-        public string START_COMMAND = "start_session";
-
-        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler, IMessageService messageService, IGameConfigurationHandler gameConfigurationHandler)
+        public InputHandler(IPipeline pipeline, ISessionHandler sessionHandler, IScreenHandler screenHandler, IMessageService messageService, IGameConfigurationHandler gameConfigurationHandler, IGamesSessionService gamesSessionService)
         {
             _pipeline = pipeline;
             _sessionHandler = sessionHandler;
             _screenHandler = screenHandler;
             _gameConfigurationHandler = gameConfigurationHandler;
+            _gamesSessionService = gamesSessionService;
             _messageService = messageService;
         }
 
-        public InputHandler()
+        public InputHandler(IGamesSessionService gamesSessionService)
         {
+            _gamesSessionService = gamesSessionService;
             //Empty constructor needed for testing purposes
         }
 
@@ -78,8 +79,7 @@ namespace ASD_Game.InputHandling
         public void HandleStartScreenCommands()
         {
             var input = GetCommand();
-            var option = 0;
-            int.TryParse(input, out option);
+            int.TryParse(input, out var option);
 
             switch (option)
             {
@@ -92,6 +92,7 @@ namespace ASD_Game.InputHandling
                     break;
                 case 3:
                     _screenHandler.TransitionTo(new LoadScreen());
+                    _gamesSessionService.RequestSavedGames();
                     break;
                 case 4:
                     _screenHandler.TransitionTo(new EditorScreen());
@@ -100,7 +101,7 @@ namespace ASD_Game.InputHandling
                     SendCommand("exit");
                     break;
                 default:
-                    StartScreen startScreen = _screenHandler.Screen as StartScreen;
+                    var startScreen = _screenHandler.Screen as StartScreen;
                     startScreen.UpdateInputMessage("Not a valid option, try again!");
                     break;
             }
@@ -109,35 +110,41 @@ namespace ASD_Game.InputHandling
         public void HandleSessionScreenCommands()
         {
             SessionScreen sessionScreen = _screenHandler.Screen as SessionScreen;
-            string input = GetCommand();
-
-            if (input == RETURN_KEYWORD)
+            var input = GetCommand();
+            // Needed to handle input on client when host has started session
+            if (_screenHandler.Screen is GameScreen)
             {
-                _screenHandler.TransitionTo(new StartScreen());
-                return;
-            }
-
-            string[] inputParts = input.Split(" ");
-
-            if (inputParts.Length != 2)
-            {
-                sessionScreen.UpdateInputMessage("Provide both a session number and username (example: 1 Gerrit)");
+                HandleGameScreenCommands(input);
             }
             else
             {
-                int sessionNumber = 0;
-                int.TryParse(input[0].ToString(), out sessionNumber);
-
-                string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
-
-                if (sessionId.IsNullOrEmpty())
+                if (input == RETURN_KEYWORD)
                 {
-                    sessionScreen.UpdateInputMessage("Not a valid session, try again!");
+                    _screenHandler.TransitionTo(new StartScreen());
+                    return;
+                }
+
+                string[] inputParts = input.Split(" ");
+
+                if (inputParts.Length != 2)
+                {
+                    sessionScreen.UpdateInputMessage("Provide both a session number and username (example: 1 Gerrit)");
                 }
                 else
                 {
-                    _screenHandler.TransitionTo(new LobbyScreen());
-                    SendCommand("join_session \"" + sessionId + "\" \"" + inputParts[1].Replace("\"", "") + "\"");
+                    int sessionNumber = 0;
+                    int.TryParse(input[0].ToString(), out sessionNumber);
+
+                    string sessionId = sessionScreen.GetSessionIdByVisualNumber(sessionNumber - 1);
+
+                    if (sessionId.IsNullOrEmpty())
+                    {
+                        sessionScreen.UpdateInputMessage("Not a valid session, try again!");
+                    }
+                    else
+                    {
+                        _sessionHandler.JoinSession(sessionId, inputParts[1].Replace("\"", ""));
+                    }
                 }
             }
         }
@@ -158,13 +165,55 @@ namespace ASD_Game.InputHandling
                     return;
                 }
 
-                if (input == START_COMMAND || input.Contains("say") || input.Contains("shout"))
+                if (input == START_COMMAND) 
+                {
+                    SendCommand(START_COMMAND);
+                }
+
+                if (input.Contains("say"))
                 {
                     SendCommand(input);
-                    _screenHandler.RedrawGameInputBox();
                 }
+                else if (input.Contains("shout"))
+                {
+                    SendCommand(input);
+                }
+               
+            }
+        }
+
+        public void HandleLoadScreenCommands()
+        {
+            LoadScreen loadScreen = _screenHandler.Screen as LoadScreen;
+            var input = GetCommand();
+
+            if (input == RETURN_KEYWORD)
+            {
+                _screenHandler.TransitionTo(new StartScreen());
+                return;
             }
 
+            if (input.Length > 0)
+            {
+                int sessionNumber = 0;
+                int.TryParse(input, out sessionNumber);
+
+                string sessionId = _screenHandler.GetSessionByPosition(sessionNumber - 1);
+
+                if (sessionId.IsNullOrEmpty())
+                {
+                    _screenHandler.UpdateInputMessage("Not a valid session number, please try again!");
+                }
+                else
+                {
+                    _screenHandler.TransitionTo(new LobbyScreen());
+                    _gamesSessionService.LoadGame(sessionId);
+                }
+            }
+            else
+            {
+                _screenHandler.UpdateInputMessage("Session number cannot be left blank, please try again!");
+            }
         }
 
         public void HandleConfigurationScreenCommands()
@@ -178,36 +227,33 @@ namespace ASD_Game.InputHandling
             else
             {
                 _gameConfigurationHandler.SetCurrentScreen();
-                
-                bool configurationCompleted = _gameConfigurationHandler.HandleAnswer(input);
+
+                var configurationCompleted = _gameConfigurationHandler.HandleAnswer(input);
 
                 if (configurationCompleted)
                 {
                     _gameConfigurationHandler.SetGameConfiguration();
                     _screenHandler.TransitionTo(new LobbyScreen());
-                    _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(), _gameConfigurationHandler.GetUsername());
+                    _sessionHandler.CreateSession(_gameConfigurationHandler.GetSessionName(), _gameConfigurationHandler.GetUsername(), false, null, null);
+
                 }
             }
         }
 
         public void HandleEditorScreenCommands()
         {
-            Questions questions = new Questions();
-            EditorScreen editorScreen = _screenHandler.Screen as EditorScreen;
+            var questions = new Questions();
+            var editorScreen = _screenHandler.Screen as EditorScreen;
 
-            List<string> answers = new();
-            answers.Add("explore=");
-            answers.Add("combat=");
-            answers.Add("");
-            answers.Add("");
+            List<string> answers = new() {"explore=", "combat=", "", ""};
 
-            int i = 0;
+            var i = 0;
             Thread.Sleep(100);
             while (i < questions.EditorQuestions.Count)
             {
                 editorScreen.UpdateLastQuestion(questions.EditorQuestions.ElementAt(i));
 
-                string input = _screenHandler.GetScreenInput();
+                var input = _screenHandler.GetScreenInput();
                 _screenHandler.SetScreenInput(input);
 
                 if (input.Equals("break"))
@@ -233,11 +279,11 @@ namespace ASD_Game.InputHandling
                 }
                 else
                 {
-                    editorScreen.PrintWarning("Please fill in an valid answer");
+                    editorScreen.PrintWarning("Please fill in a valid answer");
                 }
             }
 
-            if (answers.Count() == questions.EditorQuestions.Count)
+            if (answers.Count == questions.EditorQuestions.Count)
             {
                 if (answers.ElementAt(2).Contains("yes"))
                 {
@@ -250,8 +296,8 @@ namespace ASD_Game.InputHandling
                 }
             }
 
-            string finalString = "";
-            foreach (string element in answers)
+            var finalString = "";
+            foreach (var element in answers)
             {
                 if (element != "yes" && element != "no")
                 {
@@ -259,7 +305,7 @@ namespace ASD_Game.InputHandling
                 }
             }
 
-            AgentConfigurationService agentConfigurationService = new AgentConfigurationService();
+            var agentConfigurationService = new ConfigurationService();
             List<string> errors = agentConfigurationService.Configure(finalString);
 
 /*            AgentService agentService = new AgentService();
@@ -292,8 +338,8 @@ namespace ASD_Game.InputHandling
                                + " This is an example line: When agent nearby player then attack (optional: otherwise flee)";
             StringBuilder builder = new StringBuilder();
             BaseVariables variables = new();
-            bool nextLine = true;
-            EditorScreen editorScreen = _screenHandler.Screen as EditorScreen;
+            var nextLine = true;
+            var editorScreen = _screenHandler.Screen as EditorScreen;
 
             string input;
 
@@ -314,7 +360,6 @@ namespace ASD_Game.InputHandling
                 input = _screenHandler.GetScreenInput();
                 input = input.ToLower();
 
-
                 if (input.Equals("stop"))
                 {
                     return string.Empty;
@@ -322,7 +367,7 @@ namespace ASD_Game.InputHandling
 
                 if (input.Contains("help"))
                 {
-                    string[] help = input.Split(" ");
+                    var help = input.Split(" ");
                     switch (help[1])
                     {
                         case "armor":
@@ -374,7 +419,7 @@ namespace ASD_Game.InputHandling
                     input = input.ToLower();
                 }
 
-                List<string> rule = input.Split(" ").ToList();
+                var rule = input.Split(" ").ToList();
 
                 //Check if the user input match basic requirements
                 if (CheckInput(rule, variables))
@@ -412,7 +457,7 @@ namespace ASD_Game.InputHandling
 
         public bool CheckInput(List<string> rule, BaseVariables variables)
         {
-            bool correct = false;
+            var correct = false;
             //basic rules
             //contains all two base words
             List<string> baseWords = new() {"when", "then"};
@@ -430,7 +475,7 @@ namespace ASD_Game.InputHandling
             }
 
             //contains exactly 1 comparison type
-            correct = (rule.Intersect(variables.comparison).Count() >= 1);
+            correct = rule.Intersect(variables.comparison).Any();
             if (!correct)
             {
                 return correct;
@@ -479,7 +524,7 @@ namespace ASD_Game.InputHandling
             }
 
             //check is use count matches item count
-            correct = rule.Where(x => x.Equals("use")).Count() == variables.ReturnAllItems().Intersect(rule).Count();
+            correct = rule.Count(x => x.Equals("use")) == variables.ReturnAllItems().Intersect(rule).Count();
             if (!correct)
             {
                 return correct;
