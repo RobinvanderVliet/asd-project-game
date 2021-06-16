@@ -248,10 +248,6 @@ namespace ASD_Game.ActionHandling
                     character = _worldService.GetCharacterOnTile(attackingCharacter.XPosition, attackingCharacter.YPosition - y);
                 }
             }
-            // _messageService.AddMessage(attackingCharacter.XPosition.ToString());
-            // _messageService.AddMessage(attackingCharacter.YPosition.ToString());
-            // _messageService.AddMessage(character.XPosition.ToString());
-            // _messageService.AddMessage(character.YPosition.ToString());
             return character;
         }
 
